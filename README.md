@@ -1,6 +1,6 @@
 <div align="center">
   
-  # 🇩🇪 DeutschMeister PRO A1
+  # DeutschMeister PRO A1
   
   **El estándar definitivo para dominar el alemán técnico y prepararte para el Goethe Zertifikat, impulsado por Inteligencia Artificial.**
 
