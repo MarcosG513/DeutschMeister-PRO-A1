@@ -3,6 +3,9 @@ import { Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase,
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
 import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
+import { Capacitor } from '@capacitor/core';
+import { TextToSpeech } from '@capacitor-community/text-to-speech';
+import { initializeAdMob, showRewardVideo, showInterstitial } from './services/AdService';
 
 // --- CONFIGURACIÓN API & FIREBASE ---
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || ""; 
@@ -88,15 +91,28 @@ const pcmToWav = (pcmBuffer, sampleRate) => {
 
 const getSafeId = (str) => btoa(encodeURIComponent(str)).replace(/[/+=]/g, '_');
 
-const nativeSpeak = (text) => {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'de-DE';
-    utterance.rate = 0.85; 
-    window.speechSynthesis.speak(utterance);
+const nativeSpeak = async (text) => {
+  if (Capacitor.isNativePlatform()) {
+    try {
+      await TextToSpeech.speak({
+        text: text,
+        lang: 'de-DE',
+        rate: 0.85,
+        pitch: 1.0,
+      });
+    } catch (e) {
+      console.error("Error en TTS nativo", e);
+    }
   } else {
-    console.error("Web Speech API no está soportada en este navegador.");
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'de-DE';
+      utterance.rate = 0.85; 
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.error("Web Speech API no está soportada en este navegador.");
+    }
   }
 };
 
@@ -330,6 +346,7 @@ const AudioSim = ({ title, textDe, textEs }) => {
 const RoleplaySimulator = ({ apiKey, onExit }) => {
   const [scenario, setScenario] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [tutorMessageCount, setTutorMessageCount] = useState(0);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
@@ -366,6 +383,18 @@ const RoleplaySimulator = ({ apiKey, onExit }) => {
 
   const sendMessage = async () => {
     if(!input.trim()) return;
+
+    if (tutorMessageCount >= 3) {
+      const granted = await showRewardVideo();
+      if (granted) {
+        setTutorMessageCount(0);
+      } else {
+        return;
+      }
+    } else {
+      setTutorMessageCount(prev => prev + 1);
+    }
+
     const newMsgs = [...messages, { role: 'user', parts: [{text: input}] }];
     setMessages(newMsgs);
     setInput("");
@@ -1947,6 +1976,9 @@ const studyPlanModules = [
 ];
 
 export default function App() {
+  useEffect(() => {
+    initializeAdMob();
+  }, []);
   const [activeChapterId, setActiveChapterId] = useState(chapters[0].id);
   const [activePresentationId, setActivePresentationId] = useState(null);
   const [activeStudyPlanId, setActiveStudyPlanId] = useState(null); 
@@ -2072,6 +2104,8 @@ export default function App() {
 
   const generateStory = async () => {
     if (!activeChapter) return;
+    const granted = await showRewardVideo();
+    if (!granted) return;
     setStoryState({ isOpen: true, loading: true, de: "", es: "" });
     const wordsToUse = displayedWords.slice(0, 8).map(w => w.de).join(", ");
     
@@ -2117,33 +2151,6 @@ export default function App() {
 
     if (user && db) {
       const chatDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'chat', 'history');
-      await setDoc(chatDocRef, { messages: newMessages }).catch(console.error);
-    }
-
-    try {
-      const systemPrompt = "Eres un tutor experto y amigable de alemán nativo, especializado en enseñar a hispanohablantes principiantes (nivel A1/A2). Ayuda al usuario a practicar alemán, resolver sus dudas y corregir sus errores de forma constructiva. Usa EMOJIS. Importante: NO uses firmas al final de tus mensajes. NO te despidas escribiendo 'model' o 'DE' o firmas similares. Da respuestas limpias y claras, separando bien los párrafos.";
-      const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: newMessages,
-          systemInstruction: { parts: [{ text: systemPrompt }] }
-        })
-      });
-      
-      const aiText = result.candidates[0].content.parts[0].text;
-      const finalMessages = [...newMessages, { role: "model", parts: [{ text: aiText }] }];
-      
-      setChatMessages(finalMessages);
-      
-      if (user && db) {
-        const chatDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'chat', 'history');
-        await setDoc(chatDocRef, { messages: finalMessages }).catch(console.error);
-      }
-    } catch (error) {
-      console.error("Error en el chat:", error);
-      setChatMessages([...newMessages, { role: "model", parts: [{ text: "Lo siento, tuve un problema de conexión. ¿Podrías repetir lo último que dijiste?" }] }]);
-    } finally {
       setIsChatLoading(false);
     }
   };
@@ -2158,8 +2165,10 @@ export default function App() {
   };
 
   const generateCardImage = async (wordObj, e) => {
-    if (e) e.stopPropagation(); 
-    const safeId = getSafeId(wordObj.de).substring(0, 150);
+    if (e) e.stopPropagation();
+    const granted = await showRewardVideo();
+    if (!granted) return;
+const safeId = getSafeId(wordObj.de).substring(0, 150);
     
     if (cardImages[safeId]) return;
 
@@ -2167,16 +2176,16 @@ export default function App() {
     try {
       const promptText = `Generate a simple, clear, flat vector illustration on a white background representing the German word "${wordObj.de}" meaning "${wordObj.es}". No text in the image.`;
       
-      const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`, {
+      const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-fast-generate-001:predict?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: promptText }] }],
-          generationConfig: { responseModalities: ['TEXT', 'IMAGE'] }
+          instances: [{ prompt: promptText }],
+          parameters: { sampleCount: 1, aspectRatio: "1:1" }
         })
       });
       
-      const base64Image = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+      const base64Image = result?.predictions?.[0]?.bytesBase64Encoded;
       if (!base64Image) {
           throw new Error("No image data returned from API");
       }
@@ -2295,7 +2304,7 @@ export default function App() {
   };
 
   return (
-    <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col overflow-hidden relative"}>
+    <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
       
       {/* HEADER NAVBAR */}
       <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
@@ -2440,7 +2449,7 @@ export default function App() {
           {viewMode === "quiz" && (
              <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-2xl mx-auto mt-10 text-center animate-in fade-in zoom-in duration-300 relative">
                <button 
-                 onClick={() => { setViewMode("flashcards"); setQuizState(null); }} 
+                 onClick={() => { setViewMode("flashcards"); setQuizState(null); showInterstitial(); }} 
                  className="absolute top-4 right-4 sm:top-6 sm:left-6 sm:right-auto flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm"
                  title="Volver a los módulos"
                >
