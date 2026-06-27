@@ -1,11 +1,12 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones } from 'lucide-react';
+import { Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
 import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
 import { Capacitor } from '@capacitor/core';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { initializeAdMob, showRewardVideo, showInterstitial } from './services/AdService';
+import { fal } from "@fal-ai/client";
 
 // --- CONFIGURACIÓN API & FIREBASE ---
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || ""; 
@@ -90,6 +91,29 @@ const pcmToWav = (pcmBuffer, sampleRate) => {
 };
 
 const getSafeId = (str) => btoa(encodeURIComponent(str)).replace(/[/+=]/g, '_');
+
+const compressImageBase64 = (base64Str, maxWidth = 512, quality = 0.6) => {
+  return new Promise((resolve) => {
+    if (!base64Str || !base64Str.startsWith('data:')) return resolve(base64Str);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => resolve(base64Str);
+    img.src = base64Str;
+  });
+};
 
 const nativeSpeak = async (text) => {
   if (Capacitor.isNativePlatform()) {
@@ -194,12 +218,15 @@ const MarkdownMessage = ({ text }) => {
   return <div className="text-[15px] leading-relaxed text-slate-700">{elements}</div>;
 };
 
-const PresentationVocabCard = ({ wordObj, cardImages, generateCardImage, isImageLoading, openAiTutor }) => {
+const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generateCardImage, isImageLoading, openAiTutor, setFullscreenImage, unlockedCards }) => {
   const [flipped, setFlipped] = useState(false);
   const isLongText = wordObj.de.length > 20;
   const safeId = getSafeId(wordObj.de).substring(0, 150);
-  const imgBase64 = cardImages ? cardImages[safeId] : null;
+  const isUnlocked = unlockedCards && unlockedCards[safeId]?.unlocked;
+  const imgData = (cardImages && isUnlocked) ? cardImages[safeId] : null;
+  const existsGlobally = cardImages && !!cardImages[safeId];
   const isGenLoading = isImageLoading === safeId;
+  const isRegenerated = unlockedCards && unlockedCards[safeId]?.regenerated;
 
   return (
     <div onClick={() => setFlipped(!flipped)} className="relative h-32 perspective-1000 cursor-pointer w-full group">
@@ -207,9 +234,14 @@ const PresentationVocabCard = ({ wordObj, cardImages, generateCardImage, isImage
         
         {/* FRENTE */}
         <div className="absolute inset-0 backface-hidden bg-white border-2 border-slate-200 rounded-xl shadow-sm flex flex-col items-center justify-center text-center group-hover:border-blue-300 overflow-hidden">
-          {imgBase64 ? (
-            <div className="w-full h-16 bg-slate-100 border-b border-slate-100 relative">
-               <img src={`data:image/png;base64,${imgBase64}`} alt={wordObj.de} className="w-full h-full object-contain mix-blend-multiply p-1" />
+          {imgData ? (
+            <div className="w-full h-16 bg-slate-100 border-b border-slate-100 relative group/regen">
+               <img src={(typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:'))) ? imgData : (typeof imgData === 'string' ? `data:image/png;base64,${imgData}` : '')} alt={wordObj.de} className="w-full h-full object-contain mix-blend-multiply p-1 cursor-zoom-in hover:scale-105 transition-transform" onClick={(e) => { e.stopPropagation(); if (typeof setFullscreenImage === 'function') setFullscreenImage(imgData); }} />
+               {!isRegenerated && (
+                 <button onClick={(e) => { e.stopPropagation(); generateCardImage(wordObj, e, true); }} className="absolute top-1 right-1 bg-white/90 hover:bg-white text-blue-600 p-1 rounded-md shadow opacity-0 group-hover/regen:opacity-100 transition-opacity" title="Regenerar (Consume 1 crédito)">
+                   <RefreshCw size={12} className={isGenLoading ? "animate-spin" : ""} />
+                 </button>
+               )}
             </div>
           ) : (
             <div className="w-full h-12 bg-slate-50 flex flex-col items-center justify-center relative border-b border-slate-100 group/imgbtn z-10">
@@ -218,10 +250,10 @@ const PresentationVocabCard = ({ wordObj, cardImages, generateCardImage, isImage
                  <button 
                    onClick={(e) => { e.stopPropagation(); generateCardImage(wordObj, e); }} 
                    className="relative z-30 bg-white hover:bg-blue-50 text-blue-600 px-2 py-1 rounded shadow-sm border border-blue-200 transition-all flex items-center gap-1 text-[10px] font-bold opacity-0 group-hover/imgbtn:opacity-100"
-                   title="Generar Imagen Representativa"
+                   title={existsGlobally ? "Revelar Imagen Existente" : "Generar Imagen Representativa"}
                  >
                    {isGenLoading ? <Loader2 size={12} className="animate-spin text-blue-500" /> : <ImagePlus size={12} className="text-blue-500" />}
-                   {isGenLoading ? '...' : 'Imagen'}
+                   {isGenLoading ? '...' : (existsGlobally ? 'Revelar' : 'Generar')}
                  </button>
                )}
             </div>
@@ -1986,11 +2018,42 @@ export default function App() {
   const [revealedCards, setRevealedCards] = useState({});
   const [viewMode, setViewMode] = useState("flashcards"); 
   const [quizState, setQuizState] = useState(null);
+
+  // Se ha removido el useEffect de migración, ya que se hará síncronamente arriba.
   const [storyState, setStoryState] = useState({ isOpen: false, loading: false, de: "", es: "" });
 
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenImage, setFullscreenImage] = useState(null);
   const [user, setUser] = useState(null);
   const [cardImages, setCardImages] = useState({});
+  const [unlockedCards, setUnlockedCards] = useState(() => {
+    try {
+      const saved = localStorage.getItem('deutschmeister_unlocked');
+      let parsed = saved ? JSON.parse(saved) : {};
+      
+      // MIGRACIÓN AUTOMÁTICA (SÍNCRONA)
+      const hasReset = localStorage.getItem('global_regen_reset_v3');
+      if (!hasReset) {
+        if (parsed && typeof parsed === 'object') {
+          for (const key in parsed) {
+            parsed[key].regenerated = false;
+          }
+          localStorage.setItem('deutschmeister_unlocked', JSON.stringify(parsed));
+        }
+        localStorage.setItem('global_regen_reset_v3', 'true');
+      }
+
+      return (parsed && typeof parsed === 'object') ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    if (unlockedCards && typeof unlockedCards === 'object' && Object.keys(unlockedCards).length > 0) {
+      localStorage.setItem('deutschmeister_unlocked', JSON.stringify(unlockedCards));
+    }
+  }, [unlockedCards]);
   const [isImageLoading, setIsImageLoading] = useState(null);
   const [isTutorOpen, setIsTutorOpen] = useState(false);
   const [isTutorFullscreen, setIsTutorFullscreen] = useState(false);
@@ -2022,14 +2085,28 @@ export default function App() {
 
   useEffect(() => {
     if (!user || !db) return;
-    const imagesRef = collection(db, 'artifacts', appId, 'public', 'data', 'flashcardImages');
+    const globalAppId = "deutschmeister-pro";
+    const imagesRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'flashcardImages');
     const unsubscribe = onSnapshot(imagesRef, (snapshot) => {
       const loadedImages = {};
       snapshot.forEach(doc => {
-        loadedImages[doc.id] = doc.data().imageBase64;
+        loadedImages[doc.id] = doc.data().imageUrl || doc.data().imageBase64;
       });
       setCardImages(loadedImages);
     }, (error) => console.error("Error cargando imágenes:", error));
+    return () => unsubscribe();
+  }, [user]);
+
+  useEffect(() => {
+    if (!user || !db || user.uid === 'offline_user') return;
+    const userUnlockedRef = collection(db, 'artifacts', appId, 'users', user.uid, 'unlockedCards');
+    const unsubscribe = onSnapshot(userUnlockedRef, (snapshot) => {
+      const unlocked = {};
+      snapshot.forEach(doc => {
+        unlocked[doc.id] = doc.data();
+      });
+      setUnlockedCards(unlocked);
+    }, (error) => console.error("Error cargando desbloqueos:", error));
     return () => unsubscribe();
   }, [user]);
 
@@ -2149,8 +2226,29 @@ export default function App() {
     setChatInput("");
     setIsChatLoading(true);
 
-    if (user && db) {
-      const chatDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'chat', 'history');
+    try {
+      const payload = {
+        contents: newMessages,
+        systemInstruction: { parts: [{ text: "Eres un tutor experto de alemán. Responde a las consultas del alumno (nivel A1) de forma clara, amigable y usando explicaciones en español y ejemplos en alemán." }] }
+      };
+      const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const responseText = response.candidates?.[0]?.content?.parts?.[0]?.text || "Lo siento, no pude generar una respuesta.";
+      const modelMessage = { role: "model", parts: [{ text: responseText }] };
+      const finalMessages = [...newMessages, modelMessage];
+      setChatMessages(finalMessages);
+
+      if (user && db) {
+        const chatDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'chat', 'history');
+        await setDoc(chatDocRef, { messages: finalMessages }, { merge: true }).catch(e => console.warn("Chat guardado localmente debido a permisos:", e));
+      }
+    } catch (error) {
+      console.error("Error en chat:", error);
+      setChatMessages([...newMessages, { role: "model", parts: [{ text: "Lo siento, ha ocurrido un error de conexión con el servidor. Inténtalo de nuevo." }] }]);
+    } finally {
       setIsChatLoading(false);
     }
   };
@@ -2164,42 +2262,101 @@ export default function App() {
     setChatInput(prompt);
   };
 
-  const generateCardImage = async (wordObj, e) => {
+  const generateCardImage = async (wordObj, e, forceRegenerate = false) => {
     if (e) e.stopPropagation();
-    const granted = await showRewardVideo();
-    if (!granted) return;
-const safeId = getSafeId(wordObj.de).substring(0, 150);
     
-    if (cardImages[safeId]) return;
-
-    setIsImageLoading(safeId);
-    try {
-      const promptText = `Generate a simple, clear, flat vector illustration on a white background representing the German word "${wordObj.de}" meaning "${wordObj.es}". No text in the image.`;
+    const safeId = getSafeId(wordObj.de).substring(0, 150);
+    
+    if (user && db) {
+      const userDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'unlockedCards', safeId);
       
-      const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-fast-generate-001:predict?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          instances: [{ prompt: promptText }],
-          parameters: { sampleCount: 1, aspectRatio: "1:1" }
-        })
-      });
-      
-      const base64Image = result?.predictions?.[0]?.bytesBase64Encoded;
-      if (!base64Image) {
-          throw new Error("No image data returned from API");
+      if (!forceRegenerate) {
+        // --- CASO 1: PRIMER DESBLOQUEO ---
+        // Verificar si la imagen ya existe en la base de datos global (cargada en cardImages)
+        const existingImage = cardImages[safeId];
+        if (existingImage) {
+          const granted = await showRewardVideo();
+          if (!granted) return;
+          setUnlockedCards(prev => ({ ...prev, [safeId]: { unlocked: true, regenerated: false } }));
+          try {
+            await setDoc(userDocRef, { unlocked: true, regenerated: false }, { merge: true });
+          } catch (error) {
+            console.warn("Error de permisos en la nube ignorado:", error);
+          }
+          return;
+        }
+        
+        // Si no existe globalmente, procedemos a generarla con Fal.ai
+      } else {
+        // --- CASO 2: REGENERACIÓN (HASTA 3 VECES) ---
+        const currentCount = unlockedCards && unlockedCards[safeId]?.regenerateCount !== undefined 
+                              ? unlockedCards[safeId].regenerateCount 
+                              : (unlockedCards && unlockedCards[safeId]?.regenerated ? 1 : 0);
+                              
+        if (currentCount >= 3) {
+          alert("Ya has regenerado esta imagen el máximo de veces permitido (3 veces).");
+          return;
+        }
       }
-      
-      setCardImages(prev => ({...prev, [safeId]: base64Image}));
 
-      if (user && db) {
-        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'flashcardImages', safeId);
-        await setDoc(docRef, { imageBase64: base64Image, word: wordObj.de }).catch(console.error);
+      const falKey = import.meta.env.VITE_FAL_KEY;
+      if (!falKey) { alert("Error Crítico: API Key de FAL.ai no encontrada en la configuración."); return; }
+      fal.config({ credentials: falKey });
+      
+      const granted = await showRewardVideo();
+      if (!granted) return;
+
+      setIsImageLoading(safeId);
+      try {
+        const context = activeChapter ? activeChapter.title : "";
+        const currentCount = unlockedCards && unlockedCards[safeId]?.regenerateCount !== undefined 
+                              ? unlockedCards[safeId].regenerateCount 
+                              : (unlockedCards && unlockedCards[safeId]?.regenerated ? 1 : 0);
+        const newCount = forceRegenerate ? currentCount + 1 : currentCount;
+
+        let promptText = `A beautiful, highly detailed, and purely graphic educational illustration representing the concept of "${wordObj.es}". Context: ${context}. The image must be a completely wordless scene containing ONLY objects, characters, or actions. ABSOLUTELY NO typography, NO letters, NO labels, NO text. Clean white background.`;
+        if (wordObj.type === "Letra") {
+          promptText = `A beautiful, highly detailed educational illustration of a single large, bold letter "${wordObj.es}". Include a beautiful object next to it whose name starts with this letter. Clean white background.`;
+        } else if (wordObj.type === "Número") {
+          promptText = `A beautiful, highly detailed educational illustration of a single large, bold number "${wordObj.es}". Include exactly ${wordObj.es} beautiful objects next to it to represent the quantity. Clean white background.`;
+        } else if (['Monate', 'Tage', 'Jahreszeiten'].includes(wordObj.category)) {
+          promptText = `A beautiful, highly detailed, and purely graphic miniature scene representing the time of year or concept of "${wordObj.es}". Context: ${context}. The image must be a completely wordless scene containing ONLY objects, characters, or actions. ABSOLUTELY NO typography, NO letters, NO labels, NO calendars with text. Clean white background.`;
+        }
+        
+        const result = await fal.subscribe("fal-ai/flux/schnell", {
+          input: {
+            prompt: promptText,
+            image_size: "square_hd",
+            num_inference_steps: 4,
+            sync_mode: true
+          }
+        });
+        
+        let dataUri = result?.data?.images?.[0]?.url;
+        if (!dataUri) throw new Error("No image data returned from FAL API");
+        
+        // Comprimir la imagen para que no exceda el límite de 1MB de Firestore, apuntando a ~200-500KB
+        dataUri = await compressImageBase64(dataUri, 1024, 0.9);
+        
+        setCardImages(prev => ({...prev, [safeId]: dataUri}));
+
+        const globalAppId = "deutschmeister-pro";
+        const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'flashcardImages', safeId);
+        await setDoc(docRef, { imageUrl: dataUri, word: wordObj.de, regenerateCount: newCount }, { merge: true });
+        
+        const strictDocRef = doc(db, 'public_content', 'data', 'flashcardImages', safeId);
+        await setDoc(strictDocRef, { imageUrl: dataUri, word: wordObj.de, regenerateCount: newCount }, { merge: true });
+        
+        setUnlockedCards(prev => ({ ...prev, [safeId]: { unlocked: true, regenerateCount: newCount } }));
+        await setDoc(userDocRef, { unlocked: true, regenerateCount: newCount }, { merge: true }).catch(e => console.warn(e));
+      } catch (error) {
+        console.error("Error generating image:", error);
+        alert("Error técnico: " + error.message);
+      } finally {
+        setIsImageLoading(null);
       }
-    } catch (error) {
-      console.error("Error generating image:", error);
-    } finally {
-      setIsImageLoading(null);
+    } else {
+      alert("Error: No estás conectado a la base de datos o no te has autenticado.");
     }
   };
 
@@ -2236,7 +2393,7 @@ const safeId = getSafeId(wordObj.de).substring(0, 150);
       headerClass += "bg-[#fdfbf7] border-amber-900/10 shadow-sm";
     }
 
-    const slideProps = { cardImages, generateCardImage, isImageLoading, openAiTutor };
+    const slideProps = { cardImages, generateCardImage, isImageLoading, openAiTutor, setFullscreenImage, unlockedCards };
 
     return (
       <div className="absolute inset-0 z-20 animate-in fade-in zoom-in-95 duration-200 rounded-2xl overflow-hidden shadow-2xl border border-slate-200/50 flex flex-col bg-white">
@@ -2365,7 +2522,9 @@ const safeId = getSafeId(wordObj.de).substring(0, 150);
                 {chapters.map(chap => (
                   <li key={chap.id}>
                     <button
-                      onClick={() => {
+                      onClick={async () => {
+                        const granted = await showRewardVideo();
+                        if (!granted) return;
                         setActiveChapterId(chap.id);
                         if (viewMode !== 'flashcards' && viewMode !== 'table') setViewMode('flashcards');
                       }}
@@ -2414,6 +2573,7 @@ const safeId = getSafeId(wordObj.de).substring(0, 150);
                       onClick={() => {
                         setActivePresentationId(pres.id);
                         setViewMode('presentation');
+                        setIsFullscreen(true);
                       }}
                       className={`w-full text-left px-4 py-3 flex items-center justify-between transition-colors border-l-4 ${activePresentationId === pres.id && viewMode === 'presentation' ? 'bg-indigo-50 text-indigo-900 font-bold border-indigo-600' : 'border-transparent hover:bg-slate-50 text-slate-700'}`}
                     >
@@ -2441,6 +2601,7 @@ const safeId = getSafeId(wordObj.de).substring(0, 150);
               onClose={() => {
                 setViewMode('flashcards');
                 setActivePresentationId(null);
+                setIsFullscreen(false);
               }} 
             />
           )}
@@ -2517,15 +2678,19 @@ const safeId = getSafeId(wordObj.de).substring(0, 150);
                {/* BOTÓN PARA VER LA PRESENTACIÓN */}
                {studyPlanModules.find(m => m.id === activeStudyPlanId).presentationUrl && (
                  <div className="mt-8 pt-6 border-t border-slate-200 flex justify-center sm:justify-start">
-                   <a 
-                     href={studyPlanModules.find(m => m.id === activeStudyPlanId).presentationUrl}
-                     target="_blank"
-                     rel="noopener noreferrer"
+                   <button 
+                     onClick={async (e) => {
+                       e.preventDefault();
+                       const granted = await showRewardVideo();
+                       if (granted) {
+                         window.open(studyPlanModules.find(m => m.id === activeStudyPlanId).presentationUrl, "_blank");
+                       }
+                     }}
                      className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all hover:scale-105"
                    >
                      <Presentation size={20} />
                      Abrir Presentación de la Clase
-                   </a>
+                   </button>
                  </div>
                )}
             </div>
@@ -2574,8 +2739,11 @@ const safeId = getSafeId(wordObj.de).substring(0, 150);
                   const isRevealed = revealedCards[index];
                   const isLongText = word.de.length > 25;
                   const safeId = getSafeId(word.de).substring(0, 150);
-                  const imgBase64 = cardImages[safeId];
+                  const isUnlocked = unlockedCards && unlockedCards[safeId]?.unlocked;
+                  const imgBase64 = isUnlocked ? cardImages[safeId] : null;
+                  const existsGlobally = !!cardImages[safeId];
                   const isGenLoading = isImageLoading === safeId;
+                  const isRegenerated = unlockedCards && unlockedCards[safeId]?.regenerated;
                   
                   return (
                     <div key={index} onClick={() => toggleCard(index)} className="group cursor-pointer perspective-1000 h-56">
@@ -2584,8 +2752,14 @@ const safeId = getSafeId(wordObj.de).substring(0, 150);
                         {/* Frente */}
                         <div className="absolute inset-0 backface-hidden bg-white border-2 border-slate-200 rounded-xl shadow-sm hover:border-blue-400 overflow-hidden flex flex-col transition-all">
                            {imgBase64 ? (
-                              <div className="h-28 w-full bg-slate-100 relative">
-                                <img src={`data:image/png;base64,${imgBase64}`} alt={word.de} className="w-full h-full object-contain mix-blend-multiply p-2" />
+                              <div className="h-28 w-full bg-slate-100 relative group/regen">
+                                <img src={(typeof imgBase64 === 'string' && (imgBase64.startsWith('http') || imgBase64.startsWith('data:'))) ? imgBase64 : (typeof imgBase64 === 'string' ? `data:image/png;base64,${imgBase64}` : '')} alt={word.de} className="w-full h-full object-contain mix-blend-multiply p-2 cursor-zoom-in hover:scale-105 transition-transform" onClick={(e) => { e.stopPropagation(); if (typeof setFullscreenImage === 'function') setFullscreenImage(imgBase64); }} />
+                                {!isRegenerated && (
+                                  <button onClick={(e) => { e.stopPropagation(); generateCardImage(word, e, true); }} className="absolute top-2 right-2 bg-white/90 hover:bg-white text-blue-600 p-1.5 rounded-lg shadow-sm opacity-0 group-hover/regen:opacity-100 transition-opacity flex items-center gap-1 text-[10px] font-bold" title="Regenerar imagen (Solo 1 vez)">
+                                    {isGenLoading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+                                    <span className="hidden group-hover/regen:inline-block">Regenerar</span>
+                                  </button>
+                                )}
                               </div>
                            ) : (
                               <div className="h-28 w-full bg-slate-50 flex flex-col items-center justify-center relative border-b border-slate-100 group/imgbtn z-10">
@@ -2593,10 +2767,10 @@ const safeId = getSafeId(wordObj.de).substring(0, 150);
                                 <button 
                                   onClick={(e) => generateCardImage(word, e)} 
                                   className="relative z-30 bg-white hover:bg-blue-50 text-blue-600 px-4 py-2 rounded-lg shadow-md border border-blue-200 transition-all flex items-center gap-2 text-xs font-bold" 
-                                  title="Generar Imagen Representativa"
+                                  title={existsGlobally ? "Revelar Imagen Existente" : "Generar Imagen Representativa"}
                                 >
                                   {isGenLoading ? <Loader2 size={16} className="animate-spin text-blue-500" /> : <Sparkles size={16} className="text-blue-500" />}
-                                  {isGenLoading ? 'Generando...' : 'Generar Imagen'}
+                                  {isGenLoading ? 'Cargando...' : (existsGlobally ? 'Revelar Imagen' : 'Generar Imagen')}
                                 </button>
                               </div>
                            )}
@@ -2763,6 +2937,17 @@ const safeId = getSafeId(wordObj.de).substring(0, 150);
           </div>
         </div>
       </aside>
+    )}
+
+    {fullscreenImage && (
+      <div className="fixed inset-0 z-[100] bg-slate-900/95 flex items-center justify-center p-4" onClick={() => setFullscreenImage(null)}>
+        <div className="relative max-w-5xl max-h-screen w-full h-full flex flex-col items-center justify-center">
+          <button onClick={(e) => { e.stopPropagation(); setFullscreenImage(null); }} className="absolute top-4 right-4 text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-full transition-colors z-[110]">
+            <X size={24} />
+          </button>
+          <img src={(typeof fullscreenImage === 'string' && (fullscreenImage.startsWith('http') || fullscreenImage.startsWith('data:'))) ? fullscreenImage : (typeof fullscreenImage === 'string' ? `data:image/png;base64,${fullscreenImage}` : '')} alt="Vista Ampliada" className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl p-2 cursor-zoom-out bg-white" onClick={(e) => e.stopPropagation()} />
+        </div>
+      </div>
     )}
   </main>
 

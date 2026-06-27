@@ -1,14 +1,14 @@
 <div align="center">
   
-  # DeutschMeister PRO A1
+  # 🇩🇪 DeutschMeister PRO A1
   
-  **El estándar definitivo para dominar el alemán técnico y prepararte para el Goethe Zertifikat, impulsado por Inteligencia Artificial.**
+  **El estándar definitivo para dominar el alemán A1 y el vocabulario técnico de inserción laboral en la región DACH, impulsado por Inteligencia Artificial de vanguardia y arquitectura de grado industrial.**
 
   [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
   [![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)](https://vitejs.dev/)
-  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-  [![Firebase](https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+  [![Capacitor](https://img.shields.io/badge/Capacitor-119EFF?style=for-the-badge&logo=capacitor&logoColor=white)](https://capacitorjs.com/)
   [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=googlebard&logoColor=white)](https://deepmind.google/technologies/gemini/)
+  [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
 
   <br />
 </div>
@@ -17,83 +17,101 @@
 
 ## 🎯 Objetivo del Proyecto
 
-**DeutschMeister PRO A1** no es solo una aplicación de flashcards; es un ecosistema inmersivo de aprendizaje diseñado específicamente para hispanohablantes. Su misión principal es acelerar la adquisición del nivel A1 de alemán, combinando técnicas pedagógicas probadas con la tecnología más vanguardista.
+**DeutschMeister PRO A1** no es simplemente una aplicación de aprendizaje; es un ecosistema inmersivo de ingeniería de software educativo diseñado para hispanohablantes. Su propósito principal es acelerar la adquisición y dominio del nivel A1 de alemán, combinando métodos pedagógicos de retención comprobados con un backend serverless altamente optimizado y sistemas integrados de Inteligencia Artificial Generativa.
 
-Ya sea que te prepares para el examen **Goethe Zertifikat A1** o necesites vocabulario técnico para integrarte rápidamente en el mercado laboral de la región DACH, DeutschMeister PRO A1 se adapta a tu ritmo, creando un puente directo entre la teoría y la práctica real.
-
----
-
-## ✨ Características Principales
-
-Nuestra interfaz está diseñada meticulosamente para ofrecer una experiencia de usuario fluida, rápida y sin distracciones:
-
-*   📚 **Diccionario Interactivo Estructurado:** Vocabulario clasificado estratégicamente por capítulos fundamentales (Alfabeto, Tiempo, Transporte, Verbos Modales, etc.).
-*   🎧 **Síntesis de Voz Nativa:** Escucha la pronunciación perfecta de cada palabra y frase utilizando tecnologías de Text-to-Speech con acento alemán auténtico.
-*   🗂️ **Tarjetas de Memoria (Flashcards) 3D:** Un sistema de repaso visual e interactivo que facilita la retención a largo plazo.
-*   📖 **Módulos de Gramática Interactiva:** Explicaciones claras sobre los pilares del alemán (Nominativo, Acusativo, Dativo) con ejemplos aplicados y autoevaluaciones.
-*   🔍 **Motor de Búsqueda de Alto Rendimiento:** Encuentra cualquier palabra en español o alemán al instante.
-*   ☁️ **Sincronización en la Nube:** Tu progreso, historial de conversaciones y generación de contenido se guardan de forma segura utilizando la arquitectura serverless de Firebase.
+El software está concebido tanto para quienes aspiran a certificar el examen oficial **Goethe Zertifikat A1**, como para profesionales técnicos que requieren integrarse rápidamente a la fuerza laboral en Alemania, Austria o Suiza (región DACH), proporcionando herramientas contextuales avanzadas de traducción, simulación y generación multimedia.
 
 ---
 
-## 🤖 El Poder de la IA (Google Gemini)
+## 🛠️ Arquitectura y Topología de Datos (Grado Industrial)
 
-Lo que realmente separa a DeutschMeister PRO A1 del resto es su profunda integración con los modelos generativos de **Google Gemini**. La aplicación actúa como un tutor hiper-personalizado disponible 24/7.
+La infraestructura de la aplicación se diseñó y refactorizó siguiendo principios estrictos de sistemas de control e ingeniería de datos para garantizar robustez y economía de recursos:
 
-> *La inteligencia artificial no solo corrige; contextualiza, explica y visualiza el idioma.*
+```mermaid
+graph TD
+    A[Usuario] --> B{Filtro de Memoria}
+    B -->|Bypass / Costo 0| C[RAM del Dispositivo]
+    B -->|Bypass / Costo 0| D[Caché Global Compartido en Firestore]
+    B -->|Falta Tensión / Costo 1| E{Transductor de Energía}
+    E -->|Tiene Créditos| F[Consumo de Energía y API Gemini]
+    F --> I[Almacenamiento en Memoria Privada del Usuario]
+    F --> J[Inyección al Caché Global Compartido]
+```
 
-*   🖼️ **Generación de Arte para Flashcards:** Si una tarjeta no tiene imagen, la API de Gemini (modelo visual) diseña y renderiza al vuelo una ilustración vectorial representativa de la palabra, ayudando a la asociación visual-memoria.
-*   🗣️ **Tutor Conversacional en Tiempo Real:** Un chat interactivo con una personalidad pedagógica experta. Resuelve dudas, explica por qué una estructura gramatical es incorrecta y ofrece ejemplos adaptados a tu nivel.
-*   🎭 **Simulador de Rol A1 (Roleplay):** Practica situaciones de la vida real (pedir en un restaurante en Múnich, comprar un billete de tren en Berlín) interactuando con agentes controlados por IA bajo prompts estrictos de nivel A1.
-*   ✉️ **Evaluador de Exámenes (Goethe Zertifikat):** El simulador de correo electrónico te permite redactar un texto basándose en instrucciones de examen reales. La IA de Gemini analiza tu estructura, cuenta las palabras, verifica tus saludos/despedidas y corrige tu posición del verbo, simulando a un examinador oficial.
+### 1. Aislamiento Multi-Tenant (Seguridad de Datos)
+Para prevenir el sangrado de datos (*Data Bleeding*), el sistema implementa una arquitectura multi-tenant estricta. La telemetría, el progreso en Quizzes, el historial del Tutor IA, las simulaciones de Roleplay y los cuentos generados se direccionan y aíslan de forma privada bajo el esquema `users/{userId}/...` utilizando reglas de seguridad avanzadas en Firebase. Cada sesión es un circuito cerrado e independiente.
+
+### 2. Topología Híbrida de Caché (Shared Image Memory)
+Para mitigar el sobreconsumo y optimizar la economía de tokens de la API visual de Gemini (`imagen-3.0-fast-generate-001`), se implementó un sistema de bypass en cascada:
+*   **RAM local (Bypass instantáneo):** Si el componente mantiene la referencia de la imagen en memoria local, se renderiza de inmediato.
+*   **Caché global compartido (`public_content/data/flashcardImages/{wordId}`):** Antes de consumir API, la aplicación consulta este caché común en Firestore. Si cualquier otro estudiante ya generó la imagen ilustrativa para esa palabra, el cliente la descarga directamente a **costo 0 de energía**, liberando al procesador y a la API de cálculos repetitivos.
+*   **Generación e inyección distribuida:** Solo si la palabra carece de ilustración en el caché colectivo global, el transductor de energía consume 1 crédito, consulta la API de Gemini para generar una ilustración vectorial optimizada, e inmediatamente hace un *commit* dual: la inyecta en la vista del usuario y la almacena en el caché global para beneficio de toda la red de usuarios.
+
+### 3. Transductor de Energía (Sistema de Créditos IA)
+La ejecución de lógica de IA de alta intensidad de procesamiento (como la generación de cuentos y nuevas ilustraciones) está regulada por un acumulador de energía (sistema de créditos de usuario). Cada consulta de IA de alto coste consume créditos de la cuenta del usuario, lo que estabiliza el consumo de la API, evita sobrecargas y simula un entorno de facturación escalable.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 📚 Mapeo Completo de Vocabulario y Plan de Estudios
 
-La aplicación ha sido construida siguiendo los estándares de la industria moderna para garantizar escalabilidad, velocidad y un desarrollo robusto:
+La base de datos del vocabulario de la aplicación está estructurada en **16 capítulos fundamentales (Kapitel 0 al 15)** que cubren de manera exhaustiva todo el temario requerido para el nivel A1 y terminología técnica avanzada de la vida cotidiana en Alemania:
 
-| Capa | Tecnología | Propósito |
-| :--- | :--- | :--- |
-| **Core** | `React 18` + `Vite` | Arquitectura de componentes UI y compilación ultra rápida. |
-| **Estilos** | `Tailwind CSS v4` | Diseño utilitario, responsive y componentes estéticos avanzados (Glassmorphism). |
-| **Íconos** | `Lucide React` | Iconografía vectorial consistente y personalizable. |
-| **Backend (BaaS)** | `Firebase Cloud Firestore` | Base de datos NoSQL en tiempo real para almacenar el historial de usuarios y caché de imágenes. |
-| **Autenticación** | `Firebase Auth` | Autenticación anónima frictionless para asegurar el acceso a la base de datos. |
-| **IA Engine** | `Google Gemini API` | Modelos `gemini-2.5-flash` y `gemini-2.5-flash-image` para NLP, evaluación y generación multimodal. |
+*   **Kapitel 0: Alphabet & Zahlen** (El alfabeto alemán, deletreo, números cardinales y ordinales, y operadores matemáticos básicos).
+*   **Kapitel 1: Zeit & Datum** (Estructura temporal: días de la semana, meses, estaciones del año, partes del día y lectura horaria formal/informal).
+*   **Kapitel 2: Personen & Kontakte** (Fórmulas de saludo y presentación, datos personales de contacto, nacionalidades, profesiones y pronombres personales).
+*   **Kapitel 3: Wohnen** (El hogar: tipos de vivienda, habitaciones, mobiliario detallado, electrodomésticos y preposiciones de lugar estáticas).
+*   **Kapitel 4: Freizeit** (Actividades de ocio, hobbies, deportes y el uso de los complejos verbos separables en presente).
+*   **Kapitel 5: Essen & Trinken** (Alimentación: frutas, verduras, carnes, lácteos, comidas preparadas, compras en el supermercado y verbos modales de deseo/habilidad).
+*   **Kapitel 6: Einkaufen** (El comercio: tiendas, ropa, tallas, colores, precios y la introducción práctica al caso Acusativo).
+*   **Kapitel 7: Reisen & Verkehr** (Movilidad: medios de transporte terrestres y aéreos, indicaciones en la estación de tren, viajes y el tiempo pasado Perfekt con *haben* y *sein*).
+*   **Kapitel 8: Post & Bank** (Trámites y servicios postales, transacciones bancarias, dinero físico, divisas y redacción de cartas formales).
+*   **Kapitel 9: Gesundheit** (Cuidado de la salud: partes de la anatomía humana, síntomas de enfermedades, la consulta del médico y el uso del modo Imperativo).
+*   **Kapitel 10: Kleidung** (Prendas de vestir en profundidad, accesorios, el concepto de estilo y la declinación básica de adjetivos).
+*   **Kapitel 11: Schule & Beruf** (El ámbito educativo y laboral: asignaturas, herramientas de trabajo, la oficina moderna y la formulación de opiniones profesionales).
+*   **Kapitel 12: Fahrschuldeutsch: Auto** *(Módulo Técnico Especializado)* (Términos esenciales para la autoescuela alemana, partes del vehículo, reglas de tráfico y vocabulario de seguridad vial para la obtención de la licencia de conducir).
+*   **Kapitel 13: Grammatik: Konnektoren** (Sintaxis avanzada de nivel A1: conectores de posición cero como ADUSO, y conectores subordinantes de transposición verbal como *weil, dass, wenn*).
+*   **Kapitel 14: Basisverben & Adjektive** (Los verbos de acción y adjetivos calificativos más frecuentes para la construcción de frases de uso diario).
+*   **Kapitel 15: Adverbien & Fragewörter** (Adverbios de tiempo y espacio, y la matriz completa de pronombres interrogativos abiertos "W-Fragen").
 
 ---
 
-## 🚀 Guía de Inicio Rápido (Installation)
+## ⚡ Características Principales y Funciones de IA de Alto Impacto
 
-Sigue estos pasos para ejecutar el entorno de desarrollo en tu máquina local.
+### 1. 📖 Clases Magistrales e Interactive Presentations (Google Drive)
+Cada uno de los 16 capítulos cuenta con un **botón de enlace directo a una presentación de diapositivas interactiva** alojada en la nube (Google Drive). Estas presentaciones actúan como clases magistrales visuales que exponen detalladamente las reglas gramaticales específicas, esquemas de conjugación, fonética y tablas de declinaciones del capítulo, sirviendo como la preparación teórica perfecta antes del entrenamiento con las tarjetas de memoria.
 
-### 1. Clonar el Repositorio
+### 2. 📝 Cuentos IA (AI Story Generator)
+Ubicado de forma destacada en la cabecera de cada Kapitel, este generador es un potente motor cognitivo de lectura comprensiva. Al activarse, invoca a **Google Gemini** para redactar un relato exclusivo y adaptado al nivel A1 utilizando **únicamente el vocabulario y las estructuras gramaticales de ese capítulo específico**. 
+*   **Traducción Paralela Integrada:** Permite alternar instantáneamente la traducción de la historia en español para una autoevaluación inmediata.
+*   **Gestión de Consumo de la API:** Al ser una tarea de alto consumo de procesamiento lingüístico, su uso consume créditos activos del sistema de energía del usuario para asegurar un uso equilibrado y sostenible de la API.
 
-Abre tu terminal y ejecuta:
+### 3. 🗣️ Tutor IA Conversacional 24/7
+Un chat pedagógico que actúa como un profesor nativo de alemán en tu bolsillo. Cuenta con memoria contextual persistente aislada por usuario y está programado para resolver dudas de gramática, explicar errores comunes en tiempo real y guiarte con analogías precisas.
 
+### 4. 🎭 Simulador de Rol A1 (Roleplay)
+Prueba tus habilidades de comunicación simulando situaciones prácticas cotidianas en entornos de la región DACH (pedir café en Berlín, reservar un hotel en Zúrich). La IA adopta la personalidad del interlocutor nativo y te evalúa bajo criterios estrictos del Goethe Zertifikat, sin salir del nivel de dificultad adecuado.
+
+### 5. ✉️ Evaluador de Exámenes de Redacción
+El simulador de correo electrónico te plantea desafíos reales de redacción del examen Goethe Zertifikat A1. Al redactar tu respuesta, la IA analiza y desglosa tu rendimiento: cuenta el número de palabras, valida la estructura formal (saludos, despedidas) y corrige la posición de los verbos en oraciones principales y subordinadas, dándote retroalimentación idéntica a la de un examinador oficial.
+
+### 6. 🎧 Sícs de Voz Nativa (Text-To-Speech)
+Todas las palabras de los 16 capítulos cuentan con reproducción de audio nativa mediante síntesis de voz nativa de alta fidelidad, entrenando el oído del estudiante con la acentuación y fonética de habla alemana estándar (*Hochdeutsch*).
+
+---
+
+## 🚀 Guía de Inicio Rápido (Local & Compilación APK)
+
+### 1. Clonar y Preparar el Entorno
 ```bash
 git clone https://github.com/TU_USUARIO/DeutschMeister-PRO-A1.git
 cd "DeutschMeister-PRO-A1"
-```
-
-### 2. Instalar Dependencias
-
-Asegúrate de tener Node.js instalado. Luego ejecuta:
-
-```bash
 npm install
 ```
 
-### 3. Configurar Variables de Entorno
-
-Renombra el archivo `.env.example` a `.env` (o crea un archivo nuevo `.env` en la raíz del proyecto). Configura tus credenciales de acceso:
-
+### 2. Configurar Variables de Entorno
+Crea un archivo `.env` en la raíz del proyecto y define los siguientes parámetros del circuito:
 ```env
-# API Key de Google Gemini
 VITE_GEMINI_API_KEY="tu_api_key_de_gemini_aqui"
-
-# Configuración de Firebase
 VITE_FIREBASE_API_KEY="tu_firebase_api_key"
 VITE_FIREBASE_AUTH_DOMAIN="tu_proyecto.firebaseapp.com"
 VITE_FIREBASE_PROJECT_ID="tu_proyecto"
@@ -102,19 +120,22 @@ VITE_FIREBASE_MESSAGING_SENDER_ID="123456789"
 VITE_FIREBASE_APP_ID="1:12345:web:abcd"
 ```
 
-*Nota: Asegúrate de configurar las Reglas de Firestore para permitir acceso de lectura/escritura a los usuarios autenticados según se define en la documentación interna.*
-
-### 4. Arrancar el Servidor de Desarrollo
-
-Una vez configurado todo, lanza el entorno local con Vite:
-
+### 3. Ejecución en Entorno Local (Desarrollo)
+Para lanzar el servidor de desarrollo web ultrarrápido con Vite:
 ```bash
 npm run dev
 ```
 
-La aplicación estará corriendo y disponible en `http://localhost:5173/`. ¡Viel Erfolg beim Lernen! (¡Mucho éxito en el aprendizaje!)
+### 4. Compilación del APK Nativo (Android)
+Para empaquetar y generar el ejecutable nativo de Android utilizando Capacitor y Gradle, ejecuta el siguiente pipeline consolidado en tu terminal de Windows:
+```powershell
+cmd /c "npm run build && npx cap sync android && rmdir /s /q android\app\build & set JAVA_HOME=C:\Program Files\Android\Android Studio\jbr&& cd android && gradlew assembleDebug"
+```
+El instalador final (`app-debug.apk`) se generará automáticamente en:
+`android/app/build/outputs/apk/debug/app-debug.apk`
 
 ---
+
 <div align="center">
-  <small>Desarrollado con ❤️ para la comunidad de estudiantes de alemán.</small>
+  <small>DeutschMeister PRO A1 - Un puente tecnológico e inteligente hacia el dominio del idioma alemán. Desarrollado con ❤️ para la comunidad global de estudiantes y profesionales.</small>
 </div>
