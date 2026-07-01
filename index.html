@@ -2,9 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DeutschMeister PRO A1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>DeutschMeister Pro A1</title>
+    <script>
+      window.onerror = function(message, source, lineno, colno, error) {
+        alert('Global Error: ' + message + ' at ' + source + ':' + lineno + ':' + colno + '\n' + (error ? error.stack : ''));
+      };
+      window.addEventListener('unhandledrejection', function(event) {
+        alert('Unhandled Promise Rejection: ' + (event.reason ? event.reason.message || event.reason : 'unknown'));
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>
