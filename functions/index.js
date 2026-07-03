@@ -231,7 +231,7 @@ export const sendTutorChatMessage = onRequest(
     try {
       const genAI = new GoogleGenerativeAI(geminiApiKey.value());
       const model = genAI.getGenerativeModel({ 
-        model: "gemma-2-9b-it", 
+        model: "gemini-3.5-flash", 
         systemInstruction: systemInstruction
       });
 
