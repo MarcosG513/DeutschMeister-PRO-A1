@@ -1,0 +1,4346 @@
+[
+  {
+    "de": "A, a",
+    "es": "A",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "B, b",
+    "es": "B",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "C, c",
+    "es": "C",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "D, d",
+    "es": "D",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "E, e",
+    "es": "E",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "F, f",
+    "es": "F",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "G, g",
+    "es": "G",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "H, h",
+    "es": "H",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "I, i",
+    "es": "I",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "J, j",
+    "es": "J",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "K, k",
+    "es": "K",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "L, l",
+    "es": "L",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "M, m",
+    "es": "M",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "N, n",
+    "es": "N",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "O, o",
+    "es": "O",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "P, p",
+    "es": "P",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "Q, q",
+    "es": "Q",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "R, r",
+    "es": "R",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "S, s",
+    "es": "S",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "T, t",
+    "es": "T",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "U, u",
+    "es": "U",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "V, v",
+    "es": "V",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "W, w",
+    "es": "W",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "X, x",
+    "es": "X",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "Y, y",
+    "es": "Y",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "Z, z",
+    "es": "Z",
+    "en": "",
+    "type": "Letra"
+  },
+  {
+    "de": "Ä, ä",
+    "es": "A con diéresis",
+    "en": "",
+    "type": "Especial"
+  },
+  {
+    "de": "Ö, ö",
+    "es": "O con diéresis",
+    "en": "",
+    "type": "Especial"
+  },
+  {
+    "de": "Ü, ü",
+    "es": "U con diéresis",
+    "en": "",
+    "type": "Especial"
+  },
+  {
+    "de": "ß",
+    "es": "S fuerte",
+    "en": "",
+    "type": "Especial"
+  },
+  {
+    "de": "null",
+    "es": "cero (0)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "eins",
+    "es": "uno (1)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "zwei",
+    "es": "dos (2)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "drei",
+    "es": "tres (3)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "vier",
+    "es": "cuatro (4)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "fünf",
+    "es": "cinco (5)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "sechs",
+    "es": "seis (6)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "sieben",
+    "es": "siete (7)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "acht",
+    "es": "ocho (8)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "neun",
+    "es": "nueve (9)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "zehn",
+    "es": "diez (10)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "elf",
+    "es": "once (11)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "zwölf",
+    "es": "doce (12)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "dreizehn",
+    "es": "trece (13)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "sechzehn",
+    "es": "dieciséis (16)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "siebzehn",
+    "es": "diecisiete (17)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "zwanzig",
+    "es": "veinte (20)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "einundzwanzig",
+    "es": "veintiuno (21)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "dreißig",
+    "es": "treinta (30)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "vierzig",
+    "es": "cuarenta (40)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "hundert",
+    "es": "cien (100)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "tausend",
+    "es": "mil (1000)",
+    "en": "",
+    "type": "Número"
+  },
+  {
+    "de": "der erste",
+    "es": "primero (1.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der zweite",
+    "es": "segundo (2.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der dritte",
+    "es": "tercero (3.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der vierte",
+    "es": "cuarto (4.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der fünfte",
+    "es": "quinto (5.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der sechste",
+    "es": "sexto (6.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der siebte",
+    "es": "séptimo (7.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der achte",
+    "es": "octavo (8.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der neunte",
+    "es": "noveno (9.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der zehnte",
+    "es": "décimo (10.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der zwanzigste",
+    "es": "vigésimo (20.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "der einundzwanzigste",
+    "es": "vigésimo primero (21.)",
+    "en": "",
+    "type": "Ordinal"
+  },
+  {
+    "de": "die Hälfte",
+    "es": "la mitad",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Viertel",
+    "es": "el cuarto (1/4)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "plus / minus",
+    "es": "más / menos",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "mal / durch",
+    "es": "por / dividido entre",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "das Prozent",
+    "es": "el por ciento (%)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Woche",
+    "es": "la semana",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "Montag",
+    "es": "lunes",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Dienstag",
+    "es": "martes",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Mittwoch",
+    "es": "miércoles",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Donnerstag",
+    "es": "jueves",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Freitag",
+    "es": "viernes",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Samstag",
+    "es": "sábado",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Sonntag",
+    "es": "domingo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "am + Tag",
+    "es": "en el + día",
+    "en": "",
+    "type": "Preposición"
+  },
+  {
+    "de": "das Wochenende",
+    "es": "el fin de semana",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "am Wochenende",
+    "es": "el fin de semana (en el)",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "der Feiertag",
+    "es": "el día festivo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Jahr",
+    "es": "el año",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Monat",
+    "es": "el mes",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Januar",
+    "es": "enero",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Februar",
+    "es": "febrero",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "März",
+    "es": "marzo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "April",
+    "es": "abril",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Mai",
+    "es": "mayo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Juni",
+    "es": "junio",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Juli",
+    "es": "julio",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "August",
+    "es": "agosto",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "September",
+    "es": "septiembre",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Oktober",
+    "es": "octubre",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "November",
+    "es": "noviembre",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Dezember",
+    "es": "diciembre",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Frühling",
+    "es": "la primavera",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Sommer",
+    "es": "el verano",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Herbst",
+    "es": "el otoño",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Winter",
+    "es": "el invierno",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Tag",
+    "es": "el día",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Morgen",
+    "es": "la mañana",
+    "en": "small cute 3D analog wall clock showing 8:00 AM with a rising sun symbol next to it",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Vormittag",
+    "es": "antes del mediodía",
+    "en": "small cute 3D analog wall clock showing 10:00 AM with a bright morning sun symbol next to it",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Mittag",
+    "es": "el mediodía",
+    "en": "small cute 3D analog wall clock showing exactly 12:00 noon with a bright sun directly overhead",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Nachmittag",
+    "es": "la tarde",
+    "en": "small cute 3D analog wall clock showing 4:00 PM with a setting sun symbol next to it",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Abend",
+    "es": "el atardecer / noche",
+    "en": "small cute 3D analog wall clock showing 8:00 PM with a crescent moon symbol next to it",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Nacht",
+    "es": "la noche profunda",
+    "en": "small cute 3D analog wall clock showing 12:00 midnight with stars and a moon symbol next to it",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "am Morgen",
+    "es": "por la mañana",
+    "en": "small cute 3D analog wall clock showing 8:00 AM with a rising sun symbol next to it",
+    "type": "Frase"
+  },
+  {
+    "de": "am Vormittag",
+    "es": "por la mañana (tarde)",
+    "en": "small cute 3D analog wall clock showing 10:00 AM with a bright morning sun symbol next to it",
+    "type": "Frase"
+  },
+  {
+    "de": "am Mittag",
+    "es": "al mediodía",
+    "en": "small cute 3D analog wall clock showing exactly 12:00 noon with a bright sun directly overhead",
+    "type": "Frase"
+  },
+  {
+    "de": "am Nachmittag",
+    "es": "por la tarde",
+    "en": "small cute 3D analog wall clock showing 4:00 PM with a setting sun symbol next to it",
+    "type": "Frase"
+  },
+  {
+    "de": "am Abend",
+    "es": "por el atardecer",
+    "en": "small cute 3D analog wall clock showing 8:00 PM with a crescent moon symbol next to it",
+    "type": "Frase"
+  },
+  {
+    "de": "in der Nacht",
+    "es": "en la noche",
+    "en": "small cute 3D analog wall clock showing 12:00 midnight with stars and a moon symbol next to it",
+    "type": "Frase"
+  },
+  {
+    "de": "die Uhrzeit",
+    "es": "la hora",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "Wann?",
+    "es": "¿Cuándo?",
+    "en": "",
+    "type": "Pregunta"
+  },
+  {
+    "de": "Wie spät ist es?",
+    "es": "¿Qué hora es?",
+    "en": "",
+    "type": "Pregunta"
+  },
+  {
+    "de": "Wie viel Uhr ist es?",
+    "es": "¿Qué hora es? (formal)",
+    "en": "",
+    "type": "Pregunta"
+  },
+  {
+    "de": "ein Uhr",
+    "es": "la una",
+    "en": "",
+    "type": "Hora"
+  },
+  {
+    "de": "halb zwei",
+    "es": "la una y media",
+    "en": "",
+    "type": "Hora"
+  },
+  {
+    "de": "Viertel vor drei",
+    "es": "tres menos cuarto",
+    "en": "",
+    "type": "Hora"
+  },
+  {
+    "de": "kurz vor 4",
+    "es": "poco antes de las 4",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "gleich 4",
+    "es": "casi las 4",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "genau 4 Uhr",
+    "es": "exactamente las 4",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "fünf nach 4",
+    "es": "cuatro y cinco",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "um 3 Uhr",
+    "es": "a las 3",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "von 2 bis 3 Uhr",
+    "es": "de 2 a 3",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "ab 3 Uhr",
+    "es": "a partir de las 3",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "anfangen",
+    "es": "empezar / comenzar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Anfang",
+    "es": "el comienzo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "aufhören",
+    "es": "terminar / cesar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Ende",
+    "es": "el final",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "dauern",
+    "es": "durar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Alltag",
+    "es": "el día a día / rutina",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "pünktlich",
+    "es": "puntual",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "die Verspätung",
+    "es": "el retraso",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "regelmäßig",
+    "es": "regularmente",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "der Vorname",
+    "es": "primer nombre",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Nachname",
+    "es": "apellido",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "heißen",
+    "es": "llamarse",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "buchstabieren",
+    "es": "deletrear",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Frau",
+    "es": "la mujer / señora",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Mann",
+    "es": "el hombre / marido",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Dame",
+    "es": "la dama",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Herr",
+    "es": "el señor",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "männlich / weiblich",
+    "es": "masculino / femenino",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "das Mädchen",
+    "es": "la niña",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Junge",
+    "es": "el niño",
+    "en": "cute 3D avatar of a young little boy character smiling",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Adresse",
+    "es": "la dirección",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Wohnort",
+    "es": "lugar de residencia",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "wohnen / leben",
+    "es": "vivir / residir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Straße",
+    "es": "la calle",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Platz",
+    "es": "la plaza",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Nummer",
+    "es": "el número / de casa",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Stadt",
+    "es": "la ciudad",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Postleitzahl",
+    "es": "código postal",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Dorf / das Land",
+    "es": "el pueblo / el país",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Telefon",
+    "es": "el teléfono",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "telefonieren / anrufen",
+    "es": "hablar por tel. / llamar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die E-Mail",
+    "es": "el correo electrónico",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "Ich bin geboren am...",
+    "es": "Nací el...",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "das Geburtsdatum",
+    "es": "fecha de nacimiento",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Geburtstag",
+    "es": "el cumpleaños",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "geboren in",
+    "es": "nacido en",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Jahre alt sein",
+    "es": "tener ... años",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "die Familie",
+    "es": "la familia",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Familienstand",
+    "es": "estado civil",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "verheiratet / ledig",
+    "es": "casado/a / soltero/a",
+    "en": "cute 3D avatar of a groom in a tuxedo standing next to a single man in casual clothes",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "heiraten",
+    "es": "casarse",
+    "en": "cute 3D avatar of a bride in a white dress and a groom in a black tuxedo getting married",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Ehefrau / der Ehemann",
+    "es": "esposa / esposo",
+    "en": "cute 3D avatar of a married adult man and adult woman standing together",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Hochzeit",
+    "es": "la boda",
+    "en": "cute 3D avatar of a wedding cake with a bride and groom on top",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Vater / die Mutter",
+    "es": "padre / madre",
+    "en": "cute 3D avatar of a father holding a baby and a mother standing next to him",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Eltern",
+    "es": "los padres",
+    "en": "cute 3D avatar of an adult man and adult woman holding hands with a small child",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "das Kind / Baby",
+    "es": "el niño / bebé",
+    "en": "cute 3D avatar of a happy little baby wearing a diaper",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Sohn / die Tochter",
+    "es": "hijo / hija",
+    "en": "cute 3D avatar of a young boy and a young girl holding school backpacks",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Bruder / Schwester",
+    "es": "hermano / hermana",
+    "en": "cute 3D avatar of a boy and girl playing with toys together",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Geschwister",
+    "es": "los hermanos",
+    "en": "cute 3D avatar of three happy young children standing together",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "die Oma / der Opa",
+    "es": "abuela / abuelo",
+    "en": "cute 3D avatar of an elderly old man and an elderly old woman with gray hair",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Großeltern",
+    "es": "los abuelos",
+    "en": "cute 3D avatar of an elderly couple hugging a young child",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "die Verwandten",
+    "es": "los parientes",
+    "en": "cute 3D avatar of a big group of many people of different ages",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "der Freund / Freundin",
+    "es": "amigo / amiga",
+    "en": "cute 3D avatar of a young man and a young woman giving a high-five",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der/die Bekannte",
+    "es": "el/la conocido/a",
+    "en": "cute 3D avatar of two people waving at each other from a distance",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der/die Erwachsene",
+    "es": "el/la adulto/a",
+    "en": "cute 3D avatar of a serious mature adult wearing business clothes",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Jugendliche",
+    "es": "el joven",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Pass / Reisepass",
+    "es": "pasaporte",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Ausweis",
+    "es": "documento de identidad",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Papiere",
+    "es": "los papeles/documentos",
+    "en": "",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "das Formular",
+    "es": "formulario",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "ausfüllen",
+    "es": "rellenar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Staatsangehörigkeit",
+    "es": "nacionalidad",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Führerschein",
+    "es": "licencia de conducir",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "unterschreiben",
+    "es": "firmar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Unterschrift",
+    "es": "la firma",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Alter",
+    "es": "edad",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Geburtsort",
+    "es": "lugar de nacimiento",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "geschieden",
+    "es": "divorciado/a",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "verwitwet",
+    "es": "viudo/a",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "der Ausländer",
+    "es": "el extranjero",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Gesellschaft",
+    "es": "la sociedad",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Rentner",
+    "es": "el jubilado",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "sich freuen",
+    "es": "alegrarse",
+    "en": "",
+    "type": "Verbo Reflexivo"
+  },
+  {
+    "de": "das Gefühl",
+    "es": "el sentimiento",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Haus",
+    "es": "la casa",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Wohnung",
+    "es": "el apartamento",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Hochhaus",
+    "es": "edificio de gran altura",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Treppe",
+    "es": "la escalera",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Aufzug / Lift",
+    "es": "el ascensor",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Stock",
+    "es": "el piso / planta",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Erdgeschoss",
+    "es": "la planta baja",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Miete",
+    "es": "el alquiler",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Nebenkosten",
+    "es": "gastos adicionales",
+    "en": "",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "die Heizkosten",
+    "es": "gastos de calefacción",
+    "en": "",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "der Mieter / Vermieter",
+    "es": "inquilino / arrendador",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "mieten / vermieten",
+    "es": "alquilar / dar en alquiler",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "umziehen",
+    "es": "mudarse",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "einziehen / ausziehen",
+    "es": "mudarse a / de",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Umzug",
+    "es": "la mudanza",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Anzeige",
+    "es": "el anuncio",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "besichtigen",
+    "es": "inspeccionar / visita",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Schlüssel",
+    "es": "la llave",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Zimmer",
+    "es": "la habitación",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Küche",
+    "es": "la cocina",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Bad",
+    "es": "el baño",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Schlafzimmer",
+    "es": "el dormitorio",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Wohnzimmer",
+    "es": "la sala de estar",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Kinderzimmer",
+    "es": "cuarto de niños",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Flur",
+    "es": "pasillo / corredor",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Balkon",
+    "es": "el balcón",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Terrasse",
+    "es": "la terraza",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Garten",
+    "es": "el jardín",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Garage",
+    "es": "el garaje",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Keller",
+    "es": "el sótano",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Licht",
+    "es": "la luz",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "anmachen / ausmachen",
+    "es": "encender / apagar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "öffnen / schließen",
+    "es": "abrir / cerrar (formal)",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "aufmachen / zumachen",
+    "es": "abrir / cerrar",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "putzen / reinigen",
+    "es": "limpiar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "kaputt",
+    "es": "roto / descompuesto",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "reparieren",
+    "es": "reparar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Möbelstück",
+    "es": "el mueble",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Tisch",
+    "es": "la mesa",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Stuhl",
+    "es": "la silla",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Schrank",
+    "es": "el armario",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Bett",
+    "es": "la cama",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Spiegel",
+    "es": "el espejo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Teppich",
+    "es": "la alfombra",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "gemütlich",
+    "es": "acogedor",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "die Freizeit",
+    "es": "el tiempo libre",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Hobby",
+    "es": "el pasatiempo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "spielen",
+    "es": "jugar / tocar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "Fußball spielen",
+    "es": "jugar fútbol",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "der Ball",
+    "es": "el balón",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Karten spielen",
+    "es": "jugar cartas",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Musik hören",
+    "es": "escuchar música",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "die CD",
+    "es": "el CD",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "wandern",
+    "es": "hacer senderismo",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "schwimmen",
+    "es": "nadar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "lesen",
+    "es": "leer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Buch",
+    "es": "el libro",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Zeitung",
+    "es": "el periódico",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "fernsehen",
+    "es": "ver televisión",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "tanzen",
+    "es": "bailar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Computer",
+    "es": "computador",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Sport",
+    "es": "deporte",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "ins Kino gehen",
+    "es": "ir al cine",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "einen Film sehen",
+    "es": "ver película",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Rad fahren",
+    "es": "montar bicicleta",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "spazieren gehen",
+    "es": "pasear",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "in die Disco gehen",
+    "es": "ir a discoteca",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "das Museum",
+    "es": "museo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Verein",
+    "es": "club / asociación",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Schwimmbad",
+    "es": "la piscina",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "gefallen",
+    "es": "gustar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "schön",
+    "es": "bonito",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "mögen",
+    "es": "gustar / me gusta",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "sich treffen",
+    "es": "reunirse/encontrarse",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Essen / essen",
+    "es": "comida / comer",
+    "en": "",
+    "type": "Sustantivo / Verbo"
+  },
+  {
+    "de": "das Frühstück",
+    "es": "desayuno",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Mittagessen",
+    "es": "almuerzo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "zu Mittag essen",
+    "es": "almorzar",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "das Abendessen",
+    "es": "cena",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "zu Abend essen",
+    "es": "cenar",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "der Hunger",
+    "es": "hambre",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Durst",
+    "es": "sed",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Lebensmittel",
+    "es": "alimento",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Brot",
+    "es": "pan",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Butter",
+    "es": "mantequilla",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Käse",
+    "es": "queso",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Fleisch",
+    "es": "carne",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Fisch",
+    "es": "pescado",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Kartoffel",
+    "es": "papa",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Reis",
+    "es": "arroz",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Suppe",
+    "es": "sopa",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Gemüse",
+    "es": "verdura",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Obst",
+    "es": "fruta",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Tomate",
+    "es": "tomate",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Apfel",
+    "es": "manzana",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Orange",
+    "es": "naranja",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Kuchen",
+    "es": "pastel",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Getränk",
+    "es": "bebida",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Wasser",
+    "es": "agua",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Kaffee",
+    "es": "café",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Tee",
+    "es": "té",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Milch",
+    "es": "leche",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Bier",
+    "es": "cerveza",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Wein",
+    "es": "vino",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Teller",
+    "es": "plato",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Tasse",
+    "es": "taza",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Messer",
+    "es": "cuchillo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Gabel",
+    "es": "tenedor",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Löffel",
+    "es": "cuchara",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Flasche",
+    "es": "botella",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "trinken / kochen",
+    "es": "beber / cocinar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "schmecken",
+    "es": "saber (sabor)",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "mögen",
+    "es": "gustar (comida)",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "Ich möchte",
+    "es": "Me gustaría",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Was möchten Sie?",
+    "es": "¿Qué le gustaría?",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Ich hätte gern",
+    "es": "Quisiera...",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "nehmen",
+    "es": "tomar / pedir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Restaurant",
+    "es": "restaurante",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Speisekarte",
+    "es": "menú / carta",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "bestellen",
+    "es": "pedir / ordenar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "Guten Appetit",
+    "es": "¡Buen provecho!",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "die Rechnung",
+    "es": "la cuenta",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "bezahlen",
+    "es": "pagar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "getrennt / zusammen",
+    "es": "separado / juntos",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "Stimmt so",
+    "es": "Así está bien (propina)",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "das Gericht",
+    "es": "el plato preparado",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Topf / die Pfanne",
+    "es": "la olla / la sartén",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "probieren",
+    "es": "probar (comida)",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "scharf / süß",
+    "es": "picante / dulce",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "satt sein",
+    "es": "estar lleno",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "das Geschäft",
+    "es": "tienda / negocio",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Laden",
+    "es": "tienda pequeña",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Bäckerei",
+    "es": "panadería",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Supermarkt",
+    "es": "supermercado",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "geöffnet",
+    "es": "abierto",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "das Angebot",
+    "es": "oferta",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "günstig",
+    "es": "económico",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "billig",
+    "es": "barato",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "teuer",
+    "es": "caro",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "brauchen",
+    "es": "necesitar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Kilo",
+    "es": "kilo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Pfund",
+    "es": "libra (500g)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Gramm",
+    "es": "gramo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "kosten",
+    "es": "costar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Preis",
+    "es": "precio",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Kasse",
+    "es": "caja",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Geld",
+    "es": "dinero",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Verkäufer",
+    "es": "vendedor",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "bestellen",
+    "es": "pedir (online)",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Überweisung",
+    "es": "transferencia",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Wechselgeld",
+    "es": "el cambio / vueltas",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "umtauschen",
+    "es": "cambiar (artículo)",
+    "en": "",
+    "type": "Verbo Separable"
+  },
+  {
+    "de": "der Rabatt",
+    "es": "descuento",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Ferien",
+    "es": "las vacaciones (escolares)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Urlaub",
+    "es": "las vacaciones (laborales)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "Urlaub machen",
+    "es": "ir de vacaciones",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "es gibt",
+    "es": "hay (+ Acusativo)",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "geöffnet",
+    "es": "abierto",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "geschlossen",
+    "es": "cerrado",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "von - bis",
+    "es": "de - hasta",
+    "en": "",
+    "type": "Preposición"
+  },
+  {
+    "de": "die Karte",
+    "es": "tarjeta / mapa",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Eintrittskarte",
+    "es": "boleto de entrada",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Ticket",
+    "es": "el ticket",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "kaufen",
+    "es": "comprar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "reservieren",
+    "es": "reservar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Weg",
+    "es": "el camino",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "geradeaus",
+    "es": "recto",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "links / rechts",
+    "es": "izquierda / derecha",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "der Unfall",
+    "es": "accidente",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Polizei",
+    "es": "policía",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "umsteigen",
+    "es": "hacer transbordo",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Zelt",
+    "es": "tienda de campaña",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "zelten",
+    "es": "acampar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Post",
+    "es": "el correo",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Brief",
+    "es": "carta",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Postkarte",
+    "es": "tarjeta postal",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "schicken",
+    "es": "enviar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "bekommen",
+    "es": "recibir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "abholen",
+    "es": "recoger",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "die Briefmarke",
+    "es": "estampilla",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Absender",
+    "es": "remitente",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Empfänger",
+    "es": "destinatario",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Adresse",
+    "es": "dirección",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Telefon",
+    "es": "teléfono",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Handy",
+    "es": "celular",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Fax",
+    "es": "fax",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Telefonnummer",
+    "es": "número de teléfono",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Telefonbuch",
+    "es": "guía telefónica",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "telefonieren",
+    "es": "hablar por tel.",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "anrufen",
+    "es": "llamar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "sprechen (mit)",
+    "es": "hablar con",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "besetzt",
+    "es": "ocupado (línea)",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "die Bank",
+    "es": "banco",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Schalter",
+    "es": "ventanilla",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Geld",
+    "es": "dinero",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "bar zahlen",
+    "es": "pagar en efectivo",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "die Kreditkarte",
+    "es": "tarjeta de crédito",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Konto",
+    "es": "cuenta",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "überweisen",
+    "es": "transferir dinero",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Formular",
+    "es": "formulario",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "ausfüllen",
+    "es": "rellenar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "ankreuzen",
+    "es": "marcar con cruz",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "unterschreiben",
+    "es": "firmar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Geldautomat",
+    "es": "cajero automático",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Internet",
+    "es": "internet",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Computer",
+    "es": "computador",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Pass / Ausweis",
+    "es": "pasaporte / ID",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "gültig",
+    "es": "válido/vigente",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "das Paket",
+    "es": "el paquete",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Briefkasten",
+    "es": "buzón de correo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Gebühr",
+    "es": "tarifa(comisión)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Kredit",
+    "es": "crédito",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "abheben",
+    "es": "retirar dinero",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "einzahlen",
+    "es": "depositar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Geheimzahl",
+    "es": "el PIN",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Auge",
+    "es": "ojo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Hand",
+    "es": "mano",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Arm",
+    "es": "brazo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Bein",
+    "es": "pierna",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Kopf",
+    "es": "cabeza",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Fuß",
+    "es": "pie",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Mund",
+    "es": "boca",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Zahn",
+    "es": "diente",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Nase",
+    "es": "nariz",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Ohr",
+    "es": "oreja",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Haar",
+    "es": "pelo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Bauch",
+    "es": "barriga",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Finger",
+    "es": "dedo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Rücken",
+    "es": "espalda",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Hals",
+    "es": "cuello",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "wehtun",
+    "es": "doler",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "Wie geht es Ihnen?",
+    "es": "¿Cómo está usted?",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Es geht mir gut",
+    "es": "Me va bien",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "schlafen",
+    "es": "dormir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "ins Bett gehen",
+    "es": "ir a la cama",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "im Bett liegen",
+    "es": "estar en la cama",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "krank",
+    "es": "enfermo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "das Fieber",
+    "es": "fiebre",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Arzt",
+    "es": "médico",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Doktor",
+    "es": "doctor",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Apotheke",
+    "es": "farmacia",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Medikament",
+    "es": "medicamento",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Rezept",
+    "es": "receta médica",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Praxis",
+    "es": "consultorio",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Krankenhaus",
+    "es": "hospital",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Termin",
+    "es": "cita",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Gute Besserung",
+    "es": "¡Que te mejores!",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "das Pflaster",
+    "es": "tirita(curita)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Salbe",
+    "es": "pomada",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Erkältung",
+    "es": "resfriado",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "husten",
+    "es": "toser",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "bluten",
+    "es": "sangrar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "sich verletzen",
+    "es": "lastimarse",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Schmerz",
+    "es": "el dolor",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "schwanger",
+    "es": "embarazada",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "die Kleidung",
+    "es": "ropa",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Pullover",
+    "es": "suéter",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Rock",
+    "es": "falda",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Hose",
+    "es": "pantalón",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Hemd",
+    "es": "camisa",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Schuhe",
+    "es": "zapatos",
+    "en": "",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "die Jacke",
+    "es": "chaqueta",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Mantel",
+    "es": "abrigo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Jeans",
+    "es": "jeans",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Größe",
+    "es": "talla",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Farbe",
+    "es": "color",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "schwarz",
+    "es": "negro",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "weiß",
+    "es": "blanco",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "grau",
+    "es": "gris",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "rot",
+    "es": "rojo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "blau",
+    "es": "azul",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "gelb",
+    "es": "amarillo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "grün",
+    "es": "verde",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "braun",
+    "es": "marrón",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "anziehen",
+    "es": "ponerse ropa",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "ausziehen",
+    "es": "quitarse ropa",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "anprobieren",
+    "es": "probarse ropa",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "passen",
+    "es": "quedar bien (talla)",
+    "en": "",
+    "type": "Verbo (+ Dativo)"
+  },
+  {
+    "de": "anhaben",
+    "es": "llevar puesto (ropa)",
+    "en": "",
+    "type": "Verbo Separable"
+  },
+  {
+    "de": "eng",
+    "es": "ajustado",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "weit",
+    "es": "holgado",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "bequem",
+    "es": "cómodo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "der Schal",
+    "es": "bufanda",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Gürtel",
+    "es": "cinturón",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Schule",
+    "es": "escuela",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Klasse",
+    "es": "clase",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Lehrer / die Lehrerin",
+    "es": "profesor / profesora",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Schüler / die Schülerin",
+    "es": "alumno / alumna",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Student",
+    "es": "estudiante (uni)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "lernen",
+    "es": "aprender / estudiar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Unterricht",
+    "es": "clase (sesión)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Kurs",
+    "es": "curso",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Pause",
+    "es": "descanso/recreo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Hausaufgabe",
+    "es": "tarea",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Prüfung",
+    "es": "examen",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Lösung",
+    "es": "solución",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Fehler",
+    "es": "error",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Arbeit",
+    "es": "trabajo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Beruf",
+    "es": "profesión",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "Mechaniker von Beruf",
+    "es": "mecánico de profesión",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "der Arbeitsplatz / Job",
+    "es": "puesto de trabajo / empleo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "arbeiten",
+    "es": "trabajar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Chef / die Chefin",
+    "es": "jefe / jefa",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Kollege / die Kollegin",
+    "es": "colega",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Firma / das Büro",
+    "es": "empresa / oficina",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "arbeitslos",
+    "es": "desempleado",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "der Arbeiter",
+    "es": "obrero",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Praktikum",
+    "es": "pasantía",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Ausbildung",
+    "es": "formación dual",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Urlaub",
+    "es": "vacaciones",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "selbstständig",
+    "es": "independiente",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "die Stelle",
+    "es": "plaza/vacante",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "Geld verdienen",
+    "es": "ganar dinero",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "schwere / leichte Arbeit",
+    "es": "trabajo pesado/ligero",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "das Internet",
+    "es": "internet",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Computer",
+    "es": "computador",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Drucker",
+    "es": "impresora",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Bleistift",
+    "es": "lápiz",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Kugelschreiber",
+    "es": "bolígrafo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Schreibtisch",
+    "es": "escritorio",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Zeugnis",
+    "es": "boletín de notas",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Stundenplan",
+    "es": "horario de clases",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "fehlen",
+    "es": "faltar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "bestehen",
+    "es": "aprobar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "durchfallen",
+    "es": "reprobar",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "die Besprechung",
+    "es": "la reunión",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "kündigen",
+    "es": "renunciar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "befördern",
+    "es": "ascender",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Universität",
+    "es": "universidad",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "anmelden",
+    "es": "inscribirse",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Anmeldung",
+    "es": "inscripción",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "sprechen",
+    "es": "hablar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "verstehen",
+    "es": "entender",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "fragen",
+    "es": "preguntar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "antworten",
+    "es": "responder",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "erklären",
+    "es": "explicar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "wiederholen",
+    "es": "repetir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Benzin / der Tank",
+    "es": "gasolina / tanque",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Blinker / blinken",
+    "es": "direccional / poner intermitente",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "die Bremse / bremsen",
+    "es": "freno / frenar",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "das Bremspedal",
+    "es": "pedal de freno",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Gangschaltung",
+    "es": "caja de cambios",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Gaspedal",
+    "es": "acelerador",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "Gas geben",
+    "es": "acelerar",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "der Fahrer / fahren",
+    "es": "conductor / conducir",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "die Hupe / hupen",
+    "es": "bocina / tocar bocina",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "der Kraftstoff",
+    "es": "combustible",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Lenkrad / lenken",
+    "es": "volante / girar volante",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "der Motor",
+    "es": "motor",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Rückspiegel",
+    "es": "espejo retrovisor",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Sicherheitsgurt",
+    "es": "cinturón de seguridad",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Kupplung",
+    "es": "embrague",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Felge",
+    "es": "rin",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Handbremse",
+    "es": "freno de mano",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Schalthebel",
+    "es": "palanca de cambios",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Scheibenwischer",
+    "es": "limpiaparabrisas",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Lichtschalter",
+    "es": "interruptor de luces",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Heizung",
+    "es": "calefacción",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Abblendlicht",
+    "es": "luz corta / baja",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Fernlicht",
+    "es": "luz larga / alta",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Bremsleuchte",
+    "es": "luz de freno",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Warnblinkanlage",
+    "es": "luces de emergencia",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Nebelschlussleuchte",
+    "es": "luz antiniebla trasera",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Tagfahrlicht",
+    "es": "luz diurna",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "betanken",
+    "es": "repostar gasolina",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "überholen",
+    "es": "adelantar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "einsteigen / aussteigen",
+    "es": "subir / bajar del coche",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "aufschließen",
+    "es": "abrir con llave",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "anhalten / halten / parken",
+    "es": "parar / detenerse / parquear",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Vorfahrt",
+    "es": "prioridad",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "aufpassen",
+    "es": "prestar atención",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "Motor starten",
+    "es": "prender el motor",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "sich anschnallen",
+    "es": "ponerse el cinturón",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "beschleunigen",
+    "es": "acelerar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "abschleppen",
+    "es": "remolcar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "zusammenstoßen",
+    "es": "chocar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Schaden",
+    "es": "daño",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Motoröl",
+    "es": "aceite de motor",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Reifendruck",
+    "es": "presión neumáticos",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Reifen",
+    "es": "llanta",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Pkw / der Lkw",
+    "es": "carro / camión",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Fußgänger",
+    "es": "peatón",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Ampel / Kreuzung",
+    "es": "semáforo / cruce",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Fahrzeug",
+    "es": "el vehículo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Verkehr / Stau",
+    "es": "el tráfico / trancón",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Verkehrsschild",
+    "es": "señal de tráfico",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Geschwindigkeit",
+    "es": "velocidad",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Spur",
+    "es": "carril",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Warnleuchten",
+    "es": "luces de advertencia",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Baustelle",
+    "es": "obra de cons.",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Sicherheit",
+    "es": "seguridad",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "Toter Winkel",
+    "es": "ángulo muerto",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Schulterblick",
+    "es": "mirada sobre hombro",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Rechts vor links",
+    "es": "derecha tiene preferencia",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Motoröldruck",
+    "es": "presión aceite (rojo)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "Kühlmitteltemperatur",
+    "es": "temp. refrigerante (rojo)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Schiebedach",
+    "es": "techo corredizo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Auspuff",
+    "es": "escape",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Nummernschild",
+    "es": "placa / matrícula",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Windschutzscheibe",
+    "es": "parabrisas",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Motorhaube",
+    "es": "capó",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Stoßstange",
+    "es": "parachoques",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Kreisverkehr",
+    "es": "rotonda",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Einbahnstraße",
+    "es": "calle de un solo sentido",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "abbiegen",
+    "es": "girar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Strafzettel",
+    "es": "multa de tráfico",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Versicherung",
+    "es": "el seguro",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "und",
+    "es": "y",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "oder",
+    "es": "o (alternativa)",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "aber",
+    "es": "pero",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "denn",
+    "es": "porque / pues",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "sondern",
+    "es": "sino (que)",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "für",
+    "es": "para / por",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "ohne",
+    "es": "sin",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "durch",
+    "es": "a través de / por",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "gegen",
+    "es": "contra / hacia (hora)",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "um",
+    "es": "a las (hora) / alrededor de",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "mit",
+    "es": "con",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "nach",
+    "es": "hacia / después de",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "aus",
+    "es": "de (origen / material)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "bei",
+    "es": "en casa de / en (empresa)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "von",
+    "es": "de (procedencia / autor)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "zu",
+    "es": "hacia (lugares / personas)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "seit",
+    "es": "desde (tiempo)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "in",
+    "es": "en / dentro de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "an",
+    "es": "en (borde / fechas)",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "auf",
+    "es": "sobre (con contacto)",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "unter",
+    "es": "debajo de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "über",
+    "es": "sobre (sin contacto) / acerca de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "neben",
+    "es": "al lado de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "zwischen",
+    "es": "entre",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "vor",
+    "es": "delante de / antes de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "hinter",
+    "es": "detrás de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "obwohl",
+    "es": "aunque",
+    "en": "",
+    "type": "Conector Subordinante"
+  },
+  {
+    "de": "wenn",
+    "es": "si(condicional)",
+    "en": "",
+    "type": "Conector Subordinante"
+  },
+  {
+    "de": "als",
+    "es": "cuando",
+    "en": "",
+    "type": "Conector Subordinante"
+  },
+  {
+    "de": "deshalb",
+    "es": "por eso",
+    "en": "",
+    "type": "Conector Posición 1"
+  },
+  {
+    "de": "trotzdem",
+    "es": "sin embargo",
+    "en": "",
+    "type": "Conector Posición 1"
+  },
+  {
+    "de": "außerdem",
+    "es": "además",
+    "en": "",
+    "type": "Conector Posición 1"
+  },
+  {
+    "de": "nämlich",
+    "es": "es decir",
+    "en": "",
+    "type": "Partícula"
+  },
+  {
+    "de": "doch",
+    "es": "sí (rechaza negación)",
+    "en": "",
+    "type": "Partícula"
+  },
+  {
+    "de": "mal",
+    "es": "(Partícula de énfasis)",
+    "en": "",
+    "type": "Partícula"
+  },
+  {
+    "de": "ja",
+    "es": "sí (Partícula de énfasis)",
+    "en": "",
+    "type": "Partícula"
+  },
+  {
+    "de": "sein",
+    "es": "ser / estar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "haben",
+    "es": "tener / haber",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "werden",
+    "es": "llegar a ser / convertirse",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "machen",
+    "es": "hacer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "tun",
+    "es": "hacer (una acción)",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "sagen",
+    "es": "decir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "gehen",
+    "es": "ir / andar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "kommen",
+    "es": "venir",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "sehen",
+    "es": "ver",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "wissen",
+    "es": "saber (información)",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "kennen",
+    "es": "conocer (personas/lugares)",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "finden",
+    "es": "encontrar / parecer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "bleiben",
+    "es": "quedarse",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "lassen",
+    "es": "dejar / permitir",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "denken",
+    "es": "pensar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "groß / klein",
+    "es": "grande / pequeño",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "gut / schlecht",
+    "es": "bueno / malo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "neu / alt",
+    "es": "nuevo / viejo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "schön / hässlich",
+    "es": "bonito / feo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "schwer / leicht",
+    "es": "pesado (difícil) / ligero (fácil)",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "richtig / falsch",
+    "es": "correcto / incorrecto",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "wichtig",
+    "es": "importante",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "einfach / schwierig",
+    "es": "fácil / difícil",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "schnell / langsam",
+    "es": "rápido / lento",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "laut / leise",
+    "es": "fuerte (sonido) / silencioso",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "hell / dunkel",
+    "es": "claro (luz) / oscuro",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "heiß / kalt",
+    "es": "caliente / frío",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "können",
+    "es": "poder (habilidad/posibilidad)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "müssen",
+    "es": "tener que (obligación)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "dürfen",
+    "es": "poder (permiso)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "sollen",
+    "es": "deber (recomendación/orden)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "wollen",
+    "es": "querer (deseo fuerte)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "mögen",
+    "es": "gustar (algo/alguien)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "möchten",
+    "es": "gustaría (quisiera)",
+    "en": "",
+    "type": "Verbo Modal (KII)"
+  },
+  {
+    "de": "geben",
+    "es": "dar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "nehmen",
+    "es": "tomar / agarrar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "brauchen",
+    "es": "necesitar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "helfen",
+    "es": "ayudar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "bringen",
+    "es": "traer",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "schreiben",
+    "es": "escribir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "lesen",
+    "es": "leer",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "sprechen",
+    "es": "hablar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "versuchen",
+    "es": "intentar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "entscheiden",
+    "es": "decidir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "vergessen",
+    "es": "olvidar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "sich erinnern",
+    "es": "recordar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "passieren",
+    "es": "suceder",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "erzählen",
+    "es": "narrar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "bedeuten",
+    "es": "significar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "beginnen",
+    "es": "comenzar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "stehen",
+    "es": "estar de pie",
+    "en": "",
+    "type": "Verbo Posicional"
+  },
+  {
+    "de": "stellen",
+    "es": "colocar vertical",
+    "en": "",
+    "type": "Verbo Posicional"
+  },
+  {
+    "de": "liegen",
+    "es": "estar acostado",
+    "en": "",
+    "type": "Verbo Posicional"
+  },
+  {
+    "de": "legen",
+    "es": "colocar horizontal",
+    "en": "",
+    "type": "Verbo Posicional"
+  },
+  {
+    "de": "heute",
+    "es": "hoy",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "morgen",
+    "es": "mañana",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "gestern",
+    "es": "ayer",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "jetzt",
+    "es": "ahora",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "bald",
+    "es": "pronto",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "immer",
+    "es": "siempre",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "oft",
+    "es": "a menudo",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "manchmal",
+    "es": "a veces",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "nie",
+    "es": "nunca",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "schon",
+    "es": "ya",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "noch",
+    "es": "todavía / aún",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "hier",
+    "es": "aquí",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "dort",
+    "es": "allí",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "oben / unten",
+    "es": "arriba / abajo",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "vorn / hinten",
+    "es": "adelante / atrás",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "draußen / drinnen",
+    "es": "afuera / adentro",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "sehr",
+    "es": "muy",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "viel / wenig",
+    "es": "mucho / poco",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "wer?",
+    "es": "¿quién?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "was?",
+    "es": "¿qué?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "wo?",
+    "es": "¿dónde?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "wann?",
+    "es": "¿cuándo?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "warum?",
+    "es": "¿por qué?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "wie?",
+    "es": "¿cómo?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "woher?",
+    "es": "¿de dónde?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "wohin?",
+    "es": "¿a dónde?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "welcher?",
+    "es": "¿cuál?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  }
+]

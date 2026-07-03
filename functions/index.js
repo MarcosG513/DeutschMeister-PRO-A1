@@ -537,6 +537,7 @@ export const generateCardImage = onCall(
       try {
         await db.collection("global_flashcards").doc(safeWordId).set({
           imageUrl: dataUri,
+          model: "fal-ai/flux-2/klein/9b/base",
           updatedAt: admin.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
       } catch (err) {

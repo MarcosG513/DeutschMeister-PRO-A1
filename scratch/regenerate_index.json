@@ -1,0 +1,7 @@
+{
+  "last_flawed_generation_index": 503,
+  "last_flawed_generation_word": "der Kollege / die Kollegin",
+  "first_correct_generation_index": 504,
+  "first_correct_generation_word": "die Firma / das Büro",
+  "reason": "Images from index 0 to 503 were generated before the strict prompt logic (anti-pareidolia, diasYMeses, isSinGenero) was added to the script. They will need to be regenerated later."
+}

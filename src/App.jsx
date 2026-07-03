@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw } from 'lucide-react';
+import { Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
@@ -277,6 +277,7 @@ const goetheModules = [{
   title: 'Hören (Comprensión Auditiva)',
   desc: 'Supervivencia en estaciones y llamadas',
   theme: 'blueprint',
+  presentationUrl: 'https://drive.google.com/file/d/1HaRoaGMXPAHwQbmeVkqMoaotGvM5TjBH/view?usp=sharing',
   slides: [{
     title: "Supervivencia Auditiva: El Examen Hören",
     subtitle: "Entrena tu oído para identificar información clave",
@@ -398,6 +399,7 @@ const goetheModules = [{
   title: 'Lesen (Comprensión Lectora)',
   desc: 'Textos del día a día y letreros',
   theme: 'notebook',
+  presentationUrl: 'https://drive.google.com/file/d/1v0X84LxezwiLTIOll5OqIs5VfY6khT5Z/view?usp=sharing',
   slides: [{
     title: "Entendiendo Textos Diarios",
     subtitle: "El Examen Lesen (Comprensión Lectora)",
@@ -532,6 +534,7 @@ const goetheModules = [{
   title: 'Schreiben (Expresión Escrita)',
   desc: 'Formularios y Correos exactos',
   theme: 'medical',
+  presentationUrl: 'https://drive.google.com/file/d/19bbbF3M4RfIRbQ4PkxZlCsPcbibYQLPx/view?usp=sharing',
   slides: [{
     title: "Tu Firma y tu Voz",
     subtitle: "El Examen Schreiben (Escritura)",
@@ -728,6 +731,7 @@ const goetheModules = [{
   title: 'Sprechen (Expresión Oral)',
   desc: 'Presentaciones y Peticiones Educadas',
   theme: 'blueprint',
+  presentationUrl: 'https://drive.google.com/file/d/1_yvgsDvmHvQvSYoXJvKImN9WLxkEdgGA/view?usp=sharing',
   slides: [{
     title: "Guía Maestra: El Examen Oral",
     subtitle: "Sprechen A1/A2",
@@ -913,6 +917,9 @@ export default function App() {
   const [revealedCards, setRevealedCards] = useState({});
   const [viewMode, setViewMode] = useState("flashcards");
   const [quizState, setQuizState] = useState(null);
+  const [selectedQuizChapters, setSelectedQuizChapters] = useState([]);
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
 
   // Se ha removido el useEffect de migración, ya que se hará síncronamente arriba.
   const [storyState, setStoryState] = useState({
@@ -1084,12 +1091,28 @@ export default function App() {
     setRevealedCards(all);
   };
   const hideAll = () => setRevealedCards({});
-  const startQuiz = () => {
-    const allWords = chapters.flatMap(c => c.words);
-    const randomWord = allWords[Math.floor(Math.random() * allWords.length)];
+  const openQuizSetup = () => {
+    setSelectedQuizChapters(chapters.map(c => c.id));
+    setViewMode("quizSetup");
+  };
+
+  const startQuizSession = () => {
+    setCurrentStreak(0);
+    generateNextQuizWord();
+    setViewMode("quiz");
+  };
+
+  const generateNextQuizWord = () => {
+    let selectedCaps = chapters.filter(c => selectedQuizChapters.includes(c.id));
+    if (selectedCaps.length === 0) selectedCaps = chapters; // Fallback de seguridad
+    
+    let pool = selectedCaps.flatMap(c => c.words);
+    if (pool.length < 4) pool = chapters.flatMap(c => c.words);
+
+    const randomWord = pool[Math.floor(Math.random() * pool.length)];
     const options = [randomWord.es];
     while (options.length < 4) {
-      const randomWrong = allWords[Math.floor(Math.random() * allWords.length)].es;
+      const randomWrong = pool[Math.floor(Math.random() * pool.length)].es;
       if (!options.includes(randomWrong)) options.push(randomWrong);
     }
     setQuizState({
@@ -1098,15 +1121,27 @@ export default function App() {
       selected: null,
       isCorrect: null
     });
-    setViewMode("quiz");
   };
+
   const handleQuizAnswer = opt => {
     if (quizState.selected) return;
+    const isCorrect = opt === quizState.word.es;
+    
     setQuizState(prev => ({
       ...prev,
       selected: opt,
-      isCorrect: opt === quizState.word.es
+      isCorrect: isCorrect
     }));
+
+    if (isCorrect) {
+      setCurrentStreak(prev => {
+        const next = prev + 1;
+        setBestStreak(b => next > b ? next : b);
+        return next;
+      });
+    } else {
+      setCurrentStreak(0);
+    }
   };
   const generateStory = async () => {
     if (!activeChapter) return;
@@ -1281,7 +1316,11 @@ export default function App() {
             const globalUrl = globalCacheSnap.data().imageUrl;
             const localUrl = cardImages[safeId];
             
-            if (globalUrl !== localUrl) {
+            // Si el usuario presionó 'Regenerar', ignoramos la caché global
+            if (forceRegenerate) {
+                console.log("FORCE REGENERATE: Ignorando caché global a petición del usuario...");
+            } 
+            else if (globalUrl !== localUrl) {
                 console.log("CACHE HIT: La imagen global es NUEVA. Sincronizando sin generar...");
                 dataUri = globalUrl;
                 isDifferentFromLocal = true;
@@ -1391,9 +1430,21 @@ export default function App() {
                 <p className={`text-xs ${isBlueprint ? 'text-blue-400' : isMedical ? 'text-emerald-600' : 'text-amber-600'}`}>{currentSlide + 1} / {presentation.slides.length}</p>
               </div>
             </div>
-            <button onClick={onClose} className={`p-2 rounded-full transition ${isBlueprint ? 'hover:bg-blue-900 text-blue-300' : 'hover:bg-slate-200 text-slate-500'}`}>
-              <X size={24} />
-            </button>
+            <div className="flex items-center gap-3">
+              {presentation.presentationUrl && (
+                <a 
+                  href={presentation.presentationUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold transition-all border ${isBlueprint ? 'border-blue-700 text-blue-300 hover:bg-blue-800' : isMedical ? 'border-emerald-200 text-emerald-700 hover:bg-emerald-50' : 'border-amber-900/20 text-amber-700 hover:bg-amber-100'}`}
+                >
+                  <Link2 size={16} /> Diapositivas
+                </a>
+              )}
+              <button onClick={onClose} className={`p-2 rounded-full transition ${isBlueprint ? 'hover:bg-blue-900 text-blue-300' : 'hover:bg-slate-200 text-slate-500'}`}>
+                <X size={24} />
+              </button>
+            </div>
           </div>
 
           <div className={bodyClass}>
@@ -1428,7 +1479,7 @@ export default function App() {
         </div>
       </div>;
   };
-  return <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]" : "min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"}>
+  return <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
       
       {/* HEADER NAVBAR */}
       <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
@@ -1461,7 +1512,7 @@ export default function App() {
             <button onClick={() => setViewMode('roleplay')} className="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-500 transition flex items-center gap-2 shadow-md">
               <Sparkles size={18} /> Rol ✨
             </button>
-            <button onClick={startQuiz} className="bg-yellow-500 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center gap-2">
+            <button onClick={openQuizSetup} className="bg-yellow-500 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center gap-2">
               <Gamepad2 size={18} /> Quiz
             </button>
           </div>
@@ -1543,6 +1594,40 @@ export default function App() {
           setIsFullscreen(false);
         }} />}
 
+          {/* VISTA: CONFIGURACIÓN DEL QUIZ */}
+          {viewMode === "quizSetup" && <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-2xl mx-auto mt-10 animate-in fade-in zoom-in duration-300 relative">
+              <button onClick={() => setViewMode("flashcards")} className="absolute top-4 right-4 flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm">
+                 <X size={18} /> Salir
+              </button>
+              <div className="text-center mb-6 mt-4">
+                <div className="inline-flex bg-yellow-100 text-yellow-600 p-3 rounded-full mb-4 shadow-sm"><Gamepad2 size={32} /></div>
+                <h2 className="text-3xl font-black text-slate-800">Preparar Quiz</h2>
+                <p className="text-slate-500 mt-2">Selecciona los capítulos que deseas repasar.</p>
+              </div>
+              <div className="max-h-60 overflow-y-auto custom-scrollbar border border-slate-200 rounded-xl p-2 mb-6 text-left">
+                {chapters.map(chap => (
+                  <label key={chap.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition border-b border-slate-100 last:border-0">
+                    <input 
+                      type="checkbox" 
+                      checked={selectedQuizChapters.includes(chap.id)} 
+                      onChange={(e) => {
+                        if (e.target.checked) setSelectedQuizChapters(prev => [...prev, chap.id]);
+                        else setSelectedQuizChapters(prev => prev.filter(id => id !== chap.id));
+                      }}
+                      className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-lg">{chap.emoji}</span>
+                    <span className="font-medium text-slate-700">{chap.title}</span>
+                  </label>
+                ))}
+              </div>
+              <div className="flex justify-center">
+                <button onClick={startQuizSession} disabled={selectedQuizChapters.length === 0} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 disabled:bg-slate-300 transition w-full sm:w-auto">
+                  Iniciar Quiz
+                </button>
+              </div>
+          </div>}
+
           {/* VISTA: QUIZ */}
           {viewMode === "quiz" && <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-2xl mx-auto mt-10 text-center animate-in fade-in zoom-in duration-300 relative">
                <button onClick={() => {
@@ -1553,13 +1638,29 @@ export default function App() {
                  <X size={18} /> Salir del Quiz
                </button>
 
-               <div className="inline-flex items-center justify-center p-3 bg-yellow-100 text-yellow-800 rounded-full mb-4 mt-12 sm:mt-0">
-                 <Gamepad2 size={32} />
+               {/* Racha y Puntuación */}
+               <div className="flex justify-center items-center gap-6 mb-6 mt-12 sm:mt-0">
+                 <div className="flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-full font-bold shadow-sm">
+                   <Flame size={20} className={currentStreak > 0 ? "animate-pulse text-orange-500" : ""} /> Racha: {currentStreak}
+                 </div>
+                 <div className="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold shadow-sm">
+                   <Trophy size={20} /> Mejor: {bestStreak}
+                 </div>
                </div>
+
                <h2 className="text-xl font-medium text-slate-500 mb-2">¿Qué significa esta palabra?</h2>
-               <div className="text-4xl md:text-5xl font-black text-slate-800 mb-8 mt-4 bg-slate-50 border-2 border-slate-100 py-10 px-4 rounded-xl shadow-inner">
-                 {quizState?.word.de}
+               
+               {/* Interfaz de Pregunta (Pronunciación y Audio) */}
+               <div className="flex flex-col items-center justify-center font-black text-slate-800 mb-8 mt-4 bg-slate-50 border-2 border-slate-100 py-10 px-4 rounded-xl shadow-inner relative group">
+                 <span className="text-4xl md:text-5xl">{quizState?.word.de}</span>
+                 {quizState?.word.pron && (
+                    <div className="flex items-center gap-2 mt-3 text-blue-400 italic font-medium text-lg">
+                      /{quizState.word.pron}/
+                      <button onClick={(e) => { e.stopPropagation(); nativeSpeak(quizState.word.de); }} className="p-1.5 hover:text-blue-600 hover:bg-blue-100 rounded-full transition"><Volume2 size={20} /></button>
+                    </div>
+                 )}
                </div>
+               
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                  {quizState?.options.map((opt, i) => {
               let btnClass = "bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700";
@@ -1576,7 +1677,7 @@ export default function App() {
                      {quizState.isCorrect ? <CheckCircle size={28} /> : <XCircle size={28} />}
                      {quizState.isCorrect ? "¡Richtig! (¡Correcto!)" : `Falsch. Era: ${quizState.word.es}`}
                    </div>
-                   <button onClick={startQuiz} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 transition w-full sm:w-auto">
+                   <button onClick={generateNextQuizWord} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 transition w-full sm:w-auto">
                      Siguiente Palabra ➔
                    </button>
                  </div>}

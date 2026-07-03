@@ -1,5 +1,14 @@
 {
   "appId": "com.deutschmeister.app",
   "appName": "DeutschMeister PRO",
-  "webDir": "dist"
+  "webDir": "dist",
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": false,
+      "backgroundColor": "#0F172A"
+    },
+    "Keyboard": {
+      "resize": "body"
+    }
+  }
 }

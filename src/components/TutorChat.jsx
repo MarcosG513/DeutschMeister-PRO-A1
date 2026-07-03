@@ -19,7 +19,6 @@ const TutorChat = ({
   return (
     <aside 
       className={`fixed ${isFullscreen ? 'inset-0 w-full z-[100]' : 'inset-y-0 right-0 w-full md:w-[450px] z-50 border-l'} bg-white shadow-2xl border-slate-200 flex flex-col animate-in slide-in-from-right duration-300`}
-      style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div className="bg-slate-900 text-white p-4 flex justify-between items-center flex-shrink-0">
         <div className="flex items-center gap-2">
