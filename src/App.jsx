@@ -1522,7 +1522,7 @@ export default function App() {
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 relative">
         
         {/* SIDEBAR */}
-        {!isFullscreen && viewMode !== "quiz" && viewMode !== "roleplay" && !searchTerm && <aside className="w-full lg:w-72 flex-shrink-0 flex flex-col gap-6">
+        {!isFullscreen && viewMode !== "roleplay" && !searchTerm && <aside className="w-full lg:w-72 flex-shrink-0 flex flex-col gap-6">
             
             {/* SECCIÓN 1: Tablas Maestras */}
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -1595,92 +1595,110 @@ export default function App() {
         }} />}
 
           {/* VISTA: CONFIGURACIÓN DEL QUIZ */}
-          {viewMode === "quizSetup" && <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-2xl mx-auto mt-10 animate-in fade-in zoom-in duration-300 relative">
-              <button onClick={() => setViewMode("flashcards")} className="absolute top-4 right-4 flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm">
-                 <X size={18} /> Salir
-              </button>
-              <div className="text-center mb-6 mt-4">
-                <div className="inline-flex bg-yellow-100 text-yellow-600 p-3 rounded-full mb-4 shadow-sm"><Gamepad2 size={32} /></div>
-                <h2 className="text-3xl font-black text-slate-800">Preparar Quiz</h2>
-                <p className="text-slate-500 mt-2">Selecciona los capítulos que deseas repasar.</p>
-              </div>
-              <div className="max-h-60 overflow-y-auto custom-scrollbar border border-slate-200 rounded-xl p-2 mb-6 text-left">
-                {chapters.map(chap => (
-                  <label key={chap.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition border-b border-slate-100 last:border-0">
-                    <input 
-                      type="checkbox" 
-                      checked={selectedQuizChapters.includes(chap.id)} 
-                      onChange={(e) => {
-                        if (e.target.checked) setSelectedQuizChapters(prev => [...prev, chap.id]);
-                        else setSelectedQuizChapters(prev => prev.filter(id => id !== chap.id));
-                      }}
-                      className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-lg">{chap.emoji}</span>
-                    <span className="font-medium text-slate-700">{chap.title}</span>
-                  </label>
-                ))}
-              </div>
-              <div className="flex justify-center">
-                <button onClick={startQuizSession} disabled={selectedQuizChapters.length === 0} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 disabled:bg-slate-300 transition w-full sm:w-auto">
-                  Iniciar Quiz
+          {viewMode === "quizSetup" && <div className="animate-in fade-in duration-300">
+              <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <Gamepad2 className="text-blue-600" /> Preparar Quiz
+                  </h2>
+                  <p className="text-slate-500 text-sm mt-1">Selecciona los capítulos que deseas repasar.</p>
+                </div>
+                
+                <button onClick={() => setViewMode("flashcards")} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm self-start sm:self-auto">
+                   <X size={18} /> Salir
                 </button>
+              </div>
+
+              <div className="bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm">
+                <div className="max-h-60 overflow-y-auto custom-scrollbar border border-slate-200 rounded-xl p-2 mb-6 text-left max-w-xl mx-auto">
+                  {chapters.map(chap => (
+                    <label key={chap.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition border-b border-slate-100 last:border-0">
+                      <input 
+                        type="checkbox" 
+                        checked={selectedQuizChapters.includes(chap.id)} 
+                        onChange={(e) => {
+                          if (e.target.checked) setSelectedQuizChapters(prev => [...prev, chap.id]);
+                          else setSelectedQuizChapters(prev => prev.filter(id => id !== chap.id));
+                        }}
+                        className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-lg">{chap.emoji}</span>
+                      <span className="font-medium text-slate-700">{chap.title}</span>
+                    </label>
+                  ))}
+                </div>
+                <div className="flex justify-center">
+                  <button onClick={startQuizSession} disabled={selectedQuizChapters.length === 0} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 disabled:bg-slate-300 transition w-full sm:w-auto">
+                    Iniciar Quiz
+                  </button>
+                </div>
               </div>
           </div>}
 
           {/* VISTA: QUIZ */}
-          {viewMode === "quiz" && <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-2xl mx-auto mt-10 text-center animate-in fade-in zoom-in duration-300 relative">
-               <button onClick={() => {
-            setViewMode("flashcards");
-            setQuizState(null);
-            showInterstitial();
-          }} className="absolute top-4 right-4 sm:top-6 sm:left-6 sm:right-auto flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm" title="Volver a los módulos">
-                 <X size={18} /> Salir del Quiz
-               </button>
-
-               {/* Racha y Puntuación */}
-               <div className="flex justify-center items-center gap-6 mb-6 mt-12 sm:mt-0">
-                 <div className="flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-full font-bold shadow-sm">
-                   <Flame size={20} className={currentStreak > 0 ? "animate-pulse text-orange-500" : ""} /> Racha: {currentStreak}
+          {viewMode === "quiz" && <div className="animate-in fade-in duration-300">
+               <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                 <div>
+                   <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                     <Gamepad2 className="text-blue-600" /> Quiz de Vocabulario
+                   </h2>
+                   <p className="text-slate-500 text-sm mt-1">Prueba tus conocimientos sobre los capítulos seleccionados.</p>
                  </div>
-                 <div className="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold shadow-sm">
-                   <Trophy size={20} /> Mejor: {bestStreak}
-                 </div>
+                 
+                 <button onClick={() => {
+                   setViewMode("flashcards");
+                   setQuizState(null);
+                   showInterstitial();
+                 }} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm self-start sm:self-auto" title="Volver a los módulos">
+                   <X size={18} /> Salir del Quiz
+                 </button>
                </div>
 
-               <h2 className="text-xl font-medium text-slate-500 mb-2">¿Qué significa esta palabra?</h2>
-               
-               {/* Interfaz de Pregunta (Pronunciación y Audio) */}
-               <div className="flex flex-col items-center justify-center font-black text-slate-800 mb-8 mt-4 bg-slate-50 border-2 border-slate-100 py-10 px-4 rounded-xl shadow-inner relative group">
-                 <span className="text-4xl md:text-5xl">{quizState?.word.de}</span>
-                 {quizState?.word.pron && (
-                    <div className="flex items-center gap-2 mt-3 text-blue-400 italic font-medium text-lg">
-                      /{quizState.word.pron}/
-                      <button onClick={(e) => { e.stopPropagation(); nativeSpeak(quizState.word.de); }} className="p-1.5 hover:text-blue-600 hover:bg-blue-100 rounded-full transition"><Volume2 size={20} /></button>
-                    </div>
-                 )}
-               </div>
-               
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                 {quizState?.options.map((opt, i) => {
-              let btnClass = "bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700";
-              if (quizState.selected) {
-                if (opt === quizState.word.es) btnClass = "bg-green-50 border-2 border-green-500 text-green-700 font-bold shadow-sm";else if (opt === quizState.selected) btnClass = "bg-red-50 border-2 border-red-500 text-red-700";else btnClass = "bg-slate-50 border-2 border-slate-100 text-slate-400 opacity-50";
-              }
-              return <button key={i} onClick={() => handleQuizAnswer(opt)} disabled={!!quizState.selected} className={`py-4 px-6 rounded-xl text-lg transition-all ${btnClass}`}>
-                       {opt}
-                     </button>;
-            })}
-               </div>
-               {quizState?.selected && <div className="mt-8 flex flex-col items-center gap-4 animate-in slide-in-from-bottom-4">
-                   <div className={`flex items-center gap-2 text-xl font-bold ${quizState.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                     {quizState.isCorrect ? <CheckCircle size={28} /> : <XCircle size={28} />}
-                     {quizState.isCorrect ? "¡Richtig! (¡Correcto!)" : `Falsch. Era: ${quizState.word.es}`}
+               <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm flex flex-col items-center">
+                 {/* Racha y Puntuación */}
+                 <div className="flex justify-center items-center gap-6 mb-8 w-full">
+                   <div className="flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-full font-bold shadow-sm">
+                     <Flame size={20} className={currentStreak > 0 ? "animate-pulse text-orange-500" : ""} /> Racha: {currentStreak}
                    </div>
-                   <button onClick={generateNextQuizWord} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 transition w-full sm:w-auto">
-                     Siguiente Palabra ➔
-                   </button>
-                 </div>}
+                   <div className="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold shadow-sm">
+                     <Trophy size={20} /> Mejor: {bestStreak}
+                   </div>
+                 </div>
+
+                 <h3 className="text-xl font-medium text-slate-500 mb-4 text-center">¿Qué significa esta palabra?</h3>
+                 
+                 {/* Interfaz de Pregunta (Pronunciación y Audio) */}
+                 <div className="w-full max-w-xl flex flex-col items-center justify-center font-black text-slate-800 mb-8 bg-slate-50 border-2 border-slate-100 py-10 px-4 rounded-xl shadow-inner relative group">
+                   <span className="text-4xl md:text-5xl">{quizState?.word.de}</span>
+                   {quizState?.word.pron && (
+                      <div className="flex items-center gap-2 mt-3 text-blue-500 italic font-medium text-lg">
+                        /{quizState.word.pron}/
+                        <button onClick={(e) => { e.stopPropagation(); nativeSpeak(quizState.word.de); }} className="p-1.5 hover:text-blue-600 hover:bg-blue-100 rounded-full transition"><Volume2 size={20} /></button>
+                      </div>
+                   )}
+                 </div>
+                 
+                 <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
+                   {quizState?.options.map((opt, i) => {
+                     let btnClass = "bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700";
+                     if (quizState.selected) {
+                       if (opt === quizState.word.es) btnClass = "bg-green-50 border-2 border-green-500 text-green-700 font-bold shadow-sm";else if (opt === quizState.selected) btnClass = "bg-red-50 border-2 border-red-500 text-red-700";else btnClass = "bg-slate-50 border-2 border-slate-100 text-slate-400 opacity-50";
+                     }
+                     return <button key={i} onClick={() => handleQuizAnswer(opt)} disabled={!!quizState.selected} className={`py-4 px-6 rounded-xl text-lg transition-all ${btnClass}`}>
+                              {opt}
+                            </button>;
+                   })}
+                 </div>
+                 {quizState?.selected && <div className="mt-8 flex flex-col items-center gap-4 w-full animate-in slide-in-from-bottom-4">
+                     <div className={`flex items-center gap-2 text-xl font-bold ${quizState.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                       {quizState.isCorrect ? <CheckCircle size={28} /> : <XCircle size={28} />}
+                       {quizState.isCorrect ? "¡Richtig! (¡Correcto!)" : `Falsch. Era: ${quizState.word.es}`}
+                     </div>
+                     <button onClick={generateNextQuizWord} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 transition w-full sm:w-auto">
+                       Siguiente Palabra ➔
+                     </button>
+                   </div>}
+               </div>
              </div>}
 
           {/* VISTA: SIMULADOR DE ROL (GEMINI API) ✨ */}
