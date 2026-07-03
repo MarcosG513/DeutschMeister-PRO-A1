@@ -1202,7 +1202,7 @@ export default function App() {
     setChatInput("");
     setIsChatLoading(true);
     try {
-      const response = await fetch(`https://sendtutorchatmessage-301697303507.us-central1.run.app`, {
+      const response = await fetch(`https://sendtutorchatmessage-44keyii6gq-uc.a.run.app`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
