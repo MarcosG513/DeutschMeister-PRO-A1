@@ -106,7 +106,6 @@ export const runRoleplaySimulator = onCall(
 
 // =========================================================================
 // 2. EVALUADOR DE CORREOS (EmailSimulator)
-// Modelo: Mistral NeMo 12B (vía fal.ai)
 // =========================================================================
 export const evaluateEmail = onCall(
   { secrets: [falKey] },
@@ -117,27 +116,32 @@ export const evaluateEmail = onCall(
       throw new HttpsError("invalid-argument", "Faltan parámetros requeridos");
     }
 
-    const promptDefinido = `
-        Consigna del examen: "${consignaExamen}"
-        Texto del estudiante: "${textoCorreo}"
-
-        Actúa como un examinador oficial del Goethe-Institut (Nivel A1) y a la vez un tutor altamente empático. Evalúa el correo del estudiante.
-        
-        REGLAS ESTRICTAS DE EVALUACIÓN:
-        1. Método Sándwich: Inicia destacando lo que el estudiante hizo bien, luego señala los errores amablemente, y termina con una frase motivadora.
-        2. Estructura: Evalúa 1) Cumplimiento de la tarea, 2) Coherencia, y 3) Corrección gramatical. Usa listas, viñetas y emojis.
-        3. Tablas Visuales: Para los errores gramaticales o de vocabulario, crea OBLIGATORIAMENTE una tabla en formato Markdown con tres columnas: [❌ Tu texto] | [✅ Corrección] | [💡 Regla simple].
-        4. Simplicidad Extrema: Explica las reglas en español muy claro y conversacional. No uses jerga lingüística compleja.
-      `;
-
     try {
       fal.config({ credentials: falKey.value() });
 
-      const result = await fal.subscribe("fal-ai/any-llm", {
+      const promptDefinido = `
+      Consigna del examen: "${consignaExamen}"
+      Texto del estudiante: "${textoCorreo}"
+
+      Actúa como un profesor nativo y examinador empático del Goethe-Institut. El estudiante está practicando para el nivel A1 de alemán (Schreiben Teil 2).
+
+      Estructura tu respuesta ESTRICTAMENTE en Markdown, dirigiéndote al estudiante, con estas tres secciones:
+
+      ### 📊 Evaluación de tu correo
+      Comienza con un breve mensaje de aliento. Luego, evalúa claramente si el estudiante cumplió los 3 puntos de la consigna, si la longitud es adecuada (aprox. 30 palabras) y si incluyó saludo y despedida.
+
+      ### 🔍 Análisis de Errores y Gramática
+      Cita los errores exactos que cometió el estudiante. Explica por qué están mal y dales la regla gramatical de forma muy sencilla en español (haz énfasis en la regla de oro: el verbo conjugado en Posición 2, y los sustantivos con mayúscula). Si el texto es perfecto, felicítalo efusivamente.
+
+      ### ✨ Modelo Ideal (Musterlösung)
+      Escribe cómo sería un correo perfecto, natural y que obtendría la máxima calificación (nivel A1) para esta misma consigna. Esto servirá para que el estudiante aprenda por imitación. Incluye la traducción al español del modelo ideal.
+      `;
+
+      const result = await fal.subscribe("openrouter/router", {
         input: {
-          model: "mistralai/Mistral-Nemo-Instruct-2407",
+          model: "mistralai/mistral-nemo",
           prompt: promptDefinido,
-          system_prompt: "Eres un examinador de alemán experto pero muy empático y didáctico."
+          system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo."
         }
       });
 

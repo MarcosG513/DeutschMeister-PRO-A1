@@ -724,7 +724,7 @@ const goetheModules = [{
               <p className="text-sm text-emerald-700 mt-1">No te compliques. El examen pide 3 puntos. Escribe una oración exacta para cada punto con el verbo en Posición 2. Menos es más.</p>
             </div>
             
-            <EmailSimulator instructions="Escribe un correo a un amigo invitándolo a tu fiesta. Incluye: Cuándo es, dónde es, y pide que confirme asistencia. Mínimo 30 palabras" initialText="" />
+            <EmailSimulator initialText="" />
           </div>
   }]
 }, {

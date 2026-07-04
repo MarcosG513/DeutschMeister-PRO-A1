@@ -4,13 +4,30 @@ import { Loader2, CheckCircle, Edit as Edit3 } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
 import { functions } from '../App';
 
-const EmailSimulator = ({
-  instructions,
-  initialText
-}) => {
+const consignasGoethe = [
+  { de: "Ihre Freundin Anna hat Geburtstag. Schreiben Sie eine E-Mail: Gratulation? Wann besuchen? Geschenk?", es: "Tu amiga Anna cumple años. Escribe un correo: ¿Felicitación? ¿Cuándo la visitas? ¿Regalo?" },
+  { de: "Sie machen am Wochenende einen Ausflug. Schreiben Sie eine E-Mail an Ihren Freund: Wohin? Wann treffen? Was mitbringen?", es: "Harás una excursión el fin de semana. Escribe un correo a tu amigo: ¿A dónde? ¿Cuándo encontrarse? ¿Qué llevar?" },
+  { de: "Sie möchten am Samstag eine Party machen. Schreiben Sie eine E-Mail an Ihre Freunde: Einladung? Wann und wo? Essen und Getränke?", es: "Quieres hacer una fiesta el sábado. Escribe a tus amigos: ¿Invitación? ¿Cuándo y dónde? ¿Comida y bebida?" }
+];
+
+const EmailSimulator = ({ initialText }) => {
   const [text, setText] = useState(initialText || "");
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [consigna, setConsigna] = useState(() => {
+    const randomIndex = Math.floor(Math.random() * consignasGoethe.length);
+    return consignasGoethe[randomIndex];
+  });
+
+  const cambiarTema = () => {
+    let nextIndex;
+    do {
+      nextIndex = Math.floor(Math.random() * consignasGoethe.length);
+    } while (consignasGoethe.length > 1 && consignasGoethe[nextIndex].de === consigna.de);
+    
+    setConsigna(consignasGoethe[nextIndex]);
+    setEvaluation(null);
+  };
 
   const evaluateEmail = async () => {
     if (!text.trim()) return;
@@ -21,10 +38,11 @@ const EmailSimulator = ({
       const evaluateEmailFn = httpsCallable(functions, 'evaluateEmail');
       const result = await evaluateEmailFn({
         textoCorreo: text,
-        consignaExamen: instructions
+        consignaExamen: consigna.de
       });
-      if (result.data && result.data.output) {
-        setEvaluation(result.data.output);
+      const outputText = result.data?.output || result.data;
+      if (outputText) {
+        setEvaluation(outputText);
       } else {
         throw new Error("No feedback received");
       }
@@ -58,14 +76,27 @@ const EmailSimulator = ({
   };
 
   return (
-    <div className="bg-white border-2 border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col mb-4">
-      <div className="bg-slate-100 px-4 py-3 border-b border-slate-200 flex flex-col gap-1">
-        <div className="flex items-center gap-2 font-bold text-slate-700 text-sm">
-          <Edit3 size={16} className="text-blue-600" /> Simulador de Examen (Modo Offline)
+    <div className="bg-white border-2 border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col mb-4 text-left">
+      <div className="bg-slate-100 px-4 py-3 border-b border-slate-200 flex flex-col gap-2">
+        <div className="flex items-center justify-between font-bold text-slate-700 text-sm">
+          <div className="flex items-center gap-2">
+            <Edit3 size={16} className="text-blue-600" /> Simulador de Examen (Goethe A1 Schreiben Teil 2)
+          </div>
+          <button 
+            onClick={cambiarTema}
+            className="text-xs bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-800 px-2.5 py-1 rounded font-bold shadow-sm transition-all"
+          >
+            Cambiar tema
+          </button>
         </div>
-        <p className="text-xs text-slate-500 font-medium italic mt-1 bg-white p-2 rounded border border-slate-200">
-          <strong>Instrucciones:</strong> {instructions}
-        </p>
+        <div className="text-sm bg-white p-3 rounded border border-slate-200 flex flex-col gap-1.5 text-left">
+          <p className="font-bold text-slate-800 leading-relaxed">
+            {consigna.de}
+          </p>
+          <p className="text-xs text-slate-500 italic font-medium leading-relaxed border-t border-slate-100 pt-1.5">
+            {consigna.es}
+          </p>
+        </div>
       </div>
       <textarea 
         className="w-full p-4 h-40 focus:outline-none focus:bg-yellow-50/30 text-slate-700 font-medium resize-none transition-colors" 

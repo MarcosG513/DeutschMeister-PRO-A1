@@ -1139,7 +1139,7 @@ const goetheModules = [
             </div>
             
             <EmailSimulator 
-              instructions="Escribe un correo a un amigo invitándolo a tu fiesta. Incluye: Cuándo es, dónde es, y pide que confirme asistencia. Mínimo 30 palabras"
+
               initialText=""
             />
           </div>
