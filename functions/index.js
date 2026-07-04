@@ -108,7 +108,7 @@ export const runRoleplaySimulator = onCall(
 // 2. EVALUADOR DE CORREOS (EmailSimulator)
 // =========================================================================
 export const evaluateEmail = onCall(
-  { secrets: [falKey] },
+  { secrets: [falKey], maxInstances: 10 },
   async (request) => {
     const { textoCorreo, consignaExamen } = request.data;
 
@@ -123,18 +123,22 @@ export const evaluateEmail = onCall(
       Consigna del examen: "${consignaExamen}"
       Texto del estudiante: "${textoCorreo}"
 
-      Actúa como un profesor nativo y examinador empático del Goethe-Institut. El estudiante está practicando para el nivel A1 de alemán (Schreiben Teil 2).
+      Actúa como un profesor nativo y examinador del Goethe-Institut. El estudiante practica para el nivel A1 (Schreiben Teil 2).
 
-      Estructura tu respuesta ESTRICTAMENTE en Markdown, dirigiéndote al estudiante, con estas tres secciones:
+      REGLAS ESTRICTAS DE CONTEXTO:
+      1. Identifica el destinatario en la consigna. Si es un amigo/a (Freund/Freundin), el correo DEBE ser INFORMAL (Du, dir, Liebe/Lieber). Si es una autoridad, empresa o desconocido, DEBE ser FORMAL (Sie, Ihnen, Sehr geehrte).
+      2. El "Modelo Ideal" debe estar dirigido directamente a la persona mencionada (ej. Anna), NO hablar de ella en tercera persona.
+
+      Estructura tu respuesta ESTRICTAMENTE en Markdown con estas tres secciones:
 
       ### 📊 Evaluación de tu correo
-      Comienza con un breve mensaje de aliento. Luego, evalúa claramente si el estudiante cumplió los 3 puntos de la consigna, si la longitud es adecuada (aprox. 30 palabras) y si incluyó saludo y despedida.
+      Evalúa si cumplió los 3 puntos de la consigna, la longitud (aprox. 30 palabras), y el uso correcto de saludo/despedida según el registro (formal o informal) requerido. Sé alentador.
 
       ### 🔍 Análisis de Errores y Gramática
-      Cita los errores exactos que cometió el estudiante. Explica por qué están mal y dales la regla gramatical de forma muy sencilla en español (haz énfasis en la regla de oro: el verbo conjugado en Posición 2, y los sustantivos con mayúscula). Si el texto es perfecto, felicítalo efusivamente.
+      Cita los errores exactos y corrígelos. Explica la regla del verbo en Posición 2 y mayúsculas en sustantivos. Si el estudiante usó un registro formal ("Ihnen") para un amigo, corrígelo a informal ("dir") y viceversa. Sé lógico (ej. si escribe "motchen", asume que intentó escribir el verbo "möchten").
 
       ### ✨ Modelo Ideal (Musterlösung)
-      Escribe cómo sería un correo perfecto, natural y que obtendría la máxima calificación (nivel A1) para esta misma consigna. Esto servirá para que el estudiante aprenda por imitación. Incluye la traducción al español del modelo ideal.
+      Escribe un correo perfecto y natural de nivel A1 que responda a la consigna. Debe ir dirigido EXACTAMENTE a la persona de la consigna, en primera persona (yo te escribo a ti). Usa el saludo y despedida correctos para el registro. Incluye la traducción al español debajo.
       `;
 
       const result = await fal.subscribe("openrouter/router", {
