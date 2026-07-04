@@ -108,7 +108,7 @@ export const runRoleplaySimulator = onCall(
 // 2. EVALUADOR DE CORREOS (EmailSimulator)
 // =========================================================================
 export const evaluateEmail = onCall(
-  { secrets: [falKey], maxInstances: 9 },
+  { secrets: [falKey], maxInstances: 8 },
   async (request) => {
     const { textoCorreo, consignaExamen } = request.data;
 
@@ -148,7 +148,7 @@ export const evaluateEmail = onCall(
 
       const result = await fal.subscribe("openrouter/router", {
         input: {
-          model: "mistralai/mistral-nemo",
+          model: "meta-llama/llama-3.3-70b-instruct",
           prompt: promptDefinido,
           system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo.",
           temperature: 0.2,
