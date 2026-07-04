@@ -141,7 +141,9 @@ export const evaluateEmail = onCall(
         input: {
           model: "mistralai/mistral-nemo",
           prompt: promptDefinido,
-          system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo."
+          system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo.",
+          temperature: 0.2,
+          top_p: 0.9
         }
       });
 
