@@ -108,7 +108,7 @@ export const runRoleplaySimulator = onCall(
 // 2. EVALUADOR DE CORREOS (EmailSimulator)
 // =========================================================================
 export const evaluateEmail = onCall(
-  { secrets: [falKey], maxInstances: 7 },
+  { secrets: [falKey], maxInstances: 6 },
   async (request) => {
     const { textoCorreo, consignaExamen } = request.data;
 
@@ -148,10 +148,10 @@ export const evaluateEmail = onCall(
       Escribe un correo perfecto de nivel A1 que responda a la consigna, dirigido exactamente a la persona correcta, con la traducción al español debajo.
       `;
 
-      // Se utiliza Claude Sonnet 5 vía OpenRouter para máxima calidad pedagógica
+      // Se utiliza DeepSeek V4-Flash vía OpenRouter para máxima costo-efectividad pedagógica
       const result = await fal.subscribe("openrouter/router", {
         input: {
-          model: "anthropic/claude-sonnet-5",
+          model: "deepseek/deepseek-v4-flash",
           prompt: promptDefinido,
           system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo.",
           temperature: 0.2,
