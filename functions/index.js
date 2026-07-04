@@ -39,7 +39,7 @@ async function getSystemPrompt(promptId, defaultPrompt) {
 // Modelo: Gemini 2.5 Flash
 // =========================================================================
 export const runRoleplaySimulator = onCall(
-  { secrets: [geminiApiKey] },
+  { secrets: [geminiFreeKey, geminiApiKey] },
   async (request) => {
     const { historialConversacion, escenario } = request.data;
     
@@ -48,19 +48,26 @@ export const runRoleplaySimulator = onCall(
     }
 
     const defaultSystemInstruction = `
-      Eres un hablante nativo de alemán en un escenario de juego de rol de nivel A1: "${escenario}".
-      REGLAS ESTRICTAS:
-      1. Usa SOLO alemán de nivel A1 (frases cortas, máximo 500 palabras cotidianas, tiempo presente).
-      2. Mantén tus respuestas cortas (1 a 3 frases máximo).
-      3. Si el usuario comete un error muy grave, corrígelo brevemente entre paréntesis al final en español.
+      Eres un hablante nativo de alemán participando en un juego de rol de nivel A1. 
+      Escenario actual: "${escenario}".
+
+      REGLAS ESTRICTAS DE COMPORTAMIENTO:
+      1. Inmersión y Nivel: Mantén siempre tu personaje. Habla SOLO en alemán de nivel A1 (frases muy cortas, vocabulario cotidiano, tiempo presente).
+      2. Respuestas Ágiles: Mantén tus intervenciones muy cortas (1 a 2 frases máximo).
+      3. Ayuda Visual: Pon las palabras clave de tu respuesta en **negrita** para ayudar al alumno a identificarlas.
+      4. Correcciones (Tutor-Tipp): Si el alumno comete un error gramatical grave, responde primero en personaje en alemán. Luego, al final de tu mensaje, añade una pequeña nota en español: *(💡 Tutor-Tipp: felicítalo por el intento y corrige el error amablemente)*. Si no hay errores, no uses el tip.
+      5. El Cierre (Hook): Termina SIEMPRE tu diálogo con una pregunta corta y natural en alemán para que el alumno te responda y la escena fluya.
+      6. El Salvavidas (Ayuda a demanda): Si el usuario escribe que no entiende (ej. "No entiendo", "¿Qué significa eso?", "Ich verstehe nicht"), sal momentáneamente del personaje, explícare en español la última frase que le dijiste, dale una pista de cómo podría responder, y vuelve a formularle la pregunta en alemán para que lo intente de nuevo.
     `;
 
     const systemInstruction = await getSystemPrompt("roleplay_simulator", defaultSystemInstruction);
 
-    try {
-      const googleAI = new GoogleGenerativeAI(geminiApiKey.value());
-      const model = googleAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
+    // Función interna para llamar al modelo
+    const invocarRol = async (apiKeyStr) => {
+      const genAI = new GoogleGenerativeAI(apiKeyStr);
+      // Usamos 3.1 Flash-Lite: Alta velocidad y bajísimo costo para chats de rol
+      const model = genAI.getGenerativeModel({
+        model: "gemini-3.1-flash-lite",
         systemInstruction: systemInstruction.replace("${escenario}", escenario)
       });
 
@@ -72,9 +79,27 @@ export const runRoleplaySimulator = onCall(
       const result = await chat.sendMessage(ultimoMensaje);
 
       return { text: result.response.text() };
+    };
+
+    // EL ENRUTADOR EN CASCADA (CIRCUIT BREAKER)
+    try {
+      // Intento 1: API Gratuita (Costo $0)
+      return await invocarRol(geminiFreeKey.value());
     } catch (error) {
-      console.error("Error en runRoleplaySimulator:", error);
-      throw new HttpsError("internal", "Error al procesar la solicitud de IA", error.message);
+      const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.includes("quota")));
+      
+      if (isQuotaError && geminiApiKey.value()) {
+        console.warn("⚠️ Cuota gratuita agotada en Roleplay. Activando Failover a llave de pago...");
+        try {
+          // Intento 2: Llave de Facturación
+          return await invocarRol(geminiApiKey.value());
+        } catch (fallbackError) {
+          console.error("❌ Error crítico en llave de pago (Roleplay):", fallbackError);
+          throw new HttpsError("internal", "Error en los servidores de IA de respaldo.");
+        }
+      }
+      console.error("❌ Error general en runRoleplaySimulator:", error);
+      throw new HttpsError("internal", "Error comunicando con el Simulador de Rol.");
     }
   }
 );
