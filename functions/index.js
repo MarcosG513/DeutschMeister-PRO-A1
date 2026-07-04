@@ -151,19 +151,20 @@ export const evaluateEmail = onCall(
 
 // =========================================================================
 // 3. GENERADOR DE CUENTOS (generateStory)
-// Modelo: Qwen 2.5 7B (vía fal.ai)
+// Modelo: Qwen 2.5 7B (vía fal.ai/openrouter)
 // =========================================================================
 export const generateStory = onCall(
   { secrets: [falKey] },
   async (request) => {
     const { palabrasVocabulario } = request.data;
-
     if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario)) {
-      throw new HttpsError("invalid-argument", "Se requiere un arreglo de palabrasVocabulario");
+      throw new HttpsError("invalid-argument", "Faltan parámetros requeridos: palabrasVocabulario");
     }
 
-    const listaPalabras = palabrasVocabulario.join(", ");
-    const promptDefinido = `
+    try {
+      fal.config({ credentials: falKey.value() });
+      const listaPalabras = palabrasVocabulario.join(", ");
+      const promptDefinido = `
         Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
         
         REGLAS DEL CUENTO:
@@ -185,25 +186,27 @@ export const generateStory = onCall(
         }
       `;
 
-    try {
-      fal.config({ credentials: falKey.value() });
-
-      const result = await fal.subscribe("fal-ai/any-llm", {
+      const result = await fal.subscribe("openrouter/router", {
         input: {
-          model: "Qwen/Qwen2.5-7B-Instruct",
+          model: "qwen/qwen-2.5-7b-instruct",
           prompt: promptDefinido,
           system_prompt: "Eres un generador de JSON estricto. Nunca agregas explicaciones, saludos ni marcas markdown fuera del JSON."
         }
       });
 
-      let outputText = result.data.output.trim();
-      if (outputText.startsWith("\`\`\`json")) outputText = outputText.substring(7, outputText.length - 3).trim();
-      else if (outputText.startsWith("\`\`\`")) outputText = outputText.substring(3, outputText.length - 3).trim();
+      const outputText = result.data.output || "";
 
-      return { json: JSON.parse(outputText) };
+      // Extracción robusta de JSON con Expresiones Regulares
+      const jsonMatch = outputText.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+         console.error("El modelo no devolvió un JSON válido. Salida cruda:", outputText);
+         throw new Error("Formato JSON no encontrado en la respuesta.");
+      }
+
+      return JSON.parse(jsonMatch[0]);
     } catch (error) {
-      console.error("Error en generateStory:", error);
-      throw new HttpsError("internal", "Error al generar cuento", error.message);
+      console.error("❌ Error en Generación de Cuento (Qwen 2.5):", error);
+      throw new HttpsError("internal", "Error al generar el cuento.");
     }
   }
 );
