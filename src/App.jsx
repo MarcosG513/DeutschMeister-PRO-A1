@@ -1153,13 +1153,17 @@ export default function App() {
       de: "",
       es: ""
     });
-    const wordsToUse = displayedWords.slice(0, 8).map(w => w.de).join(", ");
+    // Filtramos letras sueltas o palabras ultracortas para que el cuento tenga sentido
+    const palabrasValidas = displayedWords
+      .filter(w => w.de.length > 2) 
+      .slice(0, 8)
+      .map(w => w.de);
+
+    const wordsToUse = palabrasValidas.join(", ");
     try {
       if (!functions) throw new Error("Firebase functions not initialized");
       const generateStoryFn = httpsCallable(functions, 'generateStory');
-      const result = await generateStoryFn({
-        palabrasVocabulario: displayedWords.slice(0, 8).map(w => w.de)
-      });
+      const result = await generateStoryFn({ palabrasVocabulario: palabrasValidas });
       
       const data = result.data.json || result.data;
       setStoryState({
