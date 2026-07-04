@@ -150,159 +150,107 @@ export const evaluateEmail = onCall(
 );
 
 // =========================================================================
-// 3. GENERADOR DE CUENTOS (generateStory)
-// Cascada de Modelos (SSE):
-// 1. gemini-3.5-flash
-// 2. gemini-3.1-flash-lite
-// 3. meta-llama/llama-3.1-8b-instruct (vía openrouter/router de fal)
+// 3. GENERADOR DE CUENTOS (generateStory) - AO Circuit Breaker (Free -> Paid)
 // =========================================================================
 export const generateStory = onRequest(
-  { secrets: [geminiFreeKey, geminiApiKey, falKey], cors: true },
+  { secrets: [geminiFreeKey, geminiApiKey], cors: true },
   async (req, res) => {
-    if (req.method !== "POST" && req.method !== "OPTIONS") {
-      res.status(405).send("Method Not Allowed");
-      return;
-    }
-
+    // Manejo manual de CORS por seguridad en SSE
     if (req.method === "OPTIONS") {
-      res.status(204).end();
+      res.set("Access-Control-Allow-Origin", "*");
+      res.set("Access-Control-Allow-Methods", "POST");
+      res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+      res.status(204).send("");
       return;
     }
+    
+    res.set("Access-Control-Allow-Origin", "*");
 
-    let data;
     try {
-      data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      if (data && data.data) data = data.data;
-    } catch (e) {
-      res.status(400).send("Invalid JSON body");
-      return;
-    }
+      // Compatibilidad con fetch nativo o httpsCallable del frontend
+      const bodyData = req.body.data || req.body;
+      const { palabrasVocabulario } = bodyData;
 
-    const { palabrasVocabulario } = data || {};
-    if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario)) {
-      res.status(400).send("Faltan parámetros requeridos: palabrasVocabulario");
-      return;
-    }
+      if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario)) {
+        res.status(400).json({ error: "Faltan parámetros requeridos: palabrasVocabulario" });
+        return;
+      }
 
-    const listaPalabras = palabrasVocabulario.join(", ");
-    const promptDefinido = `
-      Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
+      const { GoogleGenerativeAI } = require("@google/generative-ai");
+      const listaPalabras = palabrasVocabulario.join(", ");
       
-      REGLAS DEL CUENTO:
-      1. Nivel A1 Estricto: Usa solo oraciones cortas, vocabulario muy básico y tiempo presente (Präsens).
-      2. Ayuda Visual: Resalta las palabras requeridas en **negrita** dentro del texto en alemán.
-      3. Comprensión Lectora: Crea una pregunta muy sencilla en alemán sobre el cuento, con 3 opciones de respuesta.
-
-      DEBES responder ÚNICAMENTE con un objeto JSON válido. El esquema JSON debe ser exactamente este:
+      const promptSistema = "Eres un creador de cuentos infantiles y profesor de alemán nivel A1. Tu objetivo es escribir historias coherentes, inmersivas y gramaticalmente perfectas integrando vocabulario específico.";
+      
+      const promptDefinido = `Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
+      La salida debe coincidir EXACTAMENTE con este esquema JSON, sin texto adicional:
       {
-        "titulo": "Título corto en alemán",
-        "cuento_aleman": "El microcuento en alemán (4 a 6 líneas) con las palabras requeridas en **negrita**",
-        "traduccion_espanol": "La traducción al español",
-        "palabras_clave_usadas": [ { "palabra": "Palabra en alemán", "contexto": "Oración donde se usó" } ],
+        "titulo": "Título en alemán",
+        "cuento_aleman": "El microcuento en alemán...",
+        "traduccion_espanol": "Traducción fluida al español",
+        "palabras_clave_usadas": [ { "palabra": "Palabra", "contexto": "Oración donde se usó" } ],
         "pregunta_comprension": {
-           "pregunta": "Pregunta corta en alemán sobre el cuento",
+           "pregunta": "Pregunta corta",
            "opciones": ["Opción A", "Opción B", "Opción C"],
            "respuesta_correcta": "La opción correcta exacta"
         }
-      }
-    `;
+      }`;
 
-    // Helper para intentar streaming con modelos de Google
-    const tryGemini = async (modelName, apiKey) => {
+      const generationConfig = { responseMimeType: "application/json", temperature: 0.7 };
+
+      // AO: Orquestador del Pre-fetch (Circuit Breaker)
+      const initStream = async (apiKeySecret) => {
+        const genAI = new GoogleGenerativeAI(apiKeySecret.value());
+        const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash", systemInstruction: promptSistema, generationConfig });
+        const streamResult = await model.generateContentStream(promptDefinido);
+        const iterator = streamResult.stream[Symbol.asyncIterator]();
+        const firstChunk = await iterator.next(); // <- PRE-FETCH CRÍTICO
+        return { iterator, firstChunk };
+      };
+
+      let activeIterator, firstChunk;
+
       try {
-        const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({
-          model: modelName,
-          systemInstruction: "Eres un generador de JSON estricto. Nunca agregas explicaciones, saludos ni marcas markdown fuera del JSON.",
-          generationConfig: {
-            responseMimeType: "application/json"
-          }
-        });
-
-        const resultStream = await model.generateContentStream(promptDefinido);
-        const iterator = resultStream.stream[Symbol.asyncIterator]();
-        const firstResult = await iterator.next();
-
-        if (firstResult.done) {
-          throw new Error("El stream retornó sin fragmentos");
-        }
-
-        if (!res.headersSent) {
-          res.setHeader('Content-Type', 'text/event-stream');
-          res.setHeader('Cache-Control', 'no-cache');
-          res.setHeader('Connection', 'keep-alive');
-          res.setHeader('X-Accel-Buffering', 'no');
-        }
-
-        const firstText = firstResult.value.text();
-        if (firstText) {
-          res.write(`data: ${firstText}\n\n`);
-        }
-
-        for await (const chunk of resultStream.stream) {
-          const text = chunk.text();
-          if (text) {
-            res.write(`data: ${text}\n\n`);
-          }
-        }
-        return true;
-      } catch (err) {
-        console.warn(`⚠️ Error intentando streaming con el modelo ${modelName}:`, err.message || err);
-        return false;
+        // Intento 1: Capa Gratuita (Límite 15 RPM)
+        console.log("AO: Iniciando Intento 1 con GEMINI_FREE_KEY...");
+        const result = await initStream(geminiFreeKey);
+        activeIterator = result.iterator;
+        firstChunk = result.firstChunk;
+      } catch (err1) {
+        console.warn("AO: Falló la Capa Gratuita. Iniciando Fallback a Facturación...", err1.message);
+        // Intento 2: Capa de Facturación (Sin límite)
+        const result = await initStream(geminiApiKey);
+        activeIterator = result.iterator;
+        firstChunk = result.firstChunk;
       }
-    };
 
-    let success = false;
+      // Conexión exitosa y verificada. Abrimos la cascada SSE al frontend.
+      res.writeHead(200, {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "X-Accel-Buffering": "no" // Invalida el caché intermedio
+      });
 
-    // INTENTO 1: gemini-3.5-flash
-    console.log("Iniciando cascada: Intento 1 con gemini-3.5-flash...");
-    success = await tryGemini("gemini-3.5-flash", geminiFreeKey.value());
-    if (!success && geminiApiKey.value()) {
-      console.log("Reintento con llave de pago para gemini-3.5-flash...");
-      success = await tryGemini("gemini-3.5-flash", geminiApiKey.value());
-    }
-
-    // INTENTO 2: gemini-3.1-flash-lite
-    if (!success) {
-      console.log("Iniciando Intento 2 con gemini-3.1-flash-lite...");
-      success = await tryGemini("gemini-3.1-flash-lite", geminiFreeKey.value());
-      if (!success && geminiApiKey.value()) {
-        console.log("Reintento con llave de pago para gemini-3.1-flash-lite...");
-        success = await tryGemini("gemini-3.1-flash-lite", geminiApiKey.value());
+      // Transmitimos el pre-fetch
+      if (!firstChunk.done && firstChunk.value) {
+        res.write(`data: ${firstChunk.value.text()}\n\n`);
       }
-    }
 
-    // INTENTO 3: Llama 3.1 8B vía OpenRouter (Fal.ai)
-    if (!success) {
-      console.log("Iniciando Intento 3 (Respaldo final) con meta-llama/llama-3.1-8b-instruct vía fal.ai...");
-      try {
-        fal.config({ credentials: falKey.value() });
-        const result = await fal.subscribe("openrouter/router", {
-          input: {
-            model: "meta-llama/llama-3.1-8b-instruct",
-            prompt: promptDefinido,
-            system_prompt: "Eres un generador de JSON estricto. Nunca agregas explicaciones, saludos ni marcas markdown fuera del JSON."
-          }
-        });
-        const outputText = result.data.output || "";
-        if (!res.headersSent) {
-          res.setHeader('Content-Type', 'text/event-stream');
-          res.setHeader('Cache-Control', 'no-cache');
-          res.setHeader('Connection', 'keep-alive');
-          res.setHeader('X-Accel-Buffering', 'no');
-        }
-        res.write(`data: ${outputText}\n\n`);
-        success = true;
-      } catch (err) {
-        console.error("❌ Fallaron todos los modelos de la cascada. Último error:", err);
+      // Transmitimos el resto del flujo
+      for await (const chunk of activeIterator) {
+        res.write(`data: ${chunk.text()}\n\n`);
       }
-    }
 
-    if (success) {
-      res.write('data: [DONE]\n\n');
+      res.write("data: [DONE]\n\n");
       res.end();
-    } else {
-      res.status(500).send("No fue posible generar el cuento.");
+
+    } catch (globalError) {
+      console.error("AO: Error crítico en la orquestación final:", globalError);
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Error al generar el cuento." });
+      } else {
+        res.end(); // Cerrar el stream si ya había empezado
+      }
     }
   }
 );
