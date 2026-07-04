@@ -3,6 +3,7 @@ import { onRequest } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import admin from "firebase-admin";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleAICacheManager } from "@google/generative-ai/server";
 import { fal } from "@fal-ai/client";
 
 // Inicializa Firebase Admin
@@ -12,6 +13,7 @@ const db = admin.firestore();
 // Define los secretos que se tomarán de Secret Manager (FASE 1)
 const geminiApiKey = defineSecret("GEMINI_API_KEY");
 const falKey = defineSecret("FAL_KEY");
+const geminiFreeKey = defineSecret("GEMINI_FREE_KEY");
 
 /**
  * Función auxiliar para obtener los prompts desde Firestore (FASE 2)
@@ -188,7 +190,7 @@ export const generateStory = onCall(
 // Modelo: Gemini 2.5 Flash
 // =========================================================================
 export const sendTutorChatMessage = onRequest(
-  { secrets: [geminiApiKey], cors: true }, 
+  { secrets: [geminiFreeKey, geminiApiKey], cors: true }, 
   async (req, res) => {
     if (req.method !== "POST" && req.method !== "OPTIONS") {
       res.status(405).send("Method Not Allowed");
@@ -228,15 +230,102 @@ export const sendTutorChatMessage = onRequest(
 
     const systemInstruction = await getSystemPrompt("tutor_chat_system", defaultSystemInstruction);
 
-    try {
-      const genAI = new GoogleGenerativeAI(geminiApiKey.value());
-      const model = genAI.getGenerativeModel({ 
-        model: "gemini-3.1-flash-lite", 
-        systemInstruction: systemInstruction
+    // Función auxiliar interna que gestiona la conexión con el modelo y el context caching
+    const generarRespuesta = async (apiKeyStr) => {
+      const cacheManager = new GoogleAICacheManager(apiKeyStr);
+      
+      // Base de datos estática para padding A1 (Garantiza cumplir con el mínimo de 4096 tokens requerido)
+      const a1ReferenceDatabase = `
+        DEUTSCHMEISTER REFERENCE DATABASE FOR LEVEL A1
+        (Used to pad context cache to meet the minimum token requirement of 4096 tokens)
+        
+        NUMBERS (Zahlen):
+        null - 0, eins - 1, zwei - 2, drei - 3, vier - 4, fünf - 5, sechs - 6, sieben - 7, acht - 8, neun - 9, zehn - 10,
+        elf - 11, zwölf - 12, dreizehn - 13, vierzehn - 14, fünfzehn - 15, sechzehn - 16, siebzehn - 17, achtzehn - 18,
+        neunzehn - 19, zwanzig - 20, einundzwanzig - 21, zweiundzwanzig - 22, dreißig - 30, vierzig - 40, fünfzig - 50,
+        sechzig - 60, siebzig - 70, achtzig - 80, neunzig - 90, hundert - 100, tausend - 1000.
+        
+        DAYS OF THE WEEK (Wochentage):
+        Montag - lunes, Dienstag - martes, Mittwoch - miércoles, Donnerstag - jueves, Freitag - viernes, Samstag - sábado, Sonntag - domingo.
+        
+        MONTHS (Monate):
+        Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember.
+        
+        GRAMMAR PRONOUNS (Personalpronomen):
+        ich - yo, du - tú, er - él, sie - ella, es - ello, wir - nosotros, ihr - vosotros, sie - ellos/ellas, Sie - usted.
+        
+        POSSESSIVE PRONOUNS (Possessivpronomen):
+        mein - mi, dein - tu, sein - su (de él), ihr - su (de ella), unser - nuestro, euer - vuestro, ihr - su (de ellos), Ihr - su (de usted).
+        
+        COMMON VERBS (Verben):
+        sein (bin, bist, ist, sind, seid, sind) - ser/estar
+        haben (habe, hast, hat, haben, habt, haben) - tener
+        kommen (komme, kommst, kommt, kommen, kommt, kommen) - venir
+        wohnen (wohne, wohnst, wohnt, wohnen, wohnt, wohnen) - vivir/residir
+        heißen (heiße, heißt, heißt, heißen, heißt, heißen) - llamarse
+        sprechen (spreche, sprichst, spricht, sprechen, sprecht, sprechen) - hablar
+        arbeiten (arbeite, arbeitest, arbeitet, arbeiten, arbeitet, arbeiten) - trabajar
+        machen (mache, machst, macht, machen, macht, machen) - hacer
+        gehen (gehe, gehst, geht, gehen, geht, gehen) - ir
+        kauf (kaufe, kaufst, kauft, kaufen, kauft, kaufen) - comprar
+        trinken (trinke, trinkst, trinkt, trinken, trinkt, trinken) - beber
+        essen (esse, isst, isst, essen, esst, essen) - comer
+        schreiben (schreibe, schreibst, schreibt, schreiben, schreibt, schreiben) - escribir
+        lesen (lese, liest, liest, lesen, lest, lesen) - leer
+        sehen (sehe, siehst, sieht, sehen, seht, sehen) - ver
+        hören (höre, hörst, hört, hören, hört, hören) - escuchar/oír
+        lernen (lerne, lernst, lernt, lernen, lernt, lernen) - aprender
+        verstehen (verstehe, verstehst, versteht, verstehen, versteht, verstehen) - entender
+        fragen (frage, fragst, fragt, fragen, fragt, fragen) - preguntar
+        antworten (antworte, antwortest, antwortet, antworten, antwortet, antworten) - responder.
+        
+        PREPOSITIONS (Präpositionen):
+        in - en / dentro de, an - junto a / en, auf - sobre / encima de, unter - debajo de, über - sobre / encima de (sin tocar),
+        vor - delante de, hinter - detrás de, neben - al lado de, zwischen - entre.
+        mit - con, nach - hacia / después de, aus - de (procedencia/interior), zu - hacia / a, von - de, bei - en casa de / junto a, seit - desde.
+        
+        USEFUL SENTENCES:
+        Wie geht es dir? - ¿Cómo estás?
+        Mir geht es gut, danke. - Estoy bien, gracias.
+        Wie heißt du? - ¿Cómo te llamas?
+        Ich heißt Marcos. - Me llamo Marcos.
+        Woher kommst du? - ¿De dónde vienes?
+        Ich komme aus Kolumbien. - Vengo de Colombia.
+        Wo wohnst du? - ¿Dónde vives?
+        Ich wohne in Barranquilla. - Vivo en Barranquilla.
+        Was bist du von Beruf? - ¿A qué te dedicas?
+        Ich bin Elektroniker von Beruf. - Soy técnico electrónico de profesión.
+        Entschuldigung, ich verstehe nicht. - Disculpe, no entiendo.
+        Können Sie das bitte wiederholen? - ¿Puede repetir eso, por favor?
+        Sprechen Sie Spanisch? - ¿Habla español?
+        Ich spreche ein bisschen Deutsch. - Hablo un poco de alemán.
+        Vielen Dank für deine Hilfe. - Muchas gracias por tu ayuda.
+        Guten Morgen - Buenos días (mañana)
+        Guten Tag - Buenos días / buenas tardes
+        Guten Abend - Buenas noches (saludo)
+        Gute Nacht - Buenas noches (despedida)
+        Auf Wiedersehen - Adiós / Hasta la vista.
+      `;
+
+      // Repetimos para superar holgadamente los 4096 tokens exigidos por Gemini 3.1
+      const cachedContent = systemInstruction + "\n\n" + a1ReferenceDatabase.repeat(12);
+
+      const cache = await cacheManager.create({
+        model: "models/gemini-3.1-flash-lite",
+        displayName: "tutor_chat_instruction_cache",
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: cachedContent }]
+          }
+        ],
+        ttlSeconds: 3600
       });
 
+      const genAI = new GoogleGenerativeAI(apiKeyStr);
+      const model = genAI.getGenerativeModelFromCachedContent(cache);
+
       let validHistory = historialConversacion.slice(0, -1);
-      // Gemini requiere que el historial comience con 'user'. Si el primer mensaje es del 'model' (ej. bienvenida), lo quitamos o insertamos uno dummy
       if (validHistory.length > 0 && validHistory[0].role !== "user") {
         validHistory.shift();
       }
@@ -246,8 +335,6 @@ export const sendTutorChatMessage = onRequest(
       });
 
       const ultimoMensaje = historialConversacion[historialConversacion.length - 1].parts[0].text;
-      
-      // Streaming implementation
       const resultStream = await chat.sendMessageStream(ultimoMensaje);
 
       // Set headers for SSE (Server-Sent Events)
@@ -258,22 +345,43 @@ export const sendTutorChatMessage = onRequest(
       for await (const chunk of resultStream.stream) {
         const chunkText = chunk.text();
         if (chunkText) {
-          // SSE format: data: <content>\n\n
           res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
         }
       }
       
       res.write('data: [DONE]\n\n');
       res.end();
-      
+    };
+
+    // Cascada de Circuit Breaker
+    try {
+      await generarRespuesta(geminiFreeKey.value());
     } catch (error) {
-      console.error("Error en sendTutorChatMessage stream:", error);
-      // No usar status si ya empezó a streamear, pero por si acaso.
-      if (!res.headersSent) {
-        res.status(500).json({ error: "Error interno del servidor", details: error.message });
+      console.error("Error al intentar responder con la llave gratuita:", error);
+      const isQuotaError = 
+        error.status === 429 || 
+        (error.message && (error.message.includes("429") || error.message.toLowerCase().includes("quota")));
+      
+      if (isQuotaError) {
+        console.warn("Límite de cuota alcanzado en llave gratuita. Activando fallback a llave de pago...");
+        try {
+          await generarRespuesta(geminiApiKey.value());
+        } catch (fallbackError) {
+          console.error("Error crítico en la llave de pago de fallback:", fallbackError);
+          if (!res.headersSent) {
+            res.status(500).json({ error: "Error interno en el servidor de fallback", details: fallbackError.message });
+          } else {
+            res.write(`data: ${JSON.stringify({ error: "Stream fallback error: " + fallbackError.message })}\n\n`);
+            res.end();
+          }
+        }
       } else {
-        res.write(`data: ${JSON.stringify({ error: "Stream error: " + error.message })}\n\n`);
-        res.end();
+        if (!res.headersSent) {
+          res.status(500).json({ error: "Error interno del servidor", details: error.message });
+        } else {
+          res.write(`data: ${JSON.stringify({ error: "Stream error: " + error.message })}\n\n`);
+          res.end();
+        }
       }
     }
   }
