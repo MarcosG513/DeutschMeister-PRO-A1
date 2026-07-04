@@ -117,35 +117,27 @@ export const evaluateEmail = onCall(
       throw new HttpsError("invalid-argument", "Faltan parámetros requeridos");
     }
 
-    const defaultPrompt = `
-      Consigna: "${consignaExamen}"
-      Texto del estudiante: "${textoCorreo}"
+    const promptDefinido = `
+        Consigna del examen: "${consignaExamen}"
+        Texto del estudiante: "${textoCorreo}"
 
-      Actúa como examinador del Goethe-Institut para A1. Evalúa:
-      1. Cumplimiento de la tarea.
-      2. Coherencia (A1).
-      3. Gramática (declinaciones, posición del verbo).
-      
-      Formato Markdown en español:
-      ### 🎯 Evaluación General (Puntaje estimado 0-10)
-      ### 📈 Puntos Fuertes
-      ### 🛠️ Correcciones Detalladas
-      ### 💡 Sugerencia de Vocabulario
-    `;
-
-    const defaultSystemPrompt = "Eres un examinador estricto, metodológico y preciso de alemán nativo.";
-    
-    const promptDefinido = await getSystemPrompt("evaluate_email_prompt", defaultPrompt);
-    const systemPromptDefinido = await getSystemPrompt("evaluate_email_system", defaultSystemPrompt);
+        Actúa como un examinador oficial del Goethe-Institut (Nivel A1) y a la vez un tutor altamente empático. Evalúa el correo del estudiante.
+        
+        REGLAS ESTRICTAS DE EVALUACIÓN:
+        1. Método Sándwich: Inicia destacando lo que el estudiante hizo bien, luego señala los errores amablemente, y termina con una frase motivadora.
+        2. Estructura: Evalúa 1) Cumplimiento de la tarea, 2) Coherencia, y 3) Corrección gramatical. Usa listas, viñetas y emojis.
+        3. Tablas Visuales: Para los errores gramaticales o de vocabulario, crea OBLIGATORIAMENTE una tabla en formato Markdown con tres columnas: [❌ Tu texto] | [✅ Corrección] | [💡 Regla simple].
+        4. Simplicidad Extrema: Explica las reglas en español muy claro y conversacional. No uses jerga lingüística compleja.
+      `;
 
     try {
       fal.config({ credentials: falKey.value() });
       
       const result = await fal.subscribe("fal-ai/any-llm", {
         input: {
-          model: "google/gemini-2.5-flash",
-          prompt: promptDefinido.replace("${consignaExamen}", consignaExamen).replace("${textoCorreo}", textoCorreo),
-          system_prompt: systemPromptDefinido
+          model: "mistralai/Mistral-Nemo-Instruct-2407",
+          prompt: promptDefinido,
+          system_prompt: "Eres un examinador de alemán experto pero muy empático y didáctico."
         }
       });
 
@@ -170,30 +162,37 @@ export const generateStory = onCall(
       throw new HttpsError("invalid-argument", "Se requiere un arreglo de palabrasVocabulario");
     }
 
-    const defaultPrompt = `
-      Genera un micro-cuento interactivo en alemán nivel A1 que integre estas palabras: [${palabrasVocabulario.join(", ")}].
-      DEBES responder ÚNICAMENTE con un objeto JSON válido, sin texto adicional. Esquema:
-      {
-        "titulo": "Título",
-        "cuento_aleman": "Cuento en alemán",
-        "traduccion_espanol": "Traducción",
-        "palabras_clave_usadas": [{"palabra": "palabra", "contexto": "oración"}]
-      }
-    `;
+    const listaPalabras = palabrasVocabulario.join(", ");
+    const promptDefinido = `
+        Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
+        
+        REGLAS DEL CUENTO:
+        1. Nivel A1 Estricto: Usa solo oraciones cortas, vocabulario muy básico y tiempo presente (Präsens).
+        2. Ayuda Visual: Resalta las palabras requeridas en **negrita** dentro del texto en alemán.
+        3. Comprensión Lectora: Crea una pregunta muy sencilla en alemán sobre el cuento, con 3 opciones de respuesta.
 
-    const defaultSystemPrompt = "Eres un generador de JSON estricto.";
-    
-    const promptDefinido = await getSystemPrompt("generate_story_prompt", defaultPrompt);
-    const systemPromptDefinido = await getSystemPrompt("generate_story_system", defaultSystemPrompt);
+        DEBES responder ÚNICAMENTE con un objeto JSON válido. El esquema JSON debe ser exactamente este:
+        {
+          "titulo": "Título corto en alemán",
+          "cuento_aleman": "El microcuento en alemán (4 a 6 líneas) con las palabras requeridas en **negrita**",
+          "traduccion_espanol": "La traducción al español",
+          "palabras_clave_usadas": [ { "palabra": "Palabra en alemán", "contexto": "Oración donde se usó" } ],
+          "pregunta_comprension": {
+             "pregunta": "Pregunta corta en alemán sobre el cuento",
+             "opciones": ["Opción A", "Opción B", "Opción C"],
+             "respuesta_correcta": "La opción correcta exacta"
+          }
+        }
+      `;
 
     try {
       fal.config({ credentials: falKey.value() });
 
       const result = await fal.subscribe("fal-ai/any-llm", {
         input: {
-          model: "google/gemini-2.5-flash",
-          prompt: promptDefinido.replace("${palabrasVocabulario}", palabrasVocabulario.join(", ")),
-          system_prompt: systemPromptDefinido
+          model: "Qwen/Qwen2.5-7B-Instruct",
+          prompt: promptDefinido,
+          system_prompt: "Eres un generador de JSON estricto. Nunca agregas explicaciones, saludos ni marcas markdown fuera del JSON."
         }
       });
 
