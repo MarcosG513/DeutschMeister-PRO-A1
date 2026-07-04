@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
@@ -1854,7 +1855,17 @@ export default function App() {
                     <p className="font-bold animate-pulse">Imaginando historia mágica...</p>
                   </div> : <div className="space-y-4">
                     <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 relative group cursor-pointer" onClick={() => nativeSpeak(storyState.de)}>
-                      <p className="font-bold text-lg text-slate-800 leading-relaxed">{storyState.de}</p>
+                      <div className="font-bold text-lg text-slate-800 leading-relaxed">
+                        <ReactMarkdown 
+                          className="text-inherit"
+                          components={{
+                            p: ({node, ...props}) => <span className="block mb-2" {...props} />,
+                            strong: ({node, ...props}) => <strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded" {...props} />
+                          }}
+                        >
+                          {storyState.de}
+                        </ReactMarkdown>
+                      </div>
                       <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-sm text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"><Volume2 size={16} /></button>
                     </div>
                     <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
