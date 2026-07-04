@@ -176,7 +176,6 @@ export const generateStory = onRequest(
         return;
       }
 
-      const { GoogleGenerativeAI } = require("@google/generative-ai");
       const listaPalabras = palabrasVocabulario.join(", ");
       
       const promptSistema = "Eres un creador de cuentos infantiles y profesor de alemán nivel A1. Tu objetivo es escribir historias coherentes, inmersivas y gramaticalmente perfectas integrando vocabulario específico.";
@@ -231,14 +230,16 @@ export const generateStory = onRequest(
         "X-Accel-Buffering": "no" // Invalida el caché intermedio
       });
 
-      // Transmitimos el pre-fetch
+      // Transmitimos el pre-fetch limpiando saltos de línea
       if (!firstChunk.done && firstChunk.value) {
-        res.write(`data: ${firstChunk.value.text()}\n\n`);
+        const safeText = firstChunk.value.text().replace(/\n/g, " ");
+        res.write(`data: ${safeText}\n\n`);
       }
 
-      // Transmitimos el resto del flujo
+      // Transmitimos el resto del flujo en cascada
       for await (const chunk of activeIterator) {
-        res.write(`data: ${chunk.text()}\n\n`);
+        const safeText = chunk.text().replace(/\n/g, " ");
+        res.write(`data: ${safeText}\n\n`);
       }
 
       res.write("data: [DONE]\n\n");
