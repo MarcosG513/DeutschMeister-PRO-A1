@@ -42,7 +42,7 @@ export const runRoleplaySimulator = onCall(
   { secrets: [geminiFreeKey, geminiApiKey] },
   async (request) => {
     const { historialConversacion, escenario } = request.data;
-    
+
     if (!historialConversacion || !escenario) {
       throw new HttpsError("invalid-argument", "Faltan parámetros requeridos: historialConversacion o escenario");
     }
@@ -87,7 +87,7 @@ export const runRoleplaySimulator = onCall(
       return await invocarRol(geminiFreeKey.value());
     } catch (error) {
       const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.includes("quota")));
-      
+
       if (isQuotaError && geminiApiKey.value()) {
         console.warn("⚠️ Cuota gratuita agotada en Roleplay. Activando Failover a llave de pago...");
         try {
@@ -132,7 +132,7 @@ export const evaluateEmail = onCall(
 
     try {
       fal.config({ credentials: falKey.value() });
-      
+
       const result = await fal.subscribe("fal-ai/any-llm", {
         input: {
           model: "mistralai/Mistral-Nemo-Instruct-2407",
@@ -151,62 +151,158 @@ export const evaluateEmail = onCall(
 
 // =========================================================================
 // 3. GENERADOR DE CUENTOS (generateStory)
-// Modelo: Qwen 2.5 7B (vía fal.ai/openrouter)
+// Cascada de Modelos (SSE):
+// 1. gemini-3.5-flash
+// 2. gemini-3.1-flash-lite
+// 3. meta-llama/llama-3.1-8b-instruct (vía openrouter/router de fal)
 // =========================================================================
-export const generateStory = onCall(
-  { secrets: [falKey] },
-  async (request) => {
-    const { palabrasVocabulario } = request.data;
-    if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario)) {
-      throw new HttpsError("invalid-argument", "Faltan parámetros requeridos: palabrasVocabulario");
+export const generateStory = onRequest(
+  { secrets: [geminiFreeKey, geminiApiKey, falKey], cors: true },
+  async (req, res) => {
+    if (req.method !== "POST" && req.method !== "OPTIONS") {
+      res.status(405).send("Method Not Allowed");
+      return;
     }
 
-    try {
-      fal.config({ credentials: falKey.value() });
-      const listaPalabras = palabrasVocabulario.join(", ");
-      const promptDefinido = `
-        Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
-        
-        REGLAS DEL CUENTO:
-        1. Nivel A1 Estricto: Usa solo oraciones cortas, vocabulario muy básico y tiempo presente (Präsens).
-        2. Ayuda Visual: Resalta las palabras requeridas en **negrita** dentro del texto en alemán.
-        3. Comprensión Lectora: Crea una pregunta muy sencilla en alemán sobre el cuento, con 3 opciones de respuesta.
+    if (req.method === "OPTIONS") {
+      res.status(204).end();
+      return;
+    }
 
-        DEBES responder ÚNICAMENTE con un objeto JSON válido. El esquema JSON debe ser exactamente este:
-        {
-          "titulo": "Título corto en alemán",
-          "cuento_aleman": "El microcuento en alemán (4 a 6 líneas) con las palabras requeridas en **negrita**",
-          "traduccion_espanol": "La traducción al español",
-          "palabras_clave_usadas": [ { "palabra": "Palabra en alemán", "contexto": "Oración donde se usó" } ],
-          "pregunta_comprension": {
-             "pregunta": "Pregunta corta en alemán sobre el cuento",
-             "opciones": ["Opción A", "Opción B", "Opción C"],
-             "respuesta_correcta": "La opción correcta exacta"
+    let data;
+    try {
+      data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+      if (data && data.data) data = data.data;
+    } catch (e) {
+      res.status(400).send("Invalid JSON body");
+      return;
+    }
+
+    const { palabrasVocabulario } = data || {};
+    if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario)) {
+      res.status(400).send("Faltan parámetros requeridos: palabrasVocabulario");
+      return;
+    }
+
+    const listaPalabras = palabrasVocabulario.join(", ");
+    const promptDefinido = `
+      Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
+      
+      REGLAS DEL CUENTO:
+      1. Nivel A1 Estricto: Usa solo oraciones cortas, vocabulario muy básico y tiempo presente (Präsens).
+      2. Ayuda Visual: Resalta las palabras requeridas en **negrita** dentro del texto en alemán.
+      3. Comprensión Lectora: Crea una pregunta muy sencilla en alemán sobre el cuento, con 3 opciones de respuesta.
+
+      DEBES responder ÚNICAMENTE con un objeto JSON válido. El esquema JSON debe ser exactamente este:
+      {
+        "titulo": "Título corto en alemán",
+        "cuento_aleman": "El microcuento en alemán (4 a 6 líneas) con las palabras requeridas en **negrita**",
+        "traduccion_espanol": "La traducción al español",
+        "palabras_clave_usadas": [ { "palabra": "Palabra en alemán", "contexto": "Oración donde se usó" } ],
+        "pregunta_comprension": {
+           "pregunta": "Pregunta corta en alemán sobre el cuento",
+           "opciones": ["Opción A", "Opción B", "Opción C"],
+           "respuesta_correcta": "La opción correcta exacta"
+        }
+      }
+    `;
+
+    // Helper para intentar streaming con modelos de Google
+    const tryGemini = async (modelName, apiKey) => {
+      try {
+        const genAI = new GoogleGenerativeAI(apiKey);
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction: "Eres un generador de JSON estricto. Nunca agregas explicaciones, saludos ni marcas markdown fuera del JSON.",
+          generationConfig: {
+            responseMimeType: "application/json"
+          }
+        });
+
+        const resultStream = await model.generateContentStream(promptDefinido);
+        const iterator = resultStream.stream[Symbol.asyncIterator]();
+        const firstResult = await iterator.next();
+
+        if (firstResult.done) {
+          throw new Error("El stream retornó sin fragmentos");
+        }
+
+        if (!res.headersSent) {
+          res.setHeader('Content-Type', 'text/event-stream');
+          res.setHeader('Cache-Control', 'no-cache');
+          res.setHeader('Connection', 'keep-alive');
+          res.setHeader('X-Accel-Buffering', 'no');
+        }
+
+        const firstText = firstResult.value.text();
+        if (firstText) {
+          res.write(`data: ${firstText}\n\n`);
+        }
+
+        for await (const chunk of resultStream.stream) {
+          const text = chunk.text();
+          if (text) {
+            res.write(`data: ${text}\n\n`);
           }
         }
-      `;
-
-      const result = await fal.subscribe("openrouter/router", {
-        input: {
-          model: "qwen/qwen-2.5-7b-instruct",
-          prompt: promptDefinido,
-          system_prompt: "Eres un generador de JSON estricto. Nunca agregas explicaciones, saludos ni marcas markdown fuera del JSON."
-        }
-      });
-
-      const outputText = result.data.output || "";
-
-      // Extracción robusta de JSON con Expresiones Regulares
-      const jsonMatch = outputText.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-         console.error("El modelo no devolvió un JSON válido. Salida cruda:", outputText);
-         throw new Error("Formato JSON no encontrado en la respuesta.");
+        return true;
+      } catch (err) {
+        console.warn(`⚠️ Error intentando streaming con el modelo ${modelName}:`, err.message || err);
+        return false;
       }
+    };
 
-      return JSON.parse(jsonMatch[0]);
-    } catch (error) {
-      console.error("❌ Error en Generación de Cuento (Qwen 2.5):", error);
-      throw new HttpsError("internal", "Error al generar el cuento.");
+    let success = false;
+
+    // INTENTO 1: gemini-3.5-flash
+    console.log("Iniciando cascada: Intento 1 con gemini-3.5-flash...");
+    success = await tryGemini("gemini-3.5-flash", geminiFreeKey.value());
+    if (!success && geminiApiKey.value()) {
+      console.log("Reintento con llave de pago para gemini-3.5-flash...");
+      success = await tryGemini("gemini-3.5-flash", geminiApiKey.value());
+    }
+
+    // INTENTO 2: gemini-3.1-flash-lite
+    if (!success) {
+      console.log("Iniciando Intento 2 con gemini-3.1-flash-lite...");
+      success = await tryGemini("gemini-3.1-flash-lite", geminiFreeKey.value());
+      if (!success && geminiApiKey.value()) {
+        console.log("Reintento con llave de pago para gemini-3.1-flash-lite...");
+        success = await tryGemini("gemini-3.1-flash-lite", geminiApiKey.value());
+      }
+    }
+
+    // INTENTO 3: Llama 3.1 8B vía OpenRouter (Fal.ai)
+    if (!success) {
+      console.log("Iniciando Intento 3 (Respaldo final) con meta-llama/llama-3.1-8b-instruct vía fal.ai...");
+      try {
+        fal.config({ credentials: falKey.value() });
+        const result = await fal.subscribe("openrouter/router", {
+          input: {
+            model: "meta-llama/llama-3.1-8b-instruct",
+            prompt: promptDefinido,
+            system_prompt: "Eres un generador de JSON estricto. Nunca agregas explicaciones, saludos ni marcas markdown fuera del JSON."
+          }
+        });
+        const outputText = result.data.output || "";
+        if (!res.headersSent) {
+          res.setHeader('Content-Type', 'text/event-stream');
+          res.setHeader('Cache-Control', 'no-cache');
+          res.setHeader('Connection', 'keep-alive');
+          res.setHeader('X-Accel-Buffering', 'no');
+        }
+        res.write(`data: ${outputText}\n\n`);
+        success = true;
+      } catch (err) {
+        console.error("❌ Fallaron todos los modelos de la cascada. Último error:", err);
+      }
+    }
+
+    if (success) {
+      res.write('data: [DONE]\n\n');
+      res.end();
+    } else {
+      res.status(500).send("No fue posible generar el cuento.");
     }
   }
 );
@@ -214,16 +310,16 @@ export const generateStory = onCall(
 // =========================================================================
 // 4. CHAT CON EL TUTOR IA (sendTutorChatMessage)
 // FASE 3: Preparación de Canal de Streaming (SSE)
-// Modelo: Gemini 2.5 Flash
+// Modelo: Gemini 3.1 Flash-Lite
 // =========================================================================
 export const sendTutorChatMessage = onRequest(
-  { secrets: [geminiFreeKey, geminiApiKey], cors: true }, 
+  { secrets: [geminiFreeKey, geminiApiKey], cors: true },
   async (req, res) => {
     if (req.method !== "POST" && req.method !== "OPTIONS") {
       res.status(405).send("Method Not Allowed");
       return;
     }
-    
+
     // Si es OPTIONS, se resuelve rápido para CORS. 
     // Aunque `cors: true` en v2 suele manejarlo automáticamente.
 
@@ -231,8 +327,8 @@ export const sendTutorChatMessage = onRequest(
     try {
       data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
       // En funciones invocables a veces viene bajo `data`
-      if (data && data.data) data = data.data; 
-    } catch(e) {
+      if (data && data.data) data = data.data;
+    } catch (e) {
       res.status(400).send("Invalid JSON body");
       return;
     }
@@ -260,7 +356,7 @@ export const sendTutorChatMessage = onRequest(
     // Función auxiliar interna que gestiona la conexión con el modelo y el context caching
     const generarRespuesta = async (apiKeyStr) => {
       const cacheManager = new GoogleAICacheManager(apiKeyStr);
-      
+
       // Base de datos estática para padding A1 (Garantiza cumplir con el mínimo de 4096 tokens requerido)
       const a1ReferenceDatabase = `
         DEUTSCHMEISTER REFERENCE DATABASE FOR LEVEL A1
@@ -375,7 +471,7 @@ export const sendTutorChatMessage = onRequest(
           res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
         }
       }
-      
+
       res.write('data: [DONE]\n\n');
       res.end();
     };
@@ -385,10 +481,10 @@ export const sendTutorChatMessage = onRequest(
       await generarRespuesta(geminiFreeKey.value());
     } catch (error) {
       console.error("Error al intentar responder con la llave gratuita:", error);
-      const isQuotaError = 
-        error.status === 429 || 
+      const isQuotaError =
+        error.status === 429 ||
         (error.message && (error.message.includes("429") || error.message.toLowerCase().includes("quota")));
-      
+
       if (isQuotaError) {
         console.warn("Límite de cuota alcanzado en llave gratuita. Activando fallback a llave de pago...");
         try {
@@ -415,9 +511,9 @@ export const sendTutorChatMessage = onRequest(
 );
 
 // Función auxiliar para traducir conceptos a descripciones visuales usando Gemini
-// Optimizada con Gemini 2.5 Flash-Lite y patrón Circuit Breaker (Gratis -> Pago)
+// Optimizada con Gemini 3.1 Flash-Lite y patrón Circuit Breaker (Gratis -> Pago)
 async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, paidKeyVal) {
-    const prompt = `You are a prompt engineer for an image generation model. 
+  const prompt = `You are a prompt engineer for an image generation model. 
 The user wants to generate a completely textless, visual representation for the Spanish concept "${conceptoEspanol}".
 Provide ONLY a concise visual description in English of what the image should show. 
 DO NOT use the word itself. 
@@ -426,33 +522,33 @@ If it is "ayer" (yesterday), you might output: "An hourglass with sand at the bo
 If it is an animal like "perro", output: "A cute dog".
 Provide ONLY the visual description in English. Absolutely no intro, no quotes, no text.`;
 
-    const invocarModelo = async (apiKeyValue) => {
-        const genAI = new GoogleGenerativeAI(apiKeyValue);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" }); 
-        const result = await model.generateContent(prompt);
-        return result.response.text().trim().replace(/['"]/g, '');
-    };
+  const invocarModelo = async (apiKeyValue) => {
+    const genAI = new GoogleGenerativeAI(apiKeyValue);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+    const result = await model.generateContent(prompt);
+    return result.response.text().trim().replace(/['"]/g, '');
+  };
 
-    try {
-        // Intento 1: Usar la Llave Gratuita (Costo $0)
-        return await invocarModelo(freeKeyVal);
-    } catch (error) {
-        const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.includes("quota")));
-        
-        if (isQuotaError && paidKeyVal) {
-            console.warn("⚠️ Cuota gratuita agotada al generar visual prompt. Saltando a llave de pago...");
-            try {
-                // Intento 2: Usar la Llave de Pago (Costo ultrabajo por ser Flash-Lite)
-                return await invocarModelo(paidKeyVal);
-            } catch (fallbackError) {
-                console.error("❌ Error en fallback de visual prompt:", fallbackError);
-                return conceptoEspanol; 
-            }
-        }
-        
-        console.error("❌ Error desconocido al generar descripcion visual con Gemini:", error);
-        return conceptoEspanol; 
+  try {
+    // Intento 1: Usar la Llave Gratuita (Costo $0)
+    return await invocarModelo(freeKeyVal);
+  } catch (error) {
+    const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.includes("quota")));
+
+    if (isQuotaError && paidKeyVal) {
+      console.warn("⚠️ Cuota gratuita agotada al generar visual prompt. Saltando a llave de pago...");
+      try {
+        // Intento 2: Usar la Llave de Pago (Costo ultrabajo por ser Flash-Lite)
+        return await invocarModelo(paidKeyVal);
+      } catch (fallbackError) {
+        console.error("❌ Error en fallback de visual prompt:", fallbackError);
+        return conceptoEspanol;
+      }
     }
+
+    console.error("❌ Error desconocido al generar descripcion visual con Gemini:", error);
+    return conceptoEspanol;
+  }
 }
 
 // =========================================================================
@@ -461,101 +557,101 @@ Provide ONLY the visual description in English. Absolutely no intro, no quotes, 
 // =========================================================================
 
 const diccionarioLetras = {
-    "A, a": { shape: "uppercase letter A", obj: "shiny red apple" }, // Apfel
-    "B, b": { shape: "uppercase letter B", obj: "yellow banana" }, // Banane
-    "C, c": { shape: "uppercase letter C", obj: "cute chameleon" }, // Chamäleon
-    "D, d": { shape: "uppercase letter D", obj: "aluminum soda can" }, // Dose
-    "E, e": { shape: "uppercase letter E", obj: "cute little elephant" }, // Elefant
-    "F, f": { shape: "uppercase letter F", obj: "cute green frog" }, // Frosch
-    "G, g": { shape: "uppercase letter G", obj: "tall cute giraffe" }, // Giraffe
-    "H, h": { shape: "uppercase letter H", obj: "small cute 3D house" }, // Haus
-    "I, i": { shape: "uppercase letter I", obj: "cute little hedgehog" }, // Igel
-    "J, j": { shape: "uppercase letter J", obj: "folded colorful jacket" }, // Jacke
-    "K, k": { shape: "uppercase letter K", obj: "cute little cat" }, // Katze (reemplaza Kitten)
-    "L, l": { shape: "uppercase letter L", obj: "cute little lion" }, // Löwe
-    "M, m": { shape: "uppercase letter M", obj: "cute small mouse" }, // Maus
-    "N, n": { shape: "uppercase letter N", obj: "cute 3D human nose" }, // Nase
-    "O, o": { shape: "uppercase letter O", obj: "bright orange fruit" }, // Orange
-    "P, p": { shape: "uppercase letter P", obj: "cute little penguin" }, // Pinguin
-    "Q, q": { shape: "uppercase letter Q", obj: "cute pink jellyfish" }, // Qualle (reemplaza Queen/Krone)
-    "R, r": { shape: "uppercase letter R", obj: "beautiful red rose" }, // Rose
-    "S, s": { shape: "uppercase letter S", obj: "bright yellow sun" }, // Sonne
-    "T, t": { shape: "uppercase letter T", obj: "ceramic coffee mug" }, // Tasse (reemplaza Tree/Baum)
-    "U, u": { shape: "uppercase letter U", obj: "analog wall clock" }, // Uhr (reemplaza Umbrella/Regenschirm)
-    "V, v": { shape: "uppercase letter V", obj: "cute little flying bird" }, // Vogel (reemplaza Violin/Geige)
-    "W, w": { shape: "uppercase letter W", obj: "fluffy white cloud" }, // Wolke (reemplaza Whale/Wal)
-    "X, x": { shape: "uppercase letter X", obj: "colorful toy xylophone" }, // Xylophon
-    "Y, y": { shape: "uppercase letter Y", obj: "small luxury toy yacht" }, // Yacht (reemplaza Yoyo/Jojo)
-    "Z, z": { shape: "uppercase letter Z", obj: "cute little zebra" }, // Zebra
-    
-    // Umlauts y caracteres especiales
-    "Ä, ä": { shape: "uppercase letter A with two small dots (umlaut) floating above it", obj: "two shiny red apples" }, // Äpfel
-    "Ö, ö": { shape: "uppercase letter O with two small dots (umlaut) floating above it", obj: "small glass bottle of olive oil" }, // Öl
-    "Ü, ü": { shape: "uppercase letter U with two small dots (umlaut) floating above it", obj: "small open gift box with a surprise inside" }, // Überraschung
-    "ß": { shape: "German sharp S (Eszett) character", obj: "small piece of a paved street" } // Straße (contiene la ß)
+  "A, a": { shape: "uppercase letter A", obj: "shiny red apple" }, // Apfel
+  "B, b": { shape: "uppercase letter B", obj: "yellow banana" }, // Banane
+  "C, c": { shape: "uppercase letter C", obj: "cute chameleon" }, // Chamäleon
+  "D, d": { shape: "uppercase letter D", obj: "aluminum soda can" }, // Dose
+  "E, e": { shape: "uppercase letter E", obj: "cute little elephant" }, // Elefant
+  "F, f": { shape: "uppercase letter F", obj: "cute green frog" }, // Frosch
+  "G, g": { shape: "uppercase letter G", obj: "tall cute giraffe" }, // Giraffe
+  "H, h": { shape: "uppercase letter H", obj: "small cute 3D house" }, // Haus
+  "I, i": { shape: "uppercase letter I", obj: "cute little hedgehog" }, // Igel
+  "J, j": { shape: "uppercase letter J", obj: "folded colorful jacket" }, // Jacke
+  "K, k": { shape: "uppercase letter K", obj: "cute little cat" }, // Katze (reemplaza Kitten)
+  "L, l": { shape: "uppercase letter L", obj: "cute little lion" }, // Löwe
+  "M, m": { shape: "uppercase letter M", obj: "cute small mouse" }, // Maus
+  "N, n": { shape: "uppercase letter N", obj: "cute 3D human nose" }, // Nase
+  "O, o": { shape: "uppercase letter O", obj: "bright orange fruit" }, // Orange
+  "P, p": { shape: "uppercase letter P", obj: "cute little penguin" }, // Pinguin
+  "Q, q": { shape: "uppercase letter Q", obj: "cute pink jellyfish" }, // Qualle (reemplaza Queen/Krone)
+  "R, r": { shape: "uppercase letter R", obj: "beautiful red rose" }, // Rose
+  "S, s": { shape: "uppercase letter S", obj: "bright yellow sun" }, // Sonne
+  "T, t": { shape: "uppercase letter T", obj: "ceramic coffee mug" }, // Tasse (reemplaza Tree/Baum)
+  "U, u": { shape: "uppercase letter U", obj: "analog wall clock" }, // Uhr (reemplaza Umbrella/Regenschirm)
+  "V, v": { shape: "uppercase letter V", obj: "cute little flying bird" }, // Vogel (reemplaza Violin/Geige)
+  "W, w": { shape: "uppercase letter W", obj: "fluffy white cloud" }, // Wolke (reemplaza Whale/Wal)
+  "X, x": { shape: "uppercase letter X", obj: "colorful toy xylophone" }, // Xylophon
+  "Y, y": { shape: "uppercase letter Y", obj: "small luxury toy yacht" }, // Yacht (reemplaza Yoyo/Jojo)
+  "Z, z": { shape: "uppercase letter Z", obj: "cute little zebra" }, // Zebra
+
+  // Umlauts y caracteres especiales
+  "Ä, ä": { shape: "uppercase letter A with two small dots (umlaut) floating above it", obj: "two shiny red apples" }, // Äpfel
+  "Ö, ö": { shape: "uppercase letter O with two small dots (umlaut) floating above it", obj: "small glass bottle of olive oil" }, // Öl
+  "Ü, ü": { shape: "uppercase letter U with two small dots (umlaut) floating above it", obj: "small open gift box with a surprise inside" }, // Überraschung
+  "ß": { shape: "German sharp S (Eszett) character", obj: "small piece of a paved street" } // Straße (contiene la ß)
 };
 
 const diccionarioNumeros = {
-    "null": { num: "number 0", obj: "small empty yellow basket" },
-    "eins": { num: "number 1", obj: "exactly one small bright yellow star" },
-    "zwei": { num: "number 2", obj: "exactly two small bright yellow stars" },
-    "drei": { num: "number 3", obj: "exactly three small bright yellow stars" },
-    "vier": { num: "number 4", obj: "exactly four small bright yellow stars" },
-    "fünf": { num: "number 5", obj: "exactly five small bright yellow stars" },
-    "sechs": { num: "number 6", obj: "group of small bright yellow stars" },
-    "sieben": { num: "number 7", obj: "group of small bright yellow stars" },
-    "acht": { num: "number 8", obj: "group of small bright yellow stars" },
-    "neun": { num: "number 9", obj: "group of small bright yellow stars" },
-    "zehn": { num: "number 10", obj: "group of small bright yellow stars" },
-    "elf": { num: "number 11", obj: "group of small bright yellow stars" },
-    "zwölf": { num: "number 12", obj: "group of small bright yellow stars" },
-    "dreizehn": { num: "number 13", obj: "group of small bright yellow stars" },
-    "vierzehn": { num: "number 14", obj: "group of small bright yellow stars" },
-    "fünfzehn": { num: "number 15", obj: "group of small bright yellow stars" },
-    "sechzehn": { num: "number 16", obj: "group of small bright yellow stars" },
-    "siebzehn": { num: "number 17", obj: "group of small bright yellow stars" },
-    "achtzehn": { num: "number 18", obj: "group of small bright yellow stars" },
-    "neunzehn": { num: "number 19", obj: "group of small bright yellow stars" },
-    "zwanzig": { num: "number 20", obj: "group of small bright yellow stars" },
-    "einundzwanzig": { num: "number 21", obj: "group of small bright yellow stars" },
-    "dreißig": { num: "number 30", obj: "group of small bright yellow stars" },
-    "vierzig": { num: "number 40", obj: "group of small bright yellow stars" },
-    "fünfzig": { num: "number 50", obj: "group of small bright yellow stars" },
-    "sechzig": { num: "number 60", obj: "group of small bright yellow stars" },
-    "siebzig": { num: "number 70", obj: "group of small bright yellow stars" },
-    "achtzig": { num: "number 80", obj: "group of small bright yellow stars" },
-    "neunzig": { num: "number 90", obj: "group of small bright yellow stars" },
-    "hundert": { num: "number 100", obj: "group of small bright yellow stars" },
-    "tausend": { num: "number 1000", obj: "group of small bright yellow stars" },
-    
-    // Ordinales (Se renderizan como números con una medalla)
-    "der erste": { num: "number 1", obj: "shiny gold medal" },
-    "der zweite": { num: "number 2", obj: "shiny silver medal" },
-    "der dritte": { num: "number 3", obj: "shiny bronze medal" },
-    "der vierte": { num: "number 4", obj: "blue ribbon" },
-    "der fünfte": { num: "number 5", obj: "small blue ribbon" },
-    "der sechste": { num: "number 6", obj: "small blue ribbon" },
-    "der siebte": { num: "number 7", obj: "small blue ribbon" },
-    "der achte": { num: "number 8", obj: "small blue ribbon" },
-    "der neunte": { num: "number 9", obj: "small blue ribbon" },
-    "der zehnte": { num: "number 10", obj: "small blue ribbon" },
-    "der elfte": { num: "number 11", obj: "small blue ribbon" },
-    "der zwölfte": { num: "number 12", obj: "small blue ribbon" },
-    "der zwanzigste": { num: "number 20", obj: "small blue ribbon" },
-    "der einundzwanzigste": { num: "number 21", obj: "small blue ribbon" }
+  "null": { num: "number 0", obj: "small empty yellow basket" },
+  "eins": { num: "number 1", obj: "exactly one small bright yellow star" },
+  "zwei": { num: "number 2", obj: "exactly two small bright yellow stars" },
+  "drei": { num: "number 3", obj: "exactly three small bright yellow stars" },
+  "vier": { num: "number 4", obj: "exactly four small bright yellow stars" },
+  "fünf": { num: "number 5", obj: "exactly five small bright yellow stars" },
+  "sechs": { num: "number 6", obj: "group of small bright yellow stars" },
+  "sieben": { num: "number 7", obj: "group of small bright yellow stars" },
+  "acht": { num: "number 8", obj: "group of small bright yellow stars" },
+  "neun": { num: "number 9", obj: "group of small bright yellow stars" },
+  "zehn": { num: "number 10", obj: "group of small bright yellow stars" },
+  "elf": { num: "number 11", obj: "group of small bright yellow stars" },
+  "zwölf": { num: "number 12", obj: "group of small bright yellow stars" },
+  "dreizehn": { num: "number 13", obj: "group of small bright yellow stars" },
+  "vierzehn": { num: "number 14", obj: "group of small bright yellow stars" },
+  "fünfzehn": { num: "number 15", obj: "group of small bright yellow stars" },
+  "sechzehn": { num: "number 16", obj: "group of small bright yellow stars" },
+  "siebzehn": { num: "number 17", obj: "group of small bright yellow stars" },
+  "achtzehn": { num: "number 18", obj: "group of small bright yellow stars" },
+  "neunzehn": { num: "number 19", obj: "group of small bright yellow stars" },
+  "zwanzig": { num: "number 20", obj: "group of small bright yellow stars" },
+  "einundzwanzig": { num: "number 21", obj: "group of small bright yellow stars" },
+  "dreißig": { num: "number 30", obj: "group of small bright yellow stars" },
+  "vierzig": { num: "number 40", obj: "group of small bright yellow stars" },
+  "fünfzig": { num: "number 50", obj: "group of small bright yellow stars" },
+  "sechzig": { num: "number 60", obj: "group of small bright yellow stars" },
+  "siebzig": { num: "number 70", obj: "group of small bright yellow stars" },
+  "achtzig": { num: "number 80", obj: "group of small bright yellow stars" },
+  "neunzig": { num: "number 90", obj: "group of small bright yellow stars" },
+  "hundert": { num: "number 100", obj: "group of small bright yellow stars" },
+  "tausend": { num: "number 1000", obj: "group of small bright yellow stars" },
+
+  // Ordinales (Se renderizan como números con una medalla)
+  "der erste": { num: "number 1", obj: "shiny gold medal" },
+  "der zweite": { num: "number 2", obj: "shiny silver medal" },
+  "der dritte": { num: "number 3", obj: "shiny bronze medal" },
+  "der vierte": { num: "number 4", obj: "blue ribbon" },
+  "der fünfte": { num: "number 5", obj: "small blue ribbon" },
+  "der sechste": { num: "number 6", obj: "small blue ribbon" },
+  "der siebte": { num: "number 7", obj: "small blue ribbon" },
+  "der achte": { num: "number 8", obj: "small blue ribbon" },
+  "der neunte": { num: "number 9", obj: "small blue ribbon" },
+  "der zehnte": { num: "number 10", obj: "small blue ribbon" },
+  "der elfte": { num: "number 11", obj: "small blue ribbon" },
+  "der zwölfte": { num: "number 12", obj: "small blue ribbon" },
+  "der zwanzigste": { num: "number 20", obj: "small blue ribbon" },
+  "der einundzwanzigste": { num: "number 21", obj: "small blue ribbon" }
 };
 
 // Nuevo Diccionario de Preguntas
 const diccionarioPreguntas = {
-    "warum?": "a small cute 3D thought bubble",
-    "wo?": "a small cute 3D map location pin",
-    "wann?": "a small cute 3D hourglass",
-    "wer?": "a small cute 3D user profile avatar",
-    "was?": "a small cute 3D mystery gift box",
-    "wie?": "two small interlocking puzzle pieces",
-    "woher?": "a small cute 3D arrow pointing away from a map pin",
-    "wohin?": "a small cute 3D arrow pointing directly at a target bulls-eye",
-    "welcher?": "two small cute 3D checkboxes, one with a vibrant checkmark"
+  "warum?": "a small cute 3D thought bubble",
+  "wo?": "a small cute 3D map location pin",
+  "wann?": "a small cute 3D hourglass",
+  "wer?": "a small cute 3D user profile avatar",
+  "was?": "a small cute 3D mystery gift box",
+  "wie?": "two small interlocking puzzle pieces",
+  "woher?": "a small cute 3D arrow pointing away from a map pin",
+  "wohin?": "a small cute 3D arrow pointing directly at a target bulls-eye",
+  "welcher?": "two small cute 3D checkboxes, one with a vibrant checkmark"
 };
 
 /**
@@ -563,88 +659,88 @@ const diccionarioPreguntas = {
  * Estructura un JSON aislando colores naturales del indicador de género
  */
 function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman = "") {
-    // 1. Detección Inteligente de Color (Evita la epidemia gris leyendo el prefijo)
-    let hexAsignado = "hex #9E9E9E"; 
-    const palabraLimpia = (palabraAleman || "").trim().toLowerCase();
-    const tipoLimpio = (tipoGramatical || "").toLowerCase().trim();
-    
-    // Detección infalible de preguntas
-    const esPregunta = tipoLimpio.includes("pregunta") || tipoLimpio.includes("w-frage") || tipoLimpio.includes("interrogativ") || palabraLimpia.includes("?");
+  // 1. Detección Inteligente de Color (Evita la epidemia gris leyendo el prefijo)
+  let hexAsignado = "hex #9E9E9E";
+  const palabraLimpia = (palabraAleman || "").trim().toLowerCase();
+  const tipoLimpio = (tipoGramatical || "").toLowerCase().trim();
 
-    const diasYMeses = ["montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag", "januar", "februar", "märz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember"];
+  // Detección infalible de preguntas
+  const esPregunta = tipoLimpio.includes("pregunta") || tipoLimpio.includes("w-frage") || tipoLimpio.includes("interrogativ") || palabraLimpia.includes("?");
 
-    // MODIFICACIÓN AQUÍ:
-    if (palabraLimpia.startsWith("der ") || diasYMeses.includes(palabraLimpia)) { hexAsignado = "hex #4285F4"; }
-    else if (palabraLimpia.startsWith("die ")) { hexAsignado = "hex #EA4335"; }
-    else if (palabraLimpia.startsWith("das ")) { hexAsignado = "hex #34A853"; }
-    else if (tipoLimpio === "verbo" || tipoLimpio === "acción") { hexAsignado = "hex #FBBC05"; }
-    else if (tipoLimpio === "preposición" || tipoLimpio === "preposicion") { hexAsignado = "hex #FF9800"; }
-    else if (esPregunta) { hexAsignado = "hex #9C27B0"; }
+  const diasYMeses = ["montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag", "januar", "februar", "märz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember"];
 
-    // 2. Base JSON Estructurada
-    const promptObj = {
-        "scene": "A pure seamless solid white background in hex #FFFFFF",
-        "subjects": [],
-        "style": "3D isometric, minimalist, simple, educational language-app aesthetic, made of smooth matte soft clay",
-        "lighting": "Bright, even studio lighting"
-    };
+  // MODIFICACIÓN AQUÍ:
+  if (palabraLimpia.startsWith("der ") || diasYMeses.includes(palabraLimpia)) { hexAsignado = "hex #4285F4"; }
+  else if (palabraLimpia.startsWith("die ")) { hexAsignado = "hex #EA4335"; }
+  else if (palabraLimpia.startsWith("das ")) { hexAsignado = "hex #34A853"; }
+  else if (tipoLimpio === "verbo" || tipoLimpio === "acción") { hexAsignado = "hex #FBBC05"; }
+  else if (tipoLimpio === "preposición" || tipoLimpio === "preposicion") { hexAsignado = "hex #FF9800"; }
+  else if (esPregunta) { hexAsignado = "hex #9C27B0"; }
 
-    // 3. Enrutamiento Lógico de Sujetos
-    if (esPregunta) {
-        const objPregunta = diccionarioPreguntas[palabraLimpia] || "small cute 3D exclamation mark symbol";
-        promptObj.subjects = [
-            { "type": "large chunky 3D question mark symbol", "color": "strictly Material Purple hex #9C27B0", "position": "left" },
-            { "type": objPregunta, "color": "vibrant natural clay colors", "position": "sitting right next to the question mark" }
-        ];
-    } 
-    else if (tipoLimpio === 'letra' || tipoLimpio === 'alfabeto') {
-        const fallbackShape = `uppercase letter ${palabraAleman.charAt(0).toUpperCase()}`;
-        const datosLetra = diccionarioLetras[palabraAleman] || { shape: fallbackShape, obj: "small colorful bouncy ball" };
-        promptObj.subjects = [
-            { "type": `large chunky 3D block shaped like the ${datosLetra.shape}`, "color": "strictly Material Grey hex #9E9E9E", "position": "left" },
-            { "type": datosLetra.obj, "color": "vibrant natural clay colors", "position": "sitting right next to the letter block" }
-        ];
-    }
-    else if (tipoLimpio === 'numero' || tipoLimpio === 'número' || diccionarioNumeros[palabraLimpia]) {
-        const datosNum = diccionarioNumeros[palabraLimpia] || { num: "number " + palabraLimpia, obj: "group of small bright yellow stars" };
-        promptObj.subjects = [
-            { "type": `large chunky 3D block shaped like the ${datosNum.num}`, "color": "strictly Material Grey hex #9E9E9E", "position": "left" },
-            { "type": datosNum.obj, "color": "vibrant Material Yellow", "position": "sitting right next to the number block" }
-        ];
-    }
-    else {
-        // MODIFICACIÓN AQUÍ: Filtro ampliado
-        const isSinGenero = tipoLimpio === 'adverbio' || tipoLimpio === 'adjetivo' || tipoLimpio.includes('expresión') || tipoLimpio.includes('expresion') || tipoLimpio.includes('frase') || tipoLimpio.includes('regla') || palabraLimpia.includes('+');
+  // 2. Base JSON Estructurada
+  const promptObj = {
+    "scene": "A pure seamless solid white background in hex #FFFFFF",
+    "subjects": [],
+    "style": "3D isometric, minimalist, simple, educational language-app aesthetic, made of smooth matte soft clay",
+    "lighting": "Bright, even studio lighting"
+  };
 
-        if (isSinGenero) {
-            // Renderiza SOLO el concepto visual, sin esfera gramatical
-            promptObj.subjects = [
-                {
-                    "type": `3D UI icon of ${conceptoIngles}`,
-                    "description": "Rendered in its natural, realistic, and vibrant colors. Made of smooth matte soft clay. Purely visual, zero text.",
-                    "position": "centered"
-                }
-            ];
-        } else {
-            // Sustantivos, verbos y preposiciones SÍ llevan la esfera indicadora
-            promptObj.subjects = [
-                {
-                    "type": `3D UI icon of ${conceptoIngles}`,
-                    "description": "Rendered in its natural, realistic, and vibrant colors. Made of smooth matte soft clay. Purely visual, zero text.",
-                    "position": "centered"
-                },
-                {
-                    "type": "small geometric floating sphere",
-                    "description": "Made of glossy clay, perfectly round, acting as a grammatical gender indicator. Zero text.",
-                    "position": "floating near the top right corner of the main object",
-                    "color_match": "exact",
-                    "color": hexAsignado
-                }
-            ];
+  // 3. Enrutamiento Lógico de Sujetos
+  if (esPregunta) {
+    const objPregunta = diccionarioPreguntas[palabraLimpia] || "small cute 3D exclamation mark symbol";
+    promptObj.subjects = [
+      { "type": "large chunky 3D question mark symbol", "color": "strictly Material Purple hex #9C27B0", "position": "left" },
+      { "type": objPregunta, "color": "vibrant natural clay colors", "position": "sitting right next to the question mark" }
+    ];
+  }
+  else if (tipoLimpio === 'letra' || tipoLimpio === 'alfabeto') {
+    const fallbackShape = `uppercase letter ${palabraAleman.charAt(0).toUpperCase()}`;
+    const datosLetra = diccionarioLetras[palabraAleman] || { shape: fallbackShape, obj: "small colorful bouncy ball" };
+    promptObj.subjects = [
+      { "type": `large chunky 3D block shaped like the ${datosLetra.shape}`, "color": "strictly Material Grey hex #9E9E9E", "position": "left" },
+      { "type": datosLetra.obj, "color": "vibrant natural clay colors", "position": "sitting right next to the letter block" }
+    ];
+  }
+  else if (tipoLimpio === 'numero' || tipoLimpio === 'número' || diccionarioNumeros[palabraLimpia]) {
+    const datosNum = diccionarioNumeros[palabraLimpia] || { num: "number " + palabraLimpia, obj: "group of small bright yellow stars" };
+    promptObj.subjects = [
+      { "type": `large chunky 3D block shaped like the ${datosNum.num}`, "color": "strictly Material Grey hex #9E9E9E", "position": "left" },
+      { "type": datosNum.obj, "color": "vibrant Material Yellow", "position": "sitting right next to the number block" }
+    ];
+  }
+  else {
+    // MODIFICACIÓN AQUÍ: Filtro ampliado
+    const isSinGenero = tipoLimpio === 'adverbio' || tipoLimpio === 'adjetivo' || tipoLimpio.includes('expresión') || tipoLimpio.includes('expresion') || tipoLimpio.includes('frase') || tipoLimpio.includes('regla') || palabraLimpia.includes('+');
+
+    if (isSinGenero) {
+      // Renderiza SOLO el concepto visual, sin esfera gramatical
+      promptObj.subjects = [
+        {
+          "type": `3D UI icon of ${conceptoIngles}`,
+          "description": "Rendered in its natural, realistic, and vibrant colors. Made of smooth matte soft clay. Purely visual, zero text.",
+          "position": "centered"
         }
+      ];
+    } else {
+      // Sustantivos, verbos y preposiciones SÍ llevan la esfera indicadora
+      promptObj.subjects = [
+        {
+          "type": `3D UI icon of ${conceptoIngles}`,
+          "description": "Rendered in its natural, realistic, and vibrant colors. Made of smooth matte soft clay. Purely visual, zero text.",
+          "position": "centered"
+        },
+        {
+          "type": "small geometric floating sphere",
+          "description": "Made of glossy clay, perfectly round, acting as a grammatical gender indicator. Zero text.",
+          "position": "floating near the top right corner of the main object",
+          "color_match": "exact",
+          "color": hexAsignado
+        }
+      ];
     }
+  }
 
-    return JSON.stringify(promptObj);
+  return JSON.stringify(promptObj);
 }
 
 export const generateCardImage = onCall(
@@ -658,14 +754,14 @@ export const generateCardImage = onCall(
 
     // Usar el tipo gramatical si viene en wordObj, o intentar deducirlo
     const tipoGramatical = wordObj.type || wordObj.tipo_gramatical || 'sustantivo';
-    
+
     try {
       fal.config({ credentials: falKey.value() });
 
       // Si no tenemos un concepto en inglés predefinido, usamos Gemini para traducirlo rápido
       let concepto = conceptoIngles;
       if (!concepto) {
-         concepto = await getVisualDescriptionForConcept(wordObj.es, geminiFreeKey.value(), geminiApiKey.value());
+        concepto = await getVisualDescriptionForConcept(wordObj.es, geminiFreeKey.value(), geminiApiKey.value());
       }
 
       // Ensamblar el prompt usando la Fábrica
@@ -675,13 +771,13 @@ export const generateCardImage = onCall(
 
       // 3. Llamamos a Flux a través de Fal.ai (optimizando API endpoint, formato y dimensiones)
       const result = await fal.subscribe("fal-ai/flux-2/klein/9b/base", {
-          input: {
-              prompt: promptDinamicoGenerado, 
-              image_size: { width: 512, height: 512 },
-              num_inference_steps: 20,                 
-              guidance_scale: 3.5,                     
-              output_format: "jpeg"                    
-          }
+        input: {
+          prompt: promptDinamicoGenerado,
+          image_size: { width: 512, height: 512 },
+          num_inference_steps: 20,
+          guidance_scale: 3.5,
+          output_format: "jpeg"
+        }
       });
 
       const dataUri = result.data.images?.[0]?.url || result.data?.url || (result.images && result.images[0]?.url);

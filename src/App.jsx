@@ -1162,17 +1162,71 @@ export default function App() {
 
     const wordsToUse = palabrasValidas.join(", ");
     try {
-      if (!functions) throw new Error("Firebase functions not initialized");
-      const generateStoryFn = httpsCallable(functions, 'generateStory');
-      const result = await generateStoryFn({ palabrasVocabulario: palabrasValidas });
+      const response = await fetch(`https://generatestory-44keyii6gq-uc.a.run.app`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ palabrasVocabulario: palabrasValidas })
+      });
+
+      if (!response.ok) throw new Error("Failed to generate story");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let currentBuffer = "";
       
-      const data = result.data.json || result.data;
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split("\n");
+        for (const line of lines) {
+          if (line.startsWith("data: ") && !line.includes("[DONE]")) {
+            const textChunk = line.substring(6);
+            currentBuffer += textChunk;
+            
+            // Extraer campos parciales en tiempo real
+            const getStreamingField = (buffer, fieldName) => {
+              const regex = new RegExp(`"${fieldName}"\\s*:\\s*"([^"]*)`);
+              const match = buffer.match(regex);
+              if (match) {
+                return match[1]
+                  .replace(/\\n/g, "\n")
+                  .replace(/\\"/g, '"')
+                  .replace(/\\t/g, "\t");
+              }
+              return "";
+            };
+
+            const partialDe = getStreamingField(currentBuffer, "cuento_aleman") || getStreamingField(currentBuffer, "de");
+            const partialEs = getStreamingField(currentBuffer, "traduccion_espanol") || getStreamingField(currentBuffer, "es");
+
+            setStoryState(prev => ({
+              ...prev,
+              loading: false, // Ocultar spinner cuando empiece a llegar texto
+              de: partialDe || "Escribiendo cuento...",
+              es: partialEs || "Traduciendo..."
+            }));
+          }
+        }
+      }
+
+      // Procesamiento final
+      const jsonMatch = currentBuffer.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+         throw new Error("Formato JSON no encontrado en la respuesta final.");
+      }
+      const data = JSON.parse(jsonMatch[0]);
       setStoryState({
         isOpen: true,
         loading: false,
         de: data.cuento_aleman || data.de,
         es: data.traduccion_espanol || data.es
       });
+
     } catch (e) {
       console.error(e);
       setStoryState({
