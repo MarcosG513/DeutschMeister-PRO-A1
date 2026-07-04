@@ -1399,7 +1399,7 @@ export default function App() {
     const isBlueprint = presentation.theme === 'blueprint';
     const isMedical = presentation.theme === 'medical';
     const isNotebook = presentation.theme === 'notebook';
-    let containerClass = "h-full flex flex-col overflow-hidden ";
+    let containerClass = "flex-1 flex flex-col overflow-hidden ";
     let headerClass = "flex justify-between items-center p-4 border-b shrink-0 ";
     let bodyClass = "flex-1 overflow-y-auto p-6 md:p-12 flex flex-col justify-start ";
     if (isBlueprint) {
@@ -1423,7 +1423,7 @@ export default function App() {
       setFullscreenImage,
       unlockedCards
     };
-    return <div className="absolute inset-0 z-20 animate-in fade-in zoom-in-95 duration-200 rounded-2xl overflow-hidden shadow-2xl border border-slate-200/50 flex flex-col bg-white">
+    return <div className="flex flex-col min-h-[100dvh] w-full bg-white animate-in fade-in zoom-in-95 duration-200">
         <div className={containerClass}>
           <div className={headerClass}>
             <div className="flex items-center gap-3">
@@ -1486,45 +1486,120 @@ export default function App() {
   };
   return <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
       
-      {/* HEADER NAVBAR */}
-      <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="bg-yellow-500 text-slate-900 p-2 rounded-lg">
-              <GraduationCap size={28} />
-            </div>
-            <div>
-              <h1 className="text-xl font-black tracking-wide leading-tight">DeutschMeister <span className="text-yellow-400">PRO A1</span></h1>
-              <p className="text-xs text-slate-400">Alemán Técnico & Preparación Goethe Zertifikat</p>
-            </div>
-          </div>
-          
-          <div className="relative w-full md:w-1/3">
-            <input type="text" placeholder="Buscar (ej. Motor, essen, Verbo Modal)..." className="w-full py-2 px-4 pl-10 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all" value={searchTerm} onChange={e => {
-            setSearchTerm(e.target.value);
-            if (viewMode === "quiz" || viewMode === "presentation" || viewMode === "studyPlan") setViewMode("flashcards");
-          }} />
-            <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
-          </div>
+      {viewMode === "presentation" && activePresentation ? (
+        <PresentationViewer presentation={activePresentation} onClose={() => {
+          setViewMode('flashcards');
+          setActivePresentationId(null);
+          setIsFullscreen(false);
+        }} />
+      ) : viewMode === "quiz" ? (
+        <div className="flex flex-col min-h-[100dvh] w-full bg-white overflow-y-auto animate-in fade-in duration-300 p-4 sm:p-8">
+          <div className="max-w-4xl mx-auto w-full">
+               <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                 <div>
+                   <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                     <Gamepad2 className="text-blue-600" /> Quiz de Vocabulario
+                   </h2>
+                   <p className="text-slate-500 text-sm mt-1">Prueba tus conocimientos sobre los capítulos seleccionados.</p>
+                 </div>
+                 
+                 <button onClick={() => {
+                   setViewMode("flashcards");
+                   setQuizState(null);
+                   showInterstitial();
+                 }} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm self-start sm:self-auto" title="Volver a los módulos">
+                   <X size={18} /> Salir del Quiz
+                 </button>
+               </div>
 
-          <div className="flex gap-2 w-full md:w-auto justify-end">
-            <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 px-3 py-2 rounded-lg transition flex items-center justify-center" title="Pantalla Completa App">
-              {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-            </button>
-            <button onClick={() => setIsTutorOpen(true)} className="bg-slate-800 text-yellow-400 border border-yellow-500/30 px-4 py-2 rounded-lg font-bold hover:bg-slate-700 transition flex items-center gap-2">
-              <Bot size={18} /> Tutor IA
-            </button>
-            <button onClick={() => setViewMode('roleplay')} className="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-500 transition flex items-center gap-2 shadow-md">
-              <Sparkles size={18} /> Rol ✨
-            </button>
-            <button onClick={openQuizSetup} className="bg-yellow-500 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center gap-2">
-              <Gamepad2 size={18} /> Quiz
-            </button>
+               <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm flex flex-col items-center">
+                 {/* Racha y Puntuación */}
+                 <div className="flex justify-center items-center gap-6 mb-8 w-full">
+                   <div className="flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-full font-bold shadow-sm">
+                     <Flame size={20} className={currentStreak > 0 ? "animate-pulse text-orange-500" : ""} /> Racha: {currentStreak}
+                   </div>
+                   <div className="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold shadow-sm">
+                     <Trophy size={20} /> Mejor: {bestStreak}
+                   </div>
+                 </div>
+
+                 <h3 className="text-xl font-medium text-slate-500 mb-4 text-center">¿Qué significa esta palabra?</h3>
+                 
+                 {/* Interfaz de Pregunta (Pronunciación y Audio) */}
+                 <div className="w-full max-w-xl flex flex-col items-center justify-center font-black text-slate-800 mb-8 bg-slate-50 border-2 border-slate-100 py-10 px-4 rounded-xl shadow-inner relative group">
+                   <span className="text-4xl md:text-5xl">{quizState?.word.de}</span>
+                   {quizState?.word.pron && (
+                      <div className="flex items-center gap-2 mt-3 text-blue-500 italic font-medium text-lg">
+                        /{quizState.word.pron}/
+                        <button onClick={(e) => { e.stopPropagation(); nativeSpeak(quizState.word.de); }} className="p-1.5 hover:text-blue-600 hover:bg-blue-100 rounded-full transition"><Volume2 size={20} /></button>
+                      </div>
+                   )}
+                 </div>
+                 
+                 <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
+                   {quizState?.options.map((opt, i) => {
+                     let btnClass = "bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700";
+                     if (quizState.selected) {
+                       if (opt === quizState.word.es) btnClass = "bg-green-50 border-2 border-green-500 text-green-700 font-bold shadow-sm";else if (opt === quizState.selected) btnClass = "bg-red-50 border-2 border-red-500 text-red-700";else btnClass = "bg-slate-50 border-2 border-slate-100 text-slate-400 opacity-50";
+                     }
+                     return <button key={i} onClick={() => handleQuizAnswer(opt)} disabled={!!quizState.selected} className={`py-4 px-6 rounded-xl text-lg transition-all ${btnClass}`}>
+                              {opt}
+                            </button>;
+                   })}
+                 </div>
+                 {quizState?.selected && <div className="mt-8 flex flex-col items-center gap-4 w-full animate-in slide-in-from-bottom-4">
+                     <div className={`flex items-center gap-2 text-xl font-bold ${quizState.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                       {quizState.isCorrect ? <CheckCircle size={28} /> : <XCircle size={28} />}
+                       {quizState.isCorrect ? "¡Richtig! (¡Correcto!)" : `Falsch. Era: ${quizState.word.es}`}
+                     </div>
+                     <button onClick={generateNextQuizWord} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 transition w-full sm:w-auto">
+                       Siguiente Palabra ➔
+                     </button>
+                   </div>}
+               </div>
           </div>
         </div>
-      </header>
+      ) : (
+        <>
+          {/* HEADER NAVBAR */}
+          <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
+            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-yellow-500 text-slate-900 p-2 rounded-lg">
+                  <GraduationCap size={28} />
+                </div>
+                <div>
+                  <h1 className="text-xl font-black tracking-wide leading-tight">DeutschMeister <span className="text-yellow-400">PRO A1</span></h1>
+                  <p className="text-xs text-slate-400">Alemán Técnico & Preparación Goethe Zertifikat</p>
+                </div>
+              </div>
+              
+              <div className="relative w-full md:w-1/3">
+                <input type="text" placeholder="Buscar (ej. Motor, essen, Verbo Modal)..." className="w-full py-2 px-4 pl-10 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all" value={searchTerm} onChange={e => {
+                setSearchTerm(e.target.value);
+                if (viewMode === "quiz" || viewMode === "presentation" || viewMode === "studyPlan") setViewMode("flashcards");
+              }} />
+                <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
+              </div>
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 relative">
+              <div className="flex gap-2 w-full md:w-auto justify-end">
+                <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 px-3 py-2 rounded-lg transition flex items-center justify-center" title="Pantalla Completa App">
+                  {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+                </button>
+                <button onClick={() => setIsTutorOpen(true)} className="bg-slate-800 text-yellow-400 border border-yellow-500/30 px-4 py-2 rounded-lg font-bold hover:bg-slate-700 transition flex items-center gap-2">
+                  <Bot size={18} /> Tutor IA
+                </button>
+                <button onClick={() => setViewMode('roleplay')} className="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-500 transition flex items-center gap-2 shadow-md">
+                  <Sparkles size={18} /> Rol ✨
+                </button>
+                <button onClick={openQuizSetup} className="bg-yellow-500 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center gap-2">
+                  <Gamepad2 size={18} /> Quiz
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 relative">
         
         {/* SIDEBAR */}
         {!isFullscreen && viewMode !== "roleplay" && !searchTerm && <aside className="w-full lg:w-72 flex-shrink-0 flex flex-col gap-6">
@@ -1640,71 +1715,7 @@ export default function App() {
               </div>
           </div>}
 
-          {/* VISTA: QUIZ */}
-          {viewMode === "quiz" && <div className="animate-in fade-in duration-300">
-               <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                 <div>
-                   <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                     <Gamepad2 className="text-blue-600" /> Quiz de Vocabulario
-                   </h2>
-                   <p className="text-slate-500 text-sm mt-1">Prueba tus conocimientos sobre los capítulos seleccionados.</p>
-                 </div>
-                 
-                 <button onClick={() => {
-                   setViewMode("flashcards");
-                   setQuizState(null);
-                   showInterstitial();
-                 }} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm self-start sm:self-auto" title="Volver a los módulos">
-                   <X size={18} /> Salir del Quiz
-                 </button>
-               </div>
 
-               <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm flex flex-col items-center">
-                 {/* Racha y Puntuación */}
-                 <div className="flex justify-center items-center gap-6 mb-8 w-full">
-                   <div className="flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-full font-bold shadow-sm">
-                     <Flame size={20} className={currentStreak > 0 ? "animate-pulse text-orange-500" : ""} /> Racha: {currentStreak}
-                   </div>
-                   <div className="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold shadow-sm">
-                     <Trophy size={20} /> Mejor: {bestStreak}
-                   </div>
-                 </div>
-
-                 <h3 className="text-xl font-medium text-slate-500 mb-4 text-center">¿Qué significa esta palabra?</h3>
-                 
-                 {/* Interfaz de Pregunta (Pronunciación y Audio) */}
-                 <div className="w-full max-w-xl flex flex-col items-center justify-center font-black text-slate-800 mb-8 bg-slate-50 border-2 border-slate-100 py-10 px-4 rounded-xl shadow-inner relative group">
-                   <span className="text-4xl md:text-5xl">{quizState?.word.de}</span>
-                   {quizState?.word.pron && (
-                      <div className="flex items-center gap-2 mt-3 text-blue-500 italic font-medium text-lg">
-                        /{quizState.word.pron}/
-                        <button onClick={(e) => { e.stopPropagation(); nativeSpeak(quizState.word.de); }} className="p-1.5 hover:text-blue-600 hover:bg-blue-100 rounded-full transition"><Volume2 size={20} /></button>
-                      </div>
-                   )}
-                 </div>
-                 
-                 <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   {quizState?.options.map((opt, i) => {
-                     let btnClass = "bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700";
-                     if (quizState.selected) {
-                       if (opt === quizState.word.es) btnClass = "bg-green-50 border-2 border-green-500 text-green-700 font-bold shadow-sm";else if (opt === quizState.selected) btnClass = "bg-red-50 border-2 border-red-500 text-red-700";else btnClass = "bg-slate-50 border-2 border-slate-100 text-slate-400 opacity-50";
-                     }
-                     return <button key={i} onClick={() => handleQuizAnswer(opt)} disabled={!!quizState.selected} className={`py-4 px-6 rounded-xl text-lg transition-all ${btnClass}`}>
-                              {opt}
-                            </button>;
-                   })}
-                 </div>
-                 {quizState?.selected && <div className="mt-8 flex flex-col items-center gap-4 w-full animate-in slide-in-from-bottom-4">
-                     <div className={`flex items-center gap-2 text-xl font-bold ${quizState.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                       {quizState.isCorrect ? <CheckCircle size={28} /> : <XCircle size={28} />}
-                       {quizState.isCorrect ? "¡Richtig! (¡Correcto!)" : `Falsch. Era: ${quizState.word.es}`}
-                     </div>
-                     <button onClick={generateNextQuizWord} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 transition w-full sm:w-auto">
-                       Siguiente Palabra ➔
-                     </button>
-                   </div>}
-               </div>
-             </div>}
 
           {/* VISTA: SIMULADOR DE ROL (GEMINI API) ✨ */}
           {viewMode === "roleplay" && typeof RoleplaySimulator !== 'undefined' && <RoleplaySimulator onExit={() => setViewMode("flashcards")} />}
@@ -1875,8 +1886,11 @@ export default function App() {
             </div>}
         </>}
     </section>
+  </main>
+  </>
+  )}
 
-    {/* --- PANEL LATERAL: TUTOR IA --- */}
+  {/* --- PANEL LATERAL: TUTOR IA --- */}
     {isTutorOpen && <aside className={`fixed ${isTutorFullscreen ? 'inset-0 w-full z-[100]' : 'inset-y-0 right-0 w-full md:w-[450px] z-50 border-l'} bg-white shadow-2xl border-slate-200 flex flex-col animate-in slide-in-from-right duration-300`}>
         
         <div className="bg-slate-900 text-white p-4 flex justify-between items-center flex-shrink-0">
@@ -1929,7 +1943,6 @@ export default function App() {
           <img src={typeof fullscreenImage === 'string' && (fullscreenImage.startsWith('http') || fullscreenImage.startsWith('data:')) ? fullscreenImage : typeof fullscreenImage === 'string' ? `data:image/png;base64,${fullscreenImage}` : ''} alt="Vista Ampliada" className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl p-2 cursor-zoom-out bg-white" onClick={e => e.stopPropagation()} />
         </div>
       </div>}
-  </main>
 
   <style dangerouslySetInnerHTML={{
       __html: `
