@@ -108,7 +108,7 @@ export const runRoleplaySimulator = onCall(
 // 2. EVALUADOR DE CORREOS (EmailSimulator)
 // =========================================================================
 export const evaluateEmail = onCall(
-  { secrets: [falKey], maxInstances: 8 },
+  { secrets: [falKey], maxInstances: 7 },
   async (request) => {
     const { textoCorreo, consignaExamen } = request.data;
 
@@ -121,34 +121,37 @@ export const evaluateEmail = onCall(
 
       const promptDefinido = `
       Consigna del examen: "${consignaExamen}"
-      Texto escrito por ti (el estudiante): "${textoCorreo}"
+      Texto escrito por el estudiante: "${textoCorreo}"
 
-      Actúa como un profesor nativo y examinador del Goethe-Institut.
-      REGLA DE ORO 1 (PERSPECTIVA): DIRÍGETE AL ESTUDIANTE DIRECTAMENTE (Háblale de "tú"). JAMÁS hables de él en tercera persona ("el estudiante").
+      Actúa como un profesor de alemán nativo, pero experto en enseñar a hispanohablantes. Tu objetivo es que el estudiante APRENDA de sus errores, no solo corregirlos.
       
-      REGLA DE ORO 2 (REGISTRO): Analiza el destinatario de la consigna. 
-      - Si es un amigo/a (ej. Anna), el registro is INFORMAL. Si el estudiante usó "Ihnen" o "Sie", es un ERROR GRAVE. Debes corregirlo a "dir" o "dich".
-      - Si es una autoridad/empresa, es FORMAL. 
+      REGLAS DE ORO PEDAGÓGICAS:
+      1. DIRÍGETE AL ESTUDIANTE DE "TÚ", con un tono empático pero muy exigente.
+      2. DEBES detectar errores de interferencia del español (como traducir literalmente "estoy escribiendo" a "ich bin schreiben"). Explica por qué eso no funciona en alemán.
+      3. RESALTA SIEMPRE las palabras exactas del estudiante en **negrita** cuando hables de sus errores.
+      4. Si el estudiante se equivoca de registro (usa "Ihnen/Sie" con un amigo, o "dir/du" con una autoridad), corrígelo implacablemente.
 
-      REGLA DE ORO 3 (SALUDOS Y GÉNERO): 
-      - Para mujeres (amigas): USA SIEMPRE "Liebe [Nombre]" (Ej. Liebe Anna). NUNCA uses "Lieber" para una mujer.
-      - Para hombres (amigos): USA SIEMPRE "Lieber [Nombre]" (Ej. Lieber Hans).
+      Estructura tu respuesta ESTRICTAMENTE en Markdown usando estas 4 secciones:
 
-      Estructura tu respuesta ESTRICTAMENTE en Markdown con estas tres secciones:
+      ### 📊 Evaluación General
+      Da un puntaje del 1 al 100%. Usa una lista con emojis (✅, ⚠️, ❌) para evaluar punto por punto si cumplió la consigna, la longitud y el saludo/despedida correcto.
 
-      ### 📊 Evaluación de tu correo
-      (Háblale de tú. Evalúa de forma cálida si cumplió los 3 puntos, la longitud de 30 palabras y el saludo/despedida).
+      ### 🔬 Análisis Quirúrgico de tus Errores
+      NO des un párrafo aburrido. Genera una TABLA en Markdown con 3 columnas:
+      | **Lo que escribiste** | **Corrección** | **Explicación de la Regla** |
+      Analiza cada error (gramática, vocabulario, registro o posición del verbo). Cita las palabras del estudiante en **negrita**.
 
-      ### 🔍 Análisis de Errores y Gramática
-      (Cita sus errores exactos. Si usó registro formal con un amigo, corrígelo implacablemente. Si usó palabras raras como "motchen", asume el verbo "möchten" conjugado correctamente para la persona, ej. "möchte").
+      ### 💡 Ejemplos Útiles para ti
+      Basado en lo que el estudiante intentó decir, dale 2 ejemplos cortos en alemán y español de cómo se usa correctamente esa estructura en un contexto similar.
 
       ### ✨ Modelo Ideal (Musterlösung)
-      (Escribe un correo perfecto de nivel A1 que responda a la consigna. Aplica la Regla de Oro 3 para el saludo. Incluye traducción al español debajo).
+      Escribe un correo perfecto de nivel A1 que responda a la consigna, dirigido exactamente a la persona correcta, con la traducción al español debajo.
       `;
 
+      // Se utiliza Claude Sonnet 5 vía OpenRouter para máxima calidad pedagógica
       const result = await fal.subscribe("openrouter/router", {
         input: {
-          model: "meta-llama/llama-3.3-70b-instruct",
+          model: "anthropic/claude-sonnet-5",
           prompt: promptDefinido,
           system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo.",
           temperature: 0.2,
