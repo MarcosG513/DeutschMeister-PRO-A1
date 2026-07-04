@@ -1855,9 +1855,8 @@ export default function App() {
                     <p className="font-bold animate-pulse">Imaginando historia mágica...</p>
                   </div> : <div className="space-y-4">
                     <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 relative group cursor-pointer" onClick={() => nativeSpeak(storyState.de)}>
-                      <div className="font-bold text-lg text-slate-800 leading-relaxed">
+                      <div className="font-bold text-lg text-slate-800 leading-relaxed text-inherit">
                         <ReactMarkdown 
-                          className="text-inherit"
                           components={{
                             p: ({node, ...props}) => <span className="block mb-2" {...props} />,
                             strong: ({node, ...props}) => <strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded" {...props} />
