@@ -108,7 +108,7 @@ export const runRoleplaySimulator = onCall(
 // 2. EVALUADOR DE CORREOS (EmailSimulator)
 // =========================================================================
 export const evaluateEmail = onCall(
-  { secrets: [falKey], maxInstances: 10 },
+  { secrets: [falKey], maxInstances: 9 },
   async (request) => {
     const { textoCorreo, consignaExamen } = request.data;
 
@@ -121,24 +121,29 @@ export const evaluateEmail = onCall(
 
       const promptDefinido = `
       Consigna del examen: "${consignaExamen}"
-      Texto del estudiante: "${textoCorreo}"
+      Texto escrito por ti (el estudiante): "${textoCorreo}"
 
-      Actúa como un profesor nativo y examinador del Goethe-Institut. El estudiante practica para el nivel A1 (Schreiben Teil 2).
+      Actúa como un profesor nativo y examinador del Goethe-Institut.
+      REGLA DE ORO 1 (PERSPECTIVA): DIRÍGETE AL ESTUDIANTE DIRECTAMENTE (Háblale de "tú"). JAMÁS hables de él en tercera persona ("el estudiante").
+      
+      REGLA DE ORO 2 (REGISTRO): Analiza el destinatario de la consigna. 
+      - Si es un amigo/a (ej. Anna), el registro is INFORMAL. Si el estudiante usó "Ihnen" o "Sie", es un ERROR GRAVE. Debes corregirlo a "dir" o "dich".
+      - Si es una autoridad/empresa, es FORMAL. 
 
-      REGLAS ESTRICTAS DE CONTEXTO:
-      1. Identifica el destinatario en la consigna. Si es un amigo/a (Freund/Freundin), el correo DEBE ser INFORMAL (Du, dir, Liebe/Lieber). Si es una autoridad, empresa o desconocido, DEBE ser FORMAL (Sie, Ihnen, Sehr geehrte).
-      2. El "Modelo Ideal" debe estar dirigido directamente a la persona mencionada (ej. Anna), NO hablar de ella en tercera persona.
+      REGLA DE ORO 3 (SALUDOS Y GÉNERO): 
+      - Para mujeres (amigas): USA SIEMPRE "Liebe [Nombre]" (Ej. Liebe Anna). NUNCA uses "Lieber" para una mujer.
+      - Para hombres (amigos): USA SIEMPRE "Lieber [Nombre]" (Ej. Lieber Hans).
 
       Estructura tu respuesta ESTRICTAMENTE en Markdown con estas tres secciones:
 
       ### 📊 Evaluación de tu correo
-      Evalúa si cumplió los 3 puntos de la consigna, la longitud (aprox. 30 palabras), y el uso correcto de saludo/despedida según el registro (formal o informal) requerido. Sé alentador.
+      (Háblale de tú. Evalúa de forma cálida si cumplió los 3 puntos, la longitud de 30 palabras y el saludo/despedida).
 
       ### 🔍 Análisis de Errores y Gramática
-      Cita los errores exactos y corrígelos. Explica la regla del verbo en Posición 2 y mayúsculas en sustantivos. Si el estudiante usó un registro formal ("Ihnen") para un amigo, corrígelo a informal ("dir") y viceversa. Sé lógico (ej. si escribe "motchen", asume que intentó escribir el verbo "möchten").
+      (Cita sus errores exactos. Si usó registro formal con un amigo, corrígelo implacablemente. Si usó palabras raras como "motchen", asume el verbo "möchten" conjugado correctamente para la persona, ej. "möchte").
 
       ### ✨ Modelo Ideal (Musterlösung)
-      Escribe un correo perfecto y natural de nivel A1 que responda a la consigna. Debe ir dirigido EXACTAMENTE a la persona de la consigna, en primera persona (yo te escribo a ti). Usa el saludo y despedida correctos para el registro. Incluye la traducción al español debajo.
+      (Escribe un correo perfecto de nivel A1 que responda a la consigna. Aplica la Regla de Oro 3 para el saludo. Incluye traducción al español debajo).
       `;
 
       const result = await fal.subscribe("openrouter/router", {
