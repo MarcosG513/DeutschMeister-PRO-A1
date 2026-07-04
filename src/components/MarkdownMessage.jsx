@@ -1,25 +1,27 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const MarkdownMessage = ({ text }) => {
   if (!text || typeof text !== 'string') return null;
   let cleanText = text.replace(/(?:🇩🇪✨\s*model|✨\s*model|DE|model)\s*$/gi, '').trim();
 
   return (
-    <div className="text-inherit space-y-3">
+    <div className="text-inherit space-y-3 text-left">
       <ReactMarkdown 
+        remarkPlugins={[remarkGfm]}
         components={{
           p: ({node, ...props}) => <span className="block mb-2 text-slate-700" {...props} />,
-          strong: ({node, ...props}) => <strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded" {...props} />,
+          strong: ({node, ...props}) => <strong className="font-bold text-indigo-700" {...props} />,
           table: ({node, ...props}) => (
-            <div className="overflow-x-auto my-5 rounded-xl border border-slate-200 shadow-sm">
-              <table className="w-full text-left border-collapse text-sm min-w-[600px]" {...props} />
+            <div className="overflow-x-auto my-6 shadow-sm rounded-lg border border-slate-200 bg-white">
+              <table className="min-w-full text-left border-collapse" {...props} />
             </div>
           ),
-          thead: ({node, ...props}) => <thead className="bg-slate-100/80 text-slate-800" {...props} />,
+          thead: ({node, ...props}) => <thead className="bg-slate-100/80" {...props} />,
           tbody: ({node, ...props}) => <tbody className="bg-white divide-y divide-slate-100" {...props} />,
-          th: ({node, ...props}) => <th className="px-4 py-3 font-bold border-b border-slate-200 whitespace-nowrap" {...props} />,
-          td: ({node, ...props}) => <td className="px-4 py-3 align-top leading-relaxed text-slate-600" {...props} />,
+          th: ({node, ...props}) => <th className="px-4 py-3 text-sm font-bold text-slate-700 border-b border-slate-200" {...props} />,
+          td: ({node, ...props}) => <td className="px-4 py-3 text-sm text-slate-600 border-b border-slate-100 align-top" {...props} />,
           ul: ({node, ...props}) => <ul className="list-disc pl-5 space-y-1 my-2 text-slate-700 marker:text-indigo-400" {...props} />,
           ol: ({node, ...props}) => <ol className="list-decimal pl-5 space-y-1 my-2 text-slate-700 marker:text-indigo-600 marker:font-bold" {...props} />,
           li: ({node, ...props}) => <li className="pl-1" {...props} />,
