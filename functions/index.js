@@ -388,12 +388,9 @@ export const sendTutorChatMessage = onRequest(
 );
 
 // Función auxiliar para traducir conceptos a descripciones visuales usando Gemini
-async function getVisualDescriptionForConcept(conceptoEspanol, geminiKeyVal) {
-    try {
-        const genAI = new GoogleGenerativeAI(geminiKeyVal);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
-        
-        const prompt = `You are a prompt engineer for an image generation model. 
+// Optimizada con Gemini 2.5 Flash-Lite y patrón Circuit Breaker (Gratis -> Pago)
+async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, paidKeyVal) {
+    const prompt = `You are a prompt engineer for an image generation model. 
 The user wants to generate a completely textless, visual representation for the Spanish concept "${conceptoEspanol}".
 Provide ONLY a concise visual description in English of what the image should show. 
 DO NOT use the word itself. 
@@ -401,11 +398,32 @@ For example, if the concept is "mañana" (tomorrow), you might output: "A calend
 If it is "ayer" (yesterday), you might output: "An hourglass with sand at the bottom". 
 If it is an animal like "perro", output: "A cute dog".
 Provide ONLY the visual description in English. Absolutely no intro, no quotes, no text.`;
-        
+
+    const invocarModelo = async (apiKeyValue) => {
+        const genAI = new GoogleGenerativeAI(apiKeyValue);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" }); 
         const result = await model.generateContent(prompt);
-        return result.response.text().trim().replace(/['"]/g, ''); 
+        return result.response.text().trim().replace(/['"]/g, '');
+    };
+
+    try {
+        // Intento 1: Usar la Llave Gratuita (Costo $0)
+        return await invocarModelo(freeKeyVal);
     } catch (error) {
-        console.error("Error al generar descripcion visual con Gemini:", error);
+        const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.includes("quota")));
+        
+        if (isQuotaError && paidKeyVal) {
+            console.warn("⚠️ Cuota gratuita agotada al generar visual prompt. Saltando a llave de pago...");
+            try {
+                // Intento 2: Usar la Llave de Pago (Costo ultrabajo por ser Flash-Lite)
+                return await invocarModelo(paidKeyVal);
+            } catch (fallbackError) {
+                console.error("❌ Error en fallback de visual prompt:", fallbackError);
+                return conceptoEspanol; 
+            }
+        }
+        
+        console.error("❌ Error desconocido al generar descripcion visual con Gemini:", error);
         return conceptoEspanol; 
     }
 }
@@ -603,7 +621,7 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
 }
 
 export const generateCardImage = onCall(
-  { secrets: [falKey, geminiApiKey] },
+  { secrets: [falKey, geminiApiKey, geminiFreeKey] },
   async (request) => {
     const { wordObj, conceptoIngles } = request.data;
 
@@ -620,7 +638,7 @@ export const generateCardImage = onCall(
       // Si no tenemos un concepto en inglés predefinido, usamos Gemini para traducirlo rápido
       let concepto = conceptoIngles;
       if (!concepto) {
-         concepto = await getVisualDescriptionForConcept(wordObj.es, geminiApiKey.value());
+         concepto = await getVisualDescriptionForConcept(wordObj.es, geminiFreeKey.value(), geminiApiKey.value());
       }
 
       // Ensamblar el prompt usando la Fábrica
