@@ -9,19 +9,20 @@ const MarkdownMessage = ({ text }) => {
   return (
     <div className="text-inherit space-y-3 text-left">
       <ReactMarkdown 
+        className="text-inherit space-y-3"
         remarkPlugins={[remarkGfm]}
         components={{
           p: ({node, ...props}) => <span className="block mb-2 text-slate-700" {...props} />,
-          strong: ({node, ...props}) => <strong className="font-bold text-indigo-700" {...props} />,
+          strong: ({node, ...props}) => <strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded" {...props} />,
           table: ({node, ...props}) => (
-            <div className="overflow-x-auto my-6 shadow-sm rounded-lg border border-slate-200 bg-white">
-              <table className="min-w-full text-left border-collapse" {...props} />
+            <div className="overflow-x-auto my-5 rounded-xl border border-slate-200 shadow-sm">
+              <table className="w-full text-left border-collapse text-sm min-w-[600px]" {...props} />
             </div>
           ),
-          thead: ({node, ...props}) => <thead className="bg-slate-100/80" {...props} />,
+          thead: ({node, ...props}) => <thead className="bg-slate-100/80 text-slate-800" {...props} />,
           tbody: ({node, ...props}) => <tbody className="bg-white divide-y divide-slate-100" {...props} />,
-          th: ({node, ...props}) => <th className="px-4 py-3 text-sm font-bold text-slate-700 border-b border-slate-200" {...props} />,
-          td: ({node, ...props}) => <td className="px-4 py-3 text-sm text-slate-600 border-b border-slate-100 align-top" {...props} />,
+          th: ({node, ...props}) => <th className="px-4 py-3 font-bold border-b border-slate-200 whitespace-nowrap" {...props} />,
+          td: ({node, ...props}) => <td className="px-4 py-3 align-top leading-relaxed text-slate-600" {...props} />,
           ul: ({node, ...props}) => <ul className="list-disc pl-5 space-y-1 my-2 text-slate-700 marker:text-indigo-400" {...props} />,
           ol: ({node, ...props}) => <ol className="list-decimal pl-5 space-y-1 my-2 text-slate-700 marker:text-indigo-600 marker:font-bold" {...props} />,
           li: ({node, ...props}) => <li className="pl-1" {...props} />,
