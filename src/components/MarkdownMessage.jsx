@@ -9,7 +9,6 @@ const MarkdownMessage = ({ text }) => {
   return (
     <div className="text-inherit space-y-3 text-left">
       <ReactMarkdown 
-        className="text-inherit space-y-3"
         remarkPlugins={[remarkGfm]}
         components={{
           p: ({node, ...props}) => <span className="block mb-2 text-slate-700" {...props} />,
