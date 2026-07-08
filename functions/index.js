@@ -38,68 +38,105 @@ async function getSystemPrompt(promptId, defaultPrompt) {
 // 1. SIMULADOR DE ROL A1 (RoleplaySimulator)
 // Modelo: Gemini 2.5 Flash
 // =========================================================================
-export const runRoleplaySimulator = onCall(
-  { secrets: [geminiFreeKey, geminiApiKey] },
-  async (request) => {
-    const { historialConversacion, escenario } = request.data;
+export const runRoleplaySimulator = onRequest(
+  { secrets: [geminiFreeKey, geminiApiKey], cors: true },
+  async (req, res) => {
+    if (req.method !== "POST" && req.method !== "OPTIONS") {
+      res.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    let data;
+    try {
+      data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+      if (data && data.data) data = data.data;
+    } catch (e) {
+      res.status(400).send("Invalid JSON body");
+      return;
+    }
+
+    const { historialConversacion, escenario } = data || {};
 
     if (!historialConversacion || !escenario) {
-      throw new HttpsError("invalid-argument", "Faltan parámetros requeridos: historialConversacion o escenario");
+      res.status(400).send("Faltan parámetros requeridos: historialConversacion o escenario");
+      return;
     }
 
     const defaultSystemInstruction = `
-      Eres un hablante nativo de alemán participando en un juego de rol de nivel A1. 
+      Eres un compañero de juego de rol en alemán. Actúa siempre dentro de tu personaje.
       Escenario actual: "${escenario}".
 
       REGLAS ESTRICTAS DE COMPORTAMIENTO:
-      1. Inmersión y Nivel: Mantén siempre tu personaje. Habla SOLO en alemán de nivel A1 (frases muy cortas, vocabulario cotidiano, tiempo presente).
-      2. Respuestas Ágiles: Mantén tus intervenciones muy cortas (1 a 2 frases máximo).
-      3. Ayuda Visual: Pon las palabras clave de tu respuesta en **negrita** para ayudar al alumno a identificarlas.
-      4. Correcciones (Tutor-Tipp): Si el alumno comete un error gramatical grave, responde primero en personaje en alemán. Luego, al final de tu mensaje, añade una pequeña nota en español: *(💡 Tutor-Tipp: felicítalo por el intento y corrige el error amablemente)*. Si no hay errores, no uses el tip.
-      5. El Cierre (Hook): Termina SIEMPRE tu diálogo con una pregunta corta y natural en alemán para que el alumno te responda y la escena fluya.
-      6. El Salvavidas (Ayuda a demanda): Si el usuario escribe que no entiende (ej. "No entiendo", "¿Qué significa eso?", "Ich verstehe nicht"), sal momentáneamente del personaje, explícare en español la última frase que le dijiste, dale una pista de cómo podría responder, y vuelve a formularle la pregunta en alemán para que lo intente de nuevo.
+      1. Inmersión y Nivel A1 ESTRICTO: Habla SOLO en alemán nivel A1. Usa oraciones cortas de MÁXIMO 8 palabras.
+      2. Ping-pong interactivo: Haz SOLO UNA pregunta corta a la vez para mantener el diálogo dinámico como un ping-pong.
+      3. PROHIBICIÓN ABSOLUTA: Nunca uses formato Markdown, negritas ni asteriscos (**) en tus respuestas. 
+      4. El Salvavidas (Ayuda a demanda): Si el usuario escribe que no entiende (ej. "No entiendo", "¿Qué significa eso?", "Ich verstehe nicht"), explica brevemente en español la última frase, dale una pista de cómo responder, y formúlale de nuevo la pregunta en alemán.
     `;
 
     const systemInstruction = await getSystemPrompt("roleplay_simulator", defaultSystemInstruction);
 
-    // Función interna para llamar al modelo
-    const invocarRol = async (apiKeyStr) => {
+    const generarRespuesta = async (apiKeyStr) => {
       const genAI = new GoogleGenerativeAI(apiKeyStr);
-      // Usamos 3.1 Flash-Lite: Alta velocidad y bajísimo costo para chats de rol
       const model = genAI.getGenerativeModel({
         model: "gemini-3.1-flash-lite",
         systemInstruction: systemInstruction.replace("${escenario}", escenario)
       });
 
+      let validHistory = historialConversacion.slice(0, -1);
+      if (validHistory.length > 0 && validHistory[0].role !== "user") {
+        validHistory.shift();
+      }
+
       const chat = model.startChat({
-        history: historialConversacion.slice(0, -1),
+        history: validHistory,
       });
 
       const ultimoMensaje = historialConversacion[historialConversacion.length - 1].parts[0].text;
-      const result = await chat.sendMessage(ultimoMensaje);
+      const resultStream = await chat.sendMessageStream(ultimoMensaje);
 
-      return { text: result.response.text() };
-    };
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Connection', 'keep-alive');
 
-    // EL ENRUTADOR EN CASCADA (CIRCUIT BREAKER)
-    try {
-      // Intento 1: API Gratuita (Costo $0)
-      return await invocarRol(geminiFreeKey.value());
-    } catch (error) {
-      const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.includes("quota")));
-
-      if (isQuotaError && geminiApiKey.value()) {
-        console.warn("⚠️ Cuota gratuita agotada en Roleplay. Activando Failover a llave de pago...");
-        try {
-          // Intento 2: Llave de Facturación
-          return await invocarRol(geminiApiKey.value());
-        } catch (fallbackError) {
-          console.error("❌ Error crítico en llave de pago (Roleplay):", fallbackError);
-          throw new HttpsError("internal", "Error en los servidores de IA de respaldo.");
+      for await (const chunk of resultStream.stream) {
+        const chunkText = chunk.text();
+        if (chunkText) {
+          const cleanedChunk = chunkText.replace(/\*\*/g, '');
+          res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
         }
       }
-      console.error("❌ Error general en runRoleplaySimulator:", error);
-      throw new HttpsError("internal", "Error comunicando con el Simulador de Rol.");
+
+      res.write('data: [DONE]\n\n');
+      res.end();
+    };
+
+    try {
+      await generarRespuesta(geminiFreeKey.value());
+    } catch (error) {
+      console.error("Error al intentar responder con la llave gratuita en Roleplay:", error);
+      const isQuotaError =
+        error.status === 429 ||
+        (error.message && (error.message.includes("429") || error.message.toLowerCase().includes("quota")));
+
+      if (isQuotaError && geminiApiKey.value()) {
+        console.warn("Cuota gratuita agotada en Roleplay. Activando fallback a llave de pago...");
+        try {
+          await generarRespuesta(geminiApiKey.value());
+        } catch (fallbackError) {
+          console.error("Error crítico en la llave de pago de fallback (Roleplay):", fallbackError);
+          if (!res.headersSent) {
+            res.status(500).send("Error en los servidores de IA de respaldo.");
+          } else {
+            res.end();
+          }
+        }
+      } else {
+        if (!res.headersSent) {
+          res.status(500).send("Error comunicando con el Simulador de Rol.");
+        } else {
+          res.end();
+        }
+      }
     }
   }
 );
@@ -199,6 +236,7 @@ export const generateStory = onRequest(
       const promptSistema = "Eres un creador de cuentos infantiles y profesor de alemán nivel A1. Tu objetivo es escribir historias coherentes, inmersivas y gramaticalmente perfectas integrando vocabulario específico.";
       
       const promptDefinido = `Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
+      En el campo "cuento_aleman", debes envolver obligatoriamente cada una de estas palabras clave de vocabulario [${listaPalabras}] con doble asterisco "**" (ej. **palabra**) cada vez que las uses en el texto para que resalten.
       La salida debe coincidir EXACTAMENTE con este esquema JSON, sin texto adicional:
       {
         "titulo": "Título en alemán",
@@ -320,100 +358,13 @@ export const sendTutorChatMessage = onRequest(
 
     const systemInstruction = await getSystemPrompt("tutor_chat_system", defaultSystemInstruction);
 
-    // Función auxiliar interna que gestiona la conexión con el modelo y el context caching
+    // Función auxiliar interna que gestiona la conexión con el modelo
     const generarRespuesta = async (apiKeyStr) => {
-      const cacheManager = new GoogleAICacheManager(apiKeyStr);
-
-      // Base de datos estática para padding A1 (Garantiza cumplir con el mínimo de 4096 tokens requerido)
-      const a1ReferenceDatabase = `
-        DEUTSCHMEISTER REFERENCE DATABASE FOR LEVEL A1
-        (Used to pad context cache to meet the minimum token requirement of 4096 tokens)
-        
-        NUMBERS (Zahlen):
-        null - 0, eins - 1, zwei - 2, drei - 3, vier - 4, fünf - 5, sechs - 6, sieben - 7, acht - 8, neun - 9, zehn - 10,
-        elf - 11, zwölf - 12, dreizehn - 13, vierzehn - 14, fünfzehn - 15, sechzehn - 16, siebzehn - 17, achtzehn - 18,
-        neunzehn - 19, zwanzig - 20, einundzwanzig - 21, zweiundzwanzig - 22, dreißig - 30, vierzig - 40, fünfzig - 50,
-        sechzig - 60, siebzig - 70, achtzig - 80, neunzig - 90, hundert - 100, tausend - 1000.
-        
-        DAYS OF THE WEEK (Wochentage):
-        Montag - lunes, Dienstag - martes, Mittwoch - miércoles, Donnerstag - jueves, Freitag - viernes, Samstag - sábado, Sonntag - domingo.
-        
-        MONTHS (Monate):
-        Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember.
-        
-        GRAMMAR PRONOUNS (Personalpronomen):
-        ich - yo, du - tú, er - él, sie - ella, es - ello, wir - nosotros, ihr - vosotros, sie - ellos/ellas, Sie - usted.
-        
-        POSSESSIVE PRONOUNS (Possessivpronomen):
-        mein - mi, dein - tu, sein - su (de él), ihr - su (de ella), unser - nuestro, euer - vuestro, ihr - su (de ellos), Ihr - su (de usted).
-        
-        COMMON VERBS (Verben):
-        sein (bin, bist, ist, sind, seid, sind) - ser/estar
-        haben (habe, hast, hat, haben, habt, haben) - tener
-        kommen (komme, kommst, kommt, kommen, kommt, kommen) - venir
-        wohnen (wohne, wohnst, wohnt, wohnen, wohnt, wohnen) - vivir/residir
-        heißen (heiße, heißt, heißt, heißen, heißt, heißen) - llamarse
-        sprechen (spreche, sprichst, spricht, sprechen, sprecht, sprechen) - hablar
-        arbeiten (arbeite, arbeitest, arbeitet, arbeiten, arbeitet, arbeiten) - trabajar
-        machen (mache, machst, macht, machen, macht, machen) - hacer
-        gehen (gehe, gehst, geht, gehen, geht, gehen) - ir
-        kauf (kaufe, kaufst, kauft, kaufen, kauft, kaufen) - comprar
-        trinken (trinke, trinkst, trinkt, trinken, trinkt, trinken) - beber
-        essen (esse, isst, isst, essen, esst, essen) - comer
-        schreiben (schreibe, schreibst, schreibt, schreiben, schreibt, schreiben) - escribir
-        lesen (lese, liest, liest, lesen, lest, lesen) - leer
-        sehen (sehe, siehst, sieht, sehen, seht, sehen) - ver
-        hören (höre, hörst, hört, hören, hört, hören) - escuchar/oír
-        lernen (lerne, lernst, lernt, lernen, lernt, lernen) - aprender
-        verstehen (verstehe, verstehst, versteht, verstehen, versteht, verstehen) - entender
-        fragen (frage, fragst, fragt, fragen, fragt, fragen) - preguntar
-        antworten (antworte, antwortest, antwortet, antworten, antwortet, antworten) - responder.
-        
-        PREPOSITIONS (Präpositionen):
-        in - en / dentro de, an - junto a / en, auf - sobre / encima de, unter - debajo de, über - sobre / encima de (sin tocar),
-        vor - delante de, hinter - detrás de, neben - al lado de, zwischen - entre.
-        mit - con, nach - hacia / después de, aus - de (procedencia/interior), zu - hacia / a, von - de, bei - en casa de / junto a, seit - desde.
-        
-        USEFUL SENTENCES:
-        Wie geht es dir? - ¿Cómo estás?
-        Mir geht es gut, danke. - Estoy bien, gracias.
-        Wie heißt du? - ¿Cómo te llamas?
-        Ich heißt Marcos. - Me llamo Marcos.
-        Woher kommst du? - ¿De dónde vienes?
-        Ich komme aus Kolumbien. - Vengo de Colombia.
-        Wo wohnst du? - ¿Dónde vives?
-        Ich wohne in Barranquilla. - Vivo en Barranquilla.
-        Was bist du von Beruf? - ¿A qué te dedicas?
-        Ich bin Elektroniker von Beruf. - Soy técnico electrónico de profesión.
-        Entschuldigung, ich verstehe nicht. - Disculpe, no entiendo.
-        Können Sie das bitte wiederholen? - ¿Puede repetir eso, por favor?
-        Sprechen Sie Spanisch? - ¿Habla español?
-        Ich spreche ein bisschen Deutsch. - Hablo un poco de alemán.
-        Vielen Dank für deine Hilfe. - Muchas gracias por tu ayuda.
-        Guten Morgen - Buenos días (mañana)
-        Guten Tag - Buenos días / buenas tardes
-        Guten Abend - Buenas noches (saludo)
-        Gute Nacht - Buenas noches (despedida)
-        Auf Wiedersehen - Adiós / Hasta la vista.
-      `;
-
-      // Repetimos para superar holgadamente los 4096 tokens exigidos por Gemini 3.1
-      const cachedContent = systemInstruction + "\n\n" + a1ReferenceDatabase.repeat(12);
-
-      const cache = await cacheManager.create({
-        model: "models/gemini-3.1-flash-lite",
-        displayName: "tutor_chat_instruction_cache",
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: cachedContent }]
-          }
-        ],
-        ttlSeconds: 3600
-      });
-
       const genAI = new GoogleGenerativeAI(apiKeyStr);
-      const model = genAI.getGenerativeModelFromCachedContent(cache);
+      const model = genAI.getGenerativeModel({
+        model: "gemini-3.1-flash-lite",
+        systemInstruction: systemInstruction
+      });
 
       let validHistory = historialConversacion.slice(0, -1);
       if (validHistory.length > 0 && validHistory[0].role !== "user") {
@@ -479,20 +430,31 @@ export const sendTutorChatMessage = onRequest(
 
 // Función auxiliar para traducir conceptos a descripciones visuales usando Gemini
 // Optimizada con Gemini 3.1 Flash-Lite y patrón Circuit Breaker (Gratis -> Pago)
-async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, paidKeyVal) {
-  const prompt = `You are a prompt engineer for an image generation model. 
-The user wants to generate a completely textless, visual representation for the Spanish concept "${conceptoEspanol}".
-Provide ONLY a concise visual description in English of what the image should show. 
-DO NOT use the word itself. 
-For example, if the concept is "mañana" (tomorrow), you might output: "A calendar page with an arrow pointing to the next day". 
-If it is "ayer" (yesterday), you might output: "An hourglass with sand at the bottom". 
-If it is an animal like "perro", output: "A cute dog".
-Provide ONLY the visual description in English. Absolutely no intro, no quotes, no text.`;
+async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, paidKeyVal, category = "") {
+  const contextText = category 
+    ? `Contexto temático de la palabra (área o tema de vocabulario): "${category}". Úsalo para que el objeto tenga sentido y sea adecuado para este contexto específico (ej. si la categoría menciona "Auto" y el concepto es "luces" o "luz", describe luces/faros de auto, no lámparas domésticas; si menciona "Auto" y el concepto es "limpiaparabrisas", describe la escobilla o parabrisas del auto).` 
+    : '';
+
+  const promptDirectorArte = `
+    Actúa como Director de Arte de utilería 3D para flashcards educativas. 
+    El usuario necesita representar visualmente el concepto en español: "${conceptoEspanol}".
+    ${contextText}
+    
+    Tu tarea es proporcionar ÚNICAMENTE una descripción física en inglés del objeto o elemento central que representará esta palabra.
+    
+    REGLAS ESTRICTAS:
+    1. TANGIBILIDAD: Describe un objeto físico real o una escena en miniatura. 
+    2. ANTI-PAREIDOLIA (CRÍTICO): Si el concepto es abstracto (verbos, adjetivos, preposiciones, adverbios), descríbelo usando utilería INANIMADA y simbólica. Está absolutamente prohibido incluir rostros, ojos, caras felices, humanos o animales, a menos que la palabra represente explícitamente a una persona o ser vivo (ej. "madre", "perro").
+    3. CERO TEXTO: Prohibido incluir letreros, pantallas con texto, libros abiertos con letras, o cualquier tipo de tipografía.
+    4. PRECISIÓN: Ve directo a la forma física (ej. para "Enero" -> "A classic desk calendar with snowflakes", para "escribir" -> "A stylized feather quill pen resting on a clean notebook").
+    
+    Devuelve solo la descripción en inglés en una sola línea. Sin introducciones, sin confirmaciones y sin comillas.
+  `;
 
   const invocarModelo = async (apiKeyValue) => {
     const genAI = new GoogleGenerativeAI(apiKeyValue);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
-    const result = await model.generateContent(prompt);
+    const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
+    const result = await model.generateContent(promptDirectorArte);
     return result.response.text().trim().replace(/['"]/g, '');
   };
 
@@ -621,6 +583,47 @@ const diccionarioPreguntas = {
   "welcher?": "two small cute 3D checkboxes, one with a vibrant checkmark"
 };
 
+// Diccionario de Horas (Uhrzeit) para mapear manecillas de reloj exactas
+const diccionarioUhrzeit = {
+  "ein uhr": "a minimalist clean round 3D analog wall clock showing exactly 1:00, with the short hour hand pointing directly at the number 1, and the long minute hand pointing directly at the number 12",
+  "halb zwei": "a minimalist clean round 3D analog wall clock showing exactly 1:30, with the short hour hand pointing halfway between 1 and 2, and the long minute hand pointing directly at the number 6",
+  "viertel vor drei": "a minimalist clean round 3D analog wall clock showing exactly 2:45, with the short hour hand pointing close to the number 3, and the long minute hand pointing directly at the number 9",
+  "kurz vor 4": "a minimalist clean round 3D analog wall clock showing exactly 3:55 (five minutes to 4), with the short hour hand pointing almost directly at 4, and the long minute hand pointing at 11",
+  "gleich 4": "a minimalist clean round 3D analog wall clock showing exactly 3:58 (almost 4 o'clock), with the short hour hand pointing almost exactly at 4, and the long minute hand pointing very close to 12",
+  "genau 4 uhr": "a minimalist clean round 3D analog wall clock showing exactly 4:00, with the short hour hand pointing directly at the number 4, and the long minute hand pointing directly at the number 12",
+  "fünf nach 4": "a minimalist clean round 3D analog wall clock showing exactly 4:05 (five minutes past 4), with the short hour hand pointing slightly past 4, and the long minute hand pointing directly at the number 1",
+  "um 3 uhr": "a minimalist clean round 3D analog wall clock showing exactly 3:00, with the short hour hand pointing directly at the number 3, and the long minute hand pointing directly at the number 12",
+  "von 2 bis 3 uhr": "a minimalist clean round 3D analog wall clock with a brightly colored highlighted pie-slice segment between the hours 2 and 3, representing the time slot from 2:00 to 3:00",
+  "ab 3 uhr": "a minimalist clean round 3D analog wall clock with a brightly colored highlighted pie-slice segment starting at 3:00 and extending clockwise, representing starting from 3:00 onwards"
+};
+
+// Diccionario de Conceptos Especiales (Palabras abstractas complejas)
+const diccionarioConceptosEspeciales = {
+  "der vorname": "a minimalist 3D isometric employee ID card badge with a lanyard, featuring a cartoon silhouette profile picture of a person and the first line of details highlighted in vibrant blue, resting on a clean white surface",
+  "der nachname": "a minimalist 3D isometric family tree chart showing stylized connected icons of family members, representing family lineage and family name (surname), resting on a clean white surface",
+  "das abblendlicht": "a 3D isometric car headlight emitting a focused bright yellow beam of light pointing downwards onto a road surface, representing low beam headlights",
+  "das fernlicht": "a 3D isometric car headlight emitting intense, bright blue beams of light extending straight forward, representing high beam headlights",
+  "das tagfahrlicht": "a 3D isometric car headlight with modern LED signature strip daytime running lights glowing softly in white",
+  "die nebelschlussleuchte": "a 3D isometric rear car bumper showing a single glowing bright red fog light casting a strong red beam through a soft grey mist",
+  "die bremsleuchte": "a 3D isometric rear car tail light assembly with the round brake lights glowing in intense red",
+  "die warnblinkanlage": "a 3D isometric car dashboard hazard warning light button, featuring a red triangle icon glowing and flashing",
+  "einsteigen / aussteigen": "a 3D isometric representation of a clean car with an open driver door, showing a path to enter or exit",
+  "aufschließen": "a 3D isometric car door handle keyhole with a key being inserted or turned inside the lock",
+  "der blinker / blinken": "a 3D isometric front corner of a car showing a bright orange amber indicator light blinking with radiating light rays",
+  "die gangschaltung": "a 3D isometric gear shifter stick for a car transmission, showing a sphere knob with gear pattern markings on top",
+  "der schalthebel": "a 3D isometric manual gear shift lever stick with a round knob showing gear numbers",
+  "die bremse / bremsen": "a 3D isometric car brake pedal being pressed down slightly",
+  "das bremspedal": "a 3D isometric car footwell showing a clean metal brake pedal being pressed down",
+  "das gaspedal": "a 3D isometric car footwell showing an accelerator pedal being pressed down",
+  "gas geben": "a 3D isometric car accelerator pedal being pressed down to speed up",
+  "die kupplung": "a 3D isometric car clutch pedal being pressed down in the footwell",
+  "die handbremse": "a 3D isometric car handbrake lever pulled up on the center console",
+  "der scheibenwischer": "a 3D isometric car windshield with a wiper blade wiping away rain droplets, showing a clear swept arc",
+  "der lichtschalter": "a 3D isometric dial switch on a car dashboard showing icons for headlights and fog lights",
+  "der motor": "a 3D isometric modern clean car engine block with metal pipes and valve covers",
+  "motor starten": "a 3D isometric car ignition switch with a key turning to start the engine, or an illuminated engine start-stop button glowing red"
+};
+
 /**
  * 🏭 FÁBRICA DE PROMPTS (El Enrutador Lógico)
  * Estructura un JSON aislando colores naturales del indicador de género
@@ -645,7 +648,7 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
   else if (esPregunta) { hexAsignado = "hex #9C27B0"; }
 
   // 2. Base JSON Estructurada
-  const promptObj = {
+  let promptObj = {
     "scene": "A pure seamless solid white background in hex #FFFFFF",
     "subjects": [],
     "style": "3D isometric, minimalist, simple, educational language-app aesthetic, made of smooth matte soft clay",
@@ -663,16 +666,46 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
   else if (tipoLimpio === 'letra' || tipoLimpio === 'alfabeto') {
     const fallbackShape = `uppercase letter ${palabraAleman.charAt(0).toUpperCase()}`;
     const datosLetra = diccionarioLetras[palabraAleman] || { shape: fallbackShape, obj: "small colorful bouncy ball" };
-    promptObj.subjects = [
-      { "type": `large chunky 3D block shaped like the ${datosLetra.shape}`, "color": "strictly Material Grey hex #9E9E9E", "position": "left" },
-      { "type": datosLetra.obj, "color": "vibrant natural clay colors", "position": "sitting right next to the letter block" }
-    ];
+    
+    promptObj = {
+      "scene": "A pure seamless solid white background hex #FFFFFF",
+      "subjects": [
+        { "type": `large chunky 3D block shaped like the ${datosLetra.shape}`, "color": "strictly Material Grey hex #9E9E9E", "position": "left" },
+        { "type": datosLetra.obj, "color": "vibrant natural clay colors", "position": "sitting right next to the letter block" }
+      ],
+      "style_rules": "Strictly purely visual: absolutely NO TEXT, NO LETTERS, NO WORDS. Minimalist, simple, made of smooth matte soft clay."
+    };
   }
   else if (tipoLimpio === 'numero' || tipoLimpio === 'número' || diccionarioNumeros[palabraLimpia]) {
     const datosNum = diccionarioNumeros[palabraLimpia] || { num: "number " + palabraLimpia, obj: "group of small bright yellow stars" };
     promptObj.subjects = [
       { "type": `large chunky 3D block shaped like the ${datosNum.num}`, "color": "strictly Material Grey hex #9E9E9E", "position": "left" },
       { "type": datosNum.obj, "color": "vibrant Material Yellow", "position": "sitting right next to the number block" }
+    ];
+  }
+  else if (diccionarioUhrzeit[palabraLimpia]) {
+    promptObj.subjects = [
+      {
+        "type": diccionarioUhrzeit[palabraLimpia],
+        "description": "Clean, educational, clear visualization of time. Made of smooth matte soft clay. Purely visual, zero text.",
+        "position": "centered"
+      }
+    ];
+  }
+  else if (diccionarioConceptosEspeciales[palabraLimpia]) {
+    promptObj.subjects = [
+      {
+        "type": diccionarioConceptosEspeciales[palabraLimpia],
+        "description": "Clean, educational, minimalist language app illustration. Made of smooth matte soft clay. Purely visual, zero text.",
+        "position": "centered"
+      },
+      {
+        "type": "small geometric floating sphere",
+        "description": "Made of glossy clay, perfectly round, acting as a grammatical gender indicator. Zero text.",
+        "position": "floating near the top right corner of the main object",
+        "color_match": "exact",
+        "color": hexAsignado
+      }
     ];
   }
   else {
@@ -728,7 +761,8 @@ export const generateCardImage = onCall(
       // Si no tenemos un concepto en inglés predefinido, usamos Gemini para traducirlo rápido
       let concepto = conceptoIngles;
       if (!concepto) {
-        concepto = await getVisualDescriptionForConcept(wordObj.es, geminiFreeKey.value(), geminiApiKey.value());
+        const category = (request.data.category || "") + (wordObj.category ? ` - ${wordObj.category}` : "");
+        concepto = await getVisualDescriptionForConcept(wordObj.es, geminiFreeKey.value(), geminiApiKey.value(), category);
       }
 
       // Ensamblar el prompt usando la Fábrica
@@ -769,3 +803,77 @@ export const generateCardImage = onCall(
     }
   }
 );
+
+// =========================================================================
+// 6. GENERADOR DE COMPRENSIÓN LECTORA (generateReadingTest)
+// =========================================================================
+export const generateReadingTest = onCall(
+  { secrets: [geminiFreeKey, geminiApiKey] },
+  async (request) => {
+    const { tema } = request.data;
+
+    if (!tema) {
+      throw new HttpsError("invalid-argument", "Falta el parámetro requerido: tema");
+    }
+
+    const defaultSystemInstruction = `
+      Eres un profesor de alemán de nivel A1. El usuario te dará un tema de su interés.
+      Tu tarea es generar:
+      1. Un título en alemán para la lectura.
+      2. Un texto de lectura corto y sencillo en alemán nivel A1 sobre el tema (máximo 80-100 palabras, usando frases muy sencillas, tiempo presente y vocabulario básico).
+      3. Un cuestionario de exactamente 3 preguntas de opción múltiple en alemán para medir la comprensión lectora del texto.
+      
+      Debes devolver ÚNICAMENTE un JSON con esta estructura exacta:
+      {
+        "titulo_aleman": "...",
+        "texto_aleman": "...",
+        "preguntas": [
+          {
+            "pregunta_aleman": "...",
+            "opciones_aleman": ["Opción A", "Opción B", "Opción C"],
+            "respuesta_correcta": "La opción exacta (debe coincidir exactamente con una de las opciones del array opciones_aleman)",
+            "explicacion_espanol": "Explicación clara en español de por qué esta es la respuesta correcta."
+          }
+        ]
+      }
+
+      REGLAS CRÍTICAS:
+      - Responde únicamente con el formato JSON válido.
+      - El texto y las preguntas deben estar estrictamente redactados en alemán nivel A1.
+      - La explicación de las respuestas correctas debe estar en español.
+    `;
+
+    const systemInstruction = await getSystemPrompt("reading_comprehension_system", defaultSystemInstruction);
+
+    const invocarModelo = async (apiKeyStr) => {
+      const genAI = new GoogleGenerativeAI(apiKeyStr);
+      const model = genAI.getGenerativeModel({
+        model: "gemini-2.5-flash", // modelo de alta confiabilidad en este entorno
+        generationConfig: { responseMimeType: "application/json" },
+        systemInstruction: systemInstruction
+      });
+
+      const prompt = `Genera la prueba de comprensión lectora para el tema: "${tema}".`;
+      const result = await model.generateContent(prompt);
+      return JSON.parse(result.response.text().trim());
+    };
+
+    try {
+      return await invocarModelo(geminiFreeKey.value());
+    } catch (error) {
+      console.warn("Error en la llave gratuita de Reading Comprehension:", error);
+      const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.includes("quota")));
+
+      if (isQuotaError && geminiApiKey.value()) {
+        try {
+          return await invocarModelo(geminiApiKey.value());
+        } catch (fallbackError) {
+          console.error("Error crítico en llave de pago (Reading Comprehension):", fallbackError);
+          throw new HttpsError("internal", "Error en los servidores de IA de respaldo.");
+        }
+      }
+      throw new HttpsError("internal", "Error generando el examen de comprensión lectora: " + error.message);
+    }
+  }
+);
+

@@ -26,3 +26,9 @@ dist-ssr
 # Environment Variables
 .env
 serviceAccountKey.json
+
+# Temp & Scratchpad files
+scratch/
+*.bak
+*.premerge.bak
+.firebase/

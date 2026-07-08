@@ -1,2826 +1,4238 @@
 [
   {
     "id": "QSUyQyUyMGE_",
-    "word": "A, a"
+    "word": "A, a",
+    "exampleSentenceDe": "Der Buchstabe A ist groß.",
+    "exampleSentenceEs": "La letra A es grande."
   },
   {
     "id": "QiUyQyUyMGI_",
-    "word": "B, b"
+    "word": "B, b",
+    "exampleSentenceDe": "Das Wort 'Brot' beginnt mit B.",
+    "exampleSentenceEs": "La palabra 'pan' comienza con B."
   },
   {
     "id": "QyUyQyUyMGM_",
-    "word": "C, c"
+    "word": "C, c",
+    "exampleSentenceDe": "Der Buchstabe C ist groß.",
+    "exampleSentenceEs": "La letra C es grande."
   },
   {
     "id": "RCUyQyUyMGQ_",
-    "word": "D, d"
+    "word": "D, d",
+    "exampleSentenceDe": "Das ist der Buchstabe D.",
+    "exampleSentenceEs": "Esa es la letra D."
   },
   {
     "id": "RSUyQyUyMGU_",
-    "word": "E, e"
+    "word": "E, e",
+    "exampleSentenceDe": "Ich schreibe das Wort mit 'E'.",
+    "exampleSentenceEs": "Yo escribo la palabra con 'E'."
   },
   {
     "id": "RiUyQyUyMGY_",
-    "word": "F, f"
+    "word": "F, f",
+    "exampleSentenceDe": "Das 'F' in 'Familie' ist groß.",
+    "exampleSentenceEs": "La 'F' en 'Familie' es mayúscula."
   },
   {
     "id": "RyUyQyUyMGc_",
-    "word": "G, g"
+    "word": "G, g",
+    "exampleSentenceDe": "Der Buchstabe G ist im Wort 'Gitarre'.",
+    "exampleSentenceEs": "La letra G está en la palabra 'guitarra'."
   },
   {
     "id": "SCUyQyUyMGg_",
-    "word": "H, h"
+    "word": "H, h",
+    "exampleSentenceDe": "Mein Name hat ein H.",
+    "exampleSentenceEs": "Mi nombre tiene una H."
   },
   {
     "id": "SSUyQyUyMGk_",
-    "word": "I, i"
+    "word": "I, i",
+    "exampleSentenceDe": "Das 'I' ist ein Buchstabe.",
+    "exampleSentenceEs": "La 'I' es una letra."
   },
   {
     "id": "SiUyQyUyMGo_",
-    "word": "J, j"
+    "word": "J, j",
+    "exampleSentenceDe": "Der Buchstabe J ist im Wort 'Ja'.",
+    "exampleSentenceEs": "La letra J está en la palabra 'Ja' (sí)."
   },
   {
     "id": "SyUyQyUyMGs_",
-    "word": "K, k"
+    "word": "K, k",
+    "exampleSentenceDe": "Ich schreibe das Wort 'Katze' mit K.",
+    "exampleSentenceEs": "Escribo la palabra 'Katze' con K."
   },
   {
     "id": "TCUyQyUyMGw_",
-    "word": "L, l"
+    "word": "L, l",
+    "exampleSentenceDe": "Das Wort 'Land' beginnt mit 'L'.",
+    "exampleSentenceEs": "La palabra 'Land' comienza con 'L'."
   },
   {
     "id": "TSUyQyUyMG0_",
-    "word": "M, m"
+    "word": "M, m",
+    "exampleSentenceDe": "Das M ist ein Buchstabe.",
+    "exampleSentenceEs": "La M es una letra."
   },
   {
     "id": "TiUyQyUyMG4_",
-    "word": "N, n"
+    "word": "N, n",
+    "exampleSentenceDe": "Der Name beginnt mit N.",
+    "exampleSentenceEs": "El nombre comienza con N."
   },
   {
     "id": "TyUyQyUyMG8_",
-    "word": "O, o"
+    "word": "O, o",
+    "exampleSentenceDe": "Das O ist groß.",
+    "exampleSentenceEs": "La O es grande."
   },
   {
     "id": "UCUyQyUyMHA_",
-    "word": "P, p"
+    "word": "P, p",
+    "exampleSentenceDe": "Das Wort 'Post' beginnt mit P.",
+    "exampleSentenceEs": "La palabra 'Post' comienza con P."
   },
   {
     "id": "USUyQyUyMHE_",
-    "word": "Q, q"
+    "word": "Q, q",
+    "exampleSentenceDe": "Das Q ist ein Buchstabe im Alphabet.",
+    "exampleSentenceEs": "La Q es una letra del abecedario."
   },
   {
     "id": "UiUyQyUyMHI_",
-    "word": "R, r"
+    "word": "R, r",
+    "exampleSentenceDe": "Der Buchstabe R ist schwer.",
+    "exampleSentenceEs": "La letra R es difícil."
   },
   {
     "id": "UyUyQyUyMHM_",
-    "word": "S, s"
+    "word": "S, s",
+    "exampleSentenceDe": "Der Buchstabe 'S' ist in meinem Namen.",
+    "exampleSentenceEs": "La letra 'S' está en mi nombre."
   },
   {
     "id": "VCUyQyUyMHQ_",
-    "word": "T, t"
+    "word": "T, t",
+    "exampleSentenceDe": "Das ist der Buchstabe T.",
+    "exampleSentenceEs": "Esta es la letra T."
   },
   {
     "id": "VSUyQyUyMHU_",
-    "word": "U, u"
+    "word": "U, u",
+    "exampleSentenceDe": "Das 'U' ist ein Vokal.",
+    "exampleSentenceEs": "La 'U' es una vocal."
   },
   {
     "id": "ViUyQyUyMHY_",
-    "word": "V, v"
+    "word": "V, v",
+    "exampleSentenceDe": "Das ist der Buchstabe V.",
+    "exampleSentenceEs": "Esta es la letra V."
   },
   {
     "id": "VyUyQyUyMHc_",
-    "word": "W, w"
+    "word": "W, w",
+    "exampleSentenceDe": "Das ist der Buchstabe W.",
+    "exampleSentenceEs": "Esta es la letra W."
   },
   {
     "id": "WCUyQyUyMHg_",
-    "word": "X, x"
+    "word": "X, x",
+    "exampleSentenceDe": "Das ist der Buchstabe X.",
+    "exampleSentenceEs": "Esta es la letra X."
   },
   {
     "id": "WSUyQyUyMHk_",
-    "word": "Y, y"
+    "word": "Y, y",
+    "exampleSentenceDe": "Ich bin Thomas und das ist Anna.",
+    "exampleSentenceEs": "Yo soy Thomas y esta es Anna."
   },
   {
     "id": "WiUyQyUyMHo_",
-    "word": "Z, z"
+    "word": "Z, z",
+    "exampleSentenceDe": "Das ist der Buchstabe Z.",
+    "exampleSentenceEs": "Esta es la letra Z."
   },
   {
     "id": "JUMzJTg0JTJDJTIwJUMzJUE0",
-    "word": "Ä, ä"
+    "word": "Ä, ä",
+    "exampleSentenceDe": "Das Wort 'Äpfel' hat ein Ä.",
+    "exampleSentenceEs": "La palabra 'Äpfel' tiene una A con diéresis."
   },
   {
     "id": "JUMzJTk2JTJDJTIwJUMzJUI2",
-    "word": "Ö, ö"
+    "word": "Ö, ö",
+    "exampleSentenceDe": "Der Buchstabe Ö ist in meinem Namen.",
+    "exampleSentenceEs": "La letra Ö está en mi nombre."
   },
   {
     "id": "JUMzJTlDJTJDJTIwJUMzJUJD",
-    "word": "Ü, ü"
+    "word": "Ü, ü",
+    "exampleSentenceDe": "Die Übung ist sehr einfach.",
+    "exampleSentenceEs": "El ejercicio es muy fácil."
   },
   {
     "id": "JUMzJTlG",
-    "word": "ß"
+    "word": "ß",
+    "exampleSentenceDe": "Der Tee ist heiß.",
+    "exampleSentenceEs": "El té está caliente."
   },
   {
     "id": "bnVsbA__",
-    "word": "null"
+    "word": "null",
+    "exampleSentenceDe": "Ich habe null Euro.",
+    "exampleSentenceEs": "Tengo cero euros."
   },
   {
     "id": "ZWlucw__",
-    "word": "eins"
+    "word": "eins",
+    "exampleSentenceDe": "Ich habe eins.",
+    "exampleSentenceEs": "Tengo uno."
   },
   {
     "id": "endlaQ__",
-    "word": "zwei"
+    "word": "zwei",
+    "exampleSentenceDe": "Ich habe zwei Katzen.",
+    "exampleSentenceEs": "Tengo dos gatos."
   },
   {
     "id": "ZHJlaQ__",
-    "word": "drei"
+    "word": "drei",
+    "exampleSentenceDe": "Ich habe drei Äpfel.",
+    "exampleSentenceEs": "Tengo tres manzanas."
   },
   {
     "id": "dmllcg__",
-    "word": "vier"
+    "word": "vier",
+    "exampleSentenceDe": "Ich habe vier Äpfel.",
+    "exampleSentenceEs": "Tengo cuatro manzanas."
   },
   {
     "id": "ZiVDMyVCQ25m",
-    "word": "fünf"
+    "word": "fünf",
+    "exampleSentenceDe": "Das Brot kostet fünf Euro.",
+    "exampleSentenceEs": "El pan cuesta cinco euros."
   },
   {
     "id": "c2VjaHM_",
-    "word": "sechs"
+    "word": "sechs",
+    "exampleSentenceDe": "Das Ticket kostet sechs Euro.",
+    "exampleSentenceEs": "El billete cuesta seis euros."
   },
   {
     "id": "c2llYmVu",
-    "word": "sieben"
+    "word": "sieben",
+    "exampleSentenceDe": "Ich habe sieben Äpfel.",
+    "exampleSentenceEs": "Tengo siete manzanas."
   },
   {
     "id": "YWNodA__",
-    "word": "acht"
+    "word": "acht",
+    "exampleSentenceDe": "Ich habe acht Euro.",
+    "exampleSentenceEs": "Tengo ocho euros."
   },
   {
     "id": "bmV1bg__",
-    "word": "neun"
+    "word": "neun",
+    "exampleSentenceDe": "Ich habe neun Äpfel.",
+    "exampleSentenceEs": "Tengo nueve manzanas."
   },
   {
     "id": "emVobg__",
-    "word": "zehn"
+    "word": "zehn",
+    "exampleSentenceDe": "Ich habe zehn Finger.",
+    "exampleSentenceEs": "Tengo diez dedos."
   },
   {
     "id": "ZWxm",
-    "word": "elf"
+    "word": "elf",
+    "exampleSentenceDe": "Ich bin elf Jahre alt.",
+    "exampleSentenceEs": "Tengo once años."
   },
   {
     "id": "enclQzMlQjZsZg__",
-    "word": "zwölf"
+    "word": "zwölf",
+    "exampleSentenceDe": "Ich habe zwölf Euro.",
+    "exampleSentenceEs": "Tengo doce euros."
   },
   {
     "id": "ZHJlaXplaG4_",
-    "word": "dreizehn"
+    "word": "dreizehn",
+    "exampleSentenceDe": "Ich habe dreizehn Euro.",
+    "exampleSentenceEs": "Tengo trece euros."
   },
   {
     "id": "c2VjaHplaG4_",
-    "word": "sechzehn"
+    "word": "sechzehn",
+    "exampleSentenceDe": "Ich bin sechzehn Jahre alt.",
+    "exampleSentenceEs": "Tengo dieciséis años."
   },
   {
     "id": "c2llYnplaG4_",
-    "word": "siebzehn"
+    "word": "siebzehn",
+    "exampleSentenceDe": "Ich bin siebzehn Jahre alt.",
+    "exampleSentenceEs": "Tengo diecisiete años."
   },
   {
     "id": "endhbnppZw__",
-    "word": "zwanzig"
+    "word": "zwanzig",
+    "exampleSentenceDe": "Ich bin zwanzig Jahre alt.",
+    "exampleSentenceEs": "Tengo veinte años."
   },
   {
     "id": "ZWludW5kendhbnppZw__",
-    "word": "einundzwanzig"
+    "word": "einundzwanzig",
+    "exampleSentenceDe": "Ich bin einundzwanzig Jahre alt.",
+    "exampleSentenceEs": "Tengo veintiuno años."
   },
   {
     "id": "ZHJlaSVDMyU5Rmln",
-    "word": "dreißig"
+    "word": "dreißig",
+    "exampleSentenceDe": "Ich bin dreißig Jahre alt.",
+    "exampleSentenceEs": "Tengo treinta años."
   },
   {
     "id": "dmllcnppZw__",
-    "word": "vierzig"
+    "word": "vierzig",
+    "exampleSentenceDe": "Ich bin vierzig Jahre alt.",
+    "exampleSentenceEs": "Tengo cuarenta años."
   },
   {
     "id": "aHVuZGVydA__",
-    "word": "hundert"
+    "word": "hundert",
+    "exampleSentenceDe": "Ich habe hundert Euro.",
+    "exampleSentenceEs": "Tengo cien euros."
   },
   {
     "id": "dGF1c2VuZA__",
-    "word": "tausend"
+    "word": "tausend",
+    "exampleSentenceDe": "Ich habe tausend Euro.",
+    "exampleSentenceEs": "Tengo mil euros."
   },
   {
     "id": "ZGVyJTIwZXJzdGU_",
-    "word": "der erste"
+    "word": "der erste",
+    "exampleSentenceDe": "Ich bin der erste.",
+    "exampleSentenceEs": "Yo soy el primero."
   },
   {
     "id": "ZGVyJTIwendlaXRl",
-    "word": "der zweite"
+    "word": "der zweite",
+    "exampleSentenceDe": "Das ist der zweite Stock.",
+    "exampleSentenceEs": "Este es el segundo piso."
   },
   {
     "id": "ZGVyJTIwZHJpdHRl",
-    "word": "der dritte"
+    "word": "der dritte",
+    "exampleSentenceDe": "Ich wohne in der dritten Straße.",
+    "exampleSentenceEs": "Yo vivo en la tercera calle."
   },
   {
     "id": "ZGVyJTIwdmllcnRl",
-    "word": "der vierte"
+    "word": "der vierte",
+    "exampleSentenceDe": "Ich wohne in der vierten Etage.",
+    "exampleSentenceEs": "Yo vivo en el cuarto piso."
   },
   {
     "id": "ZGVyJTIwZiVDMyVCQ25mdGU_",
-    "word": "der fünfte"
+    "word": "der fünfte",
+    "exampleSentenceDe": "Heute ist der fünfte Mai.",
+    "exampleSentenceEs": "Hoy es el quinto de mayo."
   },
   {
     "id": "ZGVyJTIwc2VjaHN0ZQ__",
-    "word": "der sechste"
+    "word": "der sechste",
+    "exampleSentenceDe": "Heute ist der sechste Mai.",
+    "exampleSentenceEs": "Hoy es el sexto de mayo."
   },
   {
     "id": "ZGVyJTIwc2llYnRl",
-    "word": "der siebte"
+    "word": "der siebte",
+    "exampleSentenceDe": "Sonntag ist der siebte Tag.",
+    "exampleSentenceEs": "El domingo es el séptimo día."
   },
   {
     "id": "ZGVyJTIwYWNodGU_",
-    "word": "der achte"
+    "word": "der achte",
+    "exampleSentenceDe": "Das ist die achte Stunde.",
+    "exampleSentenceEs": "Esta es la octava hora."
   },
   {
     "id": "ZGVyJTIwbmV1bnRl",
-    "word": "der neunte"
+    "word": "der neunte",
+    "exampleSentenceDe": "Heute ist der neunte Mai.",
+    "exampleSentenceEs": "Hoy es el noveno de mayo."
   },
   {
     "id": "ZGVyJTIwemVobnRl",
-    "word": "der zehnte"
+    "word": "der zehnte",
+    "exampleSentenceDe": "Der zehnte Tag ist heute.",
+    "exampleSentenceEs": "El décimo día es hoy."
   },
   {
     "id": "ZGVyJTIwendhbnppZ3N0ZQ__",
-    "word": "der zwanzigste"
+    "word": "der zwanzigste",
+    "exampleSentenceDe": "Heute ist der zwanzigste Tag im Monat.",
+    "exampleSentenceEs": "Hoy es el vigésimo día del mes."
   },
   {
     "id": "ZGVyJTIwZWludW5kendhbnppZ3N0ZQ__",
-    "word": "der einundzwanzigste"
+    "word": "der einundzwanzigste",
+    "exampleSentenceDe": "Heute ist der einundzwanzigste Januar.",
+    "exampleSentenceEs": "Hoy es el veintiuno de enero."
   },
   {
     "id": "ZGllJTIwSCVDMyVBNGxmdGU_",
-    "word": "die Hälfte"
+    "word": "die Hälfte",
+    "exampleSentenceDe": "Ich nehme die Hälfte von dem Kuchen.",
+    "exampleSentenceEs": "Yo tomo la mitad del pastel."
   },
   {
     "id": "ZGFzJTIwVmllcnRlbA__",
-    "word": "das Viertel"
+    "word": "das Viertel",
+    "exampleSentenceDe": "Das ist ein Viertel von dem Kuchen.",
+    "exampleSentenceEs": "Este es un cuarto del pastel."
   },
   {
     "id": "cGx1cyUyMCUyRiUyMG1pbnVz",
-    "word": "plus / minus"
+    "word": "plus / minus",
+    "exampleSentenceDe": "Fünf plus fünf ist zehn.",
+    "exampleSentenceEs": "Cinco más cinco son diez."
   },
   {
     "id": "bWFsJTIwJTJGJTIwZHVyY2g_",
-    "word": "mal / durch"
+    "word": "mal / durch",
+    "exampleSentenceDe": "Wir gehen durch den Park.",
+    "exampleSentenceEs": "Vamos por el parque."
   },
   {
     "id": "ZGFzJTIwUHJvemVudA__",
-    "word": "das Prozent"
+    "word": "das Prozent",
+    "exampleSentenceDe": "Das Prozent ist nicht hoch.",
+    "exampleSentenceEs": "El por ciento no es alto."
   },
   {
     "id": "ZGllJTIwV29jaGU_",
-    "word": "die Woche"
+    "word": "die Woche",
+    "exampleSentenceDe": "Diese Woche ist kurz.",
+    "exampleSentenceEs": "Esta semana es corta."
   },
   {
     "id": "TW9udGFn",
-    "word": "Montag"
+    "word": "Montag",
+    "exampleSentenceDe": "Am Montag habe ich Deutsch.",
+    "exampleSentenceEs": "El lunes tengo alemán."
   },
   {
     "id": "RGllbnN0YWc_",
-    "word": "Dienstag"
+    "word": "Dienstag",
+    "exampleSentenceDe": "Am Dienstag trinke ich Kaffee.",
+    "exampleSentenceEs": "El martes bebo café."
   },
   {
     "id": "TWl0dHdvY2g_",
-    "word": "Mittwoch"
+    "word": "Mittwoch",
+    "exampleSentenceDe": "Am Mittwoch ist ein Treffen.",
+    "exampleSentenceEs": "El miércoles hay una reunión."
   },
   {
     "id": "RG9ubmVyc3RhZw__",
-    "word": "Donnerstag"
+    "word": "Donnerstag",
+    "exampleSentenceDe": "Am Donnerstag trinke ich Kaffee.",
+    "exampleSentenceEs": "El jueves bebo café."
   },
   {
     "id": "RnJlaXRhZw__",
-    "word": "Freitag"
+    "word": "Freitag",
+    "exampleSentenceDe": "Am Freitag ist meine Party.",
+    "exampleSentenceEs": "El viernes es mi fiesta."
   },
   {
     "id": "U2Ftc3RhZw__",
-    "word": "Samstag"
+    "word": "Samstag",
+    "exampleSentenceDe": "Am Samstag trinke ich Kaffee.",
+    "exampleSentenceEs": "El sábado bebo café."
   },
   {
     "id": "U29ubnRhZw__",
-    "word": "Sonntag"
+    "word": "Sonntag",
+    "exampleSentenceDe": "Der Sonntag ist ein Tag.",
+    "exampleSentenceEs": "El domingo es un día."
   },
   {
     "id": "YW0lMjAlMkIlMjBUYWc_",
-    "word": "am + Tag"
+    "word": "am + Tag",
+    "exampleSentenceDe": "Am Montag habe ich frei.",
+    "exampleSentenceEs": "El lunes tengo libre."
   },
   {
     "id": "ZGFzJTIwV29jaGVuZW5kZQ__",
-    "word": "das Wochenende"
+    "word": "das Wochenende",
+    "exampleSentenceDe": "Das Wochenende ist am Samstag und am Sonntag.",
+    "exampleSentenceEs": "El fin de semana es el sábado y el domingo."
   },
   {
     "id": "YW0lMjBXb2NoZW5lbmRl",
-    "word": "am Wochenende"
+    "word": "am Wochenende",
+    "exampleSentenceDe": "Am Wochenende treffe ich Freunde.",
+    "exampleSentenceEs": "El fin de semana me encuentro con amigos."
   },
   {
     "id": "ZGVyJTIwRmVpZXJ0YWc_",
-    "word": "der Feiertag"
+    "word": "der Feiertag",
+    "exampleSentenceDe": "Heute ist ein Feiertag.",
+    "exampleSentenceEs": "Hoy es un día festivo."
   },
   {
     "id": "ZGFzJTIwSmFocg__",
-    "word": "das Jahr"
+    "word": "das Jahr",
+    "exampleSentenceDe": "Das Jahr ist neu.",
+    "exampleSentenceEs": "El año es nuevo."
   },
   {
     "id": "ZGVyJTIwTW9uYXQ_",
-    "word": "der Monat"
+    "word": "der Monat",
+    "exampleSentenceDe": "Dieser Monat ist lang.",
+    "exampleSentenceEs": "Este mes es largo."
   },
   {
     "id": "SmFudWFy",
-    "word": "Januar"
+    "word": "Januar",
+    "exampleSentenceDe": "Der Januar ist der erste Monat.",
+    "exampleSentenceEs": "Enero es el primer mes."
   },
   {
     "id": "RmVicnVhcg__",
-    "word": "Februar"
+    "word": "Februar",
+    "exampleSentenceDe": "Der Februar ist ein Monat.",
+    "exampleSentenceEs": "Febrero es un mes."
   },
   {
     "id": "TSVDMyVBNHJ6",
-    "word": "März"
+    "word": "März",
+    "exampleSentenceDe": "Der dritte Monat ist März.",
+    "exampleSentenceEs": "El tercer mes es marzo."
   },
   {
     "id": "QXByaWw_",
-    "word": "April"
+    "word": "April",
+    "exampleSentenceDe": "Der April ist ein Monat.",
+    "exampleSentenceEs": "Abril es un mes."
   },
   {
     "id": "TWFp",
-    "word": "Mai"
+    "word": "Mai",
+    "exampleSentenceDe": "Der Mai ist ein schöner Monat.",
+    "exampleSentenceEs": "Mayo es un mes bonito."
   },
   {
     "id": "SnVuaQ__",
-    "word": "Juni"
+    "word": "Juni",
+    "exampleSentenceDe": "Der Juni ist ein schöner Monat.",
+    "exampleSentenceEs": "Junio es un mes bonito."
   },
   {
     "id": "SnVsaQ__",
-    "word": "Juli"
+    "word": "Juli",
+    "exampleSentenceDe": "Der Juli ist ein schöner Monat.",
+    "exampleSentenceEs": "Julio es un mes bonito."
   },
   {
     "id": "QXVndXN0",
-    "word": "August"
+    "word": "August",
+    "exampleSentenceDe": "Der Monat August ist der achte Monat.",
+    "exampleSentenceEs": "El mes de agosto es el octavo mes."
   },
   {
     "id": "U2VwdGVtYmVy",
-    "word": "September"
+    "word": "September",
+    "exampleSentenceDe": "Der September ist ein schöner Monat.",
+    "exampleSentenceEs": "Septiembre es un mes bonito."
   },
   {
     "id": "T2t0b2Jlcg__",
-    "word": "Oktober"
+    "word": "Oktober",
+    "exampleSentenceDe": "Der Oktober ist ein Monat.",
+    "exampleSentenceEs": "Octubre es un mes."
   },
   {
     "id": "Tm92ZW1iZXI_",
-    "word": "November"
+    "word": "November",
+    "exampleSentenceDe": "Im November ist es kalt.",
+    "exampleSentenceEs": "En noviembre hace frío."
   },
   {
     "id": "RGV6ZW1iZXI_",
-    "word": "Dezember"
+    "word": "Dezember",
+    "exampleSentenceDe": "Wir haben im Dezember Geburtstag.",
+    "exampleSentenceEs": "Tenemos cumpleaños en diciembre."
   },
   {
     "id": "ZGVyJTIwRnIlQzMlQkNobGluZw__",
-    "word": "der Frühling"
+    "word": "der Frühling",
+    "exampleSentenceDe": "Der Frühling ist schön.",
+    "exampleSentenceEs": "La primavera es bonita."
   },
   {
     "id": "ZGVyJTIwU29tbWVy",
-    "word": "der Sommer"
+    "word": "der Sommer",
+    "exampleSentenceDe": "Ich mag den Sommer. Der Sommer ist heiß.",
+    "exampleSentenceEs": "Me gusta el verano. El verano es caluroso."
   },
   {
     "id": "ZGVyJTIwSGVyYnN0",
-    "word": "der Herbst"
+    "word": "der Herbst",
+    "exampleSentenceDe": "Der Herbst ist schön.",
+    "exampleSentenceEs": "El otoño es bonito."
   },
   {
     "id": "ZGVyJTIwV2ludGVy",
-    "word": "der Winter"
+    "word": "der Winter",
+    "exampleSentenceDe": "Der Winter ist kalt.",
+    "exampleSentenceEs": "El invierno es frío."
   },
   {
     "id": "ZGVyJTIwVGFn",
-    "word": "der Tag"
+    "word": "der Tag",
+    "exampleSentenceDe": "Der Tag ist schön.",
+    "exampleSentenceEs": "El día es bonito."
   },
   {
     "id": "ZGVyJTIwTW9yZ2Vu",
-    "word": "der Morgen"
+    "word": "der Morgen",
+    "exampleSentenceDe": "Der Morgen ist schön.",
+    "exampleSentenceEs": "La mañana es bonita."
   },
   {
     "id": "ZGVyJTIwVm9ybWl0dGFn",
-    "word": "der Vormittag"
+    "word": "der Vormittag",
+    "exampleSentenceDe": "Am Vormittag trinke ich Kaffee.",
+    "exampleSentenceEs": "Por la mañana, bebo café."
   },
   {
     "id": "ZGVyJTIwTWl0dGFn",
-    "word": "der Mittag"
+    "word": "der Mittag",
+    "exampleSentenceDe": "Wir essen um 12 Uhr zu Mittag.",
+    "exampleSentenceEs": "Comemos al mediodía a las 12."
   },
   {
     "id": "ZGVyJTIwTmFjaG1pdHRhZw__",
-    "word": "der Nachmittag"
+    "word": "der Nachmittag",
+    "exampleSentenceDe": "Am Nachmittag trinke ich Kaffee.",
+    "exampleSentenceEs": "Por la tarde tomo café."
   },
   {
     "id": "ZGVyJTIwQWJlbmQ_",
-    "word": "der Abend"
+    "word": "der Abend",
+    "exampleSentenceDe": "Der Abend ist schön.",
+    "exampleSentenceEs": "La noche es bonita."
   },
   {
     "id": "ZGllJTIwTmFjaHQ_",
-    "word": "die Nacht"
+    "word": "die Nacht",
+    "exampleSentenceDe": "Die Nacht ist lang.",
+    "exampleSentenceEs": "La noche es larga."
   },
   {
     "id": "YW0lMjBNb3JnZW4_",
-    "word": "am Morgen"
+    "word": "am Morgen",
+    "exampleSentenceDe": "Ich trinke Kaffee am Morgen.",
+    "exampleSentenceEs": "Bebo café por la mañana."
   },
   {
     "id": "YW0lMjBWb3JtaXR0YWc_",
-    "word": "am Vormittag"
+    "word": "am Vormittag",
+    "exampleSentenceDe": "Ich esse am Vormittag.",
+    "exampleSentenceEs": "Yo como por la mañana."
   },
   {
     "id": "YW0lMjBNaXR0YWc_",
-    "word": "am Mittag"
+    "word": "am Mittag",
+    "exampleSentenceDe": "Ich esse am Mittag.",
+    "exampleSentenceEs": "Yo como al mediodía."
   },
   {
     "id": "YW0lMjBOYWNobWl0dGFn",
-    "word": "am Nachmittag"
+    "word": "am Nachmittag",
+    "exampleSentenceDe": "Am Nachmittag trinke ich Kaffee.",
+    "exampleSentenceEs": "Por la tarde bebo café."
   },
   {
     "id": "YW0lMjBBYmVuZA__",
-    "word": "am Abend"
+    "word": "am Abend",
+    "exampleSentenceDe": "Am Abend esse ich.",
+    "exampleSentenceEs": "Por la tarde como."
   },
   {
     "id": "aW4lMjBkZXIlMjBOYWNodA__",
-    "word": "in der Nacht"
+    "word": "in der Nacht",
+    "exampleSentenceDe": "Ich schlafe in der Nacht.",
+    "exampleSentenceEs": "Yo duermo en la noche."
   },
   {
     "id": "ZGllJTIwVWhyemVpdA__",
-    "word": "die Uhrzeit"
+    "word": "die Uhrzeit",
+    "exampleSentenceDe": "Ich habe die Uhrzeit nicht.",
+    "exampleSentenceEs": "No tengo la hora."
   },
   {
     "id": "V2FubiUzRg__",
-    "word": "Wann?"
+    "word": "Wann?",
+    "exampleSentenceDe": "Wann kommst du?",
+    "exampleSentenceEs": "¿Cuándo vienes?"
   },
   {
     "id": "V2llJTIwc3AlQzMlQTR0JTIwaXN0JTIwZXMlM0Y_",
-    "word": "Wie spät ist es?"
+    "word": "Wie spät ist es?",
+    "exampleSentenceDe": "Es ist zehn Uhr.",
+    "exampleSentenceEs": "Son las diez en punto."
   },
   {
     "id": "V2llJTIwdmllbCUyMFVociUyMGlzdCUyMGVzJTNG",
-    "word": "Wie viel Uhr ist es?"
+    "word": "Wie viel Uhr ist es?",
+    "exampleSentenceDe": "Ich habe eine Frage. Wie viel Uhr ist es?",
+    "exampleSentenceEs": "Tengo una pregunta. ¿Qué hora es?"
   },
   {
     "id": "ZWluJTIwVWhy",
-    "word": "ein Uhr"
+    "word": "ein Uhr",
+    "exampleSentenceDe": "Es ist ein Uhr.",
+    "exampleSentenceEs": "Es la una en punto."
   },
   {
     "id": "aGFsYiUyMHp3ZWk_",
-    "word": "halb zwei"
+    "word": "halb zwei",
+    "exampleSentenceDe": "Der Zug fährt um halb zwei.",
+    "exampleSentenceEs": "El tren sale a la una y media."
   },
   {
     "id": "VmllcnRlbCUyMHZvciUyMGRyZWk_",
-    "word": "Viertel vor drei"
+    "word": "Viertel vor drei",
+    "exampleSentenceDe": "Es ist Viertel vor drei.",
+    "exampleSentenceEs": "Son las tres menos cuarto."
   },
   {
     "id": "a3VyeiUyMHZvciUyMDQ_",
-    "word": "kurz vor 4"
+    "word": "kurz vor 4",
+    "exampleSentenceDe": "Wir treffen uns kurz vor 4.",
+    "exampleSentenceEs": "Nos encontramos poco antes de las 4."
   },
   {
     "id": "Z2xlaWNoJTIwNA__",
-    "word": "gleich 4"
+    "word": "gleich 4",
+    "exampleSentenceDe": "Es ist gleich vier Uhr.",
+    "exampleSentenceEs": "Son casi las cuatro."
   },
   {
     "id": "Z2VuYXUlMjA0JTIwVWhy",
-    "word": "genau 4 Uhr"
+    "word": "genau 4 Uhr",
+    "exampleSentenceDe": "Wir treffen uns um genau 4 Uhr.",
+    "exampleSentenceEs": "Nos vemos exactamente a las 4."
   },
   {
     "id": "ZiVDMyVCQ25mJTIwbmFjaCUyMDQ_",
-    "word": "fünf nach 4"
+    "word": "fünf nach 4",
+    "exampleSentenceDe": "Es ist fünf nach vier.",
+    "exampleSentenceEs": "Son las cuatro y cinco."
   },
   {
     "id": "dW0lMjAzJTIwVWhy",
-    "word": "um 3 Uhr"
+    "word": "um 3 Uhr",
+    "exampleSentenceDe": "Ich komme um 3 Uhr.",
+    "exampleSentenceEs": "Vengo a las 3."
   },
   {
     "id": "dm9uJTIwMiUyMGJpcyUyMDMlMjBVaHI_",
-    "word": "von 2 bis 3 Uhr"
+    "word": "von 2 bis 3 Uhr",
+    "exampleSentenceDe": "Der Kurs ist von 2 bis 3 Uhr.",
+    "exampleSentenceEs": "El curso es de 2 a 3."
   },
   {
     "id": "YWIlMjAzJTIwVWhy",
-    "word": "ab 3 Uhr"
+    "word": "ab 3 Uhr",
+    "exampleSentenceDe": "Wir essen ab 3 Uhr.",
+    "exampleSentenceEs": "Comemos a partir de las 3."
   },
   {
     "id": "YW5mYW5nZW4_",
-    "word": "anfangen"
+    "word": "anfangen",
+    "exampleSentenceDe": "Wir fangen jetzt an.",
+    "exampleSentenceEs": "Empezamos ahora."
   },
   {
     "id": "ZGVyJTIwQW5mYW5n",
-    "word": "der Anfang"
+    "word": "der Anfang",
+    "exampleSentenceDe": "Der Anfang ist gut.",
+    "exampleSentenceEs": "El comienzo es bueno."
   },
   {
     "id": "YXVmaCVDMyVCNnJlbg__",
-    "word": "aufhören"
+    "word": "aufhören",
+    "exampleSentenceDe": "Bitte, hören Sie auf. Ich möchte schlafen.",
+    "exampleSentenceEs": "Por favor, para. Quiero dormir."
   },
   {
     "id": "ZGFzJTIwRW5kZQ__",
-    "word": "das Ende"
+    "word": "das Ende",
+    "exampleSentenceDe": "Der Film ist zu Ende.",
+    "exampleSentenceEs": "La película ha terminado."
   },
   {
     "id": "ZGF1ZXJu",
-    "word": "dauern"
+    "word": "dauern",
+    "exampleSentenceDe": "Die Reise dauert zwei Stunden.",
+    "exampleSentenceEs": "El viaje dura dos horas."
   },
   {
     "id": "ZGVyJTIwQWxsdGFn",
-    "word": "der Alltag"
+    "word": "der Alltag",
+    "exampleSentenceDe": "Der Alltag ist normal.",
+    "exampleSentenceEs": "El día a día es normal."
   },
   {
     "id": "cCVDMyVCQ25rdGxpY2g_",
-    "word": "pünktlich"
+    "word": "pünktlich",
+    "exampleSentenceDe": "Der Zug ist pünktlich.",
+    "exampleSentenceEs": "El tren es puntual."
   },
   {
     "id": "ZGllJTIwVmVyc3AlQzMlQTR0dW5n",
-    "word": "die Verspätung"
+    "word": "die Verspätung",
+    "exampleSentenceDe": "Ich habe die Verspätung.",
+    "exampleSentenceEs": "Tengo el retraso."
   },
   {
     "id": "cmVnZWxtJUMzJUE0JUMzJTlGaWc_",
-    "word": "regelmäßig"
+    "word": "regelmäßig",
+    "exampleSentenceDe": "Ich trinke Wasser regelmäßig.",
+    "exampleSentenceEs": "Bebo agua regularmente."
   },
   {
     "id": "ZGVyJTIwVm9ybmFtZQ__",
-    "word": "der Vorname"
+    "word": "der Vorname",
+    "exampleSentenceDe": "Wie ist Ihr Vorname?",
+    "exampleSentenceEs": "¿Cuál es su primer nombre?"
   },
   {
     "id": "ZGVyJTIwTmFjaG5hbWU_",
-    "word": "der Nachname"
+    "word": "der Nachname",
+    "exampleSentenceDe": "Mein Nachname ist Müller.",
+    "exampleSentenceEs": "Mi apellido es Müller."
   },
   {
     "id": "aGVpJUMzJTlGZW4_",
-    "word": "heißen"
+    "word": "heißen",
+    "exampleSentenceDe": "Ich heiße Maria.",
+    "exampleSentenceEs": "Yo me llamo María."
   },
   {
     "id": "YnVjaHN0YWJpZXJlbg__",
-    "word": "buchstabieren"
+    "word": "buchstabieren",
+    "exampleSentenceDe": "Können Sie das bitte buchstabieren?",
+    "exampleSentenceEs": "¿Puede deletrear eso, por favor?"
   },
   {
     "id": "ZGllJTIwRnJhdQ__",
-    "word": "die Frau"
+    "word": "die Frau",
+    "exampleSentenceDe": "Die Frau ist nett.",
+    "exampleSentenceEs": "La mujer es simpática."
   },
   {
     "id": "ZGVyJTIwTWFubg__",
-    "word": "der Mann"
+    "word": "der Mann",
+    "exampleSentenceDe": "Der Mann ist nett.",
+    "exampleSentenceEs": "El hombre es simpático."
   },
   {
     "id": "ZGllJTIwRGFtZQ__",
-    "word": "die Dame"
+    "word": "die Dame",
+    "exampleSentenceDe": "Hier ist die Dame. Die Dame ist nett.",
+    "exampleSentenceEs": "Aquí está la dama. La dama es simpática."
   },
   {
     "id": "ZGVyJTIwSGVycg__",
-    "word": "der Herr"
+    "word": "der Herr",
+    "exampleSentenceDe": "Guten Tag, Herr Müller.",
+    "exampleSentenceEs": "Buenos días, señor Müller."
   },
   {
     "id": "bSVDMyVBNG5ubGljaCUyMCUyRiUyMHdlaWJsaWNo",
-    "word": "männlich / weiblich"
+    "word": "männlich / weiblich",
+    "exampleSentenceDe": "Ich bin männlich.",
+    "exampleSentenceEs": "Yo soy masculino."
   },
   {
     "id": "ZGFzJTIwTSVDMyVBNGRjaGVu",
-    "word": "das Mädchen"
+    "word": "das Mädchen",
+    "exampleSentenceDe": "Das Mädchen ist klein.",
+    "exampleSentenceEs": "La niña es pequeña."
   },
   {
     "id": "ZGVyJTIwSnVuZ2U_",
-    "word": "der Junge"
+    "word": "der Junge",
+    "exampleSentenceDe": "Der Junge ist klein.",
+    "exampleSentenceEs": "El niño es pequeño."
   },
   {
     "id": "ZGllJTIwQWRyZXNzZQ__",
-    "word": "die Adresse"
+    "word": "die Adresse",
+    "exampleSentenceDe": "Das ist die Adresse.",
+    "exampleSentenceEs": "Esta es la dirección."
   },
   {
     "id": "ZGVyJTIwV29obm9ydA__",
-    "word": "der Wohnort"
+    "word": "der Wohnort",
+    "exampleSentenceDe": "Mein Wohnort ist Berlin.",
+    "exampleSentenceEs": "Mi lugar de residencia es Berlín."
   },
   {
     "id": "d29obmVuJTIwJTJGJTIwbGViZW4_",
-    "word": "wohnen / leben"
+    "word": "wohnen / leben",
+    "exampleSentenceDe": "Ich wohne in Berlin.",
+    "exampleSentenceEs": "Yo vivo en Berlín."
   },
   {
     "id": "ZGllJTIwU3RyYSVDMyU5RmU_",
-    "word": "die Straße"
+    "word": "die Straße",
+    "exampleSentenceDe": "Die Straße ist lang.",
+    "exampleSentenceEs": "La calle es larga."
   },
   {
     "id": "ZGVyJTIwUGxhdHo_",
-    "word": "der Platz"
+    "word": "der Platz",
+    "exampleSentenceDe": "Ich sitze auf dem Platz.",
+    "exampleSentenceEs": "Yo estoy sentado en la plaza."
   },
   {
     "id": "ZGllJTIwTnVtbWVy",
-    "word": "die Nummer"
+    "word": "die Nummer",
+    "exampleSentenceDe": "Ich habe die Nummer. Die Nummer ist eins.",
+    "exampleSentenceEs": "Tengo el número. El número es uno."
   },
   {
     "id": "ZGllJTIwU3RhZHQ_",
-    "word": "die Stadt"
+    "word": "die Stadt",
+    "exampleSentenceDe": "Das ist die Stadt. Die Stadt ist groß.",
+    "exampleSentenceEs": "Esta es la ciudad. La ciudad es grande."
   },
   {
     "id": "ZGllJTIwUG9zdGxlaXR6YWhs",
-    "word": "die Postleitzahl"
+    "word": "die Postleitzahl",
+    "exampleSentenceDe": "Ich brauche die Postleitzahl von Berlin.",
+    "exampleSentenceEs": "Necesito el código postal de Berlín."
   },
   {
     "id": "ZGFzJTIwRG9yZiUyMCUyRiUyMGRhcyUyMExhbmQ_",
-    "word": "das Dorf / das Land"
+    "word": "das Dorf / das Land",
+    "exampleSentenceDe": "Ich wohne in einem Dorf. Das Dorf ist klein.",
+    "exampleSentenceEs": "Yo vivo en un pueblo. El pueblo es pequeño."
   },
   {
     "id": "ZGFzJTIwVGVsZWZvbg__",
-    "word": "das Telefon"
+    "word": "das Telefon",
+    "exampleSentenceDe": "Das ist mein Telefon.",
+    "exampleSentenceEs": "Este es mi teléfono."
   },
   {
     "id": "dGVsZWZvbmllcmVuJTIwJTJGJTIwYW5ydWZlbg__",
-    "word": "telefonieren / anrufen"
+    "word": "telefonieren / anrufen",
+    "exampleSentenceDe": "Ich telefoniere mit meiner Mutter.",
+    "exampleSentenceEs": "Yo hablo por teléfono con mi madre."
   },
   {
     "id": "ZGllJTIwRS1NYWls",
-    "word": "die E-Mail"
+    "word": "die E-Mail",
+    "exampleSentenceDe": "Ich habe die E-Mail. Die E-Mail ist neu.",
+    "exampleSentenceEs": "Tengo el correo electrónico. El correo electrónico es nuevo."
   },
   {
     "id": "SWNoJTIwYmluJTIwZ2Vib3JlbiUyMGFtLi4u",
-    "word": "Ich bin geboren am..."
+    "word": "Ich bin geboren am...",
+    "exampleSentenceDe": "Ich bin geboren am fünften Mai.",
+    "exampleSentenceEs": "Nací el cinco de mayo."
   },
   {
     "id": "ZGFzJTIwR2VidXJ0c2RhdHVt",
-    "word": "das Geburtsdatum"
+    "word": "das Geburtsdatum",
+    "exampleSentenceDe": "Mein Geburtsdatum ist der zehnte Mai.",
+    "exampleSentenceEs": "Mi fecha de nacimiento es el diez de mayo."
   },
   {
     "id": "ZGVyJTIwR2VidXJ0c3RhZw__",
-    "word": "der Geburtstag"
+    "word": "der Geburtstag",
+    "exampleSentenceDe": "Heute ist mein Geburtstag.",
+    "exampleSentenceEs": "Hoy es mi cumpleaños."
   },
   {
     "id": "Z2Vib3JlbiUyMGlu",
-    "word": "geboren in"
+    "word": "geboren in",
+    "exampleSentenceDe": "Ich bin geboren in Spanien.",
+    "exampleSentenceEs": "Yo nací en España."
   },
   {
     "id": "SmFocmUlMjBhbHQlMjBzZWlu",
-    "word": "Jahre alt sein"
+    "word": "Jahre alt sein",
+    "exampleSentenceDe": "Ich bin 30 Jahre alt.",
+    "exampleSentenceEs": "Tengo 30 años."
   },
   {
     "id": "ZGllJTIwRmFtaWxpZQ__",
-    "word": "die Familie"
+    "word": "die Familie",
+    "exampleSentenceDe": "Das ist meine Familie.",
+    "exampleSentenceEs": "Esta es mi familia."
   },
   {
     "id": "ZGVyJTIwRmFtaWxpZW5zdGFuZA__",
-    "word": "der Familienstand"
+    "word": "der Familienstand",
+    "exampleSentenceDe": "Mein Familienstand ist ledig.",
+    "exampleSentenceEs": "Mi estado civil es soltero."
   },
   {
     "id": "dmVyaGVpcmF0ZXQlMjAlMkYlMjBsZWRpZw__",
-    "word": "verheiratet / ledig"
+    "word": "verheiratet / ledig",
+    "exampleSentenceDe": "Ich bin ledig.",
+    "exampleSentenceEs": "Yo soy soltero/a."
   },
   {
     "id": "aGVpcmF0ZW4_",
-    "word": "heiraten"
+    "word": "heiraten",
+    "exampleSentenceDe": "Ich möchte heiraten.",
+    "exampleSentenceEs": "Quiero casarme."
   },
   {
     "id": "ZGllJTIwRWhlZnJhdSUyMCUyRiUyMGRlciUyMEVoZW1hbm4_",
-    "word": "die Ehefrau / der Ehemann"
+    "word": "die Ehefrau / der Ehemann",
+    "exampleSentenceDe": "Das ist meine Ehefrau.",
+    "exampleSentenceEs": "Ella es mi esposa."
   },
   {
     "id": "ZGllJTIwSG9jaHplaXQ_",
-    "word": "die Hochzeit"
+    "word": "die Hochzeit",
+    "exampleSentenceDe": "Die Hochzeit ist morgen.",
+    "exampleSentenceEs": "La boda es mañana."
   },
   {
     "id": "ZGVyJTIwVmF0ZXIlMjAlMkYlMjBkaWUlMjBNdXR0ZXI_",
-    "word": "der Vater / die Mutter"
+    "word": "der Vater / die Mutter",
+    "exampleSentenceDe": "Das ist mein Vater.",
+    "exampleSentenceEs": "Este es mi padre."
   },
   {
     "id": "ZGllJTIwRWx0ZXJu",
-    "word": "die Eltern"
+    "word": "die Eltern",
+    "exampleSentenceDe": "Meine Eltern sind nett.",
+    "exampleSentenceEs": "Mis padres son amables."
   },
   {
     "id": "ZGFzJTIwS2luZCUyMCUyRiUyMEJhYnk_",
-    "word": "das Kind / Baby"
+    "word": "das Kind / Baby",
+    "exampleSentenceDe": "Das Kind ist klein.",
+    "exampleSentenceEs": "El niño es pequeño."
   },
   {
     "id": "ZGVyJTIwU29obiUyMCUyRiUyMGRpZSUyMFRvY2h0ZXI_",
-    "word": "der Sohn / die Tochter"
+    "word": "der Sohn / die Tochter",
+    "exampleSentenceDe": "Ich habe einen Sohn. Mein Sohn ist klein.",
+    "exampleSentenceEs": "Tengo un hijo. Mi hijo es pequeño."
   },
   {
     "id": "ZGVyJTIwQnJ1ZGVyJTIwJTJGJTIwU2Nod2VzdGVy",
-    "word": "der Bruder / Schwester"
+    "word": "der Bruder / Schwester",
+    "exampleSentenceDe": "Ich habe einen Bruder. Mein Bruder ist nett.",
+    "exampleSentenceEs": "Tengo un hermano. Mi hermano es simpático."
   },
   {
     "id": "ZGllJTIwR2VzY2h3aXN0ZXI_",
-    "word": "die Geschwister"
+    "word": "die Geschwister",
+    "exampleSentenceDe": "Ich habe zwei Geschwister.",
+    "exampleSentenceEs": "Yo tengo dos hermanos."
   },
   {
     "id": "ZGllJTIwT21hJTIwJTJGJTIwZGVyJTIwT3Bh",
-    "word": "die Oma / der Opa"
+    "word": "die Oma / der Opa",
+    "exampleSentenceDe": "Das ist die Oma. Die Oma ist nett.",
+    "exampleSentenceEs": "Esta es la abuela. La abuela es simpática."
   },
   {
     "id": "ZGllJTIwR3JvJUMzJTlGZWx0ZXJu",
-    "word": "die Großeltern"
+    "word": "die Großeltern",
+    "exampleSentenceDe": "Meine Großeltern sind alt.",
+    "exampleSentenceEs": "Mis abuelos son mayores."
   },
   {
     "id": "ZGllJTIwVmVyd2FuZHRlbg__",
-    "word": "die Verwandten"
+    "word": "die Verwandten",
+    "exampleSentenceDe": "Ich habe Verwandte. Meine Verwandten sind nett.",
+    "exampleSentenceEs": "Tengo parientes. Mis parientes son amables."
   },
   {
     "id": "ZGVyJTIwRnJldW5kJTIwJTJGJTIwRnJldW5kaW4_",
-    "word": "der Freund / Freundin"
+    "word": "der Freund / Freundin",
+    "exampleSentenceDe": "Das ist mein Freund.",
+    "exampleSentenceEs": "Este es mi amigo."
   },
   {
     "id": "ZGVyJTJGZGllJTIwQmVrYW5udGU_",
-    "word": "der/die Bekannte"
+    "word": "der/die Bekannte",
+    "exampleSentenceDe": "Das ist mein Bekannter.",
+    "exampleSentenceEs": "Este es mi conocido."
   },
   {
     "id": "ZGVyJTJGZGllJTIwRXJ3YWNoc2VuZQ__",
-    "word": "der/die Erwachsene"
+    "word": "der/die Erwachsene",
+    "exampleSentenceDe": "Ich bin ein Erwachsener.",
+    "exampleSentenceEs": "Yo soy un adulto."
   },
   {
     "id": "ZGVyJTIwSnVnZW5kbGljaGU_",
-    "word": "der Jugendliche"
+    "word": "der Jugendliche",
+    "exampleSentenceDe": "Der Jugendliche ist hier.",
+    "exampleSentenceEs": "El joven está aquí."
   },
   {
     "id": "ZGVyJTIwUGFzcyUyMCUyRiUyMFJlaXNlcGFzcw__",
-    "word": "der Pass / Reisepass"
+    "word": "der Pass / Reisepass",
+    "exampleSentenceDe": "Ich habe den Reisepass.",
+    "exampleSentenceEs": "Yo tengo el pasaporte."
   },
   {
     "id": "ZGVyJTIwQXVzd2Vpcw__",
-    "word": "der Ausweis"
+    "word": "der Ausweis",
+    "exampleSentenceDe": "Ich brauche den Ausweis, bitte.",
+    "exampleSentenceEs": "Necesito el documento de identidad, por favor."
   },
   {
     "id": "ZGllJTIwUGFwaWVyZQ__",
-    "word": "die Papiere"
+    "word": "die Papiere",
+    "exampleSentenceDe": "Ich habe die Papiere. Die Papiere sind wichtig.",
+    "exampleSentenceEs": "Tengo los papeles. Los papeles son importantes."
   },
   {
     "id": "ZGFzJTIwRm9ybXVsYXI_",
-    "word": "das Formular"
+    "word": "das Formular",
+    "exampleSentenceDe": "Ich habe das Formular. Das Formular ist neu.",
+    "exampleSentenceEs": "Tengo el formulario. El formulario es nuevo."
   },
   {
     "id": "YXVzZiVDMyVCQ2xsZW4_",
-    "word": "ausfüllen"
+    "word": "ausfüllen",
+    "exampleSentenceDe": "Ich muss das Formular ausfüllen.",
+    "exampleSentenceEs": "Yo debo rellenar el formulario."
   },
   {
     "id": "ZGllJTIwU3RhYXRzYW5nZWglQzMlQjZyaWdrZWl0",
-    "word": "die Staatsangehörigkeit"
+    "word": "die Staatsangehörigkeit",
+    "exampleSentenceDe": "Ich habe eine Frage zur Staatsangehörigkeit.",
+    "exampleSentenceEs": "Tengo una pregunta sobre la nacionalidad."
   },
   {
     "id": "ZGVyJTIwRiVDMyVCQ2hyZXJzY2hlaW4_",
-    "word": "der Führerschein"
+    "word": "der Führerschein",
+    "exampleSentenceDe": "Ich brauche den Führerschein.",
+    "exampleSentenceEs": "Yo necesito la licencia de conducir."
   },
   {
     "id": "dW50ZXJzY2hyZWliZW4_",
-    "word": "unterschreiben"
+    "word": "unterschreiben",
+    "exampleSentenceDe": "Ich muss den Vertrag unterschreiben.",
+    "exampleSentenceEs": "Yo debo firmar el contrato."
   },
   {
     "id": "ZGllJTIwVW50ZXJzY2hyaWZ0",
-    "word": "die Unterschrift"
+    "word": "die Unterschrift",
+    "exampleSentenceDe": "Ich brauche die Unterschrift hier.",
+    "exampleSentenceEs": "Necesito la firma aquí."
   },
   {
     "id": "ZGFzJTIwQWx0ZXI_",
-    "word": "das Alter"
+    "word": "das Alter",
+    "exampleSentenceDe": "Mein Alter ist zwanzig.",
+    "exampleSentenceEs": "Mi edad es veinte."
   },
   {
     "id": "ZGVyJTIwR2VidXJ0c29ydA__",
-    "word": "der Geburtsort"
+    "word": "der Geburtsort",
+    "exampleSentenceDe": "Mein Geburtsort ist Berlin.",
+    "exampleSentenceEs": "Mi lugar de nacimiento es Berlín."
   },
   {
     "id": "Z2VzY2hpZWRlbg__",
-    "word": "geschieden"
+    "word": "geschieden",
+    "exampleSentenceDe": "Er ist geschieden.",
+    "exampleSentenceEs": "Él está divorciado."
   },
   {
     "id": "dmVyd2l0d2V0",
-    "word": "verwitwet"
+    "word": "verwitwet",
+    "exampleSentenceDe": "Mein Großvater ist verwitwet.",
+    "exampleSentenceEs": "Mi abuelo es viudo."
   },
   {
     "id": "ZGVyJTIwQXVzbCVDMyVBNG5kZXI_",
-    "word": "der Ausländer"
+    "word": "der Ausländer",
+    "exampleSentenceDe": "Ich bin ein Ausländer.",
+    "exampleSentenceEs": "Yo soy un extranjero."
   },
   {
     "id": "ZGllJTIwR2VzZWxsc2NoYWZ0",
-    "word": "die Gesellschaft"
+    "word": "die Gesellschaft",
+    "exampleSentenceDe": "Die Gesellschaft ist groß.",
+    "exampleSentenceEs": "La sociedad es grande."
   },
   {
     "id": "ZGVyJTIwUmVudG5lcg__",
-    "word": "der Rentner"
+    "word": "der Rentner",
+    "exampleSentenceDe": "Der Rentner ist alt.",
+    "exampleSentenceEs": "El jubilado es viejo."
   },
   {
     "id": "c2ljaCUyMGZyZXVlbg__",
-    "word": "sich freuen"
+    "word": "sich freuen",
+    "exampleSentenceDe": "Ich freue mich auf den Urlaub.",
+    "exampleSentenceEs": "Yo me alegro de las vacaciones."
   },
   {
     "id": "ZGFzJTIwR2VmJUMzJUJDaGw_",
-    "word": "das Gefühl"
+    "word": "das Gefühl",
+    "exampleSentenceDe": "Ich habe das Gefühl.",
+    "exampleSentenceEs": "Tengo el sentimiento."
   },
   {
     "id": "ZGFzJTIwSGF1cw__",
-    "word": "das Haus"
+    "word": "das Haus",
+    "exampleSentenceDe": "Das Haus ist groß.",
+    "exampleSentenceEs": "La casa es grande."
   },
   {
     "id": "ZGllJTIwV29obnVuZw__",
-    "word": "die Wohnung"
+    "word": "die Wohnung",
+    "exampleSentenceDe": "Ich habe eine Wohnung. Die Wohnung ist groß.",
+    "exampleSentenceEs": "Tengo un apartamento. El apartamento es grande."
   },
   {
     "id": "ZGFzJTIwSG9jaGhhdXM_",
-    "word": "das Hochhaus"
+    "word": "das Hochhaus",
+    "exampleSentenceDe": "Das Hochhaus ist groß.",
+    "exampleSentenceEs": "El edificio de gran altura es grande."
   },
   {
     "id": "ZGllJTIwVHJlcHBl",
-    "word": "die Treppe"
+    "word": "die Treppe",
+    "exampleSentenceDe": "Die Treppe ist hoch.",
+    "exampleSentenceEs": "La escalera es alta."
   },
   {
     "id": "ZGVyJTIwQXVmenVnJTIwJTJGJTIwTGlmdA__",
-    "word": "der Aufzug / Lift"
+    "word": "der Aufzug / Lift",
+    "exampleSentenceDe": "Der Aufzug ist neu.",
+    "exampleSentenceEs": "El ascensor es nuevo."
   },
   {
     "id": "ZGVyJTIwU3RvY2s_",
-    "word": "der Stock"
+    "word": "der Stock",
+    "exampleSentenceDe": "Ich wohne in dem ersten Stock.",
+    "exampleSentenceEs": "Vivo en el primer piso."
   },
   {
     "id": "ZGFzJTIwRXJkZ2VzY2hvc3M_",
-    "word": "das Erdgeschoss"
+    "word": "das Erdgeschoss",
+    "exampleSentenceDe": "Die Wohnung ist im Erdgeschoss.",
+    "exampleSentenceEs": "El apartamento está en la planta baja."
   },
   {
     "id": "ZGllJTIwTWlldGU_",
-    "word": "die Miete"
+    "word": "die Miete",
+    "exampleSentenceDe": "Die Miete ist teuer.",
+    "exampleSentenceEs": "El alquiler es caro."
   },
   {
     "id": "ZGllJTIwTmViZW5rb3N0ZW4_",
-    "word": "die Nebenkosten"
+    "word": "die Nebenkosten",
+    "exampleSentenceDe": "Ich zahle die Nebenkosten im Monat.",
+    "exampleSentenceEs": "Yo pago los gastos adicionales al mes."
   },
   {
     "id": "ZGllJTIwSGVpemtvc3Rlbg__",
-    "word": "die Heizkosten"
+    "word": "die Heizkosten",
+    "exampleSentenceDe": "Die Heizkosten sind hoch.",
+    "exampleSentenceEs": "Los gastos de calefacción son altos."
   },
   {
     "id": "ZGVyJTIwTWlldGVyJTIwJTJGJTIwVmVybWlldGVy",
-    "word": "der Mieter / Vermieter"
+    "word": "der Mieter / Vermieter",
+    "exampleSentenceDe": "Ich bin der Mieter. Mein Vermieter wohnt in Berlin.",
+    "exampleSentenceEs": "Yo soy el inquilino. Mi arrendador vive en Berlín."
   },
   {
     "id": "bWlldGVuJTIwJTJGJTIwdmVybWlldGVu",
-    "word": "mieten / vermieten"
+    "word": "mieten / vermieten",
+    "exampleSentenceDe": "Ich miete eine Wohnung.",
+    "exampleSentenceEs": "Yo alquilo un apartamento."
   },
   {
     "id": "dW16aWVoZW4_",
-    "word": "umziehen"
+    "word": "umziehen",
+    "exampleSentenceDe": "Ich ziehe in eine neue Wohnung um.",
+    "exampleSentenceEs": "Me mudo a un apartamento nuevo."
   },
   {
     "id": "ZWluemllaGVuJTIwJTJGJTIwYXVzemllaGVu",
-    "word": "einziehen / ausziehen"
+    "word": "einziehen / ausziehen",
+    "exampleSentenceDe": "Ich ziehe in eine neue Wohnung ein.",
+    "exampleSentenceEs": "Me mudo a un apartamento nuevo."
   },
   {
     "id": "ZGVyJTIwVW16dWc_",
-    "word": "der Umzug"
+    "word": "der Umzug",
+    "exampleSentenceDe": "Der Umzug ist morgen.",
+    "exampleSentenceEs": "La mudanza es mañana."
   },
   {
     "id": "ZGllJTIwQW56ZWlnZQ__",
-    "word": "die Anzeige"
+    "word": "die Anzeige",
+    "exampleSentenceDe": "Ich sehe die Anzeige.",
+    "exampleSentenceEs": "Yo veo el anuncio."
   },
   {
     "id": "YmVzaWNodGlnZW4_",
-    "word": "besichtigen"
+    "word": "besichtigen",
+    "exampleSentenceDe": "Wir besichtigen das Schloss am Samstag.",
+    "exampleSentenceEs": "Visitamos el castillo el sábado."
   },
   {
     "id": "ZGVyJTIwU2NobCVDMyVCQ3NzZWw_",
-    "word": "der Schlüssel"
+    "word": "der Schlüssel",
+    "exampleSentenceDe": "Ich habe den Schlüssel. Der Schlüssel ist hier.",
+    "exampleSentenceEs": "Tengo la llave. La llave está aquí."
   },
   {
     "id": "ZGFzJTIwWmltbWVy",
-    "word": "das Zimmer"
+    "word": "das Zimmer",
+    "exampleSentenceDe": "Das Zimmer ist groß.",
+    "exampleSentenceEs": "La habitación es grande."
   },
   {
     "id": "ZGllJTIwSyVDMyVCQ2NoZQ__",
-    "word": "die Küche"
+    "word": "die Küche",
+    "exampleSentenceDe": "Ich bin in der Küche.",
+    "exampleSentenceEs": "Yo estoy en la cocina."
   },
   {
     "id": "ZGFzJTIwQmFk",
-    "word": "das Bad"
+    "word": "das Bad",
+    "exampleSentenceDe": "Das Bad ist sauber.",
+    "exampleSentenceEs": "El baño está limpio."
   },
   {
     "id": "ZGFzJTIwU2NobGFmemltbWVy",
-    "word": "das Schlafzimmer"
+    "word": "das Schlafzimmer",
+    "exampleSentenceDe": "Das Schlafzimmer ist groß.",
+    "exampleSentenceEs": "El dormitorio es grande."
   },
   {
     "id": "ZGFzJTIwV29obnppbW1lcg__",
-    "word": "das Wohnzimmer"
+    "word": "das Wohnzimmer",
+    "exampleSentenceDe": "Das ist das Wohnzimmer. Das Wohnzimmer ist groß.",
+    "exampleSentenceEs": "Esta es la sala de estar. La sala de estar es grande."
   },
   {
     "id": "ZGFzJTIwS2luZGVyemltbWVy",
-    "word": "das Kinderzimmer"
+    "word": "das Kinderzimmer",
+    "exampleSentenceDe": "Das ist das Kinderzimmer.",
+    "exampleSentenceEs": "Este es el cuarto de niños."
   },
   {
     "id": "ZGVyJTIwRmx1cg__",
-    "word": "der Flur"
+    "word": "der Flur",
+    "exampleSentenceDe": "Ich bin im Flur.",
+    "exampleSentenceEs": "Yo estoy en el pasillo."
   },
   {
     "id": "ZGVyJTIwQmFsa29u",
-    "word": "der Balkon"
+    "word": "der Balkon",
+    "exampleSentenceDe": "Ich habe einen Balkon. Der Balkon ist groß.",
+    "exampleSentenceEs": "Tengo un balcón. El balcón es grande."
   },
   {
     "id": "ZGllJTIwVGVycmFzc2U_",
-    "word": "die Terrasse"
+    "word": "die Terrasse",
+    "exampleSentenceDe": "Die Terrasse ist groß.",
+    "exampleSentenceEs": "La terraza es grande."
   },
   {
     "id": "ZGVyJTIwR2FydGVu",
-    "word": "der Garten"
+    "word": "der Garten",
+    "exampleSentenceDe": "Ich habe einen Garten. Der Garten ist schön.",
+    "exampleSentenceEs": "Tengo un jardín. El jardín es bonito."
   },
   {
     "id": "ZGllJTIwR2FyYWdl",
-    "word": "die Garage"
+    "word": "die Garage",
+    "exampleSentenceDe": "Ich habe eine Garage. Die Garage ist groß.",
+    "exampleSentenceEs": "Tengo un garaje. El garaje es grande."
   },
   {
     "id": "ZGVyJTIwS2VsbGVy",
-    "word": "der Keller"
+    "word": "der Keller",
+    "exampleSentenceDe": "Der Keller ist unter dem Haus.",
+    "exampleSentenceEs": "El sótano está debajo de la casa."
   },
   {
     "id": "ZGFzJTIwTGljaHQ_",
-    "word": "das Licht"
+    "word": "das Licht",
+    "exampleSentenceDe": "Das Licht ist an.",
+    "exampleSentenceEs": "La luz está encendida."
   },
   {
     "id": "YW5tYWNoZW4lMjAlMkYlMjBhdXNtYWNoZW4_",
-    "word": "anmachen / ausmachen"
+    "word": "anmachen / ausmachen",
+    "exampleSentenceDe": "Ich mache das Licht an.",
+    "exampleSentenceEs": "Yo enciendo la luz."
   },
   {
     "id": "JUMzJUI2ZmZuZW4lMjAlMkYlMjBzY2hsaWUlQzMlOUZlbg__",
-    "word": "öffnen / schließen"
+    "word": "öffnen / schließen",
+    "exampleSentenceDe": "Ich öffne die Tür.",
+    "exampleSentenceEs": "Yo abro la puerta."
   },
   {
     "id": "YXVmbWFjaGVuJTIwJTJGJTIwenVtYWNoZW4_",
-    "word": "aufmachen / zumachen"
+    "word": "aufmachen / zumachen",
+    "exampleSentenceDe": "Ich mache die Tür auf.",
+    "exampleSentenceEs": "Yo abro la puerta."
   },
   {
     "id": "cHV0emVuJTIwJTJGJTIwcmVpbmlnZW4_",
-    "word": "putzen / reinigen"
+    "word": "putzen / reinigen",
+    "exampleSentenceDe": "Ich putze das Zimmer.",
+    "exampleSentenceEs": "Yo limpio la habitación."
   },
   {
     "id": "a2FwdXR0",
-    "word": "kaputt"
+    "word": "kaputt",
+    "exampleSentenceDe": "Mein Handy ist kaputt.",
+    "exampleSentenceEs": "Mi teléfono está roto."
   },
   {
     "id": "cmVwYXJpZXJlbg__",
-    "word": "reparieren"
+    "word": "reparieren",
+    "exampleSentenceDe": "Ich kann das Fahrrad reparieren.",
+    "exampleSentenceEs": "Yo puedo reparar la bicicleta."
   },
   {
     "id": "ZGFzJTIwTSVDMyVCNmJlbHN0JUMzJUJDY2s_",
-    "word": "das Möbelstück"
+    "word": "das Möbelstück",
+    "exampleSentenceDe": "Das Möbelstück ist neu.",
+    "exampleSentenceEs": "El mueble es nuevo."
   },
   {
     "id": "ZGVyJTIwVGlzY2g_",
-    "word": "der Tisch"
+    "word": "der Tisch",
+    "exampleSentenceDe": "Das ist der Tisch.",
+    "exampleSentenceEs": "Esta es la mesa."
   },
   {
     "id": "ZGVyJTIwU3R1aGw_",
-    "word": "der Stuhl"
+    "word": "der Stuhl",
+    "exampleSentenceDe": "Der Stuhl ist neu.",
+    "exampleSentenceEs": "La silla es nueva."
   },
   {
     "id": "ZGVyJTIwU2NocmFuaw__",
-    "word": "der Schrank"
+    "word": "der Schrank",
+    "exampleSentenceDe": "Das ist der Schrank. Der Schrank ist groß.",
+    "exampleSentenceEs": "Este es el armario. El armario es grande."
   },
   {
     "id": "ZGFzJTIwQmV0dA__",
-    "word": "das Bett"
+    "word": "das Bett",
+    "exampleSentenceDe": "Das Bett ist groß.",
+    "exampleSentenceEs": "La cama es grande."
   },
   {
     "id": "ZGVyJTIwU3BpZWdlbA__",
-    "word": "der Spiegel"
+    "word": "der Spiegel",
+    "exampleSentenceDe": "Ich sehe mich im Spiegel.",
+    "exampleSentenceEs": "Me veo en el espejo."
   },
   {
     "id": "ZGVyJTIwVGVwcGljaA__",
-    "word": "der Teppich"
+    "word": "der Teppich",
+    "exampleSentenceDe": "Der Teppich ist groß.",
+    "exampleSentenceEs": "La alfombra es grande."
   },
   {
     "id": "Z2VtJUMzJUJDdGxpY2g_",
-    "word": "gemütlich"
+    "word": "gemütlich",
+    "exampleSentenceDe": "Das Zimmer ist gemütlich.",
+    "exampleSentenceEs": "La habitación es acogedora."
   },
   {
     "id": "ZGllJTIwRnJlaXplaXQ_",
-    "word": "die Freizeit"
+    "word": "die Freizeit",
+    "exampleSentenceDe": "Ich habe Freizeit am Wochenende.",
+    "exampleSentenceEs": "Tengo tiempo libre el fin de semana."
   },
   {
     "id": "ZGFzJTIwSG9iYnk_",
-    "word": "das Hobby"
+    "word": "das Hobby",
+    "exampleSentenceDe": "Mein Hobby ist lesen.",
+    "exampleSentenceEs": "Mi pasatiempo es leer."
   },
   {
     "id": "c3BpZWxlbg__",
-    "word": "spielen"
+    "word": "spielen",
+    "exampleSentenceDe": "Ich spiele gern.",
+    "exampleSentenceEs": "Me gusta jugar."
   },
   {
     "id": "RnUlQzMlOUZiYWxsJTIwc3BpZWxlbg__",
-    "word": "Fußball spielen"
+    "word": "Fußball spielen",
+    "exampleSentenceDe": "Ich spiele gern Fußball.",
+    "exampleSentenceEs": "Me gusta jugar al fútbol."
   },
   {
     "id": "ZGVyJTIwQmFsbA__",
-    "word": "der Ball"
+    "word": "der Ball",
+    "exampleSentenceDe": "Ich habe einen Ball. Der Ball ist rot.",
+    "exampleSentenceEs": "Tengo un balón. El balón es rojo."
   },
   {
     "id": "S2FydGVuJTIwc3BpZWxlbg__",
-    "word": "Karten spielen"
+    "word": "Karten spielen",
+    "exampleSentenceDe": "Wir spielen Karten am Abend.",
+    "exampleSentenceEs": "Jugamos a las cartas por la noche."
   },
   {
     "id": "TXVzaWslMjBoJUMzJUI2cmVu",
-    "word": "Musik hören"
+    "word": "Musik hören",
+    "exampleSentenceDe": "Ich höre gern Musik.",
+    "exampleSentenceEs": "Me gusta escuchar música."
   },
   {
     "id": "ZGllJTIwQ0Q_",
-    "word": "die CD"
+    "word": "die CD",
+    "exampleSentenceDe": "Ich habe die CD. Die CD ist neu.",
+    "exampleSentenceEs": "Tengo el CD. El CD es nuevo."
   },
   {
     "id": "d2FuZGVybg__",
-    "word": "wandern"
+    "word": "wandern",
+    "exampleSentenceDe": "Ich gehe im Park wandern.",
+    "exampleSentenceEs": "Yo voy a hacer senderismo en el parque."
   },
   {
     "id": "c2Nod2ltbWVu",
-    "word": "schwimmen"
+    "word": "schwimmen",
+    "exampleSentenceDe": "Ich kann schwimmen.",
+    "exampleSentenceEs": "Yo puedo nadar."
   },
   {
     "id": "bGVzZW4_",
-    "word": "lesen"
+    "word": "lesen",
+    "exampleSentenceDe": "Ich lese ein Buch.",
+    "exampleSentenceEs": "Yo leo un libro."
   },
   {
     "id": "ZGFzJTIwQnVjaA__",
-    "word": "das Buch"
+    "word": "das Buch",
+    "exampleSentenceDe": "Das ist ein Buch. Das Buch ist neu.",
+    "exampleSentenceEs": "Este es un libro. El libro es nuevo."
   },
   {
     "id": "ZGllJTIwWmVpdHVuZw__",
-    "word": "die Zeitung"
+    "word": "die Zeitung",
+    "exampleSentenceDe": "Ich lese die Zeitung.",
+    "exampleSentenceEs": "Yo leo el periódico."
   },
   {
     "id": "ZmVybnNlaGVu",
-    "word": "fernsehen"
+    "word": "fernsehen",
+    "exampleSentenceDe": "Ich sehe am Abend fern.",
+    "exampleSentenceEs": "Yo veo la televisión por la noche."
   },
   {
     "id": "dGFuemVu",
-    "word": "tanzen"
+    "word": "tanzen",
+    "exampleSentenceDe": "Ich tanze gern.",
+    "exampleSentenceEs": "Me gusta bailar."
   },
   {
     "id": "ZGVyJTIwQ29tcHV0ZXI_",
-    "word": "der Computer"
+    "word": "der Computer",
+    "exampleSentenceDe": "Ich habe einen Computer. Der Computer ist neu.",
+    "exampleSentenceEs": "Tengo un computador. El computador es nuevo."
   },
   {
     "id": "ZGVyJTIwU3BvcnQ_",
-    "word": "der Sport"
+    "word": "der Sport",
+    "exampleSentenceDe": "Ich mag der Sport.",
+    "exampleSentenceEs": "Me gusta el deporte."
   },
   {
     "id": "aW5zJTIwS2lubyUyMGdlaGVu",
-    "word": "ins Kino gehen"
+    "word": "ins Kino gehen",
+    "exampleSentenceDe": "Ich gehe ins Kino.",
+    "exampleSentenceEs": "Yo voy al cine."
   },
   {
     "id": "ZWluZW4lMjBGaWxtJTIwc2VoZW4_",
-    "word": "einen Film sehen"
+    "word": "einen Film sehen",
+    "exampleSentenceDe": "Ich sehe einen Film.",
+    "exampleSentenceEs": "Yo veo una película."
   },
   {
     "id": "UmFkJTIwZmFocmVu",
-    "word": "Rad fahren"
+    "word": "Rad fahren",
+    "exampleSentenceDe": "Ich kann Rad fahren.",
+    "exampleSentenceEs": "Yo sé montar bicicleta."
   },
   {
     "id": "c3BhemllcmVuJTIwZ2VoZW4_",
-    "word": "spazieren gehen"
+    "word": "spazieren gehen",
+    "exampleSentenceDe": "Wir gehen spazieren im Park.",
+    "exampleSentenceEs": "Paseamos en el parque."
   },
   {
     "id": "aW4lMjBkaWUlMjBEaXNjbyUyMGdlaGVu",
-    "word": "in die Disco gehen"
+    "word": "in die Disco gehen",
+    "exampleSentenceDe": "Ich gehe in die Disco.",
+    "exampleSentenceEs": "Yo voy a la discoteca."
   },
   {
     "id": "ZGFzJTIwTXVzZXVt",
-    "word": "das Museum"
+    "word": "das Museum",
+    "exampleSentenceDe": "Das Museum ist groß.",
+    "exampleSentenceEs": "El museo es grande."
   },
   {
     "id": "ZGVyJTIwVmVyZWlu",
-    "word": "der Verein"
+    "word": "der Verein",
+    "exampleSentenceDe": "Ich bin in dem Verein.",
+    "exampleSentenceEs": "Yo estoy en el club."
   },
   {
     "id": "ZGFzJTIwU2Nod2ltbWJhZA__",
-    "word": "das Schwimmbad"
+    "word": "das Schwimmbad",
+    "exampleSentenceDe": "Wir gehen in das Schwimmbad.",
+    "exampleSentenceEs": "Vamos a la piscina."
   },
   {
     "id": "Z2VmYWxsZW4_",
-    "word": "gefallen"
+    "word": "gefallen",
+    "exampleSentenceDe": "Das Kleid gefällt mir.",
+    "exampleSentenceEs": "El vestido me gusta."
   },
   {
     "id": "c2NoJUMzJUI2bg__",
-    "word": "schön"
+    "word": "schön",
+    "exampleSentenceDe": "Das Wetter ist schön.",
+    "exampleSentenceEs": "El tiempo es bonito."
   },
   {
     "id": "bSVDMyVCNmdlbg__",
-    "word": "mögen"
+    "word": "mögen",
+    "exampleSentenceDe": "Ich mag Kaffee.",
+    "exampleSentenceEs": "Me gusta el café."
   },
   {
     "id": "c2ljaCUyMHRyZWZmZW4_",
-    "word": "sich treffen"
+    "word": "sich treffen",
+    "exampleSentenceDe": "Wir treffen uns heute Abend.",
+    "exampleSentenceEs": "Nos encontramos esta noche."
   },
   {
     "id": "ZGFzJTIwRXNzZW4lMjAlMkYlMjBlc3Nlbg__",
-    "word": "das Essen / essen"
+    "word": "das Essen / essen",
+    "exampleSentenceDe": "Ich esse das Essen.",
+    "exampleSentenceEs": "Yo como la comida."
   },
   {
     "id": "ZGFzJTIwRnIlQzMlQkNoc3QlQzMlQkNjaw__",
-    "word": "das Frühstück"
+    "word": "das Frühstück",
+    "exampleSentenceDe": "Ich esse das Frühstück.",
+    "exampleSentenceEs": "Yo como el desayuno."
   },
   {
     "id": "ZGFzJTIwTWl0dGFnZXNzZW4_",
-    "word": "das Mittagessen"
+    "word": "das Mittagessen",
+    "exampleSentenceDe": "Ich esse das Mittagessen um 13 Uhr.",
+    "exampleSentenceEs": "Yo como el almuerzo a las 13:00."
   },
   {
     "id": "enUlMjBNaXR0YWclMjBlc3Nlbg__",
-    "word": "zu Mittag essen"
+    "word": "zu Mittag essen",
+    "exampleSentenceDe": "Ich esse zu Mittag.",
+    "exampleSentenceEs": "Yo almuerzo."
   },
   {
     "id": "ZGFzJTIwQWJlbmRlc3Nlbg__",
-    "word": "das Abendessen"
+    "word": "das Abendessen",
+    "exampleSentenceDe": "Das Abendessen ist um 19 Uhr.",
+    "exampleSentenceEs": "La cena es a las 19:00."
   },
   {
     "id": "enUlMjBBYmVuZCUyMGVzc2Vu",
-    "word": "zu Abend essen"
+    "word": "zu Abend essen",
+    "exampleSentenceDe": "Ich esse zu Abend.",
+    "exampleSentenceEs": "Yo ceno."
   },
   {
     "id": "ZGVyJTIwSHVuZ2Vy",
-    "word": "der Hunger"
+    "word": "der Hunger",
+    "exampleSentenceDe": "Ich habe Hunger.",
+    "exampleSentenceEs": "Tengo hambre."
   },
   {
     "id": "ZGVyJTIwRHVyc3Q_",
-    "word": "der Durst"
+    "word": "der Durst",
+    "exampleSentenceDe": "Ich habe der Durst.",
+    "exampleSentenceEs": "Tengo sed."
   },
   {
     "id": "ZGFzJTIwTGViZW5zbWl0dGVs",
-    "word": "das Lebensmittel"
+    "word": "das Lebensmittel",
+    "exampleSentenceDe": "Das Lebensmittel ist gut.",
+    "exampleSentenceEs": "El alimento es bueno."
   },
   {
     "id": "ZGFzJTIwQnJvdA__",
-    "word": "das Brot"
+    "word": "das Brot",
+    "exampleSentenceDe": "Das Brot ist gut.",
+    "exampleSentenceEs": "El pan está bueno."
   },
   {
     "id": "ZGllJTIwQnV0dGVy",
-    "word": "die Butter"
+    "word": "die Butter",
+    "exampleSentenceDe": "Ich brauche die Butter.",
+    "exampleSentenceEs": "Yo necesito la mantequilla."
   },
   {
     "id": "ZGVyJTIwSyVDMyVBNHNl",
-    "word": "der Käse"
+    "word": "der Käse",
+    "exampleSentenceDe": "Das ist der Käse. Der Käse ist gut.",
+    "exampleSentenceEs": "Este es el queso. El queso es bueno."
   },
   {
     "id": "ZGFzJTIwRmxlaXNjaA__",
-    "word": "das Fleisch"
+    "word": "das Fleisch",
+    "exampleSentenceDe": "Ich esse das Fleisch.",
+    "exampleSentenceEs": "Yo como la carne."
   },
   {
     "id": "ZGVyJTIwRmlzY2g_",
-    "word": "der Fisch"
+    "word": "der Fisch",
+    "exampleSentenceDe": "Der Fisch ist gut.",
+    "exampleSentenceEs": "El pescado está bueno."
   },
   {
     "id": "ZGllJTIwS2FydG9mZmVs",
-    "word": "die Kartoffel"
+    "word": "die Kartoffel",
+    "exampleSentenceDe": "Ich esse die Kartoffel.",
+    "exampleSentenceEs": "Yo como la papa."
   },
   {
     "id": "ZGVyJTIwUmVpcw__",
-    "word": "der Reis"
+    "word": "der Reis",
+    "exampleSentenceDe": "Der Reis ist gut.",
+    "exampleSentenceEs": "El arroz está bueno."
   },
   {
     "id": "ZGllJTIwU3VwcGU_",
-    "word": "die Suppe"
+    "word": "die Suppe",
+    "exampleSentenceDe": "Ich esse die Suppe.",
+    "exampleSentenceEs": "Yo como la sopa."
   },
   {
     "id": "ZGFzJTIwR2VtJUMzJUJDc2U_",
-    "word": "das Gemüse"
+    "word": "das Gemüse",
+    "exampleSentenceDe": "Das Gemüse ist gut.",
+    "exampleSentenceEs": "La verdura es buena."
   },
   {
     "id": "ZGFzJTIwT2JzdA__",
-    "word": "das Obst"
+    "word": "das Obst",
+    "exampleSentenceDe": "Ich esse das Obst. Das Obst ist gut.",
+    "exampleSentenceEs": "Yo como la fruta. La fruta es buena."
   },
   {
     "id": "ZGllJTIwVG9tYXRl",
-    "word": "die Tomate"
+    "word": "die Tomate",
+    "exampleSentenceDe": "Die Tomate ist rot.",
+    "exampleSentenceEs": "El tomate es rojo."
   },
   {
     "id": "ZGVyJTIwQXBmZWw_",
-    "word": "der Apfel"
+    "word": "der Apfel",
+    "exampleSentenceDe": "Ich esse den Apfel.",
+    "exampleSentenceEs": "Yo como la manzana."
   },
   {
     "id": "ZGllJTIwT3Jhbmdl",
-    "word": "die Orange"
+    "word": "die Orange",
+    "exampleSentenceDe": "Das ist eine Orange. Die Orange ist rot.",
+    "exampleSentenceEs": "Esto es una naranja. La naranja es roja."
   },
   {
     "id": "ZGVyJTIwS3VjaGVu",
-    "word": "der Kuchen"
+    "word": "der Kuchen",
+    "exampleSentenceDe": "Ich mag der Kuchen.",
+    "exampleSentenceEs": "Me gusta el pastel."
   },
   {
     "id": "ZGFzJTIwR2V0ciVDMyVBNG5r",
-    "word": "das Getränk"
+    "word": "das Getränk",
+    "exampleSentenceDe": "Ich möchte das Getränk.",
+    "exampleSentenceEs": "Yo quiero la bebida."
   },
   {
     "id": "ZGFzJTIwV2Fzc2Vy",
-    "word": "das Wasser"
+    "word": "das Wasser",
+    "exampleSentenceDe": "Das Wasser ist kalt.",
+    "exampleSentenceEs": "El agua está fría."
   },
   {
     "id": "ZGVyJTIwS2FmZmVl",
-    "word": "der Kaffee"
+    "word": "der Kaffee",
+    "exampleSentenceDe": "Ich trinke gern den Kaffee.",
+    "exampleSentenceEs": "Me gusta beber el café."
   },
   {
     "id": "ZGVyJTIwVGVl",
-    "word": "der Tee"
+    "word": "der Tee",
+    "exampleSentenceDe": "Ich trinke den Tee am Morgen.",
+    "exampleSentenceEs": "Bebo el té por la mañana."
   },
   {
     "id": "ZGllJTIwTWlsY2g_",
-    "word": "die Milch"
+    "word": "die Milch",
+    "exampleSentenceDe": "Ich habe die Milch. Die Milch ist kalt.",
+    "exampleSentenceEs": "Tengo la leche. La leche está fría."
   },
   {
     "id": "ZGFzJTIwQmllcg__",
-    "word": "das Bier"
+    "word": "das Bier",
+    "exampleSentenceDe": "Ich mag das Bier.",
+    "exampleSentenceEs": "Me gusta la cerveza."
   },
   {
     "id": "ZGVyJTIwV2Vpbg__",
-    "word": "der Wein"
+    "word": "der Wein",
+    "exampleSentenceDe": "Der Wein ist rot.",
+    "exampleSentenceEs": "El vino es tinto."
   },
   {
     "id": "ZGVyJTIwVGVsbGVy",
-    "word": "der Teller"
+    "word": "der Teller",
+    "exampleSentenceDe": "Der Teller ist groß.",
+    "exampleSentenceEs": "El plato es grande."
   },
   {
     "id": "ZGllJTIwVGFzc2U_",
-    "word": "die Tasse"
+    "word": "die Tasse",
+    "exampleSentenceDe": "Ich habe eine Tasse. Die Tasse ist klein.",
+    "exampleSentenceEs": "Tengo una taza. La taza es pequeña."
   },
   {
     "id": "ZGFzJTIwTWVzc2Vy",
-    "word": "das Messer"
+    "word": "das Messer",
+    "exampleSentenceDe": "Das Messer ist neu.",
+    "exampleSentenceEs": "El cuchillo es nuevo."
   },
   {
     "id": "ZGllJTIwR2FiZWw_",
-    "word": "die Gabel"
+    "word": "die Gabel",
+    "exampleSentenceDe": "Ich habe die Gabel. Die Gabel ist auf dem Tisch.",
+    "exampleSentenceEs": "Tengo el tenedor. El tenedor está sobre la mesa."
   },
   {
     "id": "ZGVyJTIwTCVDMyVCNmZmZWw_",
-    "word": "der Löffel"
+    "word": "der Löffel",
+    "exampleSentenceDe": "Ich habe einen Löffel. Der Löffel ist klein.",
+    "exampleSentenceEs": "Tengo una cuchara. La cuchara es pequeña."
   },
   {
     "id": "ZGllJTIwRmxhc2NoZQ__",
-    "word": "die Flasche"
+    "word": "die Flasche",
+    "exampleSentenceDe": "Ich habe eine Flasche Wasser.",
+    "exampleSentenceEs": "Tengo una botella de agua."
   },
   {
     "id": "dHJpbmtlbiUyMCUyRiUyMGtvY2hlbg__",
-    "word": "trinken / kochen"
+    "word": "trinken / kochen",
+    "exampleSentenceDe": "Ich trinke Kaffee am Morgen.",
+    "exampleSentenceEs": "Yo bebo café por la mañana."
   },
   {
     "id": "c2NobWVja2Vu",
-    "word": "schmecken"
+    "word": "schmecken",
+    "exampleSentenceDe": "Das Essen schmeckt gut.",
+    "exampleSentenceEs": "La comida sabe bien."
   },
   {
     "id": "SWNoJTIwbSVDMyVCNmNodGU_",
-    "word": "Ich möchte"
+    "word": "Ich möchte",
+    "exampleSentenceDe": "Ich möchte Wasser.",
+    "exampleSentenceEs": "Me gustaría agua."
   },
   {
     "id": "V2FzJTIwbSVDMyVCNmNodGVuJTIwU2llJTNG",
-    "word": "Was möchten Sie?"
+    "word": "Was möchten Sie?",
+    "exampleSentenceDe": "Hallo! Was möchten Sie?",
+    "exampleSentenceEs": "¡Hola! ¿Qué le gustaría?"
   },
   {
     "id": "SWNoJTIwaCVDMyVBNHR0ZSUyMGdlcm4_",
-    "word": "Ich hätte gern"
+    "word": "Ich hätte gern",
+    "exampleSentenceDe": "Ich hätte gern einen Kaffee.",
+    "exampleSentenceEs": "Quisiera un café."
   },
   {
     "id": "bmVobWVu",
-    "word": "nehmen"
+    "word": "nehmen",
+    "exampleSentenceDe": "Ich nehme einen Kaffee.",
+    "exampleSentenceEs": "Yo tomo un café."
   },
   {
     "id": "ZGFzJTIwUmVzdGF1cmFudA__",
-    "word": "das Restaurant"
+    "word": "das Restaurant",
+    "exampleSentenceDe": "Das Restaurant ist neu.",
+    "exampleSentenceEs": "El restaurante es nuevo."
   },
   {
     "id": "ZGllJTIwU3BlaXNla2FydGU_",
-    "word": "die Speisekarte"
+    "word": "die Speisekarte",
+    "exampleSentenceDe": "Entschuldigung, die Speisekarte, bitte.",
+    "exampleSentenceEs": "Disculpe, el menú, por favor."
   },
   {
     "id": "YmVzdGVsbGVu",
-    "word": "bestellen"
+    "word": "bestellen",
+    "exampleSentenceDe": "Ich bestelle Pizza.",
+    "exampleSentenceEs": "Yo pido pizza."
   },
   {
     "id": "R3V0ZW4lMjBBcHBldGl0",
-    "word": "Guten Appetit"
+    "word": "Guten Appetit",
+    "exampleSentenceDe": "Guten Appetit!",
+    "exampleSentenceEs": "¡Buen provecho!"
   },
   {
     "id": "ZGllJTIwUmVjaG51bmc_",
-    "word": "die Rechnung"
+    "word": "die Rechnung",
+    "exampleSentenceDe": "Ich brauche die Rechnung bitte.",
+    "exampleSentenceEs": "Necesito la cuenta por favor."
   },
   {
     "id": "YmV6YWhsZW4_",
-    "word": "bezahlen"
+    "word": "bezahlen",
+    "exampleSentenceDe": "Ich bezahle die Rechnung.",
+    "exampleSentenceEs": "Yo pago la cuenta."
   },
   {
     "id": "Z2V0cmVubnQlMjAlMkYlMjB6dXNhbW1lbg__",
-    "word": "getrennt / zusammen"
+    "word": "getrennt / zusammen",
+    "exampleSentenceDe": "Wir wohnen zusammen.",
+    "exampleSentenceEs": "Vivimos juntos."
   },
   {
     "id": "U3RpbW10JTIwc28_",
-    "word": "Stimmt so"
+    "word": "Stimmt so",
+    "exampleSentenceDe": "Stimmt so, danke.",
+    "exampleSentenceEs": "Así está bien, gracias."
   },
   {
     "id": "ZGFzJTIwR2VyaWNodA__",
-    "word": "das Gericht"
+    "word": "das Gericht",
+    "exampleSentenceDe": "Das Gericht ist lecker.",
+    "exampleSentenceEs": "El plato preparado está rico."
   },
   {
     "id": "ZGVyJTIwVG9wZiUyMCUyRiUyMGRpZSUyMFBmYW5uZQ__",
-    "word": "der Topf / die Pfanne"
+    "word": "der Topf / die Pfanne",
+    "exampleSentenceDe": "Ich habe einen Topf. Der Topf ist neu.",
+    "exampleSentenceEs": "Tengo una olla. La olla es nueva."
   },
   {
     "id": "cHJvYmllcmVu",
-    "word": "probieren"
+    "word": "probieren",
+    "exampleSentenceDe": "Ich möchte das Brot probieren.",
+    "exampleSentenceEs": "Quiero probar el pan."
   },
   {
     "id": "c2NoYXJmJTIwJTJGJTIwcyVDMyVCQyVDMyU5Rg__",
-    "word": "scharf / süß"
+    "word": "scharf / süß",
+    "exampleSentenceDe": "Das Essen ist scharf. Die Süßigkeit ist süß.",
+    "exampleSentenceEs": "La comida es picante. El dulce es dulce."
   },
   {
     "id": "c2F0dCUyMHNlaW4_",
-    "word": "satt sein"
+    "word": "satt sein",
+    "exampleSentenceDe": "Ich bin satt.",
+    "exampleSentenceEs": "Yo estoy lleno."
   },
   {
     "id": "ZGFzJTIwR2VzY2glQzMlQTRmdA__",
-    "word": "das Geschäft"
+    "word": "das Geschäft",
+    "exampleSentenceDe": "Das Geschäft ist klein.",
+    "exampleSentenceEs": "La tienda es pequeña."
   },
   {
     "id": "ZGVyJTIwTGFkZW4_",
-    "word": "der Laden"
+    "word": "der Laden",
+    "exampleSentenceDe": "Ich gehe in den Laden.",
+    "exampleSentenceEs": "Voy a la tienda."
   },
   {
     "id": "ZGllJTIwQiVDMyVBNGNrZXJlaQ__",
-    "word": "die Bäckerei"
+    "word": "die Bäckerei",
+    "exampleSentenceDe": "Ich gehe zur Bäckerei.",
+    "exampleSentenceEs": "Voy a la panadería."
   },
   {
     "id": "ZGVyJTIwU3VwZXJtYXJrdA__",
-    "word": "der Supermarkt"
+    "word": "der Supermarkt",
+    "exampleSentenceDe": "Ich gehe in den Supermarkt.",
+    "exampleSentenceEs": "Voy al supermercado."
   },
   {
     "id": "Z2UlQzMlQjZmZm5ldA__",
-    "word": "geöffnet"
+    "word": "geöffnet",
+    "exampleSentenceDe": "Das Geschäft ist geöffnet.",
+    "exampleSentenceEs": "La tienda está abierta."
   },
   {
     "id": "ZGFzJTIwQW5nZWJvdA__",
-    "word": "das Angebot"
+    "word": "das Angebot",
+    "exampleSentenceDe": "Das ist ein gutes Angebot.",
+    "exampleSentenceEs": "Esta es una buena oferta."
   },
   {
     "id": "ZyVDMyVCQ25zdGln",
-    "word": "günstig"
+    "word": "günstig",
+    "exampleSentenceDe": "Das Hotel ist günstig.",
+    "exampleSentenceEs": "El hotel es económico."
   },
   {
     "id": "YmlsbGln",
-    "word": "billig"
+    "word": "billig",
+    "exampleSentenceDe": "Das Brot ist billig.",
+    "exampleSentenceEs": "El pan es barato."
   },
   {
     "id": "dGV1ZXI_",
-    "word": "teuer"
+    "word": "teuer",
+    "exampleSentenceDe": "Das ist teuer.",
+    "exampleSentenceEs": "Esto es caro."
   },
   {
     "id": "YnJhdWNoZW4_",
-    "word": "brauchen"
+    "word": "brauchen",
+    "exampleSentenceDe": "Ich brauche Wasser.",
+    "exampleSentenceEs": "Yo necesito agua."
   },
   {
     "id": "ZGFzJTIwS2lsbw__",
-    "word": "das Kilo"
+    "word": "das Kilo",
+    "exampleSentenceDe": "Ich kaufe ein Kilo Äpfel.",
+    "exampleSentenceEs": "Compro un kilo de manzanas."
   },
   {
     "id": "ZGFzJTIwUGZ1bmQ_",
-    "word": "das Pfund"
+    "word": "das Pfund",
+    "exampleSentenceDe": "Ich kaufe ein Pfund Brot.",
+    "exampleSentenceEs": "Compro una libra de pan."
   },
   {
     "id": "ZGFzJTIwR3JhbW0_",
-    "word": "das Gramm"
+    "word": "das Gramm",
+    "exampleSentenceDe": "Ich brauche das Gramm Zucker.",
+    "exampleSentenceEs": "Necesito el gramo de azúcar."
   },
   {
     "id": "a29zdGVu",
-    "word": "kosten"
+    "word": "kosten",
+    "exampleSentenceDe": "Was kostet das Brot?",
+    "exampleSentenceEs": "¿Cuánto cuesta el pan?"
   },
   {
     "id": "ZGVyJTIwUHJlaXM_",
-    "word": "der Preis"
+    "word": "der Preis",
+    "exampleSentenceDe": "Der Preis ist hoch.",
+    "exampleSentenceEs": "El precio es alto."
   },
   {
     "id": "ZGllJTIwS2Fzc2U_",
-    "word": "die Kasse"
+    "word": "die Kasse",
+    "exampleSentenceDe": "Wo ist die Kasse, bitte?",
+    "exampleSentenceEs": "¿Dónde está la caja, por favor?"
   },
   {
     "id": "ZGFzJTIwR2VsZA__",
-    "word": "das Geld"
+    "word": "das Geld",
+    "exampleSentenceDe": "Das ist das Geld.",
+    "exampleSentenceEs": "Este es el dinero."
   },
   {
     "id": "ZGVyJTIwVmVyayVDMyVBNHVmZXI_",
-    "word": "der Verkäufer"
+    "word": "der Verkäufer",
+    "exampleSentenceDe": "Der Verkäufer ist nett.",
+    "exampleSentenceEs": "El vendedor es simpático."
   },
   {
     "id": "ZGllJTIwJUMzJTlDYmVyd2Vpc3VuZw__",
-    "word": "die Überweisung"
+    "word": "die Überweisung",
+    "exampleSentenceDe": "Ich mache die Überweisung.",
+    "exampleSentenceEs": "Hago la transferencia."
   },
   {
     "id": "ZGFzJTIwV2VjaHNlbGdlbGQ_",
-    "word": "das Wechselgeld"
+    "word": "das Wechselgeld",
+    "exampleSentenceDe": "Ich brauche das Wechselgeld nicht.",
+    "exampleSentenceEs": "No necesito el cambio."
   },
   {
     "id": "dW10YXVzY2hlbg__",
-    "word": "umtauschen"
+    "word": "umtauschen",
+    "exampleSentenceDe": "Ich möchte das T-Shirt umtauschen.",
+    "exampleSentenceEs": "Yo quisiera cambiar la camiseta."
   },
   {
     "id": "ZGVyJTIwUmFiYXR0",
-    "word": "der Rabatt"
+    "word": "der Rabatt",
+    "exampleSentenceDe": "Ich sehe der Rabatt. Der Rabatt ist gut.",
+    "exampleSentenceEs": "Veo el descuento. El descuento es bueno."
   },
   {
     "id": "ZGllJTIwRmVyaWVu",
-    "word": "die Ferien"
+    "word": "die Ferien",
+    "exampleSentenceDe": "Die Ferien sind schön.",
+    "exampleSentenceEs": "Las vacaciones son bonitas."
   },
   {
     "id": "ZGVyJTIwVXJsYXVi",
-    "word": "der Urlaub"
+    "word": "der Urlaub",
+    "exampleSentenceDe": "Ich habe Urlaub.",
+    "exampleSentenceEs": "Tengo vacaciones."
   },
   {
     "id": "VXJsYXViJTIwbWFjaGVu",
-    "word": "Urlaub machen"
+    "word": "Urlaub machen",
+    "exampleSentenceDe": "Ich mache Urlaub in Spanien.",
+    "exampleSentenceEs": "Yo voy de vacaciones a España."
   },
   {
     "id": "ZXMlMjBnaWJ0",
-    "word": "es gibt"
+    "word": "es gibt",
+    "exampleSentenceDe": "Es gibt Kaffee.",
+    "exampleSentenceEs": "Hay café."
   },
   {
     "id": "Z2VzY2hsb3NzZW4_",
-    "word": "geschlossen"
+    "word": "geschlossen",
+    "exampleSentenceDe": "Das Geschäft ist geschlossen.",
+    "exampleSentenceEs": "La tienda está cerrada."
   },
   {
     "id": "dm9uJTIwLSUyMGJpcw__",
-    "word": "von - bis"
+    "word": "von - bis",
+    "exampleSentenceDe": "Ich arbeite von neun Uhr bis fünf Uhr.",
+    "exampleSentenceEs": "Yo trabajo de nueve en punto hasta las cinco en punto."
   },
   {
     "id": "ZGllJTIwS2FydGU_",
-    "word": "die Karte"
+    "word": "die Karte",
+    "exampleSentenceDe": "Ich habe die Karte. Die Karte ist groß.",
+    "exampleSentenceEs": "Tengo la tarjeta. La tarjeta es grande."
   },
   {
     "id": "ZGllJTIwRWludHJpdHRza2FydGU_",
-    "word": "die Eintrittskarte"
+    "word": "die Eintrittskarte",
+    "exampleSentenceDe": "Ich brauche die Eintrittskarte.",
+    "exampleSentenceEs": "Necesito el boleto de entrada."
   },
   {
     "id": "ZGFzJTIwVGlja2V0",
-    "word": "das Ticket"
+    "word": "das Ticket",
+    "exampleSentenceDe": "Ich brauche das Ticket.",
+    "exampleSentenceEs": "Necesito el ticket."
   },
   {
     "id": "a2F1ZmVu",
-    "word": "kaufen"
+    "word": "kaufen",
+    "exampleSentenceDe": "Ich kaufe ein Brot.",
+    "exampleSentenceEs": "Yo compro un pan."
   },
   {
     "id": "cmVzZXJ2aWVyZW4_",
-    "word": "reservieren"
+    "word": "reservieren",
+    "exampleSentenceDe": "Ich möchte einen Tisch reservieren.",
+    "exampleSentenceEs": "Me gustaría reservar una mesa."
   },
   {
     "id": "ZGVyJTIwV2Vn",
-    "word": "der Weg"
+    "word": "der Weg",
+    "exampleSentenceDe": "Der Weg ist frei.",
+    "exampleSentenceEs": "El camino está libre."
   },
   {
     "id": "Z2VyYWRlYXVz",
-    "word": "geradeaus"
+    "word": "geradeaus",
+    "exampleSentenceDe": "Gehen Sie geradeaus, bitte.",
+    "exampleSentenceEs": "Vaya recto, por favor."
   },
   {
     "id": "bGlua3MlMjAlMkYlMjByZWNodHM_",
-    "word": "links / rechts"
+    "word": "links / rechts",
+    "exampleSentenceDe": "Gehen Sie links.",
+    "exampleSentenceEs": "Vaya a la izquierda."
   },
   {
     "id": "ZGVyJTIwVW5mYWxs",
-    "word": "der Unfall"
+    "word": "der Unfall",
+    "exampleSentenceDe": "Ich sehe einen Unfall. Der Unfall ist groß.",
+    "exampleSentenceEs": "Yo veo un accidente. El accidente es grande."
   },
   {
     "id": "ZGllJTIwUG9saXplaQ__",
-    "word": "die Polizei"
+    "word": "die Polizei",
+    "exampleSentenceDe": "Die Polizei ist hier.",
+    "exampleSentenceEs": "La policía está aquí."
   },
   {
     "id": "dW1zdGVpZ2Vu",
-    "word": "umsteigen"
+    "word": "umsteigen",
+    "exampleSentenceDe": "Ich steige in den Bus um.",
+    "exampleSentenceEs": "Yo hago transbordo al autobús."
   },
   {
     "id": "ZGFzJTIwWmVsdA__",
-    "word": "das Zelt"
+    "word": "das Zelt",
+    "exampleSentenceDe": "Ich habe ein Zelt. Das Zelt ist groß.",
+    "exampleSentenceEs": "Tengo una tienda de campaña. La tienda de campaña es grande."
   },
   {
     "id": "emVsdGVu",
-    "word": "zelten"
+    "word": "zelten",
+    "exampleSentenceDe": "Wir zelten im Sommer.",
+    "exampleSentenceEs": "Acampamos en verano."
   },
   {
     "id": "ZGllJTIwUG9zdA__",
-    "word": "die Post"
+    "word": "die Post",
+    "exampleSentenceDe": "Ich brauche die Post.",
+    "exampleSentenceEs": "Yo necesito el correo."
   },
   {
     "id": "ZGVyJTIwQnJpZWY_",
-    "word": "der Brief"
+    "word": "der Brief",
+    "exampleSentenceDe": "Ich habe den Brief. Der Brief ist hier.",
+    "exampleSentenceEs": "Tengo la carta. La carta está aquí."
   },
   {
     "id": "ZGllJTIwUG9zdGthcnRl",
-    "word": "die Postkarte"
+    "word": "die Postkarte",
+    "exampleSentenceDe": "Ich kaufe die Postkarte im Supermarkt.",
+    "exampleSentenceEs": "Yo compro la postal en el supermercado."
   },
   {
     "id": "c2NoaWNrZW4_",
-    "word": "schicken"
+    "word": "schicken",
+    "exampleSentenceDe": "Ich schicke die E-Mail morgen.",
+    "exampleSentenceEs": "Yo envío el correo mañana."
   },
   {
     "id": "YmVrb21tZW4_",
-    "word": "bekommen"
+    "word": "bekommen",
+    "exampleSentenceDe": "Ich bekomme ein Geschenk.",
+    "exampleSentenceEs": "Yo recibo un regalo."
   },
   {
     "id": "YWJob2xlbg__",
-    "word": "abholen"
+    "word": "abholen",
+    "exampleSentenceDe": "Ich hole dich am Bahnhof ab.",
+    "exampleSentenceEs": "Te recojo en la estación de tren."
   },
   {
     "id": "ZGllJTIwQnJpZWZtYXJrZQ__",
-    "word": "die Briefmarke"
+    "word": "die Briefmarke",
+    "exampleSentenceDe": "Ich brauche die Briefmarke.",
+    "exampleSentenceEs": "Yo necesito la estampilla."
   },
   {
     "id": "ZGVyJTIwQWJzZW5kZXI_",
-    "word": "der Absender"
+    "word": "der Absender",
+    "exampleSentenceDe": "Wer ist der Absender?",
+    "exampleSentenceEs": "¿Quién es el remitente?"
   },
   {
     "id": "ZGVyJTIwRW1wZiVDMyVBNG5nZXI_",
-    "word": "der Empfänger"
+    "word": "der Empfänger",
+    "exampleSentenceDe": "Wer ist der Empfänger?",
+    "exampleSentenceEs": "¿Quién es el destinatario?"
   },
   {
     "id": "ZGFzJTIwSGFuZHk_",
-    "word": "das Handy"
+    "word": "das Handy",
+    "exampleSentenceDe": "Ich habe ein Handy. Das Handy ist neu.",
+    "exampleSentenceEs": "Tengo un celular. El celular es nuevo."
   },
   {
     "id": "ZGFzJTIwRmF4",
-    "word": "das Fax"
+    "word": "das Fax",
+    "exampleSentenceDe": "Ich habe ein Fax. Das Fax ist neu.",
+    "exampleSentenceEs": "Tengo un fax. El fax es nuevo."
   },
   {
     "id": "ZGllJTIwVGVsZWZvbm51bW1lcg__",
-    "word": "die Telefonnummer"
+    "word": "die Telefonnummer",
+    "exampleSentenceDe": "Ich habe die Telefonnummer. Die Telefonnummer ist neu.",
+    "exampleSentenceEs": "Tengo el número de teléfono. El número de teléfono es nuevo."
   },
   {
     "id": "ZGFzJTIwVGVsZWZvbmJ1Y2g_",
-    "word": "das Telefonbuch"
+    "word": "das Telefonbuch",
+    "exampleSentenceDe": "Ich suche das Telefonbuch.",
+    "exampleSentenceEs": "Yo busco la guía telefónica."
   },
   {
     "id": "dGVsZWZvbmllcmVu",
-    "word": "telefonieren"
+    "word": "telefonieren",
+    "exampleSentenceDe": "Ich telefoniere mit meiner Mutter.",
+    "exampleSentenceEs": "Yo hablo por teléfono con mi madre."
   },
   {
     "id": "YW5ydWZlbg__",
-    "word": "anrufen"
+    "word": "anrufen",
+    "exampleSentenceDe": "Ich rufe meine Mutter an.",
+    "exampleSentenceEs": "Yo llamo a mi madre."
   },
   {
     "id": "c3ByZWNoZW4lMjAobWl0KQ__",
-    "word": "sprechen (mit)"
+    "word": "sprechen (mit)",
+    "exampleSentenceDe": "Ich spreche mit meinem Freund.",
+    "exampleSentenceEs": "Yo hablo con mi amigo."
   },
   {
     "id": "YmVzZXR6dA__",
-    "word": "besetzt"
+    "word": "besetzt",
+    "exampleSentenceDe": "Die Telefonleitung ist besetzt.",
+    "exampleSentenceEs": "La línea telefónica está ocupada."
   },
   {
     "id": "ZGllJTIwQmFuaw__",
-    "word": "die Bank"
+    "word": "die Bank",
+    "exampleSentenceDe": "Ich sitze auf der Bank.",
+    "exampleSentenceEs": "Yo me siento en el banco."
   },
   {
     "id": "ZGVyJTIwU2NoYWx0ZXI_",
-    "word": "der Schalter"
+    "word": "der Schalter",
+    "exampleSentenceDe": "Ich gehe zum Schalter.",
+    "exampleSentenceEs": "Voy a la ventanilla."
   },
   {
     "id": "YmFyJTIwemFobGVu",
-    "word": "bar zahlen"
+    "word": "bar zahlen",
+    "exampleSentenceDe": "Ich möchte bar zahlen.",
+    "exampleSentenceEs": "Quiero pagar en efectivo."
   },
   {
     "id": "ZGllJTIwS3JlZGl0a2FydGU_",
-    "word": "die Kreditkarte"
+    "word": "die Kreditkarte",
+    "exampleSentenceDe": "Ich habe die Kreditkarte. Die Kreditkarte ist rot.",
+    "exampleSentenceEs": "Tengo la tarjeta de crédito. La tarjeta de crédito es roja."
   },
   {
     "id": "ZGFzJTIwS29udG8_",
-    "word": "das Konto"
+    "word": "das Konto",
+    "exampleSentenceDe": "Ich habe das Konto.",
+    "exampleSentenceEs": "Tengo la cuenta."
   },
   {
     "id": "JUMzJUJDYmVyd2Vpc2Vu",
-    "word": "überweisen"
+    "word": "überweisen",
+    "exampleSentenceDe": "Ich überweise Geld auf das Konto.",
+    "exampleSentenceEs": "Yo transfiero dinero a la cuenta."
   },
   {
     "id": "YW5rcmV1emVu",
-    "word": "ankreuzen"
+    "word": "ankreuzen",
+    "exampleSentenceDe": "Ich muss das Feld ankreuzen.",
+    "exampleSentenceEs": "Tengo que marcar el campo con una cruz."
   },
   {
     "id": "ZGVyJTIwR2VsZGF1dG9tYXQ_",
-    "word": "der Geldautomat"
+    "word": "der Geldautomat",
+    "exampleSentenceDe": "Wo ist der Geldautomat?",
+    "exampleSentenceEs": "¿Dónde está el cajero automático?"
   },
   {
     "id": "ZGFzJTIwSW50ZXJuZXQ_",
-    "word": "das Internet"
+    "word": "das Internet",
+    "exampleSentenceDe": "Ich habe das Internet. Das Internet ist gut.",
+    "exampleSentenceEs": "Tengo internet. Internet es bueno."
   },
   {
     "id": "ZGVyJTIwUGFzcyUyMCUyRiUyMEF1c3dlaXM_",
-    "word": "der Pass / Ausweis"
+    "word": "der Pass / Ausweis",
+    "exampleSentenceDe": "Ich brauche den Pass.",
+    "exampleSentenceEs": "Necesito el pasaporte."
   },
   {
     "id": "ZyVDMyVCQ2x0aWc_",
-    "word": "gültig"
+    "word": "gültig",
+    "exampleSentenceDe": "Mein Pass ist gültig.",
+    "exampleSentenceEs": "Mi pasaporte es válido."
   },
   {
     "id": "ZGFzJTIwUGFrZXQ_",
-    "word": "das Paket"
+    "word": "das Paket",
+    "exampleSentenceDe": "Ich habe das Paket. Das Paket ist groß.",
+    "exampleSentenceEs": "Tengo el paquete. El paquete es grande."
   },
   {
     "id": "ZGVyJTIwQnJpZWZrYXN0ZW4_",
-    "word": "der Briefkasten"
+    "word": "der Briefkasten",
+    "exampleSentenceDe": "Ich habe einen Briefkasten.",
+    "exampleSentenceEs": "Tengo un buzón de correo."
   },
   {
     "id": "ZGllJTIwR2ViJUMzJUJDaHI_",
-    "word": "die Gebühr"
+    "word": "die Gebühr",
+    "exampleSentenceDe": "Die Gebühr ist zehn Euro.",
+    "exampleSentenceEs": "La tarifa es de diez euros."
   },
   {
     "id": "ZGVyJTIwS3JlZGl0",
-    "word": "der Kredit"
+    "word": "der Kredit",
+    "exampleSentenceDe": "Ich habe den Kredit. Der Kredit ist gut.",
+    "exampleSentenceEs": "Tengo el crédito. El crédito es bueno."
   },
   {
     "id": "YWJoZWJlbg__",
-    "word": "abheben"
+    "word": "abheben",
+    "exampleSentenceDe": "Ich möchte Geld abheben.",
+    "exampleSentenceEs": "Quiero retirar dinero."
   },
   {
     "id": "ZWluemFobGVu",
-    "word": "einzahlen"
+    "word": "einzahlen",
+    "exampleSentenceDe": "Ich zahle Geld auf die Bank ein.",
+    "exampleSentenceEs": "Yo deposito dinero en el banco."
   },
   {
     "id": "ZGllJTIwR2VoZWltemFobA__",
-    "word": "die Geheimzahl"
+    "word": "die Geheimzahl",
+    "exampleSentenceDe": "Ich habe die Geheimzahl vergessen.",
+    "exampleSentenceEs": "Olvidé el PIN."
   },
   {
     "id": "ZGFzJTIwQXVnZQ__",
-    "word": "das Auge"
+    "word": "das Auge",
+    "exampleSentenceDe": "Ich habe ein Auge. Das Auge ist braun.",
+    "exampleSentenceEs": "Tengo un ojo. El ojo es marrón."
   },
   {
     "id": "ZGllJTIwSGFuZA__",
-    "word": "die Hand"
+    "word": "die Hand",
+    "exampleSentenceDe": "Ich habe eine Hand. Die Hand ist klein.",
+    "exampleSentenceEs": "Tengo una mano. La mano es pequeña."
   },
   {
     "id": "ZGVyJTIwQXJt",
-    "word": "der Arm"
+    "word": "der Arm",
+    "exampleSentenceDe": "Ich habe einen Arm.",
+    "exampleSentenceEs": "Tengo un brazo."
   },
   {
     "id": "ZGFzJTIwQmVpbg__",
-    "word": "das Bein"
+    "word": "das Bein",
+    "exampleSentenceDe": "Ich habe ein Bein.",
+    "exampleSentenceEs": "Yo tengo una pierna."
   },
   {
     "id": "ZGVyJTIwS29wZg__",
-    "word": "der Kopf"
+    "word": "der Kopf",
+    "exampleSentenceDe": "Ich habe Kopfschmerzen.",
+    "exampleSentenceEs": "Tengo dolor de cabeza."
   },
   {
     "id": "ZGVyJTIwRnUlQzMlOUY_",
-    "word": "der Fuß"
+    "word": "der Fuß",
+    "exampleSentenceDe": "Mein Fuß ist groß.",
+    "exampleSentenceEs": "Mi pie es grande."
   },
   {
     "id": "ZGVyJTIwTXVuZA__",
-    "word": "der Mund"
+    "word": "der Mund",
+    "exampleSentenceDe": "Ich habe einen Mund.",
+    "exampleSentenceEs": "Tengo una boca."
   },
   {
     "id": "ZGVyJTIwWmFobg__",
-    "word": "der Zahn"
+    "word": "der Zahn",
+    "exampleSentenceDe": "Mein Zahn ist schlecht.",
+    "exampleSentenceEs": "Mi diente está mal."
   },
   {
     "id": "ZGllJTIwTmFzZQ__",
-    "word": "die Nase"
+    "word": "die Nase",
+    "exampleSentenceDe": "Die Nase ist rot.",
+    "exampleSentenceEs": "La nariz es roja."
   },
   {
     "id": "ZGFzJTIwT2hy",
-    "word": "das Ohr"
+    "word": "das Ohr",
+    "exampleSentenceDe": "Ich habe ein Ohr. Das Ohr ist rot.",
+    "exampleSentenceEs": "Tengo una oreja. La oreja está roja."
   },
   {
     "id": "ZGFzJTIwSGFhcg__",
-    "word": "das Haar"
+    "word": "das Haar",
+    "exampleSentenceDe": "Das Haar ist rot.",
+    "exampleSentenceEs": "El pelo es rojo."
   },
   {
     "id": "ZGVyJTIwQmF1Y2g_",
-    "word": "der Bauch"
+    "word": "der Bauch",
+    "exampleSentenceDe": "Ich habe Hunger. Mein Bauch ist leer.",
+    "exampleSentenceEs": "Tengo hambre. Mi barriga está vacía."
   },
   {
     "id": "ZGVyJTIwRmluZ2Vy",
-    "word": "der Finger"
+    "word": "der Finger",
+    "exampleSentenceDe": "Das ist mein Finger.",
+    "exampleSentenceEs": "Este es mi dedo."
   },
   {
     "id": "ZGVyJTIwUiVDMyVCQ2NrZW4_",
-    "word": "der Rücken"
+    "word": "der Rücken",
+    "exampleSentenceDe": "Ich habe Schmerzen im Rücken.",
+    "exampleSentenceEs": "Tengo dolor en la espalda."
   },
   {
     "id": "ZGVyJTIwSGFscw__",
-    "word": "der Hals"
+    "word": "der Hals",
+    "exampleSentenceDe": "Ich habe Schmerzen am Hals.",
+    "exampleSentenceEs": "Tengo dolor en el cuello."
   },
   {
     "id": "d2VodHVu",
-    "word": "wehtun"
+    "word": "wehtun",
+    "exampleSentenceDe": "Mein Kopf tut weh.",
+    "exampleSentenceEs": "Mi cabeza duele."
   },
   {
     "id": "V2llJTIwZ2VodCUyMGVzJTIwSWhuZW4lM0Y_",
-    "word": "Wie geht es Ihnen?"
+    "word": "Wie geht es Ihnen?",
+    "exampleSentenceDe": "Hallo, wie geht es Ihnen?",
+    "exampleSentenceEs": "Hola, ¿cómo está usted?"
   },
   {
     "id": "RXMlMjBnZWh0JTIwbWlyJTIwZ3V0",
-    "word": "Es geht mir gut"
+    "word": "Es geht mir gut",
+    "exampleSentenceDe": "Hallo! Mir geht es gut, danke.",
+    "exampleSentenceEs": "¡Hola! Me va bien, gracias."
   },
   {
     "id": "c2NobGFmZW4_",
-    "word": "schlafen"
+    "word": "schlafen",
+    "exampleSentenceDe": "Ich schlafe heute.",
+    "exampleSentenceEs": "Yo duermo hoy."
   },
   {
     "id": "aW5zJTIwQmV0dCUyMGdlaGVu",
-    "word": "ins Bett gehen"
+    "word": "ins Bett gehen",
+    "exampleSentenceDe": "Ich gehe jetzt ins Bett.",
+    "exampleSentenceEs": "Yo voy a la cama ahora."
   },
   {
     "id": "aW0lMjBCZXR0JTIwbGllZ2Vu",
-    "word": "im Bett liegen"
+    "word": "im Bett liegen",
+    "exampleSentenceDe": "Ich liege im Bett.",
+    "exampleSentenceEs": "Yo estoy en la cama."
   },
   {
     "id": "a3Jhbms_",
-    "word": "krank"
+    "word": "krank",
+    "exampleSentenceDe": "Ich bin krank.",
+    "exampleSentenceEs": "Yo estoy enfermo."
   },
   {
     "id": "ZGFzJTIwRmllYmVy",
-    "word": "das Fieber"
+    "word": "das Fieber",
+    "exampleSentenceDe": "Ich habe Fieber. Das Fieber ist hoch.",
+    "exampleSentenceEs": "Tengo fiebre. La fiebre es alta."
   },
   {
     "id": "ZGVyJTIwQXJ6dA__",
-    "word": "der Arzt"
+    "word": "der Arzt",
+    "exampleSentenceDe": "Ich bin krank. Ich gehe zum Arzt.",
+    "exampleSentenceEs": "Estoy enfermo. Voy al médico."
   },
   {
     "id": "ZGVyJTIwRG9rdG9y",
-    "word": "der Doktor"
+    "word": "der Doktor",
+    "exampleSentenceDe": "Der Doktor ist nett.",
+    "exampleSentenceEs": "El doctor es amable."
   },
   {
     "id": "ZGllJTIwQXBvdGhla2U_",
-    "word": "die Apotheke"
+    "word": "die Apotheke",
+    "exampleSentenceDe": "Ich gehe zur Apotheke.",
+    "exampleSentenceEs": "Voy a la farmacia."
   },
   {
     "id": "ZGFzJTIwTWVkaWthbWVudA__",
-    "word": "das Medikament"
+    "word": "das Medikament",
+    "exampleSentenceDe": "Das Medikament ist neu.",
+    "exampleSentenceEs": "El medicamento es nuevo."
   },
   {
     "id": "ZGFzJTIwUmV6ZXB0",
-    "word": "das Rezept"
+    "word": "das Rezept",
+    "exampleSentenceDe": "Ich brauche das Rezept von dem Arzt.",
+    "exampleSentenceEs": "Necesito la receta del médico."
   },
   {
     "id": "ZGllJTIwUHJheGlz",
-    "word": "die Praxis"
+    "word": "die Praxis",
+    "exampleSentenceDe": "Ich gehe in die Praxis von dem Arzt.",
+    "exampleSentenceEs": "Voy al consultorio del doctor."
   },
   {
     "id": "ZGFzJTIwS3JhbmtlbmhhdXM_",
-    "word": "das Krankenhaus"
+    "word": "das Krankenhaus",
+    "exampleSentenceDe": "Ich bin im Krankenhaus.",
+    "exampleSentenceEs": "Estoy en el hospital."
   },
   {
     "id": "ZGVyJTIwVGVybWlu",
-    "word": "der Termin"
+    "word": "der Termin",
+    "exampleSentenceDe": "Ich habe einen Termin am Montag.",
+    "exampleSentenceEs": "Tengo una cita el lunes."
   },
   {
     "id": "R3V0ZSUyMEJlc3NlcnVuZw__",
-    "word": "Gute Besserung"
+    "word": "Gute Besserung",
+    "exampleSentenceDe": "Ich wünsche dir gute Besserung.",
+    "exampleSentenceEs": "Te deseo que te mejores."
   },
   {
     "id": "ZGFzJTIwUGZsYXN0ZXI_",
-    "word": "das Pflaster"
+    "word": "das Pflaster",
+    "exampleSentenceDe": "Ich habe das Pflaster. Das Pflaster ist klein.",
+    "exampleSentenceEs": "Tengo la tirita. La tirita es pequeña."
   },
   {
     "id": "ZGllJTIwU2FsYmU_",
-    "word": "die Salbe"
+    "word": "die Salbe",
+    "exampleSentenceDe": "Ich habe die Salbe.",
+    "exampleSentenceEs": "Tengo la pomada."
   },
   {
     "id": "ZGllJTIwRXJrJUMzJUE0bHR1bmc_",
-    "word": "die Erkältung"
+    "word": "die Erkältung",
+    "exampleSentenceDe": "Ich habe die Erkältung.",
+    "exampleSentenceEs": "Tengo el resfriado."
   },
   {
     "id": "aHVzdGVu",
-    "word": "husten"
+    "word": "husten",
+    "exampleSentenceDe": "Ich huste.",
+    "exampleSentenceEs": "Yo toso."
   },
   {
     "id": "Ymx1dGVu",
-    "word": "bluten"
+    "word": "bluten",
+    "exampleSentenceDe": "Ich blute nicht.",
+    "exampleSentenceEs": "Yo no sangro."
   },
   {
     "id": "c2ljaCUyMHZlcmxldHplbg__",
-    "word": "sich verletzen"
+    "word": "sich verletzen",
+    "exampleSentenceDe": "Ich verletze mich nicht.",
+    "exampleSentenceEs": "No me lastimo."
   },
   {
     "id": "ZGVyJTIwU2NobWVyeg__",
-    "word": "der Schmerz"
+    "word": "der Schmerz",
+    "exampleSentenceDe": "Ich habe Schmerz. Der Schmerz ist stark.",
+    "exampleSentenceEs": "Tengo dolor. El dolor es fuerte."
   },
   {
     "id": "c2Nod2FuZ2Vy",
-    "word": "schwanger"
+    "word": "schwanger",
+    "exampleSentenceDe": "Sie ist schwanger.",
+    "exampleSentenceEs": "Ella está embarazada."
   },
   {
     "id": "ZGllJTIwS2xlaWR1bmc_",
-    "word": "die Kleidung"
+    "word": "die Kleidung",
+    "exampleSentenceDe": "Ich habe Kleidung. Die Kleidung ist neu.",
+    "exampleSentenceEs": "Tengo ropa. La ropa es nueva."
   },
   {
     "id": "ZGVyJTIwUHVsbG92ZXI_",
-    "word": "der Pullover"
+    "word": "der Pullover",
+    "exampleSentenceDe": "Ich habe einen Pullover. Der Pullover ist blau.",
+    "exampleSentenceEs": "Tengo un suéter. El suéter es azul."
   },
   {
     "id": "ZGVyJTIwUm9jaw__",
-    "word": "der Rock"
+    "word": "der Rock",
+    "exampleSentenceDe": "Ich habe einen Rock. Der Rock ist rot.",
+    "exampleSentenceEs": "Tengo una falda. La falda es roja."
   },
   {
     "id": "ZGllJTIwSG9zZQ__",
-    "word": "die Hose"
+    "word": "die Hose",
+    "exampleSentenceDe": "Ich habe die Hose. Die Hose ist blau.",
+    "exampleSentenceEs": "Tengo el pantalón. El pantalón es azul."
   },
   {
     "id": "ZGFzJTIwSGVtZA__",
-    "word": "das Hemd"
+    "word": "das Hemd",
+    "exampleSentenceDe": "Ich habe das Hemd. Das Hemd ist weiß.",
+    "exampleSentenceEs": "Tengo la camisa. La camisa es blanca."
   },
   {
     "id": "ZGllJTIwU2NodWhl",
-    "word": "die Schuhe"
+    "word": "die Schuhe",
+    "exampleSentenceDe": "Ich habe die Schuhe. Die Schuhe sind neu.",
+    "exampleSentenceEs": "Tengo los zapatos. Los zapatos son nuevos."
   },
   {
     "id": "ZGllJTIwSmFja2U_",
-    "word": "die Jacke"
+    "word": "die Jacke",
+    "exampleSentenceDe": "Die Jacke ist neu.",
+    "exampleSentenceEs": "La chaqueta es nueva."
   },
   {
     "id": "ZGVyJTIwTWFudGVs",
-    "word": "der Mantel"
+    "word": "der Mantel",
+    "exampleSentenceDe": "Ich habe einen Mantel. Der Mantel ist warm.",
+    "exampleSentenceEs": "Tengo un abrigo. El abrigo es cálido."
   },
   {
     "id": "ZGllJTIwSmVhbnM_",
-    "word": "die Jeans"
+    "word": "die Jeans",
+    "exampleSentenceDe": "Ich habe die Jeans. Die Jeans ist blau.",
+    "exampleSentenceEs": "Tengo los jeans. Los jeans son azules."
   },
   {
     "id": "ZGllJTIwR3IlQzMlQjYlQzMlOUZl",
-    "word": "die Größe"
+    "word": "die Größe",
+    "exampleSentenceDe": "Ich brauche die Größe.",
+    "exampleSentenceEs": "Necesito la talla."
   },
   {
     "id": "ZGllJTIwRmFyYmU_",
-    "word": "die Farbe"
+    "word": "die Farbe",
+    "exampleSentenceDe": "Das ist die Farbe.",
+    "exampleSentenceEs": "Ese es el color."
   },
   {
     "id": "c2Nod2Fyeg__",
-    "word": "schwarz"
+    "word": "schwarz",
+    "exampleSentenceDe": "Das Auto ist schwarz.",
+    "exampleSentenceEs": "El coche es negro."
   },
   {
     "id": "d2VpJUMzJTlG",
-    "word": "weiß"
+    "word": "weiß",
+    "exampleSentenceDe": "Die Wand ist weiß.",
+    "exampleSentenceEs": "La pared es blanca."
   },
   {
     "id": "Z3JhdQ__",
-    "word": "grau"
+    "word": "grau",
+    "exampleSentenceDe": "Der Himmel ist grau.",
+    "exampleSentenceEs": "El cielo es gris."
   },
   {
     "id": "cm90",
-    "word": "rot"
+    "word": "rot",
+    "exampleSentenceDe": "Das Auto ist rot.",
+    "exampleSentenceEs": "El coche es rojo."
   },
   {
     "id": "YmxhdQ__",
-    "word": "blau"
+    "word": "blau",
+    "exampleSentenceDe": "Das Auto ist blau.",
+    "exampleSentenceEs": "El coche es azul."
   },
   {
     "id": "Z2VsYg__",
-    "word": "gelb"
+    "word": "gelb",
+    "exampleSentenceDe": "Die Sonne ist gelb.",
+    "exampleSentenceEs": "El sol es amarillo."
   },
   {
     "id": "Z3IlQzMlQkNu",
-    "word": "grün"
+    "word": "grün",
+    "exampleSentenceDe": "Das Auto ist grün.",
+    "exampleSentenceEs": "El coche es verde."
   },
   {
     "id": "YnJhdW4_",
-    "word": "braun"
+    "word": "braun",
+    "exampleSentenceDe": "Der Tisch ist braun.",
+    "exampleSentenceEs": "La mesa es marrón."
   },
   {
     "id": "YW56aWVoZW4_",
-    "word": "anziehen"
+    "word": "anziehen",
+    "exampleSentenceDe": "Ich ziehe die Jacke an.",
+    "exampleSentenceEs": "Me pongo la chaqueta."
   },
   {
     "id": "YXVzemllaGVu",
-    "word": "ausziehen"
+    "word": "ausziehen",
+    "exampleSentenceDe": "Ich ziehe den Pullover aus.",
+    "exampleSentenceEs": "Me quito el jersey."
   },
   {
     "id": "YW5wcm9iaWVyZW4_",
-    "word": "anprobieren"
+    "word": "anprobieren",
+    "exampleSentenceDe": "Ich möchte die Schuhe anprobieren.",
+    "exampleSentenceEs": "Quiero probarme los zapatos."
   },
   {
     "id": "cGFzc2Vu",
-    "word": "passen"
+    "word": "passen",
+    "exampleSentenceDe": "Die Hose passt mir gut.",
+    "exampleSentenceEs": "Los pantalones me quedan bien."
   },
   {
     "id": "YW5oYWJlbg__",
-    "word": "anhaben"
+    "word": "anhaben",
+    "exampleSentenceDe": "Ich habe heute einen blauen Pullover an.",
+    "exampleSentenceEs": "Yo llevo puesto un jersey azul hoy."
   },
   {
     "id": "ZW5n",
-    "word": "eng"
+    "word": "eng",
+    "exampleSentenceDe": "Der Rock ist eng.",
+    "exampleSentenceEs": "La falda es ajustada."
   },
   {
     "id": "d2VpdA__",
-    "word": "weit"
+    "word": "weit",
+    "exampleSentenceDe": "Die Hose ist weit.",
+    "exampleSentenceEs": "Los pantalones son holgados."
   },
   {
     "id": "YmVxdWVt",
-    "word": "bequem"
+    "word": "bequem",
+    "exampleSentenceDe": "Der Stuhl ist bequem.",
+    "exampleSentenceEs": "La silla es cómoda."
   },
   {
     "id": "ZGVyJTIwU2NoYWw_",
-    "word": "der Schal"
+    "word": "der Schal",
+    "exampleSentenceDe": "Ich habe einen Schal. Der Schal ist rot.",
+    "exampleSentenceEs": "Tengo una bufanda. La bufanda es roja."
   },
   {
     "id": "ZGVyJTIwRyVDMyVCQ3J0ZWw_",
-    "word": "der Gürtel"
+    "word": "der Gürtel",
+    "exampleSentenceDe": "Ich habe einen Gürtel. Der Gürtel ist braun.",
+    "exampleSentenceEs": "Tengo un cinturón. El cinturón es marrón."
   },
   {
     "id": "ZGllJTIwU2NodWxl",
-    "word": "die Schule"
+    "word": "die Schule",
+    "exampleSentenceDe": "Ich bin in der Schule.",
+    "exampleSentenceEs": "Yo estoy en la escuela."
   },
   {
     "id": "ZGllJTIwS2xhc3Nl",
-    "word": "die Klasse"
+    "word": "die Klasse",
+    "exampleSentenceDe": "Ich bin in der Klasse.",
+    "exampleSentenceEs": "Yo estoy en la clase."
   },
   {
     "id": "ZGVyJTIwTGVocmVyJTIwJTJGJTIwZGllJTIwTGVocmVyaW4_",
-    "word": "der Lehrer / die Lehrerin"
+    "word": "der Lehrer / die Lehrerin",
+    "exampleSentenceDe": "Das ist mein Lehrer. Mein Lehrer ist nett.",
+    "exampleSentenceEs": "Este es mi profesor. Mi profesor es simpático."
   },
   {
     "id": "ZGVyJTIwU2NoJUMzJUJDbGVyJTIwJTJGJTIwZGllJTIwU2NoJUMzJUJDbGVyaW4_",
-    "word": "der Schüler / die Schülerin"
+    "word": "der Schüler / die Schülerin",
+    "exampleSentenceDe": "Der Schüler ist neu. Er ist in der Klasse.",
+    "exampleSentenceEs": "El alumno es nuevo. Él está en la clase."
   },
   {
     "id": "ZGVyJTIwU3R1ZGVudA__",
-    "word": "der Student"
+    "word": "der Student",
+    "exampleSentenceDe": "Ich bin ein Student. Der Student ist neu.",
+    "exampleSentenceEs": "Soy un estudiante. El estudiante es nuevo."
   },
   {
     "id": "bGVybmVu",
-    "word": "lernen"
+    "word": "lernen",
+    "exampleSentenceDe": "Ich lerne Deutsch.",
+    "exampleSentenceEs": "Yo aprendo alemán."
   },
   {
     "id": "ZGVyJTIwVW50ZXJyaWNodA__",
-    "word": "der Unterricht"
+    "word": "der Unterricht",
+    "exampleSentenceDe": "Der Unterricht beginnt jetzt.",
+    "exampleSentenceEs": "La clase empieza ahora."
   },
   {
     "id": "ZGVyJTIwS3Vycw__",
-    "word": "der Kurs"
+    "word": "der Kurs",
+    "exampleSentenceDe": "Der Deutschkurs ist gut.",
+    "exampleSentenceEs": "El curso de alemán es bueno."
   },
   {
     "id": "ZGllJTIwUGF1c2U_",
-    "word": "die Pause"
+    "word": "die Pause",
+    "exampleSentenceDe": "Wir machen jetzt eine Pause.",
+    "exampleSentenceEs": "Ahora hacemos un descanso."
   },
   {
     "id": "ZGllJTIwSGF1c2F1ZmdhYmU_",
-    "word": "die Hausaufgabe"
+    "word": "die Hausaufgabe",
+    "exampleSentenceDe": "Ich mache die Hausaufgabe.",
+    "exampleSentenceEs": "Yo hago la tarea."
   },
   {
     "id": "ZGllJTIwUHIlQzMlQkNmdW5n",
-    "word": "die Prüfung"
+    "word": "die Prüfung",
+    "exampleSentenceDe": "Die Prüfung ist schwer.",
+    "exampleSentenceEs": "El examen es difícil."
   },
   {
     "id": "ZGllJTIwTCVDMyVCNnN1bmc_",
-    "word": "die Lösung"
+    "word": "die Lösung",
+    "exampleSentenceDe": "Ich habe eine Lösung. Die Lösung ist einfach.",
+    "exampleSentenceEs": "Tengo una solución. La solución es simple."
   },
   {
     "id": "ZGVyJTIwRmVobGVy",
-    "word": "der Fehler"
+    "word": "der Fehler",
+    "exampleSentenceDe": "Ich mache einen Fehler. Der Fehler ist groß.",
+    "exampleSentenceEs": "Yo cometo un error. El error es grande."
   },
   {
     "id": "ZGllJTIwQXJiZWl0",
-    "word": "die Arbeit"
+    "word": "die Arbeit",
+    "exampleSentenceDe": "Die Arbeit ist interessant.",
+    "exampleSentenceEs": "El trabajo es interesante."
   },
   {
     "id": "ZGVyJTIwQmVydWY_",
-    "word": "der Beruf"
+    "word": "der Beruf",
+    "exampleSentenceDe": "Was ist dein Beruf?",
+    "exampleSentenceEs": "¿Cuál es tu profesión?"
   },
   {
     "id": "TWVjaGFuaWtlciUyMHZvbiUyMEJlcnVm",
-    "word": "Mechaniker von Beruf"
+    "word": "Mechaniker von Beruf",
+    "exampleSentenceDe": "Ich bin Mechaniker von Beruf.",
+    "exampleSentenceEs": "Soy mecánico de profesión."
   },
   {
     "id": "ZGVyJTIwQXJiZWl0c3BsYXR6JTIwJTJGJTIwSm9i",
-    "word": "der Arbeitsplatz / Job"
+    "word": "der Arbeitsplatz / Job",
+    "exampleSentenceDe": "Ich habe einen Arbeitsplatz. Der Arbeitsplatz ist gut.",
+    "exampleSentenceEs": "Tengo un puesto de trabajo. El puesto de trabajo es bueno."
   },
   {
     "id": "YXJiZWl0ZW4_",
-    "word": "arbeiten"
+    "word": "arbeiten",
+    "exampleSentenceDe": "Ich arbeite heute.",
+    "exampleSentenceEs": "Yo trabajo hoy."
   },
   {
     "id": "ZGVyJTIwQ2hlZiUyMCUyRiUyMGRpZSUyMENoZWZpbg__",
-    "word": "der Chef / die Chefin"
+    "word": "der Chef / die Chefin",
+    "exampleSentenceDe": "Der Chef ist nett.",
+    "exampleSentenceEs": "El jefe es simpático."
   },
   {
     "id": "ZGVyJTIwS29sbGVnZSUyMCUyRiUyMGRpZSUyMEtvbGxlZ2lu",
-    "word": "der Kollege / die Kollegin"
+    "word": "der Kollege / die Kollegin",
+    "exampleSentenceDe": "Ich habe einen Kollegen. Mein Kollege ist nett.",
+    "exampleSentenceEs": "Tengo un colega. Mi colega es simpático."
   },
   {
     "id": "ZGllJTIwRmlybWElMjAlMkYlMjBkYXMlMjBCJUMzJUJDcm8_",
-    "word": "die Firma / das Büro"
+    "word": "die Firma / das Büro",
+    "exampleSentenceDe": "Ich arbeite in der Firma.",
+    "exampleSentenceEs": "Yo trabajo en la empresa."
   },
   {
     "id": "YXJiZWl0c2xvcw__",
-    "word": "arbeitslos"
+    "word": "arbeitslos",
+    "exampleSentenceDe": "Ich bin arbeitslos.",
+    "exampleSentenceEs": "Yo estoy desempleado."
   },
   {
     "id": "ZGVyJTIwQXJiZWl0ZXI_",
-    "word": "der Arbeiter"
+    "word": "der Arbeiter",
+    "exampleSentenceDe": "Ich sehe der Arbeiter.",
+    "exampleSentenceEs": "Yo veo al obrero."
   },
   {
     "id": "ZGFzJTIwUHJha3Rpa3Vt",
-    "word": "das Praktikum"
+    "word": "das Praktikum",
+    "exampleSentenceDe": "Ich mache ein Praktikum in Deutschland.",
+    "exampleSentenceEs": "Hago una pasantía en Alemania."
   },
   {
     "id": "ZGllJTIwQXVzYmlsZHVuZw__",
-    "word": "die Ausbildung"
+    "word": "die Ausbildung",
+    "exampleSentenceDe": "Die Ausbildung ist wichtig.",
+    "exampleSentenceEs": "La formación es importante."
   },
   {
     "id": "c2VsYnN0c3QlQzMlQTRuZGln",
-    "word": "selbstständig"
+    "word": "selbstständig",
+    "exampleSentenceDe": "Ich bin selbstständig.",
+    "exampleSentenceEs": "Soy independiente."
   },
   {
     "id": "ZGllJTIwU3RlbGxl",
-    "word": "die Stelle"
+    "word": "die Stelle",
+    "exampleSentenceDe": "Ich suche die Stelle.",
+    "exampleSentenceEs": "Yo busco la plaza."
   },
   {
     "id": "R2VsZCUyMHZlcmRpZW5lbg__",
-    "word": "Geld verdienen"
+    "word": "Geld verdienen",
+    "exampleSentenceDe": "Ich möchte Geld verdienen.",
+    "exampleSentenceEs": "Yo quiero ganar dinero."
   },
   {
     "id": "c2Nod2VyZSUyMCUyRiUyMGxlaWNodGUlMjBBcmJlaXQ_",
-    "word": "schwere / leichte Arbeit"
+    "word": "schwere / leichte Arbeit",
+    "exampleSentenceDe": "Die Arbeit ist schwer.",
+    "exampleSentenceEs": "El trabajo es pesado."
   },
   {
     "id": "ZGVyJTIwRHJ1Y2tlcg__",
-    "word": "der Drucker"
+    "word": "der Drucker",
+    "exampleSentenceDe": "Das ist mein Drucker. Der Drucker ist neu.",
+    "exampleSentenceEs": "Esta es mi impresora. La impresora es nueva."
   },
   {
     "id": "ZGVyJTIwQmxlaXN0aWZ0",
-    "word": "der Bleistift"
+    "word": "der Bleistift",
+    "exampleSentenceDe": "Das ist ein Bleistift. Der Bleistift ist blau.",
+    "exampleSentenceEs": "Esto es un lápiz. El lápiz es azul."
   },
   {
     "id": "ZGVyJTIwS3VnZWxzY2hyZWliZXI_",
-    "word": "der Kugelschreiber"
+    "word": "der Kugelschreiber",
+    "exampleSentenceDe": "Ich habe einen Kugelschreiber. Der Kugelschreiber ist blau.",
+    "exampleSentenceEs": "Tengo un bolígrafo. El bolígrafo es azul."
   },
   {
     "id": "ZGVyJTIwU2NocmVpYnRpc2No",
-    "word": "der Schreibtisch"
+    "word": "der Schreibtisch",
+    "exampleSentenceDe": "Der Schreibtisch ist groß.",
+    "exampleSentenceEs": "El escritorio es grande."
   },
   {
     "id": "ZGFzJTIwWmV1Z25pcw__",
-    "word": "das Zeugnis"
+    "word": "das Zeugnis",
+    "exampleSentenceDe": "Ich habe das Zeugnis. Das Zeugnis ist gut.",
+    "exampleSentenceEs": "Tengo el boletín de notas. El boletín de notas es bueno."
   },
   {
     "id": "ZGVyJTIwU3R1bmRlbnBsYW4_",
-    "word": "der Stundenplan"
+    "word": "der Stundenplan",
+    "exampleSentenceDe": "Ich habe der Stundenplan.",
+    "exampleSentenceEs": "Tengo el horario de clases."
   },
   {
     "id": "ZmVobGVu",
-    "word": "fehlen"
+    "word": "fehlen",
+    "exampleSentenceDe": "Mir fehlen die Zähne.",
+    "exampleSentenceEs": "Me faltan los dientes."
   },
   {
     "id": "YmVzdGVoZW4_",
-    "word": "bestehen"
+    "word": "bestehen",
+    "exampleSentenceDe": "Die Prüfung besteht aus zehn Fragen.",
+    "exampleSentenceEs": "El examen consta de diez preguntas."
   },
   {
     "id": "ZHVyY2hmYWxsZW4_",
-    "word": "durchfallen"
+    "word": "durchfallen",
+    "exampleSentenceDe": "Ich falle bei der Prüfung durch.",
+    "exampleSentenceEs": "Reprobo en el examen."
   },
   {
     "id": "ZGllJTIwQmVzcHJlY2h1bmc_",
-    "word": "die Besprechung"
+    "word": "die Besprechung",
+    "exampleSentenceDe": "Die Besprechung ist um neun Uhr.",
+    "exampleSentenceEs": "La reunión es a las nueve."
   },
   {
     "id": "ayVDMyVCQ25kaWdlbg__",
-    "word": "kündigen"
+    "word": "kündigen",
+    "exampleSentenceDe": "Ich kündige meinen Job.",
+    "exampleSentenceEs": "Yo renuncio a mi trabajo."
   },
   {
     "id": "YmVmJUMzJUI2cmRlcm4_",
-    "word": "befördern"
+    "word": "befördern",
+    "exampleSentenceDe": "Ich befördere meine Tasche.",
+    "exampleSentenceEs": "Yo transporte mi bolso."
   },
   {
     "id": "ZGllJTIwVW5pdmVyc2l0JUMzJUE0dA__",
-    "word": "die Universität"
+    "word": "die Universität",
+    "exampleSentenceDe": "Ich bin an der Universität. Die Universität ist groß.",
+    "exampleSentenceEs": "Yo estoy en la universidad. La universidad es grande."
   },
   {
     "id": "YW5tZWxkZW4_",
-    "word": "anmelden"
+    "word": "anmelden",
+    "exampleSentenceDe": "Ich melde mich für den Kurs an.",
+    "exampleSentenceEs": "Me inscribo para el curso."
   },
   {
     "id": "ZGllJTIwQW5tZWxkdW5n",
-    "word": "die Anmeldung"
+    "word": "die Anmeldung",
+    "exampleSentenceDe": "Ich mache die Anmeldung für den Kurs.",
+    "exampleSentenceEs": "Yo hago la inscripción para el curso."
   },
   {
     "id": "c3ByZWNoZW4_",
-    "word": "sprechen"
+    "word": "sprechen",
+    "exampleSentenceDe": "Ich spreche Deutsch.",
+    "exampleSentenceEs": "Yo hablo alemán."
   },
   {
     "id": "dmVyc3RlaGVu",
-    "word": "verstehen"
+    "word": "verstehen",
+    "exampleSentenceDe": "Ich verstehe das.",
+    "exampleSentenceEs": "Yo entiendo eso."
   },
   {
     "id": "ZnJhZ2Vu",
-    "word": "fragen"
+    "word": "fragen",
+    "exampleSentenceDe": "Ich frage dich.",
+    "exampleSentenceEs": "Yo te pregunto."
   },
   {
     "id": "YW50d29ydGVu",
-    "word": "antworten"
+    "word": "antworten",
+    "exampleSentenceDe": "Ich antworte auf deine Frage.",
+    "exampleSentenceEs": "Yo respondo a tu pregunta."
   },
   {
     "id": "ZXJrbCVDMyVBNHJlbg__",
-    "word": "erklären"
+    "word": "erklären",
+    "exampleSentenceDe": "Ich kann das nicht erklären.",
+    "exampleSentenceEs": "Yo no puedo explicar eso."
   },
   {
     "id": "d2llZGVyaG9sZW4_",
-    "word": "wiederholen"
+    "word": "wiederholen",
+    "exampleSentenceDe": "Bitte wiederholen Sie das.",
+    "exampleSentenceEs": "Por favor, repita eso."
   },
   {
     "id": "ZGFzJTIwQmVuemluJTIwJTJGJTIwZGVyJTIwVGFuaw__",
-    "word": "das Benzin / der Tank"
+    "word": "das Benzin / der Tank",
+    "exampleSentenceDe": "Das Auto ist voll. Ich brauche das Benzin für den Tank.",
+    "exampleSentenceEs": "El coche está lleno. Necesito la gasolina para el tanque."
   },
   {
     "id": "ZGVyJTIwQmxpbmtlciUyMCUyRiUyMGJsaW5rZW4_",
-    "word": "der Blinker / blinken"
+    "word": "der Blinker / blinken",
+    "exampleSentenceDe": "Ich bin im Auto. Ich blinke nach rechts.",
+    "exampleSentenceEs": "Estoy en el coche. Pongo el intermitente a la derecha."
   },
   {
     "id": "ZGllJTIwQnJlbXNlJTIwJTJGJTIwYnJlbXNlbg__",
-    "word": "die Bremse / bremsen"
+    "word": "die Bremse / bremsen",
+    "exampleSentenceDe": "Ich sehe die Bremse. Ich bremse.",
+    "exampleSentenceEs": "Veo el freno. Yo freno."
   },
   {
     "id": "ZGFzJTIwQnJlbXNwZWRhbA__",
-    "word": "das Bremspedal"
+    "word": "das Bremspedal",
+    "exampleSentenceDe": "Das Bremspedal ist wichtig.",
+    "exampleSentenceEs": "El pedal de freno es importante."
   },
   {
     "id": "ZGllJTIwR2FuZ3NjaGFsdHVuZw__",
-    "word": "die Gangschaltung"
+    "word": "die Gangschaltung",
+    "exampleSentenceDe": "Ich habe ein Problem mit der Gangschaltung.",
+    "exampleSentenceEs": "Tengo un problema con la caja de cambios."
   },
   {
     "id": "ZGFzJTIwR2FzcGVkYWw_",
-    "word": "das Gaspedal"
+    "word": "das Gaspedal",
+    "exampleSentenceDe": "Ich sehe das Gaspedal im Auto.",
+    "exampleSentenceEs": "Yo veo el acelerador en el coche."
   },
   {
     "id": "R2FzJTIwZ2ViZW4_",
-    "word": "Gas geben"
+    "word": "Gas geben",
+    "exampleSentenceDe": "Bitte gib Gas auf der Autobahn.",
+    "exampleSentenceEs": "Por favor, acelera en la autopista."
   },
   {
     "id": "ZGVyJTIwRmFocmVyJTIwJTJGJTIwZmFocmVu",
-    "word": "der Fahrer / fahren"
+    "word": "der Fahrer / fahren",
+    "exampleSentenceDe": "Ich sehe den Fahrer. Der Fahrer fährt das Auto.",
+    "exampleSentenceEs": "Veo al conductor. El conductor conduce el coche."
   },
   {
     "id": "ZGllJTIwSHVwZSUyMCUyRiUyMGh1cGVu",
-    "word": "die Hupe / hupen"
+    "word": "die Hupe / hupen",
+    "exampleSentenceDe": "Die Hupe ist laut.",
+    "exampleSentenceEs": "La bocina es ruidosa."
   },
   {
     "id": "ZGVyJTIwS3JhZnRzdG9mZg__",
-    "word": "der Kraftstoff"
+    "word": "der Kraftstoff",
+    "exampleSentenceDe": "Ich brauche den Kraftstoff für das Auto.",
+    "exampleSentenceEs": "Necesito el combustible para el coche."
   },
   {
     "id": "ZGFzJTIwTGVua3JhZCUyMCUyRiUyMGxlbmtlbg__",
-    "word": "das Lenkrad / lenken"
+    "word": "das Lenkrad / lenken",
+    "exampleSentenceDe": "Ich habe das Lenkrad. Ich kann das Lenkrad lenken.",
+    "exampleSentenceEs": "Tengo el volante. Puedo girar el volante."
   },
   {
     "id": "ZGVyJTIwTW90b3I_",
-    "word": "der Motor"
+    "word": "der Motor",
+    "exampleSentenceDe": "Ich sehe den Motor. Der Motor ist neu.",
+    "exampleSentenceEs": "Yo veo el motor. El motor es nuevo."
   },
   {
     "id": "ZGVyJTIwUiVDMyVCQ2Nrc3BpZWdlbA__",
-    "word": "der Rückspiegel"
+    "word": "der Rückspiegel",
+    "exampleSentenceDe": "Ich sehe den Rückspiegel. Der Rückspiegel ist klein.",
+    "exampleSentenceEs": "Veo el espejo retrovisor. El espejo retrovisor es pequeño."
   },
   {
     "id": "ZGVyJTIwU2ljaGVyaGVpdHNndXJ0",
-    "word": "der Sicherheitsgurt"
+    "word": "der Sicherheitsgurt",
+    "exampleSentenceDe": "Der Sicherheitsgurt ist wichtig.",
+    "exampleSentenceEs": "El cinturón de seguridad es importante."
   },
   {
     "id": "ZGllJTIwS3VwcGx1bmc_",
-    "word": "die Kupplung"
+    "word": "die Kupplung",
+    "exampleSentenceDe": "Ich brauche die Kupplung.",
+    "exampleSentenceEs": "Yo necesito el embrague."
   },
   {
     "id": "ZGllJTIwRmVsZ2U_",
-    "word": "die Felge"
+    "word": "die Felge",
+    "exampleSentenceDe": "Das Auto hat vier Felgen.",
+    "exampleSentenceEs": "El coche tiene cuatro rines."
   },
   {
     "id": "ZGllJTIwSGFuZGJyZW1zZQ__",
-    "word": "die Handbremse"
+    "word": "die Handbremse",
+    "exampleSentenceDe": "Ich ziehe die Handbremse an.",
+    "exampleSentenceEs": "Tiro del freno de mano."
   },
   {
     "id": "ZGVyJTIwU2NoYWx0aGViZWw_",
-    "word": "der Schalthebel"
+    "word": "der Schalthebel",
+    "exampleSentenceDe": "Der Schalthebel ist hier.",
+    "exampleSentenceEs": "La palanca de cambios está aquí."
   },
   {
     "id": "ZGVyJTIwU2NoZWliZW53aXNjaGVy",
-    "word": "der Scheibenwischer"
+    "word": "der Scheibenwischer",
+    "exampleSentenceDe": "Ich sehe den Scheibenwischer.",
+    "exampleSentenceEs": "Yo veo el limpiaparabrisas."
   },
   {
     "id": "ZGVyJTIwTGljaHRzY2hhbHRlcg__",
-    "word": "der Lichtschalter"
+    "word": "der Lichtschalter",
+    "exampleSentenceDe": "Wo ist der Lichtschalter?",
+    "exampleSentenceEs": "¿Dónde está el interruptor de luces?"
   },
   {
     "id": "ZGllJTIwSGVpenVuZw__",
-    "word": "die Heizung"
+    "word": "die Heizung",
+    "exampleSentenceDe": "Die Heizung ist an.",
+    "exampleSentenceEs": "La calefacción está encendida."
   },
   {
     "id": "ZGFzJTIwQWJibGVuZGxpY2h0",
-    "word": "das Abblendlicht"
+    "word": "das Abblendlicht",
+    "exampleSentenceDe": "Das Auto hat das Abblendlicht.",
+    "exampleSentenceEs": "El coche tiene la luz corta."
   },
   {
     "id": "ZGFzJTIwRmVybmxpY2h0",
-    "word": "das Fernlicht"
+    "word": "das Fernlicht",
+    "exampleSentenceDe": "Das Fernlicht ist an.",
+    "exampleSentenceEs": "La luz larga está encendida."
   },
   {
     "id": "ZGllJTIwQnJlbXNsZXVjaHRl",
-    "word": "die Bremsleuchte"
+    "word": "die Bremsleuchte",
+    "exampleSentenceDe": "Die Bremsleuchte ist rot.",
+    "exampleSentenceEs": "La luz de freno es roja."
   },
   {
     "id": "ZGllJTIwV2FybmJsaW5rYW5sYWdl",
-    "word": "die Warnblinkanlage"
+    "word": "die Warnblinkanlage",
+    "exampleSentenceDe": "Ich drücke die Warnblinkanlage.",
+    "exampleSentenceEs": "Yo pulso las luces de emergencia."
   },
   {
     "id": "ZGllJTIwTmViZWxzY2hsdXNzbGV1Y2h0ZQ__",
-    "word": "die Nebelschlussleuchte"
+    "word": "die Nebelschlussleuchte",
+    "exampleSentenceDe": "Der Wagen hat die Nebelschlussleuchte.",
+    "exampleSentenceEs": "El coche tiene la luz antiniebla trasera."
   },
   {
     "id": "ZGFzJTIwVGFnZmFocmxpY2h0",
-    "word": "das Tagfahrlicht"
+    "word": "das Tagfahrlicht",
+    "exampleSentenceDe": "Das Tagfahrlicht ist neu.",
+    "exampleSentenceEs": "La luz diurna es nueva."
   },
   {
     "id": "YmV0YW5rZW4_",
-    "word": "betanken"
+    "word": "betanken",
+    "exampleSentenceDe": "Ich muss das Auto betanken.",
+    "exampleSentenceEs": "Tengo que repostar gasolina el coche."
   },
   {
     "id": "JUMzJUJDYmVyaG9sZW4_",
-    "word": "überholen"
+    "word": "überholen",
+    "exampleSentenceDe": "Der Bus überholt das Auto.",
+    "exampleSentenceEs": "El autobús adelanta al coche."
   },
   {
     "id": "ZWluc3RlaWdlbiUyMCUyRiUyMGF1c3N0ZWlnZW4_",
-    "word": "einsteigen / aussteigen"
+    "word": "einsteigen / aussteigen",
+    "exampleSentenceDe": "Wir steigen in das Auto ein.",
+    "exampleSentenceEs": "Nosotros subimos al coche."
   },
   {
     "id": "YXVmc2NobGllJUMzJTlGZW4_",
-    "word": "aufschließen"
+    "word": "aufschließen",
+    "exampleSentenceDe": "Ich schließe die Tür auf.",
+    "exampleSentenceEs": "Yo abro la puerta con llave."
   },
   {
     "id": "YW5oYWx0ZW4lMjAlMkYlMjBoYWx0ZW4lMjAlMkYlMjBwYXJrZW4_",
-    "word": "anhalten / halten / parken"
+    "word": "anhalten / halten / parken",
+    "exampleSentenceDe": "Hier halten wir.",
+    "exampleSentenceEs": "Aquí paramos."
   },
   {
     "id": "ZGllJTIwVm9yZmFocnQ_",
-    "word": "die Vorfahrt"
+    "word": "die Vorfahrt",
+    "exampleSentenceDe": "Ich habe die Vorfahrt.",
+    "exampleSentenceEs": "Yo tengo la prioridad."
   },
   {
     "id": "YXVmcGFzc2Vu",
-    "word": "aufpassen"
+    "word": "aufpassen",
+    "exampleSentenceDe": "Pass auf, bitte!",
+    "exampleSentenceEs": "¡Presta atención, por favor!"
   },
   {
     "id": "TW90b3IlMjBzdGFydGVu",
-    "word": "Motor starten"
+    "word": "Motor starten",
+    "exampleSentenceDe": "Ich starte den Motor.",
+    "exampleSentenceEs": "Yo prendo el motor."
   },
   {
     "id": "c2ljaCUyMGFuc2NobmFsbGVu",
-    "word": "sich anschnallen"
+    "word": "sich anschnallen",
+    "exampleSentenceDe": "Ich muss mich im Auto anschnallen.",
+    "exampleSentenceEs": "Tengo que ponerme el cinturón en el coche."
   },
   {
     "id": "YmVzY2hsZXVuaWdlbg__",
-    "word": "beschleunigen"
+    "word": "beschleunigen",
+    "exampleSentenceDe": "Das Auto beschleunigt.",
+    "exampleSentenceEs": "El coche acelera."
   },
   {
     "id": "YWJzY2hsZXBwZW4_",
-    "word": "abschleppen"
+    "word": "abschleppen",
+    "exampleSentenceDe": "Ich lasse das Auto abschleppen.",
+    "exampleSentenceEs": "Yo dejo remolcar el coche."
   },
   {
     "id": "enVzYW1tZW5zdG8lQzMlOUZlbg__",
-    "word": "zusammenstoßen"
+    "word": "zusammenstoßen",
+    "exampleSentenceDe": "Wir stoßen zusammen.",
+    "exampleSentenceEs": "Nos chocamos."
   },
   {
     "id": "ZGVyJTIwU2NoYWRlbg__",
-    "word": "der Schaden"
+    "word": "der Schaden",
+    "exampleSentenceDe": "Der Schaden ist groß.",
+    "exampleSentenceEs": "El daño es grande."
   },
   {
     "id": "ZGFzJTIwTW90b3IlQzMlQjZs",
-    "word": "das Motoröl"
+    "word": "das Motoröl",
+    "exampleSentenceDe": "Das ist das Motoröl.",
+    "exampleSentenceEs": "Este es el aceite de motor."
   },
   {
     "id": "ZGVyJTIwUmVpZmVuZHJ1Y2s_",
-    "word": "der Reifendruck"
+    "word": "der Reifendruck",
+    "exampleSentenceDe": "Der Reifendruck ist gut.",
+    "exampleSentenceEs": "La presión de los neumáticos es buena."
   },
   {
     "id": "ZGVyJTIwUmVpZmVu",
-    "word": "der Reifen"
+    "word": "der Reifen",
+    "exampleSentenceDe": "Der Reifen ist neu.",
+    "exampleSentenceEs": "La llanta es nueva."
   },
   {
     "id": "ZGVyJTIwUGt3JTIwJTJGJTIwZGVyJTIwTGt3",
-    "word": "der Pkw / der Lkw"
+    "word": "der Pkw / der Lkw",
+    "exampleSentenceDe": "Das ist ein Pkw. Der Pkw ist neu.",
+    "exampleSentenceEs": "Este es un coche. El coche es nuevo."
   },
   {
     "id": "ZGVyJTIwRnUlQzMlOUZnJUMzJUE0bmdlcg__",
-    "word": "der Fußgänger"
+    "word": "der Fußgänger",
+    "exampleSentenceDe": "Der Fußgänger ist hier.",
+    "exampleSentenceEs": "El peatón está aquí."
   },
   {
     "id": "ZGllJTIwQW1wZWwlMjAlMkYlMjBLcmV1enVuZw__",
-    "word": "die Ampel / Kreuzung"
+    "word": "die Ampel / Kreuzung",
+    "exampleSentenceDe": "Die Ampel ist grün.",
+    "exampleSentenceEs": "El semáforo está en verde."
   },
   {
     "id": "ZGFzJTIwRmFocnpldWc_",
-    "word": "das Fahrzeug"
+    "word": "das Fahrzeug",
+    "exampleSentenceDe": "Das Fahrzeug ist neu.",
+    "exampleSentenceEs": "El vehículo es nuevo."
   },
   {
     "id": "ZGVyJTIwVmVya2VociUyMCUyRiUyMFN0YXU_",
-    "word": "der Verkehr / Stau"
+    "word": "der Verkehr / Stau",
+    "exampleSentenceDe": "Der Verkehr ist heute nicht gut.",
+    "exampleSentenceEs": "El tráfico no está bueno hoy."
   },
   {
     "id": "ZGFzJTIwVmVya2VocnNzY2hpbGQ_",
-    "word": "das Verkehrsschild"
+    "word": "das Verkehrsschild",
+    "exampleSentenceDe": "Das Verkehrsschild ist rot.",
+    "exampleSentenceEs": "La señal de tráfico es roja."
   },
   {
     "id": "ZGllJTIwR2VzY2h3aW5kaWdrZWl0",
-    "word": "die Geschwindigkeit"
+    "word": "die Geschwindigkeit",
+    "exampleSentenceDe": "Die Geschwindigkeit ist hoch.",
+    "exampleSentenceEs": "La velocidad es alta."
   },
   {
     "id": "ZGllJTIwU3B1cg__",
-    "word": "die Spur"
+    "word": "die Spur",
+    "exampleSentenceDe": "Das Auto ist auf der Spur.",
+    "exampleSentenceEs": "El coche está en el carril."
   },
   {
     "id": "ZGllJTIwV2FybmxldWNodGVu",
-    "word": "die Warnleuchten"
+    "word": "die Warnleuchten",
+    "exampleSentenceDe": "Die Warnleuchten sind an.",
+    "exampleSentenceEs": "Las luces de advertencia están encendidas."
   },
   {
     "id": "ZGllJTIwQmF1c3RlbGxl",
-    "word": "die Baustelle"
+    "word": "die Baustelle",
+    "exampleSentenceDe": "Die Baustelle ist groß.",
+    "exampleSentenceEs": "La obra es grande."
   },
   {
     "id": "ZGllJTIwU2ljaGVyaGVpdA__",
-    "word": "die Sicherheit"
+    "word": "die Sicherheit",
+    "exampleSentenceDe": "Die Sicherheit ist wichtig.",
+    "exampleSentenceEs": "La seguridad es importante."
   },
   {
     "id": "VG90ZXIlMjBXaW5rZWw_",
-    "word": "Toter Winkel"
+    "word": "Toter Winkel",
+    "exampleSentenceDe": "Der tote Winkel ist gefährlich.",
+    "exampleSentenceEs": "El ángulo muerto es peligroso."
   },
   {
     "id": "U2NodWx0ZXJibGljaw__",
-    "word": "Schulterblick"
+    "word": "Schulterblick",
+    "exampleSentenceDe": "Ich mache einen Schulterblick.",
+    "exampleSentenceEs": "Yo hago una mirada sobre hombro."
   },
   {
     "id": "UmVjaHRzJTIwdm9yJTIwbGlua3M_",
-    "word": "Rechts vor links"
+    "word": "Rechts vor links",
+    "exampleSentenceDe": "An der Kreuzung gilt: Rechts vor links.",
+    "exampleSentenceEs": "En el cruce se aplica: la derecha tiene preferencia."
   },
   {
     "id": "TW90b3IlQzMlQjZsZHJ1Y2s_",
-    "word": "Motoröldruck"
+    "word": "Motoröldruck",
+    "exampleSentenceDe": "Der Motoröldruck ist gut.",
+    "exampleSentenceEs": "La presión del aceite del motor está bien."
   },
   {
     "id": "SyVDMyVCQ2hsbWl0dGVsdGVtcGVyYXR1cg__",
-    "word": "Kühlmitteltemperatur"
+    "word": "Kühlmitteltemperatur",
+    "exampleSentenceDe": "Ich sehe die Kühlmitteltemperatur. Die Kühlmitteltemperatur ist rot.",
+    "exampleSentenceEs": "Veo la temperatura del refrigerante. La temperatura del refrigerante es roja."
   },
   {
     "id": "ZGFzJTIwU2NoaWViZWRhY2g_",
-    "word": "das Schiebedach"
+    "word": "das Schiebedach",
+    "exampleSentenceDe": "Ich habe ein Auto. Das Auto hat ein Schiebedach.",
+    "exampleSentenceEs": "Yo tengo un coche. El coche tiene un techo corredizo."
   },
   {
     "id": "ZGVyJTIwQXVzcHVmZg__",
-    "word": "der Auspuff"
+    "word": "der Auspuff",
+    "exampleSentenceDe": "Der Auspuff ist neu.",
+    "exampleSentenceEs": "El escape es nuevo."
   },
   {
     "id": "ZGFzJTIwTnVtbWVybnNjaGlsZA__",
-    "word": "das Nummernschild"
+    "word": "das Nummernschild",
+    "exampleSentenceDe": "Ich sehe das Nummernschild.",
+    "exampleSentenceEs": "Veo la matrícula."
   },
   {
     "id": "ZGllJTIwV2luZHNjaHV0enNjaGVpYmU_",
-    "word": "die Windschutzscheibe"
+    "word": "die Windschutzscheibe",
+    "exampleSentenceDe": "Ich brauche einen neuen Scheibenwischer für die Windschutzscheibe.",
+    "exampleSentenceEs": "Necesito un limpiaparabrisas nuevo para el parabrisas."
   },
   {
     "id": "ZGllJTIwTW90b3JoYXViZQ__",
-    "word": "die Motorhaube"
+    "word": "die Motorhaube",
+    "exampleSentenceDe": "Das Auto ist hier. Die Motorhaube ist offen.",
+    "exampleSentenceEs": "El coche está aquí. El capó está abierto."
   },
   {
     "id": "ZGllJTIwU3RvJUMzJTlGc3Rhbmdl",
-    "word": "die Stoßstange"
+    "word": "die Stoßstange",
+    "exampleSentenceDe": "Das ist die Stoßstange. Die Stoßstange ist neu.",
+    "exampleSentenceEs": "Este es el parachoques. El parachoques es nuevo."
   },
   {
     "id": "ZGVyJTIwS3JlaXN2ZXJrZWhy",
-    "word": "der Kreisverkehr"
+    "word": "der Kreisverkehr",
+    "exampleSentenceDe": "Ich fahre in den Kreisverkehr.",
+    "exampleSentenceEs": "Yo entro en la rotonda."
   },
   {
     "id": "ZGllJTIwRWluYmFobnN0cmElQzMlOUZl",
-    "word": "die Einbahnstraße"
+    "word": "die Einbahnstraße",
+    "exampleSentenceDe": "Die Straße ist eine Einbahnstraße.",
+    "exampleSentenceEs": "La calle es una calle de sentido único."
   },
   {
     "id": "YWJiaWVnZW4_",
-    "word": "abbiegen"
+    "word": "abbiegen",
+    "exampleSentenceDe": "Ich biege hier links ab.",
+    "exampleSentenceEs": "Yo giro aquí a la izquierda."
   },
   {
     "id": "ZGVyJTIwU3RyYWZ6ZXR0ZWw_",
-    "word": "der Strafzettel"
+    "word": "der Strafzettel",
+    "exampleSentenceDe": "Ich habe einen Strafzettel bekommen. Der Strafzettel ist teuer.",
+    "exampleSentenceEs": "Recibí una multa de tráfico. La multa de tráfico es cara."
   },
   {
     "id": "ZGllJTIwVmVyc2ljaGVydW5n",
-    "word": "die Versicherung"
+    "word": "die Versicherung",
+    "exampleSentenceDe": "Ich habe die Versicherung.",
+    "exampleSentenceEs": "Tengo el seguro."
   },
   {
     "id": "dW5k",
-    "word": "und"
+    "word": "und",
+    "exampleSentenceDe": "Ich habe Kaffee und Kuchen.",
+    "exampleSentenceEs": "Yo tengo café y pastel."
   },
   {
     "id": "b2Rlcg__",
-    "word": "oder"
+    "word": "oder",
+    "exampleSentenceDe": "Möchtest du Tee oder Kaffee?",
+    "exampleSentenceEs": "¿Quieres té o café?"
   },
   {
     "id": "YWJlcg__",
-    "word": "aber"
+    "word": "aber",
+    "exampleSentenceDe": "Ich habe Hunger, aber ich habe keine Zeit.",
+    "exampleSentenceEs": "Tengo hambre, pero no tengo tiempo."
   },
   {
     "id": "ZGVubg__",
-    "word": "denn"
+    "word": "denn",
+    "exampleSentenceDe": "Ich habe Hunger, denn ich esse gern.",
+    "exampleSentenceEs": "Tengo hambre, pues me gusta comer."
   },
   {
     "id": "c29uZGVybg__",
-    "word": "sondern"
+    "word": "sondern",
+    "exampleSentenceDe": "Ich bin nicht müde, sondern ich bin hungrig.",
+    "exampleSentenceEs": "No estoy cansado, sino que tengo hambre."
   },
   {
     "id": "ZiVDMyVCQ3I_",
-    "word": "für"
+    "word": "für",
+    "exampleSentenceDe": "Das Geschenk ist für dich.",
+    "exampleSentenceEs": "El regalo es para ti."
   },
   {
     "id": "b2huZQ__",
-    "word": "ohne"
+    "word": "ohne",
+    "exampleSentenceDe": "Ich trinke Kaffee ohne Zucker.",
+    "exampleSentenceEs": "Bebo café sin azúcar."
   },
   {
     "id": "ZHVyY2g_",
-    "word": "durch"
+    "word": "durch",
+    "exampleSentenceDe": "Wir gehen durch den Park.",
+    "exampleSentenceEs": "Nosotros vamos por el parque."
   },
   {
     "id": "Z2VnZW4_",
-    "word": "gegen"
+    "word": "gegen",
+    "exampleSentenceDe": "Es ist gegen 10 Uhr.",
+    "exampleSentenceEs": "Son las 10 en punto."
   },
   {
     "id": "dW0_",
-    "word": "um"
+    "word": "um",
+    "exampleSentenceDe": "Der Zug kommt um acht Uhr an.",
+    "exampleSentenceEs": "El tren llega a las ocho en punto."
   },
   {
     "id": "bWl0",
-    "word": "mit"
+    "word": "mit",
+    "exampleSentenceDe": "Ich gehe mit meinem Freund.",
+    "exampleSentenceEs": "Voy con mi amigo."
   },
   {
     "id": "bmFjaA__",
-    "word": "nach"
+    "word": "nach",
+    "exampleSentenceDe": "Nach dem Essen gehe ich nach Hause.",
+    "exampleSentenceEs": "Después de la comida, voy a casa."
   },
   {
     "id": "YXVz",
-    "word": "aus"
+    "word": "aus",
+    "exampleSentenceDe": "Ich komme aus Spanien.",
+    "exampleSentenceEs": "Yo vengo de España."
   },
   {
     "id": "YmVp",
-    "word": "bei"
+    "word": "bei",
+    "exampleSentenceDe": "Ich bin bei meiner Freundin.",
+    "exampleSentenceEs": "Yo estoy en casa de mi amiga."
   },
   {
     "id": "dm9u",
-    "word": "von"
+    "word": "von",
+    "exampleSentenceDe": "Das Buch ist von Anna.",
+    "exampleSentenceEs": "El libro es de Anna."
   },
   {
     "id": "enU_",
-    "word": "zu"
+    "word": "zu",
+    "exampleSentenceDe": "Ich gehe zu meiner Mutter.",
+    "exampleSentenceEs": "Voy hacia mi madre."
   },
   {
     "id": "c2VpdA__",
-    "word": "seit"
+    "word": "seit",
+    "exampleSentenceDe": "Ich wohne seit einem Jahr in Berlin.",
+    "exampleSentenceEs": "Vivo desde hace un año en Berlín."
   },
   {
     "id": "aW4_",
-    "word": "in"
+    "word": "in",
+    "exampleSentenceDe": "Ich bin in der Schule.",
+    "exampleSentenceEs": "Yo estoy en la escuela."
   },
   {
     "id": "YW4_",
-    "word": "an"
+    "word": "an",
+    "exampleSentenceDe": "Ich bin am Montag in Berlin.",
+    "exampleSentenceEs": "Yo estoy el lunes en Berlín."
   },
   {
     "id": "YXVm",
-    "word": "auf"
+    "word": "auf",
+    "exampleSentenceDe": "Das Buch ist auf dem Tisch.",
+    "exampleSentenceEs": "El libro está sobre la mesa."
   },
   {
     "id": "dW50ZXI_",
-    "word": "unter"
+    "word": "unter",
+    "exampleSentenceDe": "Das Buch ist unter dem Tisch.",
+    "exampleSentenceEs": "El libro está debajo de la mesa."
   },
   {
     "id": "JUMzJUJDYmVy",
-    "word": "über"
+    "word": "über",
+    "exampleSentenceDe": "Der Mann spricht über die Familie.",
+    "exampleSentenceEs": "El hombre habla sobre la familia."
   },
   {
     "id": "bmViZW4_",
-    "word": "neben"
+    "word": "neben",
+    "exampleSentenceDe": "Der Stuhl ist neben dem Tisch.",
+    "exampleSentenceEs": "La silla está al lado de la mesa."
   },
   {
     "id": "endpc2NoZW4_",
-    "word": "zwischen"
+    "word": "zwischen",
+    "exampleSentenceDe": "Das Buch ist zwischen dem Tisch und dem Stuhl.",
+    "exampleSentenceEs": "El libro está entre la mesa y la silla."
   },
   {
     "id": "dm9y",
-    "word": "vor"
+    "word": "vor",
+    "exampleSentenceDe": "Vor dem Haus ist ein Baum.",
+    "exampleSentenceEs": "Delante de la casa hay un árbol."
   },
   {
     "id": "aGludGVy",
-    "word": "hinter"
+    "word": "hinter",
+    "exampleSentenceDe": "Das Buch ist hinter dem Tisch.",
+    "exampleSentenceEs": "El libro está detrás de la mesa."
   },
   {
     "id": "b2J3b2hs",
-    "word": "obwohl"
+    "word": "obwohl",
+    "exampleSentenceDe": "Ich gehe spazieren, obwohl es regnet.",
+    "exampleSentenceEs": "Salgo a pasear, aunque llueve."
   },
   {
     "id": "d2Vubg__",
-    "word": "wenn"
+    "word": "wenn",
+    "exampleSentenceDe": "Wenn ich Zeit habe, lerne ich Deutsch.",
+    "exampleSentenceEs": "Si tengo tiempo, aprendo alemán."
   },
   {
     "id": "YWxz",
-    "word": "als"
+    "word": "als",
+    "exampleSentenceDe": "Ich bin klein, als ich Kind war.",
+    "exampleSentenceEs": "Soy bajo, cuando era niño."
   },
   {
     "id": "ZGVzaGFsYg__",
-    "word": "deshalb"
+    "word": "deshalb",
+    "exampleSentenceDe": "Ich habe Hunger. Deshalb esse ich Pizza.",
+    "exampleSentenceEs": "Tengo hambre. Por eso como pizza."
   },
   {
     "id": "dHJvdHpkZW0_",
-    "word": "trotzdem"
+    "word": "trotzdem",
+    "exampleSentenceDe": "Es regnet. Trotzdem gehe ich spazieren.",
+    "exampleSentenceEs": "Está lloviendo. Sin embargo, voy a pasear."
   },
   {
     "id": "YXUlQzMlOUZlcmRlbQ__",
-    "word": "außerdem"
+    "word": "außerdem",
+    "exampleSentenceDe": "Ich trinke Kaffee. Außerdem trinke ich Tee.",
+    "exampleSentenceEs": "Bebo café. Además, bebo té."
   },
   {
     "id": "biVDMyVBNG1saWNo",
-    "word": "nämlich"
+    "word": "nämlich",
+    "exampleSentenceDe": "Ich habe ein Problem, nämlich: Ich habe keinen Hunger.",
+    "exampleSentenceEs": "Tengo un problema, es decir: No tengo hambre."
   },
   {
     "id": "ZG9jaA__",
-    "word": "doch"
+    "word": "doch",
+    "exampleSentenceDe": "Du bist müde. Nein! Ich bin doch nicht müde.",
+    "exampleSentenceEs": "Estás cansado. ¡No! Sí que no estoy cansado."
   },
   {
     "id": "bWFs",
-    "word": "mal"
+    "word": "mal",
+    "exampleSentenceDe": "Das ist mal gut.",
+    "exampleSentenceEs": "Esto está bien, ¡eh! / Esto sí que está bien."
   },
   {
     "id": "amE_",
-    "word": "ja"
+    "word": "ja",
+    "exampleSentenceDe": "Ja, das ist gut.",
+    "exampleSentenceEs": "Sí, eso está bien."
   },
   {
     "id": "c2Vpbg__",
-    "word": "sein"
+    "word": "sein",
+    "exampleSentenceDe": "Ich bin hier.",
+    "exampleSentenceEs": "Yo estoy aquí."
   },
   {
     "id": "aGFiZW4_",
-    "word": "haben"
+    "word": "haben",
+    "exampleSentenceDe": "Ich habe Hunger.",
+    "exampleSentenceEs": "Yo tengo hambre."
   },
   {
     "id": "d2VyZGVu",
-    "word": "werden"
+    "word": "werden",
+    "exampleSentenceDe": "Ich werde Arzt.",
+    "exampleSentenceEs": "Yo seré médico."
   },
   {
     "id": "bWFjaGVu",
-    "word": "machen"
+    "word": "machen",
+    "exampleSentenceDe": "Ich mache einen Kaffee.",
+    "exampleSentenceEs": "Yo hago un café."
   },
   {
     "id": "dHVu",
-    "word": "tun"
+    "word": "tun",
+    "exampleSentenceDe": "Was tust du heute?",
+    "exampleSentenceEs": "¿Qué haces hoy?"
   },
   {
     "id": "c2FnZW4_",
-    "word": "sagen"
+    "word": "sagen",
+    "exampleSentenceDe": "Ich sage \"Hallo\".",
+    "exampleSentenceEs": "Yo digo \"Hola\"."
   },
   {
     "id": "Z2VoZW4_",
-    "word": "gehen"
+    "word": "gehen",
+    "exampleSentenceDe": "Ich gehe nach Hause.",
+    "exampleSentenceEs": "Yo voy a casa."
   },
   {
     "id": "a29tbWVu",
-    "word": "kommen"
+    "word": "kommen",
+    "exampleSentenceDe": "Ich komme aus Spanien.",
+    "exampleSentenceEs": "Yo vengo de España."
   },
   {
     "id": "c2VoZW4_",
-    "word": "sehen"
+    "word": "sehen",
+    "exampleSentenceDe": "Ich sehe den Mann.",
+    "exampleSentenceEs": "Yo veo al hombre."
   },
   {
     "id": "d2lzc2Vu",
-    "word": "wissen"
+    "word": "wissen",
+    "exampleSentenceDe": "Ich weiß die Antwort.",
+    "exampleSentenceEs": "Yo sé la respuesta."
   },
   {
     "id": "a2VubmVu",
-    "word": "kennen"
+    "word": "kennen",
+    "exampleSentenceDe": "Ich kenne den Mann.",
+    "exampleSentenceEs": "Yo conozco al hombre."
   },
   {
     "id": "ZmluZGVu",
-    "word": "finden"
+    "word": "finden",
+    "exampleSentenceDe": "Ich finde das Buch gut.",
+    "exampleSentenceEs": "Yo encuentro el libro bueno."
   },
   {
     "id": "YmxlaWJlbg__",
-    "word": "bleiben"
+    "word": "bleiben",
+    "exampleSentenceDe": "Ich bleibe hier.",
+    "exampleSentenceEs": "Yo me quedo aquí."
   },
   {
     "id": "bGFzc2Vu",
-    "word": "lassen"
+    "word": "lassen",
+    "exampleSentenceDe": "Ich lasse das Fenster offen.",
+    "exampleSentenceEs": "Yo dejo la ventana abierta."
   },
   {
     "id": "ZGVua2Vu",
-    "word": "denken"
+    "word": "denken",
+    "exampleSentenceDe": "Ich denke an dich.",
+    "exampleSentenceEs": "Pienso en ti."
   },
   {
     "id": "Z3JvJUMzJTlGJTIwJTJGJTIwa2xlaW4_",
-    "word": "groß / klein"
+    "word": "groß / klein",
+    "exampleSentenceDe": "Das Haus ist groß. Das Haus ist nicht klein.",
+    "exampleSentenceEs": "La casa es grande. La casa no es pequeña."
   },
   {
     "id": "Z3V0JTIwJTJGJTIwc2NobGVjaHQ_",
-    "word": "gut / schlecht"
+    "word": "gut / schlecht",
+    "exampleSentenceDe": "Das Essen ist gut.",
+    "exampleSentenceEs": "La comida está buena."
   },
   {
     "id": "bmV1JTIwJTJGJTIwYWx0",
-    "word": "neu / alt"
+    "word": "neu / alt",
+    "exampleSentenceDe": "Mein Haus ist alt. Aber mein Auto ist neu.",
+    "exampleSentenceEs": "Mi casa es vieja. Pero mi coche es nuevo."
   },
   {
     "id": "c2NoJUMzJUI2biUyMCUyRiUyMGglQzMlQTRzc2xpY2g_",
-    "word": "schön / hässlich"
+    "word": "schön / hässlich",
+    "exampleSentenceDe": "Das Haus ist schön.",
+    "exampleSentenceEs": "La casa es bonita."
   },
   {
     "id": "c2Nod2VyJTIwJTJGJTIwbGVpY2h0",
-    "word": "schwer / leicht"
+    "word": "schwer / leicht",
+    "exampleSentenceDe": "Der Koffer ist schwer.",
+    "exampleSentenceEs": "La maleta es pesada."
   },
   {
     "id": "cmljaHRpZyUyMCUyRiUyMGZhbHNjaA__",
-    "word": "richtig / falsch"
+    "word": "richtig / falsch",
+    "exampleSentenceDe": "Das ist richtig.",
+    "exampleSentenceEs": "Eso es correcto."
   },
   {
     "id": "d2ljaHRpZw__",
-    "word": "wichtig"
+    "word": "wichtig",
+    "exampleSentenceDe": "Das ist wichtig.",
+    "exampleSentenceEs": "Esto es importante."
   },
   {
     "id": "ZWluZmFjaCUyMCUyRiUyMHNjaHdpZXJpZw__",
-    "word": "einfach / schwierig"
+    "word": "einfach / schwierig",
+    "exampleSentenceDe": "Die Aufgabe ist einfach.",
+    "exampleSentenceEs": "La tarea es fácil."
   },
   {
     "id": "c2NobmVsbCUyMCUyRiUyMGxhbmdzYW0_",
-    "word": "schnell / langsam"
+    "word": "schnell / langsam",
+    "exampleSentenceDe": "Das Auto ist schnell.",
+    "exampleSentenceEs": "El coche es rápido."
   },
   {
     "id": "bGF1dCUyMCUyRiUyMGxlaXNl",
-    "word": "laut / leise"
+    "word": "laut / leise",
+    "exampleSentenceDe": "Das Radio ist laut. Ich mache das Radio leise.",
+    "exampleSentenceEs": "La radio está alta. Yo pongo la radio silenciosa."
   },
   {
     "id": "aGVsbCUyMCUyRiUyMGR1bmtlbA__",
-    "word": "hell / dunkel"
+    "word": "hell / dunkel",
+    "exampleSentenceDe": "Das Licht ist hell.",
+    "exampleSentenceEs": "La luz es clara."
   },
   {
     "id": "aGVpJUMzJTlGJTIwJTJGJTIwa2FsdA__",
-    "word": "heiß / kalt"
+    "word": "heiß / kalt",
+    "exampleSentenceDe": "Das Wasser ist heiß.",
+    "exampleSentenceEs": "El agua está caliente."
   },
   {
     "id": "ayVDMyVCNm5uZW4_",
-    "word": "können"
+    "word": "können",
+    "exampleSentenceDe": "Ich kann Deutsch sprechen.",
+    "exampleSentenceEs": "Yo puedo hablar alemán."
   },
   {
     "id": "bSVDMyVCQ3NzZW4_",
-    "word": "müssen"
+    "word": "müssen",
+    "exampleSentenceDe": "Ich muss jetzt nach Hause gehen.",
+    "exampleSentenceEs": "Yo tengo que ir a casa ahora."
   },
   {
     "id": "ZCVDMyVCQ3JmZW4_",
-    "word": "dürfen"
+    "word": "dürfen",
+    "exampleSentenceDe": "Hier dürfen Sie parken.",
+    "exampleSentenceEs": "Aquí puede aparcar."
   },
   {
     "id": "c29sbGVu",
-    "word": "sollen"
+    "word": "sollen",
+    "exampleSentenceDe": "Du sollst Wasser trinken.",
+    "exampleSentenceEs": "Tú deberías beber agua."
   },
   {
     "id": "d29sbGVu",
-    "word": "wollen"
+    "word": "wollen",
+    "exampleSentenceDe": "Ich will einen Kaffee.",
+    "exampleSentenceEs": "Yo quiero un café."
   },
   {
     "id": "bSVDMyVCNmNodGVu",
-    "word": "möchten"
+    "word": "möchten",
+    "exampleSentenceDe": "Ich möchte einen Kaffee.",
+    "exampleSentenceEs": "Yo quisiera un café."
   },
   {
     "id": "Z2ViZW4_",
-    "word": "geben"
+    "word": "geben",
+    "exampleSentenceDe": "Ich gebe dir mein Buch.",
+    "exampleSentenceEs": "Yo te doy mi libro."
   },
   {
     "id": "aGVsZmVu",
-    "word": "helfen"
+    "word": "helfen",
+    "exampleSentenceDe": "Kannst du mir helfen?",
+    "exampleSentenceEs": "¿Puedes ayudarme?"
   },
   {
     "id": "YnJpbmdlbg__",
-    "word": "bringen"
+    "word": "bringen",
+    "exampleSentenceDe": "Ich bringe dir das Buch.",
+    "exampleSentenceEs": "Yo te traigo el libro."
   },
   {
     "id": "c2NocmVpYmVu",
-    "word": "schreiben"
+    "word": "schreiben",
+    "exampleSentenceDe": "Ich schreibe eine E-Mail.",
+    "exampleSentenceEs": "Yo escribo un correo electrónico."
   },
   {
     "id": "dmVyc3VjaGVu",
-    "word": "versuchen"
+    "word": "versuchen",
+    "exampleSentenceDe": "Ich versuche, Deutsch zu lernen.",
+    "exampleSentenceEs": "Intento aprender alemán."
   },
   {
     "id": "ZW50c2NoZWlkZW4_",
-    "word": "entscheiden"
+    "word": "entscheiden",
+    "exampleSentenceDe": "Ich kann nicht entscheiden.",
+    "exampleSentenceEs": "Yo no puedo decidir."
   },
   {
     "id": "dmVyZ2Vzc2Vu",
-    "word": "vergessen"
+    "word": "vergessen",
+    "exampleSentenceDe": "Ich vergesse meinen Schlüssel nicht.",
+    "exampleSentenceEs": "No olvido mi llave."
   },
   {
     "id": "c2ljaCUyMGVyaW5uZXJu",
-    "word": "sich erinnern"
+    "word": "sich erinnern",
+    "exampleSentenceDe": "Ich erinnere mich an dich.",
+    "exampleSentenceEs": "Yo te recuerdo a ti."
   },
   {
     "id": "cGFzc2llcmVu",
-    "word": "passieren"
+    "word": "passieren",
+    "exampleSentenceDe": "Was passiert heute?",
+    "exampleSentenceEs": "¿Qué sucede hoy?"
   },
   {
     "id": "ZXJ6JUMzJUE0aGxlbg__",
-    "word": "erzählen"
+    "word": "erzählen",
+    "exampleSentenceDe": "Ich erzähle eine Geschichte.",
+    "exampleSentenceEs": "Yo narro una historia."
   },
   {
     "id": "YmVkZXV0ZW4_",
-    "word": "bedeuten"
+    "word": "bedeuten",
+    "exampleSentenceDe": "Was bedeutet das?",
+    "exampleSentenceEs": "¿Qué significa eso?"
   },
   {
     "id": "YmVnaW5uZW4_",
-    "word": "beginnen"
+    "word": "beginnen",
+    "exampleSentenceDe": "Der Kurs beginnt heute.",
+    "exampleSentenceEs": "El curso comienza hoy."
   },
   {
     "id": "c3RlaGVu",
-    "word": "stehen"
+    "word": "stehen",
+    "exampleSentenceDe": "Der Tisch steht hier.",
+    "exampleSentenceEs": "La mesa está aquí."
   },
   {
     "id": "c3RlbGxlbg__",
-    "word": "stellen"
+    "word": "stellen",
+    "exampleSentenceDe": "Ich stelle die Flasche auf den Tisch.",
+    "exampleSentenceEs": "Yo coloco la botella sobre la mesa."
   },
   {
     "id": "bGllZ2Vu",
-    "word": "liegen"
+    "word": "liegen",
+    "exampleSentenceDe": "Ich liege auf dem Bett.",
+    "exampleSentenceEs": "Yo estoy acostado en la cama."
   },
   {
     "id": "bGVnZW4_",
-    "word": "legen"
+    "word": "legen",
+    "exampleSentenceDe": "Ich lege das Buch auf den Tisch.",
+    "exampleSentenceEs": "Yo coloco el libro sobre la mesa."
   },
   {
     "id": "aGV1dGU_",
-    "word": "heute"
+    "word": "heute",
+    "exampleSentenceDe": "Heute ist Montag.",
+    "exampleSentenceEs": "Hoy es lunes."
   },
   {
     "id": "bW9yZ2Vu",
-    "word": "morgen"
+    "word": "morgen",
+    "exampleSentenceDe": "Ich gehe morgen ins Kino.",
+    "exampleSentenceEs": "Mañana voy al cine."
   },
   {
     "id": "Z2VzdGVybg__",
-    "word": "gestern"
+    "word": "gestern",
+    "exampleSentenceDe": "Gestern war ich im Park.",
+    "exampleSentenceEs": "Ayer estuve en el parque."
   },
   {
     "id": "amV0enQ_",
-    "word": "jetzt"
+    "word": "jetzt",
+    "exampleSentenceDe": "Ich lerne Deutsch jetzt.",
+    "exampleSentenceEs": "Yo aprendo alemán ahora."
   },
   {
     "id": "YmFsZA__",
-    "word": "bald"
+    "word": "bald",
+    "exampleSentenceDe": "Wir sehen uns bald.",
+    "exampleSentenceEs": "Nos vemos pronto."
   },
   {
     "id": "aW1tZXI_",
-    "word": "immer"
+    "word": "immer",
+    "exampleSentenceDe": "Ich trinke Kaffee immer.",
+    "exampleSentenceEs": "Yo bebo café siempre."
   },
   {
     "id": "b2Z0",
-    "word": "oft"
+    "word": "oft",
+    "exampleSentenceDe": "Ich trinke oft Kaffee.",
+    "exampleSentenceEs": "A menudo bebo café."
   },
   {
     "id": "bWFuY2htYWw_",
-    "word": "manchmal"
+    "word": "manchmal",
+    "exampleSentenceDe": "Manchmal trinke ich Kaffee.",
+    "exampleSentenceEs": "A veces bebo café."
   },
   {
     "id": "bmll",
-    "word": "nie"
+    "word": "nie",
+    "exampleSentenceDe": "Ich sehe dich nie.",
+    "exampleSentenceEs": "Yo te veo nunca."
   },
   {
     "id": "c2Nob24_",
-    "word": "schon"
+    "word": "schon",
+    "exampleSentenceDe": "Ich bin schon zu Hause.",
+    "exampleSentenceEs": "Yo ya estoy en casa."
   },
   {
     "id": "bm9jaA__",
-    "word": "noch"
+    "word": "noch",
+    "exampleSentenceDe": "Ich bin noch zu Hause.",
+    "exampleSentenceEs": "Yo estoy todavía en casa."
   },
   {
     "id": "aGllcg__",
-    "word": "hier"
+    "word": "hier",
+    "exampleSentenceDe": "Ich bin hier.",
+    "exampleSentenceEs": "Yo estoy aquí."
   },
   {
     "id": "ZG9ydA__",
-    "word": "dort"
+    "word": "dort",
+    "exampleSentenceDe": "Ich bin dort.",
+    "exampleSentenceEs": "Yo estoy allí."
   },
   {
     "id": "b2JlbiUyMCUyRiUyMHVudGVu",
-    "word": "oben / unten"
+    "word": "oben / unten",
+    "exampleSentenceDe": "Das Buch ist oben. Die Katze ist unten.",
+    "exampleSentenceEs": "El libro está arriba. El gato está abajo."
   },
   {
     "id": "dm9ybiUyMCUyRiUyMGhpbnRlbg__",
-    "word": "vorn / hinten"
+    "word": "vorn / hinten",
+    "exampleSentenceDe": "Ich sitze vorn.",
+    "exampleSentenceEs": "Yo me siento adelante."
   },
   {
     "id": "ZHJhdSVDMyU5RmVuJTIwJTJGJTIwZHJpbm5lbg__",
-    "word": "draußen / drinnen"
+    "word": "draußen / drinnen",
+    "exampleSentenceDe": "Das Wetter ist schön. Wir sind draußen.",
+    "exampleSentenceEs": "El tiempo es bueno. Estamos afuera."
   },
   {
     "id": "c2Vocg__",
-    "word": "sehr"
+    "word": "sehr",
+    "exampleSentenceDe": "Das Wetter ist sehr gut.",
+    "exampleSentenceEs": "El tiempo está muy bueno."
   },
   {
     "id": "dmllbCUyMCUyRiUyMHdlbmln",
-    "word": "viel / wenig"
+    "word": "viel / wenig",
+    "exampleSentenceDe": "Ich trinke viel Wasser.",
+    "exampleSentenceEs": "Bebo mucha agua."
   },
   {
     "id": "d2VyJTNG",
-    "word": "wer?"
+    "word": "wer?",
+    "exampleSentenceDe": "Wer ist das?",
+    "exampleSentenceEs": "¿Quién es ese/esa?"
   },
   {
     "id": "d2FzJTNG",
-    "word": "was?"
+    "word": "was?",
+    "exampleSentenceDe": "Was ist das?",
+    "exampleSentenceEs": "¿Qué es eso?"
   },
   {
     "id": "d28lM0Y_",
-    "word": "wo?"
+    "word": "wo?",
+    "exampleSentenceDe": "Wo ist die Toilette?",
+    "exampleSentenceEs": "¿Dónde está el baño?"
   },
   {
     "id": "d2FubiUzRg__",
-    "word": "wann?"
+    "word": "wann?",
+    "exampleSentenceDe": "Wann kommst du?",
+    "exampleSentenceEs": "¿Cuándo vienes?"
   },
   {
     "id": "d2FydW0lM0Y_",
-    "word": "warum?"
+    "word": "warum?",
+    "exampleSentenceDe": "Warum bist du hier?",
+    "exampleSentenceEs": "¿Por qué estás aquí?"
   },
   {
     "id": "d2llJTNG",
-    "word": "wie?"
+    "word": "wie?",
+    "exampleSentenceDe": "Wie geht es Ihnen?",
+    "exampleSentenceEs": "¿Cómo está usted?"
   },
   {
     "id": "d29oZXIlM0Y_",
-    "word": "woher?"
+    "word": "woher?",
+    "exampleSentenceDe": "Woher kommst du?",
+    "exampleSentenceEs": "¿De dónde vienes?"
   },
   {
     "id": "d29oaW4lM0Y_",
-    "word": "wohin?"
+    "word": "wohin?",
+    "exampleSentenceDe": "Wohin gehst du?",
+    "exampleSentenceEs": "¿A dónde vas?"
   },
   {
     "id": "d2VsY2hlciUzRg__",
-    "word": "welcher?"
+    "word": "welcher?",
+    "exampleSentenceDe": "Welcher Bus ist das?",
+    "exampleSentenceEs": "¿Cuál es ese autobús?"
   }
 ]

@@ -17,10 +17,11 @@ import AudioSim from './components/AudioSim';
 import InteractiveQA from './components/InteractiveQA';
 import TutorChat from './components/TutorChat';
 import MarkdownMessage from './components/MarkdownMessage';
-import { chapters } from './data/chapters';
+import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 
 import { fetchWithRetry, compressImageBase64 as compressImage, nativeSpeak, getSafeId } from './utils/helpers';
 import EmailSimulator from './components/EmailSimulator';
+import ReadingComprehension from './components/ReadingComprehension';
 
 
 // --- CONFIGURACIÓN API & FIREBASE ---
@@ -119,8 +120,7 @@ const RoleplaySimulator = ({
   const [tutorMessageCount, setTutorMessageCount] = useState(0);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const chatEndRef = useRef(null);
-  const scenarios = [{
+  const chatEndRef = useRef(null);  const scenarios = [{
     id: 'restaurant',
     title: 'En el Restaurante',
     icon: '🍽️',
@@ -138,6 +138,24 @@ const RoleplaySimulator = ({
     icon: '👕',
     desc: 'Busca una chaqueta.',
     prompt: 'Eres un vendedor en una tienda de ropa en Viena. El usuario busca una chaqueta. Empieza diciendo "Guten Tag, kann ich Ihnen helfen?". Usa vocabulario A1. Responde SOLO en alemán.'
+  }, {
+    id: 'hotel',
+    title: 'Recepción de Hotel',
+    icon: '🏨',
+    desc: 'Haz el check-in y pide la llave.',
+    prompt: 'Eres el recepcionista de un hotel en Berlín. El usuario tiene una reserva. Empieza diciendo "Herzlich willkommen! Haben Sie eine Reservierung?". Responde SOLO en alemán nivel A1.'
+  }, {
+    id: 'doctor',
+    title: 'En el Médico',
+    icon: '🩺',
+    desc: 'Explica que te sientes mal.',
+    prompt: 'Eres un médico en Alemania. El usuario es tu paciente. Empieza diciendo "Guten Tag! Was fehlt Ihnen?". Responde SOLO en alemán nivel A1.'
+  }, {
+    id: 'party',
+    title: 'Fiesta de Intercambio',
+    icon: '👋',
+    desc: 'Preséntate a un desconocido.',
+    prompt: 'Eres un estudiante de intercambio en una fiesta en Múnich. Quieres conocer al usuario. Empieza diciendo "Hallo! Ich bin Max. Wie heißt du?". Responde SOLO en alemán nivel A1.'
   }];
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({
@@ -147,25 +165,56 @@ const RoleplaySimulator = ({
   const startScenario = async scen => {
     setScenario(scen);
     setLoading(true);
+    const initialMsgs = [{
+      role: 'user',
+      parts: [{
+        text: "Hola, inicia la simulación según las instrucciones."
+      }]
+    }];
     try {
-      if (!functions) throw new Error("Firebase functions not initialized");
-      const runRoleplayFn = httpsCallable(functions, 'runRoleplaySimulator');
-      const response = await runRoleplayFn({
-        historialConversacion: [{
-          role: 'user',
-          parts: [{
-            text: "Hola, inicia la simulación según las instrucciones."
-          }]
-        }],
-        escenario: scen.prompt
+      const response = await fetch(`https://runroleplaysimulator-44keyii6gq-uc.a.run.app`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          historialConversacion: initialMsgs,
+          escenario: scen.prompt
+        })
       });
-      const text = response.data.text;
-      setMessages([{
-        role: 'model',
-        parts: [{
-          text
-        }]
-      }]);
+
+      if (!response.ok) throw new Error("Failed to connect to Roleplay");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let currentText = "";
+      setMessages([{ role: "model", parts: [{ text: "" }] }]);
+      setLoading(false);
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split("\n");
+        for (const line of lines) {
+          if (line.startsWith("data: ") && !line.includes("[DONE]")) {
+            try {
+              const data = JSON.parse(line.substring(6));
+              if (data.text) {
+                currentText += data.text;
+                const cleanedText = currentText.replace(/\*\*/g, '');
+                setMessages(prev => {
+                  const updated = [...prev];
+                  updated[updated.length - 1] = { role: "model", parts: [{ text: cleanedText }] };
+                  return updated;
+                });
+              }
+            } catch (err) {}
+          }
+        }
+      }
     } catch (e) {
       setMessages([{
         role: 'model',
@@ -199,21 +248,57 @@ const RoleplaySimulator = ({
     setInput("");
     setLoading(true);
     try {
-      if (!functions) throw new Error("Firebase functions not initialized");
-      const runRoleplayFn = httpsCallable(functions, 'runRoleplaySimulator');
-      const response = await runRoleplayFn({
-        historialConversacion: newMsgs,
-        escenario: scenario.prompt
+      const response = await fetch(`https://runroleplaysimulator-44keyii6gq-uc.a.run.app`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          historialConversacion: newMsgs,
+          escenario: scenario.prompt
+        })
       });
-      const text = response.data.text;
+
+      if (!response.ok) throw new Error("Failed to connect to Roleplay");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let currentText = "";
+      setMessages([...newMsgs, { role: "model", parts: [{ text: "" }] }]);
+      setLoading(false);
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split("\n");
+        for (const line of lines) {
+          if (line.startsWith("data: ") && !line.includes("[DONE]")) {
+            try {
+              const data = JSON.parse(line.substring(6));
+              if (data.text) {
+                currentText += data.text;
+                const cleanedText = currentText.replace(/\*\*/g, '');
+                setMessages(prev => {
+                  const updated = [...prev];
+                  updated[updated.length - 1] = { role: "model", parts: [{ text: cleanedText }] };
+                  return updated;
+                });
+              }
+            } catch (err) {}
+          }
+        }
+      }
+    } catch (e) {
+      console.error(e);
       setMessages([...newMsgs, {
         role: 'model',
         parts: [{
-          text
+          text: "Entschuldigung, es hay un error de conexión."
         }]
       }]);
-    } catch (e) {
-      console.error(e);
     } finally {
       setLoading(false);
     }
@@ -269,643 +354,8 @@ const RoleplaySimulator = ({
       </div>
     </div>;
 };
+// --- Las bases de datos se importan desde './data/chapters' ---
 
-// --- DATA: EL VOCABULARIO COMPLETO ---
-
-// --- NUEVOS MÓDULOS DE ESTUDIO GOETHE ---
-const goetheModules = [{
-  id: 'g_horen',
-  title: 'Hören (Comprensión Auditiva)',
-  desc: 'Supervivencia en estaciones y llamadas',
-  theme: 'blueprint',
-  presentationUrl: 'https://drive.google.com/file/d/1HaRoaGMXPAHwQbmeVkqMoaotGvM5TjBH/view?usp=sharing',
-  slides: [{
-    title: "Supervivencia Auditiva: El Examen Hören",
-    subtitle: "Entrena tu oído para identificar información clave",
-    content: <div className="flex flex-col items-center text-center space-y-6 max-w-2xl mx-auto mt-8">
-            <div className="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center border-4 border-blue-500 shadow-lg relative">
-              <Headphones size={64} className="text-blue-600" />
-            </div>
-            <p className="text-xl font-medium text-slate-700">El objetivo es identificar información clave (precios, andenes, horas) en medio del ruido de conversaciones, altavoces de estaciones y mensajes de voz.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mt-4">
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-blue-600 block">Teil 1</span>
-                <span className="text-sm text-slate-500">Alltagssituationen<br />(Situaciones cotidianas)</span>
-              </div>
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-blue-600 block">Teil 2</span>
-                <span className="text-sm text-slate-500">Öffentliche Durchsagen<br />(Anuncios públicos)</span>
-              </div>
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-blue-600 block">Teil 3</span>
-                <span className="text-sm text-slate-500">Telefonansagen<br />(Mensajes telefónicos)</span>
-              </div>
-            </div>
-          </div>
-  }, {
-    title: "Kit de Vocabulario Auditivo",
-    subtitle: "Si escuchas estas palabras, la respuesta está cerca",
-    content: props => <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-            <PresentationVocabCard wordObj={{
-        de: "die Durchsage",
-        es: "El anuncio por altavoz",
-        type: "Sustantivo",
-        emoji: "📢"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "das Gleis",
-        es: "El andén (del tren)",
-        type: "Sustantivo",
-        emoji: "🚉"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die Verspätung",
-        es: "El retraso",
-        type: "Sustantivo",
-        emoji: "⏳"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "das Angebot",
-        es: "La oferta",
-        type: "Sustantivo",
-        emoji: "🏷️"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die Nachricht",
-        es: "El mensaje",
-        type: "Sustantivo",
-        emoji: "💬"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "zurück|rufen",
-        es: "Devolver la llamada",
-        type: "Verbo",
-        emoji: "📞"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "aus|steigen",
-        es: "Bajarse",
-        type: "Verbo",
-        emoji: "🚪"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "Achtung!",
-        es: "¡Atención! / ¡Cuidado!",
-        type: "Interjección",
-        emoji: "⚠️"
-      }} {...props} />
-          </div>
-  }, {
-    title: "Gramática para el Oído",
-    subtitle: "La pista de aterrizaje de la información",
-    content: <div className="mt-8 max-w-3xl mx-auto space-y-4">
-            <GrammarAccordion title="A. El Imperativo Encubierto (Infinitivo al final)">
-              <p>En los anuncios públicos (Teil 2), en lugar de conjugar el imperativo formal, suelen usar el verbo en <strong>infinitivo al final</strong> para dar instrucciones generales.</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><strong>Bitte die Türen schließen!</strong> (¡Por favor, cerrar las puertas!)</li>
-                <li><strong>Bitte nicht einsteigen!</strong> (¡Por favor, no subir!)</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="B. Números, Horas y Días (Sospechosos habituales)">
-              <p>El 80% de las preguntas de opción múltiple te pondrán a dudar entre tres números. Presta atención a las preposiciones:</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><strong>um</strong> (a las...) ➡️ <em>um 8 Uhr</em> (hora exacta del evento).</li>
-                <li><strong>von... bis...</strong> (de... a...) ➡️ horarios de atención.</li>
-                <li><strong>ab</strong> (a partir de...) ➡️ <em>ab 14 Uhr</em> (desde las 2 pm).</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="C. El conector 'aber' (El engaño clásico)">
-              <p>Te van a mencionar una de las opciones falsas primero, y luego usarán <strong>aber</strong> (pero) o <strong>leider</strong> (lamentablemente) para darte la respuesta real.</p>
-              <div className="bg-red-50 text-red-800 p-3 rounded mt-2 border border-red-100">
-                Audio: "Ich wollte um 3 Uhr kommen, <strong>aber</strong> mein Auto ist kaputt. Ich komme um 4 Uhr."<br />
-                <em>Respuesta real: A las 4.</em>
-              </div>
-            </GrammarAccordion>
-          </div>
-  }, {
-    title: "Simulador de Escenarios",
-    subtitle: "Aplica la 'Regla del Pescador'",
-    content: <div className="mt-6 max-w-3xl mx-auto">
-            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded-r-lg">
-              <p className="font-bold text-yellow-800">💡 La Regla del Pescador</p>
-              <p className="text-sm text-yellow-700 mt-1">No intentes atrapar toda el agua del río traduciendo cada palabra. Lee la pregunta primero, cierra los ojos, ignora el relleno y "pesca" solo el dato (precio, hora, lugar).</p>
-            </div>
-            <AudioSim title="Escenario 1: Anuncio de tráfico (Teil 2)" textDe="Achtung Autofahrer! Auf der Autobahn gibt es einen Stau. Bitte fahren Sie langsam und nutzen Sie das Reißverschlusssystem." textEs="¡Atención conductores! Hay un atasco en la autopista. Por favor, conduzcan despacio y utilicen el sistema de cremallera." />
-            <AudioSim title="Escenario 2: Mensaje de voz (Teil 3)" textDe="Hallo, hier ist der IT-Service. Dein Computer ist repariert. Du kannst ihn morgen ab 9 Uhr abholen. Bitte ruf uns nicht zurück." textEs="Hola, aquí el servicio técnico. Tu ordenador está reparado. Puedes recogerlo mañana a partir de las 9. Por favor, no nos devuelvas la llamada." />
-            <AudioSim title="Escenario 3: Conversación en tienda (Teil 1)" textDe="Entschuldigung, was kostet diese Software? – Normalerweise 50 Euro, aber heute ist sie im Angebot für 20 Euro." textEs="Disculpe, ¿cuánto cuesta este software? - Normalmente 50 euros, pero hoy está en oferta por 20 euros." />
-          </div>
-  }]
-}, {
-  id: 'g_lesen',
-  title: 'Lesen (Comprensión Lectora)',
-  desc: 'Textos del día a día y letreros',
-  theme: 'notebook',
-  presentationUrl: 'https://drive.google.com/file/d/1v0X84LxezwiLTIOll5OqIs5VfY6khT5Z/view?usp=sharing',
-  slides: [{
-    title: "Entendiendo Textos Diarios",
-    subtitle: "El Examen Lesen (Comprensión Lectora)",
-    content: <div className="flex flex-col items-center text-center space-y-6 max-w-2xl mx-auto mt-8">
-            <div className="w-32 h-32 bg-amber-100 rounded-lg flex items-center justify-center border border-amber-300 shadow-md">
-              <BookOpen size={64} className="text-amber-600" />
-            </div>
-            <p className="text-xl font-medium text-slate-700">Prepárate para leer correos informales, comparar ofertas web y decodificar los estrictos letreros públicos alemanes.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mt-4">
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-amber-600 block">Teil 1</span>
-                <span className="text-sm text-slate-500">E-Mails und Einladungen<br />(Correos e invitaciones)</span>
-              </div>
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-amber-600 block">Teil 2</span>
-                <span className="text-sm text-slate-500">Webseiten und Anzeigen<br />(Webs y anuncios)</span>
-              </div>
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-amber-600 block">Teil 3</span>
-                <span className="text-sm text-slate-500">Schilder und Regeln<br />(Letreros y normas)</span>
-              </div>
-            </div>
-          </div>
-  }, {
-    title: "El Kit de Lupa (Vocabulario)",
-    subtitle: "Indicadores clave en textos escritos",
-    content: props => <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-            <PresentationVocabCard wordObj={{
-        de: "die Einladung",
-        es: "La invitación",
-        type: "Sustantivo",
-        emoji: "✉️"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "das Angebot",
-        es: "La oferta",
-        type: "Sustantivo",
-        emoji: "🏷️"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "das Schild",
-        es: "El letrero / señal",
-        type: "Sustantivo",
-        emoji: "🪧"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "Öffnungszeiten",
-        es: "Horarios de apertura",
-        type: "Plural",
-        emoji: "🕒"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "buchen",
-        es: "Reservar",
-        type: "Verbo",
-        emoji: "📅"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "ein|laden",
-        es: "Invitar",
-        type: "Verbo",
-        emoji: "👋"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "geöffnet / geschlossen",
-        es: "Abierto / Cerrado",
-        type: "Adjetivos",
-        emoji: "🚪"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "verboten / erlaubt",
-        es: "Prohibido / Permitido",
-        type: "Adjetivos",
-        emoji: "🚫"
-      }} {...props} />
-          </div>
-  }, {
-    title: "Patrones Visuales",
-    subtitle: "Gramática para los ojos",
-    content: <div className="mt-8 max-w-3xl mx-auto space-y-4">
-            <GrammarAccordion title="A. Palabras Compuestas (Komposita)">
-              <p>El alemán pega las palabras en lugar de usar preposiciones. <strong>La palabra principal siempre es la última.</strong></p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li>Sprache + Schule = <strong>die Sprachschule</strong> (Escuela de idiomas).</li>
-                <li>Kinder + Kleidung = <strong>die Kinderkleidung</strong> (Ropa de niños).</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="B. Fórmulas de Correo (Teil 1)">
-              <p>Detecta el tono inmediatamente:</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><strong>Informal:</strong> Empieza con <em>Hallo / Liebe(r)</em>. Termina con <em>Viele Grüße</em>.</li>
-                <li><strong>Formal:</strong> Empieza con <em>Sehr geehrte(r)</em>. Termina con <em>Mit freundlichen Grüßen</em>.</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="C. Gramática 'Telegráfica' (Teil 3)">
-              <p>Los carteles casi no usan verbos conjugados, usan <strong>infinitivos o participios</strong> secos.</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><em>En vez de "No puede aparcar":</em> <strong>Parken verboten</strong> (Aparcar prohibido).</li>
-                <li><em>En vez de "Mantenga cerrado":</em> <strong>Tür bitte geschlossen halten</strong>.</li>
-              </ul>
-            </GrammarAccordion>
-          </div>
-  }, {
-    title: "El Juego de los Espejos",
-    subtitle: "Dominando los antónimos en las opciones (A, B, C)",
-    content: <div className="mt-8 max-w-3xl mx-auto space-y-4">
-            <GrammarAccordion title="La trampa clásica del Goethe-Institut">
-              <p>Los textos o audios suelen usar un adjetivo negativo, pero la respuesta correcta usa su <strong>antónimo en positivo</strong>.</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li>Si el texto dice: <em>"Das Hotel ist nicht teuer"</em> ➡️ Busca la opción: <strong>billig / günstig</strong>.</li>
-                <li>Si el anuncio dice: <em>"Das Zimmer ist nicht dunkel"</em> ➡️ Busca la opción: <strong>hell</strong>.</li>
-                <li>Si dice: <em>"Die Maschine ist nicht neu"</em> ➡️ Busca la opción: <strong>alt</strong>.</li>
-              </ul>
-            </GrammarAccordion>
-          </div>
-  }, {
-    title: "La Regla del Tren",
-    subtitle: "Lee textos complejos de derecha a izquierda",
-    content: <div className="mt-6 max-w-3xl mx-auto flex flex-col items-center">
-            <div className="w-full bg-slate-800 p-6 rounded-xl text-center text-white mb-6 shadow-lg">
-              <p className="text-xl font-mono tracking-wider mb-4">Fahr + Plan + <span className="text-amber-400 font-bold border-b-2 border-amber-400 pb-1">Auskunft</span></p>
-              <p className="text-sm text-slate-300">Viaje + Plan + <strong className="text-amber-400">Información</strong></p>
-            </div>
-            <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg w-full">
-              <p className="font-bold text-amber-800">💡 La Regla del Tren de Palabras</p>
-              <p className="text-sm text-amber-700 mt-1">El último vagón (la derecha) te dice QUÉ es el objeto. Los vagones de la izquierda solo lo describen. ¡Aplica esto cuando veas palabras gigantes!</p>
-            </div>
-          </div>
-  }]
-}, {
-  id: 'g_schreiben',
-  title: 'Schreiben (Expresión Escrita)',
-  desc: 'Formularios y Correos exactos',
-  theme: 'medical',
-  presentationUrl: 'https://drive.google.com/file/d/19bbbF3M4RfIRbQ4PkxZlCsPcbibYQLPx/view?usp=sharing',
-  slides: [{
-    title: "Tu Firma y tu Voz",
-    subtitle: "El Examen Schreiben (Escritura)",
-    content: <div className="flex flex-col items-center text-center space-y-6 max-w-2xl mx-auto mt-8">
-            <div className="w-32 h-32 bg-emerald-100 rounded-2xl flex items-center justify-center border border-emerald-300 shadow-md">
-              <Edit3 size={64} className="text-emerald-600" />
-            </div>
-            <p className="text-xl font-medium text-slate-700">Aprende la burocracia de los formularios y la estructura quirúrgica para escribir correos perfectos sin complicarte.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full mt-4">
-              <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-emerald-600 block text-lg">Teil 1</span>
-                <span className="text-slate-600">Formulare ausfüllen<br />(Rellenar formularios)</span>
-              </div>
-              <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-emerald-600 block text-lg">Teil 2</span>
-                <span className="text-slate-600">Eine E-Mail schreiben<br />(Redactar correos)</span>
-              </div>
-            </div>
-          </div>
-  }, {
-    title: "El Idioma de la Burocracia",
-    subtitle: "Vocabulario obligatorio para formularios",
-    content: props => <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-            <PresentationVocabCard wordObj={{
-        de: "das Formular",
-        es: "El impreso / formulario",
-        type: "Sustantivo",
-        emoji: "📝"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "der Vorname",
-        es: "El nombre de pila",
-        type: "Sustantivo",
-        emoji: "👤"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "der Nachname / Familienname",
-        es: "El apellido",
-        type: "Sustantivo",
-        emoji: "👥"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die Straße",
-        es: "La calle",
-        type: "Sustantivo",
-        emoji: "🛣️"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die Hausnummer",
-        es: "El número de casa",
-        type: "Sustantivo",
-        emoji: "🔢"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die Postleitzahl (PLZ)",
-        es: "El código postal",
-        type: "Sustantivo",
-        emoji: "📮"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "der Wohnort",
-        es: "Lugar de residencia",
-        type: "Sustantivo",
-        emoji: "🏠"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "das Geburtsdatum",
-        es: "Fecha de nacimiento",
-        type: "Sustantivo",
-        emoji: "🎂"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "der Geburtsort",
-        es: "Lugar de nacimiento",
-        type: "Sustantivo",
-        emoji: "🏥"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "das Alter",
-        es: "La edad",
-        type: "Sustantivo",
-        emoji: "⏳"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die Staatsangehörigkeit",
-        es: "Nacionalidad",
-        type: "Sustantivo",
-        emoji: "🌍"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "der Beruf",
-        es: "Profesión",
-        type: "Sustantivo",
-        emoji: "💼"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die Telefonnummer",
-        es: "Número de teléfono",
-        type: "Sustantivo",
-        emoji: "📱"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die E-Mail-Adresse",
-        es: "Correo electrónico",
-        type: "Sustantivo",
-        emoji: "📧"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die Anzahl der Personen",
-        es: "Número de personas",
-        type: "Frase",
-        emoji: "🔢"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "die Unterschrift",
-        es: "La firma",
-        type: "Sustantivo",
-        emoji: "✍️"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "Barzahlung",
-        es: "Pago en efectivo",
-        type: "Sustantivo",
-        emoji: "💶"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "mit Karte zahlen",
-        es: "Pago con tarjeta",
-        type: "Frase",
-        emoji: "💳"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "weiblich / männlich / divers",
-        es: "Femenino/Masculino/Diverso",
-        type: "Adjetivos",
-        emoji: "🚻"
-      }} {...props} />
-            <PresentationVocabCard wordObj={{
-        de: "ledig / verheiratet",
-        es: "Soltero / Casado",
-        type: "Adjetivos",
-        emoji: "💍"
-      }} {...props} />
-          </div>
-  }, {
-    title: "Caja de Herramientas (Redemittel)",
-    subtitle: "Frases comodín para salvar el examen",
-    content: <div className="mt-8 max-w-3xl mx-auto space-y-4">
-            <GrammarAccordion title="1. Saludos (Anrede)">
-              <ul className="space-y-2 list-disc pl-5">
-                <li><strong>Formal Masculino:</strong> Sehr geehrter Herr [Apellido],</li>
-                <li><strong>Formal Femenino:</strong> Sehr geehrte Frau [Apellido],</li>
-                <li><strong>Informal Masculino:</strong> Lieber [Nombre],</li>
-                <li><strong>Informal Femenino:</strong> Liebe [Nombre],</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="2. Despedidas (Gruß)">
-              <ul className="space-y-2 list-disc pl-5">
-                <li><strong>Formal:</strong> Mit freundlichen Grüßen</li>
-                <li><strong>Informal:</strong> Viele Grüße <em>(o)</em> Liebe Grüße</li>
-              </ul>
-              <p className="text-sm text-emerald-600 mt-2 font-bold">¡Recuerda! Ninguna lleva coma al final.</p>
-            </GrammarAccordion>
-            <GrammarAccordion title="3. Frases Comodín (Universales)">
-              <ul className="space-y-2 list-disc pl-5">
-                <li><strong>Para excusarse:</strong> Es tut mir leid, aber... (Lo siento, pero...)</li>
-                <li><strong>Para proponer:</strong> Ich habe eine ID... (Tengo una idea...)</li>
-                <li><strong>Para agradecer:</strong> Vielen Dank für die Einladung! (Muchas gracias por la invitación)</li>
-                <li><strong>Para pedir algo:</strong> Ich brauche bitte Informationen über... (Necesito por favor información sobre...)</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="4. El Doble Juego de las Preposiciones de Lugar">
-              <p>Para indicar destinos o cancelaciones viales por daños, usa la preposición correcta:</p>
-              <ul className="space-y-2 list-disc pl-5">
-                <li><strong>Estático (Dativo - Dónde estoy):</strong> <em>Ich stehe im Stau</em> (Estoy en el trancón) / <em>Ich bin auf der Post</em> (Estoy en el correo).</li>
-                <li><strong>Movimiento (Acusativo - Hacia dónde voy):</strong> <em>Ich muss mein Auto in die Werkstatt bringen</em> (Debo llevar mi carro al taller).</li>
-              </ul>
-            </GrammarAccordion>
-          </div>
-  }, {
-    title: "La Regla Simple y Seguro",
-    subtitle: "Simulador de Redacción",
-    content: <div className="mt-6 max-w-3xl mx-auto">
-            <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 mb-4 rounded-r-lg">
-              <p className="font-bold text-emerald-800">💡 Escribe 3 oraciones cortas</p>
-              <p className="text-sm text-emerald-700 mt-1">No te compliques. El examen pide 3 puntos. Escribe una oración exacta para cada punto con el verbo en Posición 2. Menos es más.</p>
-            </div>
-            
-            <EmailSimulator initialText="" />
-          </div>
-  }]
-}, {
-  id: 'g_sprechen',
-  title: 'Sprechen (Expresión Oral)',
-  desc: 'Presentaciones y Peticiones Educadas',
-  theme: 'blueprint',
-  presentationUrl: 'https://drive.google.com/file/d/1_yvgsDvmHvQvSYoXJvKImN9WLxkEdgGA/view?usp=sharing',
-  slides: [{
-    title: "Guía Maestra: El Examen Oral",
-    subtitle: "Sprechen A1/A2",
-    content: <div className="flex flex-col items-center text-center space-y-6 max-w-2xl mx-auto mt-8">
-            <div className="w-32 h-32 bg-indigo-100 rounded-full flex items-center justify-center border-4 border-indigo-500 shadow-lg relative">
-              <Mic size={64} className="text-indigo-600" />
-            </div>
-            <p className="text-xl font-medium text-slate-700">Aprende a presentarte con fluidez, a formular preguntas directas con tarjetas y a pedir favores usando la fórmula mágica de cortesía.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mt-4">
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-indigo-600 block">Teil 1</span>
-                <span className="text-sm text-slate-500">Sich vorstellen<br />(Presentación personal)</span>
-              </div>
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-indigo-600 block">Teil 2</span>
-                <span className="text-sm text-slate-500">Fragen und Antworten<br />(Tarjetas de temas)</span>
-              </div>
-              <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <span className="font-bold text-indigo-600 block">Teil 3</span>
-                <span className="text-sm text-slate-500">Bitten formulieren<br />(Peticiones de cortesía)</span>
-              </div>
-            </div>
-          </div>
-  }, {
-    title: "Gramática Visual para Hablar",
-    subtitle: "Estructuras sin margen de error",
-    content: <div className="mt-8 max-w-3xl mx-auto space-y-4">
-            <GrammarAccordion title="1. W-Fragen (Preguntas Abiertas)">
-              <p>Buscan información específica. <strong>El verbo siempre va en posición 2.</strong></p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><strong>Wer?</strong> (¿Quién?) ➡️ <em>Wer bist du?</em></li>
-                <li><strong>Wie?</strong> (¿Cómo?) ➡️ <em>Wie heißt du?</em></li>
-                <li><strong>Was?</strong> (¿Qué?) ➡️ <em>Was machst du?</em></li>
-                <li><strong>Wann?</strong> (¿Cuándo?) ➡️ <em>Wann kommst du?</em></li>
-                <li><strong>Wo / Woher / Wohin?</strong> (¿Dónde / De dónde / A dónde?)</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="2. Ja/Nein-Fragen (Cerradas)">
-              <p>Si respondes con Sí o No, <strong>el verbo salta a la Posición 1.</strong></p>
-              <div className="bg-slate-100 p-3 rounded font-mono font-bold text-center mt-2 border border-slate-300 text-lg">
-                <span className="text-indigo-600">Trinkst [1]</span> du [2] am Wochenende Bier?
-              </div>
-            </GrammarAccordion>
-            <GrammarAccordion title="3. El Sándwich de Petición (Imperativo Suave)">
-              <p>Para la Parte 3, usa esta plantilla exacta para pedir objetos con cortesía:</p>
-              <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-xl mt-2 text-center text-sm font-bold shadow-sm">
-                <span className="text-indigo-600 text-lg block mb-1">Können Sie mir bitte...</span>
-                <span className="text-orange-500 text-xl block mb-1">[el objeto en Acusativo]</span>
-                <span className="text-emerald-600 text-lg block">...geben?</span>
-              </div>
-            </GrammarAccordion>
-            <GrammarAccordion title="4. El Truco de la Ingeniería Sintáctica: Evita Declinar">
-              <p>Bajo presión en el examen A1, declinar adjetivos antes del sustantivo genera muchos errores. <strong>Separa el adjetivo usando el verbo 'sein'.</strong></p>
-              <div className="bg-red-50 text-red-800 p-3 rounded mt-2 border border-red-100 line-through">
-                Peligroso: Ich brauche einen großen Tisch. (Exige declinación Akk).
-              </div>
-              <div className="bg-green-50 text-green-800 p-3 rounded mt-2 border border-green-200 font-bold">
-                Inteligente: Ich brauche einen Tisch. Der Tisch ist groß. (El adjetivo queda intacto).
-              </div>
-            </GrammarAccordion>
-          </div>
-  }, {
-    title: "Simulador: Teil 1 (Presentación)",
-    subtitle: "Sich vorstellen (Toca el altavoz para escuchar)",
-    content: <div className="mt-6 max-w-3xl mx-auto">
-            <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm text-slate-800">
-              <div className="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
-                <Bot size={32} className="text-indigo-600 bg-indigo-50 p-1.5 rounded-full" />
-                <p className="font-bold text-slate-700">Examinador: Bitte stellen Sie sich vor.</p>
-                <button onClick={() => nativeSpeak("Bitte stellen Sie sich vor.")} className="text-indigo-500 hover:bg-indigo-50 p-2 rounded-full transition ml-auto"><Volume2 size={20} /></button>
-              </div>
-              
-              <div className="space-y-3 pl-2">
-                {[{
-            de: "Ich heiße Marcos.",
-            es: "Me llamo Marcos."
-          }, {
-            de: "Ich bin 35 Jahre alt.",
-            es: "Tengo 35 años."
-          }, {
-            de: "Ich komme aus Kolumbien und ich wohne in Barranquilla.",
-            es: "Vengo de Colombia y vivo en Barranquilla."
-          }, {
-            de: "Ich spreche Spanisch und ein bisschen Deutsch.",
-            es: "Hablo español y un poco de alemán."
-          }, {
-            de: "Ich bin Elektroniker von Beruf.",
-            es: "Soy técnico electrónico de profesión."
-          }, {
-            de: "Meine Hobbys sind Lesen und Sport machen.",
-            es: "Mis pasatiempos son leer y hacer deporte."
-          }].map((item, i) => <div key={i} className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg hover:bg-slate-100 transition">
-                    <button onClick={() => nativeSpeak(item.de)} className="text-slate-400 hover:text-indigo-600 transition"><PlayCircle size={18} /></button>
-                    <div>
-                      <p className="font-bold text-slate-800">{item.de}</p>
-                      <p className="text-xs text-slate-500">{item.es}</p>
-                    </div>
-                  </div>)}
-              </div>
-            </div>
-          </div>
-  }, {
-    title: "Simulador: Teil 2 & 3",
-    subtitle: "Intercambios y Peticiones Reales",
-    content: <div className="mt-6 max-w-3xl mx-auto">
-            <h3 className="font-bold text-slate-700 mb-3">Teil 2: Intercambio de Información</h3>
-            <InteractiveQA question="Trinkst du am Wochenende Bier?" answer="Ja, ich trinke gern ein Bier am Samstag." note="Tema: Comida | Tarjeta: Cerveza (Bier)" />
-            <InteractiveQA question="Wo kaufst du deine Schuhe?" answer="Ich kaufe meine Schuhe im Supermarkt." note="Tema: Compras | Tarjeta: Zapatos (Schuhe) -> Usamos W-Frage (Wo)" />
-
-            <h3 className="font-bold text-slate-700 mt-8 mb-3">Teil 3: Peticiones de Cortesía</h3>
-            <InteractiveQA question="Können Sie mir bitte das Deutschbuch geben?" answer="Ja, klar! Hier ist es." note="Imagen en la tarjeta: Un libro de alemán (das Buch)" />
-            <InteractiveQA question="Kannst du mir bitte einen Apfel geben?" answer="Natürlich, bitte sehr!" note="Imagen en la tarjeta: Una manzana (der Apfel). Recuerda que es masculino, por eso usamos 'einen'." />
-          </div>
-  }]
-}];
-
-// --- NUEVO: PLAN DE ESTUDIOS (CLASES MAGISTRALES) ---
-const studyPlanModules = [{
-  id: 'sp_1',
-  title: 'Capítulo 1: Los Cimientos y Primeros Pasos',
-  content: `### Capítulo 1: Los Cimientos y Primeros Pasos\n\nEl idioma alemán funciona como un sistema modular de bloques. La regla absoluta y más importante para comenzar es la **Regla de Oro de la Posición 2**.\n\n> **👑 La Regla de Oro:** ¡El verbo conjugado es el rey inamovible de la Posición 2! No importa qué pongas al principio, el verbo exige el segundo lugar lógico.\n\n| Posición 1 (Sujeto) | Posición 2 (Verbo) | Posición 3 (Resto) |\n|---|---|---|\n| Ich | wohne | in Madrid. |\n\n### ⚙️ El Motor de Conjugación\nPara conjugar, tomamos la raíz del verbo (ej. *komm-*) y añadimos la terminación según el actor:\n\n| Actor | Terminación | Ejemplo (kommen) | sein (Ser) | haben (Tener) |\n|---|---|---|---|---|\n| **ich** | -e | komme | bin | habe |\n| **du** | -st | kommst | bist | hast |\n| **er/sie/es** | -t | kommt | ist | hat |\n| **wir** | -en | kommen | sind | haben |\n| **ihr** | -t | kommt | seid | habt |\n| **sie/Sie** | -en | kommen | sind | haben |\n\n### ❓ La Matriz de Preguntas\n* **W-Fragen (Abiertas):** La palabra W (*Wer, Wie, Woher, Was, Wo*) ocupa la Posición 1. El verbo sigue en la 2. Sujeto a la 3. 👉 *Wo wohnst du?*\n* **Ja/Nein-Fragen (Cerradas):** El verbo salta a la Posición 1 para llamar la atención. 👉 *Wohnst du in Berlin?*`,
-  presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web'
-}, {
-  id: 'sp_2',
-  title: 'Capítulo 2: Mi Círculo, Géneros y Negación',
-  content: `### Capítulo 2: Mi Círculo, Géneros y Negación\n\nEl alemán clasifica todo en tres géneros. No intentes buscarles lógica con el español, ¡aprende el "color" de la palabra!\n\n| Masculino | Femenino | Neutro | Plural |\n|---|---|---|---|\n| der (el) | die (la) | das (lo) | die (los/las) |\n| ein (un) | eine (una) | ein (un) | - (unos no existe) |\n\n### 🔑 La Matriz de Posesivos\nTodos los posesivos (*mein*=mi, *dein*=tu, *sein*=su) funcionan exactamente igual que *ein*. **Añade una "-e" al final si la palabra es femenina o plural.**\nEjemplo: *mein Vater* (Masc) vs. *mein**e** Mutter* (Fem) vs. *mein**e** Eltern* (Plural).\n\n> **🚫 La Negación:**\n> * Para negar verbos/acciones usa **nicht**: *Ich tanze nicht.*\n> * Para negar sustantivos usa **kein / keine** ("el asesino de ein"): *Ich habe keine Kinder.*`,
-  presentationUrl: 'https://drive.google.com/file/d/1ydPXeoc5VGUyyP2C-_eBo7e0RB-CTTGS/view?usp=drive_web'
-}, {
-  id: 'sp_3',
-  title: 'Capítulo 3: El Misterioso Caso Acusativo',
-  content: `### Capítulo 3: El Misterioso Caso Acusativo\n\nEl Acusativo es la "víctima" o el Objeto Directo de una acción. Responde a *¿Qué compras?* o *¿A quién buscas?*\n\n> **🎯 La Regla de Oro del Acusativo:** Al Acusativo solo le importan los masculinos. Deja exactamente igual al femenino, al neutro y al plural. ¡Solo ataca a las palabras masculinas poniéndoles la terminación **-en**!\n\n| Género | Nominativo (Sujeto) | Acusativo (Objeto Directo) |\n|---|---|---|\n| **Masculino** | der, ein, kein, mein | **den, einen, keinen, meinen** |\n| **Femenino** | die, eine, keine | die, eine, keine |\n| **Neutro** | das, ein, kein | das, ein, kein |\n| **Plural** | die, meine, keine | die, meine, keine |\n\n**Verbos activadores:** *kaufen, brauchen, essen, trinken, haben, möchten*.\nEjemplo: *Ich kaufe **einen** Käse (masculino) und eine Tomate (femenino).*`,
-  presentationUrl: 'https://drive.google.com/file/d/1QusIBIw3hhDxZvtnB3eocWlPWW43dlIp/view?usp=drive_web'
-}, {
-  id: 'sp_4',
-  title: 'Capítulo 4: Rutina y Verbos Separables',
-  content: `### Capítulo 4: Rutina y Verbos Separables\n\nLos *Trennbare Verben* (Verbos Separables) son acciones que se parten en dos pedazos exactos al conjugarse en presente.\n\n> **🗜️ El Efecto Pinza (Die Satzklammer):** El motor (la raíz del verbo) se queda en la Posición 2, pero el prefijo se desconecta y actúa como un tapón que cierra la tubería al **final absoluto** de la oración.\n\nEjemplo con *aufstehen* (levantarse):\n👉 Ich **stehe** am Montag um 7 Uhr **auf**.\n\n### ⏱️ Regla TeKaMoLo (Tiempo antes de Lugar)\nEn la "cinta transportadora" de la frase, el bloque de TIEMPO siempre va antes que el bloque de LUGAR.\n✅ *Ich gehe **heute** ins Kino.*\n❌ *Ich gehe ins Kino heute.*\n\n*Embudo de tiempo:* **im** (Meses/Estaciones), **am** (Días), **um** (Horas exactas).`,
-  presentationUrl: 'https://drive.google.com/file/d/1s4MSGKeK7xVZF2qGN4JSXu5dl43VkhOC/view?usp=drive_web'
-}, {
-  id: 'sp_5',
-  title: 'Capítulo 5: Darle actitud - Verbos Modales',
-  content: `### Capítulo 5: Darle actitud - Verbos Modales\n\nLos verbos modales le dan sabor e intención (habilidad, obligación, permiso, deseo) a tus acciones.\n\n| Verbo | Intención | Forma Rebelde (ich/er/sie) | Ejemplo |\n|---|---|---|---|\n| **können** | Habilidad / Saber hacer | kann | Ich kann sehr gut schwimmen. |\n| **müssen** | Obligación Absoluta | muss | Wir müssen arbeiten. |\n| **dürfen** | Permiso / Reglas | darf | Man darf hier nicht rauchen. |\n| **wollen** | Voluntad Fuerte | will | Er will das machen. |\n| **sollen** | Consejo / Encargo | soll | Du sollst die Arbeit machen. |\n| **möchten** | Deseo Educado | möchte | Ich möchte eine Katze haben. |\n\n> **🥪 El Sándwich Verbal:** El verbo Modal se sienta en el trono de la Posición 2. La Acción Real es empujada al abismo, al final absoluto de la frase, congelada en su forma original (Infinitivo en -en).\n\n**La Conjugación Rebelde:** En los modales, "ich" (yo) y "er/sie/es" son gemelos idénticos. No llevan terminación. (*ich kann, er kann*).`,
-  presentationUrl: 'https://drive.google.com/file/d/12ef-35y8c5SaFbw4v1xIZX74-5E8mX6c/view?usp=drive_web'
-}, {
-  id: 'sp_6',
-  title: 'Capítulo 6: Descifrando el Dativo',
-  content: `### Capítulo 6: Descifrando el Dativo\n\nEl Dativo es el traje especial para el "Receptor" de una acción (el Objeto Indirecto).\n\n> **🔑 El Código M-R-M-N:** Los artículos cambian completamente. Memoriza estas 4 letras finales:\n> * Masc: de**m** | Fem: de**r** | Neutro: de**m** | Plural: de**n** (+n al sustantivo)\n\n### El Embudo de Preposiciones Exigentes\nSi ves una de estas preposiciones, la palabra que sigue entra automáticamente en Dativo:\n**mit** (con), **nach** (hacia), **aus** (de adentro), **zu** (hacia), **von** (de), **bei** (en casa de), **seit** (desde), **ab** (a partir de).\n\nEjemplo: *Ich fahre **mit dem** Zug.* (Voy con el tren).\nPronombres en Dativo: *mir* (a mí), *dir* (a ti), *ihm* (a él), *ihr* (a ella).`,
-  presentationUrl: 'https://drive.google.com/file/d/1n_dLlwAlx9mJMoytcMC4wV3TjNCb59-r/view?usp=drive_web'
-}, {
-  id: 'sp_7',
-  title: 'Capítulo 7: Das Perfekt (El Pasado)',
-  content: `### Capítulo 7: Das Perfekt (El Pasado)\n\nPara contar anécdotas o hablar de vacaciones, usamos Das Perfekt. Es un rompecabezas mecánico de dos pilares.\n\n| Sujeto | Ayudante (Pos 2) | Relleno | El Participio (Final) |\n|---|---|---|---|\n| Ich | habe | eine Pizza | gekauft. |\n\n### ¿Haben o Sein?\n* **Haben (90%):** El Ancla. Acciones estáticas (comer, leer, trabajar). *Ich habe gelesen.*\n* **Sein (10%):** La Flecha. Desplazamiento (A → B) o cambio de estado. *Ich bin nach Berlin geflogen.*\n\n> **⏩ El Atajo Práctico (Präteritum):** Para "tener" y "ser", no uses el Perfekt, usa el atajo.\n> * haben → **hatte** (tuve/tenía)\n> * sein → **war** (fui/estaba)\n> ¡Van solos en Posición 2 sin participio final!`,
-  presentationUrl: 'https://drive.google.com/file/d/1rWmyyVBBceZm2lzbaNY8Luuvv5X6vgfU/view?usp=drive_web'
-}, {
-  id: 'sp_8',
-  title: 'Capítulo 8: Kit Médica (Imperativo)',
-  content: `### Capítulo 8: Kit de Supervivencia Médica (Imperativo)\n\nPara dar órdenes directas, recetas o consejos, usamos el Imperativo. Es eficiente y no pierde el tiempo.\n\n| Tú (du) informal | Ustedes (ihr) plural | Usted (Sie) formal |\n|---|---|---|\n| **Komm!** | **Kommt!** | **Kommen Sie!** |\n| *(Se elimina 'du' y la 'st')* | *(Solo elimina 'ihr')* | *(Verbo completo + Sie)* |\n\n**Excepciones Críticas:**\n* *sprechen* → **Sprich!** (cambio vocálico).\n* *fahren* → **Fahr!** (pierde la diéresis).\n* *sein* → **Sei!** (completamente irregular).\n\n**El Verbo 'Sollen':** Se usa para consejos a largo plazo o transmitir lo que dijo el doctor. *"Du sollst viel Wasser trinken."*`,
-  presentationUrl: 'https://drive.google.com/file/d/1hvauciZnzhQPR7Jcvlhktq7VRdc_Xvrq/view?usp=drive_web'
-}, {
-  id: 'sp_9',
-  title: 'Capítulo 9: Uniendo Ideas (Fantasma Cero)',
-  content: `### Capítulo 9: Uniendo Ideas (Fantasma Cero)\n\n¿Cómo unimos dos frases fluidamente sin romper la regla de hierro de que el verbo va en la Posición 2?\n\n> **👻 Los Conectores Fantasma Cero (ADUSO):** Operan como bisagras externas. Son invisibles para el conteo. La nueva frase empieza a contar desde 1, dejando al verbo a salvo en la Posición 2.\n\n* **A**ber (pero) - Contraste.\n* **D**enn (porque) - Razón.\n* **U**nd (y) - Adición.\n* **S**ondern (sino) - Corrección tras un *nicht/kein*.\n* **O**der (o) - Alternativa.\n\n| Frase 1 | [0] Conector | [1] Sujeto | [2] Verbo | [3] Resto |\n|---|---|---|---|---|\n| Ich kaufe das T-Shirt, | **und** | ich | kaufe | die Hose. |`,
-  presentationUrl: 'https://drive.google.com/file/d/1ja2uZyZv5RMsli1g6RVJAleFgRD4YVnG/view?usp=drive_web'
-}, {
-  id: 'sp_10',
-  title: 'Capítulo 10: El Manual del Navegante',
-  content: `### Capítulo 10: El Manual del Navegante\n\nLas coordenadas maestras del espacio requieren saber si estamos quietos o en movimiento.\n\n| ¿Wo? (¿En dónde?) | ¿Wohin? (¿A dónde?) |\n|---|---|\n| Ubicación estática. El objeto está descansando en su sitio. | Desplazamiento. Viaje cruzando un límite (A → B). |\n| 👉 **Usa Dativo (El Sillón del Dativo)**. | 👉 **Usa Acusativo**. |\n\n### Las 9 Wechselpräpositionen (Espaciales)\n**in** (dentro), **an** (pegado a), **auf** (sobre superficie), **über** (levitando/encima), **unter** (debajo), **neben** (al lado), **vor** (delante), **hinter** (detrás), **zwischen** (entre).\n\n**Contracciones vitales:** *in + dem = **im*** \\|  *an + dem = **am***\nEjemplo (Estático / Wo / Dativo): *Das Handy liegt **auf dem** Tisch.*`,
-  presentationUrl: 'https://drive.google.com/file/d/1wS542v_rcsuYj1cpEsTzahsmKDBQQxjV/view?usp=drive_web'
-}, {
-  id: 'sp_11',
-  title: 'Capítulo 11: Declinación Fuerte (Nullartikel)',
-  content: `### Capítulo 11: La Declinación Fuerte de los Adjetivos (Nullartikel)\n\n**Explicación extendida:**\nCuando un adjetivo se coloca directamente antes de un sustantivo (función atributiva, como en "café caliente"), su terminación debe cambiar para reflejar el género, el número y el caso de ese sustantivo. Esto se conoce como declinación del adjetivo.\n\nLa **declinación fuerte** ocurre específicamente cuando no hay ningún artículo delante del adjetivo (un fenómeno común llamado *Nullartikel* o artículo cero), o cuando va precedido de palabras invariables que no tienen terminaciones propias (como los números *zwei*, *drei*, o palabras como *etwas* o *mehr*).\n\nAl no existir un artículo (*der, die, das, ein, eine*) que le indique al oyente si el sustantivo es masculino, femenino, neutro, singular o plural, el adjetivo se ve obligado a hacer todo el trabajo pesado. Por lo tanto, el adjetivo adopta las terminaciones típicas de los artículos definidos.\n\n> **⚠️ Advertencia y error típico de hispanohablantes:** En español, los adjetivos cambian de forma muy simple ("café negro", "cafés negros"). En alemán, tendemos a olvidar poner la terminación si vemos que no hay artículo. Decir *Ich trinke schwarz Kaffee* es incorrecto; el adjetivo debe declinarse con la terminación del artículo masculino en acusativo (-en), convirtiéndose en **Ich trinke schwarzen Kaffee**.\n\nHay una pequeña excepción a la regla de copiar fielmente al artículo definido: en el caso Genitivo para el masculino y neutro singular, la terminación del adjetivo es *-en* en lugar de *-es*, debido a que el propio sustantivo ya añade una -s o -es al final, haciendo redundante la marca fuerte en el adjetivo. Sin embargo, para los propósitos comunicativos de un nivel A1 sólido, nos enfocaremos de forma prioritaria en los casos funcionales cotidianos: **Nominativo, Acusativo y Dativo**.\n\n---\n\n### Clase completa con ejemplos:\n\n**Ejemplo 1 (Nominativo Masculino):** *Kalter Kaffee schmeckt mir nicht.*\n* **Traducción literal:** Frío café sabe a mí no.\n* **Traducción natural:** El café frío no me gusta.\n* **Análisis:** *Kaffee* es masculino (*der Kaffee*) y actúa como sujeto (Nominativo). Al no haber artículo, el adjetivo toma la terminación **-er** del artículo *der*.\n\n**Ejemplo 2 (Acusativo Masculino):** *Ich trinke gerne schwarzen Tee.*\n* **Traducción literal:** Yo trinke con gusto negro té.\n* **Traducción natural:** Me gusta tomar té negro.\n* **Análisis:** *Tee* es masculino (*der Tee*). En esta frase es el objeto directo (Acusativo). Como el artículo en acusativo sería *den*, el adjetivo adopta la terminación **-en**.\n\n**Ejemplo 3 (Nominativo Neutro):** *Frisches Wasser ist gesund.*\n* **Traducción literal:** Fresca agua es saludable.\n* **Traducción natural:** El agua fresca es saludable.\n* **Análisis:** *Wasser* es neutro (*das Wasser*) y es el sujeto (Nominativo). El adjetivo adopta la terminación **-es** proveniente del artículo *das*.\n\n**Ejemplo 4 (Acusativo Neutro):** *Wir kaufen deutsches Bier.*\n* **Traducción literal:** Nosotros compramos alemana cerveza.\n* **Traducción natural:** Compramos cerveza alemana.\n* **Análisis:** *Bier* es neutro (*das Bier*), aquí funciona como objeto directo (Acusativo). El adjetivo mantiene la terminación **-es** del neutro.\n\n**Ejemplo 5 (Dativo Femenino):** *Der Salat ist aus frischer Milch gemacht.*\n* **Traducción literal:** La ensalada es de fresca leche hecha.\n* **Traducción natural:** La ensalada está hecha con leche fresca.\n* **Análisis:** *Milch* es femenino (*die Milch*). La preposición *aus* exige caso Dativo de forma obligatoria. El dativo femenino de *die* es *der*, por lo tanto, el adjetivo recibe la terminación **-er**.\n\n---\n\n### Esquema de Terminaciones (Declinación Fuerte / Sin Artículo):\n\n| Caso | Masculino (der) | Femenino (die) | Neutro (das) | Plural (die) |\n|---|---|---|---|---|\n| **Nominativo** | -er | -e | -es | -e |\n| **Acusativo** | -en | -e | -es | -e |\n| **Dativo** | -em | -er | -em | -en |\n\n---\n\n### Frases de uso diario:\n\n* **Ich wünsche dir großen Erfolg!** (¡Te deseo un gran éxito! -> Éxito es *der Erfolg*, en acusativo masculino sin artículo toma la terminación **-en**).\n* **Haben Sie kalte Getränke?** (¿Tiene bebidas frías? -> Bebidas es plural *die Getränke*, en acusativo plural sin artículo toma la terminación **-e**).\n* **Ich trinke lieber roten Wein.** (Prefiero tomar vino tinto. -> Vino es *der Wein*, en acusativo masculino toma la terminación **-en**).\n\n---\n\n### 📝 Autoevaluación:\n\nCompleta los espacios en blanco aplicando las terminaciones de la declinación fuerte:\n\n1. Ich mag alt____ Käse (*der Käse* - objeto directo en Acusativo).\n2. Gut____ Brot ist teuer (*das Brot* - sujeto en Nominativo).\n3. Sie hilft mir mit groß____ Freude (*die Freude* - después de la preposición *mit*, que exige Dativo).\n4. Dort stehen zwei klein____ Kinder (Plural en Nominativo, precedido por el número invariable *zwei*).\n\n**✅ Solución:**\n1. **alten** (*Ich mag alten Käse* -> Acusativo masculino toma la terminación -en).\n2. **Gutes** (*Gutes Brot ist teuer* -> Nominativo neutro toma la terminación -es).\n3. **großer** (*mit großer Freude* -> Dativo femenino toma la terminación -er).\n4. **kleine** (*zwei kleine Kinder* -> Plural en nominativo sin artículo determinado toma la terminación -e).`,
-  presentationUrl: 'https://drive.google.com/file/d/1uXg-DLwnQLSTdsSFbT8yPmHpTBWM2miu/view?usp=drive_web1'
-}];
 export default function App() {
 
   useEffect(() => {
@@ -914,6 +364,10 @@ export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(chapters[0].id);
   const [activePresentationId, setActivePresentationId] = useState(null);
   const [activeStudyPlanId, setActiveStudyPlanId] = useState(null);
+  const [currentStudyPlanSlide, setCurrentStudyPlanSlide] = useState(0);
+  useEffect(() => {
+    setCurrentStudyPlanSlide(0);
+  }, [activeStudyPlanId]);
   const [searchTerm, setSearchTerm] = useState("");
   const [revealedCards, setRevealedCards] = useState({});
   const [viewMode, setViewMode] = useState("flashcards");
@@ -929,10 +383,67 @@ export default function App() {
     de: "",
     es: ""
   });
+  const [currentWordIndex, setCurrentWordIndex] = useState(-1);
+  const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
+  const [isStoryAudioPaused, setIsStoryAudioPaused] = useState(false);
+  const utteranceRef = useRef(null);
+  const wordsOnlyRef = useRef([]);
+  const adaptiveTimerRef = useRef(null);
+  const isPausedRef = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (window.activeStoryInterval) {
+        clearInterval(window.activeStoryInterval);
+      }
+    };
+  }, []);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenImage, setFullscreenImage] = useState(null);
   const [user, setUser] = useState(null);
   const [cardImages, setCardImages] = useState({});
+  const [loadingImages, setLoadingImages] = useState({});
+
+  const lazyLoadImage = async (wordObj) => {
+    if (!wordObj || !wordObj.de) return;
+    const safeId = getSafeId(wordObj.de).substring(0, 150);
+    if (cardImages[safeId] !== undefined || loadingImages[safeId]) return;
+    setLoadingImages(prev => ({ ...prev, [safeId]: true }));
+    try {
+      const cached = await localforage.getItem(`img_${safeId}`);
+      if (cached) {
+        setCardImages(prev => ({ ...prev, [safeId]: cached }));
+        return;
+      }
+      if (!db) return;
+      const globalAppId = "deutschmeister-pro";
+      const imageDocRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'flashcardImages', safeId);
+      let docSnap = await getDoc(imageDocRef);
+      let imageUrl = "";
+      if (docSnap.exists()) {
+        imageUrl = docSnap.data().imageUrl || docSnap.data().imageBase64;
+      } else {
+        const globalCacheRef = doc(db, 'global_flashcards', safeId);
+        docSnap = await getDoc(globalCacheRef);
+        if (docSnap.exists()) {
+          imageUrl = docSnap.data().imageUrl;
+        }
+      }
+      if (imageUrl) {
+        setCardImages(prev => ({ ...prev, [safeId]: imageUrl }));
+        await localforage.setItem(`img_${safeId}`, imageUrl);
+      } else {
+        setCardImages(prev => ({ ...prev, [safeId]: null }));
+      }
+    } catch (err) {
+      console.error(`Error lazy loading image for ${safeId}:`, err);
+    } finally {
+      setLoadingImages(prev => ({ ...prev, [safeId]: false }));
+    }
+  };
   const [unlockedCards, setUnlockedCards] = useState(() => {
     try {
       const saved = localStorage.getItem('deutschmeister_unlocked');
@@ -988,39 +499,7 @@ export default function App() {
     const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, []);
-  useEffect(() => {
-    if (!user || !db) return;
-    
-    const loadImages = async () => {
-      try {
-        // 1. Intentar cargar desde el caché (costo operativo $0)
-        let cachedImages = await localforage.getItem('cardImages');
-        if (cachedImages && Object.keys(cachedImages).length > 0) {
-          setCardImages(cachedImages);
-          return; // Ya tenemos los datos offline, cortamos aquí
-        }
 
-        // 2. Si no hay caché, hacer UNA sola llamada (sin suscripción)
-        const globalAppId = "deutschmeister-pro";
-        const imagesRef = collection(db, 'artifacts', globalAppId, 'public', 'data', 'flashcardImages');
-        const snapshot = await getDocs(imagesRef);
-        
-        const loadedImages = {};
-        snapshot.forEach(doc => {
-          loadedImages[doc.id] = doc.data().imageUrl || doc.data().imageBase64;
-        });
-        
-        // 3. Guardar en estado y persistir en IndexedDB
-        setCardImages(loadedImages);
-        await localforage.setItem('cardImages', loadedImages);
-        
-      } catch (error) {
-        console.error("Error cargando imágenes con localforage:", error);
-      }
-    };
-    
-    loadImages();
-  }, [user]);
   useEffect(() => {
     if (!user || !db || user.uid === 'offline_user') return;
     const userUnlockedRef = collection(db, 'artifacts', appId, 'users', user.uid, 'unlockedCards');
@@ -1146,22 +625,33 @@ export default function App() {
   };
   const generateStory = async () => {
     if (!activeChapter) return;
+
+    const palabrasValidas = displayedWords
+      .filter(w => w.de.length > 2) 
+      .slice(0, 8)
+      .map(w => w.de);
+
+    if (palabrasValidas.length === 0) {
+      setStoryState({
+        isOpen: true,
+        loading: false,
+        de: "No hay suficientes palabras en este capítulo para generar un cuento.",
+        es: "Por favor, agrega palabras de vocabulario antes de generar."
+      });
+      return;
+    }
+
     const granted = await showRewardVideo();
     if (!granted) return;
+
     setStoryState({
       isOpen: true,
       loading: true,
       de: "",
       es: ""
     });
-    // Filtramos letras sueltas o palabras ultracortas para que el cuento tenga sentido
-    const palabrasValidas = displayedWords
-      .filter(w => w.de.length > 2) 
-      .slice(0, 8)
-      .map(w => w.de);
 
-    const wordsToUse = palabrasValidas.join(", ");
-    try {
+    const attemptFetch = async () => {
       const response = await fetch(`https://generatestory-44keyii6gq-uc.a.run.app`, {
         method: 'POST',
         headers: {
@@ -1188,7 +678,6 @@ export default function App() {
             const textChunk = line.substring(6);
             currentBuffer += textChunk;
             
-            // Extraer campos parciales en tiempo real
             const getStreamingField = (buffer, fieldName) => {
               const regex = new RegExp(`"${fieldName}"\\s*:\\s*"([^"]*)`);
               const match = buffer.match(regex);
@@ -1206,7 +695,7 @@ export default function App() {
 
             setStoryState(prev => ({
               ...prev,
-              loading: false, // Ocultar spinner cuando empiece a llegar texto
+              loading: false,
               de: partialDe || "Escribiendo cuento...",
               es: partialEs || "Traduciendo..."
             }));
@@ -1214,27 +703,330 @@ export default function App() {
         }
       }
 
-      // Procesamiento final
       const jsonMatch = currentBuffer.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
-         throw new Error("Formato JSON no encontrado en la respuesta final.");
+         throw new Error("Formato JSON no encontrado.");
       }
-      const data = JSON.parse(jsonMatch[0]);
+      return JSON.parse(jsonMatch[0]);
+    };
+
+    try {
+      const data = await attemptFetch();
       setStoryState({
         isOpen: true,
         loading: false,
         de: data.cuento_aleman || data.de,
         es: data.traduccion_espanol || data.es
       });
-
     } catch (e) {
-      console.error(e);
-      setStoryState({
-        isOpen: true,
-        loading: false,
-        de: "Error al generar el cuento.",
-        es: "Por favor, intenta de nuevo más tarde."
+      console.warn("Intento 1 falló, reintentando...", e);
+      try {
+        await new Promise(resolve => setTimeout(resolve, 600));
+        const data = await attemptFetch();
+        setStoryState({
+          isOpen: true,
+          loading: false,
+          de: data.cuento_aleman || data.de,
+          es: data.traduccion_espanol || data.es
+        });
+      } catch (retryError) {
+        console.error("Intento 2 falló:", retryError);
+        setStoryState({
+          isOpen: true,
+          loading: false,
+          de: "Error al generar el cuento.",
+          es: "Por favor, intenta de nuevo más tarde."
+        });
+      }
+    }
+  };
+  const parseTextToTokens = (text) => {
+    if (!text) return [];
+    const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
+    const tokens = [];
+    let isBold = false;
+    let charIndex = 0;
+    let wordCounter = 0;
+
+    let i = 0;
+    while (i < cleanedText.length) {
+      if (cleanedText.startsWith('**', i)) {
+        isBold = !isBold;
+        i += 2;
+        continue;
+      }
+
+      const spaceMatch = cleanedText.slice(i).match(/^\s+/);
+      if (spaceMatch) {
+        const spaceStr = spaceMatch[0];
+        tokens.push({
+          text: spaceStr,
+          isWord: false,
+          isBold: isBold,
+          isKeyword: isBold,
+          charStart: charIndex,
+          charEnd: charIndex + spaceStr.length,
+          wordIndex: -1
+        });
+        charIndex += spaceStr.length;
+        i += spaceStr.length;
+        continue;
+      }
+
+      const punctMatch = cleanedText.slice(i).match(/^[.,!?:;()[\]{}'"“”«»„“\-–—/\\+]+/);
+      if (punctMatch) {
+        const punctStr = punctMatch[0];
+        tokens.push({
+          text: punctStr,
+          isWord: false,
+          isBold: isBold,
+          isKeyword: isBold,
+          charStart: charIndex,
+          charEnd: charIndex + punctStr.length,
+          wordIndex: -1
+        });
+        charIndex += punctStr.length;
+        i += punctStr.length;
+        continue;
+      }
+
+      const wordMatch = cleanedText.slice(i).match(/^[^\s.,!?:;()[\]{}'"“”«»„“\-–—/\\+*]+/);
+      if (wordMatch) {
+        const wordStr = wordMatch[0];
+        tokens.push({
+          text: wordStr,
+          isWord: true,
+          isBold: isBold,
+          isKeyword: isBold,
+          charStart: charIndex,
+          charEnd: charIndex + wordStr.length,
+          wordIndex: wordCounter++
+        });
+        charIndex += wordStr.length;
+        i += wordStr.length;
+        continue;
+      }
+
+      const singleChar = cleanedText[i];
+      const isWord = /^[a-zA-Z0-9ÄäÖöÜüß]$/.test(singleChar);
+      tokens.push({
+        text: singleChar,
+        isWord: isWord,
+        isBold: isBold,
+        isKeyword: isBold,
+        charStart: charIndex,
+        charEnd: charIndex + 1,
+        wordIndex: isWord ? wordCounter++ : -1
       });
+      charIndex += 1;
+      i += 1;
+    }
+    return tokens;
+  };
+
+  const speakStory = (text) => {
+    if (!text) return;
+    const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
+
+    if (isPlayingStoryAudio) {
+      if (Capacitor.isNativePlatform()) {
+        if (isStoryAudioPaused) {
+          // Reanudar native
+          const remainingWords = wordsOnlyRef.current.slice(currentWordIndex).map(w => w.text).join(' ');
+          const remainingClean = remainingWords.replace(/\*\*/g, '');
+          TextToSpeech.speak({
+            text: remainingClean,
+            lang: 'de-DE',
+            rate: 0.70,
+            volume: 1.0
+          }).then(() => {
+            if (!isPausedRef.current) {
+              setIsPlayingStoryAudio(false);
+              setIsStoryAudioPaused(false);
+              setCurrentWordIndex(-1);
+            }
+          }).catch(e => console.error("Error speak", e));
+          setIsStoryAudioPaused(false);
+          isPausedRef.current = false;
+          if (adaptiveTimerRef.current) {
+            adaptiveTimerRef.current(currentWordIndex);
+          }
+        } else {
+          // Pausar native
+          TextToSpeech.stop();
+          setIsStoryAudioPaused(true);
+          isPausedRef.current = true;
+          if (window.activeStoryTimeout) {
+            clearTimeout(window.activeStoryTimeout);
+            window.activeStoryTimeout = null;
+          }
+        }
+      } else if ('speechSynthesis' in window) {
+        if (isStoryAudioPaused) {
+          window.speechSynthesis.resume();
+          setIsStoryAudioPaused(false);
+          isPausedRef.current = false;
+          if (adaptiveTimerRef.current) {
+            adaptiveTimerRef.current(currentWordIndex);
+          }
+        } else {
+          window.speechSynthesis.pause();
+          setIsStoryAudioPaused(true);
+          isPausedRef.current = true;
+          if (window.activeStoryTimeout) {
+            clearTimeout(window.activeStoryTimeout);
+            window.activeStoryTimeout = null;
+          }
+        }
+      } else {
+        if (isStoryAudioPaused) {
+          window.isStoryPausedPlaceholder = false;
+          setIsStoryAudioPaused(false);
+          isPausedRef.current = false;
+        } else {
+          window.isStoryPausedPlaceholder = true;
+          setIsStoryAudioPaused(true);
+          isPausedRef.current = true;
+        }
+      }
+      return;
+    }
+
+    setIsPlayingStoryAudio(true);
+    setIsStoryAudioPaused(false);
+    isPausedRef.current = false;
+    setCurrentWordIndex(0);
+
+    const tokens = parseTextToTokens(cleanedText);
+    const wordsOnly = tokens.filter(t => t.isWord);
+    wordsOnlyRef.current = wordsOnly;
+
+    const cleanText = cleanedText.replace(/\*\*/g, '');
+
+    let hasNativeBoundary = false;
+
+    const runAdaptiveTimer = (startIndex) => {
+      if (startIndex >= wordsOnly.length) return;
+      let localIdx = startIndex;
+
+      const tick = () => {
+        if (hasNativeBoundary) return;
+        if (localIdx >= wordsOnly.length) return;
+
+        setCurrentWordIndex(localIdx);
+        const currentWord = wordsOnly[localIdx];
+        const wordLen = currentWord ? currentWord.text.length : 5;
+        const duration = Math.max(320, wordLen * 72) / 0.70;
+
+        localIdx++;
+        if (localIdx < wordsOnly.length) {
+          window.activeStoryTimeout = setTimeout(tick, duration);
+        } else {
+          setTimeout(() => {
+            if (!hasNativeBoundary) {
+              setIsPlayingStoryAudio(false);
+              setIsStoryAudioPaused(false);
+              setCurrentWordIndex(-1);
+            }
+          }, duration);
+        }
+      };
+
+      if (window.activeStoryTimeout) clearTimeout(window.activeStoryTimeout);
+      window.activeStoryTimeout = setTimeout(tick, 0);
+    };
+
+    adaptiveTimerRef.current = runAdaptiveTimer;
+
+    if (Capacitor.isNativePlatform()) {
+      TextToSpeech.stop();
+      TextToSpeech.speak({
+        text: cleanText,
+        lang: 'de-DE',
+        rate: 0.70,
+        volume: 1.0
+      }).then(() => {
+        if (!isPausedRef.current) {
+          setIsPlayingStoryAudio(false);
+          setIsStoryAudioPaused(false);
+          setCurrentWordIndex(-1);
+        }
+      }).catch(e => console.error("Error Native Speak", e));
+      runAdaptiveTimer(0);
+    } else if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.getVoices(); // Carga segura de voces
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'de-DE';
+      utterance.rate = 0.70;
+      utterance.volume = 1.0;
+      utteranceRef.current = utterance;
+
+      utterance.onboundary = (event) => {
+        if (event.name === 'word') {
+          if (event.charIndex > 0) {
+            hasNativeBoundary = true;
+            if (window.activeStoryTimeout) {
+              clearTimeout(window.activeStoryTimeout);
+              window.activeStoryTimeout = null;
+            }
+          }
+          const charIndex = event.charIndex;
+          const currentToken = wordsOnlyRef.current.find(
+            w => charIndex >= w.charStart && charIndex < w.charEnd
+          );
+          if (currentToken) {
+            setCurrentWordIndex(currentToken.wordIndex);
+          }
+        }
+      };
+
+      utterance.onend = () => {
+        if (window.activeStoryTimeout) {
+          clearTimeout(window.activeStoryTimeout);
+          window.activeStoryTimeout = null;
+        }
+        setIsPlayingStoryAudio(false);
+        setIsStoryAudioPaused(false);
+        setCurrentWordIndex(-1);
+        utteranceRef.current = null;
+      };
+
+      utterance.onerror = () => {
+        if (window.activeStoryTimeout) {
+          clearTimeout(window.activeStoryTimeout);
+          window.activeStoryTimeout = null;
+        }
+        setIsPlayingStoryAudio(false);
+        setIsStoryAudioPaused(false);
+        setCurrentWordIndex(-1);
+        utteranceRef.current = null;
+      };
+
+      runAdaptiveTimer(0);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      let wordIdx = 0;
+      setCurrentWordIndex(0);
+      
+      const runInterval = () => {
+        if (window.activeStoryInterval) clearInterval(window.activeStoryInterval);
+        window.activeStoryInterval = setInterval(() => {
+          if (window.isStoryPausedPlaceholder) return;
+          wordIdx++;
+          if (wordIdx < wordsOnly.length) {
+            setCurrentWordIndex(wordIdx);
+          } else {
+            clearInterval(window.activeStoryInterval);
+            setIsPlayingStoryAudio(false);
+            setIsStoryAudioPaused(false);
+            setCurrentWordIndex(-1);
+          }
+        }, 450);
+      };
+      
+      window.isStoryPausedPlaceholder = false;
+      runInterval();
     }
   };
   const groupWordsByCategory = words => {
@@ -1475,9 +1267,11 @@ export default function App() {
       isImageLoading,
       openAiTutor,
       setFullscreenImage,
-      unlockedCards
+      unlockedCards,
+      speakText,
+      lazyLoadImage
     };
-    return <div className="flex flex-col min-h-[100dvh] w-full bg-white animate-in fade-in zoom-in-95 duration-200">
+    return <div className="flex flex-col min-h-[100svh] w-full bg-white animate-in fade-in zoom-in-95 duration-200">
         <div className={containerClass}>
           <div className={headerClass}>
             <div className="flex items-center gap-3">
@@ -1538,7 +1332,7 @@ export default function App() {
         </div>
       </div>;
   };
-  return <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
+  return <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-[100svh] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
       
       {viewMode === "presentation" && activePresentation ? (
         <PresentationViewer presentation={activePresentation} onClose={() => {
@@ -1547,7 +1341,7 @@ export default function App() {
           setIsFullscreen(false);
         }} />
       ) : viewMode === "quiz" ? (
-        <div className="flex flex-col min-h-[100dvh] w-full bg-white overflow-y-auto animate-in fade-in duration-300 p-4 sm:p-8">
+        <div className="flex flex-col min-h-[100svh] w-full bg-white overflow-y-auto animate-in fade-in duration-300 p-4 sm:p-8">
           <div className="max-w-4xl mx-auto w-full">
                <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                  <div>
@@ -1617,9 +1411,9 @@ export default function App() {
         <>
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
-            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="bg-yellow-500 text-slate-900 p-2 rounded-lg">
+                <div className="bg-yellow-500 text-slate-900 p-2 rounded-lg animate-pulse">
                   <GraduationCap size={28} />
                 </div>
                 <div>
@@ -1628,27 +1422,37 @@ export default function App() {
                 </div>
               </div>
               
-              <div className="relative w-full md:w-1/3">
-                <input type="text" placeholder="Buscar (ej. Motor, essen, Verbo Modal)..." className="w-full py-2 px-4 pl-10 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all" value={searchTerm} onChange={e => {
-                setSearchTerm(e.target.value);
-                if (viewMode === "quiz" || viewMode === "presentation" || viewMode === "studyPlan") setViewMode("flashcards");
-              }} />
-                <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
-              </div>
+              {/* CONTROLES DE BÚSQUEDA Y NAVEGACIÓN */}
+              <div className="flex flex-col gap-3 w-full lg:w-auto items-stretch lg:items-end">
+                {/* FILA 1: BUSCADOR + PANTALLA COMPLETA */}
+                <div className="flex items-center gap-2 w-full lg:w-auto">
+                  <div className="relative flex-1 lg:w-80">
+                    <input type="text" placeholder="Buscar (ej. Motor, essen, Verbo Modal)..." className="w-full py-2 px-4 pl-10 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all" value={searchTerm} onChange={e => {
+                      setSearchTerm(e.target.value);
+                      if (viewMode === "quiz" || viewMode === "presentation" || viewMode === "studyPlan") setViewMode("flashcards");
+                    }} />
+                    <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
+                  </div>
+                  <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 p-2.5 rounded-lg transition flex items-center justify-center shrink-0 shadow-sm" title="Pantalla Completa App">
+                    {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+                  </button>
+                </div>
 
-              <div className="flex gap-2 w-full md:w-auto justify-end">
-                <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 px-3 py-2 rounded-lg transition flex items-center justify-center" title="Pantalla Completa App">
-                  {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-                </button>
-                <button onClick={() => setIsTutorOpen(true)} className="bg-slate-800 text-yellow-400 border border-yellow-500/30 px-4 py-2 rounded-lg font-bold hover:bg-slate-700 transition flex items-center gap-2">
-                  <Bot size={18} /> Tutor IA
-                </button>
-                <button onClick={() => setViewMode('roleplay')} className="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-500 transition flex items-center gap-2 shadow-md">
-                  <Sparkles size={18} /> Rol ✨
-                </button>
-                <button onClick={openQuizSetup} className="bg-yellow-500 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center gap-2">
-                  <Gamepad2 size={18} /> Quiz
-                </button>
+                {/* FILA 2: LOS OTROS 4 BOTONES */}
+                <div className="flex gap-1.5 md:gap-2 justify-between lg:justify-end w-full">
+                  <button onClick={() => setIsTutorOpen(true)} className="flex-1 lg:flex-initial bg-slate-800 text-yellow-400 border border-yellow-500/30 px-2 py-2 rounded-lg font-bold hover:bg-slate-700 transition flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-sm">
+                    <Bot size={16} /> <span className="hidden sm:inline">Tutor IA</span><span className="sm:hidden">Tutor</span>
+                  </button>
+                  <button onClick={() => setViewMode('roleplay')} className="flex-1 lg:flex-initial bg-purple-600 text-white px-2 py-2 rounded-lg font-bold hover:bg-purple-500 transition flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-md">
+                    <Sparkles size={16} /> <span className="hidden sm:inline">Rol ✨</span><span className="sm:hidden">Rol</span>
+                  </button>
+                  <button onClick={() => setViewMode('reading')} className="flex-1 lg:flex-initial bg-emerald-600 text-white px-2 py-2 rounded-lg font-bold hover:bg-emerald-500 transition flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-md">
+                    <BookOpen size={16} /> <span className="hidden sm:inline">Lectura 📖</span><span className="sm:hidden">Lectura</span>
+                  </button>
+                  <button onClick={openQuizSetup} className="flex-1 lg:flex-initial bg-yellow-500 text-slate-900 px-2 py-2 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-md">
+                    <Gamepad2 size={16} /> Quiz
+                  </button>
+                </div>
               </div>
             </div>
           </header>
@@ -1656,7 +1460,7 @@ export default function App() {
           <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 relative">
         
         {/* SIDEBAR */}
-        {!isFullscreen && viewMode !== "roleplay" && !searchTerm && <aside className="w-full lg:w-72 flex-shrink-0 flex flex-col gap-6">
+        {!isFullscreen && viewMode !== "roleplay" && viewMode !== "reading" && !searchTerm && <aside className="w-full lg:w-72 flex-shrink-0 flex flex-col gap-6">
             
             {/* SECCIÓN 1: Tablas Maestras */}
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -1774,36 +1578,118 @@ export default function App() {
           {/* VISTA: SIMULADOR DE ROL (GEMINI API) ✨ */}
           {viewMode === "roleplay" && typeof RoleplaySimulator !== 'undefined' && <RoleplaySimulator onExit={() => setViewMode("flashcards")} />}
 
-          {/* VISTA: PLAN DE ESTUDIO (CLASES MAGISTRALES) */}
-          {viewMode === "studyPlan" && activeStudyPlanId && <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-slate-200 animate-in fade-in slide-in-from-bottom-4 mb-10">
-               <div className="flex items-center justify-between border-b-2 border-emerald-100 pb-6 mb-6">
-                 <div>
-                   <h2 className="text-2xl sm:text-3xl font-black text-slate-800">
-                     {studyPlanModules.find(m => m.id === activeStudyPlanId).title}
-                   </h2>
-                   <p className="text-emerald-600 font-bold mt-2 flex items-center gap-2">
-                     <GraduationCap size={20} /> Clase Magistral Oficial
-                   </p>
-                 </div>
-               </div>
-               <div className="prose prose-slate max-w-none">
-                 <MarkdownMessage text={studyPlanModules.find(m => m.id === activeStudyPlanId).content} />
-               </div>
+          {/* VISTA: COMPRENSIÓN LECTORA IA 📖 */}
+          {viewMode === "reading" && <ReadingComprehension onExit={() => setViewMode("flashcards")} />}
 
-               {/* BOTÓN PARA VER LA PRESENTACIÓN */}
-               {studyPlanModules.find(m => m.id === activeStudyPlanId).presentationUrl && <div className="mt-8 pt-6 border-t border-slate-200 flex justify-center sm:justify-start">
-                   <button onClick={async e => {
-              e.preventDefault();
-              const granted = await showRewardVideo();
-              if (granted) {
-                window.open(studyPlanModules.find(m => m.id === activeStudyPlanId).presentationUrl, "_blank");
-              }
-            }} className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all hover:scale-105">
-                     <Presentation size={20} />
-                     Abrir Presentación de la Clase
-                   </button>
-                 </div>}
-            </div>}
+          {/* VISTA: PLAN DE ESTUDIO (CLASES MAGISTRALES) */}
+          {viewMode === "studyPlan" && activeStudyPlanId && (() => {
+            const activeModule = studyPlanModules.find(m => m.id === activeStudyPlanId);
+            if (!activeModule) return null;
+
+            const hasSlides = !!activeModule.slides && activeModule.slides.length > 0;
+            const slideIndex = hasSlides 
+              ? (currentStudyPlanSlide >= activeModule.slides.length ? 0 : currentStudyPlanSlide) 
+              : 0;
+            const currentSlide = hasSlides ? activeModule.slides[slideIndex] : null;
+            
+            return (
+              <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-slate-200 animate-in fade-in slide-in-from-bottom-4 mb-10">
+                <div className="flex justify-between items-start mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-emerald-100 text-emerald-600 rounded-2xl">
+                      <BookOpen size={24} />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl sm:text-3xl font-black text-slate-800">{activeModule.title}</h2>
+                      <p className="text-emerald-600 font-bold mt-2 flex items-center gap-2 text-sm">
+                        <GraduationCap size={18} /> Clase Magistral Oficial
+                        {hasSlides && ` • Diapositiva ${slideIndex + 1} de ${activeModule.slides.length}`}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {hasSlides && currentSlide ? (
+                  <div className="space-y-6">
+                    <div className="mb-6 text-center">
+                      <h3 className="text-xl md:text-3xl font-bold text-slate-800 mb-2">
+                        {currentSlide.title}
+                      </h3>
+                      {currentSlide.subtitle && (
+                        <p className="text-slate-500 text-sm font-medium">
+                          {currentSlide.subtitle}
+                        </p>
+                      )}
+                    </div>
+                    <div className="w-full py-4 min-h-[250px]">
+                      {typeof currentSlide.content === 'function'
+                        ? currentSlide.content({
+                            cardImages,
+                            generateCardImage,
+                            isImageLoading,
+                            openAiTutor,
+                            setFullscreenImage,
+                            unlockedCards
+                          })
+                        : currentSlide.content}
+                    </div>
+                    
+                    <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
+                      <button 
+                        onClick={() => setCurrentStudyPlanSlide(Math.max(0, slideIndex - 1))}
+                        disabled={slideIndex === 0}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 transition"
+                      >
+                        <ChevronLeft size={20} /> Anterior
+                      </button>
+                      <div className="flex gap-1.5">
+                        {activeModule.slides.map((_, idx) => (
+                          <div 
+                            key={idx} 
+                            className={`w-2 h-2 rounded-full transition-all ${idx === slideIndex ? 'bg-emerald-600 w-6' : 'bg-emerald-100'}`} 
+                          />
+                        ))}
+                      </div>
+                      <button 
+                        onClick={() => {
+                          if (slideIndex < activeModule.slides.length - 1) {
+                            setCurrentStudyPlanSlide(slideIndex + 1);
+                          }
+                        }}
+                        disabled={slideIndex === activeModule.slides.length - 1}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-30 transition"
+                      >
+                        Siguiente <ChevronRight size={20} />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="prose prose-slate max-w-none">
+                    <MarkdownMessage text={activeModule.content} />
+                  </div>
+                )}
+
+                {/* BOTÓN PARA VER LA PRESENTACIÓN */}
+                {activeModule.presentationUrl && (
+                  <div className="mt-8 pt-6 border-t border-slate-200 flex justify-center sm:justify-start">
+                    <button 
+                      onClick={async e => {
+                        e.preventDefault();
+                        const granted = await showRewardVideo();
+                        if (granted) {
+                          window.open(activeModule.presentationUrl, "_blank");
+                        }
+                      }} 
+                      className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all hover:scale-105"
+                    >
+                      <Presentation size={20} />
+                      Abrir Presentación de la Clase
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
           
           {/* VISTAS: FLASHCARDS Y TABLA */}
           {(viewMode === "flashcards" || viewMode === "table") && <>
@@ -1858,7 +1744,8 @@ export default function App() {
                     openAiTutor={openAiTutor}
                     setFullscreenImage={setFullscreenImage}
                     unlockedCards={unlockedCards}
-                    
+                    speakText={speakText}
+                    lazyLoadImage={lazyLoadImage}
                     isRevealed={isRevealed}
                   />
                 );
@@ -1907,32 +1794,100 @@ export default function App() {
 
           {/* MODAL DEL CUENTO IA */}
           {storyState.isOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
-              <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 animate-in zoom-in-95">
-                <div className="flex justify-between items-center mb-4">
+              <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 animate-in zoom-in-95 max-h-[85svh] flex flex-col overflow-hidden">
+                <div className="flex justify-between items-center mb-4 flex-shrink-0">
                   <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2"><Sparkles className="text-indigo-500" /> Cuento A1 Generado</h3>
-                  <button onClick={() => setStoryState(prev => ({
-                  ...prev,
-                  isOpen: false
-                }))} className="text-slate-400 hover:bg-slate-100 p-2 rounded-full"><X size={20} /></button>
+                  <button onClick={() => {
+                    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                    if (Capacitor.isNativePlatform()) {
+                      try { TextToSpeech.stop(); } catch(e) {}
+                    }
+                    if (window.activeStoryInterval) {
+                      clearInterval(window.activeStoryInterval);
+                      window.activeStoryInterval = null;
+                    }
+                    if (window.activeStoryTimeout) {
+                      clearTimeout(window.activeStoryTimeout);
+                      window.activeStoryTimeout = null;
+                    }
+                    setIsPlayingStoryAudio(false);
+                    setIsStoryAudioPaused(false);
+                    setCurrentWordIndex(-1);
+                    setStoryState(prev => ({
+                      ...prev,
+                      isOpen: false
+                    }));
+                  }} className="text-slate-400 hover:bg-slate-100 p-2 rounded-full"><X size={20} /></button>
                 </div>
-                {storyState.loading ? <div className="py-12 flex flex-col items-center justify-center gap-3 text-indigo-500">
+                {storyState.loading ? <div className="py-12 flex flex-col items-center justify-center gap-3 text-indigo-500 flex-grow">
                     <Loader2 size={40} className="animate-spin" />
                     <p className="font-bold animate-pulse">Imaginando historia mágica...</p>
-                  </div> : <div className="space-y-4">
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 relative group cursor-pointer" onClick={() => nativeSpeak(storyState.de)}>
-                      <div className="font-bold text-lg text-slate-800 leading-relaxed text-inherit">
-                        <ReactMarkdown 
-                          components={{
-                            p: ({node, ...props}) => <span className="block mb-2" {...props} />,
-                            strong: ({node, ...props}) => <strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded" {...props} />
-                          }}
-                        >
-                          {storyState.de}
-                        </ReactMarkdown>
+                  </div> : <div className="space-y-4 flex-grow overflow-hidden flex flex-col">
+                    <div 
+                      className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[280px]"
+                    >
+                      <div 
+                        className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow"
+                        onClick={() => speakStory(storyState.de)}
+                      >
+                        <div className="font-normal text-lg leading-relaxed text-slate-800">
+                          {parseTextToTokens(storyState.de).map((token, idx) => {
+                            if (token.isWord) {
+                              const isHighlighted = token.wordIndex === currentWordIndex;
+                              const isKeyword = token.isBold || token.isKeyword;
+                              const fontWeightClass = isKeyword ? 'font-bold' : 'font-normal';
+                              return (
+                                <span 
+                                  key={idx} 
+                                  className={`inline-block transition-all duration-150 rounded px-[2px] mx-[1px] border ${
+                                    isHighlighted 
+                                      ? 'bg-yellow-200 border-yellow-300 text-slate-900 scale-105 shadow-sm' 
+                                      : isKeyword 
+                                        ? 'bg-indigo-50 border-transparent text-indigo-700' 
+                                        : 'bg-transparent border-transparent text-slate-800'
+                                  } ${fontWeightClass}`}
+                                >
+                                  {token.text}
+                                </span>
+                              );
+                            } else {
+                              return (
+                                <span key={idx} className="text-slate-800 inline-block">
+                                  {token.text}
+                                </span>
+                              );
+                            }
+                          })}
+                        </div>
                       </div>
-                      <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-sm text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"><Volume2 size={16} /></button>
+                      <button 
+                        onClick={() => speakStory(storyState.de)}
+                        className={`absolute top-2 right-2 p-2 bg-white rounded-full shadow-md transition-all ${
+                          isPlayingStoryAudio 
+                            ? 'scale-110 opacity-100' 
+                            : 'text-indigo-600 opacity-0 group-hover:opacity-100'
+                        }`}
+                        title={isPlayingStoryAudio ? (isStoryAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación") : "Escuchar cuento"}
+                        aria-label={isPlayingStoryAudio ? (isStoryAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación") : "Escuchar cuento"}
+                      >
+                        {isPlayingStoryAudio ? (
+                          isStoryAudioPaused ? (
+                            <Volume2 size={16} className="text-amber-500 animate-pulse" />
+                          ) : (
+                            <div className="relative w-4 h-4 flex items-center justify-center">
+                              <span className="absolute w-full h-full bg-indigo-400 rounded-full animate-ping opacity-75"></span>
+                              <div className="flex gap-0.5">
+                                <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
+                                <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
+                              </div>
+                            </div>
+                          )
+                        ) : (
+                          <Volume2 size={16} />
+                        )}
+                      </button>
                     </div>
-                    <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                    <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex-shrink-0">
                       <p className="text-slate-700 italic">{storyState.es}</p>
                     </div>
                   </div>}
@@ -1987,7 +1942,7 @@ export default function App() {
       </aside>}
 
     {fullscreenImage && <div className="fixed inset-0 z-[100] bg-slate-900/95 flex items-center justify-center p-4" onClick={() => setFullscreenImage(null)}>
-        <div className="relative max-w-5xl max-h-screen w-full h-full flex flex-col items-center justify-center">
+        <div className="relative max-w-5xl max-h-[100svh] w-full h-full flex flex-col items-center justify-center">
           <button onClick={e => {
             e.stopPropagation();
             setFullscreenImage(null);
