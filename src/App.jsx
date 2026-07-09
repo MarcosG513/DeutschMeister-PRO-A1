@@ -1857,27 +1857,23 @@ export default function App() {
                                   <span className="text-slate-300">---</span>
                                 )}
                               </td>
-                              <td className="px-4 py-3 whitespace-nowrap align-middle">
+                              <td className="px-4 py-3 whitespace-nowrap align-middle text-center">
                                 {(() => {
-                                  const typeLower = (word.type || "").toLowerCase();
-                                  if (typeLower.includes("sustantivo")) {
-                                    const pluralRaw = word.plural || "---";
-                                    const pluralClean = pluralRaw.replace(/^Plural:\s*/i, "").trim();
-                                    if (pluralClean === "---") {
-                                      return <span className="text-slate-300 font-normal text-xs font-mono">{pluralClean}</span>;
+                                  if (word.regimen) {
+                                    const reg = word.regimen;
+                                    if (reg.includes("Akkusativ")) {
+                                      return <span className="bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded text-xs inline-block">{reg}</span>;
+                                    } else if (reg.includes("Dativo") || reg.includes("⚠️")) {
+                                      return <span className="bg-amber-100 text-amber-800 font-bold px-2 py-1 rounded text-xs inline-block">{reg}</span>;
+                                    } else {
+                                      return <span className="bg-purple-100 text-purple-800 font-bold px-2 py-1 rounded text-xs inline-block">{reg}</span>;
                                     }
-                                    return <span className="font-bold text-slate-800 dark:text-slate-100 text-xs font-mono">{pluralClean}</span>;
                                   }
-                                  if (typeLower.includes("verbo") || typeLower.includes("acción") || typeLower.includes("accion")) {
-                                    const dativVerben = ["helfen", "danken", "gefallen", "gehören", "passen", "antworten", "wehtun"];
-                                    const isDativ = dativVerben.includes((word.de || "").toLowerCase().trim()) || typeLower.includes("dativ");
-                                    return isDativ ? (
-                                      <span className="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full text-xs font-semibold inline-block">⚠️ Exige Dativo</span>
-                                    ) : (
-                                      <span className="bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 rounded-full text-xs font-semibold inline-block">+ Akkusativ</span>
-                                    );
+                                  if (word.plural) {
+                                    const pluralClean = word.plural.replace(/Plural:\s*/i, "").trim();
+                                    return <span className="font-bold text-slate-800 text-xs font-mono">{pluralClean}</span>;
                                   }
-                                  return null;
+                                  return <span className="text-slate-300 font-normal text-xs font-mono">---</span>;
                                 })()}
                               </td>
                             </tr>

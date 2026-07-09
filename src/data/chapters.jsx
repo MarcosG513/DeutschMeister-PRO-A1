@@ -265,7 +265,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe null Euro.",
-    exampleSentenceEs: "Tengo cero euros."
+    exampleSentenceEs: "Tengo cero euros.",
+    regimen: "Cardinal, sin ordinal"
   }, {
     de: "eins",
     pron: "áins",
@@ -273,7 +274,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe eins.",
-    exampleSentenceEs: "Tengo uno."
+    exampleSentenceEs: "Tengo uno.",
+    regimen: "Ordinal: erste"
   }, {
     de: "zwei",
     pron: "tsvái",
@@ -281,7 +283,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe zwei Katzen.",
-    exampleSentenceEs: "Tengo dos gatos."
+    exampleSentenceEs: "Tengo dos gatos.",
+    regimen: "Ordinal: zweite"
   }, {
     de: "drei",
     pron: "drái",
@@ -289,7 +292,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe drei Äpfel.",
-    exampleSentenceEs: "Tengo tres manzanas."
+    exampleSentenceEs: "Tengo tres manzanas.",
+    regimen: "Ordinal: dritte"
   }, {
     de: "vier",
     pron: "fí-a",
@@ -297,7 +301,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe vier Äpfel.",
-    exampleSentenceEs: "Tengo cuatro manzanas."
+    exampleSentenceEs: "Tengo cuatro manzanas.",
+    regimen: "Ordinal: vierte"
   }, {
     de: "fünf",
     pron: "funf",
@@ -305,7 +310,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Das Brot kostet fünf Euro.",
-    exampleSentenceEs: "El pan cuesta cinco euros."
+    exampleSentenceEs: "El pan cuesta cinco euros.",
+    regimen: "Ordinal: fünfte"
   }, {
     de: "sechs",
     pron: "zeks",
@@ -313,7 +319,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Das Ticket kostet sechs Euro.",
-    exampleSentenceEs: "El billete cuesta seis euros."
+    exampleSentenceEs: "El billete cuesta seis euros.",
+    regimen: "Ordinal: sechste"
   }, {
     de: "sieben",
     pron: "sí-ben",
@@ -321,7 +328,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe sieben Äpfel.",
-    exampleSentenceEs: "Tengo siete manzanas."
+    exampleSentenceEs: "Tengo siete manzanas.",
+    regimen: "Ordinal: siebte"
   }, {
     de: "acht",
     pron: "ajt",
@@ -329,7 +337,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe acht Euro.",
-    exampleSentenceEs: "Tengo ocho euros."
+    exampleSentenceEs: "Tengo ocho euros.",
+    regimen: "Ordinal: achte"
   }, {
     de: "neun",
     pron: "nóin",
@@ -337,7 +346,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe neun Äpfel.",
-    exampleSentenceEs: "Tengo nueve manzanas."
+    exampleSentenceEs: "Tengo nueve manzanas.",
+    regimen: "Ordinal: neunte"
   }, {
     de: "zehn",
     pron: "tsén",
@@ -345,7 +355,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe zehn Finger.",
-    exampleSentenceEs: "Tengo diez dedos."
+    exampleSentenceEs: "Tengo diez dedos.",
+    regimen: "Ordinal: zehnte"
   }, {
     de: "elf",
     pron: "élf",
@@ -353,7 +364,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich bin elf Jahre alt.",
-    exampleSentenceEs: "Tengo once años."
+    exampleSentenceEs: "Tengo once años.",
+    regimen: "Ordinal: elfte"
   }, {
     de: "zwölf",
     pron: "tsuolf",
@@ -361,7 +373,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe zwölf Euro.",
-    exampleSentenceEs: "Tengo doce euros."
+    exampleSentenceEs: "Tengo doce euros.",
+    regimen: "Ordinal: zwölfte"
   }, {
     de: "dreizehn",
     pron: "drái-tsen",
@@ -369,7 +382,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe dreizehn Euro.",
-    exampleSentenceEs: "Tengo trece euros."
+    exampleSentenceEs: "Tengo trece euros.",
+    regimen: "Ordinal: dreizehnte"
   }, {
     de: "sechzehn",
     pron: "zéj-tsen",
@@ -377,7 +391,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich bin sechzehn Jahre alt.",
-    exampleSentenceEs: "Tengo dieciséis años."
+    exampleSentenceEs: "Tengo dieciséis años.",
+    regimen: "Ordinal: sechzehnte"
   }, {
     de: "siebzehn",
     pron: "síp-tsen",
@@ -385,7 +400,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich bin siebzehn Jahre alt.",
-    exampleSentenceEs: "Tengo diecisiete años."
+    exampleSentenceEs: "Tengo diecisiete años.",
+    regimen: "Ordinal: siebzehnte"
   }, {
     de: "zwanzig",
     pron: "tsván-tsij",
@@ -393,7 +409,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich bin zwanzig Jahre alt.",
-    exampleSentenceEs: "Tengo veinte años."
+    exampleSentenceEs: "Tengo veinte años.",
+    regimen: "Ordinal: zwanzigste"
   }, {
     de: "einundzwanzig",
     pron: "ain-unt-tsván-tsij",
@@ -401,7 +418,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich bin einundzwanzig Jahre alt.",
-    exampleSentenceEs: "Tengo veintiuno años."
+    exampleSentenceEs: "Tengo veintiuno años.",
+    regimen: "Ordinal: einundzwanzigste"
   }, {
     de: "dreißig",
     pron: "drái-sij",
@@ -409,7 +427,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich bin dreißig Jahre alt.",
-    exampleSentenceEs: "Tengo treinta años."
+    exampleSentenceEs: "Tengo treinta años.",
+    regimen: "Ordinal: dreißigste"
   }, {
     de: "vierzig",
     pron: "fía-tsij",
@@ -417,7 +436,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich bin vierzig Jahre alt.",
-    exampleSentenceEs: "Tengo cuarenta años."
+    exampleSentenceEs: "Tengo cuarenta años.",
+    regimen: "Ordinal: vierzigste"
   }, {
     de: "hundert",
     pron: "hún-deat",
@@ -425,7 +445,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe hundert Euro.",
-    exampleSentenceEs: "Tengo cien euros."
+    exampleSentenceEs: "Tengo cien euros.",
+    regimen: "Ordinal: hundertste"
   }, {
     de: "tausend",
     pron: "táu-sent",
@@ -433,7 +454,8 @@ const chapters = [{
     type: "Número",
     category: "Zahlen",
     exampleSentenceDe: "Ich habe tausend Euro.",
-    exampleSentenceEs: "Tengo mil euros."
+    exampleSentenceEs: "Tengo mil euros.",
+    regimen: "Ordinal: tausendste"
   }, {
     de: "der erste",
     pron: "dea érs-te",
@@ -441,7 +463,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Ich bin der erste.",
-    exampleSentenceEs: "Yo soy el primero."
+    exampleSentenceEs: "Yo soy el primero.",
+    regimen: "Declina como adj."
   }, {
     de: "der zweite",
     pron: "dea tsvái-te",
@@ -449,7 +472,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Das ist der zweite Stock.",
-    exampleSentenceEs: "Este es el segundo piso."
+    exampleSentenceEs: "Este es el segundo piso.",
+    regimen: "Declina como adj."
   }, {
     de: "der dritte",
     pron: "dea drí-te",
@@ -457,7 +481,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Ich wohne in der dritten Straße.",
-    exampleSentenceEs: "Yo vivo en la tercera calle."
+    exampleSentenceEs: "Yo vivo en la tercera calle.",
+    regimen: "Declina como adj."
   }, {
     de: "der vierte",
     pron: "dea fí-a-te",
@@ -465,7 +490,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Ich wohne in der vierten Etage.",
-    exampleSentenceEs: "Yo vivo en el cuarto piso."
+    exampleSentenceEs: "Yo vivo en el cuarto piso.",
+    regimen: "Declina como adjetivo"
   }, {
     de: "der fünfte",
     pron: "dea fúnf-te",
@@ -473,7 +499,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der fünfte Mai.",
-    exampleSentenceEs: "Hoy es el quinto de mayo."
+    exampleSentenceEs: "Hoy es el quinto de mayo.",
+    regimen: "Declina como adj."
   }, {
     de: "der sechste",
     pron: "dea zéks-te",
@@ -481,7 +508,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der sechste Mai.",
-    exampleSentenceEs: "Hoy es el sexto de mayo."
+    exampleSentenceEs: "Hoy es el sexto de mayo.",
+    regimen: "Declina como adj."
   }, {
     de: "der siebte",
     pron: "dea zíp-te",
@@ -489,7 +517,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Sonntag ist der siebte Tag.",
-    exampleSentenceEs: "El domingo es el séptimo día."
+    exampleSentenceEs: "El domingo es el séptimo día.",
+    regimen: "Declina como adj."
   }, {
     de: "der achte",
     pron: "dea áj-te",
@@ -497,7 +526,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Das ist die achte Stunde.",
-    exampleSentenceEs: "Esta es la octava hora."
+    exampleSentenceEs: "Esta es la octava hora.",
+    regimen: "Declina como adj."
   }, {
     de: "der neunte",
     pron: "dea nóin-te",
@@ -505,7 +535,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der neunte Mai.",
-    exampleSentenceEs: "Hoy es el noveno de mayo."
+    exampleSentenceEs: "Hoy es el noveno de mayo.",
+    regimen: "Declina como adjetivo"
   }, {
     de: "der zehnte",
     pron: "dea tsén-te",
@@ -513,7 +544,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Der zehnte Tag ist heute.",
-    exampleSentenceEs: "El décimo día es hoy."
+    exampleSentenceEs: "El décimo día es hoy.",
+    regimen: "Declina como adjetivo"
   }, {
     de: "der zwanzigste",
     pron: "dea tsván-tsiks-te",
@@ -521,7 +553,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der zwanzigste Tag im Monat.",
-    exampleSentenceEs: "Hoy es el vigésimo día del mes."
+    exampleSentenceEs: "Hoy es el vigésimo día del mes.",
+    regimen: "Declina como adj."
   }, {
     de: "der einundzwanzigste",
     pron: "dea ái-nunt-tsván-tsigs-te",
@@ -529,7 +562,8 @@ const chapters = [{
     type: "Ordinal",
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der einundzwanzigste Januar.",
-    exampleSentenceEs: "Hoy es el veintiuno de enero."
+    exampleSentenceEs: "Hoy es el veintiuno de enero.",
+    regimen: "Declina como adj."
   }, {
     de: "die Hälfte",
     pron: "di jélf-te",
@@ -537,7 +571,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Zahlen",
     exampleSentenceDe: "Ich nehme die Hälfte von dem Kuchen.",
-    exampleSentenceEs: "Yo tomo la mitad del pastel."
+    exampleSentenceEs: "Yo tomo la mitad del pastel.",
+    plural: "die Hälften"
   }, {
     de: "das Viertel",
     pron: "das fía-tel",
@@ -545,7 +580,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Zahlen",
     exampleSentenceDe: "Das ist ein Viertel von dem Kuchen.",
-    exampleSentenceEs: "Este es un cuarto del pastel."
+    exampleSentenceEs: "Este es un cuarto del pastel.",
+    plural: "die Viertel"
   }, {
     de: "plus / minus",
     pron: "plus  mí-nus",
@@ -553,7 +589,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Zahlen",
     exampleSentenceDe: "Fünf plus fünf ist zehn.",
-    exampleSentenceEs: "Cinco más cinco son diez."
+    exampleSentenceEs: "Cinco más cinco son diez.",
+    regimen: "Operaciones matemáticas"
   }, {
     de: "mal / durch",
     pron: "mal  durch",
@@ -561,7 +598,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Zahlen",
     exampleSentenceDe: "Wir gehen durch den Park.",
-    exampleSentenceEs: "Vamos por el parque."
+    exampleSentenceEs: "Vamos por el parque.",
+    regimen: "Operaciones matemáticas"
   }, {
     de: "das Prozent",
     pron: "das pro-tsént",
@@ -569,7 +607,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Zahlen",
     exampleSentenceDe: "Das Prozent ist nicht hoch.",
-    exampleSentenceEs: "El por ciento no es alto."
+    exampleSentenceEs: "El por ciento no es alto.",
+    plural: "die Prozent"
   }]
 }, {
   id: 1,
@@ -583,7 +622,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Tage",
     exampleSentenceDe: "Diese Woche ist kurz.",
-    exampleSentenceEs: "Esta semana es corta."
+    exampleSentenceEs: "Esta semana es corta.",
+    plural: "die Wochen"
   }, {
     de: "Montag",
     pron: "món-tak",
@@ -591,7 +631,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tage",
     exampleSentenceDe: "Am Montag habe ich Deutsch.",
-    exampleSentenceEs: "El lunes tengo alemán."
+    exampleSentenceEs: "El lunes tengo alemán.",
+    plural: "die Montage"
   }, {
     de: "Dienstag",
     pron: "díns-tak",
@@ -599,7 +640,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tage",
     exampleSentenceDe: "Am Dienstag trinke ich Kaffee.",
-    exampleSentenceEs: "El martes bebo café."
+    exampleSentenceEs: "El martes bebo café.",
+    plural: "die Dienstage"
   }, {
     de: "Mittwoch",
     pron: "mít-voj",
@@ -607,7 +649,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tage",
     exampleSentenceDe: "Am Mittwoch ist ein Treffen.",
-    exampleSentenceEs: "El miércoles hay una reunión."
+    exampleSentenceEs: "El miércoles hay una reunión.",
+    plural: "die Mittwoche"
   }, {
     de: "Donnerstag",
     pron: "dó-ners-tak",
@@ -615,7 +658,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tage",
     exampleSentenceDe: "Am Donnerstag trinke ich Kaffee.",
-    exampleSentenceEs: "El jueves bebo café."
+    exampleSentenceEs: "El jueves bebo café.",
+    plural: "die Donnerstage"
   }, {
     de: "Freitag",
     pron: "frái-tak",
@@ -623,7 +667,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tage",
     exampleSentenceDe: "Am Freitag ist meine Party.",
-    exampleSentenceEs: "El viernes es mi fiesta."
+    exampleSentenceEs: "El viernes es mi fiesta.",
+    plural: "die Freitage"
   }, {
     de: "Samstag",
     pron: "sáms-tak",
@@ -631,7 +676,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tage",
     exampleSentenceDe: "Am Samstag trinke ich Kaffee.",
-    exampleSentenceEs: "El sábado bebo café."
+    exampleSentenceEs: "El sábado bebo café.",
+    plural: "die Samstage"
   }, {
     de: "Sonntag",
     pron: "són-tak",
@@ -639,7 +685,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tage",
     exampleSentenceDe: "Der Sonntag ist ein Tag.",
-    exampleSentenceEs: "El domingo es un día."
+    exampleSentenceEs: "El domingo es un día.",
+    plural: "die Sonntage"
   }, {
     de: "am + Tag",
     pron: "am ták",
@@ -647,7 +694,8 @@ const chapters = [{
     type: "Preposición",
     category: "Tage",
     exampleSentenceDe: "Am Montag habe ich frei.",
-    exampleSentenceEs: "El lunes tengo libre."
+    exampleSentenceEs: "El lunes tengo libre.",
+    regimen: "+ Dativo"
   }, {
     de: "das Wochenende",
     pron: "das vó-jen-én-de",
@@ -655,7 +703,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Tage",
     exampleSentenceDe: "Das Wochenende ist am Samstag und am Sonntag.",
-    exampleSentenceEs: "El fin de semana es el sábado y el domingo."
+    exampleSentenceEs: "El fin de semana es el sábado y el domingo.",
+    plural: "die Wochenenden"
   }, {
     de: "am Wochenende",
     pron: "am vó-jen-en-de",
@@ -663,7 +712,8 @@ const chapters = [{
     type: "Frase",
     category: "Tage",
     exampleSentenceDe: "Am Wochenende treffe ich Freunde.",
-    exampleSentenceEs: "El fin de semana me encuentro con amigos."
+    exampleSentenceEs: "El fin de semana me encuentro con amigos.",
+    regimen: "am + dativo, fijo"
   }, {
     de: "der Feiertag",
     pron: "dea fái-a-tak",
@@ -671,7 +721,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tage",
     exampleSentenceDe: "Heute ist ein Feiertag.",
-    exampleSentenceEs: "Hoy es un día festivo."
+    exampleSentenceEs: "Hoy es un día festivo.",
+    plural: "die Feiertage"
   }, {
     de: "das Jahr",
     pron: "das yá-a",
@@ -679,7 +730,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Monate",
     exampleSentenceDe: "Das Jahr ist neu.",
-    exampleSentenceEs: "El año es nuevo."
+    exampleSentenceEs: "El año es nuevo.",
+    plural: "die Jahre"
   }, {
     de: "der Monat",
     pron: "dea mó-nat",
@@ -687,7 +739,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Dieser Monat ist lang.",
-    exampleSentenceEs: "Este mes es largo."
+    exampleSentenceEs: "Este mes es largo.",
+    plural: "die Monate"
   }, {
     de: "Januar",
     pron: "yá-nu-a-a",
@@ -695,7 +748,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der Januar ist der erste Monat.",
-    exampleSentenceEs: "Enero es el primer mes."
+    exampleSentenceEs: "Enero es el primer mes.",
+    plural: "die Januare"
   }, {
     de: "Februar",
     pron: "fé-bru-a",
@@ -703,7 +757,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der Februar ist ein Monat.",
-    exampleSentenceEs: "Febrero es un mes."
+    exampleSentenceEs: "Febrero es un mes.",
+    plural: "die Februare"
   }, {
     de: "März",
     pron: "merts",
@@ -711,7 +766,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der dritte Monat ist März.",
-    exampleSentenceEs: "El tercer mes es marzo."
+    exampleSentenceEs: "El tercer mes es marzo.",
+    plural: "die Märze"
   }, {
     de: "April",
     pron: "a-príl",
@@ -719,7 +775,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der April ist ein Monat.",
-    exampleSentenceEs: "Abril es un mes."
+    exampleSentenceEs: "Abril es un mes.",
+    plural: "die Aprile"
   }, {
     de: "Mai",
     pron: "mái",
@@ -727,7 +784,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der Mai ist ein schöner Monat.",
-    exampleSentenceEs: "Mayo es un mes bonito."
+    exampleSentenceEs: "Mayo es un mes bonito.",
+    plural: "die Maie"
   }, {
     de: "Juni",
     pron: "yú-ni",
@@ -735,7 +793,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der Juni ist ein schöner Monat.",
-    exampleSentenceEs: "Junio es un mes bonito."
+    exampleSentenceEs: "Junio es un mes bonito.",
+    plural: "die Junis"
   }, {
     de: "Juli",
     pron: "yú-li",
@@ -743,7 +802,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der Juli ist ein schöner Monat.",
-    exampleSentenceEs: "Julio es un mes bonito."
+    exampleSentenceEs: "Julio es un mes bonito.",
+    plural: "die Julis"
   }, {
     de: "August",
     pron: "áu-gust",
@@ -751,7 +811,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der Monat August ist der achte Monat.",
-    exampleSentenceEs: "El mes de agosto es el octavo mes."
+    exampleSentenceEs: "El mes de agosto es el octavo mes.",
+    plural: "die Auguste"
   }, {
     de: "September",
     pron: "sep-tém-bea",
@@ -759,7 +820,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der September ist ein schöner Monat.",
-    exampleSentenceEs: "Septiembre es un mes bonito."
+    exampleSentenceEs: "Septiembre es un mes bonito.",
+    plural: "die Septembers"
   }, {
     de: "Oktober",
     pron: "ok-tó-bea",
@@ -767,7 +829,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Der Oktober ist ein Monat.",
-    exampleSentenceEs: "Octubre es un mes."
+    exampleSentenceEs: "Octubre es un mes.",
+    plural: "die Oktober"
   }, {
     de: "November",
     pron: "no-fém-bea",
@@ -775,7 +838,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Im November ist es kalt.",
-    exampleSentenceEs: "En noviembre hace frío."
+    exampleSentenceEs: "En noviembre hace frío.",
+    plural: "die November"
   }, {
     de: "Dezember",
     pron: "de-tsém-bea",
@@ -783,7 +847,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Monate",
     exampleSentenceDe: "Wir haben im Dezember Geburtstag.",
-    exampleSentenceEs: "Tenemos cumpleaños en diciembre."
+    exampleSentenceEs: "Tenemos cumpleaños en diciembre.",
+    plural: "die Dezember"
   }, {
     de: "der Frühling",
     pron: "dea frú-ling",
@@ -791,7 +856,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Jahreszeiten",
     exampleSentenceDe: "Der Frühling ist schön.",
-    exampleSentenceEs: "La primavera es bonita."
+    exampleSentenceEs: "La primavera es bonita.",
+    plural: "die Frühlinge"
   }, {
     de: "der Sommer",
     pron: "dea só-mea",
@@ -799,7 +865,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Jahreszeiten",
     exampleSentenceDe: "Ich mag den Sommer. Der Sommer ist heiß.",
-    exampleSentenceEs: "Me gusta el verano. El verano es caluroso."
+    exampleSentenceEs: "Me gusta el verano. El verano es caluroso.",
+    plural: "die Sommer"
   }, {
     de: "der Herbst",
     pron: "dea jéapst",
@@ -807,7 +874,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Jahreszeiten",
     exampleSentenceDe: "Der Herbst ist schön.",
-    exampleSentenceEs: "El otoño es bonito."
+    exampleSentenceEs: "El otoño es bonito.",
+    plural: "die Herbste"
   }, {
     de: "der Winter",
     pron: "dea vín-tea",
@@ -815,7 +883,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Jahreszeiten",
     exampleSentenceDe: "Der Winter ist kalt.",
-    exampleSentenceEs: "El invierno es frío."
+    exampleSentenceEs: "El invierno es frío.",
+    plural: "die Winter"
   }, {
     de: "der Tag",
     pron: "dea ták",
@@ -823,7 +892,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tageszeiten",
     exampleSentenceDe: "Der Tag ist schön.",
-    exampleSentenceEs: "El día es bonito."
+    exampleSentenceEs: "El día es bonito.",
+    plural: "die Tage"
   }, {
     de: "der Morgen",
     pron: "dea mór-guen",
@@ -832,7 +902,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tageszeiten",
     exampleSentenceDe: "Der Morgen ist schön.",
-    exampleSentenceEs: "La mañana es bonita."
+    exampleSentenceEs: "La mañana es bonita.",
+    plural: "die Morgen"
   }, {
     de: "der Vormittag",
     pron: "dea fóa-mi-tak",
@@ -841,7 +912,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tageszeiten",
     exampleSentenceDe: "Am Vormittag trinke ich Kaffee.",
-    exampleSentenceEs: "Por la mañana, bebo café."
+    exampleSentenceEs: "Por la mañana, bebo café.",
+    plural: "die Vormittage"
   }, {
     de: "der Mittag",
     pron: "dea mí-tak",
@@ -850,7 +922,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tageszeiten",
     exampleSentenceDe: "Wir essen um 12 Uhr zu Mittag.",
-    exampleSentenceEs: "Comemos al mediodía a las 12."
+    exampleSentenceEs: "Comemos al mediodía a las 12.",
+    plural: "die Mittage"
   }, {
     de: "der Nachmittag",
     pron: "dea náj-mi-tak",
@@ -859,7 +932,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tageszeiten",
     exampleSentenceDe: "Am Nachmittag trinke ich Kaffee.",
-    exampleSentenceEs: "Por la tarde tomo café."
+    exampleSentenceEs: "Por la tarde tomo café.",
+    plural: "die Nachmittage"
   }, {
     de: "der Abend",
     pron: "dea á-bent",
@@ -868,7 +942,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Tageszeiten",
     exampleSentenceDe: "Der Abend ist schön.",
-    exampleSentenceEs: "La noche es bonita."
+    exampleSentenceEs: "La noche es bonita.",
+    plural: "die Abende"
   }, {
     de: "die Nacht",
     pron: "di-nájt",
@@ -877,7 +952,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Tageszeiten",
     exampleSentenceDe: "Die Nacht ist lang.",
-    exampleSentenceEs: "La noche es larga."
+    exampleSentenceEs: "La noche es larga.",
+    plural: "die Nächte"
   }, {
     de: "am Morgen",
     pron: "am mór-guen",
@@ -886,7 +962,8 @@ const chapters = [{
     type: "Frase",
     category: "Tageszeiten",
     exampleSentenceDe: "Ich trinke Kaffee am Morgen.",
-    exampleSentenceEs: "Bebo café por la mañana."
+    exampleSentenceEs: "Bebo café por la mañana.",
+    regimen: "Fijo: am + Dativ"
   }, {
     de: "am Vormittag",
     pron: "am fóa-mi-tak",
@@ -895,7 +972,8 @@ const chapters = [{
     type: "Frase",
     category: "Tageszeiten",
     exampleSentenceDe: "Ich esse am Vormittag.",
-    exampleSentenceEs: "Yo como por la mañana."
+    exampleSentenceEs: "Yo como por la mañana.",
+    regimen: "am + Dativo"
   }, {
     de: "am Mittag",
     pron: "am mí-tak",
@@ -904,7 +982,8 @@ const chapters = [{
     type: "Frase",
     category: "Tageszeiten",
     exampleSentenceDe: "Ich esse am Mittag.",
-    exampleSentenceEs: "Yo como al mediodía."
+    exampleSentenceEs: "Yo como al mediodía.",
+    regimen: "am + Tageszeit"
   }, {
     de: "am Nachmittag",
     pron: "am náj-mi-tak",
@@ -913,7 +992,8 @@ const chapters = [{
     type: "Frase",
     category: "Tageszeiten",
     exampleSentenceDe: "Am Nachmittag trinke ich Kaffee.",
-    exampleSentenceEs: "Por la tarde bebo café."
+    exampleSentenceEs: "Por la tarde bebo café.",
+    regimen: "am + Tageszeit"
   }, {
     de: "am Abend",
     pron: "am á-bent",
@@ -922,7 +1002,8 @@ const chapters = [{
     type: "Frase",
     category: "Tageszeiten",
     exampleSentenceDe: "Am Abend esse ich.",
-    exampleSentenceEs: "Por la tarde como."
+    exampleSentenceEs: "Por la tarde como.",
+    regimen: "Fijo: am + Tageszeit"
   }, {
     de: "in der Nacht",
     pron: "in-dea-nájt",
@@ -931,7 +1012,8 @@ const chapters = [{
     type: "Frase",
     category: "Tageszeiten",
     exampleSentenceDe: "Ich schlafe in der Nacht.",
-    exampleSentenceEs: "Yo duermo en la noche."
+    exampleSentenceEs: "Yo duermo en la noche.",
+    regimen: "Dat. + in/an/bei"
   }, {
     de: "die Uhrzeit",
     pron: "di ú-a-tsait",
@@ -939,7 +1021,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Uhrzeit",
     exampleSentenceDe: "Ich habe die Uhrzeit nicht.",
-    exampleSentenceEs: "No tengo la hora."
+    exampleSentenceEs: "No tengo la hora.",
+    plural: "die Uhrzeiten"
   }, {
     de: "Wann?",
     pron: "van",
@@ -947,7 +1030,8 @@ const chapters = [{
     type: "Pregunta",
     category: "Uhrzeit",
     exampleSentenceDe: "Wann kommst du?",
-    exampleSentenceEs: "¿Cuándo vienes?"
+    exampleSentenceEs: "¿Cuándo vienes?",
+    regimen: "Pron. interrogativo tiempo"
   }, {
     de: "Wie spät ist es?",
     pron: "vi shpét ist es",
@@ -955,7 +1039,8 @@ const chapters = [{
     type: "Pregunta",
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist zehn Uhr.",
-    exampleSentenceEs: "Son las diez en punto."
+    exampleSentenceEs: "Son las diez en punto.",
+    regimen: "Fijo"
   }, {
     de: "Wie viel Uhr ist es?",
     pron: "ví fíl ú-a ist es",
@@ -963,7 +1048,8 @@ const chapters = [{
     type: "Pregunta",
     category: "Uhrzeit",
     exampleSentenceDe: "Ich habe eine Frage. Wie viel Uhr ist es?",
-    exampleSentenceEs: "Tengo una pregunta. ¿Qué hora es?"
+    exampleSentenceEs: "Tengo una pregunta. ¿Qué hora es?",
+    regimen: "Fijo, hora"
   }, {
     de: "ein Uhr",
     pron: "áin ú-a",
@@ -971,7 +1057,8 @@ const chapters = [{
     type: "Hora",
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist ein Uhr.",
-    exampleSentenceEs: "Es la una en punto."
+    exampleSentenceEs: "Es la una en punto.",
+    regimen: "Es ist ein Uhr"
   }, {
     de: "halb zwei",
     pron: "jalp-tsvái",
@@ -979,7 +1066,8 @@ const chapters = [{
     type: "Hora",
     category: "Uhrzeit",
     exampleSentenceDe: "Der Zug fährt um halb zwei.",
-    exampleSentenceEs: "El tren sale a la una y media."
+    exampleSentenceEs: "El tren sale a la una y media.",
+    regimen: "Media hora antes"
   }, {
     de: "Viertel vor drei",
     pron: "fía-tel foa dray",
@@ -987,7 +1075,8 @@ const chapters = [{
     type: "Hora",
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist Viertel vor drei.",
-    exampleSentenceEs: "Son las tres menos cuarto."
+    exampleSentenceEs: "Son las tres menos cuarto.",
+    regimen: "Formal, hora exacta"
   }, {
     de: "kurz vor 4",
     pron: "kurts foa fía",
@@ -995,7 +1084,8 @@ const chapters = [{
     type: "Frase",
     category: "Uhrzeit",
     exampleSentenceDe: "Wir treffen uns kurz vor 4.",
-    exampleSentenceEs: "Nos encontramos poco antes de las 4."
+    exampleSentenceEs: "Nos encontramos poco antes de las 4.",
+    regimen: "Fijo: hora"
   }, {
     de: "gleich 4",
     pron: "gláij fí-a",
@@ -1003,7 +1093,8 @@ const chapters = [{
     type: "Frase",
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist gleich vier Uhr.",
-    exampleSentenceEs: "Son casi las cuatro."
+    exampleSentenceEs: "Son casi las cuatro.",
+    regimen: "Fijo"
   }, {
     de: "genau 4 Uhr",
     pron: "gue-náu fía ú-a",
@@ -1011,7 +1102,8 @@ const chapters = [{
     type: "Frase",
     category: "Uhrzeit",
     exampleSentenceDe: "Wir treffen uns um genau 4 Uhr.",
-    exampleSentenceEs: "Nos vemos exactamente a las 4."
+    exampleSentenceEs: "Nos vemos exactamente a las 4.",
+    regimen: "Uhrzeit fija"
   }, {
     de: "fünf nach 4",
     pron: "fünf-naj-fí-a",
@@ -1019,7 +1111,8 @@ const chapters = [{
     type: "Frase",
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist fünf nach vier.",
-    exampleSentenceEs: "Son las cuatro y cinco."
+    exampleSentenceEs: "Son las cuatro y cinco.",
+    regimen: "nach + dat."
   }, {
     de: "um 3 Uhr",
     pron: "um dráy ú-a",
@@ -1027,7 +1120,8 @@ const chapters = [{
     type: "Frase",
     category: "Uhrzeit",
     exampleSentenceDe: "Ich komme um 3 Uhr.",
-    exampleSentenceEs: "Vengo a las 3."
+    exampleSentenceEs: "Vengo a las 3.",
+    regimen: "um + hora"
   }, {
     de: "von 2 bis 3 Uhr",
     pron: "fon tsvái bis dray ú-a",
@@ -1035,7 +1129,8 @@ const chapters = [{
     type: "Frase",
     category: "Uhrzeit",
     exampleSentenceDe: "Der Kurs ist von 2 bis 3 Uhr.",
-    exampleSentenceEs: "El curso es de 2 a 3."
+    exampleSentenceEs: "El curso es de 2 a 3.",
+    regimen: "von + dat."
   }, {
     de: "ab 3 Uhr",
     pron: "ap-drái-ú-a",
@@ -1043,7 +1138,8 @@ const chapters = [{
     type: "Frase",
     category: "Uhrzeit",
     exampleSentenceDe: "Wir essen ab 3 Uhr.",
-    exampleSentenceEs: "Comemos a partir de las 3."
+    exampleSentenceEs: "Comemos a partir de las 3.",
+    regimen: "ab + dativo"
   }, {
     de: "anfangen",
     pron: "án-fan-guen",
@@ -1051,7 +1147,8 @@ const chapters = [{
     type: "Verbo",
     category: "Alltag",
     exampleSentenceDe: "Wir fangen jetzt an.",
-    exampleSentenceEs: "Empezamos ahora."
+    exampleSentenceEs: "Empezamos ahora.",
+    regimen: "Separable (an-)"
   }, {
     de: "der Anfang",
     pron: "dea án-fang",
@@ -1059,7 +1156,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Alltag",
     exampleSentenceDe: "Der Anfang ist gut.",
-    exampleSentenceEs: "El comienzo es bueno."
+    exampleSentenceEs: "El comienzo es bueno.",
+    plural: "die Anfänge"
   }, {
     de: "aufhören",
     pron: "áuf-jö-ren",
@@ -1067,7 +1165,8 @@ const chapters = [{
     type: "Verbo",
     category: "Alltag",
     exampleSentenceDe: "Bitte, hören Sie auf. Ich möchte schlafen.",
-    exampleSentenceEs: "Por favor, para. Quiero dormir."
+    exampleSentenceEs: "Por favor, para. Quiero dormir.",
+    regimen: "Separable (auf-)"
   }, {
     de: "das Ende",
     pron: "das én-de",
@@ -1075,7 +1174,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Alltag",
     exampleSentenceDe: "Der Film ist zu Ende.",
-    exampleSentenceEs: "La película ha terminado."
+    exampleSentenceEs: "La película ha terminado.",
+    plural: "die Enden"
   }, {
     de: "dauern",
     pron: "dáu-ean",
@@ -1083,7 +1183,8 @@ const chapters = [{
     type: "Verbo",
     category: "Alltag",
     exampleSentenceDe: "Die Reise dauert zwei Stunden.",
-    exampleSentenceEs: "El viaje dura dos horas."
+    exampleSentenceEs: "El viaje dura dos horas.",
+    regimen: "Duración"
   }, {
     de: "der Alltag",
     pron: "dea ál-tak",
@@ -1091,7 +1192,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Alltag",
     exampleSentenceDe: "Der Alltag ist normal.",
-    exampleSentenceEs: "El día a día es normal."
+    exampleSentenceEs: "El día a día es normal.",
+    plural: "die Alltage"
   }, {
     de: "pünktlich",
     pron: "púnkt-lij",
@@ -1099,7 +1201,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Alltag",
     exampleSentenceDe: "Der Zug ist pünktlich.",
-    exampleSentenceEs: "El tren es puntual."
+    exampleSentenceEs: "El tren es puntual.",
+    regimen: "≠ unpünktlich"
   }, {
     de: "die Verspätung",
     pron: "di fea-shpé-tung",
@@ -1107,7 +1210,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Alltag",
     exampleSentenceDe: "Ich habe die Verspätung.",
-    exampleSentenceEs: "Tengo el retraso."
+    exampleSentenceEs: "Tengo el retraso.",
+    plural: "die Verspätungen"
   }, {
     de: "regelmäßig",
     pron: "ré-guel-mé-sij",
@@ -1115,7 +1219,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Alltag",
     exampleSentenceDe: "Ich trinke Wasser regelmäßig.",
-    exampleSentenceEs: "Bebo agua regularmente."
+    exampleSentenceEs: "Bebo agua regularmente.",
+    regimen: "Frecuencia"
   }]
 }, {
   id: 2,
@@ -1129,7 +1234,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Identität",
     exampleSentenceDe: "Wie ist Ihr Vorname?",
-    exampleSentenceEs: "¿Cuál es su primer nombre?"
+    exampleSentenceEs: "¿Cuál es su primer nombre?",
+    plural: "die Vornamen"
   }, {
     de: "der Nachname",
     pron: "dea nách-ná-me",
@@ -1137,7 +1243,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Identität",
     exampleSentenceDe: "Mein Nachname ist Müller.",
-    exampleSentenceEs: "Mi apellido es Müller."
+    exampleSentenceEs: "Mi apellido es Müller.",
+    plural: "die Nachnamen"
   }, {
     de: "heißen",
     pron: "jái-sen",
@@ -1145,7 +1252,8 @@ const chapters = [{
     type: "Verbo",
     category: "Identität",
     exampleSentenceDe: "Ich heiße Maria.",
-    exampleSentenceEs: "Yo me llamo María."
+    exampleSentenceEs: "Yo me llamo María.",
+    regimen: "+ Nominativo"
   }, {
     de: "buchstabieren",
     pron: "buj-shta-bí-ren",
@@ -1153,7 +1261,8 @@ const chapters = [{
     type: "Verbo",
     category: "Identität",
     exampleSentenceDe: "Können Sie das bitte buchstabieren?",
-    exampleSentenceEs: "¿Puede deletrear eso, por favor?"
+    exampleSentenceEs: "¿Puede deletrear eso, por favor?",
+    regimen: "+ Akkusativ"
   }, {
     de: "die Frau",
     pron: "di frau",
@@ -1161,7 +1270,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Personen",
     exampleSentenceDe: "Die Frau ist nett.",
-    exampleSentenceEs: "La mujer es simpática."
+    exampleSentenceEs: "La mujer es simpática.",
+    plural: "die Frauen"
   }, {
     de: "der Mann",
     pron: "dea man",
@@ -1169,7 +1279,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Personen",
     exampleSentenceDe: "Der Mann ist nett.",
-    exampleSentenceEs: "El hombre es simpático."
+    exampleSentenceEs: "El hombre es simpático.",
+    plural: "die Männer"
   }, {
     de: "die Dame",
     pron: "di dá-me",
@@ -1177,7 +1288,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Personen",
     exampleSentenceDe: "Hier ist die Dame. Die Dame ist nett.",
-    exampleSentenceEs: "Aquí está la dama. La dama es simpática."
+    exampleSentenceEs: "Aquí está la dama. La dama es simpática.",
+    plural: "die Damen"
   }, {
     de: "der Herr",
     pron: "dea hea",
@@ -1185,7 +1297,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Personen",
     exampleSentenceDe: "Guten Tag, Herr Müller.",
-    exampleSentenceEs: "Buenos días, señor Müller."
+    exampleSentenceEs: "Buenos días, señor Müller.",
+    plural: "die Herren"
   }, {
     de: "männlich / weiblich",
     pron: "mén-lij  vái-blij",
@@ -1193,7 +1306,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Personen",
     exampleSentenceDe: "Ich bin männlich.",
-    exampleSentenceEs: "Yo soy masculino."
+    exampleSentenceEs: "Yo soy masculino.",
+    regimen: "≠ weiblich / männlich"
   }, {
     de: "das Mädchen",
     pron: "das mét-jen",
@@ -1201,7 +1315,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Personen",
     exampleSentenceDe: "Das Mädchen ist klein.",
-    exampleSentenceEs: "La niña es pequeña."
+    exampleSentenceEs: "La niña es pequeña.",
+    plural: "die Mädchen"
   }, {
     de: "der Junge",
     pron: "dea yún-gue",
@@ -1210,7 +1325,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Personen",
     exampleSentenceDe: "Der Junge ist klein.",
-    exampleSentenceEs: "El niño es pequeño."
+    exampleSentenceEs: "El niño es pequeño.",
+    plural: "die Jungen"
   }, {
     de: "die Adresse",
     pron: "di a-drés-se",
@@ -1218,7 +1334,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Das ist die Adresse.",
-    exampleSentenceEs: "Esta es la dirección."
+    exampleSentenceEs: "Esta es la dirección.",
+    plural: "die Adressen"
   }, {
     de: "der Wohnort",
     pron: "dea vón-ort",
@@ -1226,7 +1343,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Mein Wohnort ist Berlin.",
-    exampleSentenceEs: "Mi lugar de residencia es Berlín."
+    exampleSentenceEs: "Mi lugar de residencia es Berlín.",
+    plural: "die Wohnorte"
   }, {
     de: "wohnen / leben",
     pron: "vó-nen  lé-ben",
@@ -1234,7 +1352,8 @@ const chapters = [{
     type: "Verbo",
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich wohne in Berlin.",
-    exampleSentenceEs: "Yo vivo en Berlín."
+    exampleSentenceEs: "Yo vivo en Berlín.",
+    regimen: "wohnen+in/Dat"
   }, {
     de: "die Straße",
     pron: "di shtrá-se",
@@ -1242,7 +1361,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Die Straße ist lang.",
-    exampleSentenceEs: "La calle es larga."
+    exampleSentenceEs: "La calle es larga.",
+    plural: "die Straßen"
   }, {
     de: "der Platz",
     pron: "dea plats",
@@ -1250,7 +1370,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich sitze auf dem Platz.",
-    exampleSentenceEs: "Yo estoy sentado en la plaza."
+    exampleSentenceEs: "Yo estoy sentado en la plaza.",
+    plural: "die Plätze"
   }, {
     de: "die Nummer",
     pron: "di nú-mea",
@@ -1258,7 +1379,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich habe die Nummer. Die Nummer ist eins.",
-    exampleSentenceEs: "Tengo el número. El número es uno."
+    exampleSentenceEs: "Tengo el número. El número es uno.",
+    plural: "die Nummern"
   }, {
     de: "die Stadt",
     pron: "di shtát",
@@ -1266,7 +1388,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Das ist die Stadt. Die Stadt ist groß.",
-    exampleSentenceEs: "Esta es la ciudad. La ciudad es grande."
+    exampleSentenceEs: "Esta es la ciudad. La ciudad es grande.",
+    plural: "die Städte"
   }, {
     de: "die Postleitzahl",
     pron: "di póst-lait-tsal",
@@ -1274,7 +1397,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich brauche die Postleitzahl von Berlin.",
-    exampleSentenceEs: "Necesito el código postal de Berlín."
+    exampleSentenceEs: "Necesito el código postal de Berlín.",
+    plural: "die Postleitzahlen"
   }, {
     de: "das Dorf / das Land",
     pron: "das doaf  das lant",
@@ -1282,7 +1406,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich wohne in einem Dorf. Das Dorf ist klein.",
-    exampleSentenceEs: "Yo vivo en un pueblo. El pueblo es pequeño."
+    exampleSentenceEs: "Yo vivo en un pueblo. El pueblo es pequeño.",
+    plural: "die Dörfer / die Länder"
   }, {
     de: "das Telefon",
     pron: "das te-le-fón",
@@ -1290,7 +1415,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Das ist mein Telefon.",
-    exampleSentenceEs: "Este es mi teléfono."
+    exampleSentenceEs: "Este es mi teléfono.",
+    plural: "die Telefone"
   }, {
     de: "telefonieren / anrufen",
     pron: "te-le-fo-ní-ren  án-ru-fen",
@@ -1298,7 +1424,8 @@ const chapters = [{
     type: "Verbo",
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich telefoniere mit meiner Mutter.",
-    exampleSentenceEs: "Yo hablo por teléfono con mi madre."
+    exampleSentenceEs: "Yo hablo por teléfono con mi madre.",
+    regimen: "anrufen: separable, +Akk"
   }, {
     de: "die E-Mail",
     pron: "di í-meil",
@@ -1306,7 +1433,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich habe die E-Mail. Die E-Mail ist neu.",
-    exampleSentenceEs: "Tengo el correo electrónico. El correo electrónico es nuevo."
+    exampleSentenceEs: "Tengo el correo electrónico. El correo electrónico es nuevo.",
+    plural: "die E-Mails"
   }, {
     de: "Ich bin geboren am...",
     pron: "ij bin gue-bó-ren am",
@@ -1314,7 +1442,8 @@ const chapters = [{
     type: "Frase",
     category: "Lebenslauf",
     exampleSentenceDe: "Ich bin geboren am fünften Mai.",
-    exampleSentenceEs: "Nací el cinco de mayo."
+    exampleSentenceEs: "Nací el cinco de mayo.",
+    regimen: "+ fecha (am)"
   }, {
     de: "das Geburtsdatum",
     pron: "das gue-búrts-dá-tum",
@@ -1322,7 +1451,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Lebenslauf",
     exampleSentenceDe: "Mein Geburtsdatum ist der zehnte Mai.",
-    exampleSentenceEs: "Mi fecha de nacimiento es el diez de mayo."
+    exampleSentenceEs: "Mi fecha de nacimiento es el diez de mayo.",
+    plural: "die Geburtsdaten"
   }, {
     de: "der Geburtstag",
     pron: "dea gue-búrts-tak",
@@ -1330,7 +1460,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Lebenslauf",
     exampleSentenceDe: "Heute ist mein Geburtstag.",
-    exampleSentenceEs: "Hoy es mi cumpleaños."
+    exampleSentenceEs: "Hoy es mi cumpleaños.",
+    plural: "die Geburtstage"
   }, {
     de: "geboren in",
     pron: "gue-bó-ren in",
@@ -1338,7 +1469,8 @@ const chapters = [{
     type: "Frase",
     category: "Lebenslauf",
     exampleSentenceDe: "Ich bin geboren in Spanien.",
-    exampleSentenceEs: "Yo nací en España."
+    exampleSentenceEs: "Yo nací en España.",
+    regimen: "+ Dat."
   }, {
     de: "Jahre alt sein",
     pron: "yá-re alt sáin",
@@ -1346,7 +1478,8 @@ const chapters = [{
     type: "Frase",
     category: "Lebenslauf",
     exampleSentenceDe: "Ich bin 30 Jahre alt.",
-    exampleSentenceEs: "Tengo 30 años."
+    exampleSentenceEs: "Tengo 30 años.",
+    regimen: "Número + Jahre alt"
   }, {
     de: "die Familie",
     pron: "di fa-mí-lie",
@@ -1354,7 +1487,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Familie",
     exampleSentenceDe: "Das ist meine Familie.",
-    exampleSentenceEs: "Esta es mi familia."
+    exampleSentenceEs: "Esta es mi familia.",
+    plural: "die Familien"
   }, {
     de: "der Familienstand",
     pron: "dea fa-mí-li-en-shtant",
@@ -1362,7 +1496,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Familie",
     exampleSentenceDe: "Mein Familienstand ist ledig.",
-    exampleSentenceEs: "Mi estado civil es soltero."
+    exampleSentenceEs: "Mi estado civil es soltero.",
+    plural: "die Familienstände"
   }, {
     de: "verheiratet / ledig",
     pron: "fea-jái-ra-tet  lé-dij",
@@ -1371,7 +1506,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Familie",
     exampleSentenceDe: "Ich bin ledig.",
-    exampleSentenceEs: "Yo soy soltero/a."
+    exampleSentenceEs: "Yo soy soltero/a.",
+    regimen: "≠ ledig / verheiratet"
   }, {
     de: "heiraten",
     pron: "jái-ra-ten",
@@ -1380,7 +1516,8 @@ const chapters = [{
     type: "Verbo",
     category: "Familie",
     exampleSentenceDe: "Ich möchte heiraten.",
-    exampleSentenceEs: "Quiero casarme."
+    exampleSentenceEs: "Quiero casarme.",
+    regimen: "+ Akkusativ"
   }, {
     de: "die Ehefrau / der Ehemann",
     pron: "di é-e-frau  dea é-e-man",
@@ -1389,7 +1526,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Familie",
     exampleSentenceDe: "Das ist meine Ehefrau.",
-    exampleSentenceEs: "Ella es mi esposa."
+    exampleSentenceEs: "Ella es mi esposa.",
+    plural: "die Ehefrauen / die Ehemänner"
   }, {
     de: "die Hochzeit",
     pron: "di jój-tsait",
@@ -1398,7 +1536,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Familie",
     exampleSentenceDe: "Die Hochzeit ist morgen.",
-    exampleSentenceEs: "La boda es mañana."
+    exampleSentenceEs: "La boda es mañana.",
+    plural: "die Hochzeiten"
   }, {
     de: "der Vater / die Mutter",
     pron: "dea fá-tea  di mú-ta",
@@ -1407,7 +1546,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Familie",
     exampleSentenceDe: "Das ist mein Vater.",
-    exampleSentenceEs: "Este es mi padre."
+    exampleSentenceEs: "Este es mi padre.",
+    plural: "die Väter / die Mütter"
   }, {
     de: "die Eltern",
     pron: "di él-tean",
@@ -1416,7 +1556,8 @@ const chapters = [{
     type: "Sustantivo (Plural)",
     category: "Familie",
     exampleSentenceDe: "Meine Eltern sind nett.",
-    exampleSentenceEs: "Mis padres son amables."
+    exampleSentenceEs: "Mis padres son amables.",
+    plural: "die Eltern"
   }, {
     de: "das Kind / Baby",
     pron: "das kint  béi-bi",
@@ -1425,7 +1566,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Familie",
     exampleSentenceDe: "Das Kind ist klein.",
-    exampleSentenceEs: "El niño es pequeño."
+    exampleSentenceEs: "El niño es pequeño.",
+    plural: "die Kinder / Babys"
   }, {
     de: "der Sohn / die Tochter",
     pron: "dea son  di tój-tea",
@@ -1434,7 +1576,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Familie",
     exampleSentenceDe: "Ich habe einen Sohn. Mein Sohn ist klein.",
-    exampleSentenceEs: "Tengo un hijo. Mi hijo es pequeño."
+    exampleSentenceEs: "Tengo un hijo. Mi hijo es pequeño.",
+    plural: "die Söhne / die Töchter"
   }, {
     de: "der Bruder / Schwester",
     pron: "dea brú-da  shvés-ta",
@@ -1443,7 +1586,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Familie",
     exampleSentenceDe: "Ich habe einen Bruder. Mein Bruder ist nett.",
-    exampleSentenceEs: "Tengo un hermano. Mi hermano es simpático."
+    exampleSentenceEs: "Tengo un hermano. Mi hermano es simpático.",
+    plural: "die Brüder / Schwestern"
   }, {
     de: "die Geschwister",
     pron: "di gue-shvís-ta",
@@ -1452,7 +1596,8 @@ const chapters = [{
     type: "Sustantivo (Plural)",
     category: "Familie",
     exampleSentenceDe: "Ich habe zwei Geschwister.",
-    exampleSentenceEs: "Yo tengo dos hermanos."
+    exampleSentenceEs: "Yo tengo dos hermanos.",
+    plural: "die Geschwister"
   }, {
     de: "die Oma / der Opa",
     pron: "di ó-ma  dea ó-pa",
@@ -1461,7 +1606,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Familie",
     exampleSentenceDe: "Das ist die Oma. Die Oma ist nett.",
-    exampleSentenceEs: "Esta es la abuela. La abuela es simpática."
+    exampleSentenceEs: "Esta es la abuela. La abuela es simpática.",
+    plural: "die Omas / die Opas"
   }, {
     de: "die Großeltern",
     pron: "di grós-el-ta-n",
@@ -1470,7 +1616,8 @@ const chapters = [{
     type: "Sustantivo (Plural)",
     category: "Familie",
     exampleSentenceDe: "Meine Großeltern sind alt.",
-    exampleSentenceEs: "Mis abuelos son mayores."
+    exampleSentenceEs: "Mis abuelos son mayores.",
+    plural: "die Großeltern"
   }, {
     de: "die Verwandten",
     pron: "di fea-ván-ten",
@@ -1479,7 +1626,8 @@ const chapters = [{
     type: "Sustantivo (Plural)",
     category: "Familie",
     exampleSentenceDe: "Ich habe Verwandte. Meine Verwandten sind nett.",
-    exampleSentenceEs: "Tengo parientes. Mis parientes son amables."
+    exampleSentenceEs: "Tengo parientes. Mis parientes son amables.",
+    plural: "die Verwandten"
   }, {
     de: "der Freund / Freundin",
     pron: "dea fróint  dea fróin-din",
@@ -1488,7 +1636,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Soziales",
     exampleSentenceDe: "Das ist mein Freund.",
-    exampleSentenceEs: "Este es mi amigo."
+    exampleSentenceEs: "Este es mi amigo.",
+    plural: "die Freunde / Freundinnen"
   }, {
     de: "der/die Bekannte",
     pron: "dea / di be-kán-te",
@@ -1497,7 +1646,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Soziales",
     exampleSentenceDe: "Das ist mein Bekannter.",
-    exampleSentenceEs: "Este es mi conocido."
+    exampleSentenceEs: "Este es mi conocido.",
+    plural: "die Bekannten"
   }, {
     de: "der/die Erwachsene",
     pron: "dea / di ea-vák-se-ne",
@@ -1506,7 +1656,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Soziales",
     exampleSentenceDe: "Ich bin ein Erwachsener.",
-    exampleSentenceEs: "Yo soy un adulto."
+    exampleSentenceEs: "Yo soy un adulto.",
+    plural: "die Erwachsenen"
   }, {
     de: "der Jugendliche",
     pron: "dea yú-guent-li-je",
@@ -1514,7 +1665,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Soziales",
     exampleSentenceDe: "Der Jugendliche ist hier.",
-    exampleSentenceEs: "El joven está aquí."
+    exampleSentenceEs: "El joven está aquí.",
+    plural: "die Jugendlichen"
   }, {
     de: "der Pass / Reisepass",
     pron: "dea pas  rái-ze-pas",
@@ -1522,7 +1674,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Dokumente",
     exampleSentenceDe: "Ich habe den Reisepass.",
-    exampleSentenceEs: "Yo tengo el pasaporte."
+    exampleSentenceEs: "Yo tengo el pasaporte.",
+    plural: "die Pässe / Reisepässe"
   }, {
     de: "der Ausweis",
     pron: "dea áus-vais",
@@ -1530,7 +1683,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Dokumente",
     exampleSentenceDe: "Ich brauche den Ausweis, bitte.",
-    exampleSentenceEs: "Necesito el documento de identidad, por favor."
+    exampleSentenceEs: "Necesito el documento de identidad, por favor.",
+    plural: "die Ausweise"
   }, {
     de: "die Papiere",
     pron: "di pa-pí-re",
@@ -1538,7 +1692,8 @@ const chapters = [{
     type: "Sustantivo (Plural)",
     category: "Dokumente",
     exampleSentenceDe: "Ich habe die Papiere. Die Papiere sind wichtig.",
-    exampleSentenceEs: "Tengo los papeles. Los papeles son importantes."
+    exampleSentenceEs: "Tengo los papeles. Los papeles son importantes.",
+    plural: "die Papiere"
   }, {
     de: "das Formular",
     pron: "das foa-mu-lá",
@@ -1546,7 +1701,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Dokumente",
     exampleSentenceDe: "Ich habe das Formular. Das Formular ist neu.",
-    exampleSentenceEs: "Tengo el formulario. El formulario es nuevo."
+    exampleSentenceEs: "Tengo el formulario. El formulario es nuevo.",
+    plural: "die Formulare"
   }, {
     de: "ausfüllen",
     pron: "áus-fiú-len",
@@ -1554,7 +1710,8 @@ const chapters = [{
     type: "Verbo",
     category: "Dokumente",
     exampleSentenceDe: "Ich muss das Formular ausfüllen.",
-    exampleSentenceEs: "Yo debo rellenar el formulario."
+    exampleSentenceEs: "Yo debo rellenar el formulario.",
+    regimen: "Separable (aus-)"
   }, {
     de: "die Staatsangehörigkeit",
     pron: "di shtáts-án-gue-jö-rij-kait",
@@ -1562,7 +1719,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Dokumente",
     exampleSentenceDe: "Ich habe eine Frage zur Staatsangehörigkeit.",
-    exampleSentenceEs: "Tengo una pregunta sobre la nacionalidad."
+    exampleSentenceEs: "Tengo una pregunta sobre la nacionalidad.",
+    plural: "die Staatsangehörigkeiten"
   }, {
     de: "der Führerschein",
     pron: "dea fú-ra-sháin",
@@ -1570,7 +1728,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Dokumente",
     exampleSentenceDe: "Ich brauche den Führerschein.",
-    exampleSentenceEs: "Yo necesito la licencia de conducir."
+    exampleSentenceEs: "Yo necesito la licencia de conducir.",
+    plural: "die Führerscheine"
   }, {
     de: "unterschreiben",
     pron: "un-ta-shrái-ben",
@@ -1578,7 +1737,8 @@ const chapters = [{
     type: "Verbo",
     category: "Dokumente",
     exampleSentenceDe: "Ich muss den Vertrag unterschreiben.",
-    exampleSentenceEs: "Yo debo firmar el contrato."
+    exampleSentenceEs: "Yo debo firmar el contrato.",
+    regimen: "No separable, + Akkusativ"
   }, {
     de: "die Unterschrift",
     pron: "di ún-tea-shrift",
@@ -1586,7 +1746,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Dokumente",
     exampleSentenceDe: "Ich brauche die Unterschrift hier.",
-    exampleSentenceEs: "Necesito la firma aquí."
+    exampleSentenceEs: "Necesito la firma aquí.",
+    plural: "die Unterschriften"
   }, {
     de: "das Alter",
     pron: "das ál-tea",
@@ -1594,7 +1755,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Lebenslauf",
     exampleSentenceDe: "Mein Alter ist zwanzig.",
-    exampleSentenceEs: "Mi edad es veinte."
+    exampleSentenceEs: "Mi edad es veinte.",
+    plural: "die Alter"
   }, {
     de: "der Geburtsort",
     pron: "dea gue-búrts-ort",
@@ -1602,7 +1764,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Lebenslauf",
     exampleSentenceDe: "Mein Geburtsort ist Berlin.",
-    exampleSentenceEs: "Mi lugar de nacimiento es Berlín."
+    exampleSentenceEs: "Mi lugar de nacimiento es Berlín.",
+    plural: "die Geburtsorte"
   }, {
     de: "geschieden",
     pron: "gue-shí-den",
@@ -1610,7 +1773,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Familie",
     exampleSentenceDe: "Er ist geschieden.",
-    exampleSentenceEs: "Él está divorciado."
+    exampleSentenceEs: "Él está divorciado.",
+    regimen: "≠ verheiratet"
   }, {
     de: "verwitwet",
     pron: "fea-vít-vet",
@@ -1618,7 +1782,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Familie",
     exampleSentenceDe: "Mein Großvater ist verwitwet.",
-    exampleSentenceEs: "Mi abuelo es viudo."
+    exampleSentenceEs: "Mi abuelo es viudo.",
+    regimen: "≠ verheiratet"
   }, {
     de: "der Ausländer",
     pron: "dea áus-len-dea",
@@ -1626,7 +1791,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Gesellschaft",
     exampleSentenceDe: "Ich bin ein Ausländer.",
-    exampleSentenceEs: "Yo soy un extranjero."
+    exampleSentenceEs: "Yo soy un extranjero.",
+    plural: "die Ausländer"
   }, {
     de: "die Gesellschaft",
     pron: "di gue-sél-shaft",
@@ -1634,7 +1800,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Gesellschaft",
     exampleSentenceDe: "Die Gesellschaft ist groß.",
-    exampleSentenceEs: "La sociedad es grande."
+    exampleSentenceEs: "La sociedad es grande.",
+    plural: "die Gesellschaften"
   }, {
     de: "der Rentner",
     pron: "dea rént-nea",
@@ -1642,7 +1809,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Gesellschaft",
     exampleSentenceDe: "Der Rentner ist alt.",
-    exampleSentenceEs: "El jubilado es viejo."
+    exampleSentenceEs: "El jubilado es viejo.",
+    plural: "die Rentner"
   }, {
     de: "sich freuen",
     pron: "zij fróy-en",
@@ -1650,7 +1818,8 @@ const chapters = [{
     type: "Verbo Reflexivo",
     category: "Gefühle",
     exampleSentenceDe: "Ich freue mich auf den Urlaub.",
-    exampleSentenceEs: "Yo me alegro de las vacaciones."
+    exampleSentenceEs: "Yo me alegro de las vacaciones.",
+    regimen: "Reflexivo + auf/über+Akk"
   }, {
     de: "das Gefühl",
     pron: "das gue-fúl",
@@ -1658,7 +1827,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Gefühle",
     exampleSentenceDe: "Ich habe das Gefühl.",
-    exampleSentenceEs: "Tengo el sentimiento."
+    exampleSentenceEs: "Tengo el sentimiento.",
+    plural: "die Gefühle"
   }]
 }, {
   id: 3,
@@ -1672,7 +1842,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Gebäude",
     exampleSentenceDe: "Das Haus ist groß.",
-    exampleSentenceEs: "La casa es grande."
+    exampleSentenceEs: "La casa es grande.",
+    plural: "die Häuser"
   }, {
     de: "die Wohnung",
     pron: "di vó-nung",
@@ -1680,7 +1851,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Gebäude",
     exampleSentenceDe: "Ich habe eine Wohnung. Die Wohnung ist groß.",
-    exampleSentenceEs: "Tengo un apartamento. El apartamento es grande."
+    exampleSentenceEs: "Tengo un apartamento. El apartamento es grande.",
+    plural: "die Wohnungen"
   }, {
     de: "das Hochhaus",
     pron: "das jój-jaus",
@@ -1688,7 +1860,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Gebäude",
     exampleSentenceDe: "Das Hochhaus ist groß.",
-    exampleSentenceEs: "El edificio de gran altura es grande."
+    exampleSentenceEs: "El edificio de gran altura es grande.",
+    plural: "die Hochhäuser"
   }, {
     de: "die Treppe",
     pron: "di tré-pe",
@@ -1696,7 +1869,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Gebäude",
     exampleSentenceDe: "Die Treppe ist hoch.",
-    exampleSentenceEs: "La escalera es alta."
+    exampleSentenceEs: "La escalera es alta.",
+    plural: "die Treppen"
   }, {
     de: "der Aufzug / Lift",
     pron: "dea áuf-tsuk  lift",
@@ -1704,7 +1878,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Gebäude",
     exampleSentenceDe: "Der Aufzug ist neu.",
-    exampleSentenceEs: "El ascensor es nuevo."
+    exampleSentenceEs: "El ascensor es nuevo.",
+    plural: "die Aufzüge"
   }, {
     de: "der Stock",
     pron: "dea shtok",
@@ -1712,7 +1887,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Gebäude",
     exampleSentenceDe: "Ich wohne in dem ersten Stock.",
-    exampleSentenceEs: "Vivo en el primer piso."
+    exampleSentenceEs: "Vivo en el primer piso.",
+    plural: "die Stockwerke"
   }, {
     de: "das Erdgeschoss",
     pron: "das éat-gue-shós",
@@ -1720,7 +1896,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Gebäude",
     exampleSentenceDe: "Die Wohnung ist im Erdgeschoss.",
-    exampleSentenceEs: "El apartamento está en la planta baja."
+    exampleSentenceEs: "El apartamento está en la planta baja.",
+    plural: "die Erdgeschosse"
   }, {
     de: "die Miete",
     pron: "di mí-te",
@@ -1728,7 +1905,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Mieten",
     exampleSentenceDe: "Die Miete ist teuer.",
-    exampleSentenceEs: "El alquiler es caro."
+    exampleSentenceEs: "El alquiler es caro.",
+    plural: "die Mieten"
   }, {
     de: "die Nebenkosten",
     pron: "di né-ben-kós-ten",
@@ -1736,7 +1914,8 @@ const chapters = [{
     type: "Sustantivo (Plural)",
     category: "Mieten",
     exampleSentenceDe: "Ich zahle die Nebenkosten im Monat.",
-    exampleSentenceEs: "Yo pago los gastos adicionales al mes."
+    exampleSentenceEs: "Yo pago los gastos adicionales al mes.",
+    plural: "die Nebenkosten"
   }, {
     de: "die Heizkosten",
     pron: "di jáits-kos-ten",
@@ -1744,7 +1923,8 @@ const chapters = [{
     type: "Sustantivo (Plural)",
     category: "Mieten",
     exampleSentenceDe: "Die Heizkosten sind hoch.",
-    exampleSentenceEs: "Los gastos de calefacción son altos."
+    exampleSentenceEs: "Los gastos de calefacción son altos.",
+    plural: "die Heizkosten"
   }, {
     de: "der Mieter / Vermieter",
     pron: "dea mí-ta  fea-mí-ta",
@@ -1752,7 +1932,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Mieten",
     exampleSentenceDe: "Ich bin der Mieter. Mein Vermieter wohnt in Berlin.",
-    exampleSentenceEs: "Yo soy el inquilino. Mi arrendador vive en Berlín."
+    exampleSentenceEs: "Yo soy el inquilino. Mi arrendador vive en Berlín.",
+    plural: "die Mieter / Vermieter"
   }, {
     de: "mieten / vermieten",
     pron: "mí-ten  fea-mí-ten",
@@ -1760,7 +1941,8 @@ const chapters = [{
     type: "Verbo",
     category: "Mieten",
     exampleSentenceDe: "Ich miete eine Wohnung.",
-    exampleSentenceEs: "Yo alquilo un apartamento."
+    exampleSentenceEs: "Yo alquilo un apartamento.",
+    regimen: "+ Akkusativ; ver- insep."
   }, {
     de: "umziehen",
     pron: "úm-tsí-en",
@@ -1768,7 +1950,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Mieten",
     exampleSentenceDe: "Ich ziehe in eine neue Wohnung um.",
-    exampleSentenceEs: "Me mudo a un apartamento nuevo."
+    exampleSentenceEs: "Me mudo a un apartamento nuevo.",
+    regimen: "Separable (um-), sein"
   }, {
     de: "einziehen / ausziehen",
     pron: "áin-tsí-en  áus-tsí-en",
@@ -1776,7 +1959,8 @@ const chapters = [{
     type: "Verbo",
     category: "Mieten",
     exampleSentenceDe: "Ich ziehe in eine neue Wohnung ein.",
-    exampleSentenceEs: "Me mudo a un apartamento nuevo."
+    exampleSentenceEs: "Me mudo a un apartamento nuevo.",
+    regimen: "Separables (ein-/aus-)"
   }, {
     de: "der Umzug",
     pron: "dea úm-tsuk",
@@ -1784,7 +1968,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Mieten",
     exampleSentenceDe: "Der Umzug ist morgen.",
-    exampleSentenceEs: "La mudanza es mañana."
+    exampleSentenceEs: "La mudanza es mañana.",
+    plural: "die Umzüge"
   }, {
     de: "die Anzeige",
     pron: "di án-tsai-gue",
@@ -1792,7 +1977,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Mieten",
     exampleSentenceDe: "Ich sehe die Anzeige.",
-    exampleSentenceEs: "Yo veo el anuncio."
+    exampleSentenceEs: "Yo veo el anuncio.",
+    plural: "die Anzeigen"
   }, {
     de: "besichtigen",
     pron: "be-síj-ti-guen",
@@ -1800,7 +1986,8 @@ const chapters = [{
     type: "Verbo",
     category: "Mieten",
     exampleSentenceDe: "Wir besichtigen das Schloss am Samstag.",
-    exampleSentenceEs: "Visitamos el castillo el sábado."
+    exampleSentenceEs: "Visitamos el castillo el sábado.",
+    regimen: "+ Akkusativ"
   }, {
     de: "der Schlüssel",
     pron: "dea shlú-sel",
@@ -1808,7 +1995,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Mieten",
     exampleSentenceDe: "Ich habe den Schlüssel. Der Schlüssel ist hier.",
-    exampleSentenceEs: "Tengo la llave. La llave está aquí."
+    exampleSentenceEs: "Tengo la llave. La llave está aquí.",
+    plural: "die Schlüssel"
   }, {
     de: "das Zimmer",
     pron: "das tsí-mea",
@@ -1816,7 +2004,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Räume",
     exampleSentenceDe: "Das Zimmer ist groß.",
-    exampleSentenceEs: "La habitación es grande."
+    exampleSentenceEs: "La habitación es grande.",
+    plural: "die Zimmer"
   }, {
     de: "die Küche",
     pron: "di kü-je",
@@ -1824,7 +2013,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Räume",
     exampleSentenceDe: "Ich bin in der Küche.",
-    exampleSentenceEs: "Yo estoy en la cocina."
+    exampleSentenceEs: "Yo estoy en la cocina.",
+    plural: "die Küchen"
   }, {
     de: "das Bad",
     pron: "das bat",
@@ -1832,7 +2022,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Räume",
     exampleSentenceDe: "Das Bad ist sauber.",
-    exampleSentenceEs: "El baño está limpio."
+    exampleSentenceEs: "El baño está limpio.",
+    plural: "die Bäder"
   }, {
     de: "das Schlafzimmer",
     pron: "das shláf-tsi-mea",
@@ -1840,7 +2031,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Räume",
     exampleSentenceDe: "Das Schlafzimmer ist groß.",
-    exampleSentenceEs: "El dormitorio es grande."
+    exampleSentenceEs: "El dormitorio es grande.",
+    plural: "die Schlafzimmer"
   }, {
     de: "das Wohnzimmer",
     pron: "das vón-tsi-mea",
@@ -1848,7 +2040,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Räume",
     exampleSentenceDe: "Das ist das Wohnzimmer. Das Wohnzimmer ist groß.",
-    exampleSentenceEs: "Esta es la sala de estar. La sala de estar es grande."
+    exampleSentenceEs: "Esta es la sala de estar. La sala de estar es grande.",
+    plural: "die Wohnzimmer"
   }, {
     de: "das Kinderzimmer",
     pron: "das kín-dea-tsí-mea",
@@ -1856,7 +2049,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Räume",
     exampleSentenceDe: "Das ist das Kinderzimmer.",
-    exampleSentenceEs: "Este es el cuarto de niños."
+    exampleSentenceEs: "Este es el cuarto de niños.",
+    plural: "die Kinderzimmer"
   }, {
     de: "der Flur",
     pron: "dea flú-a",
@@ -1864,7 +2058,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Räume",
     exampleSentenceDe: "Ich bin im Flur.",
-    exampleSentenceEs: "Yo estoy en el pasillo."
+    exampleSentenceEs: "Yo estoy en el pasillo.",
+    plural: "die Flure"
   }, {
     de: "der Balkon",
     pron: "dea bal-kón",
@@ -1872,7 +2067,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Räume",
     exampleSentenceDe: "Ich habe einen Balkon. Der Balkon ist groß.",
-    exampleSentenceEs: "Tengo un balcón. El balcón es grande."
+    exampleSentenceEs: "Tengo un balcón. El balcón es grande.",
+    plural: "die Balkone"
   }, {
     de: "die Terrasse",
     pron: "di te-rá-se",
@@ -1880,7 +2076,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Räume",
     exampleSentenceDe: "Die Terrasse ist groß.",
-    exampleSentenceEs: "La terraza es grande."
+    exampleSentenceEs: "La terraza es grande.",
+    plural: "die Terrassen"
   }, {
     de: "der Garten",
     pron: "dea gár-ten",
@@ -1888,7 +2085,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Räume",
     exampleSentenceDe: "Ich habe einen Garten. Der Garten ist schön.",
-    exampleSentenceEs: "Tengo un jardín. El jardín es bonito."
+    exampleSentenceEs: "Tengo un jardín. El jardín es bonito.",
+    plural: "die Gärten"
   }, {
     de: "die Garage",
     pron: "di ga-rá-she",
@@ -1896,7 +2094,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Räume",
     exampleSentenceDe: "Ich habe eine Garage. Die Garage ist groß.",
-    exampleSentenceEs: "Tengo un garaje. El garaje es grande."
+    exampleSentenceEs: "Tengo un garaje. El garaje es grande.",
+    plural: "die Garagen"
   }, {
     de: "der Keller",
     pron: "dea ké-lea",
@@ -1904,7 +2103,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Räume",
     exampleSentenceDe: "Der Keller ist unter dem Haus.",
-    exampleSentenceEs: "El sótano está debajo de la casa."
+    exampleSentenceEs: "El sótano está debajo de la casa.",
+    plural: "die Keller"
   }, {
     de: "das Licht",
     pron: "das lijt",
@@ -1912,7 +2112,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Aktivitäten",
     exampleSentenceDe: "Das Licht ist an.",
-    exampleSentenceEs: "La luz está encendida."
+    exampleSentenceEs: "La luz está encendida.",
+    plural: "die Lichter"
   }, {
     de: "anmachen / ausmachen",
     pron: "án-ma-jen  áus-ma-jen",
@@ -1920,7 +2121,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich mache das Licht an.",
-    exampleSentenceEs: "Yo enciendo la luz."
+    exampleSentenceEs: "Yo enciendo la luz.",
+    regimen: "Separable, +Akkusativ"
   }, {
     de: "öffnen / schließen",
     pron: "óf-nen  shlí-sen",
@@ -1928,7 +2130,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich öffne die Tür.",
-    exampleSentenceEs: "Yo abro la puerta."
+    exampleSentenceEs: "Yo abro la puerta.",
+    regimen: "+ Akkusativ"
   }, {
     de: "aufmachen / zumachen",
     pron: "áuf-ma-jen  tsú-ma-jen",
@@ -1936,7 +2139,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich mache die Tür auf.",
-    exampleSentenceEs: "Yo abro la puerta."
+    exampleSentenceEs: "Yo abro la puerta.",
+    regimen: "Separable (auf-/zu-) +Akk"
   }, {
     de: "putzen / reinigen",
     pron: "pút-tsen  ráy-ni-guen",
@@ -1944,7 +2148,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich putze das Zimmer.",
-    exampleSentenceEs: "Yo limpio la habitación."
+    exampleSentenceEs: "Yo limpio la habitación.",
+    regimen: "+ Akkusativ"
   }, {
     de: "kaputt",
     pron: "ka-pút",
@@ -1952,7 +2157,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Aktivitäten",
     exampleSentenceDe: "Mein Handy ist kaputt.",
-    exampleSentenceEs: "Mi teléfono está roto."
+    exampleSentenceEs: "Mi teléfono está roto.",
+    regimen: "≠ ganz"
   }, {
     de: "reparieren",
     pron: "re-pa-rí-ren",
@@ -1960,7 +2166,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich kann das Fahrrad reparieren.",
-    exampleSentenceEs: "Yo puedo reparar la bicicleta."
+    exampleSentenceEs: "Yo puedo reparar la bicicleta.",
+    regimen: "+ Akkusativ"
   }, {
     de: "das Möbelstück",
     pron: "das mö-bel-shtük",
@@ -1968,7 +2175,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Möbel",
     exampleSentenceDe: "Das Möbelstück ist neu.",
-    exampleSentenceEs: "El mueble es nuevo."
+    exampleSentenceEs: "El mueble es nuevo.",
+    plural: "die Möbelstücke"
   }, {
     de: "der Tisch",
     pron: "dea tish",
@@ -1976,7 +2184,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Möbel",
     exampleSentenceDe: "Das ist der Tisch.",
-    exampleSentenceEs: "Esta es la mesa."
+    exampleSentenceEs: "Esta es la mesa.",
+    plural: "die Tische"
   }, {
     de: "der Stuhl",
     pron: "dea shtúl",
@@ -1984,7 +2193,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Möbel",
     exampleSentenceDe: "Der Stuhl ist neu.",
-    exampleSentenceEs: "La silla es nueva."
+    exampleSentenceEs: "La silla es nueva.",
+    plural: "die Stühle"
   }, {
     de: "der Schrank",
     pron: "dea shránk",
@@ -1992,7 +2202,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Möbel",
     exampleSentenceDe: "Das ist der Schrank. Der Schrank ist groß.",
-    exampleSentenceEs: "Este es el armario. El armario es grande."
+    exampleSentenceEs: "Este es el armario. El armario es grande.",
+    plural: "die Schränke"
   }, {
     de: "das Bett",
     pron: "das bet",
@@ -2000,7 +2211,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Möbel",
     exampleSentenceDe: "Das Bett ist groß.",
-    exampleSentenceEs: "La cama es grande."
+    exampleSentenceEs: "La cama es grande.",
+    plural: "die Betten"
   }, {
     de: "der Spiegel",
     pron: "dea shpí-guel",
@@ -2008,7 +2220,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Möbel",
     exampleSentenceDe: "Ich sehe mich im Spiegel.",
-    exampleSentenceEs: "Me veo en el espejo."
+    exampleSentenceEs: "Me veo en el espejo.",
+    plural: "die Spiegel"
   }, {
     de: "der Teppich",
     pron: "dea té-pij",
@@ -2016,7 +2229,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Möbel",
     exampleSentenceDe: "Der Teppich ist groß.",
-    exampleSentenceEs: "La alfombra es grande."
+    exampleSentenceEs: "La alfombra es grande.",
+    plural: "die Teppiche"
   }, {
     de: "gemütlich",
     pron: "gue-mút-lij",
@@ -2024,7 +2238,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Adjektive",
     exampleSentenceDe: "Das Zimmer ist gemütlich.",
-    exampleSentenceEs: "La habitación es acogedora."
+    exampleSentenceEs: "La habitación es acogedora.",
+    regimen: "≠ unbehaglich"
   }]
 }, {
   id: 4,
@@ -2038,7 +2253,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Allgemein",
     exampleSentenceDe: "Ich habe Freizeit am Wochenende.",
-    exampleSentenceEs: "Tengo tiempo libre el fin de semana."
+    exampleSentenceEs: "Tengo tiempo libre el fin de semana.",
+    plural: "die Freizeiten"
   }, {
     de: "das Hobby",
     pron: "das hó-bi",
@@ -2046,7 +2262,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Allgemein",
     exampleSentenceDe: "Mein Hobby ist lesen.",
-    exampleSentenceEs: "Mi pasatiempo es leer."
+    exampleSentenceEs: "Mi pasatiempo es leer.",
+    plural: "die Hobbys"
   }, {
     de: "spielen",
     pron: "shpí-len",
@@ -2054,7 +2271,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich spiele gern.",
-    exampleSentenceEs: "Me gusta jugar."
+    exampleSentenceEs: "Me gusta jugar.",
+    regimen: "+ Akkusativ"
   }, {
     de: "Fußball spielen",
     pron: "fús-bal shpí-len",
@@ -2062,7 +2280,8 @@ const chapters = [{
     type: "Frase",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich spiele gern Fußball.",
-    exampleSentenceEs: "Me gusta jugar al fútbol."
+    exampleSentenceEs: "Me gusta jugar al fútbol.",
+    regimen: "Verbo+objeto"
   }, {
     de: "der Ball",
     pron: "dea bal",
@@ -2070,7 +2289,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Gegenstände",
     exampleSentenceDe: "Ich habe einen Ball. Der Ball ist rot.",
-    exampleSentenceEs: "Tengo un balón. El balón es rojo."
+    exampleSentenceEs: "Tengo un balón. El balón es rojo.",
+    plural: "die Bälle"
   }, {
     de: "Karten spielen",
     pron: "kár-ten-shpí-len",
@@ -2078,7 +2298,8 @@ const chapters = [{
     type: "Frase",
     category: "Aktivitäten",
     exampleSentenceDe: "Wir spielen Karten am Abend.",
-    exampleSentenceEs: "Jugamos a las cartas por la noche."
+    exampleSentenceEs: "Jugamos a las cartas por la noche.",
+    regimen: "Verbo+objeto"
   }, {
     de: "Musik hören",
     pron: "mu-sík jé-ren",
@@ -2086,7 +2307,8 @@ const chapters = [{
     type: "Frase",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich höre gern Musik.",
-    exampleSentenceEs: "Me gusta escuchar música."
+    exampleSentenceEs: "Me gusta escuchar música.",
+    regimen: "Verbo + Akkusativ"
   }, {
     de: "die CD",
     pron: "di tse-dé",
@@ -2094,7 +2316,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Gegenstände",
     exampleSentenceDe: "Ich habe die CD. Die CD ist neu.",
-    exampleSentenceEs: "Tengo el CD. El CD es nuevo."
+    exampleSentenceEs: "Tengo el CD. El CD es nuevo.",
+    plural: "die CDs"
   }, {
     de: "wandern",
     pron: "ván-dean",
@@ -2102,7 +2325,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich gehe im Park wandern.",
-    exampleSentenceEs: "Yo voy a hacer senderismo en el parque."
+    exampleSentenceEs: "Yo voy a hacer senderismo en el parque.",
+    regimen: "sein (intransitivo)"
   }, {
     de: "schwimmen",
     pron: "shví-men",
@@ -2110,7 +2334,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich kann schwimmen.",
-    exampleSentenceEs: "Yo puedo nadar."
+    exampleSentenceEs: "Yo puedo nadar.",
+    regimen: "sein (movimiento)"
   }, {
     de: "lesen",
     pron: "lé-sen",
@@ -2118,7 +2343,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich lese ein Buch.",
-    exampleSentenceEs: "Yo leo un libro."
+    exampleSentenceEs: "Yo leo un libro.",
+    regimen: "+ Akkusativ"
   }, {
     de: "das Buch",
     pron: "das buj",
@@ -2126,7 +2352,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Gegenstände",
     exampleSentenceDe: "Das ist ein Buch. Das Buch ist neu.",
-    exampleSentenceEs: "Este es un libro. El libro es nuevo."
+    exampleSentenceEs: "Este es un libro. El libro es nuevo.",
+    plural: "die Bücher"
   }, {
     de: "die Zeitung",
     pron: "di tsái-tung",
@@ -2134,7 +2361,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Gegenstände",
     exampleSentenceDe: "Ich lese die Zeitung.",
-    exampleSentenceEs: "Yo leo el periódico."
+    exampleSentenceEs: "Yo leo el periódico.",
+    plural: "die Zeitungen"
   }, {
     de: "fernsehen",
     pron: "fén-se-en",
@@ -2142,7 +2370,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich sehe am Abend fern.",
-    exampleSentenceEs: "Yo veo la televisión por la noche."
+    exampleSentenceEs: "Yo veo la televisión por la noche.",
+    regimen: "Separable (fern-)"
   }, {
     de: "tanzen",
     pron: "tán-tsen",
@@ -2150,7 +2379,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich tanze gern.",
-    exampleSentenceEs: "Me gusta bailar."
+    exampleSentenceEs: "Me gusta bailar.",
+    regimen: "Intransitivo"
   }, {
     de: "der Computer",
     pron: "dea kom-piú-ta",
@@ -2158,7 +2388,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Gegenstände",
     exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
-    exampleSentenceEs: "Tengo un computador. El computador es nuevo."
+    exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
+    plural: "die Computer"
   }, {
     de: "der Sport",
     pron: "dea shport",
@@ -2166,7 +2397,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich mag der Sport.",
-    exampleSentenceEs: "Me gusta el deporte."
+    exampleSentenceEs: "Me gusta el deporte.",
+    plural: "die Sportarten"
   }, {
     de: "ins Kino gehen",
     pron: "ins kí-no gué-en",
@@ -2174,7 +2406,8 @@ const chapters = [{
     type: "Frase",
     category: "Ausgehen",
     exampleSentenceDe: "Ich gehe ins Kino.",
-    exampleSentenceEs: "Yo voy al cine."
+    exampleSentenceEs: "Yo voy al cine.",
+    regimen: "in + Akk."
   }, {
     de: "einen Film sehen",
     pron: "ái-nen film sé-en",
@@ -2182,7 +2415,8 @@ const chapters = [{
     type: "Frase",
     category: "Ausgehen",
     exampleSentenceDe: "Ich sehe einen Film.",
-    exampleSentenceEs: "Yo veo una película."
+    exampleSentenceEs: "Yo veo una película.",
+    regimen: "Akkusativ: einen Film"
   }, {
     de: "Rad fahren",
     pron: "rat fá-ren",
@@ -2190,7 +2424,8 @@ const chapters = [{
     type: "Frase",
     category: "Aktivitäten",
     exampleSentenceDe: "Ich kann Rad fahren.",
-    exampleSentenceEs: "Yo sé montar bicicleta."
+    exampleSentenceEs: "Yo sé montar bicicleta.",
+    regimen: "Verbo separable"
   }, {
     de: "spazieren gehen",
     pron: "shpa-tsí-ren-gué-en",
@@ -2198,7 +2433,8 @@ const chapters = [{
     type: "Frase",
     category: "Aktivitäten",
     exampleSentenceDe: "Wir gehen spazieren im Park.",
-    exampleSentenceEs: "Paseamos en el parque."
+    exampleSentenceEs: "Paseamos en el parque.",
+    regimen: "Verbo separable"
   }, {
     de: "in die Disco gehen",
     pron: "in di dís-ko gué-en",
@@ -2206,7 +2442,8 @@ const chapters = [{
     type: "Frase",
     category: "Ausgehen",
     exampleSentenceDe: "Ich gehe in die Disco.",
-    exampleSentenceEs: "Yo voy a la discoteca."
+    exampleSentenceEs: "Yo voy a la discoteca.",
+    regimen: "in + Akkusativ"
   }, {
     de: "das Museum",
     pron: "das mu-séum",
@@ -2214,7 +2451,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Orte",
     exampleSentenceDe: "Das Museum ist groß.",
-    exampleSentenceEs: "El museo es grande."
+    exampleSentenceEs: "El museo es grande.",
+    plural: "die Museen"
   }, {
     de: "der Verein",
     pron: "dea fea-áin",
@@ -2222,7 +2460,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Orte",
     exampleSentenceDe: "Ich bin in dem Verein.",
-    exampleSentenceEs: "Yo estoy en el club."
+    exampleSentenceEs: "Yo estoy en el club.",
+    plural: "die Vereine"
   }, {
     de: "das Schwimmbad",
     pron: "das shvím-bat",
@@ -2230,7 +2469,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Orte",
     exampleSentenceDe: "Wir gehen in das Schwimmbad.",
-    exampleSentenceEs: "Vamos a la piscina."
+    exampleSentenceEs: "Vamos a la piscina.",
+    plural: "die Schwimmbäder"
   }, {
     de: "gefallen",
     pron: "gue-fá-len",
@@ -2238,7 +2478,8 @@ const chapters = [{
     type: "Verbo",
     category: "Adjektive & Gefühle",
     exampleSentenceDe: "Das Kleid gefällt mir.",
-    exampleSentenceEs: "El vestido me gusta."
+    exampleSentenceEs: "El vestido me gusta.",
+    regimen: "+ Dativo"
   }, {
     de: "schön",
     pron: "shön",
@@ -2246,7 +2487,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Adjektive & Gefühle",
     exampleSentenceDe: "Das Wetter ist schön.",
-    exampleSentenceEs: "El tiempo es bonito."
+    exampleSentenceEs: "El tiempo es bonito.",
+    regimen: "≠ hässlich"
   }, {
     de: "mögen",
     pron: "mö-guen",
@@ -2254,7 +2496,8 @@ const chapters = [{
     type: "Verbo",
     category: "Adjektive & Gefühle",
     exampleSentenceDe: "Ich mag Kaffee.",
-    exampleSentenceEs: "Me gusta el café."
+    exampleSentenceEs: "Me gusta el café.",
+    regimen: "+ Akkusativ, irregular"
   }, {
     de: "sich treffen",
     pron: "zij tré-fen",
@@ -2262,7 +2505,8 @@ const chapters = [{
     type: "Verbo",
     category: "Soziales",
     exampleSentenceDe: "Wir treffen uns heute Abend.",
-    exampleSentenceEs: "Nos encontramos esta noche."
+    exampleSentenceEs: "Nos encontramos esta noche.",
+    regimen: "Reflexivo + mit/Dativ"
   }]
 }, {
   id: 5,
@@ -2276,7 +2520,8 @@ const chapters = [{
     type: "Sustantivo / Verbo",
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse das Essen.",
-    exampleSentenceEs: "Yo como la comida."
+    exampleSentenceEs: "Yo como la comida.",
+    plural: "die Essen"
   }, {
     de: "das Frühstück",
     pron: "das frú-shtuk",
@@ -2284,7 +2529,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse das Frühstück.",
-    exampleSentenceEs: "Yo como el desayuno."
+    exampleSentenceEs: "Yo como el desayuno.",
+    plural: "die Frühstücke"
   }, {
     de: "das Mittagessen",
     pron: "das mí-tak-é-sen",
@@ -2292,7 +2538,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse das Mittagessen um 13 Uhr.",
-    exampleSentenceEs: "Yo como el almuerzo a las 13:00."
+    exampleSentenceEs: "Yo como el almuerzo a las 13:00.",
+    plural: "die Mittagessen"
   }, {
     de: "zu Mittag essen",
     pron: "tsu mí-tak é-sen",
@@ -2300,7 +2547,8 @@ const chapters = [{
     type: "Frase",
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse zu Mittag.",
-    exampleSentenceEs: "Yo almuerzo."
+    exampleSentenceEs: "Yo almuerzo.",
+    regimen: "Verbo separable"
   }, {
     de: "das Abendessen",
     pron: "das á-bent-é-sen",
@@ -2308,7 +2556,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Mahlzeiten",
     exampleSentenceDe: "Das Abendessen ist um 19 Uhr.",
-    exampleSentenceEs: "La cena es a las 19:00."
+    exampleSentenceEs: "La cena es a las 19:00.",
+    plural: "die Abendessen"
   }, {
     de: "zu Abend essen",
     pron: "tsu á-bent é-sen",
@@ -2316,7 +2565,8 @@ const chapters = [{
     type: "Frase",
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse zu Abend.",
-    exampleSentenceEs: "Yo ceno."
+    exampleSentenceEs: "Yo ceno.",
+    regimen: "Verbo al final"
   }, {
     de: "der Hunger",
     pron: "dea hún-gua",
@@ -2324,7 +2574,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Gefühle",
     exampleSentenceDe: "Ich habe Hunger.",
-    exampleSentenceEs: "Tengo hambre."
+    exampleSentenceEs: "Tengo hambre.",
+    plural: "kein Plural"
   }, {
     de: "der Durst",
     pron: "dea dúrst",
@@ -2332,7 +2583,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Gefühle",
     exampleSentenceDe: "Ich habe der Durst.",
-    exampleSentenceEs: "Tengo sed."
+    exampleSentenceEs: "Tengo sed.",
+    plural: "die Durste"
   }, {
     de: "das Lebensmittel",
     pron: "das lé-bens-mi-tel",
@@ -2340,7 +2592,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Lebensmittel",
     exampleSentenceDe: "Das Lebensmittel ist gut.",
-    exampleSentenceEs: "El alimento es bueno."
+    exampleSentenceEs: "El alimento es bueno.",
+    plural: "die Lebensmittel"
   }, {
     de: "das Brot",
     pron: "das brot",
@@ -2348,7 +2601,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Lebensmittel",
     exampleSentenceDe: "Das Brot ist gut.",
-    exampleSentenceEs: "El pan está bueno."
+    exampleSentenceEs: "El pan está bueno.",
+    plural: "die Brote"
   }, {
     de: "die Butter",
     pron: "di bú-tea",
@@ -2356,7 +2610,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Lebensmittel",
     exampleSentenceDe: "Ich brauche die Butter.",
-    exampleSentenceEs: "Yo necesito la mantequilla."
+    exampleSentenceEs: "Yo necesito la mantequilla.",
+    plural: "die Buttersorten"
   }, {
     de: "der Käse",
     pron: "dea ké-se",
@@ -2364,7 +2619,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Lebensmittel",
     exampleSentenceDe: "Das ist der Käse. Der Käse ist gut.",
-    exampleSentenceEs: "Este es el queso. El queso es bueno."
+    exampleSentenceEs: "Este es el queso. El queso es bueno.",
+    plural: "die Käse"
   }, {
     de: "das Fleisch",
     pron: "das flaish",
@@ -2372,7 +2628,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse das Fleisch.",
-    exampleSentenceEs: "Yo como la carne."
+    exampleSentenceEs: "Yo como la carne.",
+    plural: "die Fleischsorten"
   }, {
     de: "der Fisch",
     pron: "dea fish",
@@ -2380,7 +2637,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Lebensmittel",
     exampleSentenceDe: "Der Fisch ist gut.",
-    exampleSentenceEs: "El pescado está bueno."
+    exampleSentenceEs: "El pescado está bueno.",
+    plural: "die Fische"
   }, {
     de: "die Kartoffel",
     pron: "di kaa-tó-fel",
@@ -2388,7 +2646,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse die Kartoffel.",
-    exampleSentenceEs: "Yo como la papa."
+    exampleSentenceEs: "Yo como la papa.",
+    plural: "die Kartoffeln"
   }, {
     de: "der Reis",
     pron: "dea ráis",
@@ -2396,7 +2655,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Lebensmittel",
     exampleSentenceDe: "Der Reis ist gut.",
-    exampleSentenceEs: "El arroz está bueno."
+    exampleSentenceEs: "El arroz está bueno.",
+    plural: "die Reis"
   }, {
     de: "die Suppe",
     pron: "di sú-pe",
@@ -2404,7 +2664,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse die Suppe.",
-    exampleSentenceEs: "Yo como la sopa."
+    exampleSentenceEs: "Yo como la sopa.",
+    plural: "die Suppen"
   }, {
     de: "das Gemüse",
     pron: "das gue-mǘ-se",
@@ -2412,7 +2673,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Lebensmittel",
     exampleSentenceDe: "Das Gemüse ist gut.",
-    exampleSentenceEs: "La verdura es buena."
+    exampleSentenceEs: "La verdura es buena.",
+    plural: "die Gemüse"
   }, {
     de: "das Obst",
     pron: "das ópst",
@@ -2420,7 +2682,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse das Obst. Das Obst ist gut.",
-    exampleSentenceEs: "Yo como la fruta. La fruta es buena."
+    exampleSentenceEs: "Yo como la fruta. La fruta es buena.",
+    plural: "kein Plural"
   }, {
     de: "die Tomate",
     pron: "di to-má-te",
@@ -2428,7 +2691,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Lebensmittel",
     exampleSentenceDe: "Die Tomate ist rot.",
-    exampleSentenceEs: "El tomate es rojo."
+    exampleSentenceEs: "El tomate es rojo.",
+    plural: "die Tomaten"
   }, {
     de: "der Apfel",
     pron: "dea áp-fel",
@@ -2436,7 +2700,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse den Apfel.",
-    exampleSentenceEs: "Yo como la manzana."
+    exampleSentenceEs: "Yo como la manzana.",
+    plural: "die Äpfel"
   }, {
     de: "die Orange",
     pron: "di o-rán-she",
@@ -2444,7 +2709,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Lebensmittel",
     exampleSentenceDe: "Das ist eine Orange. Die Orange ist rot.",
-    exampleSentenceEs: "Esto es una naranja. La naranja es roja."
+    exampleSentenceEs: "Esto es una naranja. La naranja es roja.",
+    plural: "die Orangen"
   }, {
     de: "der Kuchen",
     pron: "dea kú-jen",
@@ -2452,7 +2718,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Lebensmittel",
     exampleSentenceDe: "Ich mag der Kuchen.",
-    exampleSentenceEs: "Me gusta el pastel."
+    exampleSentenceEs: "Me gusta el pastel.",
+    plural: "die Kuchen"
   }, {
     de: "das Getränk",
     pron: "das gue-trénk",
@@ -2460,7 +2727,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Getränke",
     exampleSentenceDe: "Ich möchte das Getränk.",
-    exampleSentenceEs: "Yo quiero la bebida."
+    exampleSentenceEs: "Yo quiero la bebida.",
+    plural: "die Getränke"
   }, {
     de: "das Wasser",
     pron: "das vá-sea",
@@ -2468,7 +2736,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Getränke",
     exampleSentenceDe: "Das Wasser ist kalt.",
-    exampleSentenceEs: "El agua está fría."
+    exampleSentenceEs: "El agua está fría.",
+    plural: "die Wasser"
   }, {
     de: "der Kaffee",
     pron: "dea ká-fe",
@@ -2476,7 +2745,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Getränke",
     exampleSentenceDe: "Ich trinke gern den Kaffee.",
-    exampleSentenceEs: "Me gusta beber el café."
+    exampleSentenceEs: "Me gusta beber el café.",
+    plural: "die Kaffees"
   }, {
     de: "der Tee",
     pron: "dea té",
@@ -2484,7 +2754,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Getränke",
     exampleSentenceDe: "Ich trinke den Tee am Morgen.",
-    exampleSentenceEs: "Bebo el té por la mañana."
+    exampleSentenceEs: "Bebo el té por la mañana.",
+    plural: "die Tees"
   }, {
     de: "die Milch",
     pron: "di milj",
@@ -2492,7 +2763,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Getränke",
     exampleSentenceDe: "Ich habe die Milch. Die Milch ist kalt.",
-    exampleSentenceEs: "Tengo la leche. La leche está fría."
+    exampleSentenceEs: "Tengo la leche. La leche está fría.",
+    plural: "die Milch"
   }, {
     de: "das Bier",
     pron: "das bí-a",
@@ -2500,7 +2772,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Getränke",
     exampleSentenceDe: "Ich mag das Bier.",
-    exampleSentenceEs: "Me gusta la cerveza."
+    exampleSentenceEs: "Me gusta la cerveza.",
+    plural: "die Biere"
   }, {
     de: "der Wein",
     pron: "dea vain",
@@ -2508,7 +2781,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Getränke",
     exampleSentenceDe: "Der Wein ist rot.",
-    exampleSentenceEs: "El vino es tinto."
+    exampleSentenceEs: "El vino es tinto.",
+    plural: "die Weine"
   }, {
     de: "der Teller",
     pron: "dea té-lea",
@@ -2516,7 +2790,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Geschirr",
     exampleSentenceDe: "Der Teller ist groß.",
-    exampleSentenceEs: "El plato es grande."
+    exampleSentenceEs: "El plato es grande.",
+    plural: "die Teller"
   }, {
     de: "die Tasse",
     pron: "di tá-se",
@@ -2524,7 +2799,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Geschirr",
     exampleSentenceDe: "Ich habe eine Tasse. Die Tasse ist klein.",
-    exampleSentenceEs: "Tengo una taza. La taza es pequeña."
+    exampleSentenceEs: "Tengo una taza. La taza es pequeña.",
+    plural: "die Tassen"
   }, {
     de: "das Messer",
     pron: "das mé-sea",
@@ -2532,7 +2808,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Geschirr",
     exampleSentenceDe: "Das Messer ist neu.",
-    exampleSentenceEs: "El cuchillo es nuevo."
+    exampleSentenceEs: "El cuchillo es nuevo.",
+    plural: "die Messer"
   }, {
     de: "die Gabel",
     pron: "di gá-bel",
@@ -2540,7 +2817,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Geschirr",
     exampleSentenceDe: "Ich habe die Gabel. Die Gabel ist auf dem Tisch.",
-    exampleSentenceEs: "Tengo el tenedor. El tenedor está sobre la mesa."
+    exampleSentenceEs: "Tengo el tenedor. El tenedor está sobre la mesa.",
+    plural: "die Gabeln"
   }, {
     de: "der Löffel",
     pron: "dea ló-fel",
@@ -2548,7 +2826,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Geschirr",
     exampleSentenceDe: "Ich habe einen Löffel. Der Löffel ist klein.",
-    exampleSentenceEs: "Tengo una cuchara. La cuchara es pequeña."
+    exampleSentenceEs: "Tengo una cuchara. La cuchara es pequeña.",
+    plural: "die Löffel"
   }, {
     de: "die Flasche",
     pron: "di flá-she",
@@ -2556,7 +2835,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Geschirr",
     exampleSentenceDe: "Ich habe eine Flasche Wasser.",
-    exampleSentenceEs: "Tengo una botella de agua."
+    exampleSentenceEs: "Tengo una botella de agua.",
+    plural: "die Flaschen"
   }, {
     de: "trinken / kochen",
     pron: "trín-ken  kó-jen",
@@ -2564,7 +2844,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich trinke Kaffee am Morgen.",
-    exampleSentenceEs: "Yo bebo café por la mañana."
+    exampleSentenceEs: "Yo bebo café por la mañana.",
+    regimen: "+ Akkusativ"
   }, {
     de: "schmecken",
     pron: "shmé-ken",
@@ -2572,7 +2853,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Das Essen schmeckt gut.",
-    exampleSentenceEs: "La comida sabe bien."
+    exampleSentenceEs: "La comida sabe bien.",
+    regimen: "⚠️ Exige Dativo"
   }, {
     de: "mögen",
     pron: "mö-guen",
@@ -2580,7 +2862,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich mag Kaffee.",
-    exampleSentenceEs: "Me gusta el café."
+    exampleSentenceEs: "Me gusta el café.",
+    regimen: "+ Akkusativ"
   }, {
     de: "Ich möchte",
     pron: "íj mói-jte",
@@ -2588,7 +2871,8 @@ const chapters = [{
     type: "Frase",
     category: "Im Restaurant",
     exampleSentenceDe: "Ich möchte Wasser.",
-    exampleSentenceEs: "Me gustaría agua."
+    exampleSentenceEs: "Me gustaría agua.",
+    regimen: "+ Infinitivo final"
   }, {
     de: "Was möchten Sie?",
     pron: "vas méj-ten si",
@@ -2596,7 +2880,8 @@ const chapters = [{
     type: "Frase",
     category: "Im Restaurant",
     exampleSentenceDe: "Hallo! Was möchten Sie?",
-    exampleSentenceEs: "¡Hola! ¿Qué le gustaría?"
+    exampleSentenceEs: "¡Hola! ¿Qué le gustaría?",
+    regimen: "Formal, Verb final"
   }, {
     de: "Ich hätte gern",
     pron: "ij jé-te guean",
@@ -2604,7 +2889,8 @@ const chapters = [{
     type: "Frase",
     category: "Im Restaurant",
     exampleSentenceDe: "Ich hätte gern einen Kaffee.",
-    exampleSentenceEs: "Quisiera un café."
+    exampleSentenceEs: "Quisiera un café.",
+    regimen: "+ Akkusativ"
   }, {
     de: "nehmen",
     pron: "né-men",
@@ -2612,7 +2898,8 @@ const chapters = [{
     type: "Verbo",
     category: "Im Restaurant",
     exampleSentenceDe: "Ich nehme einen Kaffee.",
-    exampleSentenceEs: "Yo tomo un café."
+    exampleSentenceEs: "Yo tomo un café.",
+    regimen: "Irregular (nimmt) / + Akkusativ"
   }, {
     de: "das Restaurant",
     pron: "das res-to-rán",
@@ -2620,7 +2907,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Im Restaurant",
     exampleSentenceDe: "Das Restaurant ist neu.",
-    exampleSentenceEs: "El restaurante es nuevo."
+    exampleSentenceEs: "El restaurante es nuevo.",
+    plural: "die Restaurants"
   }, {
     de: "die Speisekarte",
     pron: "di shpái-se-kár-te",
@@ -2628,7 +2916,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Im Restaurant",
     exampleSentenceDe: "Entschuldigung, die Speisekarte, bitte.",
-    exampleSentenceEs: "Disculpe, el menú, por favor."
+    exampleSentenceEs: "Disculpe, el menú, por favor.",
+    plural: "die Speisekarten"
   }, {
     de: "bestellen",
     pron: "be-shté-len",
@@ -2636,7 +2925,8 @@ const chapters = [{
     type: "Verbo",
     category: "Im Restaurant",
     exampleSentenceDe: "Ich bestelle Pizza.",
-    exampleSentenceEs: "Yo pido pizza."
+    exampleSentenceEs: "Yo pido pizza.",
+    regimen: "+ Akkusativ"
   }, {
     de: "Guten Appetit",
     pron: "gú-ten a-pe-tít",
@@ -2644,7 +2934,8 @@ const chapters = [{
     type: "Frase",
     category: "Im Restaurant",
     exampleSentenceDe: "Guten Appetit!",
-    exampleSentenceEs: "¡Buen provecho!"
+    exampleSentenceEs: "¡Buen provecho!",
+    regimen: "Fijo, antes de comer"
   }, {
     de: "die Rechnung",
     pron: "di réj-nung",
@@ -2652,7 +2943,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Im Restaurant",
     exampleSentenceDe: "Ich brauche die Rechnung bitte.",
-    exampleSentenceEs: "Necesito la cuenta por favor."
+    exampleSentenceEs: "Necesito la cuenta por favor.",
+    plural: "die Rechnungen"
   }, {
     de: "bezahlen",
     pron: "be-tsá-len",
@@ -2660,7 +2952,8 @@ const chapters = [{
     type: "Verbo",
     category: "Im Restaurant",
     exampleSentenceDe: "Ich bezahle die Rechnung.",
-    exampleSentenceEs: "Yo pago la cuenta."
+    exampleSentenceEs: "Yo pago la cuenta.",
+    regimen: "+ Akkusativ"
   }, {
     de: "getrennt / zusammen",
     pron: "gue-trént  tsu-sá-men",
@@ -2668,7 +2961,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Im Restaurant",
     exampleSentenceDe: "Wir wohnen zusammen.",
-    exampleSentenceEs: "Vivimos juntos."
+    exampleSentenceEs: "Vivimos juntos.",
+    regimen: "≠ zusammen / getrennt"
   }, {
     de: "Stimmt so",
     pron: "shtímt so",
@@ -2676,7 +2970,8 @@ const chapters = [{
     type: "Frase",
     category: "Im Restaurant",
     exampleSentenceDe: "Stimmt so, danke.",
-    exampleSentenceEs: "Así está bien, gracias."
+    exampleSentenceEs: "Así está bien, gracias.",
+    regimen: "Fijo, al pagar"
   }, {
     de: "das Gericht",
     pron: "das gue-ríjt",
@@ -2684,7 +2979,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Kochen",
     exampleSentenceDe: "Das Gericht ist lecker.",
-    exampleSentenceEs: "El plato preparado está rico."
+    exampleSentenceEs: "El plato preparado está rico.",
+    plural: "die Gerichte"
   }, {
     de: "der Topf / die Pfanne",
     pron: "dea tópf  di pfá-ne",
@@ -2692,7 +2988,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Kochen",
     exampleSentenceDe: "Ich habe einen Topf. Der Topf ist neu.",
-    exampleSentenceEs: "Tengo una olla. La olla es nueva."
+    exampleSentenceEs: "Tengo una olla. La olla es nueva.",
+    plural: "die Töpfe / die Pfannen"
   }, {
     de: "probieren",
     pron: "pro-bí-ren",
@@ -2700,7 +2997,8 @@ const chapters = [{
     type: "Verbo",
     category: "Kochen",
     exampleSentenceDe: "Ich möchte das Brot probieren.",
-    exampleSentenceEs: "Quiero probar el pan."
+    exampleSentenceEs: "Quiero probar el pan.",
+    regimen: "+ Akkusativ"
   }, {
     de: "scharf / süß",
     pron: "shaaf  süs",
@@ -2708,7 +3006,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Geschmack",
     exampleSentenceDe: "Das Essen ist scharf. Die Süßigkeit ist süß.",
-    exampleSentenceEs: "La comida es picante. El dulce es dulce."
+    exampleSentenceEs: "La comida es picante. El dulce es dulce.",
+    regimen: "≠ süß / scharf"
   }, {
     de: "satt sein",
     pron: "sat záin",
@@ -2716,7 +3015,8 @@ const chapters = [{
     type: "Frase",
     category: "Gefühle",
     exampleSentenceDe: "Ich bin satt.",
-    exampleSentenceEs: "Yo estoy lleno."
+    exampleSentenceEs: "Yo estoy lleno.",
+    regimen: "sein + adj"
   }]
 }, {
   id: 6,
@@ -2730,7 +3030,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Orte",
     exampleSentenceDe: "Das Geschäft ist klein.",
-    exampleSentenceEs: "La tienda es pequeña."
+    exampleSentenceEs: "La tienda es pequeña.",
+    plural: "die Geschäfte"
   }, {
     de: "der Laden",
     pron: "dea lá-den",
@@ -2738,7 +3039,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Orte",
     exampleSentenceDe: "Ich gehe in den Laden.",
-    exampleSentenceEs: "Voy a la tienda."
+    exampleSentenceEs: "Voy a la tienda.",
+    plural: "die Läden"
   }, {
     de: "die Bäckerei",
     pron: "di bé-ke-rái",
@@ -2746,7 +3048,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Orte",
     exampleSentenceDe: "Ich gehe zur Bäckerei.",
-    exampleSentenceEs: "Voy a la panadería."
+    exampleSentenceEs: "Voy a la panadería.",
+    plural: "die Bäckereien"
   }, {
     de: "der Supermarkt",
     pron: "dea sú-pea-markt",
@@ -2754,7 +3057,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Orte",
     exampleSentenceDe: "Ich gehe in den Supermarkt.",
-    exampleSentenceEs: "Voy al supermercado."
+    exampleSentenceEs: "Voy al supermercado.",
+    plural: "die Supermärkte"
   }, {
     de: "geöffnet",
     pron: "gue-óf-net",
@@ -2762,7 +3066,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Status",
     exampleSentenceDe: "Das Geschäft ist geöffnet.",
-    exampleSentenceEs: "La tienda está abierta."
+    exampleSentenceEs: "La tienda está abierta.",
+    regimen: "≠ geschlossen"
   }, {
     de: "das Angebot",
     pron: "das án-gue-bot",
@@ -2770,7 +3075,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Preis",
     exampleSentenceDe: "Das ist ein gutes Angebot.",
-    exampleSentenceEs: "Esta es una buena oferta."
+    exampleSentenceEs: "Esta es una buena oferta.",
+    plural: "die Angebote"
   }, {
     de: "günstig",
     pron: "gúns-tij",
@@ -2778,7 +3084,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Preis",
     exampleSentenceDe: "Das Hotel ist günstig.",
-    exampleSentenceEs: "El hotel es económico."
+    exampleSentenceEs: "El hotel es económico.",
+    regimen: "≠ teuer"
   }, {
     de: "billig",
     pron: "bí-lij",
@@ -2786,7 +3093,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Preis",
     exampleSentenceDe: "Das Brot ist billig.",
-    exampleSentenceEs: "El pan es barato."
+    exampleSentenceEs: "El pan es barato.",
+    regimen: "≠ teuer"
   }, {
     de: "teuer",
     pron: "tói-a",
@@ -2794,7 +3102,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Preis",
     exampleSentenceDe: "Das ist teuer.",
-    exampleSentenceEs: "Esto es caro."
+    exampleSentenceEs: "Esto es caro.",
+    regimen: "≠ billig"
   }, {
     de: "brauchen",
     pron: "bráu-jen",
@@ -2802,7 +3111,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich brauche Wasser.",
-    exampleSentenceEs: "Yo necesito agua."
+    exampleSentenceEs: "Yo necesito agua.",
+    regimen: "+ Akkusativ"
   }, {
     de: "das Kilo",
     pron: "das kí-lo",
@@ -2810,7 +3120,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Menge",
     exampleSentenceDe: "Ich kaufe ein Kilo Äpfel.",
-    exampleSentenceEs: "Compro un kilo de manzanas."
+    exampleSentenceEs: "Compro un kilo de manzanas.",
+    plural: "die Kilo"
   }, {
     de: "das Pfund",
     pron: "das pfunt",
@@ -2818,7 +3129,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Menge",
     exampleSentenceDe: "Ich kaufe ein Pfund Brot.",
-    exampleSentenceEs: "Compro una libra de pan."
+    exampleSentenceEs: "Compro una libra de pan.",
+    plural: "die Pfund"
   }, {
     de: "das Gramm",
     pron: "das gram",
@@ -2826,7 +3138,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Menge",
     exampleSentenceDe: "Ich brauche das Gramm Zucker.",
-    exampleSentenceEs: "Necesito el gramo de azúcar."
+    exampleSentenceEs: "Necesito el gramo de azúcar.",
+    plural: "die Gramm"
   }, {
     de: "kosten",
     pron: "kós-ten",
@@ -2834,7 +3147,8 @@ const chapters = [{
     type: "Verbo",
     category: "Preis",
     exampleSentenceDe: "Was kostet das Brot?",
-    exampleSentenceEs: "¿Cuánto cuesta el pan?"
+    exampleSentenceEs: "¿Cuánto cuesta el pan?",
+    regimen: "+ Akkusativ"
   }, {
     de: "der Preis",
     pron: "dea práis",
@@ -2842,7 +3156,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Preis",
     exampleSentenceDe: "Der Preis ist hoch.",
-    exampleSentenceEs: "El precio es alto."
+    exampleSentenceEs: "El precio es alto.",
+    plural: "die Preise"
   }, {
     de: "die Kasse",
     pron: "di ká-se",
@@ -2850,7 +3165,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Bezahlen",
     exampleSentenceDe: "Wo ist die Kasse, bitte?",
-    exampleSentenceEs: "¿Dónde está la caja, por favor?"
+    exampleSentenceEs: "¿Dónde está la caja, por favor?",
+    plural: "die Kassen"
   }, {
     de: "das Geld",
     pron: "das guelt",
@@ -2858,7 +3174,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bezahlen",
     exampleSentenceDe: "Das ist das Geld.",
-    exampleSentenceEs: "Este es el dinero."
+    exampleSentenceEs: "Este es el dinero.",
+    plural: "die Gelder"
   }, {
     de: "der Verkäufer",
     pron: "dea fea-kói-fea",
@@ -2866,7 +3183,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Personen",
     exampleSentenceDe: "Der Verkäufer ist nett.",
-    exampleSentenceEs: "El vendedor es simpático."
+    exampleSentenceEs: "El vendedor es simpático.",
+    plural: "die Verkäufer"
   }, {
     de: "bestellen",
     pron: "be-shté-len",
@@ -2874,7 +3192,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich bestelle Pizza.",
-    exampleSentenceEs: "Yo pido pizza."
+    exampleSentenceEs: "Yo pido pizza.",
+    regimen: "+ Akkusativ"
   }, {
     de: "die Überweisung",
     pron: "di ǘ-bea-vái-sung",
@@ -2882,7 +3201,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bezahlen",
     exampleSentenceDe: "Ich mache die Überweisung.",
-    exampleSentenceEs: "Hago la transferencia."
+    exampleSentenceEs: "Hago la transferencia.",
+    plural: "die Überweisungen"
   }, {
     de: "das Wechselgeld",
     pron: "das vék-sel-guelt",
@@ -2890,7 +3210,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bezahlen",
     exampleSentenceDe: "Ich brauche das Wechselgeld nicht.",
-    exampleSentenceEs: "No necesito el cambio."
+    exampleSentenceEs: "No necesito el cambio.",
+    plural: "die Wechselgelder"
   }, {
     de: "umtauschen",
     pron: "úm-táu-shen",
@@ -2898,7 +3219,8 @@ const chapters = [{
     type: "Verbo Separable",
     category: "Aktionen",
     exampleSentenceDe: "Ich möchte das T-Shirt umtauschen.",
-    exampleSentenceEs: "Yo quisiera cambiar la camiseta."
+    exampleSentenceEs: "Yo quisiera cambiar la camiseta.",
+    regimen: "Separable (um-) + Akk."
   }, {
     de: "der Rabatt",
     pron: "dea ra-bát",
@@ -2906,7 +3228,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Preis",
     exampleSentenceDe: "Ich sehe der Rabatt. Der Rabatt ist gut.",
-    exampleSentenceEs: "Veo el descuento. El descuento es bueno."
+    exampleSentenceEs: "Veo el descuento. El descuento es bueno.",
+    plural: "die Rabatte"
   }]
 }, {
   id: 7,
@@ -2920,7 +3243,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Reise",
     exampleSentenceDe: "Die Ferien sind schön.",
-    exampleSentenceEs: "Las vacaciones son bonitas."
+    exampleSentenceEs: "Las vacaciones son bonitas.",
+    plural: "die Ferien"
   }, {
     de: "der Urlaub",
     pron: "dea úa-laup",
@@ -2928,7 +3252,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Reise",
     exampleSentenceDe: "Ich habe Urlaub.",
-    exampleSentenceEs: "Tengo vacaciones."
+    exampleSentenceEs: "Tengo vacaciones.",
+    plural: "die Urlaube"
   }, {
     de: "Urlaub machen",
     pron: "ú-a-laup má-jen",
@@ -2936,7 +3261,8 @@ const chapters = [{
     type: "Frase",
     category: "Reise",
     exampleSentenceDe: "Ich mache Urlaub in Spanien.",
-    exampleSentenceEs: "Yo voy de vacaciones a España."
+    exampleSentenceEs: "Yo voy de vacaciones a España.",
+    regimen: "Verbo+Akk. fijo"
   }, {
     de: "es gibt",
     pron: "es guípt",
@@ -2944,7 +3270,8 @@ const chapters = [{
     type: "Frase",
     category: "Allgemein",
     exampleSentenceDe: "Es gibt Kaffee.",
-    exampleSentenceEs: "Hay café."
+    exampleSentenceEs: "Hay café.",
+    regimen: "⚠️ + Akkusativ"
   }, {
     de: "geöffnet",
     pron: "gue-óf-net",
@@ -2952,7 +3279,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Status",
     exampleSentenceDe: "Das Geschäft ist geöffnet.",
-    exampleSentenceEs: "La tienda está abierta."
+    exampleSentenceEs: "La tienda está abierta.",
+    regimen: "≠ geschlossen"
   }, {
     de: "geschlossen",
     pron: "gue-shló-sen",
@@ -2960,7 +3288,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Status",
     exampleSentenceDe: "Das Geschäft ist geschlossen.",
-    exampleSentenceEs: "La tienda está cerrada."
+    exampleSentenceEs: "La tienda está cerrada.",
+    regimen: "≠ offen"
   }, {
     de: "von - bis",
     pron: "fon - bis",
@@ -2968,7 +3297,8 @@ const chapters = [{
     type: "Preposición",
     category: "Zeit",
     exampleSentenceDe: "Ich arbeite von neun Uhr bis fünf Uhr.",
-    exampleSentenceEs: "Yo trabajo de nueve en punto hasta las cinco en punto."
+    exampleSentenceEs: "Yo trabajo de nueve en punto hasta las cinco en punto.",
+    regimen: "+ Dativo"
   }, {
     de: "die Karte",
     pron: "di kár-te",
@@ -2976,7 +3306,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Tickets",
     exampleSentenceDe: "Ich habe die Karte. Die Karte ist groß.",
-    exampleSentenceEs: "Tengo la tarjeta. La tarjeta es grande."
+    exampleSentenceEs: "Tengo la tarjeta. La tarjeta es grande.",
+    plural: "die Karten"
   }, {
     de: "die Eintrittskarte",
     pron: "di áin-trits-kár-te",
@@ -2984,7 +3315,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Tickets",
     exampleSentenceDe: "Ich brauche die Eintrittskarte.",
-    exampleSentenceEs: "Necesito el boleto de entrada."
+    exampleSentenceEs: "Necesito el boleto de entrada.",
+    plural: "die Eintrittskarten"
   }, {
     de: "das Ticket",
     pron: "das tí-ket",
@@ -2992,7 +3324,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Tickets",
     exampleSentenceDe: "Ich brauche das Ticket.",
-    exampleSentenceEs: "Necesito el ticket."
+    exampleSentenceEs: "Necesito el ticket.",
+    plural: "die Tickets"
   }, {
     de: "kaufen",
     pron: "káu-fen",
@@ -3000,7 +3333,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich kaufe ein Brot.",
-    exampleSentenceEs: "Yo compro un pan."
+    exampleSentenceEs: "Yo compro un pan.",
+    regimen: "+ Akkusativ"
   }, {
     de: "reservieren",
     pron: "re-ze-a-fí-ren",
@@ -3008,7 +3342,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich möchte einen Tisch reservieren.",
-    exampleSentenceEs: "Me gustaría reservar una mesa."
+    exampleSentenceEs: "Me gustaría reservar una mesa.",
+    regimen: "+ Akkusativ"
   }, {
     de: "der Weg",
     pron: "dea vek",
@@ -3016,7 +3351,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Orientierung",
     exampleSentenceDe: "Der Weg ist frei.",
-    exampleSentenceEs: "El camino está libre."
+    exampleSentenceEs: "El camino está libre.",
+    plural: "die Wege"
   }, {
     de: "geradeaus",
     pron: "gue-ra-de-áus",
@@ -3024,7 +3360,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Orientierung",
     exampleSentenceDe: "Gehen Sie geradeaus, bitte.",
-    exampleSentenceEs: "Vaya recto, por favor."
+    exampleSentenceEs: "Vaya recto, por favor.",
+    regimen: "Direccional"
   }, {
     de: "links / rechts",
     pron: "links  rejts",
@@ -3032,7 +3369,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Orientierung",
     exampleSentenceDe: "Gehen Sie links.",
-    exampleSentenceEs: "Vaya a la izquierda."
+    exampleSentenceEs: "Vaya a la izquierda.",
+    regimen: "Direccional/lugar"
   }, {
     de: "der Unfall",
     pron: "dea ún-fal",
@@ -3040,7 +3378,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Ich sehe einen Unfall. Der Unfall ist groß.",
-    exampleSentenceEs: "Yo veo un accidente. El accidente es grande."
+    exampleSentenceEs: "Yo veo un accidente. El accidente es grande.",
+    plural: "die Unfälle"
   }, {
     de: "die Polizei",
     pron: "di po-li-tsái",
@@ -3048,7 +3387,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Die Polizei ist hier.",
-    exampleSentenceEs: "La policía está aquí."
+    exampleSentenceEs: "La policía está aquí.",
+    plural: "die Polizeien"
   }, {
     de: "umsteigen",
     pron: "um-shtái-guen",
@@ -3056,7 +3396,8 @@ const chapters = [{
     type: "Verbo",
     category: "Verkehr",
     exampleSentenceDe: "Ich steige in den Bus um.",
-    exampleSentenceEs: "Yo hago transbordo al autobús."
+    exampleSentenceEs: "Yo hago transbordo al autobús.",
+    regimen: "Separable (um-)"
   }, {
     de: "das Zelt",
     pron: "das tsélt",
@@ -3064,7 +3405,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Reise",
     exampleSentenceDe: "Ich habe ein Zelt. Das Zelt ist groß.",
-    exampleSentenceEs: "Tengo una tienda de campaña. La tienda de campaña es grande."
+    exampleSentenceEs: "Tengo una tienda de campaña. La tienda de campaña es grande.",
+    plural: "die Zelte"
   }, {
     de: "zelten",
     pron: "tsél-ten",
@@ -3072,7 +3414,8 @@ const chapters = [{
     type: "Verbo",
     category: "Reise",
     exampleSentenceDe: "Wir zelten im Sommer.",
-    exampleSentenceEs: "Acampamos en verano."
+    exampleSentenceEs: "Acampamos en verano.",
+    regimen: "Intransitivo, sin caso"
   }]
 }, {
   id: 8,
@@ -3086,7 +3429,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Post",
     exampleSentenceDe: "Ich brauche die Post.",
-    exampleSentenceEs: "Yo necesito el correo."
+    exampleSentenceEs: "Yo necesito el correo.",
+    plural: "die Post"
   }, {
     de: "der Brief",
     pron: "dea bríf",
@@ -3094,7 +3438,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Post",
     exampleSentenceDe: "Ich habe den Brief. Der Brief ist hier.",
-    exampleSentenceEs: "Tengo la carta. La carta está aquí."
+    exampleSentenceEs: "Tengo la carta. La carta está aquí.",
+    plural: "die Briefe"
   }, {
     de: "die Postkarte",
     pron: "di póst-kar-te",
@@ -3102,7 +3447,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Post",
     exampleSentenceDe: "Ich kaufe die Postkarte im Supermarkt.",
-    exampleSentenceEs: "Yo compro la postal en el supermercado."
+    exampleSentenceEs: "Yo compro la postal en el supermercado.",
+    plural: "die Postkarten"
   }, {
     de: "schicken",
     pron: "shí-ken",
@@ -3110,7 +3456,8 @@ const chapters = [{
     type: "Verbo",
     category: "Post",
     exampleSentenceDe: "Ich schicke die E-Mail morgen.",
-    exampleSentenceEs: "Yo envío el correo mañana."
+    exampleSentenceEs: "Yo envío el correo mañana.",
+    regimen: "+ Dativo (a quién) / + Akkusativ (qué)"
   }, {
     de: "bekommen",
     pron: "be-kó-men",
@@ -3118,7 +3465,8 @@ const chapters = [{
     type: "Verbo",
     category: "Post",
     exampleSentenceDe: "Ich bekomme ein Geschenk.",
-    exampleSentenceEs: "Yo recibo un regalo."
+    exampleSentenceEs: "Yo recibo un regalo.",
+    regimen: "+ Akkusativ"
   }, {
     de: "abholen",
     pron: "áp-jo-len",
@@ -3126,7 +3474,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Post",
     exampleSentenceDe: "Ich hole dich am Bahnhof ab.",
-    exampleSentenceEs: "Te recojo en la estación de tren."
+    exampleSentenceEs: "Te recojo en la estación de tren.",
+    regimen: "+Akk, separable (ab-)"
   }, {
     de: "die Briefmarke",
     pron: "di bríf-mar-ke",
@@ -3134,7 +3483,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Post",
     exampleSentenceDe: "Ich brauche die Briefmarke.",
-    exampleSentenceEs: "Yo necesito la estampilla."
+    exampleSentenceEs: "Yo necesito la estampilla.",
+    plural: "die Briefmarken"
   }, {
     de: "der Absender",
     pron: "dea áp-sen-dea",
@@ -3142,7 +3492,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Post",
     exampleSentenceDe: "Wer ist der Absender?",
-    exampleSentenceEs: "¿Quién es el remitente?"
+    exampleSentenceEs: "¿Quién es el remitente?",
+    plural: "die Absender"
   }, {
     de: "der Empfänger",
     pron: "dea em-pfén-gua",
@@ -3150,7 +3501,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Post",
     exampleSentenceDe: "Wer ist der Empfänger?",
-    exampleSentenceEs: "¿Quién es el destinatario?"
+    exampleSentenceEs: "¿Quién es el destinatario?",
+    plural: "die Empfänger"
   }, {
     de: "die Adresse",
     pron: "di a-dré-se",
@@ -3158,7 +3510,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Post",
     exampleSentenceDe: "Das ist die Adresse.",
-    exampleSentenceEs: "Esta es la dirección."
+    exampleSentenceEs: "Esta es la dirección.",
+    plural: "die Adressen"
   }, {
     de: "das Telefon",
     pron: "das te-le-fón",
@@ -3166,7 +3519,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Kommunikation",
     exampleSentenceDe: "Das ist mein Telefon.",
-    exampleSentenceEs: "Este es mi teléfono."
+    exampleSentenceEs: "Este es mi teléfono.",
+    plural: "die Telefone"
   }, {
     de: "das Handy",
     pron: "das jén-di",
@@ -3174,7 +3528,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe ein Handy. Das Handy ist neu.",
-    exampleSentenceEs: "Tengo un celular. El celular es nuevo."
+    exampleSentenceEs: "Tengo un celular. El celular es nuevo.",
+    plural: "die Handys"
   }, {
     de: "das Fax",
     pron: "das faks",
@@ -3182,7 +3537,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe ein Fax. Das Fax ist neu.",
-    exampleSentenceEs: "Tengo un fax. El fax es nuevo."
+    exampleSentenceEs: "Tengo un fax. El fax es nuevo.",
+    plural: "die Faxe"
   }, {
     de: "die Telefonnummer",
     pron: "di te-le-fón-nu-mea",
@@ -3190,7 +3546,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe die Telefonnummer. Die Telefonnummer ist neu.",
-    exampleSentenceEs: "Tengo el número de teléfono. El número de teléfono es nuevo."
+    exampleSentenceEs: "Tengo el número de teléfono. El número de teléfono es nuevo.",
+    plural: "die Telefonnummern"
   }, {
     de: "das Telefonbuch",
     pron: "das te-le-fón-buj",
@@ -3198,7 +3555,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Kommunikation",
     exampleSentenceDe: "Ich suche das Telefonbuch.",
-    exampleSentenceEs: "Yo busco la guía telefónica."
+    exampleSentenceEs: "Yo busco la guía telefónica.",
+    plural: "die Telefonbücher"
   }, {
     de: "telefonieren",
     pron: "te-le-fo-ní-ren",
@@ -3206,7 +3564,8 @@ const chapters = [{
     type: "Verbo",
     category: "Kommunikation",
     exampleSentenceDe: "Ich telefoniere mit meiner Mutter.",
-    exampleSentenceEs: "Yo hablo por teléfono con mi madre."
+    exampleSentenceEs: "Yo hablo por teléfono con mi madre.",
+    regimen: "+ mit + Dativ"
   }, {
     de: "anrufen",
     pron: "án-ru-fen",
@@ -3214,7 +3573,8 @@ const chapters = [{
     type: "Verbo",
     category: "Kommunikation",
     exampleSentenceDe: "Ich rufe meine Mutter an.",
-    exampleSentenceEs: "Yo llamo a mi madre."
+    exampleSentenceEs: "Yo llamo a mi madre.",
+    regimen: "Separable (an-) / + Akkusativ"
   }, {
     de: "sprechen (mit)",
     pron: "shpré-jen mit",
@@ -3222,7 +3582,8 @@ const chapters = [{
     type: "Verbo",
     category: "Kommunikation",
     exampleSentenceDe: "Ich spreche mit meinem Freund.",
-    exampleSentenceEs: "Yo hablo con mi amigo."
+    exampleSentenceEs: "Yo hablo con mi amigo.",
+    regimen: "mit + Dativ"
   }, {
     de: "besetzt",
     pron: "be-tséts",
@@ -3230,7 +3591,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Kommunikation",
     exampleSentenceDe: "Die Telefonleitung ist besetzt.",
-    exampleSentenceEs: "La línea telefónica está ocupada."
+    exampleSentenceEs: "La línea telefónica está ocupada.",
+    regimen: "≠ frei"
   }, {
     de: "die Bank",
     pron: "di bank",
@@ -3238,7 +3600,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bank",
     exampleSentenceDe: "Ich sitze auf der Bank.",
-    exampleSentenceEs: "Yo me siento en el banco."
+    exampleSentenceEs: "Yo me siento en el banco.",
+    plural: "die Bänke"
   }, {
     de: "der Schalter",
     pron: "dea shál-tea",
@@ -3246,7 +3609,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bank",
     exampleSentenceDe: "Ich gehe zum Schalter.",
-    exampleSentenceEs: "Voy a la ventanilla."
+    exampleSentenceEs: "Voy a la ventanilla.",
+    plural: "die Schalter"
   }, {
     de: "das Geld",
     pron: "das guélt",
@@ -3254,7 +3618,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Bank",
     exampleSentenceDe: "Das ist das Geld.",
-    exampleSentenceEs: "Este es el dinero."
+    exampleSentenceEs: "Este es el dinero.",
+    plural: "kein Plural"
   }, {
     de: "bar zahlen",
     pron: "bá-a tsá-len",
@@ -3262,7 +3627,8 @@ const chapters = [{
     type: "Frase",
     category: "Bank",
     exampleSentenceDe: "Ich möchte bar zahlen.",
-    exampleSentenceEs: "Quiero pagar en efectivo."
+    exampleSentenceEs: "Quiero pagar en efectivo.",
+    regimen: "Verbo al final"
   }, {
     de: "die Kreditkarte",
     pron: "di kre-dít-kar-te",
@@ -3270,7 +3636,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Bank",
     exampleSentenceDe: "Ich habe die Kreditkarte. Die Kreditkarte ist rot.",
-    exampleSentenceEs: "Tengo la tarjeta de crédito. La tarjeta de crédito es roja."
+    exampleSentenceEs: "Tengo la tarjeta de crédito. La tarjeta de crédito es roja.",
+    plural: "die Kreditkarten"
   }, {
     de: "das Konto",
     pron: "das kón-to",
@@ -3278,7 +3645,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Bank",
     exampleSentenceDe: "Ich habe das Konto.",
-    exampleSentenceEs: "Tengo la cuenta."
+    exampleSentenceEs: "Tengo la cuenta.",
+    plural: "die Konten"
   }, {
     de: "überweisen",
     pron: "ú-ba-vái-sen",
@@ -3286,7 +3654,8 @@ const chapters = [{
     type: "Verbo",
     category: "Bank",
     exampleSentenceDe: "Ich überweise Geld auf das Konto.",
-    exampleSentenceEs: "Yo transfiero dinero a la cuenta."
+    exampleSentenceEs: "Yo transfiero dinero a la cuenta.",
+    regimen: "Inseparable / + Akkusativ"
   }, {
     de: "das Formular",
     pron: "das foa-mu-lá",
@@ -3294,7 +3663,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bank",
     exampleSentenceDe: "Ich habe das Formular. Das Formular ist neu.",
-    exampleSentenceEs: "Tengo el formulario. El formulario es nuevo."
+    exampleSentenceEs: "Tengo el formulario. El formulario es nuevo.",
+    plural: "die Formulare"
   }, {
     de: "ausfüllen",
     pron: "áus-fü-len",
@@ -3302,7 +3672,8 @@ const chapters = [{
     type: "Verbo",
     category: "Bank",
     exampleSentenceDe: "Ich muss das Formular ausfüllen.",
-    exampleSentenceEs: "Yo debo rellenar el formulario."
+    exampleSentenceEs: "Yo debo rellenar el formulario.",
+    regimen: "Separable (aus-)"
   }, {
     de: "ankreuzen",
     pron: "án-krói-tsen",
@@ -3310,7 +3681,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Bank",
     exampleSentenceDe: "Ich muss das Feld ankreuzen.",
-    exampleSentenceEs: "Tengo que marcar el campo con una cruz."
+    exampleSentenceEs: "Tengo que marcar el campo con una cruz.",
+    regimen: "Separable (an-)"
   }, {
     de: "unterschreiben",
     pron: "un-ta-shrái-ben",
@@ -3318,7 +3690,8 @@ const chapters = [{
     type: "Verbo",
     category: "Bank",
     exampleSentenceDe: "Ich muss den Vertrag unterschreiben.",
-    exampleSentenceEs: "Yo debo firmar el contrato."
+    exampleSentenceEs: "Yo debo firmar el contrato.",
+    regimen: "No separable + Akk"
   }, {
     de: "der Geldautomat",
     pron: "dea guélt-áu-to-mat",
@@ -3326,7 +3699,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Bank",
     exampleSentenceDe: "Wo ist der Geldautomat?",
-    exampleSentenceEs: "¿Dónde está el cajero automático?"
+    exampleSentenceEs: "¿Dónde está el cajero automático?",
+    plural: "die Geldautomaten"
   }, {
     de: "das Internet",
     pron: "das ín-ta-net",
@@ -3334,7 +3708,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe das Internet. Das Internet ist gut.",
-    exampleSentenceEs: "Tengo internet. Internet es bueno."
+    exampleSentenceEs: "Tengo internet. Internet es bueno.",
+    plural: "die Internets"
   }, {
     de: "der Computer",
     pron: "dea kom-piú-ta",
@@ -3342,7 +3717,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
-    exampleSentenceEs: "Tengo un computador. El computador es nuevo."
+    exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
+    plural: "die Computer"
   }, {
     de: "der Pass / Ausweis",
     pron: "dea pas  áus-vais",
@@ -3350,7 +3726,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Dokumente",
     exampleSentenceDe: "Ich brauche den Pass.",
-    exampleSentenceEs: "Necesito el pasaporte."
+    exampleSentenceEs: "Necesito el pasaporte.",
+    plural: "die Pässe / Ausweise"
   }, {
     de: "gültig",
     pron: "gúl-tij",
@@ -3358,7 +3735,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Dokumente",
     exampleSentenceDe: "Mein Pass ist gültig.",
-    exampleSentenceEs: "Mi pasaporte es válido."
+    exampleSentenceEs: "Mi pasaporte es válido.",
+    regimen: "≠ ungültig"
   }, {
     de: "das Paket",
     pron: "das pa-két",
@@ -3366,7 +3744,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Post",
     exampleSentenceDe: "Ich habe das Paket. Das Paket ist groß.",
-    exampleSentenceEs: "Tengo el paquete. El paquete es grande."
+    exampleSentenceEs: "Tengo el paquete. El paquete es grande.",
+    plural: "die Pakete"
   }, {
     de: "der Briefkasten",
     pron: "dea brif-kás-ten",
@@ -3374,7 +3753,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Post",
     exampleSentenceDe: "Ich habe einen Briefkasten.",
-    exampleSentenceEs: "Tengo un buzón de correo."
+    exampleSentenceEs: "Tengo un buzón de correo.",
+    plural: "die Briefkästen"
   }, {
     de: "die Gebühr",
     pron: "di gue-bü-a",
@@ -3382,7 +3762,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bank",
     exampleSentenceDe: "Die Gebühr ist zehn Euro.",
-    exampleSentenceEs: "La tarifa es de diez euros."
+    exampleSentenceEs: "La tarifa es de diez euros.",
+    plural: "die Gebühren"
   }, {
     de: "der Kredit",
     pron: "dea kre-dít",
@@ -3390,7 +3771,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bank",
     exampleSentenceDe: "Ich habe den Kredit. Der Kredit ist gut.",
-    exampleSentenceEs: "Tengo el crédito. El crédito es bueno."
+    exampleSentenceEs: "Tengo el crédito. El crédito es bueno.",
+    plural: "die Kredite"
   }, {
     de: "abheben",
     pron: "áp-jé-ben",
@@ -3398,7 +3780,8 @@ const chapters = [{
     type: "Verbo",
     category: "Bank",
     exampleSentenceDe: "Ich möchte Geld abheben.",
-    exampleSentenceEs: "Quiero retirar dinero."
+    exampleSentenceEs: "Quiero retirar dinero.",
+    regimen: "Separable (ab-), +Akk"
   }, {
     de: "einzahlen",
     pron: "áin-tsa-len",
@@ -3406,7 +3789,8 @@ const chapters = [{
     type: "Verbo",
     category: "Bank",
     exampleSentenceDe: "Ich zahle Geld auf die Bank ein.",
-    exampleSentenceEs: "Yo deposito dinero en el banco."
+    exampleSentenceEs: "Yo deposito dinero en el banco.",
+    regimen: "Separable (ein-), +Akk"
   }, {
     de: "die Geheimzahl",
     pron: "di gue-jáim-tsal",
@@ -3414,7 +3798,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bank",
     exampleSentenceDe: "Ich habe die Geheimzahl vergessen.",
-    exampleSentenceEs: "Olvidé el PIN."
+    exampleSentenceEs: "Olvidé el PIN.",
+    plural: "die Geheimzahlen"
   }]
 }, {
   id: 9,
@@ -3428,7 +3813,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Körper",
     exampleSentenceDe: "Ich habe ein Auge. Das Auge ist braun.",
-    exampleSentenceEs: "Tengo un ojo. El ojo es marrón."
+    exampleSentenceEs: "Tengo un ojo. El ojo es marrón.",
+    plural: "die Augen"
   }, {
     de: "die Hand",
     pron: "di jant",
@@ -3436,7 +3822,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Körper",
     exampleSentenceDe: "Ich habe eine Hand. Die Hand ist klein.",
-    exampleSentenceEs: "Tengo una mano. La mano es pequeña."
+    exampleSentenceEs: "Tengo una mano. La mano es pequeña.",
+    plural: "die Hände"
   }, {
     de: "der Arm",
     pron: "dea aam",
@@ -3444,7 +3831,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Körper",
     exampleSentenceDe: "Ich habe einen Arm.",
-    exampleSentenceEs: "Tengo un brazo."
+    exampleSentenceEs: "Tengo un brazo.",
+    plural: "die Arme"
   }, {
     de: "das Bein",
     pron: "das báin",
@@ -3452,7 +3840,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Körper",
     exampleSentenceDe: "Ich habe ein Bein.",
-    exampleSentenceEs: "Yo tengo una pierna."
+    exampleSentenceEs: "Yo tengo una pierna.",
+    plural: "die Beine"
   }, {
     de: "der Kopf",
     pron: "dea kopf",
@@ -3460,7 +3849,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Körper",
     exampleSentenceDe: "Ich habe Kopfschmerzen.",
-    exampleSentenceEs: "Tengo dolor de cabeza."
+    exampleSentenceEs: "Tengo dolor de cabeza.",
+    plural: "die Köpfe"
   }, {
     de: "der Fuß",
     pron: "dea fus",
@@ -3468,7 +3858,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Körper",
     exampleSentenceDe: "Mein Fuß ist groß.",
-    exampleSentenceEs: "Mi pie es grande."
+    exampleSentenceEs: "Mi pie es grande.",
+    plural: "die Füße"
   }, {
     de: "der Mund",
     pron: "dea munt",
@@ -3476,7 +3867,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Körper",
     exampleSentenceDe: "Ich habe einen Mund.",
-    exampleSentenceEs: "Tengo una boca."
+    exampleSentenceEs: "Tengo una boca.",
+    plural: "die Münder"
   }, {
     de: "der Zahn",
     pron: "dea tsán",
@@ -3484,7 +3876,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Körper",
     exampleSentenceDe: "Mein Zahn ist schlecht.",
-    exampleSentenceEs: "Mi diente está mal."
+    exampleSentenceEs: "Mi diente está mal.",
+    plural: "die Zähne"
   }, {
     de: "die Nase",
     pron: "di ná-se",
@@ -3492,7 +3885,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Körper",
     exampleSentenceDe: "Die Nase ist rot.",
-    exampleSentenceEs: "La nariz es roja."
+    exampleSentenceEs: "La nariz es roja.",
+    plural: "die Nasen"
   }, {
     de: "das Ohr",
     pron: "das ó-a",
@@ -3500,7 +3894,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Körper",
     exampleSentenceDe: "Ich habe ein Ohr. Das Ohr ist rot.",
-    exampleSentenceEs: "Tengo una oreja. La oreja está roja."
+    exampleSentenceEs: "Tengo una oreja. La oreja está roja.",
+    plural: "die Ohren"
   }, {
     de: "das Haar",
     pron: "das já-a",
@@ -3508,7 +3903,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Körper",
     exampleSentenceDe: "Das Haar ist rot.",
-    exampleSentenceEs: "El pelo es rojo."
+    exampleSentenceEs: "El pelo es rojo.",
+    plural: "die Haare"
   }, {
     de: "der Bauch",
     pron: "dea báuj",
@@ -3516,7 +3912,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Körper",
     exampleSentenceDe: "Ich habe Hunger. Mein Bauch ist leer.",
-    exampleSentenceEs: "Tengo hambre. Mi barriga está vacía."
+    exampleSentenceEs: "Tengo hambre. Mi barriga está vacía.",
+    plural: "die Bäuche"
   }, {
     de: "der Finger",
     pron: "dea fín-ga",
@@ -3524,7 +3921,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Körper",
     exampleSentenceDe: "Das ist mein Finger.",
-    exampleSentenceEs: "Este es mi dedo."
+    exampleSentenceEs: "Este es mi dedo.",
+    plural: "die Finger"
   }, {
     de: "der Rücken",
     pron: "dea rú-ken",
@@ -3532,7 +3930,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Körper",
     exampleSentenceDe: "Ich habe Schmerzen im Rücken.",
-    exampleSentenceEs: "Tengo dolor en la espalda."
+    exampleSentenceEs: "Tengo dolor en la espalda.",
+    plural: "die Rücken"
   }, {
     de: "der Hals",
     pron: "dea jals",
@@ -3540,7 +3939,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Körper",
     exampleSentenceDe: "Ich habe Schmerzen am Hals.",
-    exampleSentenceEs: "Tengo dolor en el cuello."
+    exampleSentenceEs: "Tengo dolor en el cuello.",
+    plural: "die Hälse"
   }, {
     de: "wehtun",
     pron: "vé-tun",
@@ -3548,7 +3948,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Krankheit",
     exampleSentenceDe: "Mein Kopf tut weh.",
-    exampleSentenceEs: "Mi cabeza duele."
+    exampleSentenceEs: "Mi cabeza duele.",
+    regimen: "+ Dativo (a quién duele)"
   }, {
     de: "Wie geht es Ihnen?",
     pron: "ví guet es í-nen",
@@ -3556,7 +3957,8 @@ const chapters = [{
     type: "Frase",
     category: "Kommunikation",
     exampleSentenceDe: "Hallo, wie geht es Ihnen?",
-    exampleSentenceEs: "Hola, ¿cómo está usted?"
+    exampleSentenceEs: "Hola, ¿cómo está usted?",
+    regimen: "Formal"
   }, {
     de: "Es geht mir gut",
     pron: "es guét mia gut",
@@ -3564,7 +3966,8 @@ const chapters = [{
     type: "Frase",
     category: "Kommunikation",
     exampleSentenceDe: "Hallo! Mir geht es gut, danke.",
-    exampleSentenceEs: "¡Hola! Me va bien, gracias."
+    exampleSentenceEs: "¡Hola! Me va bien, gracias.",
+    regimen: "Dat: mir"
   }, {
     de: "schlafen",
     pron: "shlá-fen",
@@ -3572,7 +3975,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich schlafe heute.",
-    exampleSentenceEs: "Yo duermo hoy."
+    exampleSentenceEs: "Yo duermo hoy.",
+    regimen: "Irregular (schläft)"
   }, {
     de: "ins Bett gehen",
     pron: "ins bet gué-en",
@@ -3580,7 +3984,8 @@ const chapters = [{
     type: "Frase",
     category: "Aktionen",
     exampleSentenceDe: "Ich gehe jetzt ins Bett.",
-    exampleSentenceEs: "Yo voy a la cama ahora."
+    exampleSentenceEs: "Yo voy a la cama ahora.",
+    regimen: "ins + Akkusativ"
   }, {
     de: "im Bett liegen",
     pron: "im bet lí-guen",
@@ -3588,7 +3993,8 @@ const chapters = [{
     type: "Frase",
     category: "Aktionen",
     exampleSentenceDe: "Ich liege im Bett.",
-    exampleSentenceEs: "Yo estoy en la cama."
+    exampleSentenceEs: "Yo estoy en la cama.",
+    regimen: "in+Dat=fijo"
   }, {
     de: "krank",
     pron: "kránk",
@@ -3596,7 +4002,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Krankheit",
     exampleSentenceDe: "Ich bin krank.",
-    exampleSentenceEs: "Yo estoy enfermo."
+    exampleSentenceEs: "Yo estoy enfermo.",
+    regimen: "≠ gesund"
   }, {
     de: "das Fieber",
     pron: "das fí-ba",
@@ -3604,7 +4011,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Krankheit",
     exampleSentenceDe: "Ich habe Fieber. Das Fieber ist hoch.",
-    exampleSentenceEs: "Tengo fiebre. La fiebre es alta."
+    exampleSentenceEs: "Tengo fiebre. La fiebre es alta.",
+    plural: "die Fieber"
   }, {
     de: "der Arzt",
     pron: "dea artst",
@@ -3612,7 +4020,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Medizin",
     exampleSentenceDe: "Ich bin krank. Ich gehe zum Arzt.",
-    exampleSentenceEs: "Estoy enfermo. Voy al médico."
+    exampleSentenceEs: "Estoy enfermo. Voy al médico.",
+    plural: "die Ärzte"
   }, {
     de: "der Doktor",
     pron: "dea dók-toa",
@@ -3620,7 +4029,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Medizin",
     exampleSentenceDe: "Der Doktor ist nett.",
-    exampleSentenceEs: "El doctor es amable."
+    exampleSentenceEs: "El doctor es amable.",
+    plural: "die Doktoren"
   }, {
     de: "die Apotheke",
     pron: "di a-po-té-ke",
@@ -3628,7 +4038,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Medizin",
     exampleSentenceDe: "Ich gehe zur Apotheke.",
-    exampleSentenceEs: "Voy a la farmacia."
+    exampleSentenceEs: "Voy a la farmacia.",
+    plural: "die Apotheken"
   }, {
     de: "das Medikament",
     pron: "das me-di-ka-mént",
@@ -3636,7 +4047,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Medizin",
     exampleSentenceDe: "Das Medikament ist neu.",
-    exampleSentenceEs: "El medicamento es nuevo."
+    exampleSentenceEs: "El medicamento es nuevo.",
+    plural: "die Medikamente"
   }, {
     de: "das Rezept",
     pron: "das re-tsépt",
@@ -3644,7 +4056,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Medizin",
     exampleSentenceDe: "Ich brauche das Rezept von dem Arzt.",
-    exampleSentenceEs: "Necesito la receta del médico."
+    exampleSentenceEs: "Necesito la receta del médico.",
+    plural: "die Rezepte"
   }, {
     de: "die Praxis",
     pron: "di prák-sis",
@@ -3652,7 +4065,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Medizin",
     exampleSentenceDe: "Ich gehe in die Praxis von dem Arzt.",
-    exampleSentenceEs: "Voy al consultorio del doctor."
+    exampleSentenceEs: "Voy al consultorio del doctor.",
+    plural: "die Praxen"
   }, {
     de: "das Krankenhaus",
     pron: "das krán-ken-jáus",
@@ -3660,7 +4074,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Medizin",
     exampleSentenceDe: "Ich bin im Krankenhaus.",
-    exampleSentenceEs: "Estoy en el hospital."
+    exampleSentenceEs: "Estoy en el hospital.",
+    plural: "die Krankenhäuser"
   }, {
     de: "der Termin",
     pron: "dea tea-mín",
@@ -3668,7 +4083,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Medizin",
     exampleSentenceDe: "Ich habe einen Termin am Montag.",
-    exampleSentenceEs: "Tengo una cita el lunes."
+    exampleSentenceEs: "Tengo una cita el lunes.",
+    plural: "die Termine"
   }, {
     de: "Gute Besserung",
     pron: "gú-te bé-se-rung",
@@ -3676,7 +4092,8 @@ const chapters = [{
     type: "Frase",
     category: "Kommunikation",
     exampleSentenceDe: "Ich wünsche dir gute Besserung.",
-    exampleSentenceEs: "Te deseo que te mejores."
+    exampleSentenceEs: "Te deseo que te mejores.",
+    regimen: "Fórmula fija"
   }, {
     de: "das Pflaster",
     pron: "das pflás-ta",
@@ -3684,7 +4101,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Medizin",
     exampleSentenceDe: "Ich habe das Pflaster. Das Pflaster ist klein.",
-    exampleSentenceEs: "Tengo la tirita. La tirita es pequeña."
+    exampleSentenceEs: "Tengo la tirita. La tirita es pequeña.",
+    plural: "die Pflaster"
   }, {
     de: "die Salbe",
     pron: "di sál-be",
@@ -3692,7 +4110,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Medizin",
     exampleSentenceDe: "Ich habe die Salbe.",
-    exampleSentenceEs: "Tengo la pomada."
+    exampleSentenceEs: "Tengo la pomada.",
+    plural: "die Salben"
   }, {
     de: "die Erkältung",
     pron: "di ea-kél-tung",
@@ -3700,7 +4119,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Krankheit",
     exampleSentenceDe: "Ich habe die Erkältung.",
-    exampleSentenceEs: "Tengo el resfriado."
+    exampleSentenceEs: "Tengo el resfriado.",
+    plural: "die Erkältungen"
   }, {
     de: "husten",
     pron: "jús-ten",
@@ -3708,7 +4128,8 @@ const chapters = [{
     type: "Verbo",
     category: "Krankheit",
     exampleSentenceDe: "Ich huste.",
-    exampleSentenceEs: "Yo toso."
+    exampleSentenceEs: "Yo toso.",
+    regimen: "Intransitivo"
   }, {
     de: "bluten",
     pron: "blú-ten",
@@ -3716,7 +4137,8 @@ const chapters = [{
     type: "Verbo",
     category: "Krankheit",
     exampleSentenceDe: "Ich blute nicht.",
-    exampleSentenceEs: "Yo no sangro."
+    exampleSentenceEs: "Yo no sangro.",
+    regimen: "Intransitivo"
   }, {
     de: "sich verletzen",
     pron: "zij fea-lét-sen",
@@ -3724,7 +4146,8 @@ const chapters = [{
     type: "Verbo",
     category: "Krankheit",
     exampleSentenceDe: "Ich verletze mich nicht.",
-    exampleSentenceEs: "No me lastimo."
+    exampleSentenceEs: "No me lastimo.",
+    regimen: "Reflexivo + Akkusativ"
   }, {
     de: "der Schmerz",
     pron: "dea shmérts",
@@ -3732,7 +4155,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Krankheit",
     exampleSentenceDe: "Ich habe Schmerz. Der Schmerz ist stark.",
-    exampleSentenceEs: "Tengo dolor. El dolor es fuerte."
+    exampleSentenceEs: "Tengo dolor. El dolor es fuerte.",
+    plural: "die Schmerzen"
   }, {
     de: "schwanger",
     pron: "shván-guea",
@@ -3740,7 +4164,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Körper",
     exampleSentenceDe: "Sie ist schwanger.",
-    exampleSentenceEs: "Ella está embarazada."
+    exampleSentenceEs: "Ella está embarazada.",
+    regimen: "≠ nicht schwanger"
   }]
 }, {
   id: 10,
@@ -3754,7 +4179,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Allgemein",
     exampleSentenceDe: "Ich habe Kleidung. Die Kleidung ist neu.",
-    exampleSentenceEs: "Tengo ropa. La ropa es nueva."
+    exampleSentenceEs: "Tengo ropa. La ropa es nueva.",
+    plural: "die Kleidungen"
   }, {
     de: "der Pullover",
     pron: "dea pu-ló-fea",
@@ -3762,7 +4188,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe einen Pullover. Der Pullover ist blau.",
-    exampleSentenceEs: "Tengo un suéter. El suéter es azul."
+    exampleSentenceEs: "Tengo un suéter. El suéter es azul.",
+    plural: "die Pullover"
   }, {
     de: "der Rock",
     pron: "dea rok",
@@ -3770,7 +4197,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe einen Rock. Der Rock ist rot.",
-    exampleSentenceEs: "Tengo una falda. La falda es roja."
+    exampleSentenceEs: "Tengo una falda. La falda es roja.",
+    plural: "die Röcke"
   }, {
     de: "die Hose",
     pron: "di jó-se",
@@ -3778,7 +4206,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe die Hose. Die Hose ist blau.",
-    exampleSentenceEs: "Tengo el pantalón. El pantalón es azul."
+    exampleSentenceEs: "Tengo el pantalón. El pantalón es azul.",
+    plural: "die Hosen"
   }, {
     de: "das Hemd",
     pron: "das jemt",
@@ -3786,7 +4215,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe das Hemd. Das Hemd ist weiß.",
-    exampleSentenceEs: "Tengo la camisa. La camisa es blanca."
+    exampleSentenceEs: "Tengo la camisa. La camisa es blanca.",
+    plural: "die Hemden"
   }, {
     de: "die Schuhe",
     pron: "di shú-e",
@@ -3794,7 +4224,8 @@ const chapters = [{
     type: "Sustantivo (Plural)",
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe die Schuhe. Die Schuhe sind neu.",
-    exampleSentenceEs: "Tengo los zapatos. Los zapatos son nuevos."
+    exampleSentenceEs: "Tengo los zapatos. Los zapatos son nuevos.",
+    plural: "die Schuhe"
   }, {
     de: "die Jacke",
     pron: "di yá-ke",
@@ -3802,7 +4233,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kleidungsstücke",
     exampleSentenceDe: "Die Jacke ist neu.",
-    exampleSentenceEs: "La chaqueta es nueva."
+    exampleSentenceEs: "La chaqueta es nueva.",
+    plural: "die Jacken"
   }, {
     de: "der Mantel",
     pron: "dea mán-tel",
@@ -3810,7 +4242,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe einen Mantel. Der Mantel ist warm.",
-    exampleSentenceEs: "Tengo un abrigo. El abrigo es cálido."
+    exampleSentenceEs: "Tengo un abrigo. El abrigo es cálido.",
+    plural: "die Mäntel"
   }, {
     de: "die Jeans",
     pron: "di dshins",
@@ -3818,7 +4251,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe die Jeans. Die Jeans ist blau.",
-    exampleSentenceEs: "Tengo los jeans. Los jeans son azules."
+    exampleSentenceEs: "Tengo los jeans. Los jeans son azules.",
+    plural: "die Jeans"
   }, {
     de: "die Größe",
     pron: "di gro-se",
@@ -3826,7 +4260,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Eigenschaften",
     exampleSentenceDe: "Ich brauche die Größe.",
-    exampleSentenceEs: "Necesito la talla."
+    exampleSentenceEs: "Necesito la talla.",
+    plural: "die Größen"
   }, {
     de: "die Farbe",
     pron: "di fár-be",
@@ -3834,7 +4269,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Eigenschaften",
     exampleSentenceDe: "Das ist die Farbe.",
-    exampleSentenceEs: "Ese es el color."
+    exampleSentenceEs: "Ese es el color.",
+    plural: "die Farben"
   }, {
     de: "schwarz",
     pron: "shvárts",
@@ -3842,7 +4278,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Farben",
     exampleSentenceDe: "Das Auto ist schwarz.",
-    exampleSentenceEs: "El coche es negro."
+    exampleSentenceEs: "El coche es negro.",
+    regimen: "≠ weiß"
   }, {
     de: "weiß",
     pron: "vais",
@@ -3850,7 +4287,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Farben",
     exampleSentenceDe: "Die Wand ist weiß.",
-    exampleSentenceEs: "La pared es blanca."
+    exampleSentenceEs: "La pared es blanca.",
+    regimen: "≠ schwarz"
   }, {
     de: "grau",
     pron: "gráu",
@@ -3858,7 +4296,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Farben",
     exampleSentenceDe: "Der Himmel ist grau.",
-    exampleSentenceEs: "El cielo es gris."
+    exampleSentenceEs: "El cielo es gris.",
+    regimen: "≠ bunt"
   }, {
     de: "rot",
     pron: "rot",
@@ -3866,7 +4305,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Farben",
     exampleSentenceDe: "Das Auto ist rot.",
-    exampleSentenceEs: "El coche es rojo."
+    exampleSentenceEs: "El coche es rojo.",
+    regimen: "≠ grün"
   }, {
     de: "blau",
     pron: "bláu",
@@ -3874,7 +4314,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Farben",
     exampleSentenceDe: "Das Auto ist blau.",
-    exampleSentenceEs: "El coche es azul."
+    exampleSentenceEs: "El coche es azul.",
+    regimen: "≠ bunt"
   }, {
     de: "gelb",
     pron: "guélp",
@@ -3882,7 +4323,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Farben",
     exampleSentenceDe: "Die Sonne ist gelb.",
-    exampleSentenceEs: "El sol es amarillo."
+    exampleSentenceEs: "El sol es amarillo.",
+    regimen: "≠ keine feste Gegenfarbe"
   }, {
     de: "grün",
     pron: "grün",
@@ -3890,7 +4332,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Farben",
     exampleSentenceDe: "Das Auto ist grün.",
-    exampleSentenceEs: "El coche es verde."
+    exampleSentenceEs: "El coche es verde.",
+    regimen: "≠ rot"
   }, {
     de: "braun",
     pron: "bráun",
@@ -3898,7 +4341,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Farben",
     exampleSentenceDe: "Der Tisch ist braun.",
-    exampleSentenceEs: "La mesa es marrón."
+    exampleSentenceEs: "La mesa es marrón.",
+    regimen: "≠ bunt"
   }, {
     de: "anziehen",
     pron: "án-tsi-en",
@@ -3906,7 +4350,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Aktionen",
     exampleSentenceDe: "Ich ziehe die Jacke an.",
-    exampleSentenceEs: "Me pongo la chaqueta."
+    exampleSentenceEs: "Me pongo la chaqueta.",
+    regimen: "Sep./refl. + Akkusativ"
   }, {
     de: "ausziehen",
     pron: "áus-tsí-en",
@@ -3914,7 +4359,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Aktionen",
     exampleSentenceDe: "Ich ziehe den Pullover aus.",
-    exampleSentenceEs: "Me quito el jersey."
+    exampleSentenceEs: "Me quito el jersey.",
+    regimen: "Separable, +Akk, reflex."
   }, {
     de: "anprobieren",
     pron: "án-pro-bí-ren",
@@ -3922,7 +4368,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Aktionen",
     exampleSentenceDe: "Ich möchte die Schuhe anprobieren.",
-    exampleSentenceEs: "Quiero probarme los zapatos."
+    exampleSentenceEs: "Quiero probarme los zapatos.",
+    regimen: "Separable (an-), +Akk"
   }, {
     de: "passen",
     pron: "pá-sen",
@@ -3930,7 +4377,8 @@ const chapters = [{
     type: "Verbo (+ Dativo)",
     category: "Aktionen",
     exampleSentenceDe: "Die Hose passt mir gut.",
-    exampleSentenceEs: "Los pantalones me quedan bien."
+    exampleSentenceEs: "Los pantalones me quedan bien.",
+    regimen: "+ Dativo"
   }, {
     de: "anhaben",
     pron: "án-ja-ben",
@@ -3938,7 +4386,8 @@ const chapters = [{
     type: "Verbo Separable",
     category: "Aktionen",
     exampleSentenceDe: "Ich habe heute einen blauen Pullover an.",
-    exampleSentenceEs: "Yo llevo puesto un jersey azul hoy."
+    exampleSentenceEs: "Yo llevo puesto un jersey azul hoy.",
+    regimen: "+ Akk., Separable (an-)"
   }, {
     de: "eng",
     pron: "eng",
@@ -3946,7 +4395,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Eigenschaften",
     exampleSentenceDe: "Der Rock ist eng.",
-    exampleSentenceEs: "La falda es ajustada."
+    exampleSentenceEs: "La falda es ajustada.",
+    regimen: "≠ weit"
   }, {
     de: "weit",
     pron: "váit",
@@ -3954,7 +4404,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Eigenschaften",
     exampleSentenceDe: "Die Hose ist weit.",
-    exampleSentenceEs: "Los pantalones son holgados."
+    exampleSentenceEs: "Los pantalones son holgados.",
+    regimen: "≠ eng"
   }, {
     de: "bequem",
     pron: "be-kvém",
@@ -3962,7 +4413,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Eigenschaften",
     exampleSentenceDe: "Der Stuhl ist bequem.",
-    exampleSentenceEs: "La silla es cómoda."
+    exampleSentenceEs: "La silla es cómoda.",
+    regimen: "≠ unbequem"
   }, {
     de: "der Schal",
     pron: "dea shal",
@@ -3970,7 +4422,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Accessoires",
     exampleSentenceDe: "Ich habe einen Schal. Der Schal ist rot.",
-    exampleSentenceEs: "Tengo una bufanda. La bufanda es roja."
+    exampleSentenceEs: "Tengo una bufanda. La bufanda es roja.",
+    plural: "die Schals"
   }, {
     de: "der Gürtel",
     pron: "dea gúa-tel",
@@ -3978,7 +4431,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Accessoires",
     exampleSentenceDe: "Ich habe einen Gürtel. Der Gürtel ist braun.",
-    exampleSentenceEs: "Tengo un cinturón. El cinturón es marrón."
+    exampleSentenceEs: "Tengo un cinturón. El cinturón es marrón.",
+    plural: "die Gürtel"
   }]
 }, {
   id: 11,
@@ -3992,7 +4446,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich bin in der Schule.",
-    exampleSentenceEs: "Yo estoy en la escuela."
+    exampleSentenceEs: "Yo estoy en la escuela.",
+    plural: "die Schulen"
   }, {
     de: "die Klasse",
     pron: "di klá-se",
@@ -4000,7 +4455,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich bin in der Klasse.",
-    exampleSentenceEs: "Yo estoy en la clase."
+    exampleSentenceEs: "Yo estoy en la clase.",
+    plural: "die Klassen"
   }, {
     de: "der Lehrer / die Lehrerin",
     pron: "dea lé-ra  di lé-re-rin",
@@ -4008,7 +4464,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Personen",
     exampleSentenceDe: "Das ist mein Lehrer. Mein Lehrer ist nett.",
-    exampleSentenceEs: "Este es mi profesor. Mi profesor es simpático."
+    exampleSentenceEs: "Este es mi profesor. Mi profesor es simpático.",
+    plural: "die Lehrer / die Lehrerinnen"
   }, {
     de: "der Schüler / die Schülerin",
     pron: "dea shú-la  di shú-le-rin",
@@ -4016,7 +4473,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Personen",
     exampleSentenceDe: "Der Schüler ist neu. Er ist in der Klasse.",
-    exampleSentenceEs: "El alumno es nuevo. Él está en la clase."
+    exampleSentenceEs: "El alumno es nuevo. Él está en la clase.",
+    plural: "die Schüler / die Schülerinnen"
   }, {
     de: "der Student",
     pron: "dea shtu-dént",
@@ -4024,7 +4482,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Personen",
     exampleSentenceDe: "Ich bin ein Student. Der Student ist neu.",
-    exampleSentenceEs: "Soy un estudiante. El estudiante es nuevo."
+    exampleSentenceEs: "Soy un estudiante. El estudiante es nuevo.",
+    plural: "die Studenten"
   }, {
     de: "lernen",
     pron: "lér-nen",
@@ -4032,7 +4491,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich lerne Deutsch.",
-    exampleSentenceEs: "Yo aprendo alemán."
+    exampleSentenceEs: "Yo aprendo alemán.",
+    regimen: "+ Akkusativ"
   }, {
     de: "der Unterricht",
     pron: "dea ún-tea-rijt",
@@ -4040,7 +4500,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Der Unterricht beginnt jetzt.",
-    exampleSentenceEs: "La clase empieza ahora."
+    exampleSentenceEs: "La clase empieza ahora.",
+    plural: "die Unterrichte"
   }, {
     de: "der Kurs",
     pron: "dea kúrs",
@@ -4048,7 +4509,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Der Deutschkurs ist gut.",
-    exampleSentenceEs: "El curso de alemán es bueno."
+    exampleSentenceEs: "El curso de alemán es bueno.",
+    plural: "die Kurse"
   }, {
     de: "die Pause",
     pron: "di páu-se",
@@ -4056,7 +4518,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Wir machen jetzt eine Pause.",
-    exampleSentenceEs: "Ahora hacemos un descanso."
+    exampleSentenceEs: "Ahora hacemos un descanso.",
+    plural: "die Pausen"
   }, {
     de: "die Hausaufgabe",
     pron: "di jáus-áuf-gá-be",
@@ -4064,7 +4527,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich mache die Hausaufgabe.",
-    exampleSentenceEs: "Yo hago la tarea."
+    exampleSentenceEs: "Yo hago la tarea.",
+    plural: "die Hausaufgaben"
   }, {
     de: "die Prüfung",
     pron: "di prǘ-fung",
@@ -4072,7 +4536,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Die Prüfung ist schwer.",
-    exampleSentenceEs: "El examen es difícil."
+    exampleSentenceEs: "El examen es difícil.",
+    plural: "die Prüfungen"
   }, {
     de: "die Lösung",
     pron: "di lö-sung",
@@ -4080,7 +4545,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich habe eine Lösung. Die Lösung ist einfach.",
-    exampleSentenceEs: "Tengo una solución. La solución es simple."
+    exampleSentenceEs: "Tengo una solución. La solución es simple.",
+    plural: "die Lösungen"
   }, {
     de: "der Fehler",
     pron: "dea fé-la",
@@ -4088,7 +4554,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich mache einen Fehler. Der Fehler ist groß.",
-    exampleSentenceEs: "Yo cometo un error. El error es grande."
+    exampleSentenceEs: "Yo cometo un error. El error es grande.",
+    plural: "die Fehler"
   }, {
     de: "die Arbeit",
     pron: "di ár-bait",
@@ -4096,7 +4563,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Beruf",
     exampleSentenceDe: "Die Arbeit ist interessant.",
-    exampleSentenceEs: "El trabajo es interesante."
+    exampleSentenceEs: "El trabajo es interesante.",
+    plural: "die Arbeiten"
   }, {
     de: "der Beruf",
     pron: "dea be-rúf",
@@ -4104,7 +4572,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Beruf",
     exampleSentenceDe: "Was ist dein Beruf?",
-    exampleSentenceEs: "¿Cuál es tu profesión?"
+    exampleSentenceEs: "¿Cuál es tu profesión?",
+    plural: "die Berufe"
   }, {
     de: "Mechaniker von Beruf",
     pron: "me-já-ni-ka fon be-rúf",
@@ -4112,7 +4581,8 @@ const chapters = [{
     type: "Frase",
     category: "Beruf",
     exampleSentenceDe: "Ich bin Mechaniker von Beruf.",
-    exampleSentenceEs: "Soy mecánico de profesión."
+    exampleSentenceEs: "Soy mecánico de profesión.",
+    regimen: "von + dat., sin artículo"
   }, {
     de: "der Arbeitsplatz / Job",
     pron: "dea ár-baits-plats  dshob",
@@ -4120,7 +4590,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Beruf",
     exampleSentenceDe: "Ich habe einen Arbeitsplatz. Der Arbeitsplatz ist gut.",
-    exampleSentenceEs: "Tengo un puesto de trabajo. El puesto de trabajo es bueno."
+    exampleSentenceEs: "Tengo un puesto de trabajo. El puesto de trabajo es bueno.",
+    plural: "die Arbeitsplätze"
   }, {
     de: "arbeiten",
     pron: "ár-bai-ten",
@@ -4128,7 +4599,8 @@ const chapters = [{
     type: "Verbo",
     category: "Beruf",
     exampleSentenceDe: "Ich arbeite heute.",
-    exampleSentenceEs: "Yo trabajo hoy."
+    exampleSentenceEs: "Yo trabajo hoy.",
+    regimen: "+ an/bei + Dat"
   }, {
     de: "der Chef / die Chefin",
     pron: "dea shef  di shé-fin",
@@ -4136,7 +4608,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Personen",
     exampleSentenceDe: "Der Chef ist nett.",
-    exampleSentenceEs: "El jefe es simpático."
+    exampleSentenceEs: "El jefe es simpático.",
+    plural: "die Chefs / die Chefinnen"
   }, {
     de: "der Kollege / die Kollegin",
     pron: "dea ko-lé-gue  di ko-lé-guin",
@@ -4144,7 +4617,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Personen",
     exampleSentenceDe: "Ich habe einen Kollegen. Mein Kollege ist nett.",
-    exampleSentenceEs: "Tengo un colega. Mi colega es simpático."
+    exampleSentenceEs: "Tengo un colega. Mi colega es simpático.",
+    plural: "die Kollegen / Kolleginnen"
   }, {
     de: "die Firma / das Büro",
     pron: "di fír-ma  das bü-ró",
@@ -4152,7 +4626,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Beruf",
     exampleSentenceDe: "Ich arbeite in der Firma.",
-    exampleSentenceEs: "Yo trabajo en la empresa."
+    exampleSentenceEs: "Yo trabajo en la empresa.",
+    plural: "die Firmen / die Büros"
   }, {
     de: "arbeitslos",
     pron: "ár-baits-lohs",
@@ -4160,7 +4635,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Beruf",
     exampleSentenceDe: "Ich bin arbeitslos.",
-    exampleSentenceEs: "Yo estoy desempleado."
+    exampleSentenceEs: "Yo estoy desempleado.",
+    regimen: "≠ berufstätig"
   }, {
     de: "der Arbeiter",
     pron: "dea ár-bai-ta",
@@ -4168,7 +4644,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Personen",
     exampleSentenceDe: "Ich sehe der Arbeiter.",
-    exampleSentenceEs: "Yo veo al obrero."
+    exampleSentenceEs: "Yo veo al obrero.",
+    plural: "die Arbeiter"
   }, {
     de: "das Praktikum",
     pron: "das prák-ti-kum",
@@ -4176,7 +4653,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich mache ein Praktikum in Deutschland.",
-    exampleSentenceEs: "Hago una pasantía en Alemania."
+    exampleSentenceEs: "Hago una pasantía en Alemania.",
+    plural: "die Praktika"
   }, {
     de: "die Ausbildung",
     pron: "di áus-bíl-dung",
@@ -4184,7 +4662,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Die Ausbildung ist wichtig.",
-    exampleSentenceEs: "La formación es importante."
+    exampleSentenceEs: "La formación es importante.",
+    plural: "die Ausbildungen"
   }, {
     de: "der Urlaub",
     pron: "dea úa-laup",
@@ -4192,7 +4671,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Beruf",
     exampleSentenceDe: "Ich habe Urlaub.",
-    exampleSentenceEs: "Tengo vacaciones."
+    exampleSentenceEs: "Tengo vacaciones.",
+    plural: "die Urlaube"
   }, {
     de: "selbstständig",
     pron: "sélpst-shtén-dij",
@@ -4200,7 +4680,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Beruf",
     exampleSentenceDe: "Ich bin selbstständig.",
-    exampleSentenceEs: "Soy independiente."
+    exampleSentenceEs: "Soy independiente.",
+    regimen: "≠ abhängig"
   }, {
     de: "die Stelle",
     pron: "di shté-le",
@@ -4208,7 +4689,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Beruf",
     exampleSentenceDe: "Ich suche die Stelle.",
-    exampleSentenceEs: "Yo busco la plaza."
+    exampleSentenceEs: "Yo busco la plaza.",
+    plural: "die Stellen"
   }, {
     de: "Geld verdienen",
     pron: "guelt fea-dí-nen",
@@ -4216,7 +4698,8 @@ const chapters = [{
     type: "Frase",
     category: "Beruf",
     exampleSentenceDe: "Ich möchte Geld verdienen.",
-    exampleSentenceEs: "Yo quiero ganar dinero."
+    exampleSentenceEs: "Yo quiero ganar dinero.",
+    regimen: "Verbo + Akkusativ"
   }, {
     de: "schwere / leichte Arbeit",
     pron: "shvé-re  láij-te ar-báit",
@@ -4224,7 +4707,8 @@ const chapters = [{
     type: "Frase",
     category: "Beruf",
     exampleSentenceDe: "Die Arbeit ist schwer.",
-    exampleSentenceEs: "El trabajo es pesado."
+    exampleSentenceEs: "El trabajo es pesado.",
+    regimen: "Adj. + sustantivo neutro"
   }, {
     de: "das Internet",
     pron: "das ín-ta-net",
@@ -4232,7 +4716,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Büro",
     exampleSentenceDe: "Ich habe das Internet. Das Internet ist gut.",
-    exampleSentenceEs: "Tengo internet. Internet es bueno."
+    exampleSentenceEs: "Tengo internet. Internet es bueno.",
+    plural: "die Internets"
   }, {
     de: "der Computer",
     pron: "dea kom-piú-ta",
@@ -4240,7 +4725,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Büro",
     exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
-    exampleSentenceEs: "Tengo un computador. El computador es nuevo."
+    exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
+    plural: "die Computer"
   }, {
     de: "der Drucker",
     pron: "dea drú-ka",
@@ -4248,7 +4734,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Büro",
     exampleSentenceDe: "Das ist mein Drucker. Der Drucker ist neu.",
-    exampleSentenceEs: "Esta es mi impresora. La impresora es nueva."
+    exampleSentenceEs: "Esta es mi impresora. La impresora es nueva.",
+    plural: "die Drucker"
   }, {
     de: "der Bleistift",
     pron: "dea blái-shtift",
@@ -4256,7 +4743,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Büro",
     exampleSentenceDe: "Das ist ein Bleistift. Der Bleistift ist blau.",
-    exampleSentenceEs: "Esto es un lápiz. El lápiz es azul."
+    exampleSentenceEs: "Esto es un lápiz. El lápiz es azul.",
+    plural: "die Bleistifte"
   }, {
     de: "der Kugelschreiber",
     pron: "dea kú-guel-shrái-ba",
@@ -4264,7 +4752,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Büro",
     exampleSentenceDe: "Ich habe einen Kugelschreiber. Der Kugelschreiber ist blau.",
-    exampleSentenceEs: "Tengo un bolígrafo. El bolígrafo es azul."
+    exampleSentenceEs: "Tengo un bolígrafo. El bolígrafo es azul.",
+    plural: "die Kugelschreiber"
   }, {
     de: "der Schreibtisch",
     pron: "dea shráip-tish",
@@ -4272,7 +4761,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Büro",
     exampleSentenceDe: "Der Schreibtisch ist groß.",
-    exampleSentenceEs: "El escritorio es grande."
+    exampleSentenceEs: "El escritorio es grande.",
+    plural: "die Schreibtische"
   }, {
     de: "das Zeugnis",
     pron: "das tsóik-nis",
@@ -4280,7 +4770,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich habe das Zeugnis. Das Zeugnis ist gut.",
-    exampleSentenceEs: "Tengo el boletín de notas. El boletín de notas es bueno."
+    exampleSentenceEs: "Tengo el boletín de notas. El boletín de notas es bueno.",
+    plural: "die Zeugnisse"
   }, {
     de: "der Stundenplan",
     pron: "dea shtún-den-plan",
@@ -4288,7 +4779,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich habe der Stundenplan.",
-    exampleSentenceEs: "Tengo el horario de clases."
+    exampleSentenceEs: "Tengo el horario de clases.",
+    plural: "die Stundenpläne"
   }, {
     de: "fehlen",
     pron: "fé-len",
@@ -4296,7 +4788,8 @@ const chapters = [{
     type: "Verbo",
     category: "Bildung",
     exampleSentenceDe: "Mir fehlen die Zähne.",
-    exampleSentenceEs: "Me faltan los dientes."
+    exampleSentenceEs: "Me faltan los dientes.",
+    regimen: "⚠️ Exige Dativo"
   }, {
     de: "bestehen",
     pron: "be-shté-en",
@@ -4304,7 +4797,8 @@ const chapters = [{
     type: "Verbo",
     category: "Bildung",
     exampleSentenceDe: "Die Prüfung besteht aus zehn Fragen.",
-    exampleSentenceEs: "El examen consta de diez preguntas."
+    exampleSentenceEs: "El examen consta de diez preguntas.",
+    regimen: "+ Akkusativ, no separable"
   }, {
     de: "durchfallen",
     pron: "dúrch-fa-len",
@@ -4312,7 +4806,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Bildung",
     exampleSentenceDe: "Ich falle bei der Prüfung durch.",
-    exampleSentenceEs: "Reprobo en el examen."
+    exampleSentenceEs: "Reprobo en el examen.",
+    regimen: "Separable (durch-)"
   }, {
     de: "die Besprechung",
     pron: "di be-shpré-jung",
@@ -4320,7 +4815,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Beruf",
     exampleSentenceDe: "Die Besprechung ist um neun Uhr.",
-    exampleSentenceEs: "La reunión es a las nueve."
+    exampleSentenceEs: "La reunión es a las nueve.",
+    plural: "die Besprechungen"
   }, {
     de: "kündigen",
     pron: "kún-di-guen",
@@ -4328,7 +4824,8 @@ const chapters = [{
     type: "Verbo",
     category: "Beruf",
     exampleSentenceDe: "Ich kündige meinen Job.",
-    exampleSentenceEs: "Yo renuncio a mi trabajo."
+    exampleSentenceEs: "Yo renuncio a mi trabajo.",
+    regimen: "+ Dativ"
   }, {
     de: "befördern",
     pron: "be-féa-den",
@@ -4336,7 +4833,8 @@ const chapters = [{
     type: "Verbo",
     category: "Beruf",
     exampleSentenceDe: "Ich befördere meine Tasche.",
-    exampleSentenceEs: "Yo transporte mi bolso."
+    exampleSentenceEs: "Yo transporte mi bolso.",
+    regimen: "+ Akkusativ"
   }, {
     de: "die Universität",
     pron: "di u-ni-vea-si-tét",
@@ -4344,7 +4842,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich bin an der Universität. Die Universität ist groß.",
-    exampleSentenceEs: "Yo estoy en la universidad. La universidad es grande."
+    exampleSentenceEs: "Yo estoy en la universidad. La universidad es grande.",
+    plural: "die Universitäten"
   }, {
     de: "anmelden",
     pron: "án-mel-den",
@@ -4352,7 +4851,8 @@ const chapters = [{
     type: "Verbo",
     category: "Bildung",
     exampleSentenceDe: "Ich melde mich für den Kurs an.",
-    exampleSentenceEs: "Me inscribo para el curso."
+    exampleSentenceEs: "Me inscribo para el curso.",
+    regimen: "Sep./refl. + Akkusativ"
   }, {
     de: "die Anmeldung",
     pron: "di án-mel-dung",
@@ -4360,7 +4860,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Bildung",
     exampleSentenceDe: "Ich mache die Anmeldung für den Kurs.",
-    exampleSentenceEs: "Yo hago la inscripción para el curso."
+    exampleSentenceEs: "Yo hago la inscripción para el curso.",
+    plural: "die Anmeldungen"
   }, {
     de: "sprechen",
     pron: "shpré-jen",
@@ -4368,7 +4869,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich spreche Deutsch.",
-    exampleSentenceEs: "Yo hablo alemán."
+    exampleSentenceEs: "Yo hablo alemán.",
+    regimen: "+ Akkusativ, irr. (spricht)"
   }, {
     de: "verstehen",
     pron: "fea-shté-en",
@@ -4376,7 +4878,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich verstehe das.",
-    exampleSentenceEs: "Yo entiendo eso."
+    exampleSentenceEs: "Yo entiendo eso.",
+    regimen: "+ Akkusativ"
   }, {
     de: "fragen",
     pron: "frá-guen",
@@ -4384,7 +4887,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich frage dich.",
-    exampleSentenceEs: "Yo te pregunto."
+    exampleSentenceEs: "Yo te pregunto.",
+    regimen: "+ Akkusativ (jdn.)"
   }, {
     de: "antworten",
     pron: "ánt-vor-ten",
@@ -4392,7 +4896,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich antworte auf deine Frage.",
-    exampleSentenceEs: "Yo respondo a tu pregunta."
+    exampleSentenceEs: "Yo respondo a tu pregunta.",
+    regimen: "⚠️ Exige Dativo"
   }, {
     de: "erklären",
     pron: "ea-klé-ren",
@@ -4400,7 +4905,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich kann das nicht erklären.",
-    exampleSentenceEs: "Yo no puedo explicar eso."
+    exampleSentenceEs: "Yo no puedo explicar eso.",
+    regimen: "jdm. + Akk."
   }, {
     de: "wiederholen",
     pron: "ví-da-jó-len",
@@ -4408,7 +4914,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Bitte wiederholen Sie das.",
-    exampleSentenceEs: "Por favor, repita eso."
+    exampleSentenceEs: "Por favor, repita eso.",
+    regimen: "No separable, + Akk."
   }]
 }, {
   id: 12,
@@ -4422,7 +4929,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Das Auto ist voll. Ich brauche das Benzin für den Tank.",
-    exampleSentenceEs: "El coche está lleno. Necesito la gasolina para el tanque."
+    exampleSentenceEs: "El coche está lleno. Necesito la gasolina para el tanque.",
+    plural: "die Tanks"
   }, {
     de: "der Blinker / blinken",
     pron: "dea blín-ka  blín-ken",
@@ -4430,7 +4938,8 @@ const chapters = [{
     type: "Sust / Verbo",
     category: "Teile",
     exampleSentenceDe: "Ich bin im Auto. Ich blinke nach rechts.",
-    exampleSentenceEs: "Estoy en el coche. Pongo el intermitente a la derecha."
+    exampleSentenceEs: "Estoy en el coche. Pongo el intermitente a la derecha.",
+    regimen: "Intransitivo"
   }, {
     de: "die Bremse / bremsen",
     pron: "di brém-se  brém-sen",
@@ -4438,7 +4947,8 @@ const chapters = [{
     type: "Sust / Verbo",
     category: "Teile",
     exampleSentenceDe: "Ich sehe die Bremse. Ich bremse.",
-    exampleSentenceEs: "Veo el freno. Yo freno."
+    exampleSentenceEs: "Veo el freno. Yo freno.",
+    regimen: "+ Akkusativ"
   }, {
     de: "das Bremspedal",
     pron: "das brems-pe-dál",
@@ -4446,7 +4956,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Teile",
     exampleSentenceDe: "Das Bremspedal ist wichtig.",
-    exampleSentenceEs: "El pedal de freno es importante."
+    exampleSentenceEs: "El pedal de freno es importante.",
+    plural: "die Bremspedale"
   }, {
     de: "die Gangschaltung",
     pron: "di gáng-shal-tung",
@@ -4454,7 +4965,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Teile",
     exampleSentenceDe: "Ich habe ein Problem mit der Gangschaltung.",
-    exampleSentenceEs: "Tengo un problema con la caja de cambios."
+    exampleSentenceEs: "Tengo un problema con la caja de cambios.",
+    plural: "die Gangschaltungen"
   }, {
     de: "das Gaspedal",
     pron: "das gás-pe-dál",
@@ -4462,7 +4974,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Ich sehe das Gaspedal im Auto.",
-    exampleSentenceEs: "Yo veo el acelerador en el coche."
+    exampleSentenceEs: "Yo veo el acelerador en el coche.",
+    plural: "die Gaspedale"
   }, {
     de: "Gas geben",
     pron: "gas-gué-ben",
@@ -4470,7 +4983,8 @@ const chapters = [{
     type: "Frase",
     category: "Aktionen",
     exampleSentenceDe: "Bitte gib Gas auf der Autobahn.",
-    exampleSentenceEs: "Por favor, acelera en la autopista."
+    exampleSentenceEs: "Por favor, acelera en la autopista.",
+    regimen: "geben+Akk., verbo separable"
   }, {
     de: "der Fahrer / fahren",
     pron: "dea fá-rea  fá-ren",
@@ -4478,7 +4992,8 @@ const chapters = [{
     type: "Sust / Verbo",
     category: "Allgemein",
     exampleSentenceDe: "Ich sehe den Fahrer. Der Fahrer fährt das Auto.",
-    exampleSentenceEs: "Veo al conductor. El conductor conduce el coche."
+    exampleSentenceEs: "Veo al conductor. El conductor conduce el coche.",
+    regimen: "Irregular (fährt)"
   }, {
     de: "die Hupe / hupen",
     pron: "di jú-pe  jú-pen",
@@ -4486,7 +5001,8 @@ const chapters = [{
     type: "Sust / Verbo",
     category: "Teile",
     exampleSentenceDe: "Die Hupe ist laut.",
-    exampleSentenceEs: "La bocina es ruidosa."
+    exampleSentenceEs: "La bocina es ruidosa.",
+    regimen: "No separable, sin caso"
   }, {
     de: "der Kraftstoff",
     pron: "dea kráft-shtof",
@@ -4494,7 +5010,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Ich brauche den Kraftstoff für das Auto.",
-    exampleSentenceEs: "Necesito el combustible para el coche."
+    exampleSentenceEs: "Necesito el combustible para el coche.",
+    plural: "die Kraftstoffe"
   }, {
     de: "das Lenkrad / lenken",
     pron: "das lénk-rat  lén-ken",
@@ -4502,7 +5019,8 @@ const chapters = [{
     type: "Sust / Verbo",
     category: "Teile",
     exampleSentenceDe: "Ich habe das Lenkrad. Ich kann das Lenkrad lenken.",
-    exampleSentenceEs: "Tengo el volante. Puedo girar el volante."
+    exampleSentenceEs: "Tengo el volante. Puedo girar el volante.",
+    regimen: "+ Akkusativ"
   }, {
     de: "der Motor",
     pron: "dea mo-tóa",
@@ -4510,7 +5028,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Teile",
     exampleSentenceDe: "Ich sehe den Motor. Der Motor ist neu.",
-    exampleSentenceEs: "Yo veo el motor. El motor es nuevo."
+    exampleSentenceEs: "Yo veo el motor. El motor es nuevo.",
+    plural: "die Motoren"
   }, {
     de: "der Rückspiegel",
     pron: "dea rúk-shpí-guel",
@@ -4518,7 +5037,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Teile",
     exampleSentenceDe: "Ich sehe den Rückspiegel. Der Rückspiegel ist klein.",
-    exampleSentenceEs: "Veo el espejo retrovisor. El espejo retrovisor es pequeño."
+    exampleSentenceEs: "Veo el espejo retrovisor. El espejo retrovisor es pequeño.",
+    plural: "die Rückspiegel"
   }, {
     de: "der Sicherheitsgurt",
     pron: "dea sí-jea-jaits-gurt",
@@ -4526,7 +5046,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Teile",
     exampleSentenceDe: "Der Sicherheitsgurt ist wichtig.",
-    exampleSentenceEs: "El cinturón de seguridad es importante."
+    exampleSentenceEs: "El cinturón de seguridad es importante.",
+    plural: "die Sicherheitsgurte"
   }, {
     de: "die Kupplung",
     pron: "di kúp-lung",
@@ -4534,7 +5055,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Teile",
     exampleSentenceDe: "Ich brauche die Kupplung.",
-    exampleSentenceEs: "Yo necesito el embrague."
+    exampleSentenceEs: "Yo necesito el embrague.",
+    plural: "die Kupplungen"
   }, {
     de: "die Felge",
     pron: "di fél-gue",
@@ -4542,7 +5064,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Das Auto hat vier Felgen.",
-    exampleSentenceEs: "El coche tiene cuatro rines."
+    exampleSentenceEs: "El coche tiene cuatro rines.",
+    plural: "die Felgen"
   }, {
     de: "die Handbremse",
     pron: "di jánt-brem-se",
@@ -4550,7 +5073,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Ich ziehe die Handbremse an.",
-    exampleSentenceEs: "Tiro del freno de mano."
+    exampleSentenceEs: "Tiro del freno de mano.",
+    plural: "die Handbremsen"
   }, {
     de: "der Schalthebel",
     pron: "dea shált-jé-bel",
@@ -4558,7 +5082,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Der Schalthebel ist hier.",
-    exampleSentenceEs: "La palanca de cambios está aquí."
+    exampleSentenceEs: "La palanca de cambios está aquí.",
+    plural: "die Schalthebel"
   }, {
     de: "der Scheibenwischer",
     pron: "dea shái-ben-vi-shea",
@@ -4566,7 +5091,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Teile",
     exampleSentenceDe: "Ich sehe den Scheibenwischer.",
-    exampleSentenceEs: "Yo veo el limpiaparabrisas."
+    exampleSentenceEs: "Yo veo el limpiaparabrisas.",
+    plural: "die Scheibenwischer"
   }, {
     de: "der Lichtschalter",
     pron: "dea líjt-shal-tea",
@@ -4574,7 +5100,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Wo ist der Lichtschalter?",
-    exampleSentenceEs: "¿Dónde está el interruptor de luces?"
+    exampleSentenceEs: "¿Dónde está el interruptor de luces?",
+    plural: "die Lichtschalter"
   }, {
     de: "die Heizung",
     pron: "di hái-tsung",
@@ -4582,7 +5109,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Die Heizung ist an.",
-    exampleSentenceEs: "La calefacción está encendida."
+    exampleSentenceEs: "La calefacción está encendida.",
+    plural: "die Heizungen"
   }, {
     de: "das Abblendlicht",
     pron: "das áp-blent-lijt",
@@ -4590,7 +5118,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Lichter",
     exampleSentenceDe: "Das Auto hat das Abblendlicht.",
-    exampleSentenceEs: "El coche tiene la luz corta."
+    exampleSentenceEs: "El coche tiene la luz corta.",
+    plural: "die Abblendlichter"
   }, {
     de: "das Fernlicht",
     pron: "das féan-lijt",
@@ -4598,7 +5127,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Lichter",
     exampleSentenceDe: "Das Fernlicht ist an.",
-    exampleSentenceEs: "La luz larga está encendida."
+    exampleSentenceEs: "La luz larga está encendida.",
+    plural: "die Fernlichter"
   }, {
     de: "die Bremsleuchte",
     pron: "di brems-lóij-te",
@@ -4606,7 +5136,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Lichter",
     exampleSentenceDe: "Die Bremsleuchte ist rot.",
-    exampleSentenceEs: "La luz de freno es roja."
+    exampleSentenceEs: "La luz de freno es roja.",
+    plural: "die Bremsleuchten"
   }, {
     de: "die Warnblinkanlage",
     pron: "di várn-blink-án-la-gue",
@@ -4614,7 +5145,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Lichter",
     exampleSentenceDe: "Ich drücke die Warnblinkanlage.",
-    exampleSentenceEs: "Yo pulso las luces de emergencia."
+    exampleSentenceEs: "Yo pulso las luces de emergencia.",
+    plural: "die Warnblinkanlagen"
   }, {
     de: "die Nebelschlussleuchte",
     pron: "di né-bel-shlús-loich-te",
@@ -4622,7 +5154,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Lichter",
     exampleSentenceDe: "Der Wagen hat die Nebelschlussleuchte.",
-    exampleSentenceEs: "El coche tiene la luz antiniebla trasera."
+    exampleSentenceEs: "El coche tiene la luz antiniebla trasera.",
+    plural: "die Nebelschlussleuchten"
   }, {
     de: "das Tagfahrlicht",
     pron: "das ták-far-lijt",
@@ -4630,7 +5163,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Lichter",
     exampleSentenceDe: "Das Tagfahrlicht ist neu.",
-    exampleSentenceEs: "La luz diurna es nueva."
+    exampleSentenceEs: "La luz diurna es nueva.",
+    plural: "die Tagfahrlichter"
   }, {
     de: "betanken",
     pron: "be-tán-ken",
@@ -4638,7 +5172,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich muss das Auto betanken.",
-    exampleSentenceEs: "Tengo que repostar gasolina el coche."
+    exampleSentenceEs: "Tengo que repostar gasolina el coche.",
+    regimen: "Inseparable / + Akkusativ"
   }, {
     de: "überholen",
     pron: "ü-ba-jó-len",
@@ -4646,7 +5181,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Der Bus überholt das Auto.",
-    exampleSentenceEs: "El autobús adelanta al coche."
+    exampleSentenceEs: "El autobús adelanta al coche.",
+    regimen: "No separable, + Akk."
   }, {
     de: "einsteigen / aussteigen",
     pron: "áin-shtái-guen  áus-shtái-guen",
@@ -4654,7 +5190,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Aktionen",
     exampleSentenceDe: "Wir steigen in das Auto ein.",
-    exampleSentenceEs: "Nosotros subimos al coche."
+    exampleSentenceEs: "Nosotros subimos al coche.",
+    regimen: "Sep. (ein-/aus-) + in/aus Akk"
   }, {
     de: "aufschließen",
     pron: "áuf-shlí-sen",
@@ -4662,7 +5199,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Aktionen",
     exampleSentenceDe: "Ich schließe die Tür auf.",
-    exampleSentenceEs: "Yo abro la puerta con llave."
+    exampleSentenceEs: "Yo abro la puerta con llave.",
+    regimen: "Separable (auf-), +Akk"
   }, {
     de: "anhalten / halten / parken",
     pron: "án-jal-ten  hál-ten  párken",
@@ -4670,7 +5208,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Hier halten wir.",
-    exampleSentenceEs: "Aquí paramos."
+    exampleSentenceEs: "Aquí paramos.",
+    regimen: "anhalten separable, +Akk"
   }, {
     de: "die Vorfahrt",
     pron: "di fóa-fa-at",
@@ -4678,7 +5217,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Ich habe die Vorfahrt.",
-    exampleSentenceEs: "Yo tengo la prioridad."
+    exampleSentenceEs: "Yo tengo la prioridad.",
+    plural: "die Vorfahrten"
   }, {
     de: "aufpassen",
     pron: "áuf-pa-sen",
@@ -4686,7 +5226,8 @@ const chapters = [{
     type: "Verbo separable",
     category: "Verkehr",
     exampleSentenceDe: "Pass auf, bitte!",
-    exampleSentenceEs: "¡Presta atención, por favor!"
+    exampleSentenceEs: "¡Presta atención, por favor!",
+    regimen: "Separable (auf-), + auf+Akk"
   }, {
     de: "Motor starten",
     pron: "mo-tóa shtár-ten",
@@ -4694,7 +5235,8 @@ const chapters = [{
     type: "Frase",
     category: "Aktionen",
     exampleSentenceDe: "Ich starte den Motor.",
-    exampleSentenceEs: "Yo prendo el motor."
+    exampleSentenceEs: "Yo prendo el motor.",
+    regimen: "Verbo + objeto"
   }, {
     de: "sich anschnallen",
     pron: "zij án-shná-len",
@@ -4702,7 +5244,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich muss mich im Auto anschnallen.",
-    exampleSentenceEs: "Tengo que ponerme el cinturón en el coche."
+    exampleSentenceEs: "Tengo que ponerme el cinturón en el coche.",
+    regimen: "Reflexivo, separable (an-)"
   }, {
     de: "beschleunigen",
     pron: "be-shlói-ni-guen",
@@ -4710,7 +5253,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Das Auto beschleunigt.",
-    exampleSentenceEs: "El coche acelera."
+    exampleSentenceEs: "El coche acelera.",
+    regimen: "+ Akkusativ"
   }, {
     de: "abschleppen",
     pron: "áp-shlé-pen",
@@ -4718,7 +5262,8 @@ const chapters = [{
     type: "Verbo",
     category: "Aktionen",
     exampleSentenceDe: "Ich lasse das Auto abschleppen.",
-    exampleSentenceEs: "Yo dejo remolcar el coche."
+    exampleSentenceEs: "Yo dejo remolcar el coche.",
+    regimen: "Separable, +Akkusativ"
   }, {
     de: "zusammenstoßen",
     pron: "tsu-sá-men-shtó-sen",
@@ -4726,7 +5271,8 @@ const chapters = [{
     type: "Verbo",
     category: "Verkehr",
     exampleSentenceDe: "Wir stoßen zusammen.",
-    exampleSentenceEs: "Nos chocamos."
+    exampleSentenceEs: "Nos chocamos.",
+    regimen: "Separable (zusammen-)"
   }, {
     de: "der Schaden",
     pron: "dea shá-den",
@@ -4734,7 +5280,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Der Schaden ist groß.",
-    exampleSentenceEs: "El daño es grande."
+    exampleSentenceEs: "El daño es grande.",
+    plural: "die Schäden"
   }, {
     de: "das Motoröl",
     pron: "das mó-tor-öl",
@@ -4742,7 +5289,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Flüssigkeiten",
     exampleSentenceDe: "Das ist das Motoröl.",
-    exampleSentenceEs: "Este es el aceite de motor."
+    exampleSentenceEs: "Este es el aceite de motor.",
+    plural: "die Motoröle"
   }, {
     de: "der Reifendruck",
     pron: "dea rái-fen-druk",
@@ -4750,7 +5298,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Der Reifendruck ist gut.",
-    exampleSentenceEs: "La presión de los neumáticos es buena."
+    exampleSentenceEs: "La presión de los neumáticos es buena.",
+    plural: "die Reifendrücke"
   }, {
     de: "der Reifen",
     pron: "dea rái-fen",
@@ -4758,7 +5307,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Teile",
     exampleSentenceDe: "Der Reifen ist neu.",
-    exampleSentenceEs: "La llanta es nueva."
+    exampleSentenceEs: "La llanta es nueva.",
+    plural: "die Reifen"
   }, {
     de: "der Pkw / der Lkw",
     pron: "dea pé-ka-vé  dea él-ka-vé",
@@ -4766,7 +5316,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Fahrzeuge",
     exampleSentenceDe: "Das ist ein Pkw. Der Pkw ist neu.",
-    exampleSentenceEs: "Este es un coche. El coche es nuevo."
+    exampleSentenceEs: "Este es un coche. El coche es nuevo.",
+    plural: "die Pkws / die Lkws"
   }, {
     de: "der Fußgänger",
     pron: "dea fús-guen-gua",
@@ -4774,7 +5325,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Der Fußgänger ist hier.",
-    exampleSentenceEs: "El peatón está aquí."
+    exampleSentenceEs: "El peatón está aquí.",
+    plural: "die Fußgänger"
   }, {
     de: "die Ampel / Kreuzung",
     pron: "di ám-pel  krói-tsung",
@@ -4782,7 +5334,8 @@ const chapters = [{
     type: "Sustantivo (Fem)",
     category: "Verkehr",
     exampleSentenceDe: "Die Ampel ist grün.",
-    exampleSentenceEs: "El semáforo está en verde."
+    exampleSentenceEs: "El semáforo está en verde.",
+    plural: "die Ampeln / Kreuzungen"
   }, {
     de: "das Fahrzeug",
     pron: "das fá-a-tsoik",
@@ -4790,7 +5343,8 @@ const chapters = [{
     type: "Sustantivo (Neutro)",
     category: "Fahrzeuge",
     exampleSentenceDe: "Das Fahrzeug ist neu.",
-    exampleSentenceEs: "El vehículo es nuevo."
+    exampleSentenceEs: "El vehículo es nuevo.",
+    plural: "die Fahrzeuge"
   }, {
     de: "der Verkehr / Stau",
     pron: "dea fea-kéa  shtáu",
@@ -4798,7 +5352,8 @@ const chapters = [{
     type: "Sustantivo (Masc)",
     category: "Verkehr",
     exampleSentenceDe: "Der Verkehr ist heute nicht gut.",
-    exampleSentenceEs: "El tráfico no está bueno hoy."
+    exampleSentenceEs: "El tráfico no está bueno hoy.",
+    plural: "die Staus"
   }, {
     de: "das Verkehrsschild",
     pron: "das fea-kéas-shilt",
@@ -4806,7 +5361,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Das Verkehrsschild ist rot.",
-    exampleSentenceEs: "La señal de tráfico es roja."
+    exampleSentenceEs: "La señal de tráfico es roja.",
+    plural: "die Verkehrsschilder"
   }, {
     de: "die Geschwindigkeit",
     pron: "di gue-shvín-dij-kait",
@@ -4814,7 +5370,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Die Geschwindigkeit ist hoch.",
-    exampleSentenceEs: "La velocidad es alta."
+    exampleSentenceEs: "La velocidad es alta.",
+    plural: "die Geschwindigkeiten"
   }, {
     de: "die Spur",
     pron: "di shpúa",
@@ -4822,7 +5379,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Das Auto ist auf der Spur.",
-    exampleSentenceEs: "El coche está en el carril."
+    exampleSentenceEs: "El coche está en el carril.",
+    plural: "die Spuren"
   }, {
     de: "die Warnleuchten",
     pron: "di várn-loij-ten",
@@ -4830,7 +5388,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Lichter",
     exampleSentenceDe: "Die Warnleuchten sind an.",
-    exampleSentenceEs: "Las luces de advertencia están encendidas."
+    exampleSentenceEs: "Las luces de advertencia están encendidas.",
+    plural: "die Warnleuchten"
   }, {
     de: "die Baustelle",
     pron: "di báu-shté-le",
@@ -4838,7 +5397,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Die Baustelle ist groß.",
-    exampleSentenceEs: "La obra es grande."
+    exampleSentenceEs: "La obra es grande.",
+    plural: "die Baustellen"
   }, {
     de: "die Sicherheit",
     pron: "di sí-cha-jait",
@@ -4846,7 +5406,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Allgemein",
     exampleSentenceDe: "Die Sicherheit ist wichtig.",
-    exampleSentenceEs: "La seguridad es importante."
+    exampleSentenceEs: "La seguridad es importante.",
+    plural: "die Sicherheiten"
   }, {
     de: "Toter Winkel",
     pron: "tó-tea vín-kel",
@@ -4854,7 +5415,8 @@ const chapters = [{
     type: "Frase",
     category: "Verkehr",
     exampleSentenceDe: "Der tote Winkel ist gefährlich.",
-    exampleSentenceEs: "El ángulo muerto es peligroso."
+    exampleSentenceEs: "El ángulo muerto es peligroso.",
+    regimen: "der tote Winkel"
   }, {
     de: "Schulterblick",
     pron: "shúl-tea-blik",
@@ -4862,7 +5424,8 @@ const chapters = [{
     type: "Frase",
     category: "Verkehr",
     exampleSentenceDe: "Ich mache einen Schulterblick.",
-    exampleSentenceEs: "Yo hago una mirada sobre hombro."
+    exampleSentenceEs: "Yo hago una mirada sobre hombro.",
+    regimen: "Sustantivo compuesto"
   }, {
     de: "Rechts vor links",
     pron: "réjts-for-links",
@@ -4870,7 +5433,8 @@ const chapters = [{
     type: "Frase",
     category: "Verkehr",
     exampleSentenceDe: "An der Kreuzung gilt: Rechts vor links.",
-    exampleSentenceEs: "En el cruce se aplica: la derecha tiene preferencia."
+    exampleSentenceEs: "En el cruce se aplica: la derecha tiene preferencia.",
+    regimen: "Regla de tráfico"
   }, {
     de: "Motoröldruck",
     pron: "mó-to-a-öl-druk",
@@ -4878,7 +5442,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Anzeigen",
     exampleSentenceDe: "Der Motoröldruck ist gut.",
-    exampleSentenceEs: "La presión del aceite del motor está bien."
+    exampleSentenceEs: "La presión del aceite del motor está bien.",
+    plural: "die Motoröldrücke"
   }, {
     de: "Kühlmitteltemperatur",
     pron: "kúl-mi-tel-tem-pe-ra-tú-a",
@@ -4886,7 +5451,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Anzeigen",
     exampleSentenceDe: "Ich sehe die Kühlmitteltemperatur. Die Kühlmitteltemperatur ist rot.",
-    exampleSentenceEs: "Veo la temperatura del refrigerante. La temperatura del refrigerante es roja."
+    exampleSentenceEs: "Veo la temperatura del refrigerante. La temperatura del refrigerante es roja.",
+    plural: "die Kühlmitteltemperaturen"
   }, {
     de: "das Schiebedach",
     pron: "das shí-be-daj",
@@ -4894,7 +5460,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Ich habe ein Auto. Das Auto hat ein Schiebedach.",
-    exampleSentenceEs: "Yo tengo un coche. El coche tiene un techo corredizo."
+    exampleSentenceEs: "Yo tengo un coche. El coche tiene un techo corredizo.",
+    plural: "die Schiebedächer"
   }, {
     de: "der Auspuff",
     pron: "dea áus-puf",
@@ -4902,7 +5469,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Der Auspuff ist neu.",
-    exampleSentenceEs: "El escape es nuevo."
+    exampleSentenceEs: "El escape es nuevo.",
+    plural: "die Auspuffe"
   }, {
     de: "das Nummernschild",
     pron: "das nú-mean-shilt",
@@ -4910,7 +5478,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Ich sehe das Nummernschild.",
-    exampleSentenceEs: "Veo la matrícula."
+    exampleSentenceEs: "Veo la matrícula.",
+    plural: "die Nummernschilder"
   }, {
     de: "die Windschutzscheibe",
     pron: "di vínt-shuts-shái-be",
@@ -4918,7 +5487,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Ich brauche einen neuen Scheibenwischer für die Windschutzscheibe.",
-    exampleSentenceEs: "Necesito un limpiaparabrisas nuevo para el parabrisas."
+    exampleSentenceEs: "Necesito un limpiaparabrisas nuevo para el parabrisas.",
+    plural: "die Windschutzscheiben"
   }, {
     de: "die Motorhaube",
     pron: "di mo-tóa-jáu-be",
@@ -4926,7 +5496,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Das Auto ist hier. Die Motorhaube ist offen.",
-    exampleSentenceEs: "El coche está aquí. El capó está abierto."
+    exampleSentenceEs: "El coche está aquí. El capó está abierto.",
+    plural: "die Motorhauben"
   }, {
     de: "die Stoßstange",
     pron: "di shtós-shtán-gue",
@@ -4934,7 +5505,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Teile",
     exampleSentenceDe: "Das ist die Stoßstange. Die Stoßstange ist neu.",
-    exampleSentenceEs: "Este es el parachoques. El parachoques es nuevo."
+    exampleSentenceEs: "Este es el parachoques. El parachoques es nuevo.",
+    plural: "die Stoßstangen"
   }, {
     de: "der Kreisverkehr",
     pron: "dea kráis-fea-ke-a",
@@ -4942,7 +5514,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Ich fahre in den Kreisverkehr.",
-    exampleSentenceEs: "Yo entro en la rotonda."
+    exampleSentenceEs: "Yo entro en la rotonda.",
+    plural: "die Kreisverkehre"
   }, {
     de: "die Einbahnstraße",
     pron: "di áin-ban-shtrá-se",
@@ -4950,7 +5523,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Die Straße ist eine Einbahnstraße.",
-    exampleSentenceEs: "La calle es una calle de sentido único."
+    exampleSentenceEs: "La calle es una calle de sentido único.",
+    plural: "die Einbahnstraßen"
   }, {
     de: "abbiegen",
     pron: "áp-bi-guen",
@@ -4958,7 +5532,8 @@ const chapters = [{
     type: "Verbo",
     category: "Verkehr",
     exampleSentenceDe: "Ich biege hier links ab.",
-    exampleSentenceEs: "Yo giro aquí a la izquierda."
+    exampleSentenceEs: "Yo giro aquí a la izquierda.",
+    regimen: "Separable (ab-)"
   }, {
     de: "der Strafzettel",
     pron: "dea shtráf-tse-tel",
@@ -4966,7 +5541,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Verkehr",
     exampleSentenceDe: "Ich habe einen Strafzettel bekommen. Der Strafzettel ist teuer.",
-    exampleSentenceEs: "Recibí una multa de tráfico. La multa de tráfico es cara."
+    exampleSentenceEs: "Recibí una multa de tráfico. La multa de tráfico es cara.",
+    plural: "die Strafzettel"
   }, {
     de: "die Versicherung",
     pron: "di fea-sí-je-rung",
@@ -4974,7 +5550,8 @@ const chapters = [{
     type: "Sustantivo",
     category: "Allgemein",
     exampleSentenceDe: "Ich habe die Versicherung.",
-    exampleSentenceEs: "Tengo el seguro."
+    exampleSentenceEs: "Tengo el seguro.",
+    plural: "die Versicherungen"
   }]
 }, {
   id: 13,
@@ -4988,7 +5565,8 @@ const chapters = [{
     type: "Conector (Posición 0)",
     category: "Konnektoren",
     exampleSentenceDe: "Ich habe Kaffee und Kuchen.",
-    exampleSentenceEs: "Yo tengo café y pastel."
+    exampleSentenceEs: "Yo tengo café y pastel.",
+    regimen: "No afecta orden"
   }, {
     de: "oder",
     pron: "ó-dea",
@@ -4996,7 +5574,8 @@ const chapters = [{
     type: "Conector (Posición 0)",
     category: "Konnektoren",
     exampleSentenceDe: "Möchtest du Tee oder Kaffee?",
-    exampleSentenceEs: "¿Quieres té o café?"
+    exampleSentenceEs: "¿Quieres té o café?",
+    regimen: "No cuenta posición"
   }, {
     de: "aber",
     pron: "á-bea",
@@ -5004,7 +5583,8 @@ const chapters = [{
     type: "Conector (Posición 0)",
     category: "Konnektoren",
     exampleSentenceDe: "Ich habe Hunger, aber ich habe keine Zeit.",
-    exampleSentenceEs: "Tengo hambre, pero no tengo tiempo."
+    exampleSentenceEs: "Tengo hambre, pero no tengo tiempo.",
+    regimen: "No cuenta posición"
   }, {
     de: "denn",
     pron: "den",
@@ -5012,7 +5592,8 @@ const chapters = [{
     type: "Conector (Posición 0)",
     category: "Konnektoren",
     exampleSentenceDe: "Ich habe Hunger, denn ich esse gern.",
-    exampleSentenceEs: "Tengo hambre, pues me gusta comer."
+    exampleSentenceEs: "Tengo hambre, pues me gusta comer.",
+    regimen: "No cambia el orden"
   }, {
     de: "sondern",
     pron: "són-dean",
@@ -5020,7 +5601,8 @@ const chapters = [{
     type: "Conector (Posición 0)",
     category: "Konnektoren",
     exampleSentenceDe: "Ich bin nicht müde, sondern ich bin hungrig.",
-    exampleSentenceEs: "No estoy cansado, sino que tengo hambre."
+    exampleSentenceEs: "No estoy cansado, sino que tengo hambre.",
+    regimen: "Tras negación (nicht...)"
   }, {
     de: "für",
     pron: "füa",
@@ -5028,7 +5610,8 @@ const chapters = [{
     type: "Preposición (Akk)",
     category: "Präpositionen",
     exampleSentenceDe: "Das Geschenk ist für dich.",
-    exampleSentenceEs: "El regalo es para ti."
+    exampleSentenceEs: "El regalo es para ti.",
+    regimen: "+ Akkusativ"
   }, {
     de: "ohne",
     pron: "ó-ne",
@@ -5036,7 +5619,8 @@ const chapters = [{
     type: "Preposición (Akk)",
     category: "Präpositionen",
     exampleSentenceDe: "Ich trinke Kaffee ohne Zucker.",
-    exampleSentenceEs: "Bebo café sin azúcar."
+    exampleSentenceEs: "Bebo café sin azúcar.",
+    regimen: "+ Akkusativ"
   }, {
     de: "durch",
     pron: "durj",
@@ -5044,7 +5628,8 @@ const chapters = [{
     type: "Preposición (Akk)",
     category: "Präpositionen",
     exampleSentenceDe: "Wir gehen durch den Park.",
-    exampleSentenceEs: "Nosotros vamos por el parque."
+    exampleSentenceEs: "Nosotros vamos por el parque.",
+    regimen: "+ Akkusativ"
   }, {
     de: "gegen",
     pron: "gué-guen",
@@ -5052,7 +5637,8 @@ const chapters = [{
     type: "Preposición (Akk)",
     category: "Präpositionen",
     exampleSentenceDe: "Es ist gegen 10 Uhr.",
-    exampleSentenceEs: "Son las 10 en punto."
+    exampleSentenceEs: "Son las 10 en punto.",
+    regimen: "+ Akkusativ"
   }, {
     de: "um",
     pron: "um",
@@ -5060,7 +5646,8 @@ const chapters = [{
     type: "Preposición (Akk)",
     category: "Präpositionen",
     exampleSentenceDe: "Der Zug kommt um acht Uhr an.",
-    exampleSentenceEs: "El tren llega a las ocho en punto."
+    exampleSentenceEs: "El tren llega a las ocho en punto.",
+    regimen: "+ Akkusativ"
   }, {
     de: "mit",
     pron: "mit",
@@ -5068,7 +5655,8 @@ const chapters = [{
     type: "Preposición (Dat)",
     category: "Präpositionen",
     exampleSentenceDe: "Ich gehe mit meinem Freund.",
-    exampleSentenceEs: "Voy con mi amigo."
+    exampleSentenceEs: "Voy con mi amigo.",
+    regimen: "⚠️ Obliga Dativo"
   }, {
     de: "nach",
     pron: "naj",
@@ -5076,7 +5664,8 @@ const chapters = [{
     type: "Preposición (Dat)",
     category: "Präpositionen",
     exampleSentenceDe: "Nach dem Essen gehe ich nach Hause.",
-    exampleSentenceEs: "Después de la comida, voy a casa."
+    exampleSentenceEs: "Después de la comida, voy a casa.",
+    regimen: "+ Dativo"
   }, {
     de: "aus",
     pron: "áus",
@@ -5084,7 +5673,8 @@ const chapters = [{
     type: "Preposición (Dat)",
     category: "Präpositionen",
     exampleSentenceDe: "Ich komme aus Spanien.",
-    exampleSentenceEs: "Yo vengo de España."
+    exampleSentenceEs: "Yo vengo de España.",
+    regimen: "+ Dativo"
   }, {
     de: "bei",
     pron: "bái",
@@ -5092,7 +5682,8 @@ const chapters = [{
     type: "Preposición (Dat)",
     category: "Präpositionen",
     exampleSentenceDe: "Ich bin bei meiner Freundin.",
-    exampleSentenceEs: "Yo estoy en casa de mi amiga."
+    exampleSentenceEs: "Yo estoy en casa de mi amiga.",
+    regimen: "+ Dativo"
   }, {
     de: "von",
     pron: "fon",
@@ -5100,7 +5691,8 @@ const chapters = [{
     type: "Preposición (Dat)",
     category: "Präpositionen",
     exampleSentenceDe: "Das Buch ist von Anna.",
-    exampleSentenceEs: "El libro es de Anna."
+    exampleSentenceEs: "El libro es de Anna.",
+    regimen: "+ Dativo"
   }, {
     de: "zu",
     pron: "tsu",
@@ -5108,7 +5700,8 @@ const chapters = [{
     type: "Preposición (Dat)",
     category: "Präpositionen",
     exampleSentenceDe: "Ich gehe zu meiner Mutter.",
-    exampleSentenceEs: "Voy hacia mi madre."
+    exampleSentenceEs: "Voy hacia mi madre.",
+    regimen: "+ Dativo"
   }, {
     de: "seit",
     pron: "sait",
@@ -5116,7 +5709,8 @@ const chapters = [{
     type: "Preposición (Dat)",
     category: "Präpositionen",
     exampleSentenceDe: "Ich wohne seit einem Jahr in Berlin.",
-    exampleSentenceEs: "Vivo desde hace un año en Berlín."
+    exampleSentenceEs: "Vivo desde hace un año en Berlín.",
+    regimen: "+ Dativo"
   }, {
     de: "in",
     pron: "in",
@@ -5124,7 +5718,8 @@ const chapters = [{
     type: "Prep. Mixta (Dat/Akk)",
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Ich bin in der Schule.",
-    exampleSentenceEs: "Yo estoy en la escuela."
+    exampleSentenceEs: "Yo estoy en la escuela.",
+    regimen: "Wo=Dat, Wohin=Akk"
   }, {
     de: "an",
     pron: "an",
@@ -5132,7 +5727,8 @@ const chapters = [{
     type: "Prep. Mixta (Dat/Akk)",
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Ich bin am Montag in Berlin.",
-    exampleSentenceEs: "Yo estoy el lunes en Berlín."
+    exampleSentenceEs: "Yo estoy el lunes en Berlín.",
+    regimen: "Wo?=Dat, Wohin?=Akk"
   }, {
     de: "auf",
     pron: "áuf",
@@ -5140,7 +5736,8 @@ const chapters = [{
     type: "Prep. Mixta (Dat/Akk)",
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Das Buch ist auf dem Tisch.",
-    exampleSentenceEs: "El libro está sobre la mesa."
+    exampleSentenceEs: "El libro está sobre la mesa.",
+    regimen: "Wo:Dat/Wohin:Akk"
   }, {
     de: "unter",
     pron: "ún-tea",
@@ -5148,7 +5745,8 @@ const chapters = [{
     type: "Prep. Mixta (Dat/Akk)",
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Das Buch ist unter dem Tisch.",
-    exampleSentenceEs: "El libro está debajo de la mesa."
+    exampleSentenceEs: "El libro está debajo de la mesa.",
+    regimen: "Wo=Dat, Wohin=Akk"
   }, {
     de: "über",
     pron: "ú-ba",
@@ -5156,7 +5754,8 @@ const chapters = [{
     type: "Prep. Mixta (Dat/Akk)",
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Der Mann spricht über die Familie.",
-    exampleSentenceEs: "El hombre habla sobre la familia."
+    exampleSentenceEs: "El hombre habla sobre la familia.",
+    regimen: "Akk=movim./Dat=lugar"
   }, {
     de: "neben",
     pron: "né-ben",
@@ -5164,7 +5763,8 @@ const chapters = [{
     type: "Prep. Mixta (Dat/Akk)",
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Der Stuhl ist neben dem Tisch.",
-    exampleSentenceEs: "La silla está al lado de la mesa."
+    exampleSentenceEs: "La silla está al lado de la mesa.",
+    regimen: "Wo?=Dat, Wohin?=Akk"
   }, {
     de: "zwischen",
     pron: "tsví-shen",
@@ -5172,7 +5772,8 @@ const chapters = [{
     type: "Prep. Mixta (Dat/Akk)",
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Das Buch ist zwischen dem Tisch und dem Stuhl.",
-    exampleSentenceEs: "El libro está entre la mesa y la silla."
+    exampleSentenceEs: "El libro está entre la mesa y la silla.",
+    regimen: "Akk:movim./Dat:lugar"
   }, {
     de: "vor",
     pron: "fó-a",
@@ -5180,7 +5781,8 @@ const chapters = [{
     type: "Prep. Mixta (Dat/Akk)",
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Vor dem Haus ist ein Baum.",
-    exampleSentenceEs: "Delante de la casa hay un árbol."
+    exampleSentenceEs: "Delante de la casa hay un árbol.",
+    regimen: "Wo?=Dat, Wohin?=Akk"
   }, {
     de: "hinter",
     pron: "jín-tea",
@@ -5188,7 +5790,8 @@ const chapters = [{
     type: "Prep. Mixta (Dat/Akk)",
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Das Buch ist hinter dem Tisch.",
-    exampleSentenceEs: "El libro está detrás de la mesa."
+    exampleSentenceEs: "El libro está detrás de la mesa.",
+    regimen: "Wo?+Dat, Wohin?+Akk"
   }, {
     de: "obwohl",
     pron: "op-vól",
@@ -5196,7 +5799,8 @@ const chapters = [{
     type: "Conector Subordinante",
     category: "Nebensätze",
     exampleSentenceDe: "Ich gehe spazieren, obwohl es regnet.",
-    exampleSentenceEs: "Salgo a pasear, aunque llueve."
+    exampleSentenceEs: "Salgo a pasear, aunque llueve.",
+    regimen: "Verbo al final"
   }, {
     de: "wenn",
     pron: "ven",
@@ -5204,7 +5808,8 @@ const chapters = [{
     type: "Conector Subordinante",
     category: "Nebensätze",
     exampleSentenceDe: "Wenn ich Zeit habe, lerne ich Deutsch.",
-    exampleSentenceEs: "Si tengo tiempo, aprendo alemán."
+    exampleSentenceEs: "Si tengo tiempo, aprendo alemán.",
+    regimen: "Verbo al final"
   }, {
     de: "als",
     pron: "als",
@@ -5212,7 +5817,8 @@ const chapters = [{
     type: "Conector Subordinante",
     category: "Nebensätze",
     exampleSentenceDe: "Ich bin klein, als ich Kind war.",
-    exampleSentenceEs: "Soy bajo, cuando era niño."
+    exampleSentenceEs: "Soy bajo, cuando era niño.",
+    regimen: "Verbo al final"
   }, {
     de: "deshalb",
     pron: "des-hálp",
@@ -5220,7 +5826,8 @@ const chapters = [{
     type: "Conector Posición 1",
     category: "Konnektoren",
     exampleSentenceDe: "Ich habe Hunger. Deshalb esse ich Pizza.",
-    exampleSentenceEs: "Tengo hambre. Por eso como pizza."
+    exampleSentenceEs: "Tengo hambre. Por eso como pizza.",
+    regimen: "Verbo en pos.2 tras él"
   }, {
     de: "trotzdem",
     pron: "tróts-dem",
@@ -5228,7 +5835,8 @@ const chapters = [{
     type: "Conector Posición 1",
     category: "Konnektoren",
     exampleSentenceDe: "Es regnet. Trotzdem gehe ich spazieren.",
-    exampleSentenceEs: "Está lloviendo. Sin embargo, voy a pasear."
+    exampleSentenceEs: "Está lloviendo. Sin embargo, voy a pasear.",
+    regimen: "Ocupa posición 1, verbo pos.2"
   }, {
     de: "außerdem",
     pron: "áu-sea-dem",
@@ -5236,7 +5844,8 @@ const chapters = [{
     type: "Conector Posición 1",
     category: "Konnektoren",
     exampleSentenceDe: "Ich trinke Kaffee. Außerdem trinke ich Tee.",
-    exampleSentenceEs: "Bebo café. Además, bebo té."
+    exampleSentenceEs: "Bebo café. Además, bebo té.",
+    regimen: "Verbo en posición 1"
   }, {
     de: "nämlich",
     pron: "ném-lij",
@@ -5244,7 +5853,8 @@ const chapters = [{
     type: "Partícula",
     category: "Partikeln",
     exampleSentenceDe: "Ich habe ein Problem, nämlich: Ich habe keinen Hunger.",
-    exampleSentenceEs: "Tengo un problema, es decir: No tengo hambre."
+    exampleSentenceEs: "Tengo un problema, es decir: No tengo hambre.",
+    regimen: "Explica motivo"
   }, {
     de: "doch",
     pron: "doj",
@@ -5252,7 +5862,8 @@ const chapters = [{
     type: "Partícula",
     category: "Partikeln",
     exampleSentenceDe: "Du bist müde. Nein! Ich bin doch nicht müde.",
-    exampleSentenceEs: "Estás cansado. ¡No! Sí que no estoy cansado."
+    exampleSentenceEs: "Estás cansado. ¡No! Sí que no estoy cansado.",
+    regimen: "Contradice negación"
   }, {
     de: "mal",
     pron: "mal",
@@ -5260,7 +5871,8 @@ const chapters = [{
     type: "Partícula",
     category: "Partikeln",
     exampleSentenceDe: "Das ist mal gut.",
-    exampleSentenceEs: "Esto está bien, ¡eh! / Esto sí que está bien."
+    exampleSentenceEs: "Esto está bien, ¡eh! / Esto sí que está bien.",
+    regimen: "Suaviza imperativo"
   }, {
     de: "ja",
     pron: "yá",
@@ -5268,7 +5880,8 @@ const chapters = [{
     type: "Partícula",
     category: "Partikeln",
     exampleSentenceDe: "Ja, das ist gut.",
-    exampleSentenceEs: "Sí, eso está bien."
+    exampleSentenceEs: "Sí, eso está bien.",
+    regimen: "Énfasis, sin traducción literal"
   }]
 }, {
   id: 14,
@@ -5282,7 +5895,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich bin hier.",
-    exampleSentenceEs: "Yo estoy aquí."
+    exampleSentenceEs: "Yo estoy aquí.",
+    regimen: "+ Nominativ"
   }, {
     de: "haben",
     pron: "já-ben",
@@ -5290,7 +5904,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich habe Hunger.",
-    exampleSentenceEs: "Yo tengo hambre."
+    exampleSentenceEs: "Yo tengo hambre.",
+    regimen: "+ Akkusativ"
   }, {
     de: "werden",
     pron: "vér-den",
@@ -5298,7 +5913,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich werde Arzt.",
-    exampleSentenceEs: "Yo seré médico."
+    exampleSentenceEs: "Yo seré médico.",
+    regimen: "+ Nominativ (predicado)"
   }, {
     de: "machen",
     pron: "má-jen",
@@ -5306,7 +5922,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich mache einen Kaffee.",
-    exampleSentenceEs: "Yo hago un café."
+    exampleSentenceEs: "Yo hago un café.",
+    regimen: "+ Akkusativ"
   }, {
     de: "tun",
     pron: "tún",
@@ -5314,7 +5931,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Was tust du heute?",
-    exampleSentenceEs: "¿Qué haces hoy?"
+    exampleSentenceEs: "¿Qué haces hoy?",
+    regimen: "+ Akkusativ"
   }, {
     de: "sagen",
     pron: "sá-guen",
@@ -5322,7 +5940,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich sage \"Hallo\".",
-    exampleSentenceEs: "Yo digo \"Hola\"."
+    exampleSentenceEs: "Yo digo \"Hola\".",
+    regimen: "+ Dativ + Akkusativ"
   }, {
     de: "gehen",
     pron: "gué-en",
@@ -5330,7 +5949,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich gehe nach Hause.",
-    exampleSentenceEs: "Yo voy a casa."
+    exampleSentenceEs: "Yo voy a casa.",
+    regimen: "+ Nominativ"
   }, {
     de: "kommen",
     pron: "kó-men",
@@ -5338,7 +5958,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich komme aus Spanien.",
-    exampleSentenceEs: "Yo vengo de España."
+    exampleSentenceEs: "Yo vengo de España.",
+    regimen: "aus/von + Dativo"
   }, {
     de: "sehen",
     pron: "zé-en",
@@ -5346,7 +5967,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich sehe den Mann.",
-    exampleSentenceEs: "Yo veo al hombre."
+    exampleSentenceEs: "Yo veo al hombre.",
+    regimen: "+ Akkusativ"
   }, {
     de: "wissen",
     pron: "ví-sen",
@@ -5354,7 +5976,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich weiß die Antwort.",
-    exampleSentenceEs: "Yo sé la respuesta."
+    exampleSentenceEs: "Yo sé la respuesta.",
+    regimen: "+ Akkusativ; ich weiß"
   }, {
     de: "kennen",
     pron: "ké-nen",
@@ -5362,7 +5985,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich kenne den Mann.",
-    exampleSentenceEs: "Yo conozco al hombre."
+    exampleSentenceEs: "Yo conozco al hombre.",
+    regimen: "+ Akkusativ"
   }, {
     de: "finden",
     pron: "fín-den",
@@ -5370,7 +5994,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich finde das Buch gut.",
-    exampleSentenceEs: "Yo encuentro el libro bueno."
+    exampleSentenceEs: "Yo encuentro el libro bueno.",
+    regimen: "+ Akkusativ"
   }, {
     de: "bleiben",
     pron: "blái-ben",
@@ -5378,7 +6003,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich bleibe hier.",
-    exampleSentenceEs: "Yo me quedo aquí."
+    exampleSentenceEs: "Yo me quedo aquí.",
+    regimen: "+ sein, irr. (blieb)"
   }, {
     de: "lassen",
     pron: "lá-sen",
@@ -5386,7 +6012,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich lasse das Fenster offen.",
-    exampleSentenceEs: "Yo dejo la ventana abierta."
+    exampleSentenceEs: "Yo dejo la ventana abierta.",
+    regimen: "+ Akk. (er lässt)"
   }, {
     de: "denken",
     pron: "dén-ken",
@@ -5394,7 +6021,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich denke an dich.",
-    exampleSentenceEs: "Pienso en ti."
+    exampleSentenceEs: "Pienso en ti.",
+    regimen: "an/über + Akkusativ"
   }, {
     de: "groß / klein",
     pron: "grós  kláin",
@@ -5402,7 +6030,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Das Haus ist groß. Das Haus ist nicht klein.",
-    exampleSentenceEs: "La casa es grande. La casa no es pequeña."
+    exampleSentenceEs: "La casa es grande. La casa no es pequeña.",
+    regimen: "≠ klein"
   }, {
     de: "gut / schlecht",
     pron: "gút  shlejt",
@@ -5410,7 +6039,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Das Essen ist gut.",
-    exampleSentenceEs: "La comida está buena."
+    exampleSentenceEs: "La comida está buena.",
+    regimen: "≠ schlecht / gut"
   }, {
     de: "neu / alt",
     pron: "noi  alt",
@@ -5418,7 +6048,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Mein Haus ist alt. Aber mein Auto ist neu.",
-    exampleSentenceEs: "Mi casa es vieja. Pero mi coche es nuevo."
+    exampleSentenceEs: "Mi casa es vieja. Pero mi coche es nuevo.",
+    regimen: "≠ alt / neu"
   }, {
     de: "schön / hässlich",
     pron: "shön  jés-lij",
@@ -5426,7 +6057,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Das Haus ist schön.",
-    exampleSentenceEs: "La casa es bonita."
+    exampleSentenceEs: "La casa es bonita.",
+    regimen: "≠ hässlich"
   }, {
     de: "schwer / leicht",
     pron: "shvéa  láijt",
@@ -5434,7 +6066,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Der Koffer ist schwer.",
-    exampleSentenceEs: "La maleta es pesada."
+    exampleSentenceEs: "La maleta es pesada.",
+    regimen: "≠ leicht / schwer"
   }, {
     de: "richtig / falsch",
     pron: "ríj-tij  falsh",
@@ -5442,7 +6075,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Das ist richtig.",
-    exampleSentenceEs: "Eso es correcto."
+    exampleSentenceEs: "Eso es correcto.",
+    regimen: "≠ falsch"
   }, {
     de: "wichtig",
     pron: "víj-tij",
@@ -5450,7 +6084,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Adjektive",
     exampleSentenceDe: "Das ist wichtig.",
-    exampleSentenceEs: "Esto es importante."
+    exampleSentenceEs: "Esto es importante.",
+    regimen: "≠ unwichtig"
   }, {
     de: "einfach / schwierig",
     pron: "áin-faj  shví-rij",
@@ -5458,7 +6093,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Die Aufgabe ist einfach.",
-    exampleSentenceEs: "La tarea es fácil."
+    exampleSentenceEs: "La tarea es fácil.",
+    regimen: "≠ schwierig / einfach"
   }, {
     de: "schnell / langsam",
     pron: "shnel  láng-zam",
@@ -5466,7 +6102,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Das Auto ist schnell.",
-    exampleSentenceEs: "El coche es rápido."
+    exampleSentenceEs: "El coche es rápido.",
+    regimen: "≠ langsam / schnell"
   }, {
     de: "laut / leise",
     pron: "láut  lái-ze",
@@ -5474,7 +6111,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Das Radio ist laut. Ich mache das Radio leise.",
-    exampleSentenceEs: "La radio está alta. Yo pongo la radio silenciosa."
+    exampleSentenceEs: "La radio está alta. Yo pongo la radio silenciosa.",
+    regimen: "≠ leise / laut"
   }, {
     de: "hell / dunkel",
     pron: "jel  dún-kel",
@@ -5482,7 +6120,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Das Licht ist hell.",
-    exampleSentenceEs: "La luz es clara."
+    exampleSentenceEs: "La luz es clara.",
+    regimen: "hell ≠ dunkel"
   }, {
     de: "heiß / kalt",
     pron: "jáis  kalt",
@@ -5490,7 +6129,8 @@ const chapters = [{
     type: "Adjetivo",
     category: "Gegensätze",
     exampleSentenceDe: "Das Wasser ist heiß.",
-    exampleSentenceEs: "El agua está caliente."
+    exampleSentenceEs: "El agua está caliente.",
+    regimen: "≠ kalt / heiß"
   }, {
     de: "können",
     pron: "kö́-nen",
@@ -5498,7 +6138,8 @@ const chapters = [{
     type: "Verbo Modal",
     category: "Modalverben",
     exampleSentenceDe: "Ich kann Deutsch sprechen.",
-    exampleSentenceEs: "Yo puedo hablar alemán."
+    exampleSentenceEs: "Yo puedo hablar alemán.",
+    regimen: "+ Infinitiv (sin zu)"
   }, {
     de: "müssen",
     pron: "mú-sen",
@@ -5506,7 +6147,8 @@ const chapters = [{
     type: "Verbo Modal",
     category: "Modalverben",
     exampleSentenceDe: "Ich muss jetzt nach Hause gehen.",
-    exampleSentenceEs: "Yo tengo que ir a casa ahora."
+    exampleSentenceEs: "Yo tengo que ir a casa ahora.",
+    regimen: "+ Infinitiv (sin zu)"
   }, {
     de: "dürfen",
     pron: "dúa-fen",
@@ -5514,7 +6156,8 @@ const chapters = [{
     type: "Verbo Modal",
     category: "Modalverben",
     exampleSentenceDe: "Hier dürfen Sie parken.",
-    exampleSentenceEs: "Aquí puede aparcar."
+    exampleSentenceEs: "Aquí puede aparcar.",
+    regimen: "+ Infinitiv sin zu"
   }, {
     de: "sollen",
     pron: "zó-len",
@@ -5522,7 +6165,8 @@ const chapters = [{
     type: "Verbo Modal",
     category: "Modalverben",
     exampleSentenceDe: "Du sollst Wasser trinken.",
-    exampleSentenceEs: "Tú deberías beber agua."
+    exampleSentenceEs: "Tú deberías beber agua.",
+    regimen: "+ Infinitiv (ohne zu)"
   }, {
     de: "wollen",
     pron: "vó-len",
@@ -5530,7 +6174,8 @@ const chapters = [{
     type: "Verbo Modal",
     category: "Modalverben",
     exampleSentenceDe: "Ich will einen Kaffee.",
-    exampleSentenceEs: "Yo quiero un café."
+    exampleSentenceEs: "Yo quiero un café.",
+    regimen: "+ Infinitiv (sin zu)"
   }, {
     de: "mögen",
     pron: "mö-guen",
@@ -5538,7 +6183,8 @@ const chapters = [{
     type: "Verbo Modal",
     category: "Modalverben",
     exampleSentenceDe: "Ich mag Kaffee.",
-    exampleSentenceEs: "Me gusta el café."
+    exampleSentenceEs: "Me gusta el café.",
+    regimen: "+ Akkusativ"
   }, {
     de: "möchten",
     pron: "mój-ten",
@@ -5546,7 +6192,8 @@ const chapters = [{
     type: "Verbo Modal (KII)",
     category: "Modalverben",
     exampleSentenceDe: "Ich möchte einen Kaffee.",
-    exampleSentenceEs: "Yo quisiera un café."
+    exampleSentenceEs: "Yo quisiera un café.",
+    regimen: "+ Akkusativ / + Infinitiv"
   }, {
     de: "geben",
     pron: "gué-ben",
@@ -5554,7 +6201,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich gebe dir mein Buch.",
-    exampleSentenceEs: "Yo te doy mi libro."
+    exampleSentenceEs: "Yo te doy mi libro.",
+    regimen: "Dativo (a quién) + Akkusativ (qué)"
   }, {
     de: "nehmen",
     pron: "né-men",
@@ -5562,7 +6210,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich nehme einen Kaffee.",
-    exampleSentenceEs: "Yo tomo un café."
+    exampleSentenceEs: "Yo tomo un café.",
+    regimen: "Irregular (nimmt) / + Akkusativ"
   }, {
     de: "brauchen",
     pron: "bráu-jen",
@@ -5570,7 +6219,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich brauche Wasser.",
-    exampleSentenceEs: "Yo necesito agua."
+    exampleSentenceEs: "Yo necesito agua.",
+    regimen: "+ Akkusativ"
   }, {
     de: "helfen",
     pron: "jél-fen",
@@ -5578,7 +6228,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Kannst du mir helfen?",
-    exampleSentenceEs: "¿Puedes ayudarme?"
+    exampleSentenceEs: "¿Puedes ayudarme?",
+    regimen: "+ Dativo"
   }, {
     de: "bringen",
     pron: "brín-guen",
@@ -5586,7 +6237,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich bringe dir das Buch.",
-    exampleSentenceEs: "Yo te traigo el libro."
+    exampleSentenceEs: "Yo te traigo el libro.",
+    regimen: "+ Akk./Dat."
   }, {
     de: "schreiben",
     pron: "shrái-ben",
@@ -5594,7 +6246,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich schreibe eine E-Mail.",
-    exampleSentenceEs: "Yo escribo un correo electrónico."
+    exampleSentenceEs: "Yo escribo un correo electrónico.",
+    regimen: "+ Akkusativ"
   }, {
     de: "lesen",
     pron: "lé-sen",
@@ -5602,7 +6255,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich lese ein Buch.",
-    exampleSentenceEs: "Yo leo un libro."
+    exampleSentenceEs: "Yo leo un libro.",
+    regimen: "+ Akkusativ"
   }, {
     de: "sprechen",
     pron: "shpré-jen",
@@ -5610,7 +6264,8 @@ const chapters = [{
     type: "Verbo (Irregular)",
     category: "Basisverben",
     exampleSentenceDe: "Ich spreche Deutsch.",
-    exampleSentenceEs: "Yo hablo alemán."
+    exampleSentenceEs: "Yo hablo alemán.",
+    regimen: "+ Akk./mit + Dat."
   }, {
     de: "versuchen",
     pron: "fea-zú-jen",
@@ -5618,7 +6273,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich versuche, Deutsch zu lernen.",
-    exampleSentenceEs: "Intento aprender alemán."
+    exampleSentenceEs: "Intento aprender alemán.",
+    regimen: "+ Akkusativ"
   }, {
     de: "entscheiden",
     pron: "ent-shái-den",
@@ -5626,7 +6282,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich kann nicht entscheiden.",
-    exampleSentenceEs: "Yo no puedo decidir."
+    exampleSentenceEs: "Yo no puedo decidir.",
+    regimen: "sich + für/Akk"
   }, {
     de: "vergessen",
     pron: "fea-gué-sen",
@@ -5634,7 +6291,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich vergesse meinen Schlüssel nicht.",
-    exampleSentenceEs: "No olvido mi llave."
+    exampleSentenceEs: "No olvido mi llave.",
+    regimen: "+ Akkusativ, irr. (vergisst)"
   }, {
     de: "sich erinnern",
     pron: "ziş ea-í-nen",
@@ -5642,7 +6300,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich erinnere mich an dich.",
-    exampleSentenceEs: "Yo te recuerdo a ti."
+    exampleSentenceEs: "Yo te recuerdo a ti.",
+    regimen: "Reflexivo + an+Akk"
   }, {
     de: "passieren",
     pron: "pa-sí-ren",
@@ -5650,7 +6309,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Was passiert heute?",
-    exampleSentenceEs: "¿Qué sucede hoy?"
+    exampleSentenceEs: "¿Qué sucede hoy?",
+    regimen: "⚠️ Exige Dativo"
   }, {
     de: "erzählen",
     pron: "ea-tsé-len",
@@ -5658,7 +6318,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Ich erzähle eine Geschichte.",
-    exampleSentenceEs: "Yo narro una historia."
+    exampleSentenceEs: "Yo narro una historia.",
+    regimen: "+Dat./Akk."
   }, {
     de: "bedeuten",
     pron: "be-dói-ten",
@@ -5666,7 +6327,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Was bedeutet das?",
-    exampleSentenceEs: "¿Qué significa eso?"
+    exampleSentenceEs: "¿Qué significa eso?",
+    regimen: "+ Akkusativ"
   }, {
     de: "beginnen",
     pron: "be-guí-nen",
@@ -5674,7 +6336,8 @@ const chapters = [{
     type: "Verbo",
     category: "Basisverben",
     exampleSentenceDe: "Der Kurs beginnt heute.",
-    exampleSentenceEs: "El curso comienza hoy."
+    exampleSentenceEs: "El curso comienza hoy.",
+    regimen: "+ Akkusativ/mit+Dat"
   }, {
     de: "stehen",
     pron: "shté-en",
@@ -5682,7 +6345,8 @@ const chapters = [{
     type: "Verbo Posicional",
     category: "Positionsverben",
     exampleSentenceDe: "Der Tisch steht hier.",
-    exampleSentenceEs: "La mesa está aquí."
+    exampleSentenceEs: "La mesa está aquí.",
+    regimen: "+ Dativ/Akkusativ (Wo/Wohin)"
   }, {
     de: "stellen",
     pron: "shté-len",
@@ -5690,7 +6354,8 @@ const chapters = [{
     type: "Verbo Posicional",
     category: "Positionsverben",
     exampleSentenceDe: "Ich stelle die Flasche auf den Tisch.",
-    exampleSentenceEs: "Yo coloco la botella sobre la mesa."
+    exampleSentenceEs: "Yo coloco la botella sobre la mesa.",
+    regimen: "+ Akkusativ (wo? Dativ)"
   }, {
     de: "liegen",
     pron: "lí-guen",
@@ -5698,7 +6363,8 @@ const chapters = [{
     type: "Verbo Posicional",
     category: "Positionsverben",
     exampleSentenceDe: "Ich liege auf dem Bett.",
-    exampleSentenceEs: "Yo estoy acostado en la cama."
+    exampleSentenceEs: "Yo estoy acostado en la cama.",
+    regimen: "⚠️ Wo? + Dativ"
   }, {
     de: "legen",
     pron: "lé-guen",
@@ -5706,7 +6372,8 @@ const chapters = [{
     type: "Verbo Posicional",
     category: "Positionsverben",
     exampleSentenceDe: "Ich lege das Buch auf den Tisch.",
-    exampleSentenceEs: "Yo coloco el libro sobre la mesa."
+    exampleSentenceEs: "Yo coloco el libro sobre la mesa.",
+    regimen: "Akk.+Wohin? (legen/liegen)"
   }]
 }, {
   id: 15,
@@ -5720,7 +6387,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Zeitadverbien",
     exampleSentenceDe: "Heute ist Montag.",
-    exampleSentenceEs: "Hoy es lunes."
+    exampleSentenceEs: "Hoy es lunes.",
+    regimen: "Temporal"
   }, {
     de: "morgen",
     pron: "mór-guen",
@@ -5728,7 +6396,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Zeitadverbien",
     exampleSentenceDe: "Ich gehe morgen ins Kino.",
-    exampleSentenceEs: "Mañana voy al cine."
+    exampleSentenceEs: "Mañana voy al cine.",
+    regimen: "Temporal"
   }, {
     de: "gestern",
     pron: "gués-tean",
@@ -5736,7 +6405,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Zeitadverbien",
     exampleSentenceDe: "Gestern war ich im Park.",
-    exampleSentenceEs: "Ayer estuve en el parque."
+    exampleSentenceEs: "Ayer estuve en el parque.",
+    regimen: "Temporal"
   }, {
     de: "jetzt",
     pron: "yetst",
@@ -5744,7 +6414,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Zeitadverbien",
     exampleSentenceDe: "Ich lerne Deutsch jetzt.",
-    exampleSentenceEs: "Yo aprendo alemán ahora."
+    exampleSentenceEs: "Yo aprendo alemán ahora.",
+    regimen: "Temporal"
   }, {
     de: "bald",
     pron: "balt",
@@ -5752,7 +6423,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Zeitadverbien",
     exampleSentenceDe: "Wir sehen uns bald.",
-    exampleSentenceEs: "Nos vemos pronto."
+    exampleSentenceEs: "Nos vemos pronto.",
+    regimen: "Temporal"
   }, {
     de: "immer",
     pron: "í-mea",
@@ -5760,7 +6432,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Häufigkeit",
     exampleSentenceDe: "Ich trinke Kaffee immer.",
-    exampleSentenceEs: "Yo bebo café siempre."
+    exampleSentenceEs: "Yo bebo café siempre.",
+    regimen: "Frecuencia"
   }, {
     de: "oft",
     pron: "oft",
@@ -5768,7 +6441,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Häufigkeit",
     exampleSentenceDe: "Ich trinke oft Kaffee.",
-    exampleSentenceEs: "A menudo bebo café."
+    exampleSentenceEs: "A menudo bebo café.",
+    regimen: "Frecuencia"
   }, {
     de: "manchmal",
     pron: "mánch-mal",
@@ -5776,7 +6450,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Häufigkeit",
     exampleSentenceDe: "Manchmal trinke ich Kaffee.",
-    exampleSentenceEs: "A veces bebo café."
+    exampleSentenceEs: "A veces bebo café.",
+    regimen: "Frecuencia"
   }, {
     de: "nie",
     pron: "ni",
@@ -5784,7 +6459,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Häufigkeit",
     exampleSentenceDe: "Ich sehe dich nie.",
-    exampleSentenceEs: "Yo te veo nunca."
+    exampleSentenceEs: "Yo te veo nunca.",
+    regimen: "Frecuencia"
   }, {
     de: "schon",
     pron: "shon",
@@ -5792,7 +6468,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Zeitadverbien",
     exampleSentenceDe: "Ich bin schon zu Hause.",
-    exampleSentenceEs: "Yo ya estoy en casa."
+    exampleSentenceEs: "Yo ya estoy en casa.",
+    regimen: "Temporal: ya, ya sea"
   }, {
     de: "noch",
     pron: "noj",
@@ -5800,7 +6477,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Zeitadverbien",
     exampleSentenceDe: "Ich bin noch zu Hause.",
-    exampleSentenceEs: "Yo estoy todavía en casa."
+    exampleSentenceEs: "Yo estoy todavía en casa.",
+    regimen: "Temporal: continuidad"
   }, {
     de: "hier",
     pron: "hí-a",
@@ -5808,7 +6486,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Ortsadverbien",
     exampleSentenceDe: "Ich bin hier.",
-    exampleSentenceEs: "Yo estoy aquí."
+    exampleSentenceEs: "Yo estoy aquí.",
+    regimen: "Lugar"
   }, {
     de: "dort",
     pron: "dort",
@@ -5816,7 +6495,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Ortsadverbien",
     exampleSentenceDe: "Ich bin dort.",
-    exampleSentenceEs: "Yo estoy allí."
+    exampleSentenceEs: "Yo estoy allí.",
+    regimen: "Lugar"
   }, {
     de: "oben / unten",
     pron: "ó-ben  ún-ten",
@@ -5824,7 +6504,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Ortsadverbien",
     exampleSentenceDe: "Das Buch ist oben. Die Katze ist unten.",
-    exampleSentenceEs: "El libro está arriba. El gato está abajo."
+    exampleSentenceEs: "El libro está arriba. El gato está abajo.",
+    regimen: "Local"
   }, {
     de: "vorn / hinten",
     pron: "fon  jín-ten",
@@ -5832,7 +6513,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Ortsadverbien",
     exampleSentenceDe: "Ich sitze vorn.",
-    exampleSentenceEs: "Yo me siento adelante."
+    exampleSentenceEs: "Yo me siento adelante.",
+    regimen: "Local"
   }, {
     de: "draußen / drinnen",
     pron: "dráu-sen  drí-nen",
@@ -5840,7 +6522,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Ortsadverbien",
     exampleSentenceDe: "Das Wetter ist schön. Wir sind draußen.",
-    exampleSentenceEs: "El tiempo es bueno. Estamos afuera."
+    exampleSentenceEs: "El tiempo es bueno. Estamos afuera.",
+    regimen: "Lugar"
   }, {
     de: "sehr",
     pron: "zéa",
@@ -5848,7 +6531,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Gradadverbien",
     exampleSentenceDe: "Das Wetter ist sehr gut.",
-    exampleSentenceEs: "El tiempo está muy bueno."
+    exampleSentenceEs: "El tiempo está muy bueno.",
+    regimen: "Intensificador"
   }, {
     de: "viel / wenig",
     pron: "fil  vé-nij",
@@ -5856,7 +6540,8 @@ const chapters = [{
     type: "Adverbio",
     category: "Gradadverbien",
     exampleSentenceDe: "Ich trinke viel Wasser.",
-    exampleSentenceEs: "Bebo mucha agua."
+    exampleSentenceEs: "Bebo mucha agua.",
+    regimen: "Cantidad"
   }, {
     de: "wer?",
     pron: "vea",
@@ -5864,7 +6549,8 @@ const chapters = [{
     type: "Pronombre interrogativo",
     category: "W-Fragen",
     exampleSentenceDe: "Wer ist das?",
-    exampleSentenceEs: "¿Quién es ese/esa?"
+    exampleSentenceEs: "¿Quién es ese/esa?",
+    regimen: "Solo personas, nom."
   }, {
     de: "was?",
     pron: "vas",
@@ -5872,7 +6558,8 @@ const chapters = [{
     type: "Pronombre interrogativo",
     category: "W-Fragen",
     exampleSentenceDe: "Was ist das?",
-    exampleSentenceEs: "¿Qué es eso?"
+    exampleSentenceEs: "¿Qué es eso?",
+    regimen: "Invariable"
   }, {
     de: "wo?",
     pron: "vo",
@@ -5880,7 +6567,8 @@ const chapters = [{
     type: "Pronombre interrogativo",
     category: "W-Fragen",
     exampleSentenceDe: "Wo ist die Toilette?",
-    exampleSentenceEs: "¿Dónde está el baño?"
+    exampleSentenceEs: "¿Dónde está el baño?",
+    regimen: "Lugar, sin movimiento"
   }, {
     de: "wann?",
     pron: "van",
@@ -5888,7 +6576,8 @@ const chapters = [{
     type: "Pronombre interrogativo",
     category: "W-Fragen",
     exampleSentenceDe: "Wann kommst du?",
-    exampleSentenceEs: "¿Cuándo vienes?"
+    exampleSentenceEs: "¿Cuándo vienes?",
+    regimen: "V al final"
   }, {
     de: "warum?",
     pron: "va-rúm",
@@ -5896,7 +6585,8 @@ const chapters = [{
     type: "Pronombre interrogativo",
     category: "W-Fragen",
     exampleSentenceDe: "Warum bist du hier?",
-    exampleSentenceEs: "¿Por qué estás aquí?"
+    exampleSentenceEs: "¿Por qué estás aquí?",
+    regimen: "Invariable, posición 1"
   }, {
     de: "wie?",
     pron: "ví",
@@ -5904,7 +6594,8 @@ const chapters = [{
     type: "Pronombre interrogativo",
     category: "W-Fragen",
     exampleSentenceDe: "Wie geht es Ihnen?",
-    exampleSentenceEs: "¿Cómo está usted?"
+    exampleSentenceEs: "¿Cómo está usted?",
+    regimen: "Posición 1"
   }, {
     de: "woher?",
     pron: "vo-jéa",
@@ -5912,7 +6603,8 @@ const chapters = [{
     type: "Pronombre interrogativo",
     category: "W-Fragen",
     exampleSentenceDe: "Woher kommst du?",
-    exampleSentenceEs: "¿De dónde vienes?"
+    exampleSentenceEs: "¿De dónde vienes?",
+    regimen: "+ kommen aus"
   }, {
     de: "wohin?",
     pron: "vo-hín",
@@ -5920,7 +6612,8 @@ const chapters = [{
     type: "Pronombre interrogativo",
     category: "W-Fragen",
     exampleSentenceDe: "Wohin gehst du?",
-    exampleSentenceEs: "¿A dónde vas?"
+    exampleSentenceEs: "¿A dónde vas?",
+    regimen: "Con verbos de movimiento"
   }, {
     de: "welcher?",
     pron: "vél-chea",
@@ -5928,7 +6621,8 @@ const chapters = [{
     type: "Pronombre interrogativo",
     category: "W-Fragen",
     exampleSentenceDe: "Welcher Bus ist das?",
-    exampleSentenceEs: "¿Cuál es ese autobús?"
+    exampleSentenceEs: "¿Cuál es ese autobús?",
+    regimen: "Concuerda en género/caso"
   }]
 }];
 
