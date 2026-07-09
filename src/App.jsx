@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy } from 'lucide-react';
+import { Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
@@ -371,6 +371,10 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [revealedCards, setRevealedCards] = useState({});
   const [viewMode, setViewMode] = useState("flashcards");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isTablasOpen, setIsTablasOpen] = useState(false);
+  const [isPlanOpen, setIsPlanOpen] = useState(false);
+  const [isGoetheOpen, setIsGoetheOpen] = useState(false);
   const [quizState, setQuizState] = useState(null);
   const [selectedQuizChapters, setSelectedQuizChapters] = useState([]);
   const [currentStreak, setCurrentStreak] = useState(0);
@@ -547,13 +551,20 @@ export default function App() {
   }, [activeChapterId, viewMode, activeChapter]);
   const displayedWords = useMemo(() => {
     if (searchTerm.trim() !== "") {
-      const lowerTerm = searchTerm.toLowerCase();
+      const normalizeStr = str => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+      const normTerm = normalizeStr(searchTerm);
       return chapters.flatMap(c => c.words.map(w => ({
         ...w,
         chapter: c.title,
         emoji: c.emoji,
         isRedemittel: c.isRedemittel
-      }))).filter(w => w.de.toLowerCase().includes(lowerTerm) || w.es.toLowerCase().includes(lowerTerm) || w.type.toLowerCase().includes(lowerTerm) || w.category && w.category.toLowerCase().includes(lowerTerm));
+      }))).filter(w => 
+        normalizeStr(w.de).includes(normTerm) || 
+        normalizeStr(w.es).includes(normTerm) || 
+        normalizeStr(w.pron).includes(normTerm) || 
+        normalizeStr(w.type).includes(normTerm) || 
+        (w.category && normalizeStr(w.category).includes(normTerm))
+      );
     }
     return activeChapter ? activeChapter.words.map(w => ({
       ...w,
@@ -916,7 +927,10 @@ export default function App() {
         setCurrentWordIndex(localIdx);
         const currentWord = wordsOnly[localIdx];
         const wordLen = currentWord ? currentWord.text.length : 5;
-        const duration = Math.max(320, wordLen * 72) / 0.70;
+        const rate = 0.70;
+        const baseMs = 85;
+        const minMs = 350;
+        const duration = Math.max(minMs, wordLen * baseMs) / rate;
 
         localIdx++;
         if (localIdx < wordsOnly.length) {
@@ -1411,117 +1425,154 @@ export default function App() {
         <>
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
-            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-yellow-500 text-slate-900 p-2 rounded-lg animate-pulse">
-                  <GraduationCap size={28} />
+            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+              <div className="flex items-center justify-between w-full md:w-auto">
+                <div className="flex items-center gap-3">
+                  <div className="bg-yellow-500 text-slate-900 p-2 rounded-lg animate-pulse">
+                    <GraduationCap size={28} />
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-black tracking-wide leading-tight">DeutschMeister <span className="text-yellow-400">PRO A1</span></h1>
+                    <p className="text-xs text-slate-400">Alemán Técnico & Preparación Goethe Zertifikat</p>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-xl font-black tracking-wide leading-tight">DeutschMeister <span className="text-yellow-400">PRO A1</span></h1>
-                  <p className="text-xs text-slate-400">Alemán Técnico & Preparación Goethe Zertifikat</p>
+                {/* HAMBURGER + FULLSCREEN ON MOBILE */}
+                <div className="flex items-center gap-2 md:hidden">
+                  <button onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Abrir menú">
+                    <Menu size={20} />
+                  </button>
+                  <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Pantalla completa">
+                    {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+                  </button>
                 </div>
               </div>
               
-              {/* CONTROLES DE BÚSQUEDA Y NAVEGACIÓN */}
-              <div className="flex flex-col gap-3 w-full lg:w-auto items-stretch lg:items-end">
-                {/* FILA 1: BUSCADOR + PANTALLA COMPLETA */}
-                <div className="flex items-center gap-2 w-full lg:w-auto">
-                  <div className="relative flex-1 lg:w-80">
-                    <input type="text" placeholder="Buscar (ej. Motor, essen, Verbo Modal)..." className="w-full py-2 px-4 pl-10 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all" value={searchTerm} onChange={e => {
-                      setSearchTerm(e.target.value);
-                      if (viewMode === "quiz" || viewMode === "presentation" || viewMode === "studyPlan") setViewMode("flashcards");
-                    }} />
-                    <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
-                  </div>
-                  <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 p-2.5 rounded-lg transition flex items-center justify-center shrink-0 shadow-sm" title="Pantalla Completa App">
-                    {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-                  </button>
-                </div>
+              <div className="relative w-full md:w-1/3">
+                <input type="text" placeholder="Buscar (ej. Motor, essen, Verbo Modal)..." className="w-full py-2 px-4 pl-10 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all" value={searchTerm} onChange={e => {
+                  setSearchTerm(e.target.value);
+                  if (viewMode === "quiz" || viewMode === "presentation" || viewMode === "studyPlan") setViewMode("flashcards");
+                }} />
+                <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
+              </div>
 
-                {/* FILA 2: LOS OTROS 4 BOTONES */}
-                <div className="flex gap-1.5 md:gap-2 justify-between lg:justify-end w-full">
-                  <button onClick={() => setIsTutorOpen(true)} className="flex-1 lg:flex-initial bg-slate-800 text-yellow-400 border border-yellow-500/30 px-2 py-2 rounded-lg font-bold hover:bg-slate-700 transition flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-sm">
-                    <Bot size={16} /> <span className="hidden sm:inline">Tutor IA</span><span className="sm:hidden">Tutor</span>
-                  </button>
-                  <button onClick={() => setViewMode('roleplay')} className="flex-1 lg:flex-initial bg-purple-600 text-white px-2 py-2 rounded-lg font-bold hover:bg-purple-500 transition flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-md">
-                    <Sparkles size={16} /> <span className="hidden sm:inline">Rol ✨</span><span className="sm:hidden">Rol</span>
-                  </button>
-                  <button onClick={() => setViewMode('reading')} className="flex-1 lg:flex-initial bg-emerald-600 text-white px-2 py-2 rounded-lg font-bold hover:bg-emerald-500 transition flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-md">
-                    <BookOpen size={16} /> <span className="hidden sm:inline">Lectura 📖</span><span className="sm:hidden">Lectura</span>
-                  </button>
-                  <button onClick={openQuizSetup} className="flex-1 lg:flex-initial bg-yellow-500 text-slate-900 px-2 py-2 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center justify-center gap-1.5 text-xs md:text-sm shadow-md">
-                    <Gamepad2 size={16} /> Quiz
-                  </button>
-                </div>
+              {/* HAMBURGER + FULLSCREEN ON DESKTOP */}
+              <div className="hidden md:flex items-center gap-2">
+                <button onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 px-4 py-2 rounded-lg transition flex items-center gap-2 font-bold shadow-md">
+                  <Menu size={18} /> Menú
+                </button>
+                <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 p-2.5 rounded-lg transition flex items-center justify-center shadow-md">
+                  {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+                </button>
               </div>
             </div>
           </header>
 
-          <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 relative">
-        
-        {/* SIDEBAR */}
-        {!isFullscreen && viewMode !== "roleplay" && viewMode !== "reading" && !searchTerm && <aside className="w-full lg:w-72 flex-shrink-0 flex flex-col gap-6">
-            
-            {/* SECCIÓN 1: Tablas Maestras */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-              <div className="bg-slate-100 p-3 font-black text-xs text-slate-500 uppercase tracking-wider border-b border-slate-200">
-                Tablas Maestras
-              </div>
-              <ul className="flex flex-col max-h-[40vh] overflow-y-auto custom-scrollbar">
-                {chapters.map(chap => <li key={chap.id}>
-                    <button onClick={async () => {
-                setActiveChapterId(chap.id);
-                if (viewMode !== 'flashcards' && viewMode !== 'table') setViewMode('flashcards');
-              }} className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors border-l-4 ${activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table') ? 'bg-blue-50 text-blue-800 font-bold border-blue-600' : 'border-transparent hover:bg-slate-50 text-slate-600'}`}>
-                      <span className="text-xl">{chap.emoji}</span>
-                      <span className="text-sm leading-tight">{chap.title}</span>
-                    </button>
-                  </li>)}
-              </ul>
-            </div>
+          {/* SIDEBAR DRAWER MENÚ DESLIZABLE */}
+          {isMenuOpen && (
+            <>
+              <div onClick={() => setIsMenuOpen(false)} className="fixed inset-0 bg-slate-950/60 z-40 transition-opacity animate-in fade-in duration-200" />
+              <aside className="fixed inset-y-0 left-0 w-80 bg-slate-900 text-slate-100 z-50 shadow-2xl flex flex-col transform transition-transform duration-300 animate-in slide-in-from-left">
+                {/* Cabecera del Menú */}
+                <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="text-yellow-400" size={22} />
+                    <span className="font-bold text-sm text-white tracking-wide">Navegación DM A1</span>
+                  </div>
+                  <button onClick={() => setIsMenuOpen(false)} className="text-slate-400 hover:text-white p-1 rounded-lg transition" aria-label="Cerrar menú">
+                    <X size={20} />
+                  </button>
+                </div>
 
-            {/* SECCIÓN NUEVA: Plan de Estudio */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-              <div className="bg-emerald-50 p-3 font-black text-xs text-emerald-600 uppercase tracking-wider border-b border-emerald-100 flex items-center gap-2">
-                <BookOpen size={14} /> Plan de Estudio: Dominio A1
-              </div>
-              <ul className="flex flex-col max-h-[30vh] overflow-y-auto custom-scrollbar">
-                {studyPlanModules.map(mod => <li key={mod.id}>
-                    <button onClick={() => {
-                setActiveStudyPlanId(mod.id);
-                setViewMode('studyPlan');
-              }} className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors border-l-4 ${activeStudyPlanId === mod.id && viewMode === 'studyPlan' ? 'bg-emerald-50 text-emerald-800 font-bold border-emerald-600' : 'border-transparent hover:bg-slate-50 text-slate-600'}`}>
-                      <span className="text-emerald-500"><Sparkles size={16} /></span>
-                      <span className="text-sm leading-tight font-medium">{mod.title}</span>
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
+                  {/* Accesos rápidos */}
+                  <div className="grid grid-cols-2 gap-2 pb-4 border-b border-slate-800">
+                    <button onClick={() => { setIsTutorOpen(true); setIsMenuOpen(false); }} className="bg-slate-800 text-yellow-400 border border-yellow-500/20 py-2.5 rounded-lg font-bold hover:bg-slate-700 transition flex flex-col items-center justify-center gap-1 text-xs">
+                      <Bot size={18} /> Tutor IA
                     </button>
-                  </li>)}
-              </ul>
-            </div>
+                    <button onClick={() => { setViewMode('roleplay'); setIsMenuOpen(false); }} className="bg-purple-900/60 text-purple-200 border border-purple-500/20 py-2.5 rounded-lg font-bold hover:bg-purple-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                      <Sparkles size={18} /> Rol ✨
+                    </button>
+                    <button onClick={() => { setViewMode('reading'); setIsMenuOpen(false); }} className="bg-emerald-900/60 text-emerald-200 border border-emerald-500/20 py-2.5 rounded-lg font-bold hover:bg-emerald-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                      <BookOpen size={18} /> Lectura 📖
+                    </button>
+                    <button onClick={() => { openQuizSetup(); setIsMenuOpen(false); }} className="bg-yellow-600 text-slate-900 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                      <Gamepad2 size={18} /> Quiz
+                    </button>
+                  </div>
 
-            {/* SECCIÓN 3: Módulos de Estudio Goethe (Presentaciones) */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-              <div className="bg-indigo-50 p-3 font-black text-xs text-indigo-600 uppercase tracking-wider border-b border-indigo-100 flex items-center gap-2">
-                <Presentation size={14} /> Módulos de Estudio Goethe
-              </div>
-              <ul className="flex flex-col">
-                {goetheModules.map(pres => <li key={pres.id}>
-                    <button onClick={() => {
-                setActivePresentationId(pres.id);
-                setViewMode('presentation');
-                setIsFullscreen(true);
-              }} className={`w-full text-left px-4 py-3 flex items-center justify-between transition-colors border-l-4 ${activePresentationId === pres.id && viewMode === 'presentation' ? 'bg-indigo-50 text-indigo-900 font-bold border-indigo-600' : 'border-transparent hover:bg-slate-50 text-slate-700'}`}>
-                      <div>
-                        <div className="text-sm leading-tight font-bold">{pres.title}</div>
-                        <div className="text-xs text-slate-500 mt-0.5">{pres.desc}</div>
+                  {/* ACORDEÓN 1: Tablas Maestras */}
+                  <div className="border border-slate-800 rounded-xl overflow-hidden bg-slate-950/40">
+                    <button onClick={() => setIsTablasOpen(!isTablasOpen)} className="w-full flex items-center justify-between p-3 font-bold text-xs text-slate-300 uppercase tracking-wider hover:bg-slate-800/40 transition">
+                      <span>📘 Tablas Maestras</span>
+                      <ChevronRight size={16} className={`transform transition-transform ${isTablasOpen ? 'rotate-90' : ''}`} />
+                    </button>
+                    {isTablasOpen && (
+                      <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
+                        {chapters.map(chap => (
+                          <button key={chap.id} onClick={async () => {
+                            setActiveChapterId(chap.id);
+                            if (viewMode !== 'flashcards' && viewMode !== 'table') setViewMode('flashcards');
+                            setIsMenuOpen(false);
+                          }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center gap-2.5 ${activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table') ? 'bg-blue-900/30 text-blue-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
+                            <span className="text-sm shrink-0">{chap.emoji}</span>
+                            <span className="truncate">{chap.title}</span>
+                          </button>
+                        ))}
                       </div>
-                      <PlayCircle size={16} className={activePresentationId === pres.id && viewMode === 'presentation' ? 'text-indigo-600' : 'text-slate-300'} />
+                    )}
+                  </div>
+
+                  {/* ACORDEÓN 2: Plan de Estudio */}
+                  <div className="border border-slate-800 rounded-xl overflow-hidden bg-slate-950/40">
+                    <button onClick={() => setIsPlanOpen(!isPlanOpen)} className="w-full flex items-center justify-between p-3 font-bold text-xs text-slate-300 uppercase tracking-wider hover:bg-slate-800/40 transition">
+                      <span>🎓 Plan de Estudio</span>
+                      <ChevronRight size={16} className={`transform transition-transform ${isPlanOpen ? 'rotate-90' : ''}`} />
                     </button>
-                  </li>)}
-              </ul>
-            </div>
+                    {isPlanOpen && (
+                      <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
+                        {studyPlanModules.map(mod => (
+                          <button key={mod.id} onClick={() => {
+                            setActiveStudyPlanId(mod.id);
+                            setViewMode('studyPlan');
+                            setIsMenuOpen(false);
+                          }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center gap-2.5 ${activeStudyPlanId === mod.id && viewMode === 'studyPlan' ? 'bg-emerald-900/30 text-emerald-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
+                            <span className="text-emerald-500 shrink-0"><Sparkles size={14} /></span>
+                            <span className="truncate">{mod.title}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-          </aside>}
+                  {/* ACORDEÓN 3: Módulos Goethe */}
+                  <div className="border border-slate-800 rounded-xl overflow-hidden bg-slate-950/40">
+                    <button onClick={() => setIsGoetheOpen(!isGoetheOpen)} className="w-full flex items-center justify-between p-3 font-bold text-xs text-slate-300 uppercase tracking-wider hover:bg-slate-800/40 transition">
+                      <span>🏛️ Módulos Goethe</span>
+                      <ChevronRight size={16} className={`transform transition-transform ${isGoetheOpen ? 'rotate-90' : ''}`} />
+                    </button>
+                    {isGoetheOpen && (
+                      <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
+                        {goetheModules.map(pres => (
+                          <button key={pres.id} onClick={() => {
+                            setActivePresentationId(pres.id);
+                            setViewMode('presentation');
+                            setIsFullscreen(true);
+                            setIsMenuOpen(false);
+                          }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center justify-between ${activePresentationId === pres.id && viewMode === 'presentation' ? 'bg-indigo-900/30 text-indigo-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
+                            <span className="truncate">{pres.title}</span>
+                            <PlayCircle size={14} className="shrink-0" />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </aside>
+            </>
+          )}
 
+          <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6 flex flex-col gap-6 relative">
+        
         {/* CONTENT AREA */}
         <section className="flex-1 w-full min-w-0 pb-20 relative">
           
@@ -1755,34 +1806,85 @@ export default function App() {
 
           {/* RENDER TABLA */}
           {viewMode === "table" && <div className="animate-in fade-in pb-10">
-              {Object.entries(groupWordsByCategory(displayedWords)).map(([category, words], catIdx) => <div key={catIdx} className="mb-8">
+               {Object.entries(groupWordsByCategory(displayedWords)).map(([category, words], catIdx) => <div key={catIdx} className="mb-8">
                   {category !== "General" && <h3 className="text-lg font-bold text-slate-700 mb-3 border-b-2 border-blue-200 pb-2">{category}</h3>}
-                  <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse">
-                        <thead>
-                          <tr className="bg-slate-100 border-b border-slate-200 text-slate-700 text-sm uppercase tracking-wider">
-                            <th className="px-4 py-3 font-bold">Expresión en Alemán</th>
-                            {!activeChapter?.isRedemittel && <th className="px-4 py-3 font-bold">Pronunciación</th>}
-                            <th className="px-4 py-3 font-bold">Traducción</th>
-                            <th className="px-4 py-3 font-bold">Tema / Contexto</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 text-sm">
-                          {words.map((word, idx) => <tr key={idx} className="hover:bg-blue-50 transition-colors">
-                              <td className="px-4 py-3 font-bold text-slate-800 flex items-center gap-2">
-                                {!activeChapter?.isRedemittel && <button onClick={e => speakText(word, e)} className="text-blue-500 hover:text-blue-700 p-1"><Volume2 size={14} /></button>}
-                                {word.de}
+                  <div className="w-full overflow-x-auto scrollbar-thin rounded-xl border border-slate-200 shadow-sm bg-white">
+                    <table className="w-full min-w-[600px] text-left border-collapse">
+                      <thead className="sticky top-0 bg-slate-100 z-10">
+                        <tr className="border-b border-slate-200 text-slate-700 text-sm uppercase tracking-wider">
+                          <th className="px-4 py-3 font-bold">Expresión en Alemán</th>
+                          <th className="px-4 py-3 font-bold">Pronunciación</th>
+                          <th className="px-4 py-3 font-bold text-center">Traducción</th>
+                          <th className="px-4 py-3 font-bold">Contexto</th>
+                          <th className="px-4 py-3 font-bold">Plural / Régimen</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-sm">
+                        {words.map((word, idx) => {
+                          const getTypeBadgeClass = (w) => {
+                            const de = (w.de || "").toLowerCase();
+                            const type = w.type || "";
+                            if (de.startsWith("der ") || type.includes("Masc")) return "bg-blue-100 text-blue-800 border-blue-200";
+                            if (de.startsWith("die ") || type.includes("Fem")) return "bg-red-100 text-red-800 border-red-200";
+                            if (de.startsWith("das ") || type.includes("Neutro") || type.includes("Neut")) return "bg-green-100 text-green-800 border-green-200";
+                            if (type.includes("Verbo")) return "bg-yellow-100 text-yellow-800 border-yellow-200";
+                            return "bg-slate-100 text-slate-800 border-slate-200";
+                          };
+                          return (
+                            <tr key={idx} className="hover:bg-slate-50 transition-colors border-b border-slate-100">
+                              <td className="px-4 py-3 flex items-center gap-2 align-middle">
+                                <span className="font-bold text-slate-800">{word.de}</span>
+                                <button onClick={(e) => { e.stopPropagation(); nativeSpeak(word.de); }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110">
+                                  <Volume2 size={16} />
+                                </button>
                               </td>
-                              {!activeChapter?.isRedemittel && <td className="px-4 py-3 text-slate-500 italic">/{word.pron}/</td>}
-                              <td className="px-4 py-3 font-medium text-slate-700">{word.es}</td>
-                              <td className="px-4 py-3 text-slate-500">
-                                <span className="bg-slate-100 px-2 py-1 rounded-md text-xs border border-slate-200 text-slate-600">{word.type}</span>
+                              <td className="px-4 py-3 text-slate-500 font-mono text-sm align-middle">
+                                {word.pron ? `/${word.pron}/` : "-"}
                               </td>
-                            </tr>)}
-                        </tbody>
-                      </table>
-                    </div>
+                              <td className="px-4 py-3 text-center align-middle">
+                                <div className="font-medium text-slate-700">{word.es}</div>
+                                <span className={`inline-block px-2.5 py-0.5 mt-1 rounded-full text-xs font-semibold border ${getTypeBadgeClass(word)}`}>{word.type}</span>
+                              </td>
+                              <td className="px-4 py-3 text-slate-500 max-w-xs md:max-w-md align-middle">
+                                {word.exampleSentenceDe ? (
+                                  <>
+                                    <span className="text-sm text-slate-700 italic block">💬 {word.exampleSentenceDe}</span>
+                                    {word.exampleSentenceEs && (
+                                      <span className="text-xs text-slate-400 block mt-1">{word.exampleSentenceEs}</span>
+                                    )}
+                                  </>
+                                ) : (
+                                  <span className="text-slate-300">---</span>
+                                )}
+                              </td>
+                              <td className="px-4 py-3 whitespace-nowrap align-middle">
+                                {(() => {
+                                  const typeLower = (word.type || "").toLowerCase();
+                                  if (typeLower.includes("sustantivo")) {
+                                    const pluralRaw = word.plural || "---";
+                                    const pluralClean = pluralRaw.replace(/^Plural:\s*/i, "").trim();
+                                    if (pluralClean === "---") {
+                                      return <span className="text-slate-300 font-normal text-xs font-mono">{pluralClean}</span>;
+                                    }
+                                    return <span className="font-bold text-slate-800 dark:text-slate-100 text-xs font-mono">{pluralClean}</span>;
+                                  }
+                                  if (typeLower.includes("verbo") || typeLower.includes("acción") || typeLower.includes("accion")) {
+                                    const dativVerben = ["helfen", "danken", "gefallen", "gehören", "passen", "antworten", "wehtun"];
+                                    const isDativ = dativVerben.includes((word.de || "").toLowerCase().trim()) || typeLower.includes("dativ");
+                                    return isDativ ? (
+                                      <span className="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full text-xs font-semibold inline-block">⚠️ Exige Dativo</span>
+                                    ) : (
+                                      <span className="bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 rounded-full text-xs font-semibold inline-block">+ Akkusativ</span>
+                                    );
+                                  }
+                                  return null;
+                                })()}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
                   </div>
                 </div>)}
             </div>}
@@ -1830,31 +1932,19 @@ export default function App() {
                         className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow"
                         onClick={() => speakStory(storyState.de)}
                       >
-                        <div className="font-normal text-lg leading-relaxed text-slate-800">
+                        <div translate="no" className="notranslate font-normal text-lg leading-relaxed text-slate-800">
                           {parseTextToTokens(storyState.de).map((token, idx) => {
                             if (token.isWord) {
                               const isHighlighted = token.wordIndex === currentWordIndex;
                               const isKeyword = token.isBold || token.isKeyword;
                               const fontWeightClass = isKeyword ? 'font-bold' : 'font-normal';
                               return (
-                                <span 
-                                  key={idx} 
-                                  className={`inline-block transition-all duration-150 rounded px-[2px] mx-[1px] border ${
-                                    isHighlighted 
-                                      ? 'bg-yellow-200 border-yellow-300 text-slate-900 scale-105 shadow-sm' 
-                                      : isKeyword 
-                                        ? 'bg-indigo-50 border-transparent text-indigo-700' 
-                                        : 'bg-transparent border-transparent text-slate-800'
-                                  } ${fontWeightClass}`}
-                                >
-                                  {token.text}
-                                </span>
+                                <span key={idx} className={`inline-block transition-all duration-150 rounded px-[2px] mx-[1px] border ${isHighlighted ? 'bg-yellow-200 border-yellow-300 text-slate-900 scale-105 shadow-sm' : isKeyword ? 'bg-indigo-50 border-transparent text-indigo-700' : 'bg-transparent border-transparent text-slate-800'} ${fontWeightClass}`}>{token.text}</span>
                               );
                             } else {
+                              const isPunct = /^[.,!?:;]+$/.test(token.text);
                               return (
-                                <span key={idx} className="text-slate-800 inline-block">
-                                  {token.text}
-                                </span>
+                                <span key={idx} className={`text-slate-800 inline-block ${isPunct ? 'ml-[-3px] pl-0 pr-[1px]' : 'px-[1px]'}`}>{token.text}</span>
                               );
                             }
                           })}

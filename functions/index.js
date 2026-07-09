@@ -832,12 +832,14 @@ export const generateReadingTest = onCall(
             "pregunta_aleman": "...",
             "opciones_aleman": ["Opción A", "Opción B", "Opción C"],
             "respuesta_correcta": "La opción exacta (debe coincidir exactamente con una de las opciones del array opciones_aleman)",
-            "explicacion_espanol": "Explicación clara en español de por qué esta es la respuesta correcta."
+            "explicacion_espanol": "La 'explicacion_espanol' debe ser una retroalimentación socrática y didáctica que sirva de refuerzo. Debe explicar claramente por qué la respuesta correcta es la adecuada basándose en el texto, de modo que el alumno aprenda tanto si acierta como si falla."
           }
         ]
       }
 
       REGLAS CRÍTICAS:
+      - Usa diacríticos/umlauts estándar del alemán (ä, ö, ü, ß) en lugar de dígrafos (como "fuer" en lugar de "für", o "schoen" en lugar de "schön").
+      - NO coloques espacios antes de los signos de puntuación (ej. escribe "Familie." y no "Familie .", "Personen:" y no "Personen :", "Vater," y no "Vater ,"). El texto debe tener una puntuación limpia y profesional.
       - Responde únicamente con el formato JSON válido.
       - El texto y las preguntas deben estar estrictamente redactados en alemán nivel A1.
       - La explicación de las respuestas correctas debe estar en español.

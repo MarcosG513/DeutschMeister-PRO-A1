@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { BookOpen, Sparkles, X, Volume2, HelpCircle, Lightbulb, AlertTriangle, RefreshCw, Loader2 } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { BookOpen, Sparkles, X, Volume2, HelpCircle, Lightbulb, AlertTriangle, RefreshCw, Loader2, Play, Pause, CheckCircle } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
+import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { functions } from '../App';
 import { httpsCallable } from 'firebase/functions';
 import { nativeSpeak } from '../utils/helpers';
@@ -10,8 +12,324 @@ const ReadingComprehension = ({ onExit }) => {
   const [loadingStep, setLoadingStep] = useState("");
   const [readingTest, setReadingTest] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState({}); // { [questionIdx]: selectedOption }
-  const [revealedQuestions, setRevealedQuestions] = useState({}); // { [questionIdx]: true/false }
   const [error, setError] = useState("");
+
+  // Estados para lectura sincronizada (Karaoke)
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isAudioPaused, setIsAudioPaused] = useState(false);
+  const [currentWordIndex, setCurrentWordIndex] = useState(-1);
+
+  // Referencias para el motor de audio
+  const utteranceRef = useRef(null);
+  const wordsOnlyRef = useRef([]);
+  const isPausedRef = useRef(false);
+  const adaptiveTimerRef = useRef(null);
+
+  // Limpieza del motor de audio al desmontar o cambiar de lectura
+  useEffect(() => {
+    return () => {
+      if (window.activeReadingTimeout) {
+        clearTimeout(window.activeReadingTimeout);
+        window.activeReadingTimeout = null;
+      }
+      if (window.activeReadingInterval) {
+        clearInterval(window.activeReadingInterval);
+        window.activeReadingInterval = null;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      try {
+        TextToSpeech.stop();
+      } catch (e) {}
+    };
+  }, []);
+
+  // Analizador Léxico A1
+  const parseTextToTokens = (text) => {
+    if (!text) return [];
+    const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
+    const tokens = [];
+    let isBold = false;
+    let charIndex = 0;
+    let wordCounter = 0;
+    let i = 0;
+
+    while (i < cleanedText.length) {
+      if (cleanedText.startsWith('**', i)) {
+        isBold = !isBold;
+        i += 2;
+        continue;
+      }
+      const spaceMatch = cleanedText.slice(i).match(/^\s+/);
+      if (spaceMatch) {
+        const spaceStr = spaceMatch[0];
+        tokens.push({
+          text: spaceStr,
+          isWord: false,
+          isBold: isBold,
+          isKeyword: isBold,
+          charStart: charIndex,
+          charEnd: charIndex + spaceStr.length,
+          wordIndex: -1
+        });
+        charIndex += spaceStr.length;
+        i += spaceStr.length;
+        continue;
+      }
+      const punctMatch = cleanedText.slice(i).match(/^[.,!?:;()[\]{}'"“”«»„“\-–—/\\+]+/);
+      if (punctMatch) {
+        const punctStr = punctMatch[0];
+        tokens.push({
+          text: punctStr,
+          isWord: false,
+          isBold: isBold,
+          isKeyword: isBold,
+          charStart: charIndex,
+          charEnd: charIndex + punctStr.length,
+          wordIndex: -1
+        });
+        charIndex += punctStr.length;
+        i += punctStr.length;
+        continue;
+      }
+      const wordMatch = cleanedText.slice(i).match(/^[^\s.,!?:;()[\]{}'"“”«»„“\-–—/\\+*]+/);
+      if (wordMatch) {
+        const wordStr = wordMatch[0];
+        tokens.push({
+          text: wordStr,
+          isWord: true,
+          isBold: isBold,
+          isKeyword: isBold,
+          charStart: charIndex,
+          charEnd: charIndex + wordStr.length,
+          wordIndex: wordCounter++
+        });
+        charIndex += wordStr.length;
+        i += wordStr.length;
+        continue;
+      }
+      const singleChar = cleanedText[i];
+      const isWord = /^[a-zA-Z0-9ÄäÖöÜüß]$/.test(singleChar);
+      tokens.push({
+        text: singleChar,
+        isWord: isWord,
+        isBold: isBold,
+        isKeyword: isBold,
+        charStart: charIndex,
+        charEnd: charIndex + 1,
+        wordIndex: isWord ? wordCounter++ : -1
+      });
+      charIndex += 1;
+      i += 1;
+    }
+    return tokens;
+  };
+
+  // Motor de Reproducción, Pausa y Reanudación Sincronizada
+  const speakText = (text) => {
+    if (!text) return;
+    const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
+
+    if (isPlayingAudio) {
+      if (Capacitor.isNativePlatform()) {
+        if (isAudioPaused) {
+          const remainingWords = wordsOnlyRef.current.slice(currentWordIndex).map(w => w.text).join(' ');
+          const remainingClean = remainingWords.replace(/\*\*/g, '');
+          TextToSpeech.speak({
+            text: remainingClean,
+            lang: 'de-DE',
+            rate: 0.70,
+            volume: 1.0
+          }).then(() => {
+            if (!isPausedRef.current) {
+              setIsPlayingAudio(false);
+              setIsAudioPaused(false);
+              setCurrentWordIndex(-1);
+            }
+          }).catch(e => console.error("Error Native Speak", e));
+          setIsAudioPaused(false);
+          isPausedRef.current = false;
+          if (adaptiveTimerRef.current) {
+            adaptiveTimerRef.current(currentWordIndex);
+          }
+        } else {
+          TextToSpeech.stop();
+          setIsAudioPaused(true);
+          isPausedRef.current = true;
+          if (window.activeReadingTimeout) {
+            clearTimeout(window.activeReadingTimeout);
+            window.activeReadingTimeout = null;
+          }
+        }
+      } else if ('speechSynthesis' in window) {
+        if (isAudioPaused) {
+          window.speechSynthesis.resume();
+          setIsAudioPaused(false);
+          isPausedRef.current = false;
+          if (adaptiveTimerRef.current) {
+            adaptiveTimerRef.current(currentWordIndex);
+          }
+        } else {
+          window.speechSynthesis.pause();
+          setIsAudioPaused(true);
+          isPausedRef.current = true;
+          if (window.activeReadingTimeout) {
+            clearTimeout(window.activeReadingTimeout);
+            window.activeReadingTimeout = null;
+          }
+        }
+      } else {
+        if (isAudioPaused) {
+          window.isReadingPausedPlaceholder = false;
+          setIsAudioPaused(false);
+          isPausedRef.current = false;
+        } else {
+          window.isReadingPausedPlaceholder = true;
+          setIsAudioPaused(true);
+          isPausedRef.current = true;
+        }
+      }
+      return;
+    }
+
+    setIsPlayingAudio(true);
+    setIsAudioPaused(false);
+    isPausedRef.current = false;
+    setCurrentWordIndex(0);
+
+    const tokens = parseTextToTokens(cleanedText);
+    const wordsOnly = tokens.filter(t => t.isWord);
+    wordsOnlyRef.current = wordsOnly;
+
+    const cleanText = cleanedText.replace(/\*\*/g, '');
+    let hasNativeBoundary = false;
+
+    const runAdaptiveTimer = (startIndex) => {
+      if (startIndex >= wordsOnly.length) return;
+      let localIdx = startIndex;
+
+      const tick = () => {
+        if (hasNativeBoundary) return;
+        if (localIdx >= wordsOnly.length) return;
+
+        setCurrentWordIndex(localIdx);
+        const currentWord = wordsOnly[localIdx];
+        const wordLen = currentWord ? currentWord.text.length : 5;
+        const rate = 0.70;
+        const baseMs = 85;
+        const minMs = 350;
+        const duration = Math.max(minMs, wordLen * baseMs) / rate;
+
+        localIdx++;
+        if (localIdx < wordsOnly.length) {
+          window.activeReadingTimeout = setTimeout(tick, duration);
+        } else {
+          setTimeout(() => {
+            if (!hasNativeBoundary) {
+              setIsPlayingAudio(false);
+              setIsAudioPaused(false);
+              setCurrentWordIndex(-1);
+            }
+          }, duration);
+        }
+      };
+
+      if (window.activeReadingTimeout) clearTimeout(window.activeReadingTimeout);
+      window.activeReadingTimeout = setTimeout(tick, 0);
+    };
+
+    adaptiveTimerRef.current = runAdaptiveTimer;
+
+    if (Capacitor.isNativePlatform()) {
+      TextToSpeech.stop();
+      TextToSpeech.speak({
+        text: cleanText,
+        lang: 'de-DE',
+        rate: 0.70,
+        volume: 1.0
+      }).then(() => {
+        if (!isPausedRef.current) {
+          setIsPlayingAudio(false);
+          setIsAudioPaused(false);
+          setCurrentWordIndex(-1);
+        }
+      }).catch(e => console.error("Error Speak Native", e));
+      runAdaptiveTimer(0);
+    } else if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.getVoices();
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'de-DE';
+      utterance.rate = 0.70;
+      utterance.volume = 1.0;
+      utteranceRef.current = utterance;
+
+      utterance.onboundary = (event) => {
+        if (event.name === 'word') {
+          if (event.charIndex > 0) {
+            hasNativeBoundary = true;
+            if (window.activeReadingTimeout) {
+              clearTimeout(window.activeReadingTimeout);
+              window.activeReadingTimeout = null;
+            }
+          }
+          const charIndex = event.charIndex;
+          const currentToken = wordsOnlyRef.current.find(
+            w => charIndex >= w.charStart && charIndex < w.charEnd
+          );
+          if (currentToken) {
+            setCurrentWordIndex(currentToken.wordIndex);
+          }
+        }
+      };
+
+      utterance.onend = () => {
+        if (window.activeReadingTimeout) {
+          clearTimeout(window.activeReadingTimeout);
+          window.activeReadingTimeout = null;
+        }
+        setIsPlayingAudio(false);
+        setIsAudioPaused(false);
+        setCurrentWordIndex(-1);
+        utteranceRef.current = null;
+      };
+
+      utterance.onerror = () => {
+        if (window.activeReadingTimeout) {
+          clearTimeout(window.activeReadingTimeout);
+          window.activeReadingTimeout = null;
+        }
+        setIsPlayingAudio(false);
+        setIsAudioPaused(false);
+        setCurrentWordIndex(-1);
+        utteranceRef.current = null;
+      };
+
+      runAdaptiveTimer(0);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      let wordIdx = 0;
+      setCurrentWordIndex(0);
+      
+      const runInterval = () => {
+        if (window.activeReadingInterval) clearInterval(window.activeReadingInterval);
+        window.activeReadingInterval = setInterval(() => {
+          if (window.isReadingPausedPlaceholder) return;
+          wordIdx++;
+          if (wordIdx < wordsOnly.length) {
+            setCurrentWordIndex(wordIdx);
+          } else {
+            clearInterval(window.activeReadingInterval);
+            setIsPlayingAudio(false);
+            setIsAudioPaused(false);
+            setCurrentWordIndex(-1);
+          }
+        }, 450);
+      };
+      runInterval();
+    }
+  };
 
   const handleGenerate = async () => {
     if (!tema.trim()) return;
@@ -19,7 +337,6 @@ const ReadingComprehension = ({ onExit }) => {
     setError("");
     setReadingTest(null);
     setSelectedAnswers({});
-    setRevealedQuestions({});
 
     const steps = [
       "Iniciando generador de lectura...",
@@ -64,21 +381,12 @@ const ReadingComprehension = ({ onExit }) => {
       ...prev,
       [questionIdx]: optionText
     }));
-
-    if (optionText !== correctAnswer) {
-      // Mostrar explicación si falló
-      setRevealedQuestions(prev => ({
-        ...prev,
-        [questionIdx]: true
-      }));
-    }
   };
 
   const handleReset = () => {
     setTema("");
     setReadingTest(null);
     setSelectedAnswers({});
-    setRevealedQuestions({});
     setError("");
   };
 
@@ -174,17 +482,44 @@ const ReadingComprehension = ({ onExit }) => {
                   <BookOpen size={18} /> {readingTest.titulo_aleman}
                 </h4>
                 <button
-                  onClick={() => nativeSpeak(readingTest.texto_aleman)}
-                  className="bg-white hover:bg-emerald-100 text-emerald-700 p-2 rounded-full border border-slate-200 transition shadow-sm"
-                  title="Escuchar pronunciación"
-                  aria-label="Escuchar pronunciación"
+                  onClick={() => speakText(readingTest.texto_aleman)}
+                  className={`bg-white text-emerald-700 p-2.5 rounded-full border border-slate-200 transition shadow-md hover:bg-emerald-50 ${
+                    isPlayingAudio && !isAudioPaused ? 'scale-110 ring-2 ring-emerald-500/20' : ''
+                  }`}
+                  title={isPlayingAudio ? (isAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación") : "Escuchar pronunciación"}
+                  aria-label={isPlayingAudio ? (isAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación") : "Escuchar pronunciación"}
                 >
-                  <Volume2 size={16} />
+                  {isPlayingAudio ? (
+                    isAudioPaused ? (
+                      <Play size={16} className="text-amber-500 animate-pulse" />
+                    ) : (
+                      <div className="relative w-4 h-4 flex items-center justify-center">
+                        <span className="absolute w-full h-full bg-emerald-400 rounded-full animate-ping opacity-75"></span>
+                        <Pause size={16} className="text-emerald-700 z-10" />
+                      </div>
+                    )
+                  ) : (
+                    <Play size={16} />
+                  )}
                 </button>
               </div>
               <div className="p-6">
-                <p className="text-slate-800 text-lg leading-relaxed font-serif whitespace-pre-line select-none">
-                  {readingTest.texto_aleman}
+                <p translate="no" className="notranslate text-slate-800 text-lg leading-relaxed font-serif whitespace-pre-line select-none cursor-pointer" onClick={() => speakText(readingTest.texto_aleman)}>
+                  {parseTextToTokens(readingTest.texto_aleman).map((token, idx) => {
+                    if (token.isWord) {
+                      const isHighlighted = token.wordIndex === currentWordIndex;
+                      const isKeyword = token.isBold || token.isKeyword;
+                      const fontWeightClass = isKeyword ? 'font-bold' : 'font-normal';
+                      return (
+                        <span key={idx} className={`inline-block transition-all duration-150 rounded px-1 mx-[2px] border ${isHighlighted ? 'bg-yellow-200 border-yellow-300 text-yellow-900 scale-105 font-bold shadow-sm' : isKeyword ? 'bg-emerald-50 border-transparent text-emerald-800 font-bold' : 'bg-transparent border-transparent text-slate-800'} ${fontWeightClass}`}>{token.text}</span>
+                      );
+                    } else {
+                      const isPunct = /^[.,!?:;]+$/.test(token.text);
+                      return (
+                        <span key={idx} className={`text-slate-800 inline-block ${isPunct ? 'ml-[-6px] pl-0 pr-[1px]' : 'px-[1px]'}`}>{token.text}</span>
+                      );
+                    }
+                  })}
                 </p>
               </div>
             </div>
@@ -236,15 +571,25 @@ const ReadingComprehension = ({ onExit }) => {
                       })}
                     </div>
 
-                    {/* Explicación si falló o si ya fue respondida */}
-                    {isAnswered && (selected !== q.respuesta_correcta || revealedQuestions[qIdx]) && (
-                      <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex gap-3 items-start animate-in fade-in slide-in-from-top-2 duration-200">
-                        <Lightbulb size={18} className="text-amber-500 shrink-0 mt-0.5" />
-                        <div className="text-sm text-slate-700 leading-relaxed">
-                          <p className="font-bold text-amber-800 mb-1">Explicación:</p>
-                          <p>{q.explicacion_espanol}</p>
+                    {/* Explicación / Retroalimentación bimodal */}
+                    {isAnswered && (
+                      selected === q.respuesta_correcta ? (
+                        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex gap-3 items-start animate-in fade-in slide-in-from-top-2 duration-200">
+                          <CheckCircle size={18} className="text-emerald-500 shrink-0 mt-0.5" />
+                          <div className="text-sm text-slate-700 leading-relaxed">
+                            <p className="font-bold text-emerald-800 mb-1">¡Correcto! Explicación:</p>
+                            <p>{q.explicacion_espanol}</p>
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex gap-3 items-start animate-in fade-in slide-in-from-top-2 duration-200">
+                          <Lightbulb size={18} className="text-amber-500 shrink-0 mt-0.5" />
+                          <div className="text-sm text-slate-700 leading-relaxed">
+                            <p className="font-bold text-amber-800 mb-1">Explicación:</p>
+                            <p>{q.explicacion_espanol}</p>
+                          </div>
+                        </div>
+                      )
                     )}
                   </div>
                 );

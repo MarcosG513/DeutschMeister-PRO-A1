@@ -220,7 +220,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
           )}
           <div className="flex-1 flex flex-col items-center justify-center w-full px-2 relative z-20">
              <span className={`font-bold ${speechFeedback === 'success' ? 'text-green-500' : speechFeedback === 'error' ? 'text-red-500' : 'text-slate-900'} transition-colors ${isLongText ? 'text-base' : 'text-lg'}`}>{wordObj.de}</span>
-             {wordObj.pron && <span className="text-sm text-blue-500 mt-1 font-medium">/{wordObj.pron}/</span>}
+             {wordObj.pron && <span className="text-sm text-blue-500 mt-1 font-medium truncate max-w-[200px] sm:max-w-xs text-ellipsis overflow-hidden">/{wordObj.pron}/</span>}
              
              <div className="absolute left-2 bottom-2 flex gap-1 z-30">
                 <button onClick={(e) => { e.stopPropagation(); if(openAiTutor) openAiTutor(wordObj, e); }} className="text-slate-400 hover:text-blue-500 p-1 rounded-full transition-colors" title="Preguntar a IA" aria-label="Preguntar a tutor de Inteligencia Artificial">
@@ -244,7 +244,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
           
           <div className="flex-1 flex flex-col items-center justify-center w-full min-h-0">
             <span className="text-[10px] font-semibold text-blue-300/80 mb-1 tracking-wider uppercase">{wordObj.type}</span>
-            <span className={`font-bold text-yellow-400 leading-tight ${wordObj.es.length > 20 ? 'text-base' : 'text-lg md:text-xl'}`}>{wordObj.es}</span>
+            <span className={`font-bold text-yellow-400 leading-tight break-words px-2 max-w-full block ${wordObj.es.length > 20 ? 'text-base' : 'text-lg md:text-xl'}`}>{wordObj.es}</span>
             {/* Renderizado de oraciones reales */}
             {(wordObj.exampleSentenceDe || (wordObj.exampleSentenceDeBlocks && wordObj.exampleSentenceDeBlocks.length > 0)) && (
               (() => {
