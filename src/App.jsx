@@ -118,6 +118,8 @@ const RoleplaySimulator = ({
   const [tutorMessageCount, setTutorMessageCount] = useState(0);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isBlurting, setIsBlurting] = useState(false);
+  const [blurtInput, setBlurtInput] = useState("");
   const chatEndRef = useRef(null);
   const scenarios = [{
     id: 'restaurant',
@@ -161,6 +163,18 @@ const RoleplaySimulator = ({
       behavior: "smooth"
     });
   }, [messages]);
+  const handleSelectScenario = scen => {
+    setScenario(scen);
+    setIsBlurting(true);
+    setBlurtInput("");
+  };
+
+  const submitBlurting = () => {
+    if (blurtInput.trim().length < 3) return;
+    setIsBlurting(false);
+    startScenario(scenario);
+  };
+
   const startScenario = async scen => {
     setScenario(scen);
     setLoading(true);
@@ -331,7 +345,7 @@ const RoleplaySimulator = ({
           <p className="text-slate-500 mt-2">Pon a prueba tu alemán interactuando en situaciones reales con un personaje controlado por IA.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {scenarios.map(scen => <button key={scen.id} onClick={() => startScenario(scen)} className="flex flex-col items-center p-6 bg-slate-50 border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 rounded-xl transition-all text-center group cursor-pointer shadow-sm">
+          {scenarios.map(scen => <button key={scen.id} onClick={() => handleSelectScenario(scen)} className="flex flex-col items-center p-6 bg-slate-50 border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 rounded-xl transition-all text-center group cursor-pointer shadow-sm">
               <span className="text-5xl mb-4 group-hover:scale-110 transition-transform">{scen.icon}</span>
               <h3 className="font-bold text-slate-800 text-lg">{scen.title}</h3>
               <p className="text-sm text-slate-500 mt-2">{scen.desc}</p>
@@ -339,6 +353,49 @@ const RoleplaySimulator = ({
         </div>
       </div>;
   }
+
+  // ── PANTALLA INTERMEDIA DE BLURTING (narrador, fuera del personaje) ──────
+  if (scenario && isBlurting) {
+    return (
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-xl mx-auto mt-10 animate-in fade-in zoom-in duration-300 text-center relative">
+        <button
+          onClick={() => { setScenario(null); setIsBlurting(false); }}
+          className="absolute top-4 right-4 flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm">
+          <X size={18} /> Salir
+        </button>
+        <div className="inline-flex bg-amber-100 text-amber-600 p-4 rounded-full mb-5 shadow-sm">
+          <span className="text-4xl">🧠</span>
+        </div>
+        <h2 className="text-2xl font-black text-slate-800 mb-2">Calentamiento Cognitivo</h2>
+        <p className="text-slate-500 mb-6 leading-relaxed">
+          Antes de entrar al escenario{" "}
+          <span className="font-bold text-purple-600">{scenario.title}</span>,
+          escribe rápido{" "}
+          <span className="font-bold">3 palabras en alemán</span>{" "}
+          que recuerdes sobre este tema.
+        </p>
+        <div className="mb-5">
+          <input
+            type="text"
+            autoFocus
+            className="w-full bg-slate-100 border-2 border-slate-200 focus:border-purple-400 focus:bg-white rounded-xl py-3.5 px-5 text-sm text-slate-800 outline-none transition shadow-inner placeholder:text-slate-400"
+            placeholder="Ej: Essen, Trinken, Kellner..."
+            value={blurtInput}
+            onChange={e => setBlurtInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && submitBlurting()}
+          />
+        </div>
+        <button
+          onClick={submitBlurting}
+          disabled={blurtInput.trim().length < 3}
+          className="w-full py-3.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl transition shadow-md text-base">
+          Comenzar Rol ✨
+        </button>
+        <p className="text-xs text-slate-400 mt-4">Pulsa Enter o haz clic en el botón para continuar</p>
+      </div>
+    );
+  }
+
   return <div className="bg-white rounded-2xl shadow-lg border border-slate-200 flex flex-col h-[70svh] max-w-3xl mx-auto mt-6 overflow-hidden animate-in slide-in-from-bottom-4">
       <div className="bg-purple-600 text-white p-4 flex justify-between items-center shadow-md z-10">
         <div className="flex items-center gap-3">
