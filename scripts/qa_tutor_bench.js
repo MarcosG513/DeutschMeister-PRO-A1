@@ -155,7 +155,7 @@ async function runJudge(query, responseText) {
   try {
     const result = await fal.subscribe("openrouter/router/enterprise", {
       input: {
-        model: "deepseek/deepseek-v3.2",
+        model: "anthropic/claude-sonnet-5",
         prompt: promptJuez,
         temperature: 0.1
       }
@@ -169,13 +169,28 @@ async function runJudge(query, responseText) {
   }
 }
 
+// Helper de pausa para throttling
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 async function main() {
-  console.log(`🚀 Iniciando suite de pruebas. Enviando ${testQueries.length} peticiones simultáneas...`);
-  
-  const promises = testQueries.map((query, idx) => sendRequest(query, idx + 1));
-  const results = await Promise.all(promises);
-  
-  console.log("📊 Peticiones completadas. Evaluando calidad pedagógica con LLM-as-a-Judge...");
+  const DELAY_MS = 7000; // 7s entre peticiones → ~8.5 RPM, bajo el límite de 10 RPM de gemini-3.5-flash
+  console.log(`🚀 Iniciando suite de pruebas. Enviando ${testQueries.length} peticiones con throttling de ${DELAY_MS / 1000}s entre cada una...`);
+  console.log(`⏱️  Tiempo estimado: ~${Math.ceil((testQueries.length * DELAY_MS) / 60000)} minutos\n`);
+
+  const results = [];
+  for (let idx = 0; idx < testQueries.length; idx++) {
+    const query = testQueries[idx];
+    if (idx > 0) {
+      process.stdout.write(`⏳ [${idx}/${testQueries.length}] Esperando ${DELAY_MS / 1000}s (throttling Rate Limit)...\r`);
+      await sleep(DELAY_MS);
+    }
+    const result = await sendRequest(query, idx + 1);
+    results.push(result);
+    const status = result.success ? '✅' : '❌';
+    console.log(`${status} Caso #${result.index} completado [${result.provider}] — ${result.latency}ms`);
+  }
+
+  console.log("\n📊 Peticiones completadas. Evaluando calidad pedagógica con LLM-as-a-Judge...");
   
   const evaluatedResults = [];
   for (const res of results) {
@@ -219,7 +234,7 @@ async function main() {
     markdown += `| ${r.index} | ${shortQuery} | ${r.provider} | ${r.latency} ms | **${r.score}** | ${r.feedback} |\n`;
   });
 
-  const reportPath = path.join(__dirname, '../informe_tutor_socratico.md');
+  const reportPath = path.join(__dirname, '../informe_tutor_socratico_claude5.md');
   fs.writeFileSync(reportPath, markdown, 'utf8');
   console.log(`🎉 Informe generado con éxito en: ${reportPath}`);
 }
