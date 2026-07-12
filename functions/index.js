@@ -80,7 +80,7 @@ async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}
 
       const response = await fal.subscribe("openrouter/router", {
         input: {
-          model: "deepseek/deepseek-v4-flash",
+          model: "deepseek/deepseek-v3.2",
           prompt: finalPromptUser,
           system_prompt: promptSystem,
           temperature: temperature,
@@ -168,7 +168,7 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
 
       const falStream = await fal.stream("openrouter/router", {
         input: {
-          model: "deepseek/deepseek-v4-flash",
+          model: "deepseek/deepseek-v3.2",
           prompt: promptBuilder,
           system_prompt: promptSystem,
           temperature: options.temperature || 0.7
@@ -419,7 +419,7 @@ REGLA DE FORMATO: PROHIBIDO devolver código JSON crudo o bloques de código en 
   const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
 
   await streamWithDeepSeekFallback(res, systemInstruction, history, lastMessage, {
-    model: "gemini-3.1-flash-lite",
+    model: "gemini-3.1-flash",
     cleanBold: false
   });
 });
