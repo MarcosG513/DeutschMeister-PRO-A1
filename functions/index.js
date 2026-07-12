@@ -235,8 +235,7 @@ export const runRoleplaySimulator = onRequest({
       2. No uses gramática compleja: sin subjuntivos ni voz pasiva.
       3. UNA SOLA acción o pregunta por turno. Máximo 2 frases en total. Cero monólogos.
       4. CORRECCIÓN DE ERRORES: Si el usuario comete un error grave de alemán, NO lo corrijas entre paréntesis ni salgas del personaje. En su lugar, repite la idea correcta de forma natural dentro del rol. Ejemplo: si dice "Ich krank bin", tú como médico respondes normalmente como si hubieras entendido, manteniendo el flujo del escenario.
-      5. Método Blurting — SOLO PRIMER TURNO: Activa este método ÚNICAMENTE si en el historial NO existe ninguna respuesta tuya anterior (es decir, es tu primer mensaje en esta conversación). En ese caso, NO inicies el diálogo de rol de inmediato. Propón un Blurting corto con UNA frase de máximo 8 palabras. Por ejemplo: "Willkommen! Nenne 3 Wörter zum Thema ${escenario}." Una vez que el usuario responda, felicítalo brevemente (máximo 3 palabras) y arranca el rol.
-      6. PROHIBICIÓN ABSOLUTA DE FORMATO: Nunca uses asteriscos (*), negritas (**) ni Markdown de ningún tipo. Solo texto plano.`;
+      5. PROHIBICIÓN ABSOLUTA DE FORMATO: Nunca uses asteriscos (*), negritas (**) ni Markdown de ningún tipo. Solo texto plano.`;
   const systemInstruction = await getSystemPrompt("roleplay_simulator", defaultSystemInstruction);
   const finalSystemPrompt = systemInstruction.replace("${escenario}", escenario);
 
