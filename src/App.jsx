@@ -8,7 +8,6 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 import { Capacitor } from '@capacitor/core';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { initializeAdMob, showRewardVideo, showInterstitial } from './services/AdService';
-
 import localforage from 'localforage';
 import BannerAd from './components/BannerAd';
 import PresentationVocabCard from './components/PresentationVocabCard';
@@ -18,11 +17,10 @@ import InteractiveQA from './components/InteractiveQA';
 import TutorChat from './components/TutorChat';
 import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
-
 import { fetchWithRetry, compressImageBase64 as compressImage, nativeSpeak, getSafeId } from './utils/helpers';
 import EmailSimulator from './components/EmailSimulator';
 import ReadingComprehension from './components/ReadingComprehension';
-
+import PresentationViewer from './components/PresentationViewer';
 
 // --- CONFIGURACIÓN API & FIREBASE ---
 // Se removió el apiKey local, ahora se usan Firebase Functions.
@@ -120,7 +118,8 @@ const RoleplaySimulator = ({
   const [tutorMessageCount, setTutorMessageCount] = useState(0);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const chatEndRef = useRef(null);  const scenarios = [{
+  const chatEndRef = useRef(null);
+  const scenarios = [{
     id: 'restaurant',
     title: 'En el Restaurante',
     icon: '🍽️',
@@ -182,21 +181,26 @@ const RoleplaySimulator = ({
           escenario: scen.prompt
         })
       });
-
       if (!response.ok) throw new Error("Failed to connect to Roleplay");
-
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
-
       let currentText = "";
-      setMessages([{ role: "model", parts: [{ text: "" }] }]);
+      setMessages([{
+        role: "model",
+        parts: [{
+          text: ""
+        }]
+      }]);
       setLoading(false);
-
       while (true) {
-        const { value, done } = await reader.read();
+        const {
+          value,
+          done
+        } = await reader.read();
         if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value, {
+          stream: true
+        });
         const lines = chunk.split("\n");
         for (const line of lines) {
           if (line.startsWith("data: ") && !line.includes("[DONE]")) {
@@ -207,7 +211,12 @@ const RoleplaySimulator = ({
                 const cleanedText = currentText.replace(/\*\*/g, '');
                 setMessages(prev => {
                   const updated = [...prev];
-                  updated[updated.length - 1] = { role: "model", parts: [{ text: cleanedText }] };
+                  updated[updated.length - 1] = {
+                    role: "model",
+                    parts: [{
+                      text: cleanedText
+                    }]
+                  };
                   return updated;
                 });
               }
@@ -258,21 +267,26 @@ const RoleplaySimulator = ({
           escenario: scenario.prompt
         })
       });
-
       if (!response.ok) throw new Error("Failed to connect to Roleplay");
-
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
-
       let currentText = "";
-      setMessages([...newMsgs, { role: "model", parts: [{ text: "" }] }]);
+      setMessages([...newMsgs, {
+        role: "model",
+        parts: [{
+          text: ""
+        }]
+      }]);
       setLoading(false);
-
       while (true) {
-        const { value, done } = await reader.read();
+        const {
+          value,
+          done
+        } = await reader.read();
         if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value, {
+          stream: true
+        });
         const lines = chunk.split("\n");
         for (const line of lines) {
           if (line.startsWith("data: ") && !line.includes("[DONE]")) {
@@ -283,7 +297,12 @@ const RoleplaySimulator = ({
                 const cleanedText = currentText.replace(/\*\*/g, '');
                 setMessages(prev => {
                   const updated = [...prev];
-                  updated[updated.length - 1] = { role: "model", parts: [{ text: cleanedText }] };
+                  updated[updated.length - 1] = {
+                    role: "model",
+                    parts: [{
+                      text: cleanedText
+                    }]
+                  };
                   return updated;
                 });
               }
@@ -320,7 +339,7 @@ const RoleplaySimulator = ({
         </div>
       </div>;
   }
-  return <div className="bg-white rounded-2xl shadow-lg border border-slate-200 flex flex-col h-[70vh] max-w-3xl mx-auto mt-6 overflow-hidden animate-in slide-in-from-bottom-4">
+  return <div className="bg-white rounded-2xl shadow-lg border border-slate-200 flex flex-col h-[70svh] max-w-3xl mx-auto mt-6 overflow-hidden animate-in slide-in-from-bottom-4">
       <div className="bg-purple-600 text-white p-4 flex justify-between items-center shadow-md z-10">
         <div className="flex items-center gap-3">
           <span className="text-2xl">{scenario.icon}</span>
@@ -357,7 +376,6 @@ const RoleplaySimulator = ({
 // --- Las bases de datos se importan desde './data/chapters' ---
 
 export default function App() {
-
   useEffect(() => {
     initializeAdMob();
   }, []);
@@ -394,7 +412,6 @@ export default function App() {
   const wordsOnlyRef = useRef([]);
   const adaptiveTimerRef = useRef(null);
   const isPausedRef = useRef(false);
-
   useEffect(() => {
     return () => {
       if ('speechSynthesis' in window) {
@@ -410,42 +427,49 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [cardImages, setCardImages] = useState({});
   const [loadingImages, setLoadingImages] = useState({});
-
-  const lazyLoadImage = async (wordObj) => {
+  const lazyLoadImage = async wordObj => {
     if (!wordObj || !wordObj.de) return;
     const safeId = getSafeId(wordObj.de).substring(0, 150);
     if (cardImages[safeId] !== undefined || loadingImages[safeId]) return;
-    setLoadingImages(prev => ({ ...prev, [safeId]: true }));
+    setLoadingImages(prev => ({
+      ...prev,
+      [safeId]: true
+    }));
     try {
       const cached = await localforage.getItem(`img_${safeId}`);
       if (cached) {
-        setCardImages(prev => ({ ...prev, [safeId]: cached }));
+        setCardImages(prev => ({
+          ...prev,
+          [safeId]: cached
+        }));
         return;
       }
       if (!db) return;
-      const globalAppId = "deutschmeister-pro";
-      const imageDocRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'flashcardImages', safeId);
+      const imageDocRef = doc(db, 'global_flashcards', safeId);
       let docSnap = await getDoc(imageDocRef);
       let imageUrl = "";
       if (docSnap.exists()) {
         imageUrl = docSnap.data().imageUrl || docSnap.data().imageBase64;
-      } else {
-        const globalCacheRef = doc(db, 'global_flashcards', safeId);
-        docSnap = await getDoc(globalCacheRef);
-        if (docSnap.exists()) {
-          imageUrl = docSnap.data().imageUrl;
-        }
       }
       if (imageUrl) {
-        setCardImages(prev => ({ ...prev, [safeId]: imageUrl }));
+        setCardImages(prev => ({
+          ...prev,
+          [safeId]: imageUrl
+        }));
         await localforage.setItem(`img_${safeId}`, imageUrl);
       } else {
-        setCardImages(prev => ({ ...prev, [safeId]: null }));
+        setCardImages(prev => ({
+          ...prev,
+          [safeId]: null
+        }));
       }
     } catch (err) {
       console.error(`Error lazy loading image for ${safeId}:`, err);
     } finally {
-      setLoadingImages(prev => ({ ...prev, [safeId]: false }));
+      setLoadingImages(prev => ({
+        ...prev,
+        [safeId]: false
+      }));
     }
   };
   const [unlockedCards, setUnlockedCards] = useState(() => {
@@ -503,7 +527,6 @@ export default function App() {
     const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, []);
-
   useEffect(() => {
     if (!user || !db || user.uid === 'offline_user') return;
     const userUnlockedRef = collection(db, 'artifacts', appId, 'users', user.uid, 'unlockedCards');
@@ -558,13 +581,7 @@ export default function App() {
         chapter: c.title,
         emoji: c.emoji,
         isRedemittel: c.isRedemittel
-      }))).filter(w => 
-        normalizeStr(w.de).includes(normTerm) || 
-        normalizeStr(w.es).includes(normTerm) || 
-        normalizeStr(w.pron).includes(normTerm) || 
-        normalizeStr(w.type).includes(normTerm) || 
-        (w.category && normalizeStr(w.category).includes(normTerm))
-      );
+      }))).filter(w => normalizeStr(w.de).includes(normTerm) || normalizeStr(w.es).includes(normTerm) || normalizeStr(w.pron).includes(normTerm) || normalizeStr(w.type).includes(normTerm) || w.category && normalizeStr(w.category).includes(normTerm));
     }
     return activeChapter ? activeChapter.words.map(w => ({
       ...w,
@@ -586,20 +603,17 @@ export default function App() {
     setSelectedQuizChapters(chapters.map(c => c.id));
     setViewMode("quizSetup");
   };
-
   const startQuizSession = () => {
     setCurrentStreak(0);
     generateNextQuizWord();
     setViewMode("quiz");
   };
-
   const generateNextQuizWord = () => {
     let selectedCaps = chapters.filter(c => selectedQuizChapters.includes(c.id));
     if (selectedCaps.length === 0) selectedCaps = chapters; // Fallback de seguridad
-    
+
     let pool = selectedCaps.flatMap(c => c.words);
     if (pool.length < 4) pool = chapters.flatMap(c => c.words);
-
     const randomWord = pool[Math.floor(Math.random() * pool.length)];
     const options = [randomWord.es];
     while (options.length < 4) {
@@ -613,17 +627,14 @@ export default function App() {
       isCorrect: null
     });
   };
-
   const handleQuizAnswer = opt => {
     if (quizState.selected) return;
     const isCorrect = opt === quizState.word.es;
-    
     setQuizState(prev => ({
       ...prev,
       selected: opt,
       isCorrect: isCorrect
     }));
-
     if (isCorrect) {
       setCurrentStreak(prev => {
         const next = prev + 1;
@@ -636,12 +647,7 @@ export default function App() {
   };
   const generateStory = async () => {
     if (!activeChapter) return;
-
-    const palabrasValidas = displayedWords
-      .filter(w => w.de.length > 2) 
-      .slice(0, 8)
-      .map(w => w.de);
-
+    const palabrasValidas = displayedWords.filter(w => w.de.length > 2).slice(0, 8).map(w => w.de);
     if (palabrasValidas.length === 0) {
       setStoryState({
         isOpen: true,
@@ -651,59 +657,52 @@ export default function App() {
       });
       return;
     }
-
     const granted = await showRewardVideo();
     if (!granted) return;
-
     setStoryState({
       isOpen: true,
       loading: true,
       de: "",
       es: ""
     });
-
     const attemptFetch = async () => {
       const response = await fetch(`https://generatestory-44keyii6gq-uc.a.run.app`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ palabrasVocabulario: palabrasValidas })
+        body: JSON.stringify({
+          palabrasVocabulario: palabrasValidas
+        })
       });
-
       if (!response.ok) throw new Error("Failed to generate story");
-
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
-
       let currentBuffer = "";
-      
       while (true) {
-        const { value, done } = await reader.read();
+        const {
+          value,
+          done
+        } = await reader.read();
         if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value, {
+          stream: true
+        });
         const lines = chunk.split("\n");
         for (const line of lines) {
           if (line.startsWith("data: ") && !line.includes("[DONE]")) {
             const textChunk = line.substring(6);
             currentBuffer += textChunk;
-            
             const getStreamingField = (buffer, fieldName) => {
               const regex = new RegExp(`"${fieldName}"\\s*:\\s*"([^"]*)`);
               const match = buffer.match(regex);
               if (match) {
-                return match[1]
-                  .replace(/\\n/g, "\n")
-                  .replace(/\\"/g, '"')
-                  .replace(/\\t/g, "\t");
+                return match[1].replace(/\\n/g, "\n").replace(/\\"/g, '"').replace(/\\t/g, "\t");
               }
               return "";
             };
-
             const partialDe = getStreamingField(currentBuffer, "cuento_aleman") || getStreamingField(currentBuffer, "de");
             const partialEs = getStreamingField(currentBuffer, "traduccion_espanol") || getStreamingField(currentBuffer, "es");
-
             setStoryState(prev => ({
               ...prev,
               loading: false,
@@ -713,14 +712,12 @@ export default function App() {
           }
         }
       }
-
       const jsonMatch = currentBuffer.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
-         throw new Error("Formato JSON no encontrado.");
+        throw new Error("Formato JSON no encontrado.");
       }
       return JSON.parse(jsonMatch[0]);
     };
-
     try {
       const data = await attemptFetch();
       setStoryState({
@@ -751,14 +748,13 @@ export default function App() {
       }
     }
   };
-  const parseTextToTokens = (text) => {
+  const parseTextToTokens = text => {
     if (!text) return [];
     const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
     const tokens = [];
     let isBold = false;
     let charIndex = 0;
     let wordCounter = 0;
-
     let i = 0;
     while (i < cleanedText.length) {
       if (cleanedText.startsWith('**', i)) {
@@ -766,7 +762,6 @@ export default function App() {
         i += 2;
         continue;
       }
-
       const spaceMatch = cleanedText.slice(i).match(/^\s+/);
       if (spaceMatch) {
         const spaceStr = spaceMatch[0];
@@ -783,7 +778,6 @@ export default function App() {
         i += spaceStr.length;
         continue;
       }
-
       const punctMatch = cleanedText.slice(i).match(/^[.,!?:;()[\]{}'"“”«»„“\-–—/\\+]+/);
       if (punctMatch) {
         const punctStr = punctMatch[0];
@@ -800,7 +794,6 @@ export default function App() {
         i += punctStr.length;
         continue;
       }
-
       const wordMatch = cleanedText.slice(i).match(/^[^\s.,!?:;()[\]{}'"“”«»„“\-–—/\\+*]+/);
       if (wordMatch) {
         const wordStr = wordMatch[0];
@@ -817,7 +810,6 @@ export default function App() {
         i += wordStr.length;
         continue;
       }
-
       const singleChar = cleanedText[i];
       const isWord = /^[a-zA-Z0-9ÄäÖöÜüß]$/.test(singleChar);
       tokens.push({
@@ -834,11 +826,9 @@ export default function App() {
     }
     return tokens;
   };
-
-  const speakStory = (text) => {
+  const speakStory = text => {
     if (!text) return;
     const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
-
     if (isPlayingStoryAudio) {
       if (Capacitor.isNativePlatform()) {
         if (isStoryAudioPaused) {
@@ -902,28 +892,21 @@ export default function App() {
       }
       return;
     }
-
     setIsPlayingStoryAudio(true);
     setIsStoryAudioPaused(false);
     isPausedRef.current = false;
     setCurrentWordIndex(0);
-
     const tokens = parseTextToTokens(cleanedText);
     const wordsOnly = tokens.filter(t => t.isWord);
     wordsOnlyRef.current = wordsOnly;
-
     const cleanText = cleanedText.replace(/\*\*/g, '');
-
     let hasNativeBoundary = false;
-
-    const runAdaptiveTimer = (startIndex) => {
+    const runAdaptiveTimer = startIndex => {
       if (startIndex >= wordsOnly.length) return;
       let localIdx = startIndex;
-
       const tick = () => {
         if (hasNativeBoundary) return;
         if (localIdx >= wordsOnly.length) return;
-
         setCurrentWordIndex(localIdx);
         const currentWord = wordsOnly[localIdx];
         const wordLen = currentWord ? currentWord.text.length : 5;
@@ -931,7 +914,6 @@ export default function App() {
         const baseMs = 85;
         const minMs = 350;
         const duration = Math.max(minMs, wordLen * baseMs) / rate;
-
         localIdx++;
         if (localIdx < wordsOnly.length) {
           window.activeStoryTimeout = setTimeout(tick, duration);
@@ -945,13 +927,10 @@ export default function App() {
           }, duration);
         }
       };
-
       if (window.activeStoryTimeout) clearTimeout(window.activeStoryTimeout);
       window.activeStoryTimeout = setTimeout(tick, 0);
     };
-
     adaptiveTimerRef.current = runAdaptiveTimer;
-
     if (Capacitor.isNativePlatform()) {
       TextToSpeech.stop();
       TextToSpeech.speak({
@@ -975,8 +954,7 @@ export default function App() {
       utterance.rate = 0.70;
       utterance.volume = 1.0;
       utteranceRef.current = utterance;
-
-      utterance.onboundary = (event) => {
+      utterance.onboundary = event => {
         if (event.name === 'word') {
           if (event.charIndex > 0) {
             hasNativeBoundary = true;
@@ -986,15 +964,12 @@ export default function App() {
             }
           }
           const charIndex = event.charIndex;
-          const currentToken = wordsOnlyRef.current.find(
-            w => charIndex >= w.charStart && charIndex < w.charEnd
-          );
+          const currentToken = wordsOnlyRef.current.find(w => charIndex >= w.charStart && charIndex < w.charEnd);
           if (currentToken) {
             setCurrentWordIndex(currentToken.wordIndex);
           }
         }
       };
-
       utterance.onend = () => {
         if (window.activeStoryTimeout) {
           clearTimeout(window.activeStoryTimeout);
@@ -1005,7 +980,6 @@ export default function App() {
         setCurrentWordIndex(-1);
         utteranceRef.current = null;
       };
-
       utterance.onerror = () => {
         if (window.activeStoryTimeout) {
           clearTimeout(window.activeStoryTimeout);
@@ -1016,13 +990,11 @@ export default function App() {
         setCurrentWordIndex(-1);
         utteranceRef.current = null;
       };
-
       runAdaptiveTimer(0);
       window.speechSynthesis.speak(utterance);
     } else {
       let wordIdx = 0;
       setCurrentWordIndex(0);
-      
       const runInterval = () => {
         if (window.activeStoryInterval) clearInterval(window.activeStoryInterval);
         window.activeStoryInterval = setInterval(() => {
@@ -1038,7 +1010,6 @@ export default function App() {
           }
         }, 450);
       };
-      
       window.isStoryPausedPlaceholder = false;
       runInterval();
     }
@@ -1072,23 +1043,30 @@ export default function App() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ historialConversacion: newMessages })
+        body: JSON.stringify({
+          historialConversacion: newMessages
+        })
       });
-      
       if (!response.ok) throw new Error("Failed to connect to tutor");
-      
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
-      
       let currentText = "";
-      setChatMessages([...newMessages, { role: "model", parts: [{ text: "" }] }]);
+      setChatMessages([...newMessages, {
+        role: "model",
+        parts: [{
+          text: ""
+        }]
+      }]);
       setIsChatLoading(false);
-      
       while (true) {
-        const { value, done } = await reader.read();
+        const {
+          value,
+          done
+        } = await reader.read();
         if (done) break;
-        
-        const chunk = decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value, {
+          stream: true
+        });
         const lines = chunk.split("\n");
         for (const line of lines) {
           if (line.startsWith("data: ") && !line.includes("[DONE]")) {
@@ -1098,7 +1076,12 @@ export default function App() {
                 currentText += data.text;
                 setChatMessages(prev => {
                   const updated = [...prev];
-                  updated[updated.length - 1] = { role: "model", parts: [{ text: currentText }] };
+                  updated[updated.length - 1] = {
+                    role: "model",
+                    parts: [{
+                      text: currentText
+                    }]
+                  };
                   return updated;
                 });
               }
@@ -1106,8 +1089,12 @@ export default function App() {
           }
         }
       }
-      
-      const finalMessages = [...newMessages, { role: "model", parts: [{ text: currentText }] }];
+      const finalMessages = [...newMessages, {
+        role: "model",
+        parts: [{
+          text: currentText
+        }]
+      }];
       setChatMessages(finalMessages);
       if (user && db) {
         const chatDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'chat', 'history');
@@ -1134,27 +1121,41 @@ export default function App() {
     setIsTutorOpen(true);
     const wordDe = typeof word === 'string' ? word : word.de;
     const wordEs = typeof word === 'string' ? "" : word.es;
-    const prompt = `Hola tutor, ¿me puedes explicar con más detalle la palabra alemana "${wordDe}"${wordEs ? ` que significa "${wordEs}"` : ''}? Dame un par de ejemplos cortos en oraciones útiles para mi nivel A1.`;
+    const prompt = `Hola tutor, estoy repasando la palabra "${wordDe}"${wordEs ? ` (${wordEs})` : ''}. ¿Me das un solo ejemplo súper corto de nivel A1 y me haces una pregunta rápida para poner a prueba si sé cómo usarla?`;
     setChatInput(prompt);
   };
   const generateCardImage = async (wordObj, e, forceRegenerate = false) => {
     if (e) e.stopPropagation();
     const safeId = getSafeId(wordObj.de).substring(0, 150);
-    const userDocRef = (user && db) ? doc(db, 'artifacts', appId, 'users', user.uid, 'unlockedCards', safeId) : null;
-    
+    const userDocRef = user && db ? doc(db, 'artifacts', appId, 'users', user.uid, 'unlockedCards', safeId) : null;
     if (!forceRegenerate) {
       const existingImage = cardImages[safeId];
       if (existingImage) {
         const granted = await showRewardVideo();
         if (!granted) return;
-        setUnlockedCards(prev => ({ ...prev, [safeId]: { unlocked: true, regenerated: false } }));
+        setUnlockedCards(prev => ({
+          ...prev,
+          [safeId]: {
+            unlocked: true,
+            regenerated: false
+          }
+        }));
         if (userDocRef) {
-          try { await setDoc(userDocRef, { unlocked: true, regenerated: false }, { merge: true }); } catch (error) { console.warn(error); }
+          try {
+            await setDoc(userDocRef, {
+              unlocked: true,
+              regenerated: false
+            }, {
+              merge: true
+            });
+          } catch (error) {
+            console.warn(error);
+          }
         }
         return;
       }
     } else {
-      const currentCount = unlockedCards && unlockedCards[safeId]?.regenerateCount !== undefined ? unlockedCards[safeId].regenerateCount : (unlockedCards && unlockedCards[safeId]?.regenerated ? 1 : 0);
+      const currentCount = unlockedCards && unlockedCards[safeId]?.regenerateCount !== undefined ? unlockedCards[safeId].regenerateCount : unlockedCards && unlockedCards[safeId]?.regenerated ? 1 : 0;
       if (currentCount >= 10) {
         alert('Ya has regenerado esta imagen el máximo de veces permitido (10 veces).');
         return;
@@ -1165,73 +1166,109 @@ export default function App() {
     setIsImageLoading(safeId);
     try {
       if (!functions) throw new Error("Firebase functions not initialized");
-      const currentCount = unlockedCards && unlockedCards[safeId]?.regenerateCount !== undefined ? unlockedCards[safeId].regenerateCount : (unlockedCards && unlockedCards[safeId]?.regenerated ? 1 : 0);
+      const currentCount = unlockedCards && unlockedCards[safeId]?.regenerateCount !== undefined ? unlockedCards[safeId].regenerateCount : unlockedCards && unlockedCards[safeId]?.regenerated ? 1 : 0;
       const newCount = forceRegenerate ? currentCount + 1 : currentCount;
       let conceptoAEnviar = wordObj.en || wordObj.concepto_ingles || "";
 
-      // PARTE 2: Interceptar (Read Global)
-      let dataUri = "";
-      let isDifferentFromLocal = false;
-      try {
-        const globalSafeId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
-        const globalCacheRef = doc(db, 'global_flashcards', globalSafeId);
-        const globalCacheSnap = await getDoc(globalCacheRef);
-        
-        if (globalCacheSnap.exists() && globalCacheSnap.data().imageUrl) {
-            const globalUrl = globalCacheSnap.data().imageUrl;
-            const localUrl = cardImages[safeId];
-            
-            // Si el usuario presionó 'Regenerar', ignoramos la caché global
-            if (forceRegenerate) {
-                console.log("FORCE REGENERATE: Ignorando caché global a petición del usuario...");
-            } 
-            else if (globalUrl !== localUrl) {
-                console.log("CACHE HIT: La imagen global es NUEVA. Sincronizando sin generar...");
-                dataUri = globalUrl;
-                isDifferentFromLocal = true;
-            } else {
-                console.log("CACHE MATCH: Ya tienes la imagen más reciente. Forzando nueva generación...");
+      // Paso intermedio de validación: Read-Through Cache
+      if (!forceRegenerate && db) {
+        try {
+          const globalCacheRef = doc(db, 'global_flashcards', safeId);
+          const globalCacheSnap = await getDoc(globalCacheRef);
+          if (globalCacheSnap.exists()) {
+            const cachedData = globalCacheSnap.data();
+            const cachedImage = cachedData.imageUrl || cachedData.imageBase64;
+            if (cachedImage) {
+              console.log("CACHE HIT (Read-Through Cache): Imagen encontrada en global_flashcards para", safeId);
+              const compressedImage = await compressImageBase64(cachedImage, 1024, 0.9);
+              setCardImages(prev => {
+                const nextImages = {
+                  ...prev,
+                  [safeId]: compressedImage
+                };
+                localforage.setItem(`img_${safeId}`, compressedImage).catch(e => console.warn(e));
+                return nextImages;
+              });
+              setUnlockedCards(prev => ({
+                ...prev,
+                [safeId]: {
+                  unlocked: true,
+                  regenerateCount: currentCount,
+                  imageUrl: compressedImage
+                }
+              }));
+              if (userDocRef) {
+                await setDoc(userDocRef, {
+                  unlocked: true,
+                  regenerateCount: currentCount,
+                  imageUrl: compressedImage
+                }, {
+                  merge: true
+                }).catch(e => console.warn(e));
+              }
+              return;
             }
+          }
+        } catch (cacheErr) {
+          console.warn("Advertencia en Read-Through Cache:", cacheErr);
         }
-      } catch (cacheErr) {
-        console.warn("Advertencia de lectura en caché global:", cacheErr);
       }
-
-      // Si no hubo Hit diferente, forzamos la generación en la nube
-      if (!isDifferentFromLocal) {
-        console.log("FORCED REGEN: Llamando a Cloud Function...");
-        const generateCardImageFn = httpsCallable(functions, 'generateCardImage');
-        const result = await generateCardImageFn({
-          wordObj: wordObj,
-          conceptoIngles: conceptoAEnviar,
-          word: wordObj.de,
-          category: activeChapter ? activeChapter.title : ''
-        });
-        dataUri = result.data?.imageUrl;
-      }
-
+      let dataUri = "";
+      console.log("CACHE MISS o FORCE REGENERATE: Llamando a Cloud Function...");
+      const generateCardImageFn = httpsCallable(functions, 'generateCardImage');
+      const result = await generateCardImageFn({
+        wordObj: wordObj,
+        conceptoIngles: conceptoAEnviar,
+        word: wordObj.de,
+        category: activeChapter ? activeChapter.title : ''
+      });
+      dataUri = result.data?.imageUrl;
       if (!dataUri) throw new Error('No image data returned from FAL API');
       dataUri = await compressImageBase64(dataUri, 1024, 0.9);
-      
       setCardImages(prev => {
-        const nextImages = { ...prev, [safeId]: dataUri };
-        // Guardar la respuesta final en IndexedDB (localforage)
-        localforage.setItem('cardImages', nextImages).catch(e => console.warn(e));
+        const nextImages = {
+          ...prev,
+          [safeId]: dataUri
+        };
+        localforage.setItem(`img_${safeId}`, dataUri).catch(e => console.warn(e));
         return nextImages;
       });
-      
       if (db) {
         try {
-          const globalAppId = 'deutschmeister-pro';
-          const docRef = doc(db, 'artifacts', globalAppId, 'public', 'data', 'flashcardImages', safeId);
-          await setDoc(docRef, { imageUrl: dataUri, word: wordObj.de, regenerateCount: newCount }, { merge: true });
+          const docRef = doc(db, 'global_flashcards', safeId);
+          await setDoc(docRef, {
+            imageUrl: dataUri,
+            word: wordObj.de,
+            regenerateCount: newCount
+          }, {
+            merge: true
+          });
           const strictDocRef = doc(db, 'public_content', 'data', 'flashcardImages', safeId);
-          await setDoc(strictDocRef, { imageUrl: dataUri, word: wordObj.de, regenerateCount: newCount }, { merge: true });
-        } catch(e) { console.warn(e); }
+          await setDoc(strictDocRef, {
+            imageUrl: dataUri,
+            word: wordObj.de,
+            regenerateCount: newCount
+          }, {
+            merge: true
+          });
+        } catch (e) {
+          console.warn(e);
+        }
       }
-      setUnlockedCards(prev => ({ ...prev, [safeId]: { unlocked: true, regenerateCount: newCount } }));
+      setUnlockedCards(prev => ({
+        ...prev,
+        [safeId]: {
+          unlocked: true,
+          regenerateCount: newCount
+        }
+      }));
       if (userDocRef) {
-        await setDoc(userDocRef, { unlocked: true, regenerateCount: newCount }, { merge: true }).catch(e => console.warn(e));
+        await setDoc(userDocRef, {
+          unlocked: true,
+          regenerateCount: newCount
+        }, {
+          merge: true
+        }).catch(e => console.warn(e));
       }
     } catch (error) {
       console.error('Error generating image:', error);
@@ -1245,117 +1282,24 @@ export default function App() {
     const textToSpeak = typeof word === 'string' ? word : word.de;
     nativeSpeak(textToSpeak);
   };
-  const PresentationViewer = ({
-    presentation,
-    onClose
-  }) => {
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const nextSlide = () => {
-      if (currentSlide < presentation.slides.length - 1) setCurrentSlide(prev => prev + 1);
-    };
-    const prevSlide = () => {
-      if (currentSlide > 0) setCurrentSlide(prev => prev - 1);
-    };
-    const isBlueprint = presentation.theme === 'blueprint';
-    const isMedical = presentation.theme === 'medical';
-    const isNotebook = presentation.theme === 'notebook';
-    let containerClass = "flex-1 flex flex-col overflow-hidden ";
-    let headerClass = "flex justify-between items-center p-4 border-b shrink-0 ";
-    let bodyClass = "flex-1 overflow-y-auto p-6 md:p-12 flex flex-col justify-start ";
-    if (isBlueprint) {
-      containerClass += "bg-blue-950 text-blue-50 font-sans";
-      bodyClass += " bg-[linear-gradient(to_right,#1e3a8a_1px,transparent_1px),linear-gradient(to_bottom,#1e3a8a_1px,transparent_1px)] bg-[size:3rem_3rem]";
-      headerClass += "bg-blue-950 border-blue-800";
-    } else if (isMedical) {
-      containerClass += "bg-slate-50 text-slate-800 font-sans";
-      bodyClass += " bg-white/50";
-      headerClass += "bg-white border-emerald-100 shadow-sm";
-    } else if (isNotebook) {
-      containerClass += "bg-[#fdfbf7] text-slate-800 font-serif";
-      bodyClass += " bg-[linear-gradient(transparent_95%,#e5e7eb_5%)] bg-[size:100%_2rem]";
-      headerClass += "bg-[#fdfbf7] border-amber-900/10 shadow-sm";
-    }
-    const slideProps = {
-      cardImages,
-      generateCardImage,
-      isImageLoading,
-      openAiTutor,
-      setFullscreenImage,
-      unlockedCards,
-      speakText,
-      lazyLoadImage
-    };
-    return <div className="flex flex-col min-h-[100svh] w-full bg-white animate-in fade-in zoom-in-95 duration-200">
-        <div className={containerClass}>
-          <div className={headerClass}>
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${isBlueprint ? 'bg-blue-900 text-blue-300' : isMedical ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-700'}`}>
-                <Presentation size={24} />
-              </div>
-              <div>
-                <h2 className="font-bold text-lg leading-tight">{presentation.title}</h2>
-                <p className={`text-xs ${isBlueprint ? 'text-blue-400' : isMedical ? 'text-emerald-600' : 'text-amber-600'}`}>{currentSlide + 1} / {presentation.slides.length}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              {presentation.presentationUrl && (
-                <a 
-                  href={presentation.presentationUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold transition-all border ${isBlueprint ? 'border-blue-700 text-blue-300 hover:bg-blue-800' : isMedical ? 'border-emerald-200 text-emerald-700 hover:bg-emerald-50' : 'border-amber-900/20 text-amber-700 hover:bg-amber-100'}`}
-                >
-                  <Link2 size={16} /> Diapositivas
-                </a>
-              )}
-              <button onClick={onClose} className={`p-2 rounded-full transition ${isBlueprint ? 'hover:bg-blue-900 text-blue-300' : 'hover:bg-slate-200 text-slate-500'}`}>
-                <X size={24} />
-              </button>
-            </div>
-          </div>
-
-          <div className={bodyClass}>
-            <div className="max-w-4xl mx-auto w-full animate-in slide-in-from-bottom-4 fade-in duration-300" key={currentSlide}>
-              <div className="mb-6 md:mb-10 text-center">
-                 <h1 className={`text-3xl md:text-5xl font-black mb-3 ${isBlueprint ? 'text-white' : isMedical ? 'text-emerald-950' : 'text-amber-950'}`}>
-                   {presentation.slides[currentSlide].title}
-                 </h1>
-                 {presentation.slides[currentSlide].subtitle && <h2 className={`text-lg md:text-xl font-medium ${isBlueprint ? 'text-blue-300' : isMedical ? 'text-emerald-700' : 'text-amber-700/80'}`}>
-                     {presentation.slides[currentSlide].subtitle}
-                   </h2>}
-              </div>
-              <div className="w-full">
-                {typeof presentation.slides[currentSlide].content === 'function' ? presentation.slides[currentSlide].content(slideProps) : presentation.slides[currentSlide].content}
-              </div>
-            </div>
-          </div>
-
-          <div className={`p-4 shrink-0 flex items-center justify-between border-t ${isBlueprint ? 'border-blue-800 bg-blue-950/80 backdrop-blur' : isMedical ? 'border-emerald-100 bg-white/80 backdrop-blur' : 'border-amber-900/10 bg-[#fdfbf7]/80 backdrop-blur'}`}>
-            <button onClick={prevSlide} disabled={currentSlide === 0} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition disabled:opacity-30 ${isBlueprint ? 'bg-blue-900 text-white hover:bg-blue-800' : isMedical ? 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' : 'bg-amber-100 text-amber-900 hover:bg-amber-200'}`}>
-              <ChevronLeft size={20} /> Anterior
-            </button>
-            
-            <div className="flex gap-1.5">
-              {presentation.slides.map((_, idx) => <div key={idx} className={`w-2 h-2 rounded-full transition-all ${idx === currentSlide ? isBlueprint ? 'bg-blue-400 w-6' : isMedical ? 'bg-emerald-500 w-6' : 'bg-amber-600 w-6' : isBlueprint ? 'bg-blue-900' : isMedical ? 'bg-emerald-200' : 'bg-amber-200'}`} />)}
-            </div>
-
-            <button onClick={currentSlide === presentation.slides.length - 1 ? onClose : nextSlide} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition ${isBlueprint ? 'bg-blue-500 text-blue-950 hover:bg-blue-400' : isMedical ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-amber-600 text-white hover:bg-amber-700'}`}>
-              {currentSlide === presentation.slides.length - 1 ? 'Finalizar' : 'Siguiente'} <ChevronRight size={20} />
-            </button>
-          </div>
-        </div>
-      </div>;
-  };
   return <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-[100svh] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
       
-      {viewMode === "presentation" && activePresentation ? (
-        <PresentationViewer presentation={activePresentation} onClose={() => {
+      {viewMode === "presentation" && activePresentation ? <PresentationViewer
+        presentation={activePresentation}
+        onClose={() => {
           setViewMode('flashcards');
           setActivePresentationId(null);
           setIsFullscreen(false);
-        }} />
-      ) : viewMode === "quiz" ? (
-        <div className="flex flex-col min-h-[100svh] w-full bg-white overflow-y-auto animate-in fade-in duration-300 p-4 sm:p-8">
+        }}
+        cardImages={cardImages}
+        generateCardImage={generateCardImage}
+        isImageLoading={isImageLoading}
+        openAiTutor={openAiTutor}
+        setFullscreenImage={setFullscreenImage}
+        unlockedCards={unlockedCards}
+        speakText={speakText}
+        lazyLoadImage={lazyLoadImage}
+      /> : viewMode === "quiz" ? <div className="flex flex-col min-h-[100svh] w-full bg-white overflow-y-auto animate-in fade-in duration-300 p-4 sm:p-8">
           <div className="max-w-4xl mx-auto w-full">
                <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                  <div>
@@ -1366,10 +1310,10 @@ export default function App() {
                  </div>
                  
                  <button onClick={() => {
-                   setViewMode("flashcards");
-                   setQuizState(null);
-                   showInterstitial();
-                 }} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm self-start sm:self-auto" title="Volver a los módulos">
+            setViewMode("flashcards");
+            setQuizState(null);
+            showInterstitial();
+          }} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm self-start sm:self-auto" title="Volver a los módulos">
                    <X size={18} /> Salir del Quiz
                  </button>
                </div>
@@ -1390,24 +1334,25 @@ export default function App() {
                  {/* Interfaz de Pregunta (Pronunciación y Audio) */}
                  <div className="w-full max-w-xl flex flex-col items-center justify-center font-black text-slate-800 mb-8 bg-slate-50 border-2 border-slate-100 py-10 px-4 rounded-xl shadow-inner relative group">
                    <span className="text-4xl md:text-5xl">{quizState?.word.de}</span>
-                   {quizState?.word.pron && (
-                      <div className="flex items-center gap-2 mt-3 text-blue-500 italic font-medium text-lg">
+                   {quizState?.word.pron && <div className="flex items-center gap-2 mt-3 text-blue-500 italic font-medium text-lg">
                         /{quizState.word.pron}/
-                        <button onClick={(e) => { e.stopPropagation(); nativeSpeak(quizState.word.de); }} className="p-1.5 hover:text-blue-600 hover:bg-blue-100 rounded-full transition"><Volume2 size={20} /></button>
-                      </div>
-                   )}
+                        <button onClick={e => {
+                e.stopPropagation();
+                nativeSpeak(quizState.word.de);
+              }} className="p-1.5 hover:text-blue-600 hover:bg-blue-100 rounded-full transition"><Volume2 size={20} /></button>
+                      </div>}
                  </div>
                  
                  <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
                    {quizState?.options.map((opt, i) => {
-                     let btnClass = "bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700";
-                     if (quizState.selected) {
-                       if (opt === quizState.word.es) btnClass = "bg-green-50 border-2 border-green-500 text-green-700 font-bold shadow-sm";else if (opt === quizState.selected) btnClass = "bg-red-50 border-2 border-red-500 text-red-700";else btnClass = "bg-slate-50 border-2 border-slate-100 text-slate-400 opacity-50";
-                     }
-                     return <button key={i} onClick={() => handleQuizAnswer(opt)} disabled={!!quizState.selected} className={`py-4 px-6 rounded-xl text-lg transition-all ${btnClass}`}>
+              let btnClass = "bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700";
+              if (quizState.selected) {
+                if (opt === quizState.word.es) btnClass = "bg-green-50 border-2 border-green-500 text-green-700 font-bold shadow-sm";else if (opt === quizState.selected) btnClass = "bg-red-50 border-2 border-red-500 text-red-700";else btnClass = "bg-slate-50 border-2 border-slate-100 text-slate-400 opacity-50";
+              }
+              return <button key={i} onClick={() => handleQuizAnswer(opt)} disabled={!!quizState.selected} className={`py-4 px-6 rounded-xl text-lg transition-all ${btnClass}`}>
                               {opt}
                             </button>;
-                   })}
+            })}
                  </div>
                  {quizState?.selected && <div className="mt-8 flex flex-col items-center gap-4 w-full animate-in slide-in-from-bottom-4">
                      <div className={`flex items-center gap-2 text-xl font-bold ${quizState.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
@@ -1420,9 +1365,7 @@ export default function App() {
                    </div>}
                </div>
           </div>
-        </div>
-      ) : (
-        <>
+        </div> : <>
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
             <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
@@ -1449,9 +1392,9 @@ export default function App() {
               
               <div className="relative w-full md:w-1/3">
                 <input type="text" placeholder="Buscar (ej. Motor, essen, Verbo Modal)..." className="w-full py-2 px-4 pl-10 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all" value={searchTerm} onChange={e => {
-                  setSearchTerm(e.target.value);
-                  if (viewMode === "quiz" || viewMode === "presentation" || viewMode === "studyPlan") setViewMode("flashcards");
-                }} />
+              setSearchTerm(e.target.value);
+              if (viewMode === "quiz" || viewMode === "presentation" || viewMode === "studyPlan") setViewMode("flashcards");
+            }} />
                 <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
               </div>
 
@@ -1468,8 +1411,7 @@ export default function App() {
           </header>
 
           {/* SIDEBAR DRAWER MENÚ DESLIZABLE */}
-          {isMenuOpen && (
-            <>
+          {isMenuOpen && <>
               <div onClick={() => setIsMenuOpen(false)} className="fixed inset-0 bg-slate-950/60 z-40 transition-opacity animate-in fade-in duration-200" />
               <aside className="fixed inset-y-0 left-0 w-80 bg-slate-900 text-slate-100 z-50 shadow-2xl flex flex-col transform transition-transform duration-300 animate-in slide-in-from-left">
                 {/* Cabecera del Menú */}
@@ -1486,16 +1428,28 @@ export default function App() {
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
                   {/* Accesos rápidos */}
                   <div className="grid grid-cols-2 gap-2 pb-4 border-b border-slate-800">
-                    <button onClick={() => { setIsTutorOpen(true); setIsMenuOpen(false); }} className="bg-slate-800 text-yellow-400 border border-yellow-500/20 py-2.5 rounded-lg font-bold hover:bg-slate-700 transition flex flex-col items-center justify-center gap-1 text-xs">
+                    <button onClick={() => {
+                setIsTutorOpen(true);
+                setIsMenuOpen(false);
+              }} className="bg-slate-800 text-yellow-400 border border-yellow-500/20 py-2.5 rounded-lg font-bold hover:bg-slate-700 transition flex flex-col items-center justify-center gap-1 text-xs">
                       <Bot size={18} /> Tutor IA
                     </button>
-                    <button onClick={() => { setViewMode('roleplay'); setIsMenuOpen(false); }} className="bg-purple-900/60 text-purple-200 border border-purple-500/20 py-2.5 rounded-lg font-bold hover:bg-purple-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                    <button onClick={() => {
+                setViewMode('roleplay');
+                setIsMenuOpen(false);
+              }} className="bg-purple-900/60 text-purple-200 border border-purple-500/20 py-2.5 rounded-lg font-bold hover:bg-purple-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
                       <Sparkles size={18} /> Rol ✨
                     </button>
-                    <button onClick={() => { setViewMode('reading'); setIsMenuOpen(false); }} className="bg-emerald-900/60 text-emerald-200 border border-emerald-500/20 py-2.5 rounded-lg font-bold hover:bg-emerald-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                    <button onClick={() => {
+                setViewMode('reading');
+                setIsMenuOpen(false);
+              }} className="bg-emerald-900/60 text-emerald-200 border border-emerald-500/20 py-2.5 rounded-lg font-bold hover:bg-emerald-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
                       <BookOpen size={18} /> Lectura 📖
                     </button>
-                    <button onClick={() => { openQuizSetup(); setIsMenuOpen(false); }} className="bg-yellow-600 text-slate-900 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                    <button onClick={() => {
+                openQuizSetup();
+                setIsMenuOpen(false);
+              }} className="bg-yellow-600 text-slate-900 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
                       <Gamepad2 size={18} /> Quiz
                     </button>
                   </div>
@@ -1506,20 +1460,16 @@ export default function App() {
                       <span>📘 Tablas Maestras</span>
                       <ChevronRight size={16} className={`transform transition-transform ${isTablasOpen ? 'rotate-90' : ''}`} />
                     </button>
-                    {isTablasOpen && (
-                      <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
-                        {chapters.map(chap => (
-                          <button key={chap.id} onClick={async () => {
-                            setActiveChapterId(chap.id);
-                            if (viewMode !== 'flashcards' && viewMode !== 'table') setViewMode('flashcards');
-                            setIsMenuOpen(false);
-                          }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center gap-2.5 ${activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table') ? 'bg-blue-900/30 text-blue-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
+                    {isTablasOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
+                        {chapters.map(chap => <button key={chap.id} onClick={async () => {
+                  setActiveChapterId(chap.id);
+                  if (viewMode !== 'flashcards' && viewMode !== 'table') setViewMode('flashcards');
+                  setIsMenuOpen(false);
+                }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center gap-2.5 ${activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table') ? 'bg-blue-900/30 text-blue-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
                             <span className="text-sm shrink-0">{chap.emoji}</span>
                             <span className="truncate">{chap.title}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                          </button>)}
+                      </div>}
                   </div>
 
                   {/* ACORDEÓN 2: Plan de Estudio */}
@@ -1528,20 +1478,16 @@ export default function App() {
                       <span>🎓 Plan de Estudio</span>
                       <ChevronRight size={16} className={`transform transition-transform ${isPlanOpen ? 'rotate-90' : ''}`} />
                     </button>
-                    {isPlanOpen && (
-                      <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
-                        {studyPlanModules.map(mod => (
-                          <button key={mod.id} onClick={() => {
-                            setActiveStudyPlanId(mod.id);
-                            setViewMode('studyPlan');
-                            setIsMenuOpen(false);
-                          }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center gap-2.5 ${activeStudyPlanId === mod.id && viewMode === 'studyPlan' ? 'bg-emerald-900/30 text-emerald-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
+                    {isPlanOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
+                        {studyPlanModules.map(mod => <button key={mod.id} onClick={() => {
+                  setActiveStudyPlanId(mod.id);
+                  setViewMode('studyPlan');
+                  setIsMenuOpen(false);
+                }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center gap-2.5 ${activeStudyPlanId === mod.id && viewMode === 'studyPlan' ? 'bg-emerald-900/30 text-emerald-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
                             <span className="text-emerald-500 shrink-0"><Sparkles size={14} /></span>
                             <span className="truncate">{mod.title}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                          </button>)}
+                      </div>}
                   </div>
 
                   {/* ACORDEÓN 3: Módulos Goethe */}
@@ -1550,26 +1496,21 @@ export default function App() {
                       <span>🏛️ Módulos Goethe</span>
                       <ChevronRight size={16} className={`transform transition-transform ${isGoetheOpen ? 'rotate-90' : ''}`} />
                     </button>
-                    {isGoetheOpen && (
-                      <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
-                        {goetheModules.map(pres => (
-                          <button key={pres.id} onClick={() => {
-                            setActivePresentationId(pres.id);
-                            setViewMode('presentation');
-                            setIsFullscreen(true);
-                            setIsMenuOpen(false);
-                          }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center justify-between ${activePresentationId === pres.id && viewMode === 'presentation' ? 'bg-indigo-900/30 text-indigo-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
+                    {isGoetheOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
+                        {goetheModules.map(pres => <button key={pres.id} onClick={() => {
+                  setActivePresentationId(pres.id);
+                  setViewMode('presentation');
+                  setIsFullscreen(true);
+                  setIsMenuOpen(false);
+                }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center justify-between ${activePresentationId === pres.id && viewMode === 'presentation' ? 'bg-indigo-900/30 text-indigo-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
                             <span className="truncate">{pres.title}</span>
                             <PlayCircle size={14} className="shrink-0" />
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                          </button>)}
+                      </div>}
                   </div>
                 </div>
               </aside>
-            </>
-          )}
+            </>}
 
           <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6 flex flex-col gap-6 relative">
         
@@ -1577,11 +1518,22 @@ export default function App() {
         <section className="flex-1 w-full min-w-0 pb-20 relative">
           
           {/* MODO PRESENTACIÓN VISUAL */}
-          {viewMode === "presentation" && activePresentation && <PresentationViewer presentation={activePresentation} onClose={() => {
-          setViewMode('flashcards');
-          setActivePresentationId(null);
-          setIsFullscreen(false);
-        }} />}
+          {viewMode === "presentation" && activePresentation && <PresentationViewer
+            presentation={activePresentation}
+            onClose={() => {
+              setViewMode('flashcards');
+              setActivePresentationId(null);
+              setIsFullscreen(false);
+            }}
+            cardImages={cardImages}
+            generateCardImage={generateCardImage}
+            isImageLoading={isImageLoading}
+            openAiTutor={openAiTutor}
+            setFullscreenImage={setFullscreenImage}
+            unlockedCards={unlockedCards}
+            speakText={speakText}
+            lazyLoadImage={lazyLoadImage}
+          />}
 
           {/* VISTA: CONFIGURACIÓN DEL QUIZ */}
           {viewMode === "quizSetup" && <div className="animate-in fade-in duration-300">
@@ -1600,21 +1552,13 @@ export default function App() {
 
               <div className="bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm">
                 <div className="max-h-60 overflow-y-auto custom-scrollbar border border-slate-200 rounded-xl p-2 mb-6 text-left max-w-xl mx-auto">
-                  {chapters.map(chap => (
-                    <label key={chap.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition border-b border-slate-100 last:border-0">
-                      <input 
-                        type="checkbox" 
-                        checked={selectedQuizChapters.includes(chap.id)} 
-                        onChange={(e) => {
-                          if (e.target.checked) setSelectedQuizChapters(prev => [...prev, chap.id]);
-                          else setSelectedQuizChapters(prev => prev.filter(id => id !== chap.id));
-                        }}
-                        className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                      />
+                  {chapters.map(chap => <label key={chap.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition border-b border-slate-100 last:border-0">
+                      <input type="checkbox" checked={selectedQuizChapters.includes(chap.id)} onChange={e => {
+                    if (e.target.checked) setSelectedQuizChapters(prev => [...prev, chap.id]);else setSelectedQuizChapters(prev => prev.filter(id => id !== chap.id));
+                  }} className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
                       <span className="text-lg">{chap.emoji}</span>
                       <span className="font-medium text-slate-700">{chap.title}</span>
-                    </label>
-                  ))}
+                    </label>)}
                 </div>
                 <div className="flex justify-center">
                   <button onClick={startQuizSession} disabled={selectedQuizChapters.length === 0} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 disabled:bg-slate-300 transition w-full sm:w-auto">
@@ -1636,15 +1580,10 @@ export default function App() {
           {viewMode === "studyPlan" && activeStudyPlanId && (() => {
             const activeModule = studyPlanModules.find(m => m.id === activeStudyPlanId);
             if (!activeModule) return null;
-
             const hasSlides = !!activeModule.slides && activeModule.slides.length > 0;
-            const slideIndex = hasSlides 
-              ? (currentStudyPlanSlide >= activeModule.slides.length ? 0 : currentStudyPlanSlide) 
-              : 0;
+            const slideIndex = hasSlides ? currentStudyPlanSlide >= activeModule.slides.length ? 0 : currentStudyPlanSlide : 0;
             const currentSlide = hasSlides ? activeModule.slides[slideIndex] : null;
-            
-            return (
-              <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-slate-200 animate-in fade-in slide-in-from-bottom-4 mb-10">
+            return <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-slate-200 animate-in fade-in slide-in-from-bottom-4 mb-10">
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-emerald-100 text-emerald-600 rounded-2xl">
@@ -1660,86 +1599,59 @@ export default function App() {
                   </div>
                 </div>
 
-                {hasSlides && currentSlide ? (
-                  <div className="space-y-6">
+                {hasSlides && currentSlide ? <div className="space-y-6">
                     <div className="mb-6 text-center">
                       <h3 className="text-xl md:text-3xl font-bold text-slate-800 mb-2">
                         {currentSlide.title}
                       </h3>
-                      {currentSlide.subtitle && (
-                        <p className="text-slate-500 text-sm font-medium">
+                      {currentSlide.subtitle && <p className="text-slate-500 text-sm font-medium">
                           {currentSlide.subtitle}
-                        </p>
-                      )}
+                        </p>}
                     </div>
                     <div className="w-full py-4 min-h-[250px]">
-                      {typeof currentSlide.content === 'function'
-                        ? currentSlide.content({
-                            cardImages,
-                            generateCardImage,
-                            isImageLoading,
-                            openAiTutor,
-                            setFullscreenImage,
-                            unlockedCards
-                          })
-                        : currentSlide.content}
+                      {typeof currentSlide.content === 'function' ? currentSlide.content({
+                    cardImages,
+                    generateCardImage,
+                    isImageLoading,
+                    openAiTutor,
+                    setFullscreenImage,
+                    unlockedCards
+                  }) : currentSlide.content}
                     </div>
                     
                     <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
-                      <button 
-                        onClick={() => setCurrentStudyPlanSlide(Math.max(0, slideIndex - 1))}
-                        disabled={slideIndex === 0}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 transition"
-                      >
+                      <button onClick={() => setCurrentStudyPlanSlide(Math.max(0, slideIndex - 1))} disabled={slideIndex === 0} className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 transition">
                         <ChevronLeft size={20} /> Anterior
                       </button>
                       <div className="flex gap-1.5">
-                        {activeModule.slides.map((_, idx) => (
-                          <div 
-                            key={idx} 
-                            className={`w-2 h-2 rounded-full transition-all ${idx === slideIndex ? 'bg-emerald-600 w-6' : 'bg-emerald-100'}`} 
-                          />
-                        ))}
+                        {activeModule.slides.map((_, idx) => <div key={idx} className={`w-2 h-2 rounded-full transition-all ${idx === slideIndex ? 'bg-emerald-600 w-6' : 'bg-emerald-100'}`} />)}
                       </div>
-                      <button 
-                        onClick={() => {
-                          if (slideIndex < activeModule.slides.length - 1) {
-                            setCurrentStudyPlanSlide(slideIndex + 1);
-                          }
-                        }}
-                        disabled={slideIndex === activeModule.slides.length - 1}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-30 transition"
-                      >
+                      <button onClick={() => {
+                    if (slideIndex < activeModule.slides.length - 1) {
+                      setCurrentStudyPlanSlide(slideIndex + 1);
+                    }
+                  }} disabled={slideIndex === activeModule.slides.length - 1} className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-30 transition">
                         Siguiente <ChevronRight size={20} />
                       </button>
                     </div>
-                  </div>
-                ) : (
-                  <div className="prose prose-slate max-w-none">
+                  </div> : <div className="prose prose-slate max-w-none">
                     <MarkdownMessage text={activeModule.content} />
-                  </div>
-                )}
+                  </div>}
 
                 {/* BOTÓN PARA VER LA PRESENTACIÓN */}
-                {activeModule.presentationUrl && (
-                  <div className="mt-8 pt-6 border-t border-slate-200 flex justify-center sm:justify-start">
-                    <button 
-                      onClick={async e => {
-                        e.preventDefault();
-                        const granted = await showRewardVideo();
-                        if (granted) {
-                          window.open(activeModule.presentationUrl, "_blank");
-                        }
-                      }} 
-                      className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all hover:scale-105"
-                    >
+                {activeModule.presentationUrl && <div className="mt-8 pt-6 border-t border-slate-200 flex justify-center sm:justify-start">
+                    <button onClick={async e => {
+                  e.preventDefault();
+                  const granted = await showRewardVideo();
+                  if (granted) {
+                    window.open(activeModule.presentationUrl, "_blank");
+                  }
+                }} className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all hover:scale-105">
                       <Presentation size={20} />
                       Abrir Presentación de la Clase
                     </button>
-                  </div>
-                )}
-              </div>
-            );
+                  </div>}
+              </div>;
           })()}
           
           {/* VISTAS: FLASHCARDS Y TABLA */}
@@ -1776,31 +1688,19 @@ export default function App() {
                      </div>}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
                 {displayedWords.map((word, index) => {
-                const isRevealed = revealedCards[index];
-                const isLongText = word.de.length > 25;
-                const safeId = getSafeId(word.de).substring(0, 150);
-                const isUnlocked = unlockedCards && unlockedCards[safeId]?.unlocked;
-                const imgBase64 = isUnlocked ? cardImages[safeId] : null;
-                const existsGlobally = !!cardImages[safeId];
-                const isGenLoading = isImageLoading === safeId;
-                const isRegenerated = unlockedCards && unlockedCards[safeId]?.regenerated;
-                return (
-                  <PresentationVocabCard 
-                    key={index}
-                    wordObj={{...word, chapter: searchTerm ? word.chapter : undefined}}
-                    cardImages={cardImages}
-                    regeneratedImages={unlockedCards}
-                    generateCardImage={generateCardImage}
-                    isImageLoading={isImageLoading}
-                    openAiTutor={openAiTutor}
-                    setFullscreenImage={setFullscreenImage}
-                    unlockedCards={unlockedCards}
-                    speakText={speakText}
-                    lazyLoadImage={lazyLoadImage}
-                    isRevealed={isRevealed}
-                  />
-                );
-              })}
+                  const isRevealed = revealedCards[index];
+                  const isLongText = word.de.length > 25;
+                  const safeId = getSafeId(word.de).substring(0, 150);
+                  const isUnlocked = unlockedCards && unlockedCards[safeId]?.unlocked;
+                  const imgBase64 = isUnlocked ? cardImages[safeId] : null;
+                  const existsGlobally = !!cardImages[safeId];
+                  const isGenLoading = isImageLoading === safeId;
+                  const isRegenerated = unlockedCards && unlockedCards[safeId]?.regenerated;
+                  return <PresentationVocabCard key={index} wordObj={{
+                    ...word,
+                    chapter: searchTerm ? word.chapter : undefined
+                  }} cardImages={cardImages} regeneratedImages={unlockedCards} generateCardImage={generateCardImage} isImageLoading={isImageLoading} openAiTutor={openAiTutor} setFullscreenImage={setFullscreenImage} unlockedCards={unlockedCards} speakText={speakText} lazyLoadImage={lazyLoadImage} isRevealed={isRevealed} />;
+                })}
               </div>
             </>}
 
@@ -1821,20 +1721,22 @@ export default function App() {
                       </thead>
                       <tbody className="divide-y divide-slate-100 text-sm">
                         {words.map((word, idx) => {
-                          const getTypeBadgeClass = (w) => {
-                            const de = (w.de || "").toLowerCase();
-                            const type = w.type || "";
-                            if (de.startsWith("der ") || type.includes("Masc")) return "bg-blue-100 text-blue-800 border-blue-200";
-                            if (de.startsWith("die ") || type.includes("Fem")) return "bg-red-100 text-red-800 border-red-200";
-                            if (de.startsWith("das ") || type.includes("Neutro") || type.includes("Neut")) return "bg-green-100 text-green-800 border-green-200";
-                            if (type.includes("Verbo")) return "bg-yellow-100 text-yellow-800 border-yellow-200";
-                            return "bg-slate-100 text-slate-800 border-slate-200";
-                          };
-                          return (
-                            <tr key={idx} className="hover:bg-slate-50 transition-colors border-b border-slate-100">
+                        const getTypeBadgeClass = w => {
+                          const de = (w.de || "").toLowerCase();
+                          const type = w.type || "";
+                          if (de.startsWith("der ") || type.includes("Masc")) return "bg-blue-100 text-blue-800 border-blue-200";
+                          if (de.startsWith("die ") || type.includes("Fem")) return "bg-red-100 text-red-800 border-red-200";
+                          if (de.startsWith("das ") || type.includes("Neutro") || type.includes("Neut")) return "bg-green-100 text-green-800 border-green-200";
+                          if (type.includes("Verbo")) return "bg-yellow-100 text-yellow-800 border-yellow-200";
+                          return "bg-slate-100 text-slate-800 border-slate-200";
+                        };
+                        return <tr key={idx} className="hover:bg-slate-50 transition-colors border-b border-slate-100">
                               <td className="px-4 py-3 flex items-center gap-2 align-middle">
                                 <span className="font-bold text-slate-800">{word.de}</span>
-                                <button onClick={(e) => { e.stopPropagation(); nativeSpeak(word.de); }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110">
+                                <button onClick={e => {
+                              e.stopPropagation();
+                              nativeSpeak(word.de);
+                            }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110">
                                   <Volume2 size={16} />
                                 </button>
                               </td>
@@ -1846,39 +1748,32 @@ export default function App() {
                                 <span className={`inline-block px-2.5 py-0.5 mt-1 rounded-full text-xs font-semibold border ${getTypeBadgeClass(word)}`}>{word.type}</span>
                               </td>
                               <td className="px-4 py-3 text-slate-500 max-w-xs md:max-w-md align-middle">
-                                {word.exampleSentenceDe ? (
-                                  <>
+                                {word.exampleSentenceDe ? <>
                                     <span className="text-sm text-slate-700 italic block">💬 {word.exampleSentenceDe}</span>
-                                    {word.exampleSentenceEs && (
-                                      <span className="text-xs text-slate-400 block mt-1">{word.exampleSentenceEs}</span>
-                                    )}
-                                  </>
-                                ) : (
-                                  <span className="text-slate-300">---</span>
-                                )}
+                                    {word.exampleSentenceEs && <span className="text-xs text-slate-400 block mt-1">{word.exampleSentenceEs}</span>}
+                                  </> : <span className="text-slate-300">---</span>}
                               </td>
                               <td className="px-4 py-3 whitespace-nowrap align-middle text-center">
                                 {(() => {
-                                  if (word.regimen) {
-                                    const reg = word.regimen;
-                                    if (reg.includes("Akkusativ")) {
-                                      return <span className="bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded text-xs inline-block">{reg}</span>;
-                                    } else if (reg.includes("Dativo") || reg.includes("⚠️")) {
-                                      return <span className="bg-amber-100 text-amber-800 font-bold px-2 py-1 rounded text-xs inline-block">{reg}</span>;
-                                    } else {
-                                      return <span className="bg-purple-100 text-purple-800 font-bold px-2 py-1 rounded text-xs inline-block">{reg}</span>;
-                                    }
-                                  }
-                                  if (word.plural) {
-                                    const pluralClean = word.plural.replace(/Plural:\s*/i, "").trim();
-                                    return <span className="font-bold text-slate-800 text-xs font-mono">{pluralClean}</span>;
-                                  }
-                                  return <span className="text-slate-300 font-normal text-xs font-mono">---</span>;
-                                })()}
+                              if (word.regimen) {
+                                const reg = word.regimen;
+                                if (reg.includes("Akkusativ")) {
+                                  return <span className="font-bold text-blue-600">{reg}</span>;
+                                } else if (reg.includes("Dativo") || reg.includes("⚠️")) {
+                                  return <span className="font-bold text-amber-600">{reg}</span>;
+                                } else {
+                                  return <span className="font-semibold text-slate-700">{reg}</span>;
+                                }
+                              }
+                              if (word.plural) {
+                                const pluralClean = word.plural.replace(/Plural:\s*/i, "").trim();
+                                return <span className="font-bold text-slate-800">{pluralClean}</span>;
+                              }
+                              return <span className="text-slate-300 font-normal text-xs font-mono">---</span>;
+                            })()}
                               </td>
-                            </tr>
-                          );
-                        })}
+                            </tr>;
+                      })}
                       </tbody>
                     </table>
                   </div>
@@ -1898,7 +1793,9 @@ export default function App() {
                   <button onClick={() => {
                     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
                     if (Capacitor.isNativePlatform()) {
-                      try { TextToSpeech.stop(); } catch(e) {}
+                      try {
+                        TextToSpeech.stop();
+                      } catch (e) {}
                     }
                     if (window.activeStoryInterval) {
                       clearInterval(window.activeStoryInterval);
@@ -1921,56 +1818,30 @@ export default function App() {
                     <Loader2 size={40} className="animate-spin" />
                     <p className="font-bold animate-pulse">Imaginando historia mágica...</p>
                   </div> : <div className="space-y-4 flex-grow overflow-hidden flex flex-col">
-                    <div 
-                      className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[280px]"
-                    >
-                      <div 
-                        className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow"
-                        onClick={() => speakStory(storyState.de)}
-                      >
+                    <div className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[280px]">
+                      <div className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow" onClick={() => speakStory(storyState.de)}>
                         <div translate="no" className="notranslate font-normal text-lg leading-relaxed text-slate-800">
                           {parseTextToTokens(storyState.de).map((token, idx) => {
-                            if (token.isWord) {
-                              const isHighlighted = token.wordIndex === currentWordIndex;
-                              const isKeyword = token.isBold || token.isKeyword;
-                              const fontWeightClass = isKeyword ? 'font-bold' : 'font-normal';
-                              return (
-                                <span key={idx} className={`inline-block transition-all duration-150 rounded px-[2px] mx-[1px] border ${isHighlighted ? 'bg-yellow-200 border-yellow-300 text-slate-900 scale-105 shadow-sm' : isKeyword ? 'bg-indigo-50 border-transparent text-indigo-700' : 'bg-transparent border-transparent text-slate-800'} ${fontWeightClass}`}>{token.text}</span>
-                              );
-                            } else {
-                              const isPunct = /^[.,!?:;]+$/.test(token.text);
-                              return (
-                                <span key={idx} className={`text-slate-800 inline-block ${isPunct ? 'ml-[-3px] pl-0 pr-[1px]' : 'px-[1px]'}`}>{token.text}</span>
-                              );
-                            }
-                          })}
+                          if (token.isWord) {
+                            const isHighlighted = token.wordIndex === currentWordIndex;
+                            const isKeyword = token.isBold || token.isKeyword;
+                            const fontWeightClass = isKeyword ? 'font-bold' : 'font-normal';
+                            return <span key={idx} className={`inline-block transition-all duration-150 rounded px-[2px] mx-[1px] border ${isHighlighted ? 'bg-yellow-200 border-yellow-300 text-slate-900 scale-105 shadow-sm' : isKeyword ? 'bg-indigo-50 border-transparent text-indigo-700' : 'bg-transparent border-transparent text-slate-800'} ${fontWeightClass}`}>{token.text}</span>;
+                          } else {
+                            const isPunct = /^[.,!?:;]+$/.test(token.text);
+                            return <span key={idx} className={`text-slate-800 inline-block ${isPunct ? 'ml-[-3px] pl-0 pr-[1px]' : 'px-[1px]'}`}>{token.text}</span>;
+                          }
+                        })}
                         </div>
                       </div>
-                      <button 
-                        onClick={() => speakStory(storyState.de)}
-                        className={`absolute top-2 right-2 p-2 bg-white rounded-full shadow-md transition-all ${
-                          isPlayingStoryAudio 
-                            ? 'scale-110 opacity-100' 
-                            : 'text-indigo-600 opacity-0 group-hover:opacity-100'
-                        }`}
-                        title={isPlayingStoryAudio ? (isStoryAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación") : "Escuchar cuento"}
-                        aria-label={isPlayingStoryAudio ? (isStoryAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación") : "Escuchar cuento"}
-                      >
-                        {isPlayingStoryAudio ? (
-                          isStoryAudioPaused ? (
-                            <Volume2 size={16} className="text-amber-500 animate-pulse" />
-                          ) : (
-                            <div className="relative w-4 h-4 flex items-center justify-center">
+                      <button onClick={() => speakStory(storyState.de)} className={`absolute top-2 right-2 p-2 bg-white rounded-full shadow-md transition-all ${isPlayingStoryAudio ? 'scale-110 opacity-100' : 'text-indigo-600 opacity-0 group-hover:opacity-100'}`} title={isPlayingStoryAudio ? isStoryAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación" : "Escuchar cuento"} aria-label={isPlayingStoryAudio ? isStoryAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación" : "Escuchar cuento"}>
+                        {isPlayingStoryAudio ? isStoryAudioPaused ? <Volume2 size={16} className="text-amber-500 animate-pulse" /> : <div className="relative w-4 h-4 flex items-center justify-center">
                               <span className="absolute w-full h-full bg-indigo-400 rounded-full animate-ping opacity-75"></span>
                               <div className="flex gap-0.5">
                                 <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
                                 <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
                               </div>
-                            </div>
-                          )
-                        ) : (
-                          <Volume2 size={16} />
-                        )}
+                            </div> : <Volume2 size={16} />}
                       </button>
                     </div>
                     <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex-shrink-0">
@@ -1982,8 +1853,7 @@ export default function App() {
         </>}
     </section>
   </main>
-  </>
-  )}
+  </>}
 
   {/* --- PANEL LATERAL: TUTOR IA --- */}
     {isTutorOpen && <aside className={`fixed ${isTutorFullscreen ? 'inset-0 w-full z-[100]' : 'inset-y-0 right-0 w-full md:w-[450px] z-50 border-l'} bg-white shadow-2xl border-slate-200 flex flex-col animate-in slide-in-from-right duration-300`}>
@@ -2013,7 +1883,8 @@ export default function App() {
               <div className="bg-white border border-slate-200 text-slate-500 px-4 py-3 rounded-2xl rounded-bl-none flex gap-2 items-center text-sm shadow-sm">
                 <Loader2 size={16} className="animate-spin text-blue-500" /> Escribiendo...
               </div>
-            </div>}
+            </div>
+          }
           <div ref={chatEndRef} />
         </div>
 
@@ -2030,12 +1901,12 @@ export default function App() {
     {fullscreenImage && <div className="fixed inset-0 z-[100] bg-slate-900/95 flex items-center justify-center p-4" onClick={() => setFullscreenImage(null)}>
         <div className="relative max-w-5xl max-h-[100svh] w-full h-full flex flex-col items-center justify-center">
           <button onClick={e => {
-            e.stopPropagation();
-            setFullscreenImage(null);
-          }} className="absolute top-4 right-4 text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-full transition-colors z-[110]">
+          e.stopPropagation();
+          setFullscreenImage(null);
+        }} className="absolute top-4 right-4 text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-full transition-colors z-[110]">
             <X size={24} />
           </button>
-          <img src={typeof fullscreenImage === 'string' && (fullscreenImage.startsWith('http') || fullscreenImage.startsWith('data:')) ? fullscreenImage : typeof fullscreenImage === 'string' ? `data:image/png;base64,${fullscreenImage}` : ''} alt="Vista Ampliada" className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl p-2 cursor-zoom-out bg-white" onClick={e => e.stopPropagation()} />
+          <img src={typeof fullscreenImage === 'string' && (fullscreenImage.startsWith('http') || fullscreenImage.startsWith('data:')) ? fullscreenImage : typeof fullscreenImage === 'string' ? `data:image/png;base64,${fullscreenImage}` : ''} alt="Vista Ampliada" className="max-w-full max-h-[90svh] object-contain rounded-2xl shadow-2xl p-2 cursor-zoom-out bg-white" onClick={e => e.stopPropagation()} />
         </div>
       </div>}
 

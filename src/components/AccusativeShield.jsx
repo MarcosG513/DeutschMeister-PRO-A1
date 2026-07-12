@@ -16,6 +16,7 @@ const AccusativeShield = ({ words = [] }) => {
   const [showFeedback, setShowFeedback] = useState(null); // 'correct' | 'incorrect'
   const [feedbackMsg, setFeedbackMsg] = useState("");
   const [finished, setFinished] = useState(false);
+  const [shieldApplied, setShieldApplied] = useState(false);
 
   const currentWord = list[currentIndex];
 
@@ -29,6 +30,7 @@ const AccusativeShield = ({ words = [] }) => {
     if (applyShield) {
       if (isMasculine) {
         correct = true;
+        setShieldApplied(true);
         explanation = `¡Correcto! El masculino '${currentWord.gender} ${currentWord.word}' cambia en Acusativo a 'den ${currentWord.word}' (o 'einen ${currentWord.word}').`;
         if (typeof nativeSpeak === 'function') nativeSpeak(`den ${currentWord.word}`);
       } else {
@@ -57,6 +59,7 @@ const AccusativeShield = ({ words = [] }) => {
     setTimeout(() => {
       setShowFeedback(null);
       setFeedbackMsg("");
+      setShieldApplied(false);
       if (currentIndex + 1 < list.length) {
         setCurrentIndex(prev => prev + 1);
       } else {
@@ -71,6 +74,7 @@ const AccusativeShield = ({ words = [] }) => {
     setShowFeedback(null);
     setFeedbackMsg("");
     setFinished(false);
+    setShieldApplied(false);
   };
 
   if (finished) {
@@ -108,14 +112,16 @@ const AccusativeShield = ({ words = [] }) => {
 
       {/* Word Box */}
       <div className="my-6 text-center">
-        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase mb-2 ${
-          currentWord.gender === "der" 
-            ? "bg-blue-100 text-blue-800" 
-            : currentWord.gender === "die" 
-              ? "bg-rose-100 text-rose-800" 
-              : "bg-amber-100 text-amber-800"
+        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase mb-2 transition-all duration-500 ${
+          shieldApplied 
+            ? "bg-emerald-600 text-white scale-110 shadow-sm" 
+            : currentWord.gender === "der" 
+              ? "bg-blue-100 text-blue-800" 
+              : currentWord.gender === "die" 
+                ? "bg-rose-100 text-rose-800" 
+                : "bg-amber-100 text-amber-800"
         }`}>
-          {currentWord.gender}
+          {shieldApplied ? "den" : currentWord.gender}
         </span>
         <h3 className="text-3xl font-black text-slate-800 tracking-tight">{currentWord.word}</h3>
         <p className="text-sm text-slate-400 mt-1 italic">({currentWord.translation})</p>

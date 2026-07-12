@@ -3,7 +3,6 @@ import { onRequest } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import admin from "firebase-admin";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { GoogleAICacheManager } from "@google/generative-ai/server";
 import { fal } from "@fal-ai/client";
 
 // Inicializa Firebase Admin
@@ -11,7 +10,6 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Define los secretos que se tomarán de Secret Manager (FASE 1)
-const geminiApiKey = defineSecret("GEMINI_API_KEY");
 const falKey = defineSecret("FAL_KEY");
 const geminiFreeKey = defineSecret("GEMINI_FREE_KEY");
 
@@ -34,208 +32,300 @@ async function getSystemPrompt(promptId, defaultPrompt) {
   return defaultPrompt;
 }
 
-// =========================================================================
-// 1. SIMULADOR DE ROL A1 (RoleplaySimulator)
-// Modelo: Gemini 2.5 Flash
-// =========================================================================
-export const runRoleplaySimulator = onRequest(
-  { secrets: [geminiFreeKey, geminiApiKey], cors: true },
-  async (req, res) => {
-    if (req.method !== "POST" && req.method !== "OPTIONS") {
-      res.status(405).send("Method Not Allowed");
-      return;
+/**
+ * Función centralizada de enrutamiento con Fallback a DeepSeek (Costo Base Cero con Fallback Económico)
+ */
+async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}) {
+  const isJson = options.isJson || false;
+  const temperature = options.temperature !== undefined ? options.temperature : 0.7;
+
+  // Intento 1: Gemini Free Tier (Costo $0)
+  try {
+    console.log("FinOps: Intentando con Gemini (Free Tier)...");
+    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+    const model = genAI.getGenerativeModel({
+      model: options.model || "gemini-3.5-flash",
+      systemInstruction: promptSystem,
+      generationConfig: {
+        ...(isJson ? { responseMimeType: "application/json" } : {}),
+        temperature: temperature
+      }
+    });
+
+    const result = await model.generateContent(promptUser);
+    const responseText = result.response.text().trim();
+    if (isJson) {
+      return JSON.parse(responseText);
+    }
+    return responseText;
+  } catch (error) {
+    const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.toLowerCase().includes("quota") || error.message.toLowerCase().includes("limit")));
+    if (!isQuotaError) {
+      console.warn("FinOps: Gemini falló por un error no de cuota, activando fallback de todos modos:", error.message);
+    } else {
+      console.warn("FinOps: Límite de cuota excedido (429) en Gemini. Activando fallback a DeepSeek...");
     }
 
-    let data;
+    // Fallback: DeepSeek en Fal.ai (Costo ultra bajo)
     try {
-      data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      if (data && data.data) data = data.data;
-    } catch (e) {
-      res.status(400).send("Invalid JSON body");
-      return;
-    }
-
-    const { historialConversacion, escenario } = data || {};
-
-    if (!historialConversacion || !escenario) {
-      res.status(400).send("Faltan parámetros requeridos: historialConversacion o escenario");
-      return;
-    }
-
-    const defaultSystemInstruction = `
-      Eres un compañero de juego de rol en alemán. Actúa siempre dentro de tu personaje.
-      Escenario actual: "${escenario}".
-
-      REGLAS ESTRICTAS DE COMPORTAMIENTO:
-      1. Inmersión y Nivel A1 ESTRICTO: Habla SOLO en alemán nivel A1. Usa oraciones cortas de MÁXIMO 8 palabras.
-      2. Ping-pong interactivo: Haz SOLO UNA pregunta corta a la vez para mantener el diálogo dinámico como un ping-pong.
-      3. PROHIBICIÓN ABSOLUTA: Nunca uses formato Markdown, negritas ni asteriscos (**) en tus respuestas. 
-      4. El Salvavidas (Ayuda a demanda): Si el usuario escribe que no entiende (ej. "No entiendo", "¿Qué significa eso?", "Ich verstehe nicht"), explica brevemente en español la última frase, dale una pista de cómo responder, y formúlale de nuevo la pregunta en alemán.
-    `;
-
-    const systemInstruction = await getSystemPrompt("roleplay_simulator", defaultSystemInstruction);
-
-    const generarRespuesta = async (apiKeyStr) => {
-      const genAI = new GoogleGenerativeAI(apiKeyStr);
-      const model = genAI.getGenerativeModel({
-        model: "gemini-3.1-flash-lite",
-        systemInstruction: systemInstruction.replace("${escenario}", escenario)
+      fal.config({
+        credentials: falKey.value()
       });
+      console.log("FinOps: Invocando DeepSeek via Fal.ai...");
 
-      let validHistory = historialConversacion.slice(0, -1);
-      if (validHistory.length > 0 && validHistory[0].role !== "user") {
-        validHistory.shift();
+      let finalPromptUser = promptUser;
+      if (isJson) {
+        finalPromptUser += "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
       }
 
-      const chat = model.startChat({
-        history: validHistory,
-      });
-
-      const ultimoMensaje = historialConversacion[historialConversacion.length - 1].parts[0].text;
-      const resultStream = await chat.sendMessageStream(ultimoMensaje);
-
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.setHeader('Connection', 'keep-alive');
-
-      for await (const chunk of resultStream.stream) {
-        const chunkText = chunk.text();
-        if (chunkText) {
-          const cleanedChunk = chunkText.replace(/\*\*/g, '');
-          res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
-        }
-      }
-
-      res.write('data: [DONE]\n\n');
-      res.end();
-    };
-
-    try {
-      await generarRespuesta(geminiFreeKey.value());
-    } catch (error) {
-      console.error("Error al intentar responder con la llave gratuita en Roleplay:", error);
-      const isQuotaError =
-        error.status === 429 ||
-        (error.message && (error.message.includes("429") || error.message.toLowerCase().includes("quota")));
-
-      if (isQuotaError && geminiApiKey.value()) {
-        console.warn("Cuota gratuita agotada en Roleplay. Activando fallback a llave de pago...");
-        try {
-          await generarRespuesta(geminiApiKey.value());
-        } catch (fallbackError) {
-          console.error("Error crítico en la llave de pago de fallback (Roleplay):", fallbackError);
-          if (!res.headersSent) {
-            res.status(500).send("Error en los servidores de IA de respaldo.");
-          } else {
-            res.end();
-          }
-        }
-      } else {
-        if (!res.headersSent) {
-          res.status(500).send("Error comunicando con el Simulador de Rol.");
-        } else {
-          res.end();
-        }
-      }
-    }
-  }
-);
-
-// =========================================================================
-// 2. EVALUADOR DE CORREOS (EmailSimulator)
-// =========================================================================
-export const evaluateEmail = onCall(
-  { secrets: [falKey], maxInstances: 6 },
-  async (request) => {
-    const { textoCorreo, consignaExamen } = request.data;
-
-    if (!textoCorreo || !consignaExamen) {
-      throw new HttpsError("invalid-argument", "Faltan parámetros requeridos");
-    }
-
-    try {
-      fal.config({ credentials: falKey.value() });
-
-      const promptDefinido = `
-      Consigna del examen: "${consignaExamen}"
-      Texto escrito por el estudiante: "${textoCorreo}"
-
-      Actúa como un profesor de alemán nativo, pero experto en enseñar a hispanohablantes. Tu objetivo es que el estudiante APRENDA de sus errores, no solo corregirlos.
-      
-      REGLAS DE ORO PEDAGÓGICAS:
-      1. DIRÍGETE AL ESTUDIANTE DE "TÚ", con un tono empático pero muy exigente.
-      2. DEBES detectar errores de interferencia del español (como traducir literalmente "estoy escribiendo" a "ich bin schreiben"). Explica por qué eso no funciona en alemán.
-      3. RESALTA SIEMPRE las palabras exactas del estudiante en **negrita** cuando hables de sus errores.
-      4. Si el estudiante se equivoca de registro (usa "Ihnen/Sie" con un amigo, o "dir/du" con una autoridad), corrígelo implacablemente.
-
-      Estructura tu respuesta ESTRICTAMENTE en Markdown usando estas 4 secciones:
-
-      ### 📊 Evaluación General
-      Da un puntaje del 1 al 100%. Usa una lista con emojis (✅, ⚠️, ❌) para evaluar punto por punto si cumplió la consigna, la longitud y el saludo/despedida correcto.
-
-      ### 🔬 Análisis Quirúrgico de tus Errores
-      NO des un párrafo aburrido. Genera una TABLA en Markdown con 3 columnas:
-      | **Lo que escribiste** | **Corrección** | **Explicación de la Regla** |
-      Analiza cada error (gramática, vocabulario, registro o posición del verbo). Cita las palabras del estudiante en **negrita**.
-
-      ### 💡 Ejemplos Útiles para ti
-      Basado en lo que el estudiante intentó decir, dale 2 ejemplos cortos en alemán y español de cómo se usa correctamente esa estructura en un contexto similar.
-
-      ### ✨ Modelo Ideal (Musterlösung)
-      Escribe un correo perfecto de nivel A1 que responda a la consigna, dirigido exactamente a la persona correcta, con la traducción al español debajo.
-      `;
-
-      // Se utiliza DeepSeek V4-Flash vía OpenRouter para máxima costo-efectividad pedagógica
-      const result = await fal.subscribe("openrouter/router", {
+      const response = await fal.subscribe("openrouter/router", {
         input: {
           model: "deepseek/deepseek-v4-flash",
-          prompt: promptDefinido,
-          system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo.",
-          temperature: 0.2,
+          prompt: finalPromptUser,
+          system_prompt: promptSystem,
+          temperature: temperature,
           top_p: 0.9
         }
       });
 
-      return { output: result.data.output };
-    } catch (error) {
-      console.error("Error en evaluateEmail:", error);
-      throw new HttpsError("internal", "Error al procesar la evaluación de correo", error.message);
+      const outputText = response.data.output || response.data.text || "";
+      if (isJson) {
+        const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+        return JSON.parse(cleanJson);
+      }
+      return outputText;
+    } catch (fallbackErr) {
+      console.error("FinOps: Error crítico en fallback de DeepSeek:", fallbackErr);
+      throw new Error("Servicio no disponible temporalmente. Inténtalo más tarde.");
     }
   }
-);
+}
+
+/**
+ * Función centralizada para Streaming SSE con Fallback a DeepSeek
+ */
+async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessage, options = {}) {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+
+  // Intento 1: Gemini Free Tier (Costo $0)
+  try {
+    console.log("FinOps Stream: Intentando con Gemini (Free Tier)...");
+    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+    const model = genAI.getGenerativeModel({
+      model: options.model || "gemini-3.1-flash-lite",
+      systemInstruction: promptSystem
+    });
+
+    let validHistory = history.slice(0);
+    if (validHistory.length > 0 && validHistory[0].role !== "user") {
+      validHistory.shift();
+    }
+
+    const chat = model.startChat({
+      history: validHistory
+    });
+
+    const resultStream = await chat.sendMessageStream(lastMessage);
+    for await (const chunk of resultStream.stream) {
+      const chunkText = chunk.text();
+      if (chunkText) {
+        const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '') : chunkText;
+        res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
+      }
+    }
+    res.write('data: [DONE]\n\n');
+    res.end();
+    return;
+  } catch (error) {
+    const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.toLowerCase().includes("quota") || error.message.toLowerCase().includes("limit")));
+    if (!isQuotaError) {
+      console.warn("FinOps Stream: Gemini falló por un error no de cuota, activando fallback de todos modos:", error.message);
+    } else {
+      console.warn("FinOps Stream: Límite de cuota excedido (429) en Gemini. Activando fallback a DeepSeek...");
+    }
+
+    // Fallback: DeepSeek en Fal.ai (Costo ultra bajo / económico)
+    try {
+      fal.config({
+        credentials: falKey.value()
+      });
+      console.log("FinOps Stream: Invocando stream de DeepSeek via Fal.ai...");
+
+      let promptBuilder = "";
+      if (history && history.length > 0) {
+        promptBuilder += "Historial de conversación previa:\n";
+        history.forEach(msg => {
+          const roleLabel = msg.role === 'user' ? 'Usuario' : 'Asistente';
+          const text = msg.parts && msg.parts[0] ? msg.parts[0].text : '';
+          promptBuilder += `${roleLabel}: ${text}\n`;
+        });
+        promptBuilder += "\n";
+      }
+      promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
+
+      const falStream = await fal.stream("openrouter/router", {
+        input: {
+          model: "deepseek/deepseek-v4-flash",
+          prompt: promptBuilder,
+          system_prompt: promptSystem,
+          temperature: options.temperature || 0.7
+        }
+      });
+
+      let lastOutput = "";
+      for await (const event of falStream) {
+        const currentOutput = event.output || "";
+        if (currentOutput.length > lastOutput.length) {
+          const chunkText = currentOutput.substring(lastOutput.length);
+          lastOutput = currentOutput;
+          if (chunkText) {
+            const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '') : chunkText;
+            res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
+          }
+        }
+      }
+      res.write('data: [DONE]\n\n');
+      res.end();
+    } catch (fallbackErr) {
+      console.error("FinOps Stream: Error crítico en fallback de DeepSeek:", fallbackErr);
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Error en el servidor de fallback." });
+      } else {
+        res.write(`data: ${JSON.stringify({ error: "Stream fallback error: " + fallbackErr.message })}\n\n`);
+        res.end();
+      }
+    }
+  }
+}
 
 // =========================================================================
-// 3. GENERADOR DE CUENTOS (generateStory) - AO Circuit Breaker (Free -> Paid)
+// 1. SIMULADOR DE ROL A1 (RoleplaySimulator)
+// Modelo: Gemini 2.5 Flash / DeepSeek Fallback
 // =========================================================================
-export const generateStory = onRequest(
-  { secrets: [geminiFreeKey, geminiApiKey], cors: true },
-  async (req, res) => {
-    // Manejo manual de CORS por seguridad en SSE
-    if (req.method === "OPTIONS") {
-      res.set("Access-Control-Allow-Origin", "*");
-      res.set("Access-Control-Allow-Methods", "POST");
-      res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-      res.status(204).send("");
+export const runRoleplaySimulator = onRequest({
+  secrets: [geminiFreeKey, falKey],
+  cors: true
+}, async (req, res) => {
+  if (req.method !== "POST" && req.method !== "OPTIONS") {
+    res.status(405).send("Method Not Allowed");
+    return;
+  }
+  let data;
+  try {
+    data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    if (data && data.data) data = data.data;
+  } catch (e) {
+    res.status(400).send("Invalid JSON body");
+    return;
+  }
+  const {
+    historialConversacion,
+    escenario
+  } = data || {};
+  if (!historialConversacion || !escenario) {
+    res.status(400).send("Faltan parámetros requeridos: historialConversacion o escenario");
+    return;
+  }
+  const defaultSystemInstruction = `Eres un hablante nativo de alemán en un escenario de juego de rol de nivel A1: "${escenario}". 
+      REGLAS ESTRICTAS:
+      1. Usa SOLO alemán de nivel A1 (frases cortas, vocabulario de máximo 500 palabras cotidianas, tiempo presente).
+      2. No uses gramática compleja como subjuntivos o voz pasiva.
+      3. Mantén tus respuestas cortas (1 a 3 frases máximo) para mantener la conversación ágil.
+      4. Si el usuario comete un error muy grave en su respuesta, corrígelo brevemente entre paréntesis al final en español, pero mantén el flujo del personaje.
+      5. Método Blurting (Calentamiento Cognitivo): Si estás enviando el primer mensaje para abrir el escenario, NO inicies el diálogo de rol de inmediato. Primero, proponle al estudiante un reto de 'vaciado de memoria' (Blurting). Dile que tiene 30 segundos para escribirte de 3 a 5 palabras en alemán relacionadas con el lugar en el que están (ej. '¡Bienvenido al restaurante! Antes de pedir, dime rápido 3 palabras de comida o bebidas en alemán que recuerdes'). Una vez que el usuario responda, felicítalo y entonces sí, arranca el juego de rol.`;
+  const systemInstruction = await getSystemPrompt("roleplay_simulator", defaultSystemInstruction);
+  const finalSystemPrompt = systemInstruction.replace("${escenario}", escenario);
+
+  const history = historialConversacion.slice(0, -1);
+  const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
+
+  await streamWithDeepSeekFallback(res, finalSystemPrompt, history, lastMessage, {
+    model: "gemini-3.1-flash-lite",
+    cleanBold: true
+  });
+});
+
+// =========================================================================
+// 2. EVALUADOR DE CORREOS (EmailSimulator)
+// =========================================================================
+export const evaluateEmail = onCall({
+  secrets: [falKey],
+  maxInstances: 6
+}, async request => {
+  const {
+    textoCorreo,
+    consignaExamen
+  } = request.data;
+  if (!textoCorreo || !consignaExamen) {
+    throw new HttpsError("invalid-argument", "Faltan parámetros requeridos");
+  }
+  try {
+    fal.config({
+      credentials: falKey.value()
+    });
+    const promptDefinido = ` Consigna del examen: "${consignaExamen}"
+Texto del estudiante: "${textoCorreo}"
+
+Por favor, actúa como un examinador oficial del Goethe-Institut para el nivel A1. Evalúa el correo redactado por el estudiante siguiendo la rúbrica oficial:
+1. Cumplimiento de la tarea (¿respondió a los 3 puntos requeridos?).
+2. Coherencia y vocabulario (nivel A1).
+3. Corrección gramatical (especial atención a declinaciones nominativo/acusativo, conjugación verbal y posición del verbo).
+4. Regla de Evaluación Socrática (¡CRÍTICO!): Si el estudiante intenta responder una pregunta de la consigna pero comete errores gramaticales o léxicos (ej. usar preposiciones literales como 'zu Park' en lugar de 'in den Park' o 'zum Park', o usar un verbo incorrecto), NUNCA digas que 'no respondió la pregunta'. Valida su intención comunicativa primero ("Veo que intentaste decir que...") y luego corrige el error gramatical. Asegúrate de que los títulos de tus correcciones no se contradigan con tus propias explicaciones y siempre explica el POR QUÉ de la regla gramatical sin inventar reglas falsas.
+
+Devuelve tu respuesta estructurada en español usando Markdown con el formato de Evaluación General y Análisis Quirúrgico.
+`;
+
+    // Se utiliza DeepSeek V4-Pro para máxima precisión y análisis pedagógico
+    const result = await fal.subscribe("openrouter/router/enterprise", {
+      input: {
+        model: "deepseek/deepseek-v4-pro",
+        prompt: promptDefinido,
+        system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo.",
+        temperature: 0.2,
+        top_p: 0.9
+      }
+    });
+    return {
+      output: result.data.output
+    };
+  } catch (error) {
+    console.error("Error en evaluateEmail:", error);
+    throw new HttpsError("internal", "Error al procesar la evaluación de correo", error.message);
+  }
+});
+
+// =========================================================================
+// 3. GENERADOR DE CUENTOS (generateStory)
+// =========================================================================
+export const generateStory = onRequest({
+  secrets: [geminiFreeKey, falKey],
+  cors: true
+}, async (req, res) => {
+  if (req.method === "OPTIONS") {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "POST");
+    res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.status(204).send("");
+    return;
+  }
+  res.set("Access-Control-Allow-Origin", "*");
+  try {
+    const bodyData = req.body.data || req.body;
+    const {
+      palabrasVocabulario
+    } = bodyData;
+    if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario)) {
+      res.status(400).json({
+        error: "Faltan parámetros requeridos: palabrasVocabulario"
+      });
       return;
     }
-    
-    res.set("Access-Control-Allow-Origin", "*");
-
-    try {
-      // Compatibilidad con fetch nativo o httpsCallable del frontend
-      const bodyData = req.body.data || req.body;
-      const { palabrasVocabulario } = bodyData;
-
-      if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario)) {
-        res.status(400).json({ error: "Faltan parámetros requeridos: palabrasVocabulario" });
-        return;
-      }
-
-      const listaPalabras = palabrasVocabulario.join(", ");
-      
-      const promptSistema = "Eres un creador de cuentos infantiles y profesor de alemán nivel A1. Tu objetivo es escribir historias coherentes, inmersivas y gramaticalmente perfectas integrando vocabulario específico.";
-      
-      const promptDefinido = `Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
+    const listaPalabras = palabrasVocabulario.join(", ");
+    const promptSistema = "Eres un creador de cuentos infantiles y profesor de alemán nivel A1. Tu objetivo es escribir historias coherentes, inmersivas y gramaticalmente perfectas integrando vocabulario específico.";
+    const promptDefinido = `Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
       En el campo "cuento_aleman", debes envolver obligatoriamente cada una de estas palabras clave de vocabulario [${listaPalabras}] con doble asterisco "**" (ej. **palabra**) cada vez que las uses en el texto para que resalten.
       La salida debe coincidir EXACTAMENTE con este esquema JSON, sin texto adicional:
       {
@@ -246,195 +336,89 @@ export const generateStory = onRequest(
         "pregunta_comprension": {
            "pregunta": "Pregunta corta",
            "opciones": ["Opción A", "Opción B", "Opción C"],
-           "respuesta_correcta": "La opción correcta exacta"
+           "respuesta_correcta": "La opción exacta"
         }
       }`;
 
-      const generationConfig = { responseMimeType: "application/json", temperature: 0.7 };
+    console.log("FinOps: Iniciando generateStory con fallback...");
+    const jsonOutput = await invokeWithDeepSeekFallback(promptSistema, promptDefinido, {
+      isJson: true,
+      temperature: 0.7,
+      model: "gemini-3.5-flash"
+    });
 
-      // AO: Orquestador del Pre-fetch (Circuit Breaker)
-      const initStream = async (apiKeySecret) => {
-        const genAI = new GoogleGenerativeAI(apiKeySecret.value());
-        const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash", systemInstruction: promptSistema, generationConfig });
-        const streamResult = await model.generateContentStream(promptDefinido);
-        const iterator = streamResult.stream[Symbol.asyncIterator]();
-        const firstChunk = await iterator.next(); // <- PRE-FETCH CRÍTICO
-        return { iterator, firstChunk };
-      };
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+      "X-Accel-Buffering": "no"
+    });
 
-      let activeIterator, firstChunk;
-
-      try {
-        // Intento 1: Capa Gratuita (Límite 15 RPM)
-        console.log("AO: Iniciando Intento 1 con GEMINI_FREE_KEY...");
-        const result = await initStream(geminiFreeKey);
-        activeIterator = result.iterator;
-        firstChunk = result.firstChunk;
-      } catch (err1) {
-        console.warn("AO: Falló la Capa Gratuita. Iniciando Fallback a Facturación...", err1.message);
-        // Intento 2: Capa de Facturación (Sin límite)
-        const result = await initStream(geminiApiKey);
-        activeIterator = result.iterator;
-        firstChunk = result.firstChunk;
-      }
-
-      // Conexión exitosa y verificada. Abrimos la cascada SSE al frontend.
-      res.writeHead(200, {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        "Connection": "keep-alive",
-        "X-Accel-Buffering": "no" // Invalida el caché intermedio
+    const safeText = JSON.stringify(jsonOutput).replace(/\n/g, " ");
+    res.write(`data: ${safeText}\n\n`);
+    res.write("data: [DONE]\n\n");
+    res.end();
+  } catch (globalError) {
+    console.error("FinOps Story Error:", globalError);
+    if (!res.headersSent) {
+      res.status(500).json({
+        error: "Error al generar el cuento."
       });
-
-      // Transmitimos el pre-fetch limpiando saltos de línea
-      if (!firstChunk.done && firstChunk.value) {
-        const safeText = firstChunk.value.text().replace(/\n/g, " ");
-        res.write(`data: ${safeText}\n\n`);
-      }
-
-      // Transmitimos el resto del flujo en cascada
-      for await (const chunk of activeIterator) {
-        const safeText = chunk.text().replace(/\n/g, " ");
-        res.write(`data: ${safeText}\n\n`);
-      }
-
-      res.write("data: [DONE]\n\n");
+    } else {
       res.end();
-
-    } catch (globalError) {
-      console.error("AO: Error crítico en la orquestación final:", globalError);
-      if (!res.headersSent) {
-        res.status(500).json({ error: "Error al generar el cuento." });
-      } else {
-        res.end(); // Cerrar el stream si ya había empezado
-      }
     }
   }
-);
+});
 
 // =========================================================================
 // 4. CHAT CON EL TUTOR IA (sendTutorChatMessage)
-// FASE 3: Preparación de Canal de Streaming (SSE)
-// Modelo: Gemini 3.1 Flash-Lite
 // =========================================================================
-export const sendTutorChatMessage = onRequest(
-  { secrets: [geminiFreeKey, geminiApiKey], cors: true },
-  async (req, res) => {
-    if (req.method !== "POST" && req.method !== "OPTIONS") {
-      res.status(405).send("Method Not Allowed");
-      return;
-    }
-
-    // Si es OPTIONS, se resuelve rápido para CORS. 
-    // Aunque `cors: true` en v2 suele manejarlo automáticamente.
-
-    let data;
-    try {
-      data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      // En funciones invocables a veces viene bajo `data`
-      if (data && data.data) data = data.data;
-    } catch (e) {
-      res.status(400).send("Invalid JSON body");
-      return;
-    }
-
-    const historialConversacion = data?.historialConversacion;
-
-    if (!historialConversacion || !Array.isArray(historialConversacion)) {
-      res.status(400).send("Faltan parámetros requeridos: historialConversacion");
-      return;
-    }
-
-    const defaultSystemInstruction = `Eres 'DeutschMeister Tutor', un profesor de alemán nativo, altamente empático y experto en pedagogía para estudiantes de nivel A1. 
-
-   Tu objetivo no es solo traducir, sino ENSEÑAR, guiar al estudiante y asegurar la retención del conocimiento.
-
-   REGLAS ESTRICTAS DE COMPORTAMIENTO:
-   1. Idioma y Ejemplos: Explica siempre en español claro y conversacional. Cada vez que uses una palabra o frase en alemán, ponla en **negrita** e incluye SIEMPRE su traducción al español inmediatamente después.
-   2. Metodología Socrática y Correcciones: Si el estudiante comete un error, NUNCA le des la respuesta correcta de golpe. Usa el "Método Sándwich": felicítalo por el intento, señala el error amablemente, explícale la regla con una analogía simple de la vida real, y pídele que lo intente de nuevo.
-   3. Formato Visual Avanzado: No entregues muros de texto. Usa listas con viñetas y emojis para separar ideas. OBLIGATORIO: Cuando expliques gramática (ej. der/die/das, conjugaciones, acusativo), utiliza tablas en formato Markdown para que el estudiante visualice los patrones fácilmente.
-   4. Simplicidad Extrema: Tienes prohibido usar jerga lingüística compleja (no uses términos como "cláusula subordinada" o "pluscuamperfecto"). Usa conceptos visuales como "la regla de la posición 2" o "el verbo es el rey". Limita tu vocabulario en alemán estrictamente a conceptos del nivel A1.
-   5. Cierre Interactivo (Hook): Termina CADA mensaje con una (y solo una) pregunta corta y sencilla en alemán (apropiada para el nivel A1) relacionada con lo que acaban de hablar, para invitar al alumno a practicar y responder.`;
-
-    const systemInstruction = await getSystemPrompt("tutor_chat_system", defaultSystemInstruction);
-
-    // Función auxiliar interna que gestiona la conexión con el modelo
-    const generarRespuesta = async (apiKeyStr) => {
-      const genAI = new GoogleGenerativeAI(apiKeyStr);
-      const model = genAI.getGenerativeModel({
-        model: "gemini-3.1-flash-lite",
-        systemInstruction: systemInstruction
-      });
-
-      let validHistory = historialConversacion.slice(0, -1);
-      if (validHistory.length > 0 && validHistory[0].role !== "user") {
-        validHistory.shift();
-      }
-
-      const chat = model.startChat({
-        history: validHistory,
-      });
-
-      const ultimoMensaje = historialConversacion[historialConversacion.length - 1].parts[0].text;
-      const resultStream = await chat.sendMessageStream(ultimoMensaje);
-
-      // Set headers for SSE (Server-Sent Events)
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.setHeader('Connection', 'keep-alive');
-
-      for await (const chunk of resultStream.stream) {
-        const chunkText = chunk.text();
-        if (chunkText) {
-          res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
-        }
-      }
-
-      res.write('data: [DONE]\n\n');
-      res.end();
-    };
-
-    // Cascada de Circuit Breaker
-    try {
-      await generarRespuesta(geminiFreeKey.value());
-    } catch (error) {
-      console.error("Error al intentar responder con la llave gratuita:", error);
-      const isQuotaError =
-        error.status === 429 ||
-        (error.message && (error.message.includes("429") || error.message.toLowerCase().includes("quota")));
-
-      if (isQuotaError) {
-        console.warn("Límite de cuota alcanzado en llave gratuita. Activando fallback a llave de pago...");
-        try {
-          await generarRespuesta(geminiApiKey.value());
-        } catch (fallbackError) {
-          console.error("Error crítico en la llave de pago de fallback:", fallbackError);
-          if (!res.headersSent) {
-            res.status(500).json({ error: "Error interno en el servidor de fallback", details: fallbackError.message });
-          } else {
-            res.write(`data: ${JSON.stringify({ error: "Stream fallback error: " + fallbackError.message })}\n\n`);
-            res.end();
-          }
-        }
-      } else {
-        if (!res.headersSent) {
-          res.status(500).json({ error: "Error interno del servidor", details: error.message });
-        } else {
-          res.write(`data: ${JSON.stringify({ error: "Stream error: " + error.message })}\n\n`);
-          res.end();
-        }
-      }
-    }
+export const sendTutorChatMessage = onRequest({
+  secrets: [geminiFreeKey, falKey],
+  cors: true
+}, async (req, res) => {
+  if (req.method !== "POST" && req.method !== "OPTIONS") {
+    res.status(405).send("Method Not Allowed");
+    return;
   }
-);
+  let data;
+  try {
+    data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    if (data && data.data) data = data.data;
+  } catch (e) {
+    res.status(400).send("Invalid JSON body");
+    return;
+  }
+  const historialConversacion = data?.historialConversacion;
+  if (!historialConversacion || !Array.isArray(historialConversacion)) {
+    res.status(400).send("Faltan parámetros requeridos: historialConversacion");
+    return;
+  }
+  const defaultSystemInstruction = `Eres 'DeutschMeister Tutor', un profesor de alemán nativo, altamente empático y experto en pedagogía para estudiantes de nivel A1. 
+
+Tu objetivo no es solo traducir, sino ENSEÑAR, guiar al estudiante y asegurar la retención del conocimiento.
+
+REGLAS ESTRICTAS DE COMPORTAMIENTO:
+1. Idioma y Ejemplos: Explica siempre en español claro y conversacional. Cada vez que uses una palabra o frase en alemán, ponla en **negrita** e incluye SIEMPRE su traducción al español inmediatamente después.
+2. Metodología Socrática y Correcciones: Si el estudiante comete un error, NUNCA le des la respuesta correcta de golpe. Usa el "Método Sándwich": felicítalo por el intento, señala el error amablemente, explícale la regla con una analogía simple de la vida real, y pídele que lo intente de nuevo.
+3. Formato Visual Avanzado: No entregues muros de texto. Usa listas con viñetas y emojis para separar ideas. OBLIGATORIO: Cuando expliques gramática (ej. der/die/das, conjugaciones, acusativo), utiliza tablas en formato Markdown para que el estudiante visualice los patrones fácilmente.
+4. Simplicidad Extrema: Tienes prohibido usar jerga lingüística compleja (no uses términos como "cláusula subordinada" o "pluscuamperfecto"). Usa conceptos visuales como "la regla de la posición 2" o "el verbo es el rey". Limita tu vocabulario en alemán estrictamente a conceptos del nivel A1.
+5. Cierre Interactivo (Hook): Termina CADA mensaje con una (y solo una) pregunta corta y sencilla en alemán (apropiada para el nivel A1) relacionada con lo que acaban de hablar, para invitar al alumno a practicar y responder.
+6. Método Feynman (Inversión de Roles): Ocasionalmente, cuando el estudiante acierte un concepto complejo o pregunte por una regla gramatical, no se la des digerida de inmediato. En su lugar, dale una pista y rétalo a que él te explique la regla a ti con sus propias palabras, de forma muy simple (como si le enseñara a un niño de 5 años). Espera su respuesta para validar su comprensión real antes de avanzar.`;
+  const systemInstruction = await getSystemPrompt("tutor_chat_system", defaultSystemInstruction);
+
+  const history = historialConversacion.slice(0, -1);
+  const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
+
+  await streamWithDeepSeekFallback(res, systemInstruction, history, lastMessage, {
+    model: "gemini-3.1-flash-lite",
+    cleanBold: false
+  });
+});
 
 // Función auxiliar para traducir conceptos a descripciones visuales usando Gemini
-// Optimizada con Gemini 3.1 Flash-Lite y patrón Circuit Breaker (Gratis -> Pago)
-async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, paidKeyVal, category = "") {
-  const contextText = category 
-    ? `Contexto temático de la palabra (área o tema de vocabulario): "${category}". Úsalo para que el objeto tenga sentido y sea adecuado para este contexto específico (ej. si la categoría menciona "Auto" y el concepto es "luces" o "luz", describe luces/faros de auto, no lámparas domésticas; si menciona "Auto" y el concepto es "limpiaparabrisas", describe la escobilla o parabrisas del auto).` 
-    : '';
-
+async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, category = "") {
+  const contextText = category ? `Contexto temático de la palabra (área o tema de vocabulario): "${category}". Úsalo para que el objeto tenga sentido y sea adecuado para este contexto específico (ej. si la categoría menciona "Auto" y el concepto es "luces" o "luz", describe luces/faros de auto, no lámparas domésticas; si menciona "Auto" y el concepto es "limpiaparabrisas", describe la escobilla o parabrisas del auto).` : '';
   const promptDirectorArte = `
     Actúa como Director de Arte de utilería 3D para flashcards educativas. 
     El usuario necesita representar visualmente el concepto en español: "${conceptoEspanol}".
@@ -450,35 +434,89 @@ async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, paidK
     
     Devuelve solo la descripción en inglés en una sola línea. Sin introducciones, sin confirmaciones y sin comillas.
   `;
-
-  const invocarModelo = async (apiKeyValue) => {
+  const invocarModelo = async apiKeyValue => {
     const genAI = new GoogleGenerativeAI(apiKeyValue);
-    const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3.1-flash-lite"
+    });
     const result = await model.generateContent(promptDirectorArte);
     return result.response.text().trim().replace(/['"]/g, '');
   };
-
   try {
-    // Intento 1: Usar la Llave Gratuita (Costo $0)
     return await invocarModelo(freeKeyVal);
   } catch (error) {
-    const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.includes("quota")));
-
-    if (isQuotaError && paidKeyVal) {
-      console.warn("⚠️ Cuota gratuita agotada al generar visual prompt. Saltando a llave de pago...");
-      try {
-        // Intento 2: Usar la Llave de Pago (Costo ultrabajo por ser Flash-Lite)
-        return await invocarModelo(paidKeyVal);
-      } catch (fallbackError) {
-        console.error("❌ Error en fallback de visual prompt:", fallbackError);
-        return conceptoEspanol;
-      }
-    }
-
-    console.error("❌ Error desconocido al generar descripcion visual con Gemini:", error);
     return conceptoEspanol;
   }
 }
+
+// Función auxiliar para traducir conceptos directos de sentimientos/adjetivos/verbos a inglés limpio
+async function getCleanEnglishTranslation(wordEspanol, freeKeyVal) {
+  const prompt = `Translate the Spanish word "${wordEspanol}" to a single English word representing the emotion, state, or action (e.g., "cansado" -> "tired", "feliz" -> "happy", "triste" -> "sad", "enojado" -> "angry"). Return ONLY the translated English word in lowercase, with no punctuation or extra text.`;
+  const invocarModelo = async apiKeyValue => {
+    const genAI = new GoogleGenerativeAI(apiKeyValue);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3.1-flash-lite"
+    });
+    const result = await model.generateContent(prompt);
+    return result.response.text().trim().toLowerCase().replace(/[^a-z\s-]/g, '');
+  };
+  try {
+    return await invocarModelo(freeKeyVal);
+  } catch (error) {
+    return wordEspanol;
+  }
+}
+
+const diccionarioIndustrial = {
+  "der strom": "glowing yellow lightning bolt symbol",
+  "die spannung": "industrial electrical voltmeter dial with a red needle",
+  "der stromkreis": "closed electrical circuit board with a glowing lightbulb",
+  "das kabel": "thick industrial electrical copper cable spool",
+  "der stecker": "standard heavy European electrical plug",
+  "die steckdose": "white electrical wall socket",
+  "der schalter": "modern industrial wall light switch",
+  "die sicherung": "industrial electrical fuse breaker box with switches",
+  "der transformator": "heavy industrial electrical power transformer unit",
+  "die batterie": "standard AA battery with plus and minus signs",
+  "der akku": "green lithium ion rechargeable battery pack",
+  "der zähler": "smart electrical power meter with digital display",
+  "die erdung": "copper grounding rod driven into a small block of earth",
+  "der kurzschluss": "broken thick electrical wire emitting bright electric sparks",
+  "die solaranlage": "miniature house roof completely covered with solar panels",
+  "das solarmodul": "single large blue photovoltaic solar panel on a stand",
+  "die solarzelle": "close-up of a blue micro photovoltaic solar cell grid",
+  "der wechselrichter": "modern solar power inverter wall box with a digital display",
+  "der speicher": "large modern home solar battery storage unit",
+  "das netz": "tall electrical power transmission tower with cables",
+  "der ertrag": "rising bar chart with a glowing sun symbol on top",
+  "die gleichspannung": "electrical block showing the Direct Current DC straight line symbol",
+  "die wechselspannung": "oscilloscope screen showing an Alternating Current AC sine wave",
+  "die leistung": "glowing futuristic energy core",
+  "die dachmontage": "aluminum construction brackets mounted on a piece of rooftop",
+  "das werkzeug": "open red toolbox filled with tools",
+  "der schraubenzieher": "yellow and black mechanical screwdriver",
+  "die zange": "pair of heavy metal pliers with rubber grips",
+  "der bohrer": "heavy duty power drill",
+  "das multimeter": "digital multimeter testing tool with red and black probes",
+  "der helm": "yellow industrial hard hat",
+  "die handschuhe": "pair of heavy duty protective leather work gloves",
+  "die leiter": "tall aluminum folding stepladder",
+  "die gefahr": "yellow high voltage warning triangle sign",
+  "gefährlich": "yellow skull and crossbones hazard sign",
+  "messen": "extended yellow measuring tape next to a wire",
+  "anschließen": "two thick electrical cables firmly plugged together",
+  "installieren": "silver wrench tightening a bolt on a metal machine part",
+  "prüfen": "green checkmark hovering over a technical clipboard",
+  "warten": "red oil can and a silver mechanical gear",
+  "einschalten": "green glowing ON button switch",
+  "ausschalten": "red glowing OFF button switch",
+  "löten": "hot soldering iron melting silver wire onto a green circuit board",
+  "isolieren": "roll of black electrical insulation tape",
+  "abisolieren": "wire strippers removing plastic insulation from a thick copper wire",
+  "austauschen": "two mechanical gears swapping places with arrows",
+  "einspeisen": "electricity energy flowing from a house into a power grid tower",
+  "funktionieren": "two interlocking mechanical gears turning smoothly"
+};
 
 // =========================================================================
 // 5. GENERADOR DE IMÁGENES DE TARJETAS (generateCardImage)
@@ -486,88 +524,340 @@ async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, paidK
 // =========================================================================
 
 const diccionarioLetras = {
-  "A, a": { shape: "uppercase letter A", obj: "shiny red apple" }, // Apfel
-  "B, b": { shape: "uppercase letter B", obj: "yellow banana" }, // Banane
-  "C, c": { shape: "uppercase letter C", obj: "cute chameleon" }, // Chamäleon
-  "D, d": { shape: "uppercase letter D", obj: "aluminum soda can" }, // Dose
-  "E, e": { shape: "uppercase letter E", obj: "cute little elephant" }, // Elefant
-  "F, f": { shape: "uppercase letter F", obj: "cute green frog" }, // Frosch
-  "G, g": { shape: "uppercase letter G", obj: "tall cute giraffe" }, // Giraffe
-  "H, h": { shape: "uppercase letter H", obj: "small cute 3D house" }, // Haus
-  "I, i": { shape: "uppercase letter I", obj: "cute little hedgehog" }, // Igel
-  "J, j": { shape: "uppercase letter J", obj: "folded colorful jacket" }, // Jacke
-  "K, k": { shape: "uppercase letter K", obj: "cute little cat" }, // Katze (reemplaza Kitten)
-  "L, l": { shape: "uppercase letter L", obj: "cute little lion" }, // Löwe
-  "M, m": { shape: "uppercase letter M", obj: "cute small mouse" }, // Maus
-  "N, n": { shape: "uppercase letter N", obj: "cute 3D human nose" }, // Nase
-  "O, o": { shape: "uppercase letter O", obj: "bright orange fruit" }, // Orange
-  "P, p": { shape: "uppercase letter P", obj: "cute little penguin" }, // Pinguin
-  "Q, q": { shape: "uppercase letter Q", obj: "cute pink jellyfish" }, // Qualle (reemplaza Queen/Krone)
-  "R, r": { shape: "uppercase letter R", obj: "beautiful red rose" }, // Rose
-  "S, s": { shape: "uppercase letter S", obj: "bright yellow sun" }, // Sonne
-  "T, t": { shape: "uppercase letter T", obj: "ceramic coffee mug" }, // Tasse (reemplaza Tree/Baum)
-  "U, u": { shape: "uppercase letter U", obj: "analog wall clock" }, // Uhr (reemplaza Umbrella/Regenschirm)
-  "V, v": { shape: "uppercase letter V", obj: "cute little flying bird" }, // Vogel (reemplaza Violin/Geige)
-  "W, w": { shape: "uppercase letter W", obj: "fluffy white cloud" }, // Wolke (reemplaza Whale/Wal)
-  "X, x": { shape: "uppercase letter X", obj: "colorful toy xylophone" }, // Xylophon
-  "Y, y": { shape: "uppercase letter Y", obj: "small luxury toy yacht" }, // Yacht (reemplaza Yoyo/Jojo)
-  "Z, z": { shape: "uppercase letter Z", obj: "cute little zebra" }, // Zebra
+  "A, a": {
+    shape: "uppercase letter A",
+    obj: "shiny red apple"
+  },
+  // Apfel
+  "B, b": {
+    shape: "uppercase letter B",
+    obj: "yellow banana"
+  },
+  // Banane
+  "C, c": {
+    shape: "uppercase letter C",
+    obj: "cute chameleon"
+  },
+  // Chamäleon
+  "D, d": {
+    shape: "uppercase letter D",
+    obj: "aluminum soda can"
+  },
+  // Dose
+  "E, e": {
+    shape: "uppercase letter E",
+    obj: "cute little elephant"
+  },
+  // Elefant
+  "F, f": {
+    shape: "uppercase letter F",
+    obj: "cute green frog"
+  },
+  // Frosch
+  "G, g": {
+    shape: "uppercase letter G",
+    obj: "tall cute giraffe"
+  },
+  // Giraffe
+  "H, h": {
+    shape: "uppercase letter H",
+    obj: "small cute 3D house"
+  },
+  // Haus
+  "I, i": {
+    shape: "uppercase letter I",
+    obj: "cute little hedgehog"
+  },
+  // Igel
+  "J, j": {
+    shape: "uppercase letter J",
+    obj: "folded colorful jacket"
+  },
+  // Jacke
+  "K, k": {
+    shape: "uppercase letter K",
+    obj: "cute little cat"
+  },
+  // Katze (reemplaza Kitten)
+  "L, l": {
+    shape: "uppercase letter L",
+    obj: "cute little lion"
+  },
+  // Löwe
+  "M, m": {
+    shape: "uppercase letter M",
+    obj: "cute small mouse"
+  },
+  // Maus
+  "N, n": {
+    shape: "uppercase letter N",
+    obj: "cute 3D human nose"
+  },
+  // Nase
+  "O, o": {
+    shape: "uppercase letter O",
+    obj: "bright orange fruit"
+  },
+  // Orange
+  "P, p": {
+    shape: "uppercase letter P",
+    obj: "cute little penguin"
+  },
+  // Pinguin
+  "Q, q": {
+    shape: "uppercase letter Q",
+    obj: "cute pink jellyfish"
+  },
+  // Qualle (reemplaza Queen/Krone)
+  "R, r": {
+    shape: "uppercase letter R",
+    obj: "beautiful red rose"
+  },
+  // Rose
+  "S, s": {
+    shape: "uppercase letter S",
+    obj: "bright yellow sun"
+  },
+  // Sonne
+  "T, t": {
+    shape: "uppercase letter T",
+    obj: "ceramic coffee mug"
+  },
+  // Tasse (reemplaza Tree/Baum)
+  "U, u": {
+    shape: "uppercase letter U",
+    obj: "analog wall clock"
+  },
+  // Uhr (reemplaza Umbrella/Regenschirm)
+  "V, v": {
+    shape: "uppercase letter V",
+    obj: "cute little flying bird"
+  },
+  // Vogel (reemplaza Violin/Geige)
+  "W, w": {
+    shape: "uppercase letter W",
+    obj: "fluffy white cloud"
+  },
+  // Wolke (reemplaza Whale/Wal)
+  "X, x": {
+    shape: "uppercase letter X",
+    obj: "colorful toy xylophone"
+  },
+  // Xylophon
+  "Y, y": {
+    shape: "uppercase letter Y",
+    obj: "small luxury toy yacht"
+  },
+  // Yacht (reemplaza Yoyo/Jojo)
+  "Z, z": {
+    shape: "uppercase letter Z",
+    obj: "cute little zebra"
+  },
+  // Zebra
 
   // Umlauts y caracteres especiales
-  "Ä, ä": { shape: "uppercase letter A with two small dots (umlaut) floating above it", obj: "two shiny red apples" }, // Äpfel
-  "Ö, ö": { shape: "uppercase letter O with two small dots (umlaut) floating above it", obj: "small glass bottle of olive oil" }, // Öl
-  "Ü, ü": { shape: "uppercase letter U with two small dots (umlaut) floating above it", obj: "small open gift box with a surprise inside" }, // Überraschung
-  "ß": { shape: "German sharp S (Eszett) character", obj: "small piece of a paved street" } // Straße (contiene la ß)
+  "Ä, ä": {
+    shape: "uppercase letter A with two small dots (umlaut) floating above it",
+    obj: "two shiny red apples"
+  },
+  // Äpfel
+  "Ö, ö": {
+    shape: "uppercase letter O with two small dots (umlaut) floating above it",
+    obj: "small glass bottle of olive oil"
+  },
+  // Öl
+  "Ü, ü": {
+    shape: "uppercase letter U with two small dots (umlaut) floating above it",
+    obj: "small open gift box with a surprise inside"
+  },
+  // Überraschung
+  "ß": {
+    shape: "German sharp S (Eszett) character",
+    obj: "small piece of a paved street"
+  } // Straße (contiene la ß)
 };
-
 const diccionarioNumeros = {
-  "null": { num: "number 0", obj: "small empty yellow basket" },
-  "eins": { num: "number 1", obj: "exactly one small bright yellow star" },
-  "zwei": { num: "number 2", obj: "exactly two small bright yellow stars" },
-  "drei": { num: "number 3", obj: "exactly three small bright yellow stars" },
-  "vier": { num: "number 4", obj: "exactly four small bright yellow stars" },
-  "fünf": { num: "number 5", obj: "exactly five small bright yellow stars" },
-  "sechs": { num: "number 6", obj: "group of small bright yellow stars" },
-  "sieben": { num: "number 7", obj: "group of small bright yellow stars" },
-  "acht": { num: "number 8", obj: "group of small bright yellow stars" },
-  "neun": { num: "number 9", obj: "group of small bright yellow stars" },
-  "zehn": { num: "number 10", obj: "group of small bright yellow stars" },
-  "elf": { num: "number 11", obj: "group of small bright yellow stars" },
-  "zwölf": { num: "number 12", obj: "group of small bright yellow stars" },
-  "dreizehn": { num: "number 13", obj: "group of small bright yellow stars" },
-  "vierzehn": { num: "number 14", obj: "group of small bright yellow stars" },
-  "fünfzehn": { num: "number 15", obj: "group of small bright yellow stars" },
-  "sechzehn": { num: "number 16", obj: "group of small bright yellow stars" },
-  "siebzehn": { num: "number 17", obj: "group of small bright yellow stars" },
-  "achtzehn": { num: "number 18", obj: "group of small bright yellow stars" },
-  "neunzehn": { num: "number 19", obj: "group of small bright yellow stars" },
-  "zwanzig": { num: "number 20", obj: "group of small bright yellow stars" },
-  "einundzwanzig": { num: "number 21", obj: "group of small bright yellow stars" },
-  "dreißig": { num: "number 30", obj: "group of small bright yellow stars" },
-  "vierzig": { num: "number 40", obj: "group of small bright yellow stars" },
-  "fünfzig": { num: "number 50", obj: "group of small bright yellow stars" },
-  "sechzig": { num: "number 60", obj: "group of small bright yellow stars" },
-  "siebzig": { num: "number 70", obj: "group of small bright yellow stars" },
-  "achtzig": { num: "number 80", obj: "group of small bright yellow stars" },
-  "neunzig": { num: "number 90", obj: "group of small bright yellow stars" },
-  "hundert": { num: "number 100", obj: "group of small bright yellow stars" },
-  "tausend": { num: "number 1000", obj: "group of small bright yellow stars" },
-
+  "null": {
+    num: "number 0",
+    obj: "small empty yellow basket"
+  },
+  "eins": {
+    num: "number 1",
+    obj: "exactly one small bright yellow star"
+  },
+  "zwei": {
+    num: "number 2",
+    obj: "exactly two small bright yellow stars"
+  },
+  "drei": {
+    num: "number 3",
+    obj: "exactly three small bright yellow stars"
+  },
+  "vier": {
+    num: "number 4",
+    obj: "exactly four small bright yellow stars"
+  },
+  "fünf": {
+    num: "number 5",
+    obj: "exactly five small bright yellow stars"
+  },
+  "sechs": {
+    num: "number 6",
+    obj: "group of small bright yellow stars"
+  },
+  "sieben": {
+    num: "number 7",
+    obj: "group of small bright yellow stars"
+  },
+  "acht": {
+    num: "number 8",
+    obj: "group of small bright yellow stars"
+  },
+  "neun": {
+    num: "number 9",
+    obj: "group of small bright yellow stars"
+  },
+  "zehn": {
+    num: "number 10",
+    obj: "group of small bright yellow stars"
+  },
+  "elf": {
+    num: "number 11",
+    obj: "group of small bright yellow stars"
+  },
+  "zwölf": {
+    num: "number 12",
+    obj: "group of small bright yellow stars"
+  },
+  "dreizehn": {
+    num: "number 13",
+    obj: "group of small bright yellow stars"
+  },
+  "vierzehn": {
+    num: "number 14",
+    obj: "group of small bright yellow stars"
+  },
+  "fünfzehn": {
+    num: "number 15",
+    obj: "group of small bright yellow stars"
+  },
+  "sechzehn": {
+    num: "number 16",
+    obj: "group of small bright yellow stars"
+  },
+  "siebzehn": {
+    num: "number 17",
+    obj: "group of small bright yellow stars"
+  },
+  "achtzehn": {
+    num: "number 18",
+    obj: "group of small bright yellow stars"
+  },
+  "neunzehn": {
+    num: "number 19",
+    obj: "group of small bright yellow stars"
+  },
+  "zwanzig": {
+    num: "number 20",
+    obj: "group of small bright yellow stars"
+  },
+  "einundzwanzig": {
+    num: "number 21",
+    obj: "group of small bright yellow stars"
+  },
+  "dreißig": {
+    num: "number 30",
+    obj: "group of small bright yellow stars"
+  },
+  "vierzig": {
+    num: "number 40",
+    obj: "group of small bright yellow stars"
+  },
+  "fünfzig": {
+    num: "number 50",
+    obj: "group of small bright yellow stars"
+  },
+  "sechzig": {
+    num: "number 60",
+    obj: "group of small bright yellow stars"
+  },
+  "siebzig": {
+    num: "number 70",
+    obj: "group of small bright yellow stars"
+  },
+  "achtzig": {
+    num: "number 80",
+    obj: "group of small bright yellow stars"
+  },
+  "neunzig": {
+    num: "number 90",
+    obj: "group of small bright yellow stars"
+  },
+  "hundert": {
+    num: "number 100",
+    obj: "group of small bright yellow stars"
+  },
+  "tausend": {
+    num: "number 1000",
+    obj: "group of small bright yellow stars"
+  },
   // Ordinales (Se renderizan como números con una medalla)
-  "der erste": { num: "number 1", obj: "shiny gold medal" },
-  "der zweite": { num: "number 2", obj: "shiny silver medal" },
-  "der dritte": { num: "number 3", obj: "shiny bronze medal" },
-  "der vierte": { num: "number 4", obj: "blue ribbon" },
-  "der fünfte": { num: "number 5", obj: "small blue ribbon" },
-  "der sechste": { num: "number 6", obj: "small blue ribbon" },
-  "der siebte": { num: "number 7", obj: "small blue ribbon" },
-  "der achte": { num: "number 8", obj: "small blue ribbon" },
-  "der neunte": { num: "number 9", obj: "small blue ribbon" },
-  "der zehnte": { num: "number 10", obj: "small blue ribbon" },
-  "der elfte": { num: "number 11", obj: "small blue ribbon" },
-  "der zwölfte": { num: "number 12", obj: "small blue ribbon" },
-  "der zwanzigste": { num: "number 20", obj: "small blue ribbon" },
-  "der einundzwanzigste": { num: "number 21", obj: "small blue ribbon" }
+  "der erste": {
+    num: "number 1",
+    obj: "shiny gold medal"
+  },
+  "der zweite": {
+    num: "number 2",
+    obj: "shiny silver medal"
+  },
+  "der dritte": {
+    num: "number 3",
+    obj: "shiny bronze medal"
+  },
+  "der vierte": {
+    num: "number 4",
+    obj: "blue ribbon"
+  },
+  "der fünfte": {
+    num: "number 5",
+    obj: "small blue ribbon"
+  },
+  "der sechste": {
+    num: "number 6",
+    obj: "small blue ribbon"
+  },
+  "der siebte": {
+    num: "number 7",
+    obj: "small blue ribbon"
+  },
+  "der achte": {
+    num: "number 8",
+    obj: "small blue ribbon"
+  },
+  "der neunte": {
+    num: "number 9",
+    obj: "small blue ribbon"
+  },
+  "der zehnte": {
+    num: "number 10",
+    obj: "small blue ribbon"
+  },
+  "der elfte": {
+    num: "number 11",
+    obj: "small blue ribbon"
+  },
+  "der zwölfte": {
+    num: "number 12",
+    obj: "small blue ribbon"
+  },
+  "der zwanzigste": {
+    num: "number 20",
+    obj: "small blue ribbon"
+  },
+  "der einundzwanzigste": {
+    num: "number 21",
+    obj: "small blue ribbon"
+  }
 };
 
 // Nuevo Diccionario de Preguntas
@@ -624,6 +914,34 @@ const diccionarioConceptosEspeciales = {
   "motor starten": "a 3D isometric car ignition switch with a key turning to start the engine, or an illuminated engine start-stop button glowing red"
 };
 
+const diccionarioAccionesDinamicas = {
+  "abfahren": "train moving away from a station platform on tracks",
+  "ankommen": "train arriving at a station platform",
+  "einsteigen": "passenger stepping into a train or bus",
+  "aussteigen": "passenger stepping out of a train or bus",
+  "umsteigen": "two trains parked side by side at a station",
+  "fliegen": "airplane flying high in the sky",
+  "parken": "car perfectly parked in a parking slot",
+  "regnen": "dark storm cloud dropping rain",
+  "schneien": "fluffy cloud dropping snowflakes",
+  "überholen": "car overtaking another car on the highway",
+  "bremsen": "car tire braking hard on asphalt"
+};
+
+const mapColoresHex = {
+  "weiß": "strictly white hex #FFFFFF",
+  "schwarz": "strictly black hex #000000",
+  "grau": "strictly grey hex #808080",
+  "rot": "strictly red hex #FF0000",
+  "blau": "strictly blue hex #0000FF",
+  "gelb": "strictly yellow hex #FFFF00",
+  "grün": "strictly green hex #008000",
+  "braun": "strictly brown hex #8B4513",
+  "orange": "strictly orange hex #FFA500",
+  "rosa": "strictly pink hex #FFC0CB",
+  "lila": "strictly purple hex #800080"
+};
+
 /**
  * 🏭 FÁBRICA DE PROMPTS (El Enrutador Lógico)
  * Estructura un JSON aislando colores naturales del indicador de género
@@ -636,16 +954,22 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
 
   // Detección infalible de preguntas
   const esPregunta = tipoLimpio.includes("pregunta") || tipoLimpio.includes("w-frage") || tipoLimpio.includes("interrogativ") || palabraLimpia.includes("?");
-
   const diasYMeses = ["montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag", "januar", "februar", "märz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember"];
 
   // MODIFICACIÓN AQUÍ:
-  if (palabraLimpia.startsWith("der ") || diasYMeses.includes(palabraLimpia)) { hexAsignado = "hex #4285F4"; }
-  else if (palabraLimpia.startsWith("die ")) { hexAsignado = "hex #EA4335"; }
-  else if (palabraLimpia.startsWith("das ")) { hexAsignado = "hex #34A853"; }
-  else if (tipoLimpio === "verbo" || tipoLimpio === "acción") { hexAsignado = "hex #FBBC05"; }
-  else if (tipoLimpio === "preposición" || tipoLimpio === "preposicion") { hexAsignado = "hex #FF9800"; }
-  else if (esPregunta) { hexAsignado = "hex #9C27B0"; }
+  if (palabraLimpia.startsWith("der ") || diasYMeses.includes(palabraLimpia)) {
+    hexAsignado = "hex #4285F4";
+  } else if (palabraLimpia.startsWith("die ")) {
+    hexAsignado = "hex #EA4335";
+  } else if (palabraLimpia.startsWith("das ")) {
+    hexAsignado = "hex #34A853";
+  } else if (tipoLimpio === "verbo" || tipoLimpio === "acción") {
+    hexAsignado = "hex #FBBC05";
+  } else if (tipoLimpio === "preposición" || tipoLimpio === "preposicion") {
+    hexAsignado = "hex #FF9800";
+  } else if (esPregunta) {
+    hexAsignado = "hex #9C27B0";
+  }
 
   // 2. Base JSON Estructurada
   let promptObj = {
@@ -658,165 +982,238 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
   // 3. Enrutamiento Lógico de Sujetos
   if (esPregunta) {
     const objPregunta = diccionarioPreguntas[palabraLimpia] || "small cute 3D exclamation mark symbol";
-    promptObj.subjects = [
-      { "type": "large chunky 3D question mark symbol", "color": "strictly Material Purple hex #9C27B0", "position": "left" },
-      { "type": objPregunta, "color": "vibrant natural clay colors", "position": "sitting right next to the question mark" }
-    ];
-  }
-  else if (tipoLimpio === 'letra' || tipoLimpio === 'alfabeto') {
+    promptObj.subjects = [{
+      "type": "large chunky 3D question mark symbol",
+      "color": "strictly Material Purple hex #9C27B0",
+      "position": "left"
+    }, {
+      "type": objPregunta,
+      "color": "vibrant natural clay colors",
+      "position": "sitting right next to the question mark"
+    }];
+  } else if (tipoLimpio === 'letra' || tipoLimpio === 'alfabeto') {
     const fallbackShape = `uppercase letter ${palabraAleman.charAt(0).toUpperCase()}`;
-    const datosLetra = diccionarioLetras[palabraAleman] || { shape: fallbackShape, obj: "small colorful bouncy ball" };
-    
+    const datosLetra = diccionarioLetras[palabraAleman] || {
+      shape: fallbackShape,
+      obj: "small colorful bouncy ball"
+    };
     promptObj = {
       "scene": "A pure seamless solid white background hex #FFFFFF",
-      "subjects": [
-        { "type": `large chunky 3D block shaped like the ${datosLetra.shape}`, "color": "strictly Material Grey hex #9E9E9E", "position": "left" },
-        { "type": datosLetra.obj, "color": "vibrant natural clay colors", "position": "sitting right next to the letter block" }
-      ],
+      "subjects": [{
+        "type": `large chunky 3D block shaped like the ${datosLetra.shape}`,
+        "color": "strictly Material Grey hex #9E9E9E",
+        "position": "left"
+      }, {
+        "type": datosLetra.obj,
+        "color": "vibrant natural clay colors",
+        "position": "sitting right next to the letter block"
+      }],
       "style_rules": "Strictly purely visual: absolutely NO TEXT, NO LETTERS, NO WORDS. Minimalist, simple, made of smooth matte soft clay."
     };
-  }
-  else if (tipoLimpio === 'numero' || tipoLimpio === 'número' || diccionarioNumeros[palabraLimpia]) {
-    const datosNum = diccionarioNumeros[palabraLimpia] || { num: "number " + palabraLimpia, obj: "group of small bright yellow stars" };
-    promptObj.subjects = [
-      { "type": `large chunky 3D block shaped like the ${datosNum.num}`, "color": "strictly Material Grey hex #9E9E9E", "position": "left" },
-      { "type": datosNum.obj, "color": "vibrant Material Yellow", "position": "sitting right next to the number block" }
-    ];
-  }
-  else if (diccionarioUhrzeit[palabraLimpia]) {
-    promptObj.subjects = [
-      {
-        "type": diccionarioUhrzeit[palabraLimpia],
-        "description": "Clean, educational, clear visualization of time. Made of smooth matte soft clay. Purely visual, zero text.",
-        "position": "centered"
-      }
-    ];
-  }
-  else if (diccionarioConceptosEspeciales[palabraLimpia]) {
-    promptObj.subjects = [
-      {
-        "type": diccionarioConceptosEspeciales[palabraLimpia],
-        "description": "Clean, educational, minimalist language app illustration. Made of smooth matte soft clay. Purely visual, zero text.",
-        "position": "centered"
-      },
-      {
-        "type": "small geometric floating sphere",
-        "description": "Made of glossy clay, perfectly round, acting as a grammatical gender indicator. Zero text.",
-        "position": "floating near the top right corner of the main object",
-        "color_match": "exact",
-        "color": hexAsignado
-      }
-    ];
-  }
-  else {
-    // MODIFICACIÓN AQUÍ: Filtro ampliado
+  } else if (tipoLimpio === 'numero' || tipoLimpio === 'número' || diccionarioNumeros[palabraLimpia]) {
+    const datosNum = diccionarioNumeros[palabraLimpia] || {
+      num: "number " + palabraLimpia,
+      obj: "group of small bright yellow stars"
+    };
+    promptObj.subjects = [{
+      "type": `large chunky 3D block shaped like the ${datosNum.num}`,
+      "color": "strictly Material Grey hex #9E9E9E",
+      "position": "left"
+    }, {
+      "type": datosNum.obj,
+      "color": "vibrant Material Yellow",
+      "position": "sitting right next to the number block"
+    }];
+  } else if (diccionarioUhrzeit[palabraLimpia]) {
+    promptObj.subjects = [{
+      "type": diccionarioUhrzeit[palabraLimpia],
+      "description": "Clean, educational, clear visualization of time. Made of smooth matte soft clay. Purely visual, zero text.",
+      "position": "centered"
+    }];
+  } else if (diccionarioConceptosEspeciales[palabraLimpia]) {
+    promptObj.subjects = [{
+      "type": diccionarioConceptosEspeciales[palabraLimpia],
+      "description": "Clean, educational, minimalist language app illustration. Made of smooth matte soft clay. Purely visual, zero text.",
+      "position": "centered"
+    }, {
+      "type": "small geometric floating sphere",
+      "description": "Made of glossy clay, perfectly round, acting as a grammatical gender indicator. Zero text.",
+      "position": "floating near the top right corner of the main object",
+      "color_match": "exact",
+      "color": hexAsignado
+    }];
+  } else if (diccionarioIndustrial[palabraLimpia]) {
     const isSinGenero = tipoLimpio === 'adverbio' || tipoLimpio === 'adjetivo' || tipoLimpio.includes('expresión') || tipoLimpio.includes('expresion') || tipoLimpio.includes('frase') || tipoLimpio.includes('regla') || palabraLimpia.includes('+');
+    promptObj.subjects = [{
+      "type": diccionarioIndustrial[palabraLimpia],
+      "color": "natural realistic industrial colors",
+      "position": "centered"
+    }];
+    if (!isSinGenero) {
+      promptObj.subjects.push({
+        "type": "A magical glowing sphere",
+        "color": `strictly ${hexAsignado}`,
+        "position": "floating gently next to the main object"
+      });
+    }
+    promptObj.style_rules = "CRITICAL: Must be an INANIMATE object or symbolic prop. Absolutely NO FACES, NO EYES, NO MOUTHS. Strictly purely visual: absolutely NO TEXT, NO LETTERS, NO WORDS. Minimalist, simple.";
+  } else {
+    // 🔥 NUEVA LÓGICA DE ENRUTAMIENTO SEMÁNTICO (NUBE)
+    const esColor = palabraLimpia === "weiß" || palabraLimpia === "schwarz" || palabraLimpia === "grau" || palabraLimpia === "rot" || palabraLimpia === "blau" || palabraLimpia === "gelb" || palabraLimpia === "grün" || palabraLimpia === "braun" || palabraLimpia === "orange" || palabraLimpia === "rosa" || palabraLimpia === "lila" || palabraLimpia.includes("farbe") || tipoLimpio.includes("color");
+    const esAdjetivo = !esColor && (tipoLimpio.includes("adjetivo") || tipoLimpio.includes("sentimiento"));
+    const esVerbo = !esColor && (tipoLimpio.includes("verbo") || tipoLimpio.includes("acción"));
+    const esPersona = !esColor && (tipoLimpio.includes("pronombre") || tipoLimpio.includes("persona") || tipoLimpio.includes("profesión") || tipoLimpio.includes("profesion"));
+    const esAbstractoInanimado = !esColor && (tipoLimpio.includes("preposición") || tipoLimpio.includes("preposicion") || tipoLimpio.includes("adverbio") || tipoLimpio.includes("conjunción"));
 
-    if (isSinGenero) {
-      // Renderiza SOLO el concepto visual, sin esfera gramatical
-      promptObj.subjects = [
-        {
-          "type": `3D UI icon of ${conceptoIngles}`,
-          "description": "Rendered in its natural, realistic, and vibrant colors. Made of smooth matte soft clay. Purely visual, zero text.",
-          "position": "centered"
-        }
-      ];
+    // Filtro ampliado para determinar si lleva o no la esfera gramatical
+    const isSinGenero = esColor || esAdjetivo || esVerbo || esPersona || esAbstractoInanimado || diccionarioAccionesDinamicas[palabraLimpia] || tipoLimpio.includes('expresión') || tipoLimpio.includes('expresion') || tipoLimpio.includes('frase') || tipoLimpio.includes('regla') || palabraLimpia.includes('+');
+    let subjectType = conceptoIngles;
+    const colorAsignado = hexAsignado; // Garantizar compatibilidad con hexAsignado
+
+    // Asignación de sujeto y escudo anti-caritas según el tipo
+    if (diccionarioAccionesDinamicas[palabraLimpia]) {
+      subjectType = diccionarioAccionesDinamicas[palabraLimpia];
+    } else if (esColor) {
+      subjectType = conceptoIngles;
+      promptObj.style_rules = "CRITICAL: Purely visual representation of the color itself. Absolutely NO PEOPLE, NO CHARACTERS, NO CLOTHES, NO FACES, NO ANIMALS. Minimalist, simple.";
+    } else if (esAdjetivo) {
+      subjectType = `expressive human character who is visibly ${conceptoIngles}. The character's pose, facial expression, and body language perfectly illustrate the adjective`;
+    } else if (esVerbo) {
+      subjectType = `expressive human character actively performing the action of ${conceptoIngles}. The character's pose dynamically captures the verb in motion`;
+    } else if (esPersona) {
+      subjectType = `expressive human character representing a ${conceptoIngles}`;
+    } else if (esAbstractoInanimado) {
+      subjectType = `faceless inanimate object or symbolic prop representing the concept of "${conceptoIngles}"`;
+      promptObj.style_rules += " CRITICAL: Must be an INANIMATE object or symbolic prop. Absolutely NO FACES, NO EYES, NO MOUTHS, NO ANIMALS, NO CHARACTERS, NO ANTHROPOMORPHISM.";
     } else {
-      // Sustantivos, verbos y preposiciones SÍ llevan la esfera indicadora
-      promptObj.subjects = [
-        {
-          "type": `3D UI icon of ${conceptoIngles}`,
-          "description": "Rendered in its natural, realistic, and vibrant colors. Made of smooth matte soft clay. Purely visual, zero text.",
-          "position": "centered"
-        },
-        {
-          "type": "small geometric floating sphere",
-          "description": "Made of glossy clay, perfectly round, acting as a grammatical gender indicator. Zero text.",
-          "position": "floating near the top right corner of the main object",
-          "color_match": "exact",
-          "color": hexAsignado
-        }
-      ];
+      subjectType = `UI icon representing "${conceptoIngles}"`;
+    }
+
+    // Determinar el color del sujeto principal
+    let colorDelSujeto = "vibrant natural clay colors";
+    if (esColor) {
+      if (mapColoresHex[palabraLimpia]) {
+        colorDelSujeto = mapColoresHex[palabraLimpia];
+      } else {
+        const limpio = (conceptoIngles || "").replace("a vibrant splash of ", "").replace(" paint", "").trim().toLowerCase();
+        colorDelSujeto = limpio ? `strictly ${limpio}` : "vibrant natural clay colors";
+      }
+    }
+
+    // Insertar el sujeto principal
+    promptObj.subjects.push({
+      "type": subjectType,
+      "color": colorDelSujeto,
+      "position": isSinGenero ? "centered" : "left"
+    });
+
+    // Insertar la esfera indicadora de género si corresponde
+    if (!isSinGenero) {
+      promptObj.subjects.push({
+        "type": "magical glowing sphere",
+        "color": `strictly ${colorAsignado}`,
+        "position": "floating gently right next to the main object"
+      });
     }
   }
-
   return JSON.stringify(promptObj);
 }
-
-export const generateCardImage = onCall(
-  { secrets: [falKey, geminiApiKey, geminiFreeKey] },
-  async (request) => {
-    const { wordObj, conceptoIngles } = request.data;
-
-    if (!wordObj || !wordObj.es || !wordObj.de) {
-      throw new HttpsError("invalid-argument", "Faltan parámetros requeridos en wordObj");
-    }
-
-    // Usar el tipo gramatical si viene en wordObj, o intentar deducirlo
-    const tipoGramatical = wordObj.type || wordObj.tipo_gramatical || 'sustantivo';
-
-    try {
-      fal.config({ credentials: falKey.value() });
-
-      // Si no tenemos un concepto en inglés predefinido, usamos Gemini para traducirlo rápido
-      let concepto = conceptoIngles;
-      if (!concepto) {
-        const category = (request.data.category || "") + (wordObj.category ? ` - ${wordObj.category}` : "");
-        concepto = await getVisualDescriptionForConcept(wordObj.es, geminiFreeKey.value(), geminiApiKey.value(), category);
-      }
-
-      // Ensamblar el prompt usando la Fábrica
-      const promptDinamicoGenerado = construirPromptDinamico(concepto, tipoGramatical, wordObj.de);
-      console.log(`🎨 Renderizando: ${wordObj.de} (${tipoGramatical})`);
-      console.log(`📝 Prompt ensamblado: "${promptDinamicoGenerado}"`);
-
-      // 3. Llamamos a Flux a través de Fal.ai (optimizando API endpoint, formato y dimensiones)
-      const result = await fal.subscribe("fal-ai/flux-2/klein/9b/base", {
-        input: {
-          prompt: promptDinamicoGenerado,
-          image_size: { width: 512, height: 512 },
-          num_inference_steps: 20,
-          guidance_scale: 3.5,
-          output_format: "jpeg"
-        }
-      });
-
-      const dataUri = result.data.images?.[0]?.url || result.data?.url || (result.images && result.images[0]?.url);
-      if (!dataUri) throw new Error("No image data returned from FAL API");
-
-      // PARTE 1: Guardado Global en Caché
-      const safeWordId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
-      try {
-        await db.collection("global_flashcards").doc(safeWordId).set({
-          imageUrl: dataUri,
-          model: "fal-ai/flux-2/klein/9b/base",
-          updatedAt: admin.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-      } catch (err) {
-        console.warn("No se pudo guardar en el caché global:", err);
-      }
-
-      return { imageUrl: dataUri };
-    } catch (error) {
-      console.error("Error en generateCardImage:", error);
-      throw new HttpsError("internal", "Error al generar imagen de la tarjeta", error.message);
-    }
+export const generateCardImage = onCall({
+  secrets: [falKey, geminiFreeKey]
+}, async request => {
+  const {
+    wordObj,
+    conceptoIngles
+  } = request.data;
+  if (!wordObj || !wordObj.es || !wordObj.de) {
+    throw new HttpsError("invalid-argument", "Faltan parámetros requeridos en wordObj");
   }
-);
+
+  // Usar el tipo gramatical si viene en wordObj, o intentar deducirlo
+  const tipoGramatical = wordObj.type || wordObj.tipo_gramatical || 'sustantivo';
+  const tipoLimpio = tipoGramatical.toLowerCase().trim();
+  const palabraLimpia = (wordObj.de || "").trim().toLowerCase();
+  const categoryLimpia = (wordObj.category || request.data.category || "").toLowerCase().trim();
+  const esColor = palabraLimpia === "weiß" || palabraLimpia === "schwarz" || palabraLimpia === "grau" || palabraLimpia === "rot" || palabraLimpia === "blau" || palabraLimpia === "gelb" || palabraLimpia === "grün" || palabraLimpia === "braun" || palabraLimpia === "orange" || palabraLimpia === "rosa" || palabraLimpia === "lila" || palabraLimpia.includes("farbe") || categoryLimpia.includes("farben") || categoryLimpia.includes("color") || tipoLimpio.includes("color");
+  const esPersonaje = !esColor && (tipoLimpio.includes("adjetivo") || tipoLimpio.includes("verbo") || tipoLimpio.includes("acción") || tipoLimpio.includes("pronombre") || tipoLimpio.includes("sentimiento"));
+
+  try {
+    fal.config({
+      credentials: falKey.value()
+    });
+
+    // Si no tenemos un concepto en inglés predefinido, usamos Gemini para traducirlo rápido
+    let concepto = conceptoIngles;
+    if (esColor) {
+      // Si es un color, obtenemos la traducción limpia en inglés (ej. "blanco" -> "white")
+      // y definimos una salpicadura de pintura de ese color en lugar de personas
+      const colorEn = await getCleanEnglishTranslation(wordObj.es, geminiFreeKey.value());
+      concepto = `a vibrant splash of ${colorEn} paint`;
+    } else if (esPersonaje) {
+      // Ignorar la descripción de icono predefinida (por ej. luna, estrella, nube con caritas)
+      // para forzar la generación de un personaje humano que represente la emoción/acción.
+      concepto = await getCleanEnglishTranslation(wordObj.es, geminiFreeKey.value());
+    } else if (!concepto) {
+      const category = (request.data.category || "") + (wordObj.category ? ` - ${wordObj.category}` : "");
+      concepto = await getVisualDescriptionForConcept(wordObj.es, geminiFreeKey.value(), category);
+    }
+
+    // Ensamblar el prompt usando la Fábrica
+    const promptDinamicoGenerado = construirPromptDinamico(concepto, tipoGramatical, wordObj.de);
+    console.log(`🎨 Renderizando: ${wordObj.de} (${tipoGramatical})`);
+    console.log(`📝 Prompt ensamblado: "${promptDinamicoGenerado}"`);
+
+    // 3. Llamamos a Flux a través de Fal.ai (optimizando API endpoint, formato y dimensiones)
+    const result = await fal.subscribe("fal-ai/flux-2/klein/9b/base", {
+      input: {
+        prompt: promptDinamicoGenerado,
+        image_size: {
+          width: 512,
+          height: 512
+        },
+        num_inference_steps: 20,
+        guidance_scale: 3.5,
+        output_format: "jpeg"
+      }
+    });
+    const dataUri = result.data.images?.[0]?.url || result.data?.url || result.images && result.images[0]?.url;
+    if (!dataUri) throw new Error("No image data returned from FAL API");
+
+    // PARTE 1: Guardado Global en Caché
+    const safeWordId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
+    try {
+      await db.collection("global_flashcards").doc(safeWordId).set({
+        imageUrl: dataUri,
+        model: "fal-ai/flux-2/klein/9b/base",
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      }, {
+        merge: true
+      });
+    } catch (err) {
+      console.warn("No se pudo guardar en el caché global:", err);
+    }
+    return {
+      imageUrl: dataUri
+    };
+  } catch (error) {
+    console.error("Error en generateCardImage:", error);
+    throw new HttpsError("internal", "Error al generar imagen de la tarjeta", error.message);
+  }
+});
 
 // =========================================================================
 // 6. GENERADOR DE COMPRENSIÓN LECTORA (generateReadingTest)
 // =========================================================================
-export const generateReadingTest = onCall(
-  { secrets: [geminiFreeKey, geminiApiKey] },
-  async (request) => {
-    const { tema } = request.data;
-
-    if (!tema) {
-      throw new HttpsError("invalid-argument", "Falta el parámetro requerido: tema");
-    }
-
-    const defaultSystemInstruction = `
+export const generateReadingTest = onCall({
+  secrets: [geminiFreeKey, falKey]
+}, async request => {
+  const {
+    tema
+  } = request.data;
+  if (!tema) {
+    throw new HttpsError("invalid-argument", "Falta el parámetro requerido: tema");
+  }
+  const defaultSystemInstruction = `
       Eres un profesor de alemán de nivel A1. El usuario te dará un tema de su interés.
       Tu tarea es generar:
       1. Un título en alemán para la lectura.
@@ -844,38 +1241,18 @@ export const generateReadingTest = onCall(
       - El texto y las preguntas deben estar estrictamente redactados en alemán nivel A1.
       - La explicación de las respuestas correctas debe estar en español.
     `;
+  const systemInstruction = await getSystemPrompt("reading_comprehension_system", defaultSystemInstruction);
+  const promptUser = `Genera la prueba de comprensión lectora para el tema: "${tema}".`;
 
-    const systemInstruction = await getSystemPrompt("reading_comprehension_system", defaultSystemInstruction);
-
-    const invocarModelo = async (apiKeyStr) => {
-      const genAI = new GoogleGenerativeAI(apiKeyStr);
-      const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash", // modelo de alta confiabilidad en este entorno
-        generationConfig: { responseMimeType: "application/json" },
-        systemInstruction: systemInstruction
-      });
-
-      const prompt = `Genera la prueba de comprensión lectora para el tema: "${tema}".`;
-      const result = await model.generateContent(prompt);
-      return JSON.parse(result.response.text().trim());
-    };
-
-    try {
-      return await invocarModelo(geminiFreeKey.value());
-    } catch (error) {
-      console.warn("Error en la llave gratuita de Reading Comprehension:", error);
-      const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.includes("quota")));
-
-      if (isQuotaError && geminiApiKey.value()) {
-        try {
-          return await invocarModelo(geminiApiKey.value());
-        } catch (fallbackError) {
-          console.error("Error crítico en llave de pago (Reading Comprehension):", fallbackError);
-          throw new HttpsError("internal", "Error en los servidores de IA de respaldo.");
-        }
-      }
-      throw new HttpsError("internal", "Error generando el examen de comprensión lectora: " + error.message);
-    }
+  try {
+    const jsonOutput = await invokeWithDeepSeekFallback(systemInstruction, promptUser, {
+      isJson: true,
+      temperature: 0.7,
+      model: "gemini-2.5-flash"
+    });
+    return jsonOutput;
+  } catch (error) {
+    console.error("Error en generateReadingTest:", error);
+    throw new HttpsError("internal", "Error generando el examen de comprensión lectora: " + error.message);
   }
-);
-
+});

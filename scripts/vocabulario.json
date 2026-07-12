@@ -1200,6 +1200,1122 @@
     "type": "Sustantivo"
   },
   {
+    "de": "mitbringen",
+    "es": "traer consigo",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "kennenlernen",
+    "es": "conocer (por 1ª vez)",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "einladen",
+    "es": "invitar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "feiern",
+    "es": "celebrar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "schenken",
+    "es": "regalar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "gratulieren",
+    "es": "felicitar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "danken",
+    "es": "agradecer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Feuerwehr",
+    "es": "los bomberos",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "sein",
+    "es": "ser / estar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "haben",
+    "es": "tener / haber",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "werden",
+    "es": "llegar a ser / convertirse",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "machen",
+    "es": "hacer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "tun",
+    "es": "hacer (una acción)",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "sagen",
+    "es": "decir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "gehen",
+    "es": "ir / andar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "kommen",
+    "es": "venir",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "sehen",
+    "es": "ver",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "wissen",
+    "es": "saber (información)",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "kennen",
+    "es": "conocer (personas/lugares)",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "finden",
+    "es": "encontrar / parecer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "bleiben",
+    "es": "quedarse",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "lassen",
+    "es": "dejar / permitir",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "denken",
+    "es": "pensar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "groß / klein",
+    "es": "grande / pequeño",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "gut / schlecht",
+    "es": "bueno / malo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "neu / alt",
+    "es": "nuevo / viejo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "schön / hässlich",
+    "es": "bonito / feo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "schwer / leicht",
+    "es": "pesado (difícil) / ligero (fácil)",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "richtig / falsch",
+    "es": "correcto / incorrecto",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "wichtig",
+    "es": "importante",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "einfach / schwierig",
+    "es": "fácil / difícil",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "schnell / langsam",
+    "es": "rápido / lento",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "laut / leise",
+    "es": "fuerte (sonido) / silencioso",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "hell / dunkel",
+    "es": "claro (luz) / oscuro",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "heiß / kalt",
+    "es": "caliente / frío",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "können",
+    "es": "poder (habilidad/posibilidad)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "müssen",
+    "es": "tener que (obligación)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "dürfen",
+    "es": "poder (permiso)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "sollen",
+    "es": "deber (recomendación/orden)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "wollen",
+    "es": "querer (deseo fuerte)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "mögen",
+    "es": "gustar (algo/alguien)",
+    "en": "",
+    "type": "Verbo Modal"
+  },
+  {
+    "de": "möchten",
+    "es": "gustaría (quisiera)",
+    "en": "",
+    "type": "Verbo Modal (KII)"
+  },
+  {
+    "de": "geben",
+    "es": "dar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "nehmen",
+    "es": "tomar / agarrar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "brauchen",
+    "es": "necesitar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "helfen",
+    "es": "ayudar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "bringen",
+    "es": "traer",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "schreiben",
+    "es": "escribir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "lesen",
+    "es": "leer",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "sprechen",
+    "es": "hablar",
+    "en": "",
+    "type": "Verbo (Irregular)"
+  },
+  {
+    "de": "versuchen",
+    "es": "intentar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "entscheiden",
+    "es": "decidir",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "vergessen",
+    "es": "olvidar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "sich erinnern",
+    "es": "recordar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "passieren",
+    "es": "suceder",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "erzählen",
+    "es": "narrar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "bedeuten",
+    "es": "significar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "beginnen",
+    "es": "comenzar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "stehen",
+    "es": "estar de pie",
+    "en": "",
+    "type": "Verbo Posicional"
+  },
+  {
+    "de": "stellen",
+    "es": "colocar vertical",
+    "en": "",
+    "type": "Verbo Posicional"
+  },
+  {
+    "de": "liegen",
+    "es": "estar acostado",
+    "en": "",
+    "type": "Verbo Posicional"
+  },
+  {
+    "de": "legen",
+    "es": "colocar horizontal",
+    "en": "",
+    "type": "Verbo Posicional"
+  },
+  {
+    "de": "aufstehen",
+    "es": "levantarse",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "aufwachen",
+    "es": "despertarse",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "einschlafen",
+    "es": "dormirse",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "waschen",
+    "es": "lavar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "duschen",
+    "es": "ducharse",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "abtrocknen",
+    "es": "secar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "gehören",
+    "es": "pertenecer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "glauben",
+    "es": "creer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "zuhören",
+    "es": "escuchar (atención)",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "verlieren",
+    "es": "perder",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "stehlen",
+    "es": "robar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "suchen",
+    "es": "buscar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Regenschirm",
+    "es": "el paraguas",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Brille",
+    "es": "las gafas / lentes",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Tasche",
+    "es": "el bolso / la bolsa",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Uhr",
+    "es": "el reloj",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "fliegen",
+    "es": "volar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "rennen",
+    "es": "correr (rápido)",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "springen",
+    "es": "saltar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "singen",
+    "es": "cantar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "weinen",
+    "es": "llorar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "lachen",
+    "es": "reír",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "ziehen",
+    "es": "tirar / jalar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "drücken",
+    "es": "presionar / empujar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "werfen",
+    "es": "lanzar / tirar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "fangen",
+    "es": "atrapar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "steigen",
+    "es": "subir / escalar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "fallen",
+    "es": "caer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "reich",
+    "es": "rico",
+    "en": "bag full of gold coins",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "arm",
+    "es": "pobre",
+    "en": "empty broken wallet",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "wach",
+    "es": "despierto",
+    "en": "wide open eye",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "klug",
+    "es": "inteligente",
+    "en": "glowing lightbulb",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "dumm",
+    "es": "tonto",
+    "en": "dunce cap",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "fleißig",
+    "es": "trabajador",
+    "en": "busy bee",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "faul",
+    "es": "perezoso",
+    "en": "sleeping sloth",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "mutig",
+    "es": "valiente",
+    "en": "brave lion",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "feige",
+    "es": "cobarde",
+    "en": "hiding person",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "höflich",
+    "es": "cortés",
+    "en": "person bowing politely",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "freundlich",
+    "es": "amable",
+    "en": "friendly waving hand",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "streng",
+    "es": "estricto",
+    "en": "strict teacher pointing",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "lustig",
+    "es": "divertido",
+    "en": "laughing face",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "langweilig",
+    "es": "aburrido",
+    "en": "yawning face",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "spannend",
+    "es": "emocionante",
+    "en": "exciting roller coaster",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "ruhig",
+    "es": "tranquilo",
+    "en": "calm zen stones",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "nervös",
+    "es": "nervioso",
+    "en": "sweating nervous face",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "gewinnen",
+    "es": "ganar",
+    "en": "person holding a gold trophy",
+    "type": "Verbo"
+  },
+  {
+    "de": "schieben",
+    "es": "empujar",
+    "en": "person pushing a heavy box",
+    "type": "Verbo"
+  },
+  {
+    "de": "stören",
+    "es": "molestar",
+    "en": "person covering their ears",
+    "type": "Verbo"
+  },
+  {
+    "de": "hoffen",
+    "es": "esperar (desear)",
+    "en": "person crossing fingers hoping",
+    "type": "Verbo"
+  },
+  {
+    "de": "träumen",
+    "es": "soñar",
+    "en": "sleeping person with a thought bubble",
+    "type": "Verbo"
+  },
+  {
+    "de": "lieben",
+    "es": "amar",
+    "en": "person hugging a large heart",
+    "type": "Verbo"
+  },
+  {
+    "de": "hassen",
+    "es": "odiar",
+    "en": "angry person crossing arms",
+    "type": "Verbo"
+  },
+  {
+    "de": "lächeln",
+    "es": "sonreír",
+    "en": "smiling happy person",
+    "type": "Verbo"
+  },
+  {
+    "de": "schreien",
+    "es": "gritar",
+    "en": "person shouting loud",
+    "type": "Verbo"
+  },
+  {
+    "de": "flüstern",
+    "es": "susurrar",
+    "en": "person whispering a secret",
+    "type": "Verbo"
+  },
+  {
+    "de": "diskutieren",
+    "es": "discutir",
+    "en": "two people debating",
+    "type": "Verbo"
+  },
+  {
+    "de": "versprechen",
+    "es": "prometer",
+    "en": "person making a pinky promise",
+    "type": "Verbo"
+  },
+  {
+    "de": "zweifeln",
+    "es": "dudar",
+    "en": "person scratching head confused",
+    "type": "Verbo"
+  },
+  {
+    "de": "verzeihen",
+    "es": "perdonar",
+    "en": "two people shaking hands apologizing",
+    "type": "Verbo"
+  },
+  {
+    "de": "heute",
+    "es": "hoy",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "morgen",
+    "es": "mañana",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "gestern",
+    "es": "ayer",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "jetzt",
+    "es": "ahora",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "bald",
+    "es": "pronto",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "immer",
+    "es": "siempre",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "oft",
+    "es": "a menudo",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "manchmal",
+    "es": "a veces",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "nie",
+    "es": "nunca",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "schon",
+    "es": "ya",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "noch",
+    "es": "todavía / aún",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "hier",
+    "es": "aquí",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "dort",
+    "es": "allí",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "oben / unten",
+    "es": "arriba / abajo",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "vorn / hinten",
+    "es": "adelante / atrás",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "draußen / drinnen",
+    "es": "afuera / adentro",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "sehr",
+    "es": "muy",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "viel / wenig",
+    "es": "mucho / poco",
+    "en": "",
+    "type": "Adverbio"
+  },
+  {
+    "de": "wer?",
+    "es": "¿quién?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "was?",
+    "es": "¿qué?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "wo?",
+    "es": "¿dónde?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "wann?",
+    "es": "¿cuándo?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "warum?",
+    "es": "¿por qué?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "wie?",
+    "es": "¿cómo?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "woher?",
+    "es": "¿de dónde?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "wohin?",
+    "es": "¿a dónde?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "welcher?",
+    "es": "¿cuál?",
+    "en": "",
+    "type": "Pronombre interrogativo"
+  },
+  {
+    "de": "morgens",
+    "es": "por las mañanas",
+    "en": "a bright morning sun",
+    "type": "Adverbio"
+  },
+  {
+    "de": "abends",
+    "es": "por las tardes/noches",
+    "en": "a crescent moon with stars",
+    "type": "Adverbio"
+  },
+  {
+    "de": "und",
+    "es": "y",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "oder",
+    "es": "o (alternativa)",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "aber",
+    "es": "pero",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "denn",
+    "es": "porque / pues",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "sondern",
+    "es": "sino (que)",
+    "en": "",
+    "type": "Conector (Posición 0)"
+  },
+  {
+    "de": "für",
+    "es": "para / por",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "ohne",
+    "es": "sin",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "durch",
+    "es": "a través de / por",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "gegen",
+    "es": "contra / hacia (hora)",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "um",
+    "es": "a las (hora) / alrededor de",
+    "en": "",
+    "type": "Preposición (Akk)"
+  },
+  {
+    "de": "mit",
+    "es": "con",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "nach",
+    "es": "hacia / después de",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "aus",
+    "es": "de (origen / material)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "bei",
+    "es": "en casa de / en (empresa)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "von",
+    "es": "de (procedencia / autor)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "zu",
+    "es": "hacia (lugares / personas)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "seit",
+    "es": "desde (tiempo)",
+    "en": "",
+    "type": "Preposición (Dat)"
+  },
+  {
+    "de": "in",
+    "es": "en / dentro de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "an",
+    "es": "en (borde / fechas)",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "auf",
+    "es": "sobre (con contacto)",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "unter",
+    "es": "debajo de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "über",
+    "es": "sobre (sin contacto) / acerca de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "neben",
+    "es": "al lado de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "zwischen",
+    "es": "entre",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "vor",
+    "es": "delante de / antes de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "hinter",
+    "es": "detrás de",
+    "en": "",
+    "type": "Prep. Mixta (Dat/Akk)"
+  },
+  {
+    "de": "obwohl",
+    "es": "aunque",
+    "en": "",
+    "type": "Conector Subordinante"
+  },
+  {
+    "de": "wenn",
+    "es": "si(condicional)",
+    "en": "",
+    "type": "Conector Subordinante"
+  },
+  {
+    "de": "als",
+    "es": "cuando",
+    "en": "",
+    "type": "Conector Subordinante"
+  },
+  {
+    "de": "deshalb",
+    "es": "por eso",
+    "en": "",
+    "type": "Conector Posición 1"
+  },
+  {
+    "de": "trotzdem",
+    "es": "sin embargo",
+    "en": "",
+    "type": "Conector Posición 1"
+  },
+  {
+    "de": "außerdem",
+    "es": "además",
+    "en": "",
+    "type": "Conector Posición 1"
+  },
+  {
+    "de": "nämlich",
+    "es": "es decir",
+    "en": "",
+    "type": "Partícula"
+  },
+  {
+    "de": "doch",
+    "es": "sí (rechaza negación)",
+    "en": "",
+    "type": "Partícula"
+  },
+  {
+    "de": "mal",
+    "es": "(Partícula de énfasis)",
+    "en": "",
+    "type": "Partícula"
+  },
+  {
+    "de": "ja",
+    "es": "sí (Partícula de énfasis)",
+    "en": "",
+    "type": "Partícula"
+  },
+  {
     "de": "das Haus",
     "es": "la casa",
     "en": "",
@@ -1470,178 +2586,154 @@
     "type": "Adjetivo"
   },
   {
-    "de": "die Freizeit",
-    "es": "el tiempo libre",
-    "en": "",
-    "type": "Sustantivo (Fem)"
-  },
-  {
-    "de": "das Hobby",
-    "es": "el pasatiempo",
-    "en": "",
-    "type": "Sustantivo (Neutro)"
-  },
-  {
-    "de": "spielen",
-    "es": "jugar / tocar",
+    "de": "aufräumen",
+    "es": "ordenar / recoger",
     "en": "",
     "type": "Verbo"
   },
   {
-    "de": "Fußball spielen",
-    "es": "jugar fútbol",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "der Ball",
-    "es": "el balón",
+    "de": "der Müll",
+    "es": "la basura",
     "en": "",
     "type": "Sustantivo (Masc)"
   },
   {
-    "de": "Karten spielen",
-    "es": "jugar cartas",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "Musik hören",
-    "es": "escuchar música",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "die CD",
-    "es": "el CD",
-    "en": "",
-    "type": "Sustantivo (Fem)"
-  },
-  {
-    "de": "wandern",
-    "es": "hacer senderismo",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "schwimmen",
-    "es": "nadar",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "lesen",
-    "es": "leer",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "das Buch",
-    "es": "el libro",
-    "en": "",
-    "type": "Sustantivo (Neutro)"
-  },
-  {
-    "de": "die Zeitung",
-    "es": "el periódico",
-    "en": "",
-    "type": "Sustantivo (Fem)"
-  },
-  {
-    "de": "fernsehen",
-    "es": "ver televisión",
-    "en": "",
-    "type": "Verbo separable"
-  },
-  {
-    "de": "tanzen",
-    "es": "bailar",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "der Computer",
-    "es": "computador",
+    "de": "der Eimer",
+    "es": "el cubo / balde",
     "en": "",
     "type": "Sustantivo (Masc)"
   },
   {
-    "de": "der Sport",
-    "es": "deporte",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "ins Kino gehen",
-    "es": "ir al cine",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "einen Film sehen",
-    "es": "ver película",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "Rad fahren",
-    "es": "montar bicicleta",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "spazieren gehen",
-    "es": "pasear",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "in die Disco gehen",
-    "es": "ir a discoteca",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "das Museum",
-    "es": "museo",
-    "en": "",
-    "type": "Sustantivo (Neutro)"
-  },
-  {
-    "de": "der Verein",
-    "es": "club / asociación",
+    "de": "der Staubsauger",
+    "es": "la aspiradora",
     "en": "",
     "type": "Sustantivo (Masc)"
   },
   {
-    "de": "das Schwimmbad",
-    "es": "la piscina",
+    "de": "die Waschmaschine",
+    "es": "la lavadora",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Spülmaschine",
+    "es": "el lavavajillas",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Waschbecken",
+    "es": "el lavamanos",
     "en": "",
     "type": "Sustantivo (Neutro)"
   },
   {
-    "de": "gefallen",
-    "es": "gustar",
+    "de": "der Fernseher",
+    "es": "el televisor",
     "en": "",
-    "type": "Verbo"
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "schön",
-    "es": "bonito",
+    "de": "der Kühlschrank",
+    "es": "el refrigerador",
     "en": "",
-    "type": "Adjetivo"
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "mögen",
-    "es": "gustar / me gusta",
+    "de": "das Sofa",
+    "es": "el sofá",
     "en": "",
-    "type": "Verbo"
+    "type": "Sustantivo (Neutro)"
   },
   {
-    "de": "sich treffen",
-    "es": "reunirse/encontrarse",
+    "de": "der Sessel",
+    "es": "el sillón",
     "en": "",
-    "type": "Verbo"
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Lampe",
+    "es": "la lámpara",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Radio",
+    "es": "la radio",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Herd",
+    "es": "la estufa / el fogón",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Ofen",
+    "es": "el horno",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Mikrowelle",
+    "es": "el microondas",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Kaffeemaschine",
+    "es": "la cafetera",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Topf",
+    "es": "la olla",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Pfanne",
+    "es": "la sartén",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Tür",
+    "es": "la puerta",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Fenster",
+    "es": "la ventana",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Wand",
+    "es": "la pared",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Dach",
+    "es": "el techo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "das Kissen",
+    "es": "la almohada / cojín",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Decke",
+    "es": "la manta / cobija",
+    "en": "",
+    "type": "Sustantivo (Fem)"
   },
   {
     "de": "das Essen / essen",
@@ -1980,6 +3072,378 @@
     "type": "Frase"
   },
   {
+    "de": "backen",
+    "es": "hornear",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "braten",
+    "es": "freír / asar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "grillen",
+    "es": "asar a la parrilla",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "schneiden",
+    "es": "cortar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Besteck",
+    "es": "los cubiertos",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Schüssel",
+    "es": "el tazón / bol",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Glas",
+    "es": "el vaso / copa",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Becher",
+    "es": "el vaso (plástico/cartón)",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Serviette",
+    "es": "la servilleta",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Pilz",
+    "es": "el champiñón",
+    "en": "brown mushroom",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Nuss",
+    "es": "la nuez",
+    "en": "brown walnut",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Keks",
+    "es": "la galleta",
+    "en": "chocolate chip cookie",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Bonbon",
+    "es": "el caramelo",
+    "en": "wrapped sweet candy",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Schokolade",
+    "es": "el chocolate",
+    "en": "brown chocolate bar",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Sahne",
+    "es": "la crema / nata",
+    "en": "bowl of whipped cream",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Pfirsich",
+    "es": "el durazno",
+    "en": "fresh peach fruit",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Melone",
+    "es": "el melón",
+    "en": "slice of watermelon",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Mehl",
+    "es": "la harina",
+    "en": "paper bag of white flour",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Gewürz",
+    "es": "la especia",
+    "en": "small bowl of red spice powder",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Kirsche",
+    "es": "la cereza",
+    "en": "two red cherries",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Pflaume",
+    "es": "la ciruela",
+    "en": "purple plum",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Senf",
+    "es": "la mostaza",
+    "en": "yellow mustard bottle",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Mayonnaise",
+    "es": "la mayonesa",
+    "en": "jar of white mayonnaise",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Ketchup",
+    "es": "el kétchup",
+    "en": "red ketchup bottle",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Ei",
+    "es": "el huevo",
+    "en": "a white egg",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Salz",
+    "es": "la sal",
+    "en": "a salt shaker",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Pfeffer",
+    "es": "la pimienta",
+    "en": "a black pepper shaker",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Zucker",
+    "es": "el azúcar",
+    "en": "a few white sugar cubes",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Nudeln",
+    "es": "la pasta / los fideos",
+    "en": "a bowl of cooked pasta",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "die Wurst",
+    "es": "el embutido / la salchicha",
+    "en": "a traditional german sausage",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Kleidung",
+    "es": "ropa",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Pullover",
+    "es": "suéter",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Rock",
+    "es": "falda",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Hose",
+    "es": "pantalón",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Hemd",
+    "es": "camisa",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Schuhe",
+    "es": "zapatos",
+    "en": "",
+    "type": "Sustantivo (Plural)"
+  },
+  {
+    "de": "die Jacke",
+    "es": "chaqueta",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Mantel",
+    "es": "abrigo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Jeans",
+    "es": "jeans",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Größe",
+    "es": "talla",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Farbe",
+    "es": "color",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "schwarz",
+    "es": "negro",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "weiß",
+    "es": "blanco",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "grau",
+    "es": "gris",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "rot",
+    "es": "rojo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "blau",
+    "es": "azul",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "gelb",
+    "es": "amarillo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "grün",
+    "es": "verde",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "braun",
+    "es": "marrón",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "anziehen",
+    "es": "ponerse ropa",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "ausziehen",
+    "es": "quitarse ropa",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "anprobieren",
+    "es": "probarse ropa",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "passen",
+    "es": "quedar bien (talla)",
+    "en": "",
+    "type": "Verbo (+ Dativo)"
+  },
+  {
+    "de": "anhaben",
+    "es": "llevar puesto (ropa)",
+    "en": "",
+    "type": "Verbo Separable"
+  },
+  {
+    "de": "eng",
+    "es": "ajustado",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "weit",
+    "es": "holgado",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "bequem",
+    "es": "cómodo",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "der Schal",
+    "es": "bufanda",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Gürtel",
+    "es": "cinturón",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "orange",
+    "es": "naranja",
+    "en": "a vibrant splash of orange paint",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "rosa",
+    "es": "rosa",
+    "en": "a vibrant splash of pink paint",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "lila",
+    "es": "morado / lila",
+    "en": "a vibrant splash of purple paint",
+    "type": "Adjetivo"
+  },
+  {
     "de": "das Geschäft",
     "es": "tienda / negocio",
     "en": "",
@@ -2118,6 +3582,360 @@
     "type": "Sustantivo"
   },
   {
+    "de": "einkaufen",
+    "es": "ir de compras",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "verkaufen",
+    "es": "vender",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Freizeit",
+    "es": "el tiempo libre",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Hobby",
+    "es": "el pasatiempo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "spielen",
+    "es": "jugar / tocar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "Fußball spielen",
+    "es": "jugar fútbol",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "der Ball",
+    "es": "el balón",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "Karten spielen",
+    "es": "jugar cartas",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Musik hören",
+    "es": "escuchar música",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "die CD",
+    "es": "el CD",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "wandern",
+    "es": "hacer senderismo",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "schwimmen",
+    "es": "nadar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "lesen",
+    "es": "leer",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "das Buch",
+    "es": "el libro",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Zeitung",
+    "es": "el periódico",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "fernsehen",
+    "es": "ver televisión",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "tanzen",
+    "es": "bailar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Computer",
+    "es": "computador",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Sport",
+    "es": "deporte",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "ins Kino gehen",
+    "es": "ir al cine",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "einen Film sehen",
+    "es": "ver película",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Rad fahren",
+    "es": "montar bicicleta",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "spazieren gehen",
+    "es": "pasear",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "in die Disco gehen",
+    "es": "ir a discoteca",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "das Museum",
+    "es": "museo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Verein",
+    "es": "club / asociación",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Schwimmbad",
+    "es": "la piscina",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "gefallen",
+    "es": "gustar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "schön",
+    "es": "bonito",
+    "en": "",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "mögen",
+    "es": "gustar / me gusta",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "sich treffen",
+    "es": "reunirse/encontrarse",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Hund",
+    "es": "el perro",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Katze",
+    "es": "el gato",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Vogel",
+    "es": "el pájaro",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Pferd",
+    "es": "el caballo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Maus",
+    "es": "el ratón",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Kuh",
+    "es": "la vaca",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Schaf",
+    "es": "la oveja",
+    "en": "white fluffy sheep",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Ziege",
+    "es": "la cabra",
+    "en": "brown goat",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Huhn",
+    "es": "la gallina",
+    "en": "white chicken",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Bär",
+    "es": "el oso",
+    "en": "brown bear",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Löwe",
+    "es": "el león",
+    "en": "male lion with a mane",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Elefant",
+    "es": "el elefante",
+    "en": "gray elephant with a trunk",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Affe",
+    "es": "el mono",
+    "en": "monkey eating a banana",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Schlange",
+    "es": "la serpiente",
+    "en": "green snake",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Frosch",
+    "es": "la rana",
+    "en": "green frog",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Spinne",
+    "es": "la araña",
+    "en": "black spider",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Biene",
+    "es": "la abeja",
+    "en": "yellow and black bee",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Schmetterling",
+    "es": "la mariposa",
+    "en": "colorful butterfly",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Kirche",
+    "es": "la iglesia",
+    "en": "old stone church",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Brücke",
+    "es": "el puente",
+    "en": "stone bridge over a river",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Turm",
+    "es": "la torre",
+    "en": "tall medieval tower",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Park",
+    "es": "el parque",
+    "en": "green park with trees",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Rathaus",
+    "es": "el ayuntamiento",
+    "en": "historic city hall building",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Bibliothek",
+    "es": "la biblioteca",
+    "en": "building full of books",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Stadion",
+    "es": "el estadio",
+    "en": "large sports stadium",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Theater",
+    "es": "el teatro",
+    "en": "classic theater stage",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Zentrum",
+    "es": "el centro",
+    "en": "busy city center square",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Markt",
+    "es": "el mercado",
+    "en": "fruit market stall",
+    "type": "Sustantivo"
+  },
+  {
     "de": "die Ferien",
     "es": "las vacaciones (escolares)",
     "en": "",
@@ -2236,6 +4054,582 @@
     "es": "acampar",
     "en": "",
     "type": "Verbo"
+  },
+  {
+    "de": "die Sonne",
+    "es": "el sol",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Mond",
+    "es": "la luna",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Stern",
+    "es": "la estrella",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Regen",
+    "es": "la lluvia",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Schnee",
+    "es": "la nieve",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Wind",
+    "es": "el viento",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Baum",
+    "es": "el árbol",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Blume",
+    "es": "la flor",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Wald",
+    "es": "el bosque",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Meer",
+    "es": "el mar",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "regnen",
+    "es": "llover",
+    "en": "dark storm cloud dropping rain",
+    "type": "Verbo"
+  },
+  {
+    "de": "schneien",
+    "es": "nevar",
+    "en": "fluffy cloud dropping snowflakes",
+    "type": "Verbo"
+  },
+  {
+    "de": "scheinen",
+    "es": "brillar (sol)",
+    "en": "bright yellow sun shining",
+    "type": "Verbo"
+  },
+  {
+    "de": "frieren",
+    "es": "tener frío / congelarse",
+    "en": "frozen ice block",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Nebel",
+    "es": "la niebla",
+    "en": "thick gray fog",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Sturm",
+    "es": "la tormenta",
+    "en": "strong wind blowing trees",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "kühl",
+    "es": "fresco",
+    "en": "cool autumn breeze",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "warm",
+    "es": "cálido",
+    "en": "warm glowing sun",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "nass",
+    "es": "mojado",
+    "en": "water drops",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "trocken",
+    "es": "seco",
+    "en": "dry cracked earth",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "der Blitz",
+    "es": "el relámpago",
+    "en": "yellow lightning bolt",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Donner",
+    "es": "el trueno",
+    "en": "dark thundercloud",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Strand",
+    "es": "la playa",
+    "en": "a sandy beach with a colorful sun umbrella",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Berg",
+    "es": "la montaña",
+    "en": "a high mountain with a snowy peak",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Wolke",
+    "es": "la nube",
+    "en": "a fluffy white cloud",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Gewitter",
+    "es": "la tormenta",
+    "en": "a dark storm cloud with a yellow lightning bolt",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Benzin / der Tank",
+    "es": "gasolina / tanque",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Blinker / blinken",
+    "es": "direccional / poner intermitente",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "die Bremse / bremsen",
+    "es": "freno / frenar",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "das Bremspedal",
+    "es": "pedal de freno",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "die Gangschaltung",
+    "es": "caja de cambios",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Gaspedal",
+    "es": "acelerador",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "Gas geben",
+    "es": "acelerar",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "der Fahrer / fahren",
+    "es": "conductor / conducir",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "die Hupe / hupen",
+    "es": "bocina / tocar bocina",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "der Kraftstoff",
+    "es": "combustible",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Lenkrad / lenken",
+    "es": "volante / girar volante",
+    "en": "",
+    "type": "Sust / Verbo"
+  },
+  {
+    "de": "der Motor",
+    "es": "motor",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Rückspiegel",
+    "es": "espejo retrovisor",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Sicherheitsgurt",
+    "es": "cinturón de seguridad",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Kupplung",
+    "es": "embrague",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Felge",
+    "es": "rin",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Handbremse",
+    "es": "freno de mano",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Schalthebel",
+    "es": "palanca de cambios",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Scheibenwischer",
+    "es": "limpiaparabrisas",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Lichtschalter",
+    "es": "interruptor de luces",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Heizung",
+    "es": "calefacción",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Abblendlicht",
+    "es": "luz corta / baja",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Fernlicht",
+    "es": "luz larga / alta",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Bremsleuchte",
+    "es": "luz de freno",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Warnblinkanlage",
+    "es": "luces de emergencia",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Nebelschlussleuchte",
+    "es": "luz antiniebla trasera",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Tagfahrlicht",
+    "es": "luz diurna",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "betanken",
+    "es": "repostar gasolina",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "überholen",
+    "es": "adelantar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "einsteigen / aussteigen",
+    "es": "subir / bajar del coche",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "aufschließen",
+    "es": "abrir con llave",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "anhalten / halten / parken",
+    "es": "parar / detenerse / parquear",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "die Vorfahrt",
+    "es": "prioridad",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "aufpassen",
+    "es": "prestar atención",
+    "en": "",
+    "type": "Verbo separable"
+  },
+  {
+    "de": "Motor starten",
+    "es": "prender el motor",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "sich anschnallen",
+    "es": "ponerse el cinturón",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "beschleunigen",
+    "es": "acelerar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "abschleppen",
+    "es": "remolcar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "zusammenstoßen",
+    "es": "chocar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Schaden",
+    "es": "daño",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Motoröl",
+    "es": "aceite de motor",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Reifendruck",
+    "es": "presión neumáticos",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Reifen",
+    "es": "llanta",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Pkw / der Lkw",
+    "es": "carro / camión",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Fußgänger",
+    "es": "peatón",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Ampel / Kreuzung",
+    "es": "semáforo / cruce",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Fahrzeug",
+    "es": "el vehículo",
+    "en": "",
+    "type": "Sustantivo (Neutro)"
+  },
+  {
+    "de": "der Verkehr / Stau",
+    "es": "el tráfico / trancón",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Verkehrsschild",
+    "es": "señal de tráfico",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Geschwindigkeit",
+    "es": "velocidad",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Spur",
+    "es": "carril",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Warnleuchten",
+    "es": "luces de advertencia",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Baustelle",
+    "es": "obra de cons.",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Sicherheit",
+    "es": "seguridad",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "Toter Winkel",
+    "es": "ángulo muerto",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Schulterblick",
+    "es": "mirada sobre hombro",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Rechts vor links",
+    "es": "derecha tiene preferencia",
+    "en": "",
+    "type": "Frase"
+  },
+  {
+    "de": "Motoröldruck",
+    "es": "presión aceite (rojo)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "Kühlmitteltemperatur",
+    "es": "temp. refrigerante (rojo)",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Schiebedach",
+    "es": "techo corredizo",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Auspuff",
+    "es": "escape",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Nummernschild",
+    "es": "placa / matrícula",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Windschutzscheibe",
+    "es": "parabrisas",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Motorhaube",
+    "es": "capó",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Stoßstange",
+    "es": "parachoques",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Kreisverkehr",
+    "es": "rotonda",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Einbahnstraße",
+    "es": "calle de un solo sentido",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "abbiegen",
+    "es": "girar",
+    "en": "",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Strafzettel",
+    "es": "multa de tráfico",
+    "en": "",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Versicherung",
+    "es": "el seguro",
+    "en": "",
+    "type": "Sustantivo"
   },
   {
     "de": "die Post",
@@ -2730,178 +5124,136 @@
     "type": "Adjetivo"
   },
   {
-    "de": "die Kleidung",
-    "es": "ropa",
+    "de": "die Seife",
+    "es": "el jabón",
     "en": "",
     "type": "Sustantivo (Fem)"
   },
   {
-    "de": "der Pullover",
-    "es": "suéter",
-    "en": "",
-    "type": "Sustantivo (Masc)"
-  },
-  {
-    "de": "der Rock",
-    "es": "falda",
-    "en": "",
-    "type": "Sustantivo (Masc)"
-  },
-  {
-    "de": "die Hose",
-    "es": "pantalón",
-    "en": "",
-    "type": "Sustantivo (Fem)"
-  },
-  {
-    "de": "das Hemd",
-    "es": "camisa",
+    "de": "das Shampoo",
+    "es": "el champú",
     "en": "",
     "type": "Sustantivo (Neutro)"
   },
   {
-    "de": "die Schuhe",
-    "es": "zapatos",
-    "en": "",
-    "type": "Sustantivo (Plural)"
-  },
-  {
-    "de": "die Jacke",
-    "es": "chaqueta",
+    "de": "die Zahnbürste",
+    "es": "cepillo de dientes",
     "en": "",
     "type": "Sustantivo (Fem)"
   },
   {
-    "de": "der Mantel",
-    "es": "abrigo",
+    "de": "die Zahnpasta",
+    "es": "pasta de dientes",
+    "en": "",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Kamm",
+    "es": "el peine",
     "en": "",
     "type": "Sustantivo (Masc)"
   },
   {
-    "de": "die Jeans",
-    "es": "jeans",
+    "de": "der Föhn",
+    "es": "secador de pelo",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Rasierer",
+    "es": "la afeitadora",
+    "en": "",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Tablette",
+    "es": "la pastilla / píldora",
     "en": "",
     "type": "Sustantivo (Fem)"
   },
   {
-    "de": "die Größe",
-    "es": "talla",
+    "de": "die Krankheit",
+    "es": "la enfermedad",
     "en": "",
     "type": "Sustantivo (Fem)"
   },
   {
-    "de": "die Farbe",
-    "es": "color",
+    "de": "die Gesundheit",
+    "es": "la salud",
     "en": "",
     "type": "Sustantivo (Fem)"
   },
   {
-    "de": "schwarz",
-    "es": "negro",
+    "de": "der Notfall",
+    "es": "la emergencia",
     "en": "",
-    "type": "Adjetivo"
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "weiß",
-    "es": "blanco",
+    "de": "der Krankenwagen",
+    "es": "la ambulancia",
     "en": "",
-    "type": "Adjetivo"
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "grau",
-    "es": "gris",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "rot",
-    "es": "rojo",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "blau",
-    "es": "azul",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "gelb",
-    "es": "amarillo",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "grün",
-    "es": "verde",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "braun",
-    "es": "marrón",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "anziehen",
-    "es": "ponerse ropa",
-    "en": "",
-    "type": "Verbo separable"
-  },
-  {
-    "de": "ausziehen",
-    "es": "quitarse ropa",
-    "en": "",
-    "type": "Verbo separable"
-  },
-  {
-    "de": "anprobieren",
-    "es": "probarse ropa",
-    "en": "",
-    "type": "Verbo separable"
-  },
-  {
-    "de": "passen",
-    "es": "quedar bien (talla)",
-    "en": "",
-    "type": "Verbo (+ Dativo)"
-  },
-  {
-    "de": "anhaben",
-    "es": "llevar puesto (ropa)",
-    "en": "",
-    "type": "Verbo Separable"
-  },
-  {
-    "de": "eng",
-    "es": "ajustado",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "weit",
-    "es": "holgado",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "bequem",
-    "es": "cómodo",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "der Schal",
-    "es": "bufanda",
-    "en": "",
+    "de": "der Muskel",
+    "es": "el músculo",
+    "en": "strong flexing bicep muscle",
     "type": "Sustantivo"
   },
   {
-    "de": "der Gürtel",
-    "es": "cinturón",
-    "en": "",
+    "de": "der Knochen",
+    "es": "el hueso",
+    "en": "white skeleton bone",
     "type": "Sustantivo"
+  },
+  {
+    "de": "die Haut",
+    "es": "la piel",
+    "en": "smooth human skin texture",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Gehirn",
+    "es": "el cerebro",
+    "en": "pink anatomical human brain",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Herz",
+    "es": "el corazón",
+    "en": "red anatomical human heart",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Lunge",
+    "es": "el pulmón",
+    "en": "pink anatomical human lungs",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "die Leber",
+    "es": "el hígado",
+    "en": "dark red anatomical human liver",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "atmen",
+    "es": "respirar",
+    "en": "person taking a deep breath",
+    "type": "Verbo"
+  },
+  {
+    "de": "schwitzen",
+    "es": "sudar",
+    "en": "sweating tired person",
+    "type": "Verbo"
+  },
+  {
+    "de": "zittern",
+    "es": "temblar",
+    "en": "shivering freezing person",
+    "type": "Verbo"
   },
   {
     "de": "die Schule",
@@ -3222,1125 +5574,711 @@
     "type": "Verbo"
   },
   {
-    "de": "das Benzin / der Tank",
-    "es": "gasolina / tanque",
-    "en": "",
+    "de": "der Architekt / die Architektin",
+    "es": "arquitecto",
+    "en": "architect with blueprints",
     "type": "Sustantivo"
   },
   {
-    "de": "der Blinker / blinken",
-    "es": "direccional / poner intermitente",
-    "en": "",
-    "type": "Sust / Verbo"
+    "de": "der Anwalt / die Anwältin",
+    "es": "abogado",
+    "en": "lawyer in a suit with a briefcase",
+    "type": "Sustantivo"
   },
   {
-    "de": "die Bremse / bremsen",
-    "es": "freno / frenar",
-    "en": "",
-    "type": "Sust / Verbo"
+    "de": "der Richter / die Richterin",
+    "es": "juez",
+    "en": "judge holding a wooden gavel",
+    "type": "Sustantivo"
   },
   {
-    "de": "das Bremspedal",
-    "es": "pedal de freno",
-    "en": "",
+    "de": "der Schauspieler",
+    "es": "actor",
+    "en": "actor holding a theater mask",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Bäcker / die Bäckerin",
+    "es": "panadero",
+    "en": "baker holding fresh bread",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Metzger / die Metzgerin",
+    "es": "carnicero",
+    "en": "butcher cutting meat",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Friseur / die Friseurin",
+    "es": "peluquero",
+    "en": "hairdresser with scissors",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Soldat / die Soldatin",
+    "es": "soldado",
+    "en": "soldier in uniform",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Künstler / die Künstlerin",
+    "es": "artista",
+    "en": "artist holding a paint palette",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Bauer / die Bäuerin",
+    "es": "granjero",
+    "en": "farmer holding a pitchfork",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Kellner / die Kellnerin",
+    "es": "el camarero / la camarera",
+    "en": "a silver serving tray",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Koch / die Köchin",
+    "es": "el cocinero / la cocinera",
+    "en": "a white chef hat and a spatula",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Polizist / die Polizistin",
+    "es": "el policía / la mujer policía",
+    "en": "a silver police badge",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Ingenieur / die Ingenieurin",
+    "es": "el ingeniero / la ingeniera",
+    "en": "a yellow safety helmet over blueprints",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Heft",
+    "es": "el cuaderno",
+    "en": "a simple spiral notebook",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "das Papier",
+    "es": "el papel",
+    "en": "a stack of blank white paper sheets",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Radiergummi",
+    "es": "el borrador / la goma",
+    "en": "a classic pink and blue eraser",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Rucksack",
+    "es": "la mochila",
+    "en": "a colorful school backpack",
+    "type": "Sustantivo"
+  },
+  {
+    "de": "der Laptop",
+    "es": "el portátil",
+    "en": "a cute 3D isometric UI icon of a silver laptop computer",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Bildschirm",
+    "es": "la pantalla",
+    "en": "a cute 3D isometric UI icon of a glowing computer monitor",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Tastatur",
+    "es": "el teclado",
+    "en": "a cute 3D isometric UI icon of a mechanical computer keyboard",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Maus",
+    "es": "el ratón",
+    "en": "a cute 3D isometric UI icon of a computer mouse emitting wireless signal waves",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Passwort",
+    "es": "la contraseña",
+    "en": "a cute 3D isometric UI icon of a golden key over a metallic padlock",
+    "type": "Sustantivo (Neut)"
+  },
+  {
+    "de": "die Datei",
+    "es": "el archivo",
+    "en": "a cute 3D isometric UI icon of a digital document sheet with a folded corner",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Ordner",
+    "es": "la carpeta",
+    "en": "a cute 3D isometric UI icon of a yellow folder organizer",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Kopfhörer",
+    "es": "los auriculares",
+    "en": "a cute 3D isometric UI icon of modern wireless headphones",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die App",
+    "es": "la aplicación",
+    "en": "a cute 3D isometric UI icon of a smartphone showing colorful utility widgets",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Drucker",
+    "es": "la impresora",
+    "en": "a cute 3D isometric UI icon of a modern office printer ejecting a paper page",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Netzwerk",
+    "es": "la red",
+    "en": "a cute 3D isometric UI icon of interconnected digital nodes glowing blue",
+    "type": "Sustantivo (Neut)"
+  },
+  {
+    "de": "der Link",
+    "es": "el enlace",
+    "en": "a cute 3D isometric UI icon of a chain link connection symbol",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Internet",
+    "es": "el internet",
+    "en": "a cute 3D isometric UI icon of a digital globe spinning in a cloud",
+    "type": "Sustantivo (Neut)"
+  },
+  {
+    "de": "der Computer",
+    "es": "el ordenador",
+    "en": "a cute 3D isometric UI icon of a desktop computer setup with a keyboard and mouse",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das WLAN",
+    "es": "el wifi",
+    "en": "a cute 3D isometric UI icon of a router emitting glowing wireless signal waves",
+    "type": "Sustantivo (Neut)"
+  },
+  {
+    "de": "die Cloud",
+    "es": "la nube",
+    "en": "a cute 3D isometric UI icon of a glowing blue cloud storage icon",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die Webseite",
+    "es": "la página web",
+    "en": "a cute 3D isometric UI icon of a web browser interface page showing layouts",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die E-Mail-Adresse",
+    "es": "la dirección de correo",
+    "en": "a cute 3D isometric UI icon of a digital technical mail envelope with an @ symbol",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "die E-Mail",
+    "es": "el correo electrónico",
+    "en": "a cute 3D isometric UI icon of an open envelope containing a glowing message paper",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das System",
+    "es": "el sistema",
+    "en": "a cute 3D isometric UI icon of interlocking technical gears under a circuit board panel",
+    "type": "Sustantivo (Neut)"
+  },
+  {
+    "de": "das Update",
+    "es": "la actualización",
+    "en": "a cute 3D isometric UI icon of a circle arrow download progress symbol",
+    "type": "Sustantivo (Neut)"
+  },
+  {
+    "de": "der Code",
+    "es": "el código",
+    "en": "a cute 3D isometric UI icon of code lines on a dark monitor",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Benutzer",
+    "es": "el usuario",
+    "en": "a cute 3D isometric UI icon of a glowing blue user profile silhouette tag",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Screenshot",
+    "es": "la captura de pantalla",
+    "en": "a cute 3D isometric UI icon of a scissor cutting a digital screen area",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Virus",
+    "es": "el virus",
+    "en": "a cute 3D isometric UI icon of a red virus bug with sharp legs",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Taste",
+    "es": "la tecla / botón",
+    "en": "a cute 3D isometric UI icon of a single keyboard key button",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "digital",
+    "es": "digital",
+    "en": "a cute 3D isometric UI icon of binary numbers zero and one glowing blue",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "online",
+    "es": "en línea",
+    "en": "a cute 3D isometric UI icon of a green glowing active connection indicator light",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "offline",
+    "es": "desconectado",
+    "en": "a cute 3D isometric UI icon of a red offline disconnected plug symbol",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "kabellos",
+    "es": "inalámbrico",
+    "en": "a cute 3D isometric UI icon of headphones emitting wireless radio waves with no cables",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "automatisch",
+    "es": "automático",
+    "en": "a cute 3D isometric UI icon of moving metallic gears",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "manuell",
+    "es": "manual",
+    "en": "a cute 3D isometric UI icon of a hand turning a dial",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "sicher",
+    "es": "seguro",
+    "en": "a cute 3D isometric UI icon of a glowing green cyber security shield",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "vernetzt",
+    "es": "conectado / en red",
+    "en": "a cute 3D isometric UI icon of two connected digital glowing globes",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "virtuell",
+    "es": "virtual",
+    "en": "a cute 3D isometric UI icon of VR virtual reality goggles glowing purple",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "gesperrt",
+    "es": "bloqueado",
+    "en": "a cute 3D isometric UI icon of a red digital lock",
+    "type": "Adjetivo"
+  },
+  {
+    "de": "programmieren",
+    "es": "programar",
+    "en": "a cute 3D isometric UI icon of a laptop screen with program code",
+    "type": "Verbo"
+  },
+  {
+    "de": "herunterladen",
+    "es": "descargar",
+    "en": "a cute 3D isometric UI icon of a down arrow pointing to a hard drive disk",
+    "type": "Verbo"
+  },
+  {
+    "de": "hochladen",
+    "es": "subir (archivo)",
+    "en": "a cute 3D isometric UI icon of an up arrow pointing to a digital cloud",
+    "type": "Verbo"
+  },
+  {
+    "de": "speichern",
+    "es": "guardar",
+    "en": "a cute 3D isometric UI icon of a classic 3.5 inch blue floppy disk storage",
+    "type": "Verbo"
+  },
+  {
+    "de": "löschen",
+    "es": "borrar / eliminar",
+    "en": "a cute 3D isometric UI icon of a red trash can bin overflowing with paper crumbs",
+    "type": "Verbo"
+  },
+  {
+    "de": "klicken",
+    "es": "hacer clic",
+    "en": "a cute 3D isometric UI icon of a glowing blue cursor clicking a button",
+    "type": "Verbo"
+  },
+  {
+    "de": "tippen",
+    "es": "escribir (teclado)",
+    "en": "a cute 3D isometric UI icon of hands typing on a glowing laptop keyboard",
+    "type": "Verbo"
+  },
+  {
+    "de": "senden",
+    "es": "enviar",
+    "en": "a cute 3D isometric UI icon of a paper plane flying out of a digital envelope",
+    "type": "Verbo"
+  },
+  {
+    "de": "empfangen",
+    "es": "recibir",
+    "en": "a cute 3D isometric UI icon of a digital tray box receiving incoming letter envelopes",
+    "type": "Verbo"
+  },
+  {
+    "de": "teilen",
+    "es": "compartir",
+    "en": "a cute 3D isometric UI icon of three connected dots sharing network lines",
+    "type": "Verbo"
+  },
+  {
+    "de": "kopieren",
+    "es": "copiar",
+    "en": "a cute 3D isometric UI icon of two identical overlapping document sheets",
+    "type": "Verbo"
+  },
+  {
+    "de": "einfügen",
+    "es": "pegar",
+    "en": "a cute 3D isometric UI icon of a clipboard pasting text onto a page document",
+    "type": "Verbo"
+  },
+  {
+    "de": "aktualisieren",
+    "es": "actualizar",
+    "en": "a cute 3D isometric UI icon of two circular green arrows turning",
+    "type": "Verbo"
+  },
+  {
+    "de": "drucken",
+    "es": "imprimir",
+    "en": "a cute 3D isometric UI icon of a paper sheet rolling out of a metal print head roller",
+    "type": "Verbo"
+  },
+  {
+    "de": "der Strom",
+    "es": "la electricidad / corriente",
+    "en": "a cute 3D isometric UI icon of a glowing yellow lightning bolt",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Spannung",
+    "es": "el voltaje / tensión",
+    "en": "a cute 3D isometric UI icon of an electrical voltmeter dial",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Stromkreis",
+    "es": "el circuito eléctrico",
+    "en": "a cute 3D isometric UI icon of a closed electrical circuit with a glowing lightbulb",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "das Kabel",
+    "es": "el cable",
+    "en": "a cute 3D isometric UI icon of a thick industrial electrical copper cable spool",
     "type": "Sustantivo (Neutro)"
   },
   {
-    "de": "die Gangschaltung",
-    "es": "caja de cambios",
-    "en": "",
+    "de": "der Stecker",
+    "es": "el enchufe (macho)",
+    "en": "a cute 3D isometric UI icon of a standard European electrical plug",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Steckdose",
+    "es": "la toma de corriente",
+    "en": "a cute 3D isometric UI icon of an electrical wall socket",
     "type": "Sustantivo (Fem)"
   },
   {
-    "de": "das Gaspedal",
-    "es": "acelerador",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "Gas geben",
-    "es": "acelerar",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "der Fahrer / fahren",
-    "es": "conductor / conducir",
-    "en": "",
-    "type": "Sust / Verbo"
-  },
-  {
-    "de": "die Hupe / hupen",
-    "es": "bocina / tocar bocina",
-    "en": "",
-    "type": "Sust / Verbo"
-  },
-  {
-    "de": "der Kraftstoff",
-    "es": "combustible",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "das Lenkrad / lenken",
-    "es": "volante / girar volante",
-    "en": "",
-    "type": "Sust / Verbo"
-  },
-  {
-    "de": "der Motor",
-    "es": "motor",
-    "en": "",
+    "de": "der Schalter",
+    "es": "el interruptor",
+    "en": "a cute 3D isometric UI icon of a modern wall light switch",
     "type": "Sustantivo (Masc)"
   },
   {
-    "de": "der Rückspiegel",
-    "es": "espejo retrovisor",
-    "en": "",
-    "type": "Sustantivo (Masc)"
-  },
-  {
-    "de": "der Sicherheitsgurt",
-    "es": "cinturón de seguridad",
-    "en": "",
-    "type": "Sustantivo (Masc)"
-  },
-  {
-    "de": "die Kupplung",
-    "es": "embrague",
-    "en": "",
+    "de": "die Sicherung",
+    "es": "el fusible / el taco",
+    "en": "a cute 3D isometric UI icon of an electrical fuse breaker box",
     "type": "Sustantivo (Fem)"
   },
   {
-    "de": "die Felge",
-    "es": "rin",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "die Handbremse",
-    "es": "freno de mano",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "der Schalthebel",
-    "es": "palanca de cambios",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "der Scheibenwischer",
-    "es": "limpiaparabrisas",
-    "en": "",
+    "de": "der Transformator",
+    "es": "el transformador",
+    "en": "a cute 3D isometric UI icon of an industrial electrical power transformer",
     "type": "Sustantivo (Masc)"
   },
   {
-    "de": "der Lichtschalter",
-    "es": "interruptor de luces",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "die Heizung",
-    "es": "calefacción",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "das Abblendlicht",
-    "es": "luz corta / baja",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "das Fernlicht",
-    "es": "luz larga / alta",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "die Bremsleuchte",
-    "es": "luz de freno",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "die Warnblinkanlage",
-    "es": "luces de emergencia",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "die Nebelschlussleuchte",
-    "es": "luz antiniebla trasera",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "das Tagfahrlicht",
-    "es": "luz diurna",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "betanken",
-    "es": "repostar gasolina",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "überholen",
-    "es": "adelantar",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "einsteigen / aussteigen",
-    "es": "subir / bajar del coche",
-    "en": "",
-    "type": "Verbo separable"
-  },
-  {
-    "de": "aufschließen",
-    "es": "abrir con llave",
-    "en": "",
-    "type": "Verbo separable"
-  },
-  {
-    "de": "anhalten / halten / parken",
-    "es": "parar / detenerse / parquear",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "die Vorfahrt",
-    "es": "prioridad",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "aufpassen",
-    "es": "prestar atención",
-    "en": "",
-    "type": "Verbo separable"
-  },
-  {
-    "de": "Motor starten",
-    "es": "prender el motor",
-    "en": "",
-    "type": "Frase"
-  },
-  {
-    "de": "sich anschnallen",
-    "es": "ponerse el cinturón",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "beschleunigen",
-    "es": "acelerar",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "abschleppen",
-    "es": "remolcar",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "zusammenstoßen",
-    "es": "chocar",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "der Schaden",
-    "es": "daño",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "das Motoröl",
-    "es": "aceite de motor",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "der Reifendruck",
-    "es": "presión neumáticos",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "der Reifen",
-    "es": "llanta",
-    "en": "",
-    "type": "Sustantivo (Masc)"
-  },
-  {
-    "de": "der Pkw / der Lkw",
-    "es": "carro / camión",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "der Fußgänger",
-    "es": "peatón",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "die Ampel / Kreuzung",
-    "es": "semáforo / cruce",
-    "en": "",
+    "de": "die Batterie",
+    "es": "la batería",
+    "en": "a cute 3D isometric UI icon of a standard AA battery",
     "type": "Sustantivo (Fem)"
   },
   {
-    "de": "das Fahrzeug",
-    "es": "el vehículo",
-    "en": "",
+    "de": "der Akku",
+    "es": "la batería recargable",
+    "en": "a cute 3D isometric UI icon of a lithium ion rechargeable battery pack",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "der Zähler",
+    "es": "el medidor eléctrico",
+    "en": "a cute 3D isometric UI icon of a smart electrical power meter",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Erdung",
+    "es": "la toma de tierra",
+    "en": "a cute 3D isometric UI icon of a copper grounding rod symbol",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Kurzschluss",
+    "es": "el cortocircuito",
+    "en": "a cute 3D isometric UI icon of electric sparks and a broken wire",
+    "type": "Sustantivo (Masc)"
+  },
+  {
+    "de": "die Solaranlage",
+    "es": "el sistema solar / fotovoltaico",
+    "en": "a cute 3D isometric UI icon of a house roof with shiny solar panels",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "das Solarmodul",
+    "es": "el módulo solar",
+    "en": "a cute 3D isometric UI icon of a single large blue solar panel",
     "type": "Sustantivo (Neutro)"
   },
   {
-    "de": "der Verkehr / Stau",
-    "es": "el tráfico / trancón",
-    "en": "",
+    "de": "die Solarzelle",
+    "es": "la célula solar",
+    "en": "a cute 3D isometric UI icon of a micro photovoltaic solar cell grid",
+    "type": "Sustantivo (Fem)"
+  },
+  {
+    "de": "der Wechselrichter",
+    "es": "el inversor (AC/DC)",
+    "en": "a cute 3D isometric UI icon of a modern solar power inverter box",
     "type": "Sustantivo (Masc)"
   },
   {
-    "de": "das Verkehrsschild",
-    "es": "señal de tráfico",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "der Speicher",
+    "es": "el acumulador / banco de baterías",
+    "en": "a cute 3D isometric UI icon of a home solar battery storage system",
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "die Geschwindigkeit",
-    "es": "velocidad",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "das Netz",
+    "es": "la red eléctrica",
+    "en": "a cute 3D isometric UI icon of electrical power transmission towers",
+    "type": "Sustantivo (Neutro)"
   },
   {
-    "de": "die Spur",
-    "es": "carril",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "der Ertrag",
+    "es": "el rendimiento / producción",
+    "en": "a cute 3D isometric UI icon of a rising chart with a sun symbol",
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "die Warnleuchten",
-    "es": "luces de advertencia",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "die Gleichspannung",
+    "es": "tensión continua (DC)",
+    "en": "a cute 3D isometric UI icon showing the Direct Current DC symbol",
+    "type": "Sustantivo (Fem)"
   },
   {
-    "de": "die Baustelle",
-    "es": "obra de cons.",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "die Wechselspannung",
+    "es": "tensión alterna (AC)",
+    "en": "a cute 3D isometric UI icon showing the Alternating Current AC sine wave symbol",
+    "type": "Sustantivo (Fem)"
   },
   {
-    "de": "die Sicherheit",
-    "es": "seguridad",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "die Leistung",
+    "es": "la potencia (W/kW)",
+    "en": "a cute 3D isometric UI icon of a glowing energy core",
+    "type": "Sustantivo (Fem)"
   },
   {
-    "de": "Toter Winkel",
-    "es": "ángulo muerto",
-    "en": "",
-    "type": "Frase"
+    "de": "die Dachmontage",
+    "es": "el montaje en techo",
+    "en": "a cute 3D isometric UI icon of construction brackets on a rooftop",
+    "type": "Sustantivo (Fem)"
   },
   {
-    "de": "Schulterblick",
-    "es": "mirada sobre hombro",
-    "en": "",
-    "type": "Frase"
+    "de": "das Werkzeug",
+    "es": "la herramienta",
+    "en": "a cute 3D isometric UI icon of a red toolbox",
+    "type": "Sustantivo (Neutro)"
   },
   {
-    "de": "Rechts vor links",
-    "es": "derecha tiene preferencia",
-    "en": "",
-    "type": "Frase"
+    "de": "der Schraubenzieher",
+    "es": "el destornillador",
+    "en": "a cute 3D isometric UI icon of a yellow and black screwdriver",
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "Motoröldruck",
-    "es": "presión aceite (rojo)",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "die Zange",
+    "es": "el alicate / pinza",
+    "en": "a cute 3D isometric UI icon of a pair of metal pliers with rubber grips",
+    "type": "Sustantivo (Fem)"
   },
   {
-    "de": "Kühlmitteltemperatur",
-    "es": "temp. refrigerante (rojo)",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "der Bohrer",
+    "es": "el taladro",
+    "en": "a cute 3D isometric UI icon of a power drill",
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "das Schiebedach",
-    "es": "techo corredizo",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "das Multimeter",
+    "es": "el multímetro",
+    "en": "a cute 3D isometric UI icon of a digital multimeter with probes",
+    "type": "Sustantivo (Neutro)"
   },
   {
-    "de": "der Auspuff",
-    "es": "escape",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "der Helm",
+    "es": "el casco de seguridad",
+    "en": "a cute 3D isometric UI icon of a yellow hard hat",
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "das Nummernschild",
-    "es": "placa / matrícula",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "die Handschuhe",
+    "es": "los guantes de trabajo",
+    "en": "a cute 3D isometric UI icon of heavy duty protective work gloves",
+    "type": "Sustantivo (Plural)"
   },
   {
-    "de": "die Windschutzscheibe",
-    "es": "parabrisas",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "die Leiter",
+    "es": "la escalera",
+    "en": "a cute 3D isometric UI icon of a tall aluminum stepladder",
+    "type": "Sustantivo (Fem)"
   },
   {
-    "de": "die Motorhaube",
-    "es": "capó",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "der Elektriker",
+    "es": "el electricista",
+    "en": "a cute 3D isometric UI icon of a worker holding cables",
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "die Stoßstange",
-    "es": "parachoques",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "der Techniker",
+    "es": "el técnico",
+    "en": "a cute 3D isometric UI icon of a worker with blueprints and tools",
+    "type": "Sustantivo (Masc)"
   },
   {
-    "de": "der Kreisverkehr",
-    "es": "rotonda",
-    "en": "",
-    "type": "Sustantivo"
+    "de": "die Gefahr",
+    "es": "el peligro / riesgo",
+    "en": "a cute 3D isometric UI icon of a yellow high voltage warning sign",
+    "type": "Sustantivo (Fem)"
   },
   {
-    "de": "die Einbahnstraße",
-    "es": "calle de un solo sentido",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "abbiegen",
-    "es": "girar",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "der Strafzettel",
-    "es": "multa de tráfico",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "die Versicherung",
-    "es": "el seguro",
-    "en": "",
-    "type": "Sustantivo"
-  },
-  {
-    "de": "und",
-    "es": "y",
-    "en": "",
-    "type": "Conector (Posición 0)"
-  },
-  {
-    "de": "oder",
-    "es": "o (alternativa)",
-    "en": "",
-    "type": "Conector (Posición 0)"
-  },
-  {
-    "de": "aber",
-    "es": "pero",
-    "en": "",
-    "type": "Conector (Posición 0)"
-  },
-  {
-    "de": "denn",
-    "es": "porque / pues",
-    "en": "",
-    "type": "Conector (Posición 0)"
-  },
-  {
-    "de": "sondern",
-    "es": "sino (que)",
-    "en": "",
-    "type": "Conector (Posición 0)"
-  },
-  {
-    "de": "für",
-    "es": "para / por",
-    "en": "",
-    "type": "Preposición (Akk)"
-  },
-  {
-    "de": "ohne",
-    "es": "sin",
-    "en": "",
-    "type": "Preposición (Akk)"
-  },
-  {
-    "de": "durch",
-    "es": "a través de / por",
-    "en": "",
-    "type": "Preposición (Akk)"
-  },
-  {
-    "de": "gegen",
-    "es": "contra / hacia (hora)",
-    "en": "",
-    "type": "Preposición (Akk)"
-  },
-  {
-    "de": "um",
-    "es": "a las (hora) / alrededor de",
-    "en": "",
-    "type": "Preposición (Akk)"
-  },
-  {
-    "de": "mit",
-    "es": "con",
-    "en": "",
-    "type": "Preposición (Dat)"
-  },
-  {
-    "de": "nach",
-    "es": "hacia / después de",
-    "en": "",
-    "type": "Preposición (Dat)"
-  },
-  {
-    "de": "aus",
-    "es": "de (origen / material)",
-    "en": "",
-    "type": "Preposición (Dat)"
-  },
-  {
-    "de": "bei",
-    "es": "en casa de / en (empresa)",
-    "en": "",
-    "type": "Preposición (Dat)"
-  },
-  {
-    "de": "von",
-    "es": "de (procedencia / autor)",
-    "en": "",
-    "type": "Preposición (Dat)"
-  },
-  {
-    "de": "zu",
-    "es": "hacia (lugares / personas)",
-    "en": "",
-    "type": "Preposición (Dat)"
-  },
-  {
-    "de": "seit",
-    "es": "desde (tiempo)",
-    "en": "",
-    "type": "Preposición (Dat)"
-  },
-  {
-    "de": "in",
-    "es": "en / dentro de",
-    "en": "",
-    "type": "Prep. Mixta (Dat/Akk)"
-  },
-  {
-    "de": "an",
-    "es": "en (borde / fechas)",
-    "en": "",
-    "type": "Prep. Mixta (Dat/Akk)"
-  },
-  {
-    "de": "auf",
-    "es": "sobre (con contacto)",
-    "en": "",
-    "type": "Prep. Mixta (Dat/Akk)"
-  },
-  {
-    "de": "unter",
-    "es": "debajo de",
-    "en": "",
-    "type": "Prep. Mixta (Dat/Akk)"
-  },
-  {
-    "de": "über",
-    "es": "sobre (sin contacto) / acerca de",
-    "en": "",
-    "type": "Prep. Mixta (Dat/Akk)"
-  },
-  {
-    "de": "neben",
-    "es": "al lado de",
-    "en": "",
-    "type": "Prep. Mixta (Dat/Akk)"
-  },
-  {
-    "de": "zwischen",
-    "es": "entre",
-    "en": "",
-    "type": "Prep. Mixta (Dat/Akk)"
-  },
-  {
-    "de": "vor",
-    "es": "delante de / antes de",
-    "en": "",
-    "type": "Prep. Mixta (Dat/Akk)"
-  },
-  {
-    "de": "hinter",
-    "es": "detrás de",
-    "en": "",
-    "type": "Prep. Mixta (Dat/Akk)"
-  },
-  {
-    "de": "obwohl",
-    "es": "aunque",
-    "en": "",
-    "type": "Conector Subordinante"
-  },
-  {
-    "de": "wenn",
-    "es": "si(condicional)",
-    "en": "",
-    "type": "Conector Subordinante"
-  },
-  {
-    "de": "als",
-    "es": "cuando",
-    "en": "",
-    "type": "Conector Subordinante"
-  },
-  {
-    "de": "deshalb",
-    "es": "por eso",
-    "en": "",
-    "type": "Conector Posición 1"
-  },
-  {
-    "de": "trotzdem",
-    "es": "sin embargo",
-    "en": "",
-    "type": "Conector Posición 1"
-  },
-  {
-    "de": "außerdem",
-    "es": "además",
-    "en": "",
-    "type": "Conector Posición 1"
-  },
-  {
-    "de": "nämlich",
-    "es": "es decir",
-    "en": "",
-    "type": "Partícula"
-  },
-  {
-    "de": "doch",
-    "es": "sí (rechaza negación)",
-    "en": "",
-    "type": "Partícula"
-  },
-  {
-    "de": "mal",
-    "es": "(Partícula de énfasis)",
-    "en": "",
-    "type": "Partícula"
-  },
-  {
-    "de": "ja",
-    "es": "sí (Partícula de énfasis)",
-    "en": "",
-    "type": "Partícula"
-  },
-  {
-    "de": "sein",
-    "es": "ser / estar",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "haben",
-    "es": "tener / haber",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "werden",
-    "es": "llegar a ser / convertirse",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "machen",
-    "es": "hacer",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "tun",
-    "es": "hacer (una acción)",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "sagen",
-    "es": "decir",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "gehen",
-    "es": "ir / andar",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "kommen",
-    "es": "venir",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "sehen",
-    "es": "ver",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "wissen",
-    "es": "saber (información)",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "kennen",
-    "es": "conocer (personas/lugares)",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "finden",
-    "es": "encontrar / parecer",
-    "en": "",
-    "type": "Verbo"
-  },
-  {
-    "de": "bleiben",
-    "es": "quedarse",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "lassen",
-    "es": "dejar / permitir",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "denken",
-    "es": "pensar",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "groß / klein",
-    "es": "grande / pequeño",
-    "en": "",
+    "de": "gefährlich",
+    "es": "peligroso",
+    "en": "a cute 3D isometric UI icon of a skull and crossbones hazard symbol",
     "type": "Adjetivo"
   },
   {
-    "de": "gut / schlecht",
-    "es": "bueno / malo",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "neu / alt",
-    "es": "nuevo / viejo",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "schön / hässlich",
-    "es": "bonito / feo",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "schwer / leicht",
-    "es": "pesado (difícil) / ligero (fácil)",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "richtig / falsch",
-    "es": "correcto / incorrecto",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "wichtig",
-    "es": "importante",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "einfach / schwierig",
-    "es": "fácil / difícil",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "schnell / langsam",
-    "es": "rápido / lento",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "laut / leise",
-    "es": "fuerte (sonido) / silencioso",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "hell / dunkel",
-    "es": "claro (luz) / oscuro",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "heiß / kalt",
-    "es": "caliente / frío",
-    "en": "",
-    "type": "Adjetivo"
-  },
-  {
-    "de": "können",
-    "es": "poder (habilidad/posibilidad)",
-    "en": "",
-    "type": "Verbo Modal"
-  },
-  {
-    "de": "müssen",
-    "es": "tener que (obligación)",
-    "en": "",
-    "type": "Verbo Modal"
-  },
-  {
-    "de": "dürfen",
-    "es": "poder (permiso)",
-    "en": "",
-    "type": "Verbo Modal"
-  },
-  {
-    "de": "sollen",
-    "es": "deber (recomendación/orden)",
-    "en": "",
-    "type": "Verbo Modal"
-  },
-  {
-    "de": "wollen",
-    "es": "querer (deseo fuerte)",
-    "en": "",
-    "type": "Verbo Modal"
-  },
-  {
-    "de": "mögen",
-    "es": "gustar (algo/alguien)",
-    "en": "",
-    "type": "Verbo Modal"
-  },
-  {
-    "de": "möchten",
-    "es": "gustaría (quisiera)",
-    "en": "",
-    "type": "Verbo Modal (KII)"
-  },
-  {
-    "de": "geben",
-    "es": "dar",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "nehmen",
-    "es": "tomar / agarrar",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "brauchen",
-    "es": "necesitar",
-    "en": "",
+    "de": "messen",
+    "es": "medir",
+    "en": "a cute 3D isometric UI icon of a measuring tape extended",
     "type": "Verbo"
   },
   {
-    "de": "helfen",
-    "es": "ayudar",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "bringen",
-    "es": "traer",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "schreiben",
-    "es": "escribir",
-    "en": "",
+    "de": "anschließen",
+    "es": "conectar",
+    "en": "a cute 3D isometric UI icon of two electrical wires being connected together",
     "type": "Verbo"
   },
   {
-    "de": "lesen",
-    "es": "leer",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "sprechen",
-    "es": "hablar",
-    "en": "",
-    "type": "Verbo (Irregular)"
-  },
-  {
-    "de": "versuchen",
-    "es": "intentar",
-    "en": "",
+    "de": "installieren",
+    "es": "instalar",
+    "en": "a cute 3D isometric UI icon of a wrench tightening a bolt on a machine",
     "type": "Verbo"
   },
   {
-    "de": "entscheiden",
-    "es": "decidir",
-    "en": "",
+    "de": "prüfen",
+    "es": "comprobar / revisar",
+    "en": "a cute 3D isometric UI icon of a green checkmark over a technical clipboard",
     "type": "Verbo"
   },
   {
-    "de": "vergessen",
-    "es": "olvidar",
-    "en": "",
+    "de": "warten",
+    "es": "mantener (mantenimiento)",
+    "en": "a cute 3D isometric UI icon of an oil can and a gear",
     "type": "Verbo"
   },
   {
-    "de": "sich erinnern",
-    "es": "recordar",
-    "en": "",
+    "de": "einschalten",
+    "es": "encender (equipo)",
+    "en": "a cute 3D isometric UI icon of a green glowing ON button",
     "type": "Verbo"
   },
   {
-    "de": "passieren",
-    "es": "suceder",
-    "en": "",
+    "de": "ausschalten",
+    "es": "apagar (equipo)",
+    "en": "a cute 3D isometric UI icon of a red OFF button",
     "type": "Verbo"
   },
   {
-    "de": "erzählen",
-    "es": "narrar",
-    "en": "",
+    "de": "löten",
+    "es": "soldar (electrónica)",
+    "en": "a cute 3D isometric UI icon of a soldering iron melting silver wire",
     "type": "Verbo"
   },
   {
-    "de": "bedeuten",
-    "es": "significar",
-    "en": "",
+    "de": "isolieren",
+    "es": "aislar (cableado)",
+    "en": "a cute 3D isometric UI icon of a roll of black electrical insulation tape",
     "type": "Verbo"
   },
   {
-    "de": "beginnen",
-    "es": "comenzar",
-    "en": "",
+    "de": "abisolieren",
+    "es": "pelar un cable",
+    "en": "a cute 3D isometric UI icon of wire strippers removing plastic from a copper wire",
     "type": "Verbo"
   },
   {
-    "de": "stehen",
-    "es": "estar de pie",
-    "en": "",
-    "type": "Verbo Posicional"
+    "de": "austauschen",
+    "es": "reemplazar / cambiar",
+    "en": "a cute 3D isometric UI icon of two mechanical parts swapping places with arrows",
+    "type": "Verbo"
   },
   {
-    "de": "stellen",
-    "es": "colocar vertical",
-    "en": "",
-    "type": "Verbo Posicional"
+    "de": "einspeisen",
+    "es": "inyectar (a la red)",
+    "en": "a cute 3D isometric UI icon of electricity flowing from a house into a power grid tower",
+    "type": "Verbo"
   },
   {
-    "de": "liegen",
-    "es": "estar acostado",
-    "en": "",
-    "type": "Verbo Posicional"
-  },
-  {
-    "de": "legen",
-    "es": "colocar horizontal",
-    "en": "",
-    "type": "Verbo Posicional"
-  },
-  {
-    "de": "heute",
-    "es": "hoy",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "morgen",
-    "es": "mañana",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "gestern",
-    "es": "ayer",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "jetzt",
-    "es": "ahora",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "bald",
-    "es": "pronto",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "immer",
-    "es": "siempre",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "oft",
-    "es": "a menudo",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "manchmal",
-    "es": "a veces",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "nie",
-    "es": "nunca",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "schon",
-    "es": "ya",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "noch",
-    "es": "todavía / aún",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "hier",
-    "es": "aquí",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "dort",
-    "es": "allí",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "oben / unten",
-    "es": "arriba / abajo",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "vorn / hinten",
-    "es": "adelante / atrás",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "draußen / drinnen",
-    "es": "afuera / adentro",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "sehr",
-    "es": "muy",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "viel / wenig",
-    "es": "mucho / poco",
-    "en": "",
-    "type": "Adverbio"
-  },
-  {
-    "de": "wer?",
-    "es": "¿quién?",
-    "en": "",
-    "type": "Pronombre interrogativo"
-  },
-  {
-    "de": "was?",
-    "es": "¿qué?",
-    "en": "",
-    "type": "Pronombre interrogativo"
-  },
-  {
-    "de": "wo?",
-    "es": "¿dónde?",
-    "en": "",
-    "type": "Pronombre interrogativo"
-  },
-  {
-    "de": "wann?",
-    "es": "¿cuándo?",
-    "en": "",
-    "type": "Pronombre interrogativo"
-  },
-  {
-    "de": "warum?",
-    "es": "¿por qué?",
-    "en": "",
-    "type": "Pronombre interrogativo"
-  },
-  {
-    "de": "wie?",
-    "es": "¿cómo?",
-    "en": "",
-    "type": "Pronombre interrogativo"
-  },
-  {
-    "de": "woher?",
-    "es": "¿de dónde?",
-    "en": "",
-    "type": "Pronombre interrogativo"
-  },
-  {
-    "de": "wohin?",
-    "es": "¿a dónde?",
-    "en": "",
-    "type": "Pronombre interrogativo"
-  },
-  {
-    "de": "welcher?",
-    "es": "¿cuál?",
-    "en": "",
-    "type": "Pronombre interrogativo"
+    "de": "funktionieren",
+    "es": "funcionar",
+    "en": "a cute 3D isometric UI icon of two interlocking gears turning smoothly",
+    "type": "Verbo"
   }
 ]

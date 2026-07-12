@@ -43,6 +43,71 @@ const diccionarioLetras = { "a": "Letter A", "b": "Letter B" };
 const diccionarioNumeros = { "1": "Number one", "2": "Number two" };
 const diccionarioPreguntas = { "wer": "silhouette of a person", "wie": "question mark", "was": "mystery box", "wo": "map pin", "wann": "clock", "warum": "question mark with a lightbulb" };
 
+const diccionarioAccionesDinamicas = {
+  "abfahren": "train moving away from a station platform on tracks",
+  "ankommen": "train arriving at a station platform",
+  "einsteigen": "passenger stepping into a train or bus",
+  "aussteigen": "passenger stepping out of a train or bus",
+  "umsteigen": "two trains parked side by side at a station",
+  "fliegen": "airplane flying high in the sky",
+  "parken": "car perfectly parked in a parking slot",
+  "regnen": "dark storm cloud dropping rain",
+  "schneien": "fluffy cloud dropping snowflakes",
+  "überholen": "car overtaking another car on the highway",
+  "bremsen": "car tire braking hard on asphalt"
+};
+
+const diccionarioIndustrial = {
+  "der strom": "glowing yellow lightning bolt symbol",
+  "die spannung": "industrial electrical voltmeter dial with a red needle",
+  "der stromkreis": "closed electrical circuit board with a glowing lightbulb",
+  "das kabel": "thick industrial electrical copper cable spool",
+  "der stecker": "standard heavy European electrical plug",
+  "die steckdose": "white electrical wall socket",
+  "der schalter": "modern industrial wall light switch",
+  "die sicherung": "industrial electrical fuse breaker box with switches",
+  "der transformator": "heavy industrial electrical power transformer unit",
+  "die batterie": "standard AA battery with plus and minus signs",
+  "der akku": "green lithium ion rechargeable battery pack",
+  "der zähler": "smart electrical power meter with digital display",
+  "die erdung": "copper grounding rod driven into a small block of earth",
+  "der kurzschluss": "broken thick electrical wire emitting bright electric sparks",
+  "die solaranlage": "miniature house roof completely covered with solar panels",
+  "das solarmodul": "single large blue photovoltaic solar panel on a stand",
+  "die solarzelle": "close-up of a blue micro photovoltaic solar cell grid",
+  "der wechselrichter": "modern solar power inverter wall box with a digital display",
+  "der speicher": "large modern home solar battery storage unit",
+  "das netz": "tall electrical power transmission tower with cables",
+  "der ertrag": "rising bar chart with a glowing sun symbol on top",
+  "die gleichspannung": "electrical block showing the Direct Current DC straight line symbol",
+  "die wechselspannung": "oscilloscope screen showing an Alternating Current AC sine wave",
+  "die leistung": "glowing futuristic energy core",
+  "die dachmontage": "aluminum construction brackets mounted on a piece of rooftop",
+  "das werkzeug": "open red toolbox filled with tools",
+  "der schraubenzieher": "yellow and black mechanical screwdriver",
+  "die zange": "pair of heavy metal pliers with rubber grips",
+  "der bohrer": "heavy duty power drill",
+  "das multimeter": "digital multimeter testing tool with red and black probes",
+  "der helm": "yellow industrial hard hat",
+  "die handschuhe": "pair of heavy duty protective leather work gloves",
+  "die leiter": "tall aluminum folding stepladder",
+  "die gefahr": "yellow high voltage warning triangle sign",
+  "gefährlich": "yellow skull and crossbones hazard sign",
+  "messen": "extended yellow measuring tape next to a wire",
+  "anschließen": "two thick electrical cables firmly plugged together",
+  "installieren": "silver wrench tightening a bolt on a metal machine part",
+  "prüfen": "green checkmark hovering over a technical clipboard",
+  "warten": "red oil can and a silver mechanical gear",
+  "einschalten": "green glowing ON button switch",
+  "ausschalten": "red glowing OFF button switch",
+  "löten": "hot soldering iron melting silver wire onto a green circuit board",
+  "isolieren": "roll of black electrical insulation tape",
+  "abisolieren": "wire strippers removing plastic insulation from a thick copper wire",
+  "austauschen": "two mechanical gears swapping places with arrows",
+  "einspeisen": "electricity energy flowing from a house into a power grid tower",
+  "funktionieren": "two interlocking mechanical gears turning smoothly"
+};
+
 // TODO: Extraer esta función a un módulo compartido (ej. shared/promptFactory.js)
 function construirPromptDinamico(palabraObj) {
   let colorAsignado = "hex #9E9E9E"; // Gris por defecto
@@ -52,11 +117,13 @@ function construirPromptDinamico(palabraObj) {
   const diasYMeses = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag", 
                       "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
   
-  const isSinGenero = type.includes("adverbio") || type.includes("adjetivo") || type.includes("pronombre") || type.includes("expresión") || type.includes("conjunción");
+  const esAdjetivo = type.includes("adjetivo") || type.includes("sentimiento");
+  const esVerbo = type.includes("verbo") || type.includes("acción");
+  const esPersona = type.includes("pronombre") || type.includes("persona") || type.includes("profesión") || type.includes("profesion");
+  const esAbstractoInanimado = type.includes("preposición") || type.includes("preposicion") || type.includes("adverbio") || type.includes("conjunción");
+
+  const isSinGenero = esAdjetivo || esVerbo || esPersona || esAbstractoInanimado || type.includes("expresión") || type.includes("expresion");
   const esPregunta = type.includes("pregunta") || type.includes("w-frage");
-  
-  // 🔥 Detección de conceptos abstractos para activar el filtro Anti-Caritas
-  const esAbstracto = type.includes("verbo") || type.includes("acción") || type.includes("preposición") || isSinGenero;
 
   // Asignación estricta de color HEX por género/tipo
   if (type.includes("verbo") || type.includes("acción")) colorAsignado = "hex #FBBC05"; // Amarillo
@@ -75,7 +142,7 @@ function construirPromptDinamico(palabraObj) {
   let styleRules = "Strictly purely visual: absolutely NO TEXT, NO LETTERS, NO WORDS. Minimalist, simple.";
   
   // 🛡️ REGLA CRÍTICA PARA ABSTRACTOS: Cero antropomorfismo
-  if (esAbstracto) {
+  if (esAbstractoInanimado) {
     styleRules += " CRITICAL: Must be an INANIMATE object or symbolic prop. Absolutely NO FACES, NO EYES, NO MOUTHS, NO ANIMALS, NO CHARACTERS, NO ANTHROPOMORPHISM.";
   }
 
@@ -92,12 +159,28 @@ function construirPromptDinamico(palabraObj) {
       setting: "A pure seamless solid white background hex #FFFFFF.",
       style_rules: styleRules
     };
+  } else if (diccionarioIndustrial[de]) {
+    promptObj = {
+      subject: `A 3D isometric UI icon of a "${diccionarioIndustrial[de]}", rendered in natural realistic industrial colors. Made of smooth matte soft clay.`,
+      setting: "A pure seamless solid white background hex #FFFFFF.",
+      style_rules: "CRITICAL: Must be an INANIMATE object or symbolic prop. Absolutely NO FACES, NO EYES, NO MOUTHS. Strictly purely visual: absolutely NO TEXT, NO LETTERS, NO WORDS. Minimalist, simple."
+    };
+    if (!isSinGenero) {
+      promptObj.gender_indicator = `A magical glowing sphere floating gently next to the main subject. The dominant primary color of the sphere is strictly ${colorAsignado}.`;
+    }
   } else {
-    
     // 🧱 Cambio de semántica en el Sujeto dependiendo de si es abstracto o sustantivo
     let subjectText = `A 3D isometric UI icon of "${englishConcept}", rendered in its natural, realistic, and vibrant colors. Made of smooth matte soft clay.`;
     
-    if (esAbstracto) {
+    if (diccionarioAccionesDinamicas[de]) {
+       subjectText = `A 3D isometric representation of a ${diccionarioAccionesDinamicas[de]}. Made of smooth matte soft clay.`;
+    } else if (esAdjetivo) {
+       subjectText = `A 3D isometric expressive human character who is visibly ${englishConcept}. The character's pose, facial expression, and body language perfectly illustrate the adjective. Made of smooth matte soft clay in vibrant natural colors.`;
+    } else if (esVerbo) {
+       subjectText = `A 3D isometric expressive human character actively performing the action of ${englishConcept}. The character's pose dynamically captures the verb in motion. Made of smooth matte soft clay in vibrant natural colors.`;
+    } else if (esPersona) {
+       subjectText = `A 3D isometric expressive human character representing a ${englishConcept}. Made of smooth matte soft clay in vibrant natural colors.`;
+    } else if (esAbstractoInanimado) {
        subjectText = `A 3D isometric faceless inanimate object or symbolic prop representing the concept of "${englishConcept}". Made of smooth matte soft clay.`;
     }
 

@@ -18,7 +18,7 @@ function extraerVocabulario() {
   const content = fs.readFileSync(chaptersPath, 'utf-8');
 
   // 1. Aislar solo la parte del arreglo 'chapters' para evitar palabras de 'goetheModules'
-  const startIdx = content.indexOf('const chapters = [');
+  const startIdx = content.indexOf('const chapters =');
   const endIdx = content.indexOf('const goetheModules ='); // El siguiente bloque principal
   
   let chaptersText = content;
@@ -30,7 +30,7 @@ function extraerVocabulario() {
 
   // 2. Extraer mediante RegEx todos los objetos literal que comiencen con { de: "..."
   // (Esto evita romper el parsing por culpa del JSX que está en otros atributos como 'icon')
-  const regex = /\{\s*de:\s*"[^"]+".*?\}/g;
+  const regex = /\{\s*de:\s*"[^"]+"[\s\S]*?\}/g;
   const matches = chaptersText.match(regex);
   
   if (!matches) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, BookOpen, Bot, Briefcase, Car, Clock, Coffee, Edit as Edit3, Headphones, Heart, Home, Link2, List, Mail, Mic, PlayCircle, Search, ShoppingCart, Star as Sparkles, Volume2 } from 'lucide-react';
+import { Activity, BookOpen, Bot, Briefcase, Car, Clock, Coffee, Edit as Edit3, Headphones, Heart, Home, Link2, List, Mail, Mic, PlayCircle, Search, ShoppingCart, Star as Sparkles, Volume2, Laptop, Zap } from 'lucide-react';
 import GrammarAccordion from '../components/GrammarAccordion';
 import AudioSim from '../components/AudioSim';
 import InteractiveQA from '../components/InteractiveQA';
@@ -13,9 +13,10 @@ import LiveEvaluator from '../components/LiveEvaluator';
 import LocativeMapSimulator from '../components/LocativeMapSimulator';
 export
 // --- DATA: EL VOCABULARIO COMPLETO ---
-const chapters = [{
+const chapters = [
+{
   id: 0,
-  title: "Kapitel 0: Alphabet & Zahlen",
+  title: "Kapitel 1: Alphabet & Zahlen",
   icon: <List size={20} />,
   emoji: "🔤",
   words: [{
@@ -610,9 +611,10 @@ const chapters = [{
     exampleSentenceEs: "El por ciento no es alto.",
     plural: "die Prozent"
   }]
-}, {
+},
+{
   id: 1,
-  title: "Kapitel 1: Zeit & Datum",
+  title: "Kapitel 2: Zeit & Datum",
   icon: <Clock size={20} />,
   emoji: "⏰",
   words: [{
@@ -1222,9 +1224,10 @@ const chapters = [{
     exampleSentenceEs: "Bebo agua regularmente.",
     regimen: "Frecuencia"
   }]
-}, {
+},
+{
   id: 2,
-  title: "Kapitel 2: Personen & Kontakte",
+  title: "Kapitel 3: Personen & Kontakte",
   icon: <BookOpen size={20} />,
   emoji: "👤",
   words: [{
@@ -1829,10 +1832,1723 @@ const chapters = [{
     exampleSentenceDe: "Ich habe das Gefühl.",
     exampleSentenceEs: "Tengo el sentimiento.",
     plural: "die Gefühle"
+  },
+  {
+    de: "mitbringen",
+    pron: "mít-brin-guen",
+    es: "traer consigo",
+    type: "Verbo",
+    category: "Soziales",
+    regimen: "Separable (mit-) / + Dativo + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "kennenlernen",
+    pron: "ké-nen-lea-nen",
+    es: "conocer (por 1ª vez)",
+    type: "Verbo",
+    category: "Soziales",
+    regimen: "Separable (kennen-) / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "einladen",
+    pron: "áin-la-den",
+    es: "invitar",
+    type: "Verbo",
+    category: "Soziales",
+    regimen: "Separable (ein-) / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "feiern",
+    pron: "fái-ean",
+    es: "celebrar",
+    type: "Verbo",
+    category: "Soziales",
+    regimen: "+ Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "schenken",
+    pron: "shén-ken",
+    es: "regalar",
+    type: "Verbo",
+    category: "Soziales",
+    regimen: "Dativo (a quién) + Akkusativ (qué)",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "gratulieren",
+    pron: "gra-tu-lí-ren",
+    es: "felicitar",
+    type: "Verbo",
+    category: "Soziales",
+    regimen: "⚠️ Exige Dativo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "danken",
+    pron: "dán-ken",
+    es: "agradecer",
+    type: "Verbo",
+    category: "Soziales",
+    regimen: "⚠️ Exige Dativo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Feuerwehr",
+    pron: "di fói-ea-vea",
+    es: "los bomberos",
+    type: "Sustantivo (Fem)",
+    category: "Gesellschaft",
+    plural: "die Feuerwehren",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
   }]
-}, {
+},
+{
+  id: 14,
+  title: "Kapitel 4: Basisverben & Adjektive",
+  icon: <Sparkles size={20} />,
+  emoji: "✨",
+  words: [{
+    de: "sein",
+    pron: "záin",
+    es: "ser / estar",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich bin hier.",
+    exampleSentenceEs: "Yo estoy aquí.",
+    regimen: "+ Nominativ"
+  }, {
+    de: "haben",
+    pron: "já-ben",
+    es: "tener / haber",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich habe Hunger.",
+    exampleSentenceEs: "Yo tengo hambre.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "werden",
+    pron: "vér-den",
+    es: "llegar a ser / convertirse",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich werde Arzt.",
+    exampleSentenceEs: "Yo seré médico.",
+    regimen: "+ Nominativ (predicado)"
+  }, {
+    de: "machen",
+    pron: "má-jen",
+    es: "hacer",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich mache einen Kaffee.",
+    exampleSentenceEs: "Yo hago un café.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "tun",
+    pron: "tún",
+    es: "hacer (una acción)",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Was tust du heute?",
+    exampleSentenceEs: "¿Qué haces hoy?",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "sagen",
+    pron: "sá-guen",
+    es: "decir",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich sage \"Hallo\".",
+    exampleSentenceEs: "Yo digo \"Hola\".",
+    regimen: "+ Dativ + Akkusativ"
+  }, {
+    de: "gehen",
+    pron: "gué-en",
+    es: "ir / andar",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich gehe nach Hause.",
+    exampleSentenceEs: "Yo voy a casa.",
+    regimen: "+ Nominativ"
+  }, {
+    de: "kommen",
+    pron: "kó-men",
+    es: "venir",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich komme aus Spanien.",
+    exampleSentenceEs: "Yo vengo de España.",
+    regimen: "aus/von + Dativo"
+  }, {
+    de: "sehen",
+    pron: "zé-en",
+    es: "ver",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich sehe den Mann.",
+    exampleSentenceEs: "Yo veo al hombre.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "wissen",
+    pron: "ví-sen",
+    es: "saber (información)",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich weiß die Antwort.",
+    exampleSentenceEs: "Yo sé la respuesta.",
+    regimen: "+ Akkusativ; ich weiß"
+  }, {
+    de: "kennen",
+    pron: "ké-nen",
+    es: "conocer (personas/lugares)",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich kenne den Mann.",
+    exampleSentenceEs: "Yo conozco al hombre.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "finden",
+    pron: "fín-den",
+    es: "encontrar / parecer",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich finde das Buch gut.",
+    exampleSentenceEs: "Yo encuentro el libro bueno.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "bleiben",
+    pron: "blái-ben",
+    es: "quedarse",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich bleibe hier.",
+    exampleSentenceEs: "Yo me quedo aquí.",
+    regimen: "+ sein, irr. (blieb)"
+  }, {
+    de: "lassen",
+    pron: "lá-sen",
+    es: "dejar / permitir",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich lasse das Fenster offen.",
+    exampleSentenceEs: "Yo dejo la ventana abierta.",
+    regimen: "+ Akk. (er lässt)"
+  }, {
+    de: "denken",
+    pron: "dén-ken",
+    es: "pensar",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich denke an dich.",
+    exampleSentenceEs: "Pienso en ti.",
+    regimen: "an/über + Akkusativ"
+  }, {
+    de: "groß / klein",
+    pron: "grós  kláin",
+    es: "grande / pequeño",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Das Haus ist groß. Das Haus ist nicht klein.",
+    exampleSentenceEs: "La casa es grande. La casa no es pequeña.",
+    regimen: "≠ klein"
+  }, {
+    de: "gut / schlecht",
+    pron: "gút  shlejt",
+    es: "bueno / malo",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Das Essen ist gut.",
+    exampleSentenceEs: "La comida está buena.",
+    regimen: "≠ schlecht / gut"
+  }, {
+    de: "neu / alt",
+    pron: "noi  alt",
+    es: "nuevo / viejo",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Mein Haus ist alt. Aber mein Auto ist neu.",
+    exampleSentenceEs: "Mi casa es vieja. Pero mi coche es nuevo.",
+    regimen: "≠ alt / neu"
+  }, {
+    de: "schön / hässlich",
+    pron: "shön  jés-lij",
+    es: "bonito / feo",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Das Haus ist schön.",
+    exampleSentenceEs: "La casa es bonita.",
+    regimen: "≠ hässlich"
+  }, {
+    de: "schwer / leicht",
+    pron: "shvéa  láijt",
+    es: "pesado (difícil) / ligero (fácil)",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Der Koffer ist schwer.",
+    exampleSentenceEs: "La maleta es pesada.",
+    regimen: "≠ leicht / schwer"
+  }, {
+    de: "richtig / falsch",
+    pron: "ríj-tij  falsh",
+    es: "correcto / incorrecto",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Das ist richtig.",
+    exampleSentenceEs: "Eso es correcto.",
+    regimen: "≠ falsch"
+  }, {
+    de: "wichtig",
+    pron: "víj-tij",
+    es: "importante",
+    type: "Adjetivo",
+    category: "Adjektive",
+    exampleSentenceDe: "Das ist wichtig.",
+    exampleSentenceEs: "Esto es importante.",
+    regimen: "≠ unwichtig"
+  }, {
+    de: "einfach / schwierig",
+    pron: "áin-faj  shví-rij",
+    es: "fácil / difícil",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Die Aufgabe ist einfach.",
+    exampleSentenceEs: "La tarea es fácil.",
+    regimen: "≠ schwierig / einfach"
+  }, {
+    de: "schnell / langsam",
+    pron: "shnel  láng-zam",
+    es: "rápido / lento",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Das Auto ist schnell.",
+    exampleSentenceEs: "El coche es rápido.",
+    regimen: "≠ langsam / schnell"
+  }, {
+    de: "laut / leise",
+    pron: "láut  lái-ze",
+    es: "fuerte (sonido) / silencioso",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Das Radio ist laut. Ich mache das Radio leise.",
+    exampleSentenceEs: "La radio está alta. Yo pongo la radio silenciosa.",
+    regimen: "≠ leise / laut"
+  }, {
+    de: "hell / dunkel",
+    pron: "jel  dún-kel",
+    es: "claro (luz) / oscuro",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Das Licht ist hell.",
+    exampleSentenceEs: "La luz es clara.",
+    regimen: "hell ≠ dunkel"
+  }, {
+    de: "heiß / kalt",
+    pron: "jáis  kalt",
+    es: "caliente / frío",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    exampleSentenceDe: "Das Wasser ist heiß.",
+    exampleSentenceEs: "El agua está caliente.",
+    regimen: "≠ kalt / heiß"
+  }, {
+    de: "können",
+    pron: "kö́-nen",
+    es: "poder (habilidad/posibilidad)",
+    type: "Verbo Modal",
+    category: "Modalverben",
+    exampleSentenceDe: "Ich kann Deutsch sprechen.",
+    exampleSentenceEs: "Yo puedo hablar alemán.",
+    regimen: "+ Infinitiv (sin zu)"
+  }, {
+    de: "müssen",
+    pron: "mú-sen",
+    es: "tener que (obligación)",
+    type: "Verbo Modal",
+    category: "Modalverben",
+    exampleSentenceDe: "Ich muss jetzt nach Hause gehen.",
+    exampleSentenceEs: "Yo tengo que ir a casa ahora.",
+    regimen: "+ Infinitiv (sin zu)"
+  }, {
+    de: "dürfen",
+    pron: "dúa-fen",
+    es: "poder (permiso)",
+    type: "Verbo Modal",
+    category: "Modalverben",
+    exampleSentenceDe: "Hier dürfen Sie parken.",
+    exampleSentenceEs: "Aquí puede aparcar.",
+    regimen: "+ Infinitiv sin zu"
+  }, {
+    de: "sollen",
+    pron: "zó-len",
+    es: "deber (recomendación/orden)",
+    type: "Verbo Modal",
+    category: "Modalverben",
+    exampleSentenceDe: "Du sollst Wasser trinken.",
+    exampleSentenceEs: "Tú deberías beber agua.",
+    regimen: "+ Infinitiv (ohne zu)"
+  }, {
+    de: "wollen",
+    pron: "vó-len",
+    es: "querer (deseo fuerte)",
+    type: "Verbo Modal",
+    category: "Modalverben",
+    exampleSentenceDe: "Ich will einen Kaffee.",
+    exampleSentenceEs: "Yo quiero un café.",
+    regimen: "+ Infinitiv (sin zu)"
+  }, {
+    de: "mögen",
+    pron: "mö-guen",
+    es: "gustar (algo/alguien)",
+    type: "Verbo Modal",
+    category: "Modalverben",
+    exampleSentenceDe: "Ich mag Kaffee.",
+    exampleSentenceEs: "Me gusta el café.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "möchten",
+    pron: "mój-ten",
+    es: "gustaría (quisiera)",
+    type: "Verbo Modal (KII)",
+    category: "Modalverben",
+    exampleSentenceDe: "Ich möchte einen Kaffee.",
+    exampleSentenceEs: "Yo quisiera un café.",
+    regimen: "+ Akkusativ / + Infinitiv"
+  }, {
+    de: "geben",
+    pron: "gué-ben",
+    es: "dar",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich gebe dir mein Buch.",
+    exampleSentenceEs: "Yo te doy mi libro.",
+    regimen: "Dativo (a quién) + Akkusativ (qué)"
+  }, {
+    de: "nehmen",
+    pron: "né-men",
+    es: "tomar / agarrar",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich nehme einen Kaffee.",
+    exampleSentenceEs: "Yo tomo un café.",
+    regimen: "Irregular (nimmt) / + Akkusativ"
+  }, {
+    de: "brauchen",
+    pron: "bráu-jen",
+    es: "necesitar",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich brauche Wasser.",
+    exampleSentenceEs: "Yo necesito agua.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "helfen",
+    pron: "jél-fen",
+    es: "ayudar",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Kannst du mir helfen?",
+    exampleSentenceEs: "¿Puedes ayudarme?",
+    regimen: "+ Dativo"
+  }, {
+    de: "bringen",
+    pron: "brín-guen",
+    es: "traer",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich bringe dir das Buch.",
+    exampleSentenceEs: "Yo te traigo el libro.",
+    regimen: "+ Akk./Dat."
+  }, {
+    de: "schreiben",
+    pron: "shrái-ben",
+    es: "escribir",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich schreibe eine E-Mail.",
+    exampleSentenceEs: "Yo escribo un correo electrónico.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "lesen",
+    pron: "lé-sen",
+    es: "leer",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich lese ein Buch.",
+    exampleSentenceEs: "Yo leo un libro.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "sprechen",
+    pron: "shpré-jen",
+    es: "hablar",
+    type: "Verbo (Irregular)",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich spreche Deutsch.",
+    exampleSentenceEs: "Yo hablo alemán.",
+    regimen: "+ Akk./mit + Dat."
+  }, {
+    de: "versuchen",
+    pron: "fea-zú-jen",
+    es: "intentar",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich versuche, Deutsch zu lernen.",
+    exampleSentenceEs: "Intento aprender alemán.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "entscheiden",
+    pron: "ent-shái-den",
+    es: "decidir",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich kann nicht entscheiden.",
+    exampleSentenceEs: "Yo no puedo decidir.",
+    regimen: "sich + für/Akk"
+  }, {
+    de: "vergessen",
+    pron: "fea-gué-sen",
+    es: "olvidar",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich vergesse meinen Schlüssel nicht.",
+    exampleSentenceEs: "No olvido mi llave.",
+    regimen: "+ Akkusativ, irr. (vergisst)"
+  }, {
+    de: "sich erinnern",
+    pron: "ziş ea-í-nen",
+    es: "recordar",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich erinnere mich an dich.",
+    exampleSentenceEs: "Yo te recuerdo a ti.",
+    regimen: "Reflexivo + an+Akk"
+  }, {
+    de: "passieren",
+    pron: "pa-sí-ren",
+    es: "suceder",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Was passiert heute?",
+    exampleSentenceEs: "¿Qué sucede hoy?",
+    regimen: "⚠️ Exige Dativo"
+  }, {
+    de: "erzählen",
+    pron: "ea-tsé-len",
+    es: "narrar",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Ich erzähle eine Geschichte.",
+    exampleSentenceEs: "Yo narro una historia.",
+    regimen: "+Dat./Akk."
+  }, {
+    de: "bedeuten",
+    pron: "be-dói-ten",
+    es: "significar",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Was bedeutet das?",
+    exampleSentenceEs: "¿Qué significa eso?",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "beginnen",
+    pron: "be-guí-nen",
+    es: "comenzar",
+    type: "Verbo",
+    category: "Basisverben",
+    exampleSentenceDe: "Der Kurs beginnt heute.",
+    exampleSentenceEs: "El curso comienza hoy.",
+    regimen: "+ Akkusativ/mit+Dat"
+  }, {
+    de: "stehen",
+    pron: "shté-en",
+    es: "estar de pie",
+    type: "Verbo Posicional",
+    category: "Positionsverben",
+    exampleSentenceDe: "Der Tisch steht hier.",
+    exampleSentenceEs: "La mesa está aquí.",
+    regimen: "+ Dativ/Akkusativ (Wo/Wohin)"
+  }, {
+    de: "stellen",
+    pron: "shté-len",
+    es: "colocar vertical",
+    type: "Verbo Posicional",
+    category: "Positionsverben",
+    exampleSentenceDe: "Ich stelle die Flasche auf den Tisch.",
+    exampleSentenceEs: "Yo coloco la botella sobre la mesa.",
+    regimen: "+ Akkusativ (wo? Dativ)"
+  }, {
+    de: "liegen",
+    pron: "lí-guen",
+    es: "estar acostado",
+    type: "Verbo Posicional",
+    category: "Positionsverben",
+    exampleSentenceDe: "Ich liege auf dem Bett.",
+    exampleSentenceEs: "Yo estoy acostado en la cama.",
+    regimen: "⚠️ Wo? + Dativ"
+  }, {
+    de: "legen",
+    pron: "lé-guen",
+    es: "colocar horizontal",
+    type: "Verbo Posicional",
+    category: "Positionsverben",
+    exampleSentenceDe: "Ich lege das Buch auf den Tisch.",
+    exampleSentenceEs: "Yo coloco el libro sobre la mesa.",
+    regimen: "Akk.+Wohin? (legen/liegen)"
+  },
+  {
+    de: "aufstehen",
+    pron: "áuf-shte-en",
+    es: "levantarse",
+    type: "Verbo",
+    category: "Alltag",
+    regimen: "Separable (auf-) / + Nominativo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "aufwachen",
+    pron: "áuf-va-jen",
+    es: "despertarse",
+    type: "Verbo",
+    category: "Alltag",
+    regimen: "Separable (auf-) / + Nominativo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "einschlafen",
+    pron: "áin-shla-fen",
+    es: "dormirse",
+    type: "Verbo",
+    category: "Alltag",
+    regimen: "Separable (ein-) / + Nominativo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "waschen",
+    pron: "vá-shen",
+    es: "lavar",
+    type: "Verbo",
+    category: "Alltag",
+    regimen: "+ Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "duschen",
+    pron: "dú-shen",
+    es: "ducharse",
+    type: "Verbo",
+    category: "Alltag",
+    regimen: "Reflexivo (+ Akkusativ)",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "abtrocknen",
+    pron: "áp-trok-nen",
+    es: "secar",
+    type: "Verbo",
+    category: "Alltag",
+    regimen: "Separable (ab-) / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "gehören",
+    pron: "gue-hö-ren",
+    es: "pertenecer",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "⚠️ Exige Dativo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "glauben",
+    pron: "gláu-ben",
+    es: "creer",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "⚠️ Exige Dativo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "zuhören",
+    pron: "tsú-hö-ren",
+    es: "escuchar (atención)",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "Separable (zu-) / ⚠️ Exige Dativo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "verlieren",
+    pron: "fea-lí-ren",
+    es: "perder",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "Irregular / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "stehlen",
+    pron: "shté-len",
+    es: "robar",
+    type: "Verbo",
+    category: "Haushalt",
+    regimen: "Irregular / Dativo + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "suchen",
+    pron: "zú-jen",
+    es: "buscar",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "+ Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Regenschirm",
+    pron: "dea ré-guen-shirm",
+    es: "el paraguas",
+    type: "Sustantivo (Masc)",
+    category: "Alltag",
+    plural: "die Regenschirme",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Brille",
+    pron: "di brí-le",
+    es: "las gafas / lentes",
+    type: "Sustantivo (Fem)",
+    category: "Alltag",
+    plural: "die Brillen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Tasche",
+    pron: "di tá-she",
+    es: "el bolso / la bolsa",
+    type: "Sustantivo (Fem)",
+    category: "Alltag",
+    plural: "die Taschen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Uhr",
+    pron: "di ur",
+    es: "el reloj",
+    type: "Sustantivo (Fem)",
+    category: "Alltag",
+    plural: "die Uhren",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "fliegen",
+    pron: "flí-guen",
+    es: "volar",
+    type: "Verbo",
+    category: "Bewegung",
+    regimen: "Irregular / + sein (Perfekt)",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "rennen",
+    pron: "ré-nen",
+    es: "correr (rápido)",
+    type: "Verbo",
+    category: "Bewegung",
+    regimen: "Irregular / + sein (Perfekt)",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "springen",
+    pron: "shprín-guen",
+    es: "saltar",
+    type: "Verbo",
+    category: "Bewegung",
+    regimen: "Irregular / + sein (Perfekt)",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "singen",
+    pron: "zín-guen",
+    es: "cantar",
+    type: "Verbo",
+    category: "Aktivitäten",
+    regimen: "Irregular / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "weinen",
+    pron: "vái-nen",
+    es: "llorar",
+    type: "Verbo",
+    category: "Gefühle",
+    regimen: "Intransitivo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "lachen",
+    pron: "lá-jen",
+    es: "reír",
+    type: "Verbo",
+    category: "Gefühle",
+    regimen: "Intransitivo",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "ziehen",
+    pron: "tsí-en",
+    es: "tirar / jalar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Irregular / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "drücken",
+    pron: "drü-ken",
+    es: "presionar / empujar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "werfen",
+    pron: "véa-fen",
+    es: "lanzar / tirar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Irregular (wirft) / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "fangen",
+    pron: "fán-guen",
+    es: "atrapar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Irregular (fängt) / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "steigen",
+    pron: "shtái-guen",
+    es: "subir / escalar",
+    type: "Verbo",
+    category: "Bewegung",
+    regimen: "Irregular / + sein (Perfekt)",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "fallen",
+    pron: "fá-len",
+    es: "caer",
+    type: "Verbo",
+    category: "Bewegung",
+    regimen: "Irregular (fällt) / + sein (Perfekt)",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "reich",
+    pron: "raij",
+    es: "rico",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "bag full of gold coins",
+    exampleSentenceDe: "Der Mann ist sehr reich.",
+    exampleSentenceEs: "El hombre es muy rico."
+  }, {
+        de: "arm",
+    pron: "arm",
+    es: "pobre",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "empty broken wallet",
+    exampleSentenceDe: "Die Familie ist arm.",
+    exampleSentenceEs: "La familia es pobre."
+  }, {
+        de: "wach",
+    pron: "vaj",
+    es: "despierto",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "wide open eye",
+    exampleSentenceDe: "Das Baby ist schon wach.",
+    exampleSentenceEs: "El bebé ya está despierto."
+  }, {
+        de: "klug",
+    pron: "kluk",
+    es: "inteligente",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "glowing lightbulb",
+    exampleSentenceDe: "Meine Schwester ist sehr klug.",
+    exampleSentenceEs: "Mi hermana es muy inteligente."
+  }, {
+        de: "dumm",
+    pron: "dum",
+    es: "tonto",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "dunce cap",
+    exampleSentenceDe: "Das war ein dummer Fehler.",
+    exampleSentenceEs: "Ese fue un error tonto."
+  }, {
+        de: "fleißig",
+    pron: "flái-sij",
+    es: "trabajador",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "busy bee",
+    exampleSentenceDe: "Der Schüler ist sehr fleißig.",
+    exampleSentenceEs: "El alumno es muy trabajador."
+  }, {
+        de: "faul",
+    pron: "faul",
+    es: "perezoso",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "sleeping sloth",
+    exampleSentenceDe: "Am Sonntag bin ich faul.",
+    exampleSentenceEs: "El domingo soy perezoso."
+  }, {
+        de: "mutig",
+    pron: "mú-tij",
+    es: "valiente",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "brave lion",
+    exampleSentenceDe: "Der Polizist ist mutig.",
+    exampleSentenceEs: "El policía es valiente."
+  }, {
+        de: "feige",
+    pron: "fái-gue",
+    es: "cobarde",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "hiding person",
+    exampleSentenceDe: "Sei nicht feige!",
+    exampleSentenceEs: "¡No seas cobarde!"
+  }, {
+        de: "höflich",
+    pron: "höf-lij",
+    es: "cortés",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "person bowing politely",
+    exampleSentenceDe: "Der Kellner ist muy cortés.",
+    exampleSentenceEs: "El camarero es muy cortés."
+  }, {
+        de: "freundlich",
+    pron: "fróind-lij",
+    es: "amable",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "friendly waving hand",
+    exampleSentenceDe: "Die Leute hier sind freundlich.",
+    exampleSentenceEs: "La gente aquí es amable."
+  }, {
+        de: "streng",
+    pron: "shtreng",
+    es: "estricto",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "strict teacher pointing",
+    exampleSentenceDe: "Der Lehrer ist streng.",
+    exampleSentenceEs: "El profesor es estricto."
+  }, {
+        de: "lustig",
+    pron: "lús-tij",
+    es: "divertido",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "laughing face",
+    exampleSentenceDe: "Der Witz ist sehr lustig.",
+    exampleSentenceEs: "El chiste es muy divertido."
+  }, {
+        de: "langweilig",
+    pron: "láng-vai-lij",
+    es: "aburrido",
+    type: "Adjetivo",
+    category: "Gegensätze",
+    en: "yawning face",
+    exampleSentenceDe: "Das Buch ist langweilig.",
+    exampleSentenceEs: "El libro es aburrido."
+  }, {
+        de: "spannend",
+    pron: "shpá-nent",
+    es: "emocionante",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "exciting roller coaster",
+    exampleSentenceDe: "Der Film ist spannend.",
+    exampleSentenceEs: "La película es emocionante."
+  }, {
+        de: "ruhig",
+    pron: "rú-ij",
+    es: "tranquilo",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "calm zen stones",
+    exampleSentenceDe: "Das Meer ist heute ruhig.",
+    exampleSentenceEs: "El mar está tranquilo hoy."
+  }, {
+        de: "nervös",
+    pron: "ner-vös",
+    es: "nervioso",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "sweating nervous face",
+    exampleSentenceDe: "Vor der Prüfung bin ich nervös.",
+    exampleSentenceEs: "Antes del examen estoy nervioso."
+  }, {
+        de: "gewinnen",
+    pron: "gue-ví-nen",
+    es: "ganar",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "Irregular / + Akkusativ",
+    en: "person holding a gold trophy",
+    exampleSentenceDe: "Wir werden das Spiel gewinnen.",
+    exampleSentenceEs: "Ganaremos el juego."
+  }, {
+        de: "schieben",
+    pron: "shí-ben",
+    es: "empujar",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "Irregular / + Akkusativ",
+    en: "person pushing a heavy box",
+    exampleSentenceDe: "Ich schiebe das Auto.",
+    exampleSentenceEs: "Yo empujo el coche."
+  }, {
+        de: "stören",
+    pron: "shtö-ren",
+    es: "molestar",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "+ Akkusativ",
+    en: "person covering their ears",
+    exampleSentenceDe: "Bitte stören Sie mich nicht.",
+    exampleSentenceEs: "Por favor, no me moleste."
+  }, {
+        de: "hoffen",
+    pron: "jó-fen",
+    es: "esperar (desear)",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "auf + Akkusativ",
+    en: "person crossing fingers hoping",
+    exampleSentenceDe: "Ich hoffe auf gutes Wetter.",
+    exampleSentenceEs: "Espero buen tiempo."
+  }, {
+        de: "träumen",
+    pron: "trói-men",
+    es: "soñar",
+    type: "Verbo",
+    category: "Basisverben",
+    regimen: "von + Dativ",
+    en: "sleeping person with a thought bubble",
+    exampleSentenceDe: "Ich träume von dir.",
+    exampleSentenceEs: "Sueño contigo."
+  }, {
+        de: "lieben",
+    pron: "lí-ben",
+    es: "amar",
+    type: "Verbo",
+    category: "Gefühle",
+    regimen: "+ Akkusativ",
+    en: "person hugging a large heart",
+    exampleSentenceDe: "Ich liebe meine Familie.",
+    exampleSentenceEs: "Amo a mi familia."
+  }, {
+        de: "hassen",
+    pron: "já-sen",
+    es: "odiar",
+    type: "Verbo",
+    category: "Gefühle",
+    regimen: "+ Akkusativ",
+    en: "angry person crossing arms",
+    exampleSentenceDe: "Ich hasse den Winter.",
+    exampleSentenceEs: "Odio el invierno."
+  }, {
+        de: "lächeln",
+    pron: "lé-cheln",
+    es: "sonreír",
+    type: "Verbo",
+    category: "Gefühle",
+    regimen: "Intransitivo",
+    en: "smiling happy person",
+    exampleSentenceDe: "Das Kid lächelt.",
+    exampleSentenceEs: "El niño sonríe."
+  }, {
+        de: "schreien",
+    pron: "shrái-en",
+    es: "gritar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Irregular / Intransitivo",
+    en: "person shouting loud",
+    exampleSentenceDe: "Warum schreist du?",
+    exampleSentenceEs: "¿Por qué gritas?"
+  }, {
+        de: "flüstern",
+    pron: "flüs-tern",
+    es: "susurrar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Intransitivo",
+    en: "person whispering a secret",
+    exampleSentenceDe: "Wir müssen hier flüstern.",
+    exampleSentenceEs: "Tenemos que susurrar aquí."
+  }, {
+        de: "diskutieren",
+    pron: "dis-ku-tí-ren",
+    es: "discutir",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "über + Akkusativ",
+    en: "two people debating",
+    exampleSentenceDe: "Wir diskutieren über Politik.",
+    exampleSentenceEs: "Discutimos sobre política."
+  }, {
+        de: "versprechen",
+    pron: "fea-shpré-jen",
+    es: "prometer",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Irregular / + Dativo",
+    en: "person making a pinky promise",
+    exampleSentenceDe: "Ich verspreche es dir.",
+    exampleSentenceEs: "Te lo prometo."
+  }, {
+        de: "zweifeln",
+    pron: "tsvái-feln",
+    es: "dudar",
+    type: "Verbo",
+    category: "Gefühle",
+    regimen: "an + Dativo",
+    en: "person scratching head confused",
+    exampleSentenceDe: "Ich zweifle an seiner Geschichte.",
+    exampleSentenceEs: "Dudo de su historia."
+  }, {
+        de: "verzeihen",
+    pron: "fea-tsái-en",
+    es: "perdonar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Irregular / + Dativo",
+    en: "two people shaking hands apologizing",
+    exampleSentenceDe: "Bitte verzeih mir.",
+    exampleSentenceEs: "Por favor, perdóname."
+  }]
+},
+{
+  id: 15,
+  title: "Kapitel 5: Adverbien & Fragewörter",
+  icon: <Search size={20} />,
+  emoji: "❓",
+  words: [{
+    de: "heute",
+    pron: "jói-te",
+    es: "hoy",
+    type: "Adverbio",
+    category: "Zeitadverbien",
+    exampleSentenceDe: "Heute ist Montag.",
+    exampleSentenceEs: "Hoy es lunes.",
+    regimen: "Temporal"
+  }, {
+    de: "morgen",
+    pron: "mór-guen",
+    es: "mañana",
+    type: "Adverbio",
+    category: "Zeitadverbien",
+    exampleSentenceDe: "Ich gehe morgen ins Kino.",
+    exampleSentenceEs: "Mañana voy al cine.",
+    regimen: "Temporal"
+  }, {
+    de: "gestern",
+    pron: "gués-tean",
+    es: "ayer",
+    type: "Adverbio",
+    category: "Zeitadverbien",
+    exampleSentenceDe: "Gestern war ich im Park.",
+    exampleSentenceEs: "Ayer estuve en el parque.",
+    regimen: "Temporal"
+  }, {
+    de: "jetzt",
+    pron: "yetst",
+    es: "ahora",
+    type: "Adverbio",
+    category: "Zeitadverbien",
+    exampleSentenceDe: "Ich lerne Deutsch jetzt.",
+    exampleSentenceEs: "Yo aprendo alemán ahora.",
+    regimen: "Temporal"
+  }, {
+    de: "bald",
+    pron: "balt",
+    es: "pronto",
+    type: "Adverbio",
+    category: "Zeitadverbien",
+    exampleSentenceDe: "Wir sehen uns bald.",
+    exampleSentenceEs: "Nos vemos pronto.",
+    regimen: "Temporal"
+  }, {
+    de: "immer",
+    pron: "í-mea",
+    es: "siempre",
+    type: "Adverbio",
+    category: "Häufigkeit",
+    exampleSentenceDe: "Ich trinke Kaffee immer.",
+    exampleSentenceEs: "Yo bebo café siempre.",
+    regimen: "Frecuencia"
+  }, {
+    de: "oft",
+    pron: "oft",
+    es: "a menudo",
+    type: "Adverbio",
+    category: "Häufigkeit",
+    exampleSentenceDe: "Ich trinke oft Kaffee.",
+    exampleSentenceEs: "A menudo bebo café.",
+    regimen: "Frecuencia"
+  }, {
+    de: "manchmal",
+    pron: "mánch-mal",
+    es: "a veces",
+    type: "Adverbio",
+    category: "Häufigkeit",
+    exampleSentenceDe: "Manchmal trinke ich Kaffee.",
+    exampleSentenceEs: "A veces bebo café.",
+    regimen: "Frecuencia"
+  }, {
+    de: "nie",
+    pron: "ni",
+    es: "nunca",
+    type: "Adverbio",
+    category: "Häufigkeit",
+    exampleSentenceDe: "Ich sehe dich nie.",
+    exampleSentenceEs: "Yo te veo nunca.",
+    regimen: "Frecuencia"
+  }, {
+    de: "schon",
+    pron: "shon",
+    es: "ya",
+    type: "Adverbio",
+    category: "Zeitadverbien",
+    exampleSentenceDe: "Ich bin schon zu Hause.",
+    exampleSentenceEs: "Yo ya estoy en casa.",
+    regimen: "Temporal: ya, ya sea"
+  }, {
+    de: "noch",
+    pron: "noj",
+    es: "todavía / aún",
+    type: "Adverbio",
+    category: "Zeitadverbien",
+    exampleSentenceDe: "Ich bin noch zu Hause.",
+    exampleSentenceEs: "Yo estoy todavía en casa.",
+    regimen: "Temporal: continuidad"
+  }, {
+    de: "hier",
+    pron: "hí-a",
+    es: "aquí",
+    type: "Adverbio",
+    category: "Ortsadverbien",
+    exampleSentenceDe: "Ich bin hier.",
+    exampleSentenceEs: "Yo estoy aquí.",
+    regimen: "Lugar"
+  }, {
+    de: "dort",
+    pron: "dort",
+    es: "allí",
+    type: "Adverbio",
+    category: "Ortsadverbien",
+    exampleSentenceDe: "Ich bin dort.",
+    exampleSentenceEs: "Yo estoy allí.",
+    regimen: "Lugar"
+  }, {
+    de: "oben / unten",
+    pron: "ó-ben  ún-ten",
+    es: "arriba / abajo",
+    type: "Adverbio",
+    category: "Ortsadverbien",
+    exampleSentenceDe: "Das Buch ist oben. Die Katze ist unten.",
+    exampleSentenceEs: "El libro está arriba. El gato está abajo.",
+    regimen: "Local"
+  }, {
+    de: "vorn / hinten",
+    pron: "fon  jín-ten",
+    es: "adelante / atrás",
+    type: "Adverbio",
+    category: "Ortsadverbien",
+    exampleSentenceDe: "Ich sitze vorn.",
+    exampleSentenceEs: "Yo me siento adelante.",
+    regimen: "Local"
+  }, {
+    de: "draußen / drinnen",
+    pron: "dráu-sen  drí-nen",
+    es: "afuera / adentro",
+    type: "Adverbio",
+    category: "Ortsadverbien",
+    exampleSentenceDe: "Das Wetter ist schön. Wir sind draußen.",
+    exampleSentenceEs: "El tiempo es bueno. Estamos afuera.",
+    regimen: "Lugar"
+  }, {
+    de: "sehr",
+    pron: "zéa",
+    es: "muy",
+    type: "Adverbio",
+    category: "Gradadverbien",
+    exampleSentenceDe: "Das Wetter ist sehr gut.",
+    exampleSentenceEs: "El tiempo está muy bueno.",
+    regimen: "Intensificador"
+  }, {
+    de: "viel / wenig",
+    pron: "fil  vé-nij",
+    es: "mucho / poco",
+    type: "Adverbio",
+    category: "Gradadverbien",
+    exampleSentenceDe: "Ich trinke viel Wasser.",
+    exampleSentenceEs: "Bebo mucha agua.",
+    regimen: "Cantidad"
+  }, {
+    de: "wer?",
+    pron: "vea",
+    es: "¿quién?",
+    type: "Pronombre interrogativo",
+    category: "W-Fragen",
+    exampleSentenceDe: "Wer ist das?",
+    exampleSentenceEs: "¿Quién es ese/esa?",
+    regimen: "Solo personas, nom."
+  }, {
+    de: "was?",
+    pron: "vas",
+    es: "¿qué?",
+    type: "Pronombre interrogativo",
+    category: "W-Fragen",
+    exampleSentenceDe: "Was ist das?",
+    exampleSentenceEs: "¿Qué es eso?",
+    regimen: "Invariable"
+  }, {
+    de: "wo?",
+    pron: "vo",
+    es: "¿dónde?",
+    type: "Pronombre interrogativo",
+    category: "W-Fragen",
+    exampleSentenceDe: "Wo ist die Toilette?",
+    exampleSentenceEs: "¿Dónde está el baño?",
+    regimen: "Lugar, sin movimiento"
+  }, {
+    de: "wann?",
+    pron: "van",
+    es: "¿cuándo?",
+    type: "Pronombre interrogativo",
+    category: "W-Fragen",
+    exampleSentenceDe: "Wann kommst du?",
+    exampleSentenceEs: "¿Cuándo vienes?",
+    regimen: "V al final"
+  }, {
+    de: "warum?",
+    pron: "va-rúm",
+    es: "¿por qué?",
+    type: "Pronombre interrogativo",
+    category: "W-Fragen",
+    exampleSentenceDe: "Warum bist du hier?",
+    exampleSentenceEs: "¿Por qué estás aquí?",
+    regimen: "Invariable, posición 1"
+  }, {
+    de: "wie?",
+    pron: "ví",
+    es: "¿cómo?",
+    type: "Pronombre interrogativo",
+    category: "W-Fragen",
+    exampleSentenceDe: "Wie geht es Ihnen?",
+    exampleSentenceEs: "¿Cómo está usted?",
+    regimen: "Posición 1"
+  }, {
+    de: "woher?",
+    pron: "vo-jéa",
+    es: "¿de dónde?",
+    type: "Pronombre interrogativo",
+    category: "W-Fragen",
+    exampleSentenceDe: "Woher kommst du?",
+    exampleSentenceEs: "¿De dónde vienes?",
+    regimen: "+ kommen aus"
+  }, {
+    de: "wohin?",
+    pron: "vo-hín",
+    es: "¿a dónde?",
+    type: "Pronombre interrogativo",
+    category: "W-Fragen",
+    exampleSentenceDe: "Wohin gehst du?",
+    exampleSentenceEs: "¿A dónde vas?",
+    regimen: "Con verbos de movimiento"
+  }, {
+    de: "welcher?",
+    pron: "vél-chea",
+    es: "¿cuál?",
+    type: "Pronombre interrogativo",
+    category: "W-Fragen",
+    exampleSentenceDe: "Welcher Bus ist das?",
+    exampleSentenceEs: "¿Cuál es ese autobús?",
+    regimen: "Concuerda en género/caso"
+  },
+  {
+    de: "morgens",
+    pron: "moa-guens",
+    es: "por las mañanas",
+    type: "Adverbio",
+    category: "Häufigkeit",
+    en: "a bright morning sun",
+    exampleSentenceDe: "Morgens trinke ich immer Tee.",
+    exampleSentenceEs: "Por las mañanas siempre bebo té."
+  }, {
+        de: "abends",
+    pron: "a-bents",
+    es: "por las tardes/noches",
+    type: "Adverbio",
+    category: "Häufigkeit",
+    en: "a crescent moon with stars",
+    exampleSentenceDe: "Abends lese ich ein Buch.",
+    exampleSentenceEs: "Por las noches leo un libro."
+  }]
+},
+{
+  id: 13,
+  title: "Kapitel 6: Grammatik: Konnektoren",
+  icon: <Link2 size={20} />,
+  emoji: "🔗",
+  words: [{
+    de: "und",
+    pron: "unt",
+    es: "y",
+    type: "Conector (Posición 0)",
+    category: "Konnektoren",
+    exampleSentenceDe: "Ich habe Kaffee und Kuchen.",
+    exampleSentenceEs: "Yo tengo café y pastel.",
+    regimen: "No afecta orden"
+  }, {
+    de: "oder",
+    pron: "ó-dea",
+    es: "o (alternativa)",
+    type: "Conector (Posición 0)",
+    category: "Konnektoren",
+    exampleSentenceDe: "Möchtest du Tee oder Kaffee?",
+    exampleSentenceEs: "¿Quieres té o café?",
+    regimen: "No cuenta posición"
+  }, {
+    de: "aber",
+    pron: "á-bea",
+    es: "pero",
+    type: "Conector (Posición 0)",
+    category: "Konnektoren",
+    exampleSentenceDe: "Ich habe Hunger, aber ich habe keine Zeit.",
+    exampleSentenceEs: "Tengo hambre, pero no tengo tiempo.",
+    regimen: "No cuenta posición"
+  }, {
+    de: "denn",
+    pron: "den",
+    es: "porque / pues",
+    type: "Conector (Posición 0)",
+    category: "Konnektoren",
+    exampleSentenceDe: "Ich habe Hunger, denn ich esse gern.",
+    exampleSentenceEs: "Tengo hambre, pues me gusta comer.",
+    regimen: "No cambia el orden"
+  }, {
+    de: "sondern",
+    pron: "són-dean",
+    es: "sino (que)",
+    type: "Conector (Posición 0)",
+    category: "Konnektoren",
+    exampleSentenceDe: "Ich bin nicht müde, sondern ich bin hungrig.",
+    exampleSentenceEs: "No estoy cansado, sino que tengo hambre.",
+    regimen: "Tras negación (nicht...)"
+  }, {
+    de: "für",
+    pron: "füa",
+    es: "para / por",
+    type: "Preposición (Akk)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Das Geschenk ist für dich.",
+    exampleSentenceEs: "El regalo es para ti.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "ohne",
+    pron: "ó-ne",
+    es: "sin",
+    type: "Preposición (Akk)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Ich trinke Kaffee ohne Zucker.",
+    exampleSentenceEs: "Bebo café sin azúcar.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "durch",
+    pron: "durj",
+    es: "a través de / por",
+    type: "Preposición (Akk)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Wir gehen durch den Park.",
+    exampleSentenceEs: "Nosotros vamos por el parque.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "gegen",
+    pron: "gué-guen",
+    es: "contra / hacia (hora)",
+    type: "Preposición (Akk)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Es ist gegen 10 Uhr.",
+    exampleSentenceEs: "Son las 10 en punto.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "um",
+    pron: "um",
+    es: "a las (hora) / alrededor de",
+    type: "Preposición (Akk)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Der Zug kommt um acht Uhr an.",
+    exampleSentenceEs: "El tren llega a las ocho en punto.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "mit",
+    pron: "mit",
+    es: "con",
+    type: "Preposición (Dat)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Ich gehe mit meinem Freund.",
+    exampleSentenceEs: "Voy con mi amigo.",
+    regimen: "⚠️ Obliga Dativo"
+  }, {
+    de: "nach",
+    pron: "naj",
+    es: "hacia / después de",
+    type: "Preposición (Dat)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Nach dem Essen gehe ich nach Hause.",
+    exampleSentenceEs: "Después de la comida, voy a casa.",
+    regimen: "+ Dativo"
+  }, {
+    de: "aus",
+    pron: "áus",
+    es: "de (origen / material)",
+    type: "Preposición (Dat)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Ich komme aus Spanien.",
+    exampleSentenceEs: "Yo vengo de España.",
+    regimen: "+ Dativo"
+  }, {
+    de: "bei",
+    pron: "bái",
+    es: "en casa de / en (empresa)",
+    type: "Preposición (Dat)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Ich bin bei meiner Freundin.",
+    exampleSentenceEs: "Yo estoy en casa de mi amiga.",
+    regimen: "+ Dativo"
+  }, {
+    de: "von",
+    pron: "fon",
+    es: "de (procedencia / autor)",
+    type: "Preposición (Dat)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Das Buch ist von Anna.",
+    exampleSentenceEs: "El libro es de Anna.",
+    regimen: "+ Dativo"
+  }, {
+    de: "zu",
+    pron: "tsu",
+    es: "hacia (lugares / personas)",
+    type: "Preposición (Dat)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Ich gehe zu meiner Mutter.",
+    exampleSentenceEs: "Voy hacia mi madre.",
+    regimen: "+ Dativo"
+  }, {
+    de: "seit",
+    pron: "sait",
+    es: "desde (tiempo)",
+    type: "Preposición (Dat)",
+    category: "Präpositionen",
+    exampleSentenceDe: "Ich wohne seit einem Jahr in Berlin.",
+    exampleSentenceEs: "Vivo desde hace un año en Berlín.",
+    regimen: "+ Dativo"
+  }, {
+    de: "in",
+    pron: "in",
+    es: "en / dentro de",
+    type: "Prep. Mixta (Dat/Akk)",
+    category: "Wechselpräpositionen",
+    exampleSentenceDe: "Ich bin in der Schule.",
+    exampleSentenceEs: "Yo estoy en la escuela.",
+    regimen: "Wo=Dat, Wohin=Akk"
+  }, {
+    de: "an",
+    pron: "an",
+    es: "en (borde / fechas)",
+    type: "Prep. Mixta (Dat/Akk)",
+    category: "Wechselpräpositionen",
+    exampleSentenceDe: "Ich bin am Montag in Berlin.",
+    exampleSentenceEs: "Yo estoy el lunes en Berlín.",
+    regimen: "Wo?=Dat, Wohin?=Akk"
+  }, {
+    de: "auf",
+    pron: "áuf",
+    es: "sobre (con contacto)",
+    type: "Prep. Mixta (Dat/Akk)",
+    category: "Wechselpräpositionen",
+    exampleSentenceDe: "Das Buch ist auf dem Tisch.",
+    exampleSentenceEs: "El libro está sobre la mesa.",
+    regimen: "Wo:Dat/Wohin:Akk"
+  }, {
+    de: "unter",
+    pron: "ún-tea",
+    es: "debajo de",
+    type: "Prep. Mixta (Dat/Akk)",
+    category: "Wechselpräpositionen",
+    exampleSentenceDe: "Das Buch ist unter dem Tisch.",
+    exampleSentenceEs: "El libro está debajo de la mesa.",
+    regimen: "Wo=Dat, Wohin=Akk"
+  }, {
+    de: "über",
+    pron: "ú-ba",
+    es: "sobre (sin contacto) / acerca de",
+    type: "Prep. Mixta (Dat/Akk)",
+    category: "Wechselpräpositionen",
+    exampleSentenceDe: "Der Mann spricht über die Familie.",
+    exampleSentenceEs: "El hombre habla sobre la familia.",
+    regimen: "Akk=movim./Dat=lugar"
+  }, {
+    de: "neben",
+    pron: "né-ben",
+    es: "al lado de",
+    type: "Prep. Mixta (Dat/Akk)",
+    category: "Wechselpräpositionen",
+    exampleSentenceDe: "Der Stuhl ist neben dem Tisch.",
+    exampleSentenceEs: "La silla está al lado de la mesa.",
+    regimen: "Wo?=Dat, Wohin?=Akk"
+  }, {
+    de: "zwischen",
+    pron: "tsví-shen",
+    es: "entre",
+    type: "Prep. Mixta (Dat/Akk)",
+    category: "Wechselpräpositionen",
+    exampleSentenceDe: "Das Buch ist zwischen dem Tisch und dem Stuhl.",
+    exampleSentenceEs: "El libro está entre la mesa y la silla.",
+    regimen: "Akk:movim./Dat:lugar"
+  }, {
+    de: "vor",
+    pron: "fó-a",
+    es: "delante de / antes de",
+    type: "Prep. Mixta (Dat/Akk)",
+    category: "Wechselpräpositionen",
+    exampleSentenceDe: "Vor dem Haus ist ein Baum.",
+    exampleSentenceEs: "Delante de la casa hay un árbol.",
+    regimen: "Wo?=Dat, Wohin?=Akk"
+  }, {
+    de: "hinter",
+    pron: "jín-tea",
+    es: "detrás de",
+    type: "Prep. Mixta (Dat/Akk)",
+    category: "Wechselpräpositionen",
+    exampleSentenceDe: "Das Buch ist hinter dem Tisch.",
+    exampleSentenceEs: "El libro está detrás de la mesa.",
+    regimen: "Wo?+Dat, Wohin?+Akk"
+  }, {
+    de: "obwohl",
+    pron: "op-vól",
+    es: "aunque",
+    type: "Conector Subordinante",
+    category: "Nebensätze",
+    exampleSentenceDe: "Ich gehe spazieren, obwohl es regnet.",
+    exampleSentenceEs: "Salgo a pasear, aunque llueve.",
+    regimen: "Verbo al final"
+  }, {
+    de: "wenn",
+    pron: "ven",
+    es: "si(condicional)",
+    type: "Conector Subordinante",
+    category: "Nebensätze",
+    exampleSentenceDe: "Wenn ich Zeit habe, lerne ich Deutsch.",
+    exampleSentenceEs: "Si tengo tiempo, aprendo alemán.",
+    regimen: "Verbo al final"
+  }, {
+    de: "als",
+    pron: "als",
+    es: "cuando",
+    type: "Conector Subordinante",
+    category: "Nebensätze",
+    exampleSentenceDe: "Ich bin klein, als ich Kind war.",
+    exampleSentenceEs: "Soy bajo, cuando era niño.",
+    regimen: "Verbo al final"
+  }, {
+    de: "deshalb",
+    pron: "des-hálp",
+    es: "por eso",
+    type: "Conector Posición 1",
+    category: "Konnektoren",
+    exampleSentenceDe: "Ich habe Hunger. Deshalb esse ich Pizza.",
+    exampleSentenceEs: "Tengo hambre. Por eso como pizza.",
+    regimen: "Verbo en pos.2 tras él"
+  }, {
+    de: "trotzdem",
+    pron: "tróts-dem",
+    es: "sin embargo",
+    type: "Conector Posición 1",
+    category: "Konnektoren",
+    exampleSentenceDe: "Es regnet. Trotzdem gehe ich spazieren.",
+    exampleSentenceEs: "Está lloviendo. Sin embargo, voy a pasear.",
+    regimen: "Ocupa posición 1, verbo pos.2"
+  }, {
+    de: "außerdem",
+    pron: "áu-sea-dem",
+    es: "además",
+    type: "Conector Posición 1",
+    category: "Konnektoren",
+    exampleSentenceDe: "Ich trinke Kaffee. Außerdem trinke ich Tee.",
+    exampleSentenceEs: "Bebo café. Además, bebo té.",
+    regimen: "Verbo en posición 1"
+  }, {
+    de: "nämlich",
+    pron: "ném-lij",
+    es: "es decir",
+    type: "Partícula",
+    category: "Partikeln",
+    exampleSentenceDe: "Ich habe ein Problem, nämlich: Ich habe keinen Hunger.",
+    exampleSentenceEs: "Tengo un problema, es decir: No tengo hambre.",
+    regimen: "Explica motivo"
+  }, {
+    de: "doch",
+    pron: "doj",
+    es: "sí (rechaza negación)",
+    type: "Partícula",
+    category: "Partikeln",
+    exampleSentenceDe: "Du bist müde. Nein! Ich bin doch nicht müde.",
+    exampleSentenceEs: "Estás cansado. ¡No! Sí que no estoy cansado.",
+    regimen: "Contradice negación"
+  }, {
+    de: "mal",
+    pron: "mal",
+    es: "(Partícula de énfasis)",
+    type: "Partícula",
+    category: "Partikeln",
+    exampleSentenceDe: "Das ist mal gut.",
+    exampleSentenceEs: "Esto está bien, ¡eh! / Esto sí que está bien.",
+    regimen: "Suaviza imperativo"
+  }, {
+    de: "ja",
+    pron: "yá",
+    es: "sí (Partícula de énfasis)",
+    type: "Partícula",
+    category: "Partikeln",
+    exampleSentenceDe: "Ja, das ist gut.",
+    exampleSentenceEs: "Sí, eso está bien.",
+    regimen: "Énfasis, sin traducción literal"
+  }]
+},
+{
   id: 3,
-  title: "Kapitel 3: Wohnen",
+  title: "Kapitel 7: Wohnen",
   icon: <Home size={20} />,
   emoji: "🏠",
   words: [{
@@ -2240,277 +3956,237 @@ const chapters = [{
     exampleSentenceDe: "Das Zimmer ist gemütlich.",
     exampleSentenceEs: "La habitación es acogedora.",
     regimen: "≠ unbehaglich"
+  },
+  {
+    de: "aufräumen",
+    pron: "áuf-roi-men",
+    es: "ordenar / recoger",
+    type: "Verbo",
+    category: "Wohnen",
+    regimen: "Separable (auf-) / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Müll",
+    pron: "dea mül",
+    es: "la basura",
+    type: "Sustantivo (Masc)",
+    category: "Haushalt",
+    plural: "-",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Eimer",
+    pron: "dea ái-ma",
+    es: "el cubo / balde",
+    type: "Sustantivo (Masc)",
+    category: "Haushalt",
+    plural: "die Eimer",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Staubsauger",
+    pron: "dea shtáup-zau-ga",
+    es: "la aspiradora",
+    type: "Sustantivo (Masc)",
+    category: "Haushalt",
+    plural: "die Staubsauger",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Waschmaschine",
+    pron: "di vásh-ma-shi-ne",
+    es: "la lavadora",
+    type: "Sustantivo (Fem)",
+    category: "Haushalt",
+    plural: "die Waschmaschinen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Spülmaschine",
+    pron: "di shpül-ma-shi-ne",
+    es: "el lavavajillas",
+    type: "Sustantivo (Fem)",
+    category: "Haushalt",
+    plural: "die Spülmaschinen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Waschbecken",
+    pron: "das vásh-be-ken",
+    es: "el lavamanos",
+    type: "Sustantivo (Neutro)",
+    category: "Haushalt",
+    plural: "die Waschbecken",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Fernseher",
+    pron: "dea férn-ze-ea",
+    es: "el televisor",
+    type: "Sustantivo (Masc)",
+    category: "Wohnen",
+    plural: "die Fernseher",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Kühlschrank",
+    pron: "dea kül-shrank",
+    es: "el refrigerador",
+    type: "Sustantivo (Masc)",
+    category: "Küche",
+    plural: "die Kühlschränke",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Sofa",
+    pron: "das zó-fa",
+    es: "el sofá",
+    type: "Sustantivo (Neutro)",
+    category: "Wohnen",
+    plural: "die Sofas",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Sessel",
+    pron: "dea zé-sel",
+    es: "el sillón",
+    type: "Sustantivo (Masc)",
+    category: "Wohnen",
+    plural: "die Sessel",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Lampe",
+    pron: "di lám-pe",
+    es: "la lámpara",
+    type: "Sustantivo (Fem)",
+    category: "Wohnen",
+    plural: "die Lampen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Radio",
+    pron: "das rá-dio",
+    es: "la radio",
+    type: "Sustantivo (Neutro)",
+    category: "Wohnen",
+    plural: "die Radios",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Herd",
+    pron: "dea jeat",
+    es: "la estufa / el fogón",
+    type: "Sustantivo (Masc)",
+    category: "Küche",
+    plural: "die Herde",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Ofen",
+    pron: "dea ó-fen",
+    es: "el horno",
+    type: "Sustantivo (Masc)",
+    category: "Küche",
+    plural: "die Öfen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Mikrowelle",
+    pron: "di mi-kro-vé-le",
+    es: "el microondas",
+    type: "Sustantivo (Fem)",
+    category: "Küche",
+    plural: "die Mikrowellen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Kaffeemaschine",
+    pron: "di ka-fé-ma-shi-ne",
+    es: "la cafetera",
+    type: "Sustantivo (Fem)",
+    category: "Küche",
+    plural: "die Kaffeemaschinen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Topf",
+    pron: "dea topf",
+    es: "la olla",
+    type: "Sustantivo (Masc)",
+    category: "Küche",
+    plural: "die Töpfe",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Pfanne",
+    pron: "di pfá-ne",
+    es: "la sartén",
+    type: "Sustantivo (Fem)",
+    category: "Küche",
+    plural: "die Pfannen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Tür",
+    pron: "di tür",
+    es: "la puerta",
+    type: "Sustantivo (Fem)",
+    category: "Gebäude",
+    plural: "die Türen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Fenster",
+    pron: "das féns-tea",
+    es: "la ventana",
+    type: "Sustantivo (Neutro)",
+    category: "Gebäude",
+    plural: "die Fenster",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Wand",
+    pron: "di vant",
+    es: "la pared",
+    type: "Sustantivo (Fem)",
+    category: "Gebäude",
+    plural: "die Wände",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Dach",
+    pron: "das daj",
+    es: "el techo",
+    type: "Sustantivo (Neutro)",
+    category: "Gebäude",
+    plural: "die Dächer",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Kissen",
+    pron: "das kí-sen",
+    es: "la almohada / cojín",
+    type: "Sustantivo (Neutro)",
+    category: "Wohnen",
+    plural: "die Kissen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Decke",
+    pron: "di dé-ke",
+    es: "la manta / cobija",
+    type: "Sustantivo (Fem)",
+    category: "Wohnen",
+    plural: "die Decken",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
   }]
-}, {
-  id: 4,
-  title: "Kapitel 4: Freizeit",
-  icon: <Activity size={20} />,
-  emoji: "⚛",
-  words: [{
-    de: "die Freizeit",
-    pron: "di frái-tsait",
-    es: "el tiempo libre",
-    type: "Sustantivo (Fem)",
-    category: "Allgemein",
-    exampleSentenceDe: "Ich habe Freizeit am Wochenende.",
-    exampleSentenceEs: "Tengo tiempo libre el fin de semana.",
-    plural: "die Freizeiten"
-  }, {
-    de: "das Hobby",
-    pron: "das hó-bi",
-    es: "el pasatiempo",
-    type: "Sustantivo (Neutro)",
-    category: "Allgemein",
-    exampleSentenceDe: "Mein Hobby ist lesen.",
-    exampleSentenceEs: "Mi pasatiempo es leer.",
-    plural: "die Hobbys"
-  }, {
-    de: "spielen",
-    pron: "shpí-len",
-    es: "jugar / tocar",
-    type: "Verbo",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich spiele gern.",
-    exampleSentenceEs: "Me gusta jugar.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "Fußball spielen",
-    pron: "fús-bal shpí-len",
-    es: "jugar fútbol",
-    type: "Frase",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich spiele gern Fußball.",
-    exampleSentenceEs: "Me gusta jugar al fútbol.",
-    regimen: "Verbo+objeto"
-  }, {
-    de: "der Ball",
-    pron: "dea bal",
-    es: "el balón",
-    type: "Sustantivo (Masc)",
-    category: "Gegenstände",
-    exampleSentenceDe: "Ich habe einen Ball. Der Ball ist rot.",
-    exampleSentenceEs: "Tengo un balón. El balón es rojo.",
-    plural: "die Bälle"
-  }, {
-    de: "Karten spielen",
-    pron: "kár-ten-shpí-len",
-    es: "jugar cartas",
-    type: "Frase",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Wir spielen Karten am Abend.",
-    exampleSentenceEs: "Jugamos a las cartas por la noche.",
-    regimen: "Verbo+objeto"
-  }, {
-    de: "Musik hören",
-    pron: "mu-sík jé-ren",
-    es: "escuchar música",
-    type: "Frase",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich höre gern Musik.",
-    exampleSentenceEs: "Me gusta escuchar música.",
-    regimen: "Verbo + Akkusativ"
-  }, {
-    de: "die CD",
-    pron: "di tse-dé",
-    es: "el CD",
-    type: "Sustantivo (Fem)",
-    category: "Gegenstände",
-    exampleSentenceDe: "Ich habe die CD. Die CD ist neu.",
-    exampleSentenceEs: "Tengo el CD. El CD es nuevo.",
-    plural: "die CDs"
-  }, {
-    de: "wandern",
-    pron: "ván-dean",
-    es: "hacer senderismo",
-    type: "Verbo",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich gehe im Park wandern.",
-    exampleSentenceEs: "Yo voy a hacer senderismo en el parque.",
-    regimen: "sein (intransitivo)"
-  }, {
-    de: "schwimmen",
-    pron: "shví-men",
-    es: "nadar",
-    type: "Verbo",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich kann schwimmen.",
-    exampleSentenceEs: "Yo puedo nadar.",
-    regimen: "sein (movimiento)"
-  }, {
-    de: "lesen",
-    pron: "lé-sen",
-    es: "leer",
-    type: "Verbo",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich lese ein Buch.",
-    exampleSentenceEs: "Yo leo un libro.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "das Buch",
-    pron: "das buj",
-    es: "el libro",
-    type: "Sustantivo (Neutro)",
-    category: "Gegenstände",
-    exampleSentenceDe: "Das ist ein Buch. Das Buch ist neu.",
-    exampleSentenceEs: "Este es un libro. El libro es nuevo.",
-    plural: "die Bücher"
-  }, {
-    de: "die Zeitung",
-    pron: "di tsái-tung",
-    es: "el periódico",
-    type: "Sustantivo (Fem)",
-    category: "Gegenstände",
-    exampleSentenceDe: "Ich lese die Zeitung.",
-    exampleSentenceEs: "Yo leo el periódico.",
-    plural: "die Zeitungen"
-  }, {
-    de: "fernsehen",
-    pron: "fén-se-en",
-    es: "ver televisión",
-    type: "Verbo separable",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich sehe am Abend fern.",
-    exampleSentenceEs: "Yo veo la televisión por la noche.",
-    regimen: "Separable (fern-)"
-  }, {
-    de: "tanzen",
-    pron: "tán-tsen",
-    es: "bailar",
-    type: "Verbo",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich tanze gern.",
-    exampleSentenceEs: "Me gusta bailar.",
-    regimen: "Intransitivo"
-  }, {
-    de: "der Computer",
-    pron: "dea kom-piú-ta",
-    es: "computador",
-    type: "Sustantivo (Masc)",
-    category: "Gegenstände",
-    exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
-    exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
-    plural: "die Computer"
-  }, {
-    de: "der Sport",
-    pron: "dea shport",
-    es: "deporte",
-    type: "Sustantivo",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich mag der Sport.",
-    exampleSentenceEs: "Me gusta el deporte.",
-    plural: "die Sportarten"
-  }, {
-    de: "ins Kino gehen",
-    pron: "ins kí-no gué-en",
-    es: "ir al cine",
-    type: "Frase",
-    category: "Ausgehen",
-    exampleSentenceDe: "Ich gehe ins Kino.",
-    exampleSentenceEs: "Yo voy al cine.",
-    regimen: "in + Akk."
-  }, {
-    de: "einen Film sehen",
-    pron: "ái-nen film sé-en",
-    es: "ver película",
-    type: "Frase",
-    category: "Ausgehen",
-    exampleSentenceDe: "Ich sehe einen Film.",
-    exampleSentenceEs: "Yo veo una película.",
-    regimen: "Akkusativ: einen Film"
-  }, {
-    de: "Rad fahren",
-    pron: "rat fá-ren",
-    es: "montar bicicleta",
-    type: "Frase",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Ich kann Rad fahren.",
-    exampleSentenceEs: "Yo sé montar bicicleta.",
-    regimen: "Verbo separable"
-  }, {
-    de: "spazieren gehen",
-    pron: "shpa-tsí-ren-gué-en",
-    es: "pasear",
-    type: "Frase",
-    category: "Aktivitäten",
-    exampleSentenceDe: "Wir gehen spazieren im Park.",
-    exampleSentenceEs: "Paseamos en el parque.",
-    regimen: "Verbo separable"
-  }, {
-    de: "in die Disco gehen",
-    pron: "in di dís-ko gué-en",
-    es: "ir a discoteca",
-    type: "Frase",
-    category: "Ausgehen",
-    exampleSentenceDe: "Ich gehe in die Disco.",
-    exampleSentenceEs: "Yo voy a la discoteca.",
-    regimen: "in + Akkusativ"
-  }, {
-    de: "das Museum",
-    pron: "das mu-séum",
-    es: "museo",
-    type: "Sustantivo (Neutro)",
-    category: "Orte",
-    exampleSentenceDe: "Das Museum ist groß.",
-    exampleSentenceEs: "El museo es grande.",
-    plural: "die Museen"
-  }, {
-    de: "der Verein",
-    pron: "dea fea-áin",
-    es: "club / asociación",
-    type: "Sustantivo (Masc)",
-    category: "Orte",
-    exampleSentenceDe: "Ich bin in dem Verein.",
-    exampleSentenceEs: "Yo estoy en el club.",
-    plural: "die Vereine"
-  }, {
-    de: "das Schwimmbad",
-    pron: "das shvím-bat",
-    es: "la piscina",
-    type: "Sustantivo (Neutro)",
-    category: "Orte",
-    exampleSentenceDe: "Wir gehen in das Schwimmbad.",
-    exampleSentenceEs: "Vamos a la piscina.",
-    plural: "die Schwimmbäder"
-  }, {
-    de: "gefallen",
-    pron: "gue-fá-len",
-    es: "gustar",
-    type: "Verbo",
-    category: "Adjektive & Gefühle",
-    exampleSentenceDe: "Das Kleid gefällt mir.",
-    exampleSentenceEs: "El vestido me gusta.",
-    regimen: "+ Dativo"
-  }, {
-    de: "schön",
-    pron: "shön",
-    es: "bonito",
-    type: "Adjetivo",
-    category: "Adjektive & Gefühle",
-    exampleSentenceDe: "Das Wetter ist schön.",
-    exampleSentenceEs: "El tiempo es bonito.",
-    regimen: "≠ hässlich"
-  }, {
-    de: "mögen",
-    pron: "mö-guen",
-    es: "gustar / me gusta",
-    type: "Verbo",
-    category: "Adjektive & Gefühle",
-    exampleSentenceDe: "Ich mag Kaffee.",
-    exampleSentenceEs: "Me gusta el café.",
-    regimen: "+ Akkusativ, irregular"
-  }, {
-    de: "sich treffen",
-    pron: "zij tré-fen",
-    es: "reunirse/encontrarse",
-    type: "Verbo",
-    category: "Soziales",
-    exampleSentenceDe: "Wir treffen uns heute Abend.",
-    exampleSentenceEs: "Nos encontramos esta noche.",
-    regimen: "Reflexivo + mit/Dativ"
-  }]
-}, {
+},
+{
   id: 5,
-  title: "Kapitel 5: Essen & Trinken",
+  title: "Kapitel 8: Essen & Trinken",
   icon: <Coffee size={20} />,
   emoji: "🍽️",
   words: [{
@@ -3017,1159 +4693,304 @@ const chapters = [{
     exampleSentenceDe: "Ich bin satt.",
     exampleSentenceEs: "Yo estoy lleno.",
     regimen: "sein + adj"
+  },
+  {
+    de: "backen",
+    pron: "bá-ken",
+    es: "hornear",
+    type: "Verbo",
+    category: "Essen & Trinken",
+    regimen: "+ Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "braten",
+    pron: "brá-ten",
+    es: "freír / asar",
+    type: "Verbo",
+    category: "Essen & Trinken",
+    regimen: "+ Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "grillen",
+    pron: "grí-len",
+    es: "asar a la parrilla",
+    type: "Verbo",
+    category: "Essen & Trinken",
+    regimen: "+ Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "schneiden",
+    pron: "shnái-den",
+    es: "cortar",
+    type: "Verbo",
+    category: "Essen & Trinken",
+    regimen: "+ Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Besteck",
+    pron: "das be-shték",
+    es: "los cubiertos",
+    type: "Sustantivo (Neutro)",
+    category: "Haushalt",
+    plural: "die Bestecke",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Schüssel",
+    pron: "di shü-sel",
+    es: "el tazón / bol",
+    type: "Sustantivo (Fem)",
+    category: "Haushalt",
+    plural: "die Schüsseln",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Glas",
+    pron: "das glas",
+    es: "el vaso / copa",
+    type: "Sustantivo (Neutro)",
+    category: "Haushalt",
+    plural: "die Gläser",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Becher",
+    pron: "dea bé-jea",
+    es: "el vaso (plástico/cartón)",
+    type: "Sustantivo (Masc)",
+    category: "Haushalt",
+    plural: "die Becher",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Serviette",
+    pron: "di sea-vié-te",
+    es: "la servilleta",
+    type: "Sustantivo (Fem)",
+    category: "Haushalt",
+    plural: "die Servietten",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Pilz",
+    pron: "dea pilts",
+    es: "el champiñón",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Pilze",
+    en: "brown mushroom",
+    exampleSentenceDe: "Ich esse gern Pilze.",
+    exampleSentenceEs: "Me gusta comer champiñones."
+  }, {
+        de: "die Nuss",
+    pron: "di nus",
+    es: "la nuez",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Nüsse",
+    en: "brown walnut",
+    exampleSentenceDe: "Der Kuchen hat Nüsse.",
+    exampleSentenceEs: "El pastel tiene nueces."
+  }, {
+        de: "der Keks",
+    pron: "dea keks",
+    es: "la galleta",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Kekse",
+    en: "chocolate chip cookie",
+    exampleSentenceDe: "Möchtest du einen Keks?",
+    exampleSentenceEs: "¿Quieres una galleta?"
+  }, {
+        de: "das Bonbon",
+    pron: "das bong-bóng",
+    es: "el caramelo",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Bonbons",
+    en: "wrapped sweet candy",
+    exampleSentenceDe: "Das Kind isst ein Bonbon.",
+    exampleSentenceEs: "El niño come un caramelo."
+  }, {
+        de: "die Schokolade",
+    pron: "di sho-ko-lá-de",
+    es: "el chocolate",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Schokoladen",
+    en: "brown chocolate bar",
+    exampleSentenceDe: "Ich liebe Schokolade.",
+    exampleSentenceEs: "Amo el chocolate."
+  }, {
+        de: "die Sahne",
+    pron: "di zá-ne",
+    es: "la crema / nata",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Sahnen",
+    en: "bowl of whipped cream",
+    exampleSentenceDe: "Ich trinke Kaffee mit Sahne.",
+    exampleSentenceEs: "Bebo café con nata."
+  }, {
+        de: "der Pfirsich",
+    pron: "dea pfír-sij",
+    es: "el durazno",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Pfirsiche",
+    en: "fresh peach fruit",
+    exampleSentenceDe: "Der Pfirsich ist muy dulce.",
+    exampleSentenceEs: "El durazno es muy dulce."
+  }, {
+        de: "die Melone",
+    pron: "di me-ló-ne",
+    es: "el melón",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Melonen",
+    en: "slice of watermelon",
+    exampleSentenceDe: "Im Sommer esse ich Melone.",
+    exampleSentenceEs: "En verano como melón."
+  }, {
+        de: "das Mehl",
+    pron: "das mel",
+    es: "la harina",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Mehle",
+    en: "paper bag of white flour",
+    exampleSentenceDe: "Wir brauchen Mehl für das Brot.",
+    exampleSentenceEs: "Necesitamos harina para el pan."
+  }, {
+        de: "das Gewürz",
+    pron: "das gue-vürts",
+    es: "la especia",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Gewürze",
+    en: "small bowl of red spice powder",
+    exampleSentenceDe: "Das Essen braucht mehr Gewürz.",
+    exampleSentenceEs: "La comida necesita más especias."
+  }, {
+        de: "die Kirsche",
+    pron: "di kír-she",
+    es: "la cereza",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Kirschen",
+    en: "two red cherries",
+    exampleSentenceDe: "Die Kirsche ist rot.",
+    exampleSentenceEs: "La cereza es roja."
+  }, {
+        de: "die Pflaume",
+    pron: "di pfláu-me",
+    es: "la ciruela",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Pflaumen",
+    en: "purple plum",
+    exampleSentenceDe: "Diese Pflaume ist lecker.",
+    exampleSentenceEs: "Esta ciruela es delicosa."
+  }, {
+        de: "der Senf",
+    pron: "dea senf",
+    es: "la mostaza",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Senfe",
+    en: "yellow mustard bottle",
+    exampleSentenceDe: "Ich esse Wurst mit Senf.",
+    exampleSentenceEs: "Como embutido con mostaza."
+  }, {
+        de: "die Mayonnaise",
+    pron: "di ma-yo-né-ze",
+    es: "la mayonesa",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Mayonnaisen",
+    en: "jar of white mayonnaise",
+    exampleSentenceDe: "Pommes frites mit Mayonnaise, bitte.",
+    exampleSentenceEs: "Papas fritas con mayonesa, por favor."
+  }, {
+        de: "der Ketchup",
+    pron: "dea két-chup",
+    es: "el kétchup",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Ketchups",
+    en: "red ketchup bottle",
+    exampleSentenceDe: "Das Kind mag Ketchup.",
+    exampleSentenceEs: "Al niño le gusta el kétchup."
+  },
+  {
+    de: "das Ei",
+    pron: "das ai",
+    es: "el huevo",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Eier",
+    en: "a white egg",
+    exampleSentenceDe: "Ich esse ein gekochtes Ei zum Frühstück.",
+    exampleSentenceEs: "Yo como un huevo cocido de desayuno."
+  }, {
+        de: "das Salz",
+    pron: "das salts",
+    es: "la sal",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Salze",
+    en: "a salt shaker",
+    exampleSentenceDe: "Die Suppe braucht mehr Salz.",
+    exampleSentenceEs: "La sopa necesita más sal."
+  }, {
+        de: "der Pfeffer",
+    pron: "dea pfe-fa",
+    es: "la pimienta",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "-",
+    en: "a black pepper shaker",
+    exampleSentenceDe: "Ich brauche Salz und Pfeffer.",
+    exampleSentenceEs: "Necesito sal y pimienta."
+  }, {
+        de: "der Zucker",
+    pron: "dea tsu-ka",
+    es: "el azúcar",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "-",
+    en: "a few white sugar cubes",
+    exampleSentenceDe: "Trinkst du den Kaffee mit Zucker?",
+    exampleSentenceEs: "¿Bebes el café con azúcar?"
+  }, {
+        de: "die Nudeln",
+    pron: "di nu-deln",
+    es: "la pasta / los fideos",
+    type: "Sustantivo (Plural)",
+    category: "Lebensmittel",
+    plural: "die Nudeln",
+    en: "a bowl of cooked pasta",
+    exampleSentenceDe: "Wir kochen heute Abend Nudeln.",
+    exampleSentenceEs: "Cocinamos pasta esta noche."
+  }, {
+        de: "die Wurst",
+    pron: "di vurst",
+    es: "el embutido / la salchicha",
+    type: "Sustantivo",
+    category: "Lebensmittel",
+    plural: "die Würste",
+    en: "a traditional german sausage",
+    exampleSentenceDe: "Ich möchte ein Brötchen mit Wurst.",
+    exampleSentenceEs: "Quisiera un panecillo con embutido."
   }]
-}, {
-  id: 6,
-  title: "Kapitel 6: Einkaufen",
-  icon: <ShoppingCart size={20} />,
-  emoji: "🛒",
-  words: [{
-    de: "das Geschäft",
-    pron: "das gue-shéft",
-    es: "tienda / negocio",
-    type: "Sustantivo",
-    category: "Orte",
-    exampleSentenceDe: "Das Geschäft ist klein.",
-    exampleSentenceEs: "La tienda es pequeña.",
-    plural: "die Geschäfte"
-  }, {
-    de: "der Laden",
-    pron: "dea lá-den",
-    es: "tienda pequeña",
-    type: "Sustantivo",
-    category: "Orte",
-    exampleSentenceDe: "Ich gehe in den Laden.",
-    exampleSentenceEs: "Voy a la tienda.",
-    plural: "die Läden"
-  }, {
-    de: "die Bäckerei",
-    pron: "di bé-ke-rái",
-    es: "panadería",
-    type: "Sustantivo (Fem)",
-    category: "Orte",
-    exampleSentenceDe: "Ich gehe zur Bäckerei.",
-    exampleSentenceEs: "Voy a la panadería.",
-    plural: "die Bäckereien"
-  }, {
-    de: "der Supermarkt",
-    pron: "dea sú-pea-markt",
-    es: "supermercado",
-    type: "Sustantivo (Masc)",
-    category: "Orte",
-    exampleSentenceDe: "Ich gehe in den Supermarkt.",
-    exampleSentenceEs: "Voy al supermercado.",
-    plural: "die Supermärkte"
-  }, {
-    de: "geöffnet",
-    pron: "gue-óf-net",
-    es: "abierto",
-    type: "Adjetivo",
-    category: "Status",
-    exampleSentenceDe: "Das Geschäft ist geöffnet.",
-    exampleSentenceEs: "La tienda está abierta.",
-    regimen: "≠ geschlossen"
-  }, {
-    de: "das Angebot",
-    pron: "das án-gue-bot",
-    es: "oferta",
-    type: "Sustantivo (Neutro)",
-    category: "Preis",
-    exampleSentenceDe: "Das ist ein gutes Angebot.",
-    exampleSentenceEs: "Esta es una buena oferta.",
-    plural: "die Angebote"
-  }, {
-    de: "günstig",
-    pron: "gúns-tij",
-    es: "económico",
-    type: "Adjetivo",
-    category: "Preis",
-    exampleSentenceDe: "Das Hotel ist günstig.",
-    exampleSentenceEs: "El hotel es económico.",
-    regimen: "≠ teuer"
-  }, {
-    de: "billig",
-    pron: "bí-lij",
-    es: "barato",
-    type: "Adjetivo",
-    category: "Preis",
-    exampleSentenceDe: "Das Brot ist billig.",
-    exampleSentenceEs: "El pan es barato.",
-    regimen: "≠ teuer"
-  }, {
-    de: "teuer",
-    pron: "tói-a",
-    es: "caro",
-    type: "Adjetivo",
-    category: "Preis",
-    exampleSentenceDe: "Das ist teuer.",
-    exampleSentenceEs: "Esto es caro.",
-    regimen: "≠ billig"
-  }, {
-    de: "brauchen",
-    pron: "bráu-jen",
-    es: "necesitar",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich brauche Wasser.",
-    exampleSentenceEs: "Yo necesito agua.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "das Kilo",
-    pron: "das kí-lo",
-    es: "kilo",
-    type: "Sustantivo",
-    category: "Menge",
-    exampleSentenceDe: "Ich kaufe ein Kilo Äpfel.",
-    exampleSentenceEs: "Compro un kilo de manzanas.",
-    plural: "die Kilo"
-  }, {
-    de: "das Pfund",
-    pron: "das pfunt",
-    es: "libra (500g)",
-    type: "Sustantivo",
-    category: "Menge",
-    exampleSentenceDe: "Ich kaufe ein Pfund Brot.",
-    exampleSentenceEs: "Compro una libra de pan.",
-    plural: "die Pfund"
-  }, {
-    de: "das Gramm",
-    pron: "das gram",
-    es: "gramo",
-    type: "Sustantivo",
-    category: "Menge",
-    exampleSentenceDe: "Ich brauche das Gramm Zucker.",
-    exampleSentenceEs: "Necesito el gramo de azúcar.",
-    plural: "die Gramm"
-  }, {
-    de: "kosten",
-    pron: "kós-ten",
-    es: "costar",
-    type: "Verbo",
-    category: "Preis",
-    exampleSentenceDe: "Was kostet das Brot?",
-    exampleSentenceEs: "¿Cuánto cuesta el pan?",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "der Preis",
-    pron: "dea práis",
-    es: "precio",
-    type: "Sustantivo",
-    category: "Preis",
-    exampleSentenceDe: "Der Preis ist hoch.",
-    exampleSentenceEs: "El precio es alto.",
-    plural: "die Preise"
-  }, {
-    de: "die Kasse",
-    pron: "di ká-se",
-    es: "caja",
-    type: "Sustantivo (Fem)",
-    category: "Bezahlen",
-    exampleSentenceDe: "Wo ist die Kasse, bitte?",
-    exampleSentenceEs: "¿Dónde está la caja, por favor?",
-    plural: "die Kassen"
-  }, {
-    de: "das Geld",
-    pron: "das guelt",
-    es: "dinero",
-    type: "Sustantivo",
-    category: "Bezahlen",
-    exampleSentenceDe: "Das ist das Geld.",
-    exampleSentenceEs: "Este es el dinero.",
-    plural: "die Gelder"
-  }, {
-    de: "der Verkäufer",
-    pron: "dea fea-kói-fea",
-    es: "vendedor",
-    type: "Sustantivo",
-    category: "Personen",
-    exampleSentenceDe: "Der Verkäufer ist nett.",
-    exampleSentenceEs: "El vendedor es simpático.",
-    plural: "die Verkäufer"
-  }, {
-    de: "bestellen",
-    pron: "be-shté-len",
-    es: "pedir (online)",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich bestelle Pizza.",
-    exampleSentenceEs: "Yo pido pizza.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "die Überweisung",
-    pron: "di ǘ-bea-vái-sung",
-    es: "transferencia",
-    type: "Sustantivo",
-    category: "Bezahlen",
-    exampleSentenceDe: "Ich mache die Überweisung.",
-    exampleSentenceEs: "Hago la transferencia.",
-    plural: "die Überweisungen"
-  }, {
-    de: "das Wechselgeld",
-    pron: "das vék-sel-guelt",
-    es: "el cambio / vueltas",
-    type: "Sustantivo",
-    category: "Bezahlen",
-    exampleSentenceDe: "Ich brauche das Wechselgeld nicht.",
-    exampleSentenceEs: "No necesito el cambio.",
-    plural: "die Wechselgelder"
-  }, {
-    de: "umtauschen",
-    pron: "úm-táu-shen",
-    es: "cambiar (artículo)",
-    type: "Verbo Separable",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich möchte das T-Shirt umtauschen.",
-    exampleSentenceEs: "Yo quisiera cambiar la camiseta.",
-    regimen: "Separable (um-) + Akk."
-  }, {
-    de: "der Rabatt",
-    pron: "dea ra-bát",
-    es: "descuento",
-    type: "Sustantivo",
-    category: "Preis",
-    exampleSentenceDe: "Ich sehe der Rabatt. Der Rabatt ist gut.",
-    exampleSentenceEs: "Veo el descuento. El descuento es bueno.",
-    plural: "die Rabatte"
-  }]
-}, {
-  id: 7,
-  title: "Kapitel 7: Reisen & Verkehr",
-  icon: <Car size={20} />,
-  emoji: "✈️",
-  words: [{
-    de: "die Ferien",
-    pron: "di fé-ri-en",
-    es: "las vacaciones (escolares)",
-    type: "Sustantivo",
-    category: "Reise",
-    exampleSentenceDe: "Die Ferien sind schön.",
-    exampleSentenceEs: "Las vacaciones son bonitas.",
-    plural: "die Ferien"
-  }, {
-    de: "der Urlaub",
-    pron: "dea úa-laup",
-    es: "las vacaciones (laborales)",
-    type: "Sustantivo",
-    category: "Reise",
-    exampleSentenceDe: "Ich habe Urlaub.",
-    exampleSentenceEs: "Tengo vacaciones.",
-    plural: "die Urlaube"
-  }, {
-    de: "Urlaub machen",
-    pron: "ú-a-laup má-jen",
-    es: "ir de vacaciones",
-    type: "Frase",
-    category: "Reise",
-    exampleSentenceDe: "Ich mache Urlaub in Spanien.",
-    exampleSentenceEs: "Yo voy de vacaciones a España.",
-    regimen: "Verbo+Akk. fijo"
-  }, {
-    de: "es gibt",
-    pron: "es guípt",
-    es: "hay (+ Acusativo)",
-    type: "Frase",
-    category: "Allgemein",
-    exampleSentenceDe: "Es gibt Kaffee.",
-    exampleSentenceEs: "Hay café.",
-    regimen: "⚠️ + Akkusativ"
-  }, {
-    de: "geöffnet",
-    pron: "gue-óf-net",
-    es: "abierto",
-    type: "Adjetivo",
-    category: "Status",
-    exampleSentenceDe: "Das Geschäft ist geöffnet.",
-    exampleSentenceEs: "La tienda está abierta.",
-    regimen: "≠ geschlossen"
-  }, {
-    de: "geschlossen",
-    pron: "gue-shló-sen",
-    es: "cerrado",
-    type: "Adjetivo",
-    category: "Status",
-    exampleSentenceDe: "Das Geschäft ist geschlossen.",
-    exampleSentenceEs: "La tienda está cerrada.",
-    regimen: "≠ offen"
-  }, {
-    de: "von - bis",
-    pron: "fon - bis",
-    es: "de - hasta",
-    type: "Preposición",
-    category: "Zeit",
-    exampleSentenceDe: "Ich arbeite von neun Uhr bis fünf Uhr.",
-    exampleSentenceEs: "Yo trabajo de nueve en punto hasta las cinco en punto.",
-    regimen: "+ Dativo"
-  }, {
-    de: "die Karte",
-    pron: "di kár-te",
-    es: "tarjeta / mapa",
-    type: "Sustantivo (Fem)",
-    category: "Tickets",
-    exampleSentenceDe: "Ich habe die Karte. Die Karte ist groß.",
-    exampleSentenceEs: "Tengo la tarjeta. La tarjeta es grande.",
-    plural: "die Karten"
-  }, {
-    de: "die Eintrittskarte",
-    pron: "di áin-trits-kár-te",
-    es: "boleto de entrada",
-    type: "Sustantivo (Fem)",
-    category: "Tickets",
-    exampleSentenceDe: "Ich brauche die Eintrittskarte.",
-    exampleSentenceEs: "Necesito el boleto de entrada.",
-    plural: "die Eintrittskarten"
-  }, {
-    de: "das Ticket",
-    pron: "das tí-ket",
-    es: "el ticket",
-    type: "Sustantivo (Neutro)",
-    category: "Tickets",
-    exampleSentenceDe: "Ich brauche das Ticket.",
-    exampleSentenceEs: "Necesito el ticket.",
-    plural: "die Tickets"
-  }, {
-    de: "kaufen",
-    pron: "káu-fen",
-    es: "comprar",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich kaufe ein Brot.",
-    exampleSentenceEs: "Yo compro un pan.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "reservieren",
-    pron: "re-ze-a-fí-ren",
-    es: "reservar",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich möchte einen Tisch reservieren.",
-    exampleSentenceEs: "Me gustaría reservar una mesa.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "der Weg",
-    pron: "dea vek",
-    es: "el camino",
-    type: "Sustantivo",
-    category: "Orientierung",
-    exampleSentenceDe: "Der Weg ist frei.",
-    exampleSentenceEs: "El camino está libre.",
-    plural: "die Wege"
-  }, {
-    de: "geradeaus",
-    pron: "gue-ra-de-áus",
-    es: "recto",
-    type: "Adverbio",
-    category: "Orientierung",
-    exampleSentenceDe: "Gehen Sie geradeaus, bitte.",
-    exampleSentenceEs: "Vaya recto, por favor.",
-    regimen: "Direccional"
-  }, {
-    de: "links / rechts",
-    pron: "links  rejts",
-    es: "izquierda / derecha",
-    type: "Adverbio",
-    category: "Orientierung",
-    exampleSentenceDe: "Gehen Sie links.",
-    exampleSentenceEs: "Vaya a la izquierda.",
-    regimen: "Direccional/lugar"
-  }, {
-    de: "der Unfall",
-    pron: "dea ún-fal",
-    es: "accidente",
-    type: "Sustantivo",
-    category: "Verkehr",
-    exampleSentenceDe: "Ich sehe einen Unfall. Der Unfall ist groß.",
-    exampleSentenceEs: "Yo veo un accidente. El accidente es grande.",
-    plural: "die Unfälle"
-  }, {
-    de: "die Polizei",
-    pron: "di po-li-tsái",
-    es: "policía",
-    type: "Sustantivo",
-    category: "Verkehr",
-    exampleSentenceDe: "Die Polizei ist hier.",
-    exampleSentenceEs: "La policía está aquí.",
-    plural: "die Polizeien"
-  }, {
-    de: "umsteigen",
-    pron: "um-shtái-guen",
-    es: "hacer transbordo",
-    type: "Verbo",
-    category: "Verkehr",
-    exampleSentenceDe: "Ich steige in den Bus um.",
-    exampleSentenceEs: "Yo hago transbordo al autobús.",
-    regimen: "Separable (um-)"
-  }, {
-    de: "das Zelt",
-    pron: "das tsélt",
-    es: "tienda de campaña",
-    type: "Sustantivo",
-    category: "Reise",
-    exampleSentenceDe: "Ich habe ein Zelt. Das Zelt ist groß.",
-    exampleSentenceEs: "Tengo una tienda de campaña. La tienda de campaña es grande.",
-    plural: "die Zelte"
-  }, {
-    de: "zelten",
-    pron: "tsél-ten",
-    es: "acampar",
-    type: "Verbo",
-    category: "Reise",
-    exampleSentenceDe: "Wir zelten im Sommer.",
-    exampleSentenceEs: "Acampamos en verano.",
-    regimen: "Intransitivo, sin caso"
-  }]
-}, {
-  id: 8,
-  title: "Kapitel 8: Post & Bank",
-  icon: <Mail size={20} />,
-  emoji: "📮",
-  words: [{
-    de: "die Post",
-    pron: "di post",
-    es: "el correo",
-    type: "Sustantivo (Fem)",
-    category: "Post",
-    exampleSentenceDe: "Ich brauche die Post.",
-    exampleSentenceEs: "Yo necesito el correo.",
-    plural: "die Post"
-  }, {
-    de: "der Brief",
-    pron: "dea bríf",
-    es: "carta",
-    type: "Sustantivo",
-    category: "Post",
-    exampleSentenceDe: "Ich habe den Brief. Der Brief ist hier.",
-    exampleSentenceEs: "Tengo la carta. La carta está aquí.",
-    plural: "die Briefe"
-  }, {
-    de: "die Postkarte",
-    pron: "di póst-kar-te",
-    es: "tarjeta postal",
-    type: "Sustantivo",
-    category: "Post",
-    exampleSentenceDe: "Ich kaufe die Postkarte im Supermarkt.",
-    exampleSentenceEs: "Yo compro la postal en el supermercado.",
-    plural: "die Postkarten"
-  }, {
-    de: "schicken",
-    pron: "shí-ken",
-    es: "enviar",
-    type: "Verbo",
-    category: "Post",
-    exampleSentenceDe: "Ich schicke die E-Mail morgen.",
-    exampleSentenceEs: "Yo envío el correo mañana.",
-    regimen: "+ Dativo (a quién) / + Akkusativ (qué)"
-  }, {
-    de: "bekommen",
-    pron: "be-kó-men",
-    es: "recibir",
-    type: "Verbo",
-    category: "Post",
-    exampleSentenceDe: "Ich bekomme ein Geschenk.",
-    exampleSentenceEs: "Yo recibo un regalo.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "abholen",
-    pron: "áp-jo-len",
-    es: "recoger",
-    type: "Verbo separable",
-    category: "Post",
-    exampleSentenceDe: "Ich hole dich am Bahnhof ab.",
-    exampleSentenceEs: "Te recojo en la estación de tren.",
-    regimen: "+Akk, separable (ab-)"
-  }, {
-    de: "die Briefmarke",
-    pron: "di bríf-mar-ke",
-    es: "estampilla",
-    type: "Sustantivo (Fem)",
-    category: "Post",
-    exampleSentenceDe: "Ich brauche die Briefmarke.",
-    exampleSentenceEs: "Yo necesito la estampilla.",
-    plural: "die Briefmarken"
-  }, {
-    de: "der Absender",
-    pron: "dea áp-sen-dea",
-    es: "remitente",
-    type: "Sustantivo (Masc)",
-    category: "Post",
-    exampleSentenceDe: "Wer ist der Absender?",
-    exampleSentenceEs: "¿Quién es el remitente?",
-    plural: "die Absender"
-  }, {
-    de: "der Empfänger",
-    pron: "dea em-pfén-gua",
-    es: "destinatario",
-    type: "Sustantivo (Masc)",
-    category: "Post",
-    exampleSentenceDe: "Wer ist der Empfänger?",
-    exampleSentenceEs: "¿Quién es el destinatario?",
-    plural: "die Empfänger"
-  }, {
-    de: "die Adresse",
-    pron: "di a-dré-se",
-    es: "dirección",
-    type: "Sustantivo (Fem)",
-    category: "Post",
-    exampleSentenceDe: "Das ist die Adresse.",
-    exampleSentenceEs: "Esta es la dirección.",
-    plural: "die Adressen"
-  }, {
-    de: "das Telefon",
-    pron: "das te-le-fón",
-    es: "teléfono",
-    type: "Sustantivo (Neutro)",
-    category: "Kommunikation",
-    exampleSentenceDe: "Das ist mein Telefon.",
-    exampleSentenceEs: "Este es mi teléfono.",
-    plural: "die Telefone"
-  }, {
-    de: "das Handy",
-    pron: "das jén-di",
-    es: "celular",
-    type: "Sustantivo (Neutro)",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich habe ein Handy. Das Handy ist neu.",
-    exampleSentenceEs: "Tengo un celular. El celular es nuevo.",
-    plural: "die Handys"
-  }, {
-    de: "das Fax",
-    pron: "das faks",
-    es: "fax",
-    type: "Sustantivo (Neutro)",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich habe ein Fax. Das Fax ist neu.",
-    exampleSentenceEs: "Tengo un fax. El fax es nuevo.",
-    plural: "die Faxe"
-  }, {
-    de: "die Telefonnummer",
-    pron: "di te-le-fón-nu-mea",
-    es: "número de teléfono",
-    type: "Sustantivo (Fem)",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich habe die Telefonnummer. Die Telefonnummer ist neu.",
-    exampleSentenceEs: "Tengo el número de teléfono. El número de teléfono es nuevo.",
-    plural: "die Telefonnummern"
-  }, {
-    de: "das Telefonbuch",
-    pron: "das te-le-fón-buj",
-    es: "guía telefónica",
-    type: "Sustantivo (Neutro)",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich suche das Telefonbuch.",
-    exampleSentenceEs: "Yo busco la guía telefónica.",
-    plural: "die Telefonbücher"
-  }, {
-    de: "telefonieren",
-    pron: "te-le-fo-ní-ren",
-    es: "hablar por tel.",
-    type: "Verbo",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich telefoniere mit meiner Mutter.",
-    exampleSentenceEs: "Yo hablo por teléfono con mi madre.",
-    regimen: "+ mit + Dativ"
-  }, {
-    de: "anrufen",
-    pron: "án-ru-fen",
-    es: "llamar",
-    type: "Verbo",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich rufe meine Mutter an.",
-    exampleSentenceEs: "Yo llamo a mi madre.",
-    regimen: "Separable (an-) / + Akkusativ"
-  }, {
-    de: "sprechen (mit)",
-    pron: "shpré-jen mit",
-    es: "hablar con",
-    type: "Verbo",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich spreche mit meinem Freund.",
-    exampleSentenceEs: "Yo hablo con mi amigo.",
-    regimen: "mit + Dativ"
-  }, {
-    de: "besetzt",
-    pron: "be-tséts",
-    es: "ocupado (línea)",
-    type: "Adjetivo",
-    category: "Kommunikation",
-    exampleSentenceDe: "Die Telefonleitung ist besetzt.",
-    exampleSentenceEs: "La línea telefónica está ocupada.",
-    regimen: "≠ frei"
-  }, {
-    de: "die Bank",
-    pron: "di bank",
-    es: "banco",
-    type: "Sustantivo",
-    category: "Bank",
-    exampleSentenceDe: "Ich sitze auf der Bank.",
-    exampleSentenceEs: "Yo me siento en el banco.",
-    plural: "die Bänke"
-  }, {
-    de: "der Schalter",
-    pron: "dea shál-tea",
-    es: "ventanilla",
-    type: "Sustantivo",
-    category: "Bank",
-    exampleSentenceDe: "Ich gehe zum Schalter.",
-    exampleSentenceEs: "Voy a la ventanilla.",
-    plural: "die Schalter"
-  }, {
-    de: "das Geld",
-    pron: "das guélt",
-    es: "dinero",
-    type: "Sustantivo (Neutro)",
-    category: "Bank",
-    exampleSentenceDe: "Das ist das Geld.",
-    exampleSentenceEs: "Este es el dinero.",
-    plural: "kein Plural"
-  }, {
-    de: "bar zahlen",
-    pron: "bá-a tsá-len",
-    es: "pagar en efectivo",
-    type: "Frase",
-    category: "Bank",
-    exampleSentenceDe: "Ich möchte bar zahlen.",
-    exampleSentenceEs: "Quiero pagar en efectivo.",
-    regimen: "Verbo al final"
-  }, {
-    de: "die Kreditkarte",
-    pron: "di kre-dít-kar-te",
-    es: "tarjeta de crédito",
-    type: "Sustantivo (Fem)",
-    category: "Bank",
-    exampleSentenceDe: "Ich habe die Kreditkarte. Die Kreditkarte ist rot.",
-    exampleSentenceEs: "Tengo la tarjeta de crédito. La tarjeta de crédito es roja.",
-    plural: "die Kreditkarten"
-  }, {
-    de: "das Konto",
-    pron: "das kón-to",
-    es: "cuenta",
-    type: "Sustantivo (Neutro)",
-    category: "Bank",
-    exampleSentenceDe: "Ich habe das Konto.",
-    exampleSentenceEs: "Tengo la cuenta.",
-    plural: "die Konten"
-  }, {
-    de: "überweisen",
-    pron: "ú-ba-vái-sen",
-    es: "transferir dinero",
-    type: "Verbo",
-    category: "Bank",
-    exampleSentenceDe: "Ich überweise Geld auf das Konto.",
-    exampleSentenceEs: "Yo transfiero dinero a la cuenta.",
-    regimen: "Inseparable / + Akkusativ"
-  }, {
-    de: "das Formular",
-    pron: "das foa-mu-lá",
-    es: "formulario",
-    type: "Sustantivo",
-    category: "Bank",
-    exampleSentenceDe: "Ich habe das Formular. Das Formular ist neu.",
-    exampleSentenceEs: "Tengo el formulario. El formulario es nuevo.",
-    plural: "die Formulare"
-  }, {
-    de: "ausfüllen",
-    pron: "áus-fü-len",
-    es: "rellenar",
-    type: "Verbo",
-    category: "Bank",
-    exampleSentenceDe: "Ich muss das Formular ausfüllen.",
-    exampleSentenceEs: "Yo debo rellenar el formulario.",
-    regimen: "Separable (aus-)"
-  }, {
-    de: "ankreuzen",
-    pron: "án-krói-tsen",
-    es: "marcar con cruz",
-    type: "Verbo separable",
-    category: "Bank",
-    exampleSentenceDe: "Ich muss das Feld ankreuzen.",
-    exampleSentenceEs: "Tengo que marcar el campo con una cruz.",
-    regimen: "Separable (an-)"
-  }, {
-    de: "unterschreiben",
-    pron: "un-ta-shrái-ben",
-    es: "firmar",
-    type: "Verbo",
-    category: "Bank",
-    exampleSentenceDe: "Ich muss den Vertrag unterschreiben.",
-    exampleSentenceEs: "Yo debo firmar el contrato.",
-    regimen: "No separable + Akk"
-  }, {
-    de: "der Geldautomat",
-    pron: "dea guélt-áu-to-mat",
-    es: "cajero automático",
-    type: "Sustantivo (Masc)",
-    category: "Bank",
-    exampleSentenceDe: "Wo ist der Geldautomat?",
-    exampleSentenceEs: "¿Dónde está el cajero automático?",
-    plural: "die Geldautomaten"
-  }, {
-    de: "das Internet",
-    pron: "das ín-ta-net",
-    es: "internet",
-    type: "Sustantivo",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich habe das Internet. Das Internet ist gut.",
-    exampleSentenceEs: "Tengo internet. Internet es bueno.",
-    plural: "die Internets"
-  }, {
-    de: "der Computer",
-    pron: "dea kom-piú-ta",
-    es: "computador",
-    type: "Sustantivo (Masc)",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
-    exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
-    plural: "die Computer"
-  }, {
-    de: "der Pass / Ausweis",
-    pron: "dea pas  áus-vais",
-    es: "pasaporte / ID",
-    type: "Sustantivo",
-    category: "Dokumente",
-    exampleSentenceDe: "Ich brauche den Pass.",
-    exampleSentenceEs: "Necesito el pasaporte.",
-    plural: "die Pässe / Ausweise"
-  }, {
-    de: "gültig",
-    pron: "gúl-tij",
-    es: "válido/vigente",
-    type: "Adjetivo",
-    category: "Dokumente",
-    exampleSentenceDe: "Mein Pass ist gültig.",
-    exampleSentenceEs: "Mi pasaporte es válido.",
-    regimen: "≠ ungültig"
-  }, {
-    de: "das Paket",
-    pron: "das pa-két",
-    es: "el paquete",
-    type: "Sustantivo",
-    category: "Post",
-    exampleSentenceDe: "Ich habe das Paket. Das Paket ist groß.",
-    exampleSentenceEs: "Tengo el paquete. El paquete es grande.",
-    plural: "die Pakete"
-  }, {
-    de: "der Briefkasten",
-    pron: "dea brif-kás-ten",
-    es: "buzón de correo",
-    type: "Sustantivo",
-    category: "Post",
-    exampleSentenceDe: "Ich habe einen Briefkasten.",
-    exampleSentenceEs: "Tengo un buzón de correo.",
-    plural: "die Briefkästen"
-  }, {
-    de: "die Gebühr",
-    pron: "di gue-bü-a",
-    es: "tarifa(comisión)",
-    type: "Sustantivo",
-    category: "Bank",
-    exampleSentenceDe: "Die Gebühr ist zehn Euro.",
-    exampleSentenceEs: "La tarifa es de diez euros.",
-    plural: "die Gebühren"
-  }, {
-    de: "der Kredit",
-    pron: "dea kre-dít",
-    es: "crédito",
-    type: "Sustantivo",
-    category: "Bank",
-    exampleSentenceDe: "Ich habe den Kredit. Der Kredit ist gut.",
-    exampleSentenceEs: "Tengo el crédito. El crédito es bueno.",
-    plural: "die Kredite"
-  }, {
-    de: "abheben",
-    pron: "áp-jé-ben",
-    es: "retirar dinero",
-    type: "Verbo",
-    category: "Bank",
-    exampleSentenceDe: "Ich möchte Geld abheben.",
-    exampleSentenceEs: "Quiero retirar dinero.",
-    regimen: "Separable (ab-), +Akk"
-  }, {
-    de: "einzahlen",
-    pron: "áin-tsa-len",
-    es: "depositar",
-    type: "Verbo",
-    category: "Bank",
-    exampleSentenceDe: "Ich zahle Geld auf die Bank ein.",
-    exampleSentenceEs: "Yo deposito dinero en el banco.",
-    regimen: "Separable (ein-), +Akk"
-  }, {
-    de: "die Geheimzahl",
-    pron: "di gue-jáim-tsal",
-    es: "el PIN",
-    type: "Sustantivo",
-    category: "Bank",
-    exampleSentenceDe: "Ich habe die Geheimzahl vergessen.",
-    exampleSentenceEs: "Olvidé el PIN.",
-    plural: "die Geheimzahlen"
-  }]
-}, {
-  id: 9,
-  title: "Kapitel 9: Gesundheit",
-  icon: <Heart size={20} />,
-  emoji: "🏥",
-  words: [{
-    de: "das Auge",
-    pron: "das áu-gue",
-    es: "ojo",
-    type: "Sustantivo (Neutro)",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe ein Auge. Das Auge ist braun.",
-    exampleSentenceEs: "Tengo un ojo. El ojo es marrón.",
-    plural: "die Augen"
-  }, {
-    de: "die Hand",
-    pron: "di jant",
-    es: "mano",
-    type: "Sustantivo (Fem)",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe eine Hand. Die Hand ist klein.",
-    exampleSentenceEs: "Tengo una mano. La mano es pequeña.",
-    plural: "die Hände"
-  }, {
-    de: "der Arm",
-    pron: "dea aam",
-    es: "brazo",
-    type: "Sustantivo",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe einen Arm.",
-    exampleSentenceEs: "Tengo un brazo.",
-    plural: "die Arme"
-  }, {
-    de: "das Bein",
-    pron: "das báin",
-    es: "pierna",
-    type: "Sustantivo",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe ein Bein.",
-    exampleSentenceEs: "Yo tengo una pierna.",
-    plural: "die Beine"
-  }, {
-    de: "der Kopf",
-    pron: "dea kopf",
-    es: "cabeza",
-    type: "Sustantivo (Masc)",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe Kopfschmerzen.",
-    exampleSentenceEs: "Tengo dolor de cabeza.",
-    plural: "die Köpfe"
-  }, {
-    de: "der Fuß",
-    pron: "dea fus",
-    es: "pie",
-    type: "Sustantivo (Masc)",
-    category: "Körper",
-    exampleSentenceDe: "Mein Fuß ist groß.",
-    exampleSentenceEs: "Mi pie es grande.",
-    plural: "die Füße"
-  }, {
-    de: "der Mund",
-    pron: "dea munt",
-    es: "boca",
-    type: "Sustantivo (Masc)",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe einen Mund.",
-    exampleSentenceEs: "Tengo una boca.",
-    plural: "die Münder"
-  }, {
-    de: "der Zahn",
-    pron: "dea tsán",
-    es: "diente",
-    type: "Sustantivo (Masc)",
-    category: "Körper",
-    exampleSentenceDe: "Mein Zahn ist schlecht.",
-    exampleSentenceEs: "Mi diente está mal.",
-    plural: "die Zähne"
-  }, {
-    de: "die Nase",
-    pron: "di ná-se",
-    es: "nariz",
-    type: "Sustantivo",
-    category: "Körper",
-    exampleSentenceDe: "Die Nase ist rot.",
-    exampleSentenceEs: "La nariz es roja.",
-    plural: "die Nasen"
-  }, {
-    de: "das Ohr",
-    pron: "das ó-a",
-    es: "oreja",
-    type: "Sustantivo",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe ein Ohr. Das Ohr ist rot.",
-    exampleSentenceEs: "Tengo una oreja. La oreja está roja.",
-    plural: "die Ohren"
-  }, {
-    de: "das Haar",
-    pron: "das já-a",
-    es: "pelo",
-    type: "Sustantivo",
-    category: "Körper",
-    exampleSentenceDe: "Das Haar ist rot.",
-    exampleSentenceEs: "El pelo es rojo.",
-    plural: "die Haare"
-  }, {
-    de: "der Bauch",
-    pron: "dea báuj",
-    es: "barriga",
-    type: "Sustantivo",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe Hunger. Mein Bauch ist leer.",
-    exampleSentenceEs: "Tengo hambre. Mi barriga está vacía.",
-    plural: "die Bäuche"
-  }, {
-    de: "der Finger",
-    pron: "dea fín-ga",
-    es: "dedo",
-    type: "Sustantivo (Masc)",
-    category: "Körper",
-    exampleSentenceDe: "Das ist mein Finger.",
-    exampleSentenceEs: "Este es mi dedo.",
-    plural: "die Finger"
-  }, {
-    de: "der Rücken",
-    pron: "dea rú-ken",
-    es: "espalda",
-    type: "Sustantivo (Masc)",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe Schmerzen im Rücken.",
-    exampleSentenceEs: "Tengo dolor en la espalda.",
-    plural: "die Rücken"
-  }, {
-    de: "der Hals",
-    pron: "dea jals",
-    es: "cuello",
-    type: "Sustantivo (Masc)",
-    category: "Körper",
-    exampleSentenceDe: "Ich habe Schmerzen am Hals.",
-    exampleSentenceEs: "Tengo dolor en el cuello.",
-    plural: "die Hälse"
-  }, {
-    de: "wehtun",
-    pron: "vé-tun",
-    es: "doler",
-    type: "Verbo separable",
-    category: "Krankheit",
-    exampleSentenceDe: "Mein Kopf tut weh.",
-    exampleSentenceEs: "Mi cabeza duele.",
-    regimen: "+ Dativo (a quién duele)"
-  }, {
-    de: "Wie geht es Ihnen?",
-    pron: "ví guet es í-nen",
-    es: "¿Cómo está usted?",
-    type: "Frase",
-    category: "Kommunikation",
-    exampleSentenceDe: "Hallo, wie geht es Ihnen?",
-    exampleSentenceEs: "Hola, ¿cómo está usted?",
-    regimen: "Formal"
-  }, {
-    de: "Es geht mir gut",
-    pron: "es guét mia gut",
-    es: "Me va bien",
-    type: "Frase",
-    category: "Kommunikation",
-    exampleSentenceDe: "Hallo! Mir geht es gut, danke.",
-    exampleSentenceEs: "¡Hola! Me va bien, gracias.",
-    regimen: "Dat: mir"
-  }, {
-    de: "schlafen",
-    pron: "shlá-fen",
-    es: "dormir",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich schlafe heute.",
-    exampleSentenceEs: "Yo duermo hoy.",
-    regimen: "Irregular (schläft)"
-  }, {
-    de: "ins Bett gehen",
-    pron: "ins bet gué-en",
-    es: "ir a la cama",
-    type: "Frase",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich gehe jetzt ins Bett.",
-    exampleSentenceEs: "Yo voy a la cama ahora.",
-    regimen: "ins + Akkusativ"
-  }, {
-    de: "im Bett liegen",
-    pron: "im bet lí-guen",
-    es: "estar en la cama",
-    type: "Frase",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich liege im Bett.",
-    exampleSentenceEs: "Yo estoy en la cama.",
-    regimen: "in+Dat=fijo"
-  }, {
-    de: "krank",
-    pron: "kránk",
-    es: "enfermo",
-    type: "Adjetivo",
-    category: "Krankheit",
-    exampleSentenceDe: "Ich bin krank.",
-    exampleSentenceEs: "Yo estoy enfermo.",
-    regimen: "≠ gesund"
-  }, {
-    de: "das Fieber",
-    pron: "das fí-ba",
-    es: "fiebre",
-    type: "Sustantivo",
-    category: "Krankheit",
-    exampleSentenceDe: "Ich habe Fieber. Das Fieber ist hoch.",
-    exampleSentenceEs: "Tengo fiebre. La fiebre es alta.",
-    plural: "die Fieber"
-  }, {
-    de: "der Arzt",
-    pron: "dea artst",
-    es: "médico",
-    type: "Sustantivo (Masc)",
-    category: "Medizin",
-    exampleSentenceDe: "Ich bin krank. Ich gehe zum Arzt.",
-    exampleSentenceEs: "Estoy enfermo. Voy al médico.",
-    plural: "die Ärzte"
-  }, {
-    de: "der Doktor",
-    pron: "dea dók-toa",
-    es: "doctor",
-    type: "Sustantivo",
-    category: "Medizin",
-    exampleSentenceDe: "Der Doktor ist nett.",
-    exampleSentenceEs: "El doctor es amable.",
-    plural: "die Doktoren"
-  }, {
-    de: "die Apotheke",
-    pron: "di a-po-té-ke",
-    es: "farmacia",
-    type: "Sustantivo",
-    category: "Medizin",
-    exampleSentenceDe: "Ich gehe zur Apotheke.",
-    exampleSentenceEs: "Voy a la farmacia.",
-    plural: "die Apotheken"
-  }, {
-    de: "das Medikament",
-    pron: "das me-di-ka-mént",
-    es: "medicamento",
-    type: "Sustantivo (Neutro)",
-    category: "Medizin",
-    exampleSentenceDe: "Das Medikament ist neu.",
-    exampleSentenceEs: "El medicamento es nuevo.",
-    plural: "die Medikamente"
-  }, {
-    de: "das Rezept",
-    pron: "das re-tsépt",
-    es: "receta médica",
-    type: "Sustantivo (Neutro)",
-    category: "Medizin",
-    exampleSentenceDe: "Ich brauche das Rezept von dem Arzt.",
-    exampleSentenceEs: "Necesito la receta del médico.",
-    plural: "die Rezepte"
-  }, {
-    de: "die Praxis",
-    pron: "di prák-sis",
-    es: "consultorio",
-    type: "Sustantivo",
-    category: "Medizin",
-    exampleSentenceDe: "Ich gehe in die Praxis von dem Arzt.",
-    exampleSentenceEs: "Voy al consultorio del doctor.",
-    plural: "die Praxen"
-  }, {
-    de: "das Krankenhaus",
-    pron: "das krán-ken-jáus",
-    es: "hospital",
-    type: "Sustantivo",
-    category: "Medizin",
-    exampleSentenceDe: "Ich bin im Krankenhaus.",
-    exampleSentenceEs: "Estoy en el hospital.",
-    plural: "die Krankenhäuser"
-  }, {
-    de: "der Termin",
-    pron: "dea tea-mín",
-    es: "cita",
-    type: "Sustantivo (Masc)",
-    category: "Medizin",
-    exampleSentenceDe: "Ich habe einen Termin am Montag.",
-    exampleSentenceEs: "Tengo una cita el lunes.",
-    plural: "die Termine"
-  }, {
-    de: "Gute Besserung",
-    pron: "gú-te bé-se-rung",
-    es: "¡Que te mejores!",
-    type: "Frase",
-    category: "Kommunikation",
-    exampleSentenceDe: "Ich wünsche dir gute Besserung.",
-    exampleSentenceEs: "Te deseo que te mejores.",
-    regimen: "Fórmula fija"
-  }, {
-    de: "das Pflaster",
-    pron: "das pflás-ta",
-    es: "tirita(curita)",
-    type: "Sustantivo",
-    category: "Medizin",
-    exampleSentenceDe: "Ich habe das Pflaster. Das Pflaster ist klein.",
-    exampleSentenceEs: "Tengo la tirita. La tirita es pequeña.",
-    plural: "die Pflaster"
-  }, {
-    de: "die Salbe",
-    pron: "di sál-be",
-    es: "pomada",
-    type: "Sustantivo",
-    category: "Medizin",
-    exampleSentenceDe: "Ich habe die Salbe.",
-    exampleSentenceEs: "Tengo la pomada.",
-    plural: "die Salben"
-  }, {
-    de: "die Erkältung",
-    pron: "di ea-kél-tung",
-    es: "resfriado",
-    type: "Sustantivo",
-    category: "Krankheit",
-    exampleSentenceDe: "Ich habe die Erkältung.",
-    exampleSentenceEs: "Tengo el resfriado.",
-    plural: "die Erkältungen"
-  }, {
-    de: "husten",
-    pron: "jús-ten",
-    es: "toser",
-    type: "Verbo",
-    category: "Krankheit",
-    exampleSentenceDe: "Ich huste.",
-    exampleSentenceEs: "Yo toso.",
-    regimen: "Intransitivo"
-  }, {
-    de: "bluten",
-    pron: "blú-ten",
-    es: "sangrar",
-    type: "Verbo",
-    category: "Krankheit",
-    exampleSentenceDe: "Ich blute nicht.",
-    exampleSentenceEs: "Yo no sangro.",
-    regimen: "Intransitivo"
-  }, {
-    de: "sich verletzen",
-    pron: "zij fea-lét-sen",
-    es: "lastimarse",
-    type: "Verbo",
-    category: "Krankheit",
-    exampleSentenceDe: "Ich verletze mich nicht.",
-    exampleSentenceEs: "No me lastimo.",
-    regimen: "Reflexivo + Akkusativ"
-  }, {
-    de: "der Schmerz",
-    pron: "dea shmérts",
-    es: "el dolor",
-    type: "Sustantivo",
-    category: "Krankheit",
-    exampleSentenceDe: "Ich habe Schmerz. Der Schmerz ist stark.",
-    exampleSentenceEs: "Tengo dolor. El dolor es fuerte.",
-    plural: "die Schmerzen"
-  }, {
-    de: "schwanger",
-    pron: "shván-guea",
-    es: "embarazada",
-    type: "Adjetivo",
-    category: "Körper",
-    exampleSentenceDe: "Sie ist schwanger.",
-    exampleSentenceEs: "Ella está embarazada.",
-    regimen: "≠ nicht schwanger"
-  }]
-}, {
+},
+{
   id: 10,
-  title: "Kapitel 10: Kleidung",
+  title: "Kapitel 9: Kleidung",
   icon: <ShoppingCart size={20} />,
   emoji: "👕",
   words: [{
@@ -4433,493 +5254,1250 @@ const chapters = [{
     exampleSentenceDe: "Ich habe einen Gürtel. Der Gürtel ist braun.",
     exampleSentenceEs: "Tengo un cinturón. El cinturón es marrón.",
     plural: "die Gürtel"
+  },
+  {
+    de: "orange",
+    pron: "o-ran-she",
+    es: "naranja",
+    type: "Adjetivo",
+    category: "Farben",
+    en: "a vibrant splash of orange paint",
+    exampleSentenceDe: "Meine neue Jacke ist orange.",
+    exampleSentenceEs: "Mi nueva chaqueta es naranja."
+  }, {
+        de: "rosa",
+    pron: "ro-sa",
+    es: "rosa",
+    type: "Adjetivo",
+    category: "Farben",
+    en: "a vibrant splash of pink paint",
+    exampleSentenceDe: "Das Mädchen trägt ein rosa Kleid.",
+    exampleSentenceEs: "La niña lleva un vestido rosa."
+  }, {
+        de: "lila",
+    pron: "li-la",
+    es: "morado / lila",
+    type: "Adjetivo",
+    category: "Farben",
+    en: "a vibrant splash of purple paint",
+    exampleSentenceDe: "Die Blumen im Garten sind lila.",
+    exampleSentenceEs: "Las flores en el jardín son moradas."
   }]
-}, {
-  id: 11,
-  title: "Kapitel 11: Schule & Beruf",
-  icon: <Briefcase size={20} />,
-  emoji: "💼",
+},
+{
+  id: 6,
+  title: "Kapitel 10: Einkaufen",
+  icon: <ShoppingCart size={20} />,
+  emoji: "🛒",
   words: [{
-    de: "die Schule",
-    pron: "di shú-le",
-    es: "escuela",
+    de: "das Geschäft",
+    pron: "das gue-shéft",
+    es: "tienda / negocio",
     type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich bin in der Schule.",
-    exampleSentenceEs: "Yo estoy en la escuela.",
-    plural: "die Schulen"
+    category: "Orte",
+    exampleSentenceDe: "Das Geschäft ist klein.",
+    exampleSentenceEs: "La tienda es pequeña.",
+    plural: "die Geschäfte"
   }, {
-    de: "die Klasse",
-    pron: "di klá-se",
-    es: "clase",
+    de: "der Laden",
+    pron: "dea lá-den",
+    es: "tienda pequeña",
     type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich bin in der Klasse.",
-    exampleSentenceEs: "Yo estoy en la clase.",
-    plural: "die Klassen"
+    category: "Orte",
+    exampleSentenceDe: "Ich gehe in den Laden.",
+    exampleSentenceEs: "Voy a la tienda.",
+    plural: "die Läden"
   }, {
-    de: "der Lehrer / die Lehrerin",
-    pron: "dea lé-ra  di lé-re-rin",
-    es: "profesor / profesora",
-    type: "Sustantivo",
-    category: "Personen",
-    exampleSentenceDe: "Das ist mein Lehrer. Mein Lehrer ist nett.",
-    exampleSentenceEs: "Este es mi profesor. Mi profesor es simpático.",
-    plural: "die Lehrer / die Lehrerinnen"
+    de: "die Bäckerei",
+    pron: "di bé-ke-rái",
+    es: "panadería",
+    type: "Sustantivo (Fem)",
+    category: "Orte",
+    exampleSentenceDe: "Ich gehe zur Bäckerei.",
+    exampleSentenceEs: "Voy a la panadería.",
+    plural: "die Bäckereien"
   }, {
-    de: "der Schüler / die Schülerin",
-    pron: "dea shú-la  di shú-le-rin",
-    es: "alumno / alumna",
-    type: "Sustantivo",
-    category: "Personen",
-    exampleSentenceDe: "Der Schüler ist neu. Er ist in der Klasse.",
-    exampleSentenceEs: "El alumno es nuevo. Él está en la clase.",
-    plural: "die Schüler / die Schülerinnen"
+    de: "der Supermarkt",
+    pron: "dea sú-pea-markt",
+    es: "supermercado",
+    type: "Sustantivo (Masc)",
+    category: "Orte",
+    exampleSentenceDe: "Ich gehe in den Supermarkt.",
+    exampleSentenceEs: "Voy al supermercado.",
+    plural: "die Supermärkte"
   }, {
-    de: "der Student",
-    pron: "dea shtu-dént",
-    es: "estudiante (uni)",
-    type: "Sustantivo",
-    category: "Personen",
-    exampleSentenceDe: "Ich bin ein Student. Der Student ist neu.",
-    exampleSentenceEs: "Soy un estudiante. El estudiante es nuevo.",
-    plural: "die Studenten"
+    de: "geöffnet",
+    pron: "gue-óf-net",
+    es: "abierto",
+    type: "Adjetivo",
+    category: "Status",
+    exampleSentenceDe: "Das Geschäft ist geöffnet.",
+    exampleSentenceEs: "La tienda está abierta.",
+    regimen: "≠ geschlossen"
   }, {
-    de: "lernen",
-    pron: "lér-nen",
-    es: "aprender / estudiar",
+    de: "das Angebot",
+    pron: "das án-gue-bot",
+    es: "oferta",
+    type: "Sustantivo (Neutro)",
+    category: "Preis",
+    exampleSentenceDe: "Das ist ein gutes Angebot.",
+    exampleSentenceEs: "Esta es una buena oferta.",
+    plural: "die Angebote"
+  }, {
+    de: "günstig",
+    pron: "gúns-tij",
+    es: "económico",
+    type: "Adjetivo",
+    category: "Preis",
+    exampleSentenceDe: "Das Hotel ist günstig.",
+    exampleSentenceEs: "El hotel es económico.",
+    regimen: "≠ teuer"
+  }, {
+    de: "billig",
+    pron: "bí-lij",
+    es: "barato",
+    type: "Adjetivo",
+    category: "Preis",
+    exampleSentenceDe: "Das Brot ist billig.",
+    exampleSentenceEs: "El pan es barato.",
+    regimen: "≠ teuer"
+  }, {
+    de: "teuer",
+    pron: "tói-a",
+    es: "caro",
+    type: "Adjetivo",
+    category: "Preis",
+    exampleSentenceDe: "Das ist teuer.",
+    exampleSentenceEs: "Esto es caro.",
+    regimen: "≠ billig"
+  }, {
+    de: "brauchen",
+    pron: "bráu-jen",
+    es: "necesitar",
     type: "Verbo",
     category: "Aktionen",
-    exampleSentenceDe: "Ich lerne Deutsch.",
-    exampleSentenceEs: "Yo aprendo alemán.",
+    exampleSentenceDe: "Ich brauche Wasser.",
+    exampleSentenceEs: "Yo necesito agua.",
     regimen: "+ Akkusativ"
   }, {
-    de: "der Unterricht",
-    pron: "dea ún-tea-rijt",
-    es: "clase (sesión)",
+    de: "das Kilo",
+    pron: "das kí-lo",
+    es: "kilo",
     type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Der Unterricht beginnt jetzt.",
-    exampleSentenceEs: "La clase empieza ahora.",
-    plural: "die Unterrichte"
+    category: "Menge",
+    exampleSentenceDe: "Ich kaufe ein Kilo Äpfel.",
+    exampleSentenceEs: "Compro un kilo de manzanas.",
+    plural: "die Kilo"
   }, {
-    de: "der Kurs",
-    pron: "dea kúrs",
-    es: "curso",
+    de: "das Pfund",
+    pron: "das pfunt",
+    es: "libra (500g)",
     type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Der Deutschkurs ist gut.",
-    exampleSentenceEs: "El curso de alemán es bueno.",
-    plural: "die Kurse"
+    category: "Menge",
+    exampleSentenceDe: "Ich kaufe ein Pfund Brot.",
+    exampleSentenceEs: "Compro una libra de pan.",
+    plural: "die Pfund"
   }, {
-    de: "die Pause",
-    pron: "di páu-se",
-    es: "descanso/recreo",
+    de: "das Gramm",
+    pron: "das gram",
+    es: "gramo",
     type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Wir machen jetzt eine Pause.",
-    exampleSentenceEs: "Ahora hacemos un descanso.",
-    plural: "die Pausen"
+    category: "Menge",
+    exampleSentenceDe: "Ich brauche das Gramm Zucker.",
+    exampleSentenceEs: "Necesito el gramo de azúcar.",
+    plural: "die Gramm"
   }, {
-    de: "die Hausaufgabe",
-    pron: "di jáus-áuf-gá-be",
-    es: "tarea",
-    type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich mache die Hausaufgabe.",
-    exampleSentenceEs: "Yo hago la tarea.",
-    plural: "die Hausaufgaben"
-  }, {
-    de: "die Prüfung",
-    pron: "di prǘ-fung",
-    es: "examen",
-    type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Die Prüfung ist schwer.",
-    exampleSentenceEs: "El examen es difícil.",
-    plural: "die Prüfungen"
-  }, {
-    de: "die Lösung",
-    pron: "di lö-sung",
-    es: "solución",
-    type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich habe eine Lösung. Die Lösung ist einfach.",
-    exampleSentenceEs: "Tengo una solución. La solución es simple.",
-    plural: "die Lösungen"
-  }, {
-    de: "der Fehler",
-    pron: "dea fé-la",
-    es: "error",
-    type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich mache einen Fehler. Der Fehler ist groß.",
-    exampleSentenceEs: "Yo cometo un error. El error es grande.",
-    plural: "die Fehler"
-  }, {
-    de: "die Arbeit",
-    pron: "di ár-bait",
-    es: "trabajo",
-    type: "Sustantivo",
-    category: "Beruf",
-    exampleSentenceDe: "Die Arbeit ist interessant.",
-    exampleSentenceEs: "El trabajo es interesante.",
-    plural: "die Arbeiten"
-  }, {
-    de: "der Beruf",
-    pron: "dea be-rúf",
-    es: "profesión",
-    type: "Sustantivo",
-    category: "Beruf",
-    exampleSentenceDe: "Was ist dein Beruf?",
-    exampleSentenceEs: "¿Cuál es tu profesión?",
-    plural: "die Berufe"
-  }, {
-    de: "Mechaniker von Beruf",
-    pron: "me-já-ni-ka fon be-rúf",
-    es: "mecánico de profesión",
-    type: "Frase",
-    category: "Beruf",
-    exampleSentenceDe: "Ich bin Mechaniker von Beruf.",
-    exampleSentenceEs: "Soy mecánico de profesión.",
-    regimen: "von + dat., sin artículo"
-  }, {
-    de: "der Arbeitsplatz / Job",
-    pron: "dea ár-baits-plats  dshob",
-    es: "puesto de trabajo / empleo",
-    type: "Sustantivo",
-    category: "Beruf",
-    exampleSentenceDe: "Ich habe einen Arbeitsplatz. Der Arbeitsplatz ist gut.",
-    exampleSentenceEs: "Tengo un puesto de trabajo. El puesto de trabajo es bueno.",
-    plural: "die Arbeitsplätze"
-  }, {
-    de: "arbeiten",
-    pron: "ár-bai-ten",
-    es: "trabajar",
+    de: "kosten",
+    pron: "kós-ten",
+    es: "costar",
     type: "Verbo",
-    category: "Beruf",
-    exampleSentenceDe: "Ich arbeite heute.",
-    exampleSentenceEs: "Yo trabajo hoy.",
-    regimen: "+ an/bei + Dat"
+    category: "Preis",
+    exampleSentenceDe: "Was kostet das Brot?",
+    exampleSentenceEs: "¿Cuánto cuesta el pan?",
+    regimen: "+ Akkusativ"
   }, {
-    de: "der Chef / die Chefin",
-    pron: "dea shef  di shé-fin",
-    es: "jefe / jefa",
+    de: "der Preis",
+    pron: "dea práis",
+    es: "precio",
+    type: "Sustantivo",
+    category: "Preis",
+    exampleSentenceDe: "Der Preis ist hoch.",
+    exampleSentenceEs: "El precio es alto.",
+    plural: "die Preise"
+  }, {
+    de: "die Kasse",
+    pron: "di ká-se",
+    es: "caja",
+    type: "Sustantivo (Fem)",
+    category: "Bezahlen",
+    exampleSentenceDe: "Wo ist die Kasse, bitte?",
+    exampleSentenceEs: "¿Dónde está la caja, por favor?",
+    plural: "die Kassen"
+  }, {
+    de: "das Geld",
+    pron: "das guelt",
+    es: "dinero",
+    type: "Sustantivo",
+    category: "Bezahlen",
+    exampleSentenceDe: "Das ist das Geld.",
+    exampleSentenceEs: "Este es el dinero.",
+    plural: "die Gelder"
+  }, {
+    de: "der Verkäufer",
+    pron: "dea fea-kói-fea",
+    es: "vendedor",
     type: "Sustantivo",
     category: "Personen",
-    exampleSentenceDe: "Der Chef ist nett.",
-    exampleSentenceEs: "El jefe es simpático.",
-    plural: "die Chefs / die Chefinnen"
+    exampleSentenceDe: "Der Verkäufer ist nett.",
+    exampleSentenceEs: "El vendedor es simpático.",
+    plural: "die Verkäufer"
   }, {
-    de: "der Kollege / die Kollegin",
-    pron: "dea ko-lé-gue  di ko-lé-guin",
-    es: "colega",
+    de: "bestellen",
+    pron: "be-shté-len",
+    es: "pedir (online)",
+    type: "Verbo",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich bestelle Pizza.",
+    exampleSentenceEs: "Yo pido pizza.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "die Überweisung",
+    pron: "di ǘ-bea-vái-sung",
+    es: "transferencia",
     type: "Sustantivo",
-    category: "Personen",
-    exampleSentenceDe: "Ich habe einen Kollegen. Mein Kollege ist nett.",
-    exampleSentenceEs: "Tengo un colega. Mi colega es simpático.",
-    plural: "die Kollegen / Kolleginnen"
+    category: "Bezahlen",
+    exampleSentenceDe: "Ich mache die Überweisung.",
+    exampleSentenceEs: "Hago la transferencia.",
+    plural: "die Überweisungen"
   }, {
-    de: "die Firma / das Büro",
-    pron: "di fír-ma  das bü-ró",
-    es: "empresa / oficina",
+    de: "das Wechselgeld",
+    pron: "das vék-sel-guelt",
+    es: "el cambio / vueltas",
     type: "Sustantivo",
-    category: "Beruf",
-    exampleSentenceDe: "Ich arbeite in der Firma.",
-    exampleSentenceEs: "Yo trabajo en la empresa.",
-    plural: "die Firmen / die Büros"
+    category: "Bezahlen",
+    exampleSentenceDe: "Ich brauche das Wechselgeld nicht.",
+    exampleSentenceEs: "No necesito el cambio.",
+    plural: "die Wechselgelder"
   }, {
-    de: "arbeitslos",
-    pron: "ár-baits-lohs",
-    es: "desempleado",
-    type: "Adjetivo",
-    category: "Beruf",
-    exampleSentenceDe: "Ich bin arbeitslos.",
-    exampleSentenceEs: "Yo estoy desempleado.",
-    regimen: "≠ berufstätig"
+    de: "umtauschen",
+    pron: "úm-táu-shen",
+    es: "cambiar (artículo)",
+    type: "Verbo Separable",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich möchte das T-Shirt umtauschen.",
+    exampleSentenceEs: "Yo quisiera cambiar la camiseta.",
+    regimen: "Separable (um-) + Akk."
   }, {
-    de: "der Arbeiter",
-    pron: "dea ár-bai-ta",
-    es: "obrero",
+    de: "der Rabatt",
+    pron: "dea ra-bát",
+    es: "descuento",
     type: "Sustantivo",
-    category: "Personen",
-    exampleSentenceDe: "Ich sehe der Arbeiter.",
-    exampleSentenceEs: "Yo veo al obrero.",
-    plural: "die Arbeiter"
+    category: "Preis",
+    exampleSentenceDe: "Ich sehe der Rabatt. Der Rabatt ist gut.",
+    exampleSentenceEs: "Veo el descuento. El descuento es bueno.",
+    plural: "die Rabatte"
+  },
+  {
+    de: "einkaufen",
+    pron: "áin-kau-fen",
+    es: "ir de compras",
+    type: "Verbo",
+    category: "Einkaufen",
+    regimen: "Separable (ein-) / + Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
   }, {
-    de: "das Praktikum",
-    pron: "das prák-ti-kum",
-    es: "pasantía",
-    type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich mache ein Praktikum in Deutschland.",
-    exampleSentenceEs: "Hago una pasantía en Alemania.",
-    plural: "die Praktika"
+        de: "verkaufen",
+    pron: "fea-káo-fen",
+    es: "vender",
+    type: "Verbo",
+    category: "Einkaufen",
+    regimen: "+ Akkusativ",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }]
+},
+{
+  id: 4,
+  title: "Kapitel 11: Freizeit",
+  icon: <Activity size={20} />,
+  emoji: "⚛",
+  words: [{
+    de: "die Freizeit",
+    pron: "di frái-tsait",
+    es: "el tiempo libre",
+    type: "Sustantivo (Fem)",
+    category: "Allgemein",
+    exampleSentenceDe: "Ich habe Freizeit am Wochenende.",
+    exampleSentenceEs: "Tengo tiempo libre el fin de semana.",
+    plural: "die Freizeiten"
   }, {
-    de: "die Ausbildung",
-    pron: "di áus-bíl-dung",
-    es: "formación dual",
-    type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Die Ausbildung ist wichtig.",
-    exampleSentenceEs: "La formación es importante.",
-    plural: "die Ausbildungen"
+    de: "das Hobby",
+    pron: "das hó-bi",
+    es: "el pasatiempo",
+    type: "Sustantivo (Neutro)",
+    category: "Allgemein",
+    exampleSentenceDe: "Mein Hobby ist lesen.",
+    exampleSentenceEs: "Mi pasatiempo es leer.",
+    plural: "die Hobbys"
   }, {
-    de: "der Urlaub",
-    pron: "dea úa-laup",
-    es: "vacaciones",
-    type: "Sustantivo",
-    category: "Beruf",
-    exampleSentenceDe: "Ich habe Urlaub.",
-    exampleSentenceEs: "Tengo vacaciones.",
-    plural: "die Urlaube"
+    de: "spielen",
+    pron: "shpí-len",
+    es: "jugar / tocar",
+    type: "Verbo",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich spiele gern.",
+    exampleSentenceEs: "Me gusta jugar.",
+    regimen: "+ Akkusativ"
   }, {
-    de: "selbstständig",
-    pron: "sélpst-shtén-dij",
-    es: "independiente",
-    type: "Adjetivo",
-    category: "Beruf",
-    exampleSentenceDe: "Ich bin selbstständig.",
-    exampleSentenceEs: "Soy independiente.",
-    regimen: "≠ abhängig"
-  }, {
-    de: "die Stelle",
-    pron: "di shté-le",
-    es: "plaza/vacante",
-    type: "Sustantivo",
-    category: "Beruf",
-    exampleSentenceDe: "Ich suche die Stelle.",
-    exampleSentenceEs: "Yo busco la plaza.",
-    plural: "die Stellen"
-  }, {
-    de: "Geld verdienen",
-    pron: "guelt fea-dí-nen",
-    es: "ganar dinero",
+    de: "Fußball spielen",
+    pron: "fús-bal shpí-len",
+    es: "jugar fútbol",
     type: "Frase",
-    category: "Beruf",
-    exampleSentenceDe: "Ich möchte Geld verdienen.",
-    exampleSentenceEs: "Yo quiero ganar dinero.",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich spiele gern Fußball.",
+    exampleSentenceEs: "Me gusta jugar al fútbol.",
+    regimen: "Verbo+objeto"
+  }, {
+    de: "der Ball",
+    pron: "dea bal",
+    es: "el balón",
+    type: "Sustantivo (Masc)",
+    category: "Gegenstände",
+    exampleSentenceDe: "Ich habe einen Ball. Der Ball ist rot.",
+    exampleSentenceEs: "Tengo un balón. El balón es rojo.",
+    plural: "die Bälle"
+  }, {
+    de: "Karten spielen",
+    pron: "kár-ten-shpí-len",
+    es: "jugar cartas",
+    type: "Frase",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Wir spielen Karten am Abend.",
+    exampleSentenceEs: "Jugamos a las cartas por la noche.",
+    regimen: "Verbo+objeto"
+  }, {
+    de: "Musik hören",
+    pron: "mu-sík jé-ren",
+    es: "escuchar música",
+    type: "Frase",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich höre gern Musik.",
+    exampleSentenceEs: "Me gusta escuchar música.",
     regimen: "Verbo + Akkusativ"
   }, {
-    de: "schwere / leichte Arbeit",
-    pron: "shvé-re  láij-te ar-báit",
-    es: "trabajo pesado/ligero",
-    type: "Frase",
-    category: "Beruf",
-    exampleSentenceDe: "Die Arbeit ist schwer.",
-    exampleSentenceEs: "El trabajo es pesado.",
-    regimen: "Adj. + sustantivo neutro"
+    de: "die CD",
+    pron: "di tse-dé",
+    es: "el CD",
+    type: "Sustantivo (Fem)",
+    category: "Gegenstände",
+    exampleSentenceDe: "Ich habe die CD. Die CD ist neu.",
+    exampleSentenceEs: "Tengo el CD. El CD es nuevo.",
+    plural: "die CDs"
   }, {
-    de: "das Internet",
-    pron: "das ín-ta-net",
-    es: "internet",
-    type: "Sustantivo",
-    category: "Büro",
-    exampleSentenceDe: "Ich habe das Internet. Das Internet ist gut.",
-    exampleSentenceEs: "Tengo internet. Internet es bueno.",
-    plural: "die Internets"
+    de: "wandern",
+    pron: "ván-dean",
+    es: "hacer senderismo",
+    type: "Verbo",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich gehe im Park wandern.",
+    exampleSentenceEs: "Yo voy a hacer senderismo en el parque.",
+    regimen: "sein (intransitivo)"
+  }, {
+    de: "schwimmen",
+    pron: "shví-men",
+    es: "nadar",
+    type: "Verbo",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich kann schwimmen.",
+    exampleSentenceEs: "Yo puedo nadar.",
+    regimen: "sein (movimiento)"
+  }, {
+    de: "lesen",
+    pron: "lé-sen",
+    es: "leer",
+    type: "Verbo",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich lese ein Buch.",
+    exampleSentenceEs: "Yo leo un libro.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "das Buch",
+    pron: "das buj",
+    es: "el libro",
+    type: "Sustantivo (Neutro)",
+    category: "Gegenstände",
+    exampleSentenceDe: "Das ist ein Buch. Das Buch ist neu.",
+    exampleSentenceEs: "Este es un libro. El libro es nuevo.",
+    plural: "die Bücher"
+  }, {
+    de: "die Zeitung",
+    pron: "di tsái-tung",
+    es: "el periódico",
+    type: "Sustantivo (Fem)",
+    category: "Gegenstände",
+    exampleSentenceDe: "Ich lese die Zeitung.",
+    exampleSentenceEs: "Yo leo el periódico.",
+    plural: "die Zeitungen"
+  }, {
+    de: "fernsehen",
+    pron: "fén-se-en",
+    es: "ver televisión",
+    type: "Verbo separable",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich sehe am Abend fern.",
+    exampleSentenceEs: "Yo veo la televisión por la noche.",
+    regimen: "Separable (fern-)"
+  }, {
+    de: "tanzen",
+    pron: "tán-tsen",
+    es: "bailar",
+    type: "Verbo",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich tanze gern.",
+    exampleSentenceEs: "Me gusta bailar.",
+    regimen: "Intransitivo"
   }, {
     de: "der Computer",
     pron: "dea kom-piú-ta",
     es: "computador",
-    type: "Sustantivo",
-    category: "Büro",
+    type: "Sustantivo (Masc)",
+    category: "Gegenstände",
     exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
     exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
     plural: "die Computer"
   }, {
-    de: "der Drucker",
-    pron: "dea drú-ka",
-    es: "impresora",
+    de: "der Sport",
+    pron: "dea shport",
+    es: "deporte",
     type: "Sustantivo",
-    category: "Büro",
-    exampleSentenceDe: "Das ist mein Drucker. Der Drucker ist neu.",
-    exampleSentenceEs: "Esta es mi impresora. La impresora es nueva.",
-    plural: "die Drucker"
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich mag der Sport.",
+    exampleSentenceEs: "Me gusta el deporte.",
+    plural: "die Sportarten"
   }, {
-    de: "der Bleistift",
-    pron: "dea blái-shtift",
-    es: "lápiz",
+    de: "ins Kino gehen",
+    pron: "ins kí-no gué-en",
+    es: "ir al cine",
+    type: "Frase",
+    category: "Ausgehen",
+    exampleSentenceDe: "Ich gehe ins Kino.",
+    exampleSentenceEs: "Yo voy al cine.",
+    regimen: "in + Akk."
+  }, {
+    de: "einen Film sehen",
+    pron: "ái-nen film sé-en",
+    es: "ver película",
+    type: "Frase",
+    category: "Ausgehen",
+    exampleSentenceDe: "Ich sehe einen Film.",
+    exampleSentenceEs: "Yo veo una película.",
+    regimen: "Akkusativ: einen Film"
+  }, {
+    de: "Rad fahren",
+    pron: "rat fá-ren",
+    es: "montar bicicleta",
+    type: "Frase",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Ich kann Rad fahren.",
+    exampleSentenceEs: "Yo sé montar bicicleta.",
+    regimen: "Verbo separable"
+  }, {
+    de: "spazieren gehen",
+    pron: "shpa-tsí-ren-gué-en",
+    es: "pasear",
+    type: "Frase",
+    category: "Aktivitäten",
+    exampleSentenceDe: "Wir gehen spazieren im Park.",
+    exampleSentenceEs: "Paseamos en el parque.",
+    regimen: "Verbo separable"
+  }, {
+    de: "in die Disco gehen",
+    pron: "in di dís-ko gué-en",
+    es: "ir a discoteca",
+    type: "Frase",
+    category: "Ausgehen",
+    exampleSentenceDe: "Ich gehe in die Disco.",
+    exampleSentenceEs: "Yo voy a la discoteca.",
+    regimen: "in + Akkusativ"
+  }, {
+    de: "das Museum",
+    pron: "das mu-séum",
+    es: "museo",
+    type: "Sustantivo (Neutro)",
+    category: "Orte",
+    exampleSentenceDe: "Das Museum ist groß.",
+    exampleSentenceEs: "El museo es grande.",
+    plural: "die Museen"
+  }, {
+    de: "der Verein",
+    pron: "dea fea-áin",
+    es: "club / asociación",
+    type: "Sustantivo (Masc)",
+    category: "Orte",
+    exampleSentenceDe: "Ich bin in dem Verein.",
+    exampleSentenceEs: "Yo estoy en el club.",
+    plural: "die Vereine"
+  }, {
+    de: "das Schwimmbad",
+    pron: "das shvím-bat",
+    es: "la piscina",
+    type: "Sustantivo (Neutro)",
+    category: "Orte",
+    exampleSentenceDe: "Wir gehen in das Schwimmbad.",
+    exampleSentenceEs: "Vamos a la piscina.",
+    plural: "die Schwimmbäder"
+  }, {
+    de: "gefallen",
+    pron: "gue-fá-len",
+    es: "gustar",
+    type: "Verbo",
+    category: "Adjektive & Gefühle",
+    exampleSentenceDe: "Das Kleid gefällt mir.",
+    exampleSentenceEs: "El vestido me gusta.",
+    regimen: "+ Dativo"
+  }, {
+    de: "schön",
+    pron: "shön",
+    es: "bonito",
+    type: "Adjetivo",
+    category: "Adjektive & Gefühle",
+    exampleSentenceDe: "Das Wetter ist schön.",
+    exampleSentenceEs: "El tiempo es bonito.",
+    regimen: "≠ hässlich"
+  }, {
+    de: "mögen",
+    pron: "mö-guen",
+    es: "gustar / me gusta",
+    type: "Verbo",
+    category: "Adjektive & Gefühle",
+    exampleSentenceDe: "Ich mag Kaffee.",
+    exampleSentenceEs: "Me gusta el café.",
+    regimen: "+ Akkusativ, irregular"
+  }, {
+    de: "sich treffen",
+    pron: "zij tré-fen",
+    es: "reunirse/encontrarse",
+    type: "Verbo",
+    category: "Soziales",
+    exampleSentenceDe: "Wir treffen uns heute Abend.",
+    exampleSentenceEs: "Nos encontramos esta noche.",
+    regimen: "Reflexivo + mit/Dativ"
+  },
+  {
+    de: "der Hund",
+    pron: "dea hunt",
+    es: "el perro",
+    type: "Sustantivo (Masc)",
+    category: "Tiere",
+    plural: "die Hunde",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Katze",
+    pron: "di ká-tse",
+    es: "el gato",
+    type: "Sustantivo (Fem)",
+    category: "Tiere",
+    plural: "die Katzen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Vogel",
+    pron: "dea fó-guel",
+    es: "el pájaro",
+    type: "Sustantivo (Masc)",
+    category: "Tiere",
+    plural: "die Vögel",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Pferd",
+    pron: "das pfeat",
+    es: "el caballo",
+    type: "Sustantivo (Neutro)",
+    category: "Tiere",
+    plural: "die Pferde",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Maus",
+    pron: "di maus",
+    es: "el ratón",
+    type: "Sustantivo (Fem)",
+    category: "Tiere",
+    plural: "die Mäuse",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Kuh",
+    pron: "di ku",
+    es: "la vaca",
+    type: "Sustantivo (Fem)",
+    category: "Tiere",
+    plural: "die Kühe",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Schaf",
+    pron: "das shaf",
+    es: "la oveja",
     type: "Sustantivo",
-    category: "Büro",
-    exampleSentenceDe: "Das ist ein Bleistift. Der Bleistift ist blau.",
-    exampleSentenceEs: "Esto es un lápiz. El lápiz es azul.",
-    plural: "die Bleistifte"
+    category: "Tiere",
+    plural: "die Schafe",
+    en: "white fluffy sheep",
+    exampleSentenceDe: "Das Schaf isst Gras.",
+    exampleSentenceEs: "La oveja come hierba."
   }, {
-    de: "der Kugelschreiber",
-    pron: "dea kú-guel-shrái-ba",
-    es: "bolígrafo",
+        de: "die Ziege",
+    pron: "di tsí-gue",
+    es: "la cabra",
     type: "Sustantivo",
-    category: "Büro",
-    exampleSentenceDe: "Ich habe einen Kugelschreiber. Der Kugelschreiber ist blau.",
-    exampleSentenceEs: "Tengo un bolígrafo. El bolígrafo es azul.",
-    plural: "die Kugelschreiber"
+    category: "Tiere",
+    plural: "die Ziegen",
+    en: "brown goat",
+    exampleSentenceDe: "Die Ziege ist auf dem Berg.",
+    exampleSentenceEs: "La cabra está en la montaña."
   }, {
-    de: "der Schreibtisch",
-    pron: "dea shráip-tish",
-    es: "escritorio",
+        de: "das Huhn",
+    pron: "das jun",
+    es: "la gallina",
     type: "Sustantivo",
-    category: "Büro",
-    exampleSentenceDe: "Der Schreibtisch ist groß.",
-    exampleSentenceEs: "El escritorio es grande.",
-    plural: "die Schreibtische"
+    category: "Tiere",
+    plural: "die Hühner",
+    en: "white chicken",
+    exampleSentenceDe: "Das Huhn legt ein Ei.",
+    exampleSentenceEs: "La gallina pone un huevo."
   }, {
-    de: "das Zeugnis",
-    pron: "das tsóik-nis",
-    es: "boletín de notas",
+        de: "der Bär",
+    pron: "dea ber",
+    es: "el oso",
     type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich habe das Zeugnis. Das Zeugnis ist gut.",
-    exampleSentenceEs: "Tengo el boletín de notas. El boletín de notas es bueno.",
-    plural: "die Zeugnisse"
+    category: "Tiere",
+    plural: "die Bären",
+    en: "brown bear",
+    exampleSentenceDe: "Der Bär ist groß.",
+    exampleSentenceEs: "El oso es grande."
   }, {
-    de: "der Stundenplan",
-    pron: "dea shtún-den-plan",
-    es: "horario de clases",
+        de: "der Löwe",
+    pron: "dea lö-ve",
+    es: "el león",
     type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich habe der Stundenplan.",
-    exampleSentenceEs: "Tengo el horario de clases.",
-    plural: "die Stundenpläne"
+    category: "Tiere",
+    plural: "die Löwen",
+    en: "male lion with a mane",
+    exampleSentenceDe: "Der Löwe ist stark.",
+    exampleSentenceEs: "El león es fuerte."
   }, {
-    de: "fehlen",
-    pron: "fé-len",
-    es: "faltar",
-    type: "Verbo",
-    category: "Bildung",
-    exampleSentenceDe: "Mir fehlen die Zähne.",
-    exampleSentenceEs: "Me faltan los dientes.",
-    regimen: "⚠️ Exige Dativo"
-  }, {
-    de: "bestehen",
-    pron: "be-shté-en",
-    es: "aprobar",
-    type: "Verbo",
-    category: "Bildung",
-    exampleSentenceDe: "Die Prüfung besteht aus zehn Fragen.",
-    exampleSentenceEs: "El examen consta de diez preguntas.",
-    regimen: "+ Akkusativ, no separable"
-  }, {
-    de: "durchfallen",
-    pron: "dúrch-fa-len",
-    es: "reprobar",
-    type: "Verbo separable",
-    category: "Bildung",
-    exampleSentenceDe: "Ich falle bei der Prüfung durch.",
-    exampleSentenceEs: "Reprobo en el examen.",
-    regimen: "Separable (durch-)"
-  }, {
-    de: "die Besprechung",
-    pron: "di be-shpré-jung",
-    es: "la reunión",
+        de: "der Elefant",
+    pron: "dea e-le-fánt",
+    es: "el elefante",
     type: "Sustantivo",
-    category: "Beruf",
-    exampleSentenceDe: "Die Besprechung ist um neun Uhr.",
-    exampleSentenceEs: "La reunión es a las nueve.",
-    plural: "die Besprechungen"
+    category: "Tiere",
+    plural: "die Elefanten",
+    en: "gray elephant with a trunk",
+    exampleSentenceDe: "Der Elefant hat große Ohren.",
+    exampleSentenceEs: "El elefante tiene orejas grandes."
   }, {
-    de: "kündigen",
-    pron: "kún-di-guen",
-    es: "renunciar",
-    type: "Verbo",
-    category: "Beruf",
-    exampleSentenceDe: "Ich kündige meinen Job.",
-    exampleSentenceEs: "Yo renuncio a mi trabajo.",
-    regimen: "+ Dativ"
-  }, {
-    de: "befördern",
-    pron: "be-féa-den",
-    es: "ascender",
-    type: "Verbo",
-    category: "Beruf",
-    exampleSentenceDe: "Ich befördere meine Tasche.",
-    exampleSentenceEs: "Yo transporte mi bolso.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "die Universität",
-    pron: "di u-ni-vea-si-tét",
-    es: "universidad",
+        de: "der Affe",
+    pron: "dea á-fe",
+    es: "el mono",
     type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich bin an der Universität. Die Universität ist groß.",
-    exampleSentenceEs: "Yo estoy en la universidad. La universidad es grande.",
-    plural: "die Universitäten"
+    category: "Tiere",
+    plural: "die Affen",
+    en: "monkey eating a banana",
+    exampleSentenceDe: "Der Affe isst eine Banane.",
+    exampleSentenceEs: "El mono come un banano."
   }, {
-    de: "anmelden",
-    pron: "án-mel-den",
-    es: "inscribirse",
-    type: "Verbo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich melde mich für den Kurs an.",
-    exampleSentenceEs: "Me inscribo para el curso.",
-    regimen: "Sep./refl. + Akkusativ"
-  }, {
-    de: "die Anmeldung",
-    pron: "di án-mel-dung",
-    es: "inscripción",
+        de: "die Schlange",
+    pron: "di shláng-e",
+    es: "la serpiente",
     type: "Sustantivo",
-    category: "Bildung",
-    exampleSentenceDe: "Ich mache die Anmeldung für den Kurs.",
-    exampleSentenceEs: "Yo hago la inscripción para el curso.",
-    plural: "die Anmeldungen"
+    category: "Tiere",
+    plural: "die Schlangen",
+    en: "green snake",
+    exampleSentenceDe: "Die Schlange ist lang.",
+    exampleSentenceEs: "La serpiente es larga."
   }, {
-    de: "sprechen",
-    pron: "shpré-jen",
-    es: "hablar",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich spreche Deutsch.",
-    exampleSentenceEs: "Yo hablo alemán.",
-    regimen: "+ Akkusativ, irr. (spricht)"
+        de: "der Frosch",
+    pron: "dea frosh",
+    es: "la rana",
+    type: "Sustantivo",
+    category: "Tiere",
+    plural: "die Frösche",
+    en: "green frog",
+    exampleSentenceDe: "Der Frosch springt.",
+    exampleSentenceEs: "La rana salta."
   }, {
-    de: "verstehen",
-    pron: "fea-shté-en",
-    es: "entender",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich verstehe das.",
-    exampleSentenceEs: "Yo entiendo eso.",
-    regimen: "+ Akkusativ"
+        de: "die Spinne",
+    pron: "di shpí-ne",
+    es: "la araña",
+    type: "Sustantivo",
+    category: "Tiere",
+    plural: "die Spinnen",
+    en: "black spider",
+    exampleSentenceDe: "Ich mag keine Spinnen.",
+    exampleSentenceEs: "No me gustan las arañas."
   }, {
-    de: "fragen",
-    pron: "frá-guen",
-    es: "preguntar",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich frage dich.",
-    exampleSentenceEs: "Yo te pregunto.",
-    regimen: "+ Akkusativ (jdn.)"
+        de: "die Biene",
+    pron: "di bí-ne",
+    es: "la abeja",
+    type: "Sustantivo",
+    category: "Tiere",
+    plural: "die Bienen",
+    en: "yellow and black bee",
+    exampleSentenceDe: "Die Biene macht Honig.",
+    exampleSentenceEs: "La abeja hace miel."
   }, {
-    de: "antworten",
-    pron: "ánt-vor-ten",
-    es: "responder",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich antworte auf deine Frage.",
-    exampleSentenceEs: "Yo respondo a tu pregunta.",
-    regimen: "⚠️ Exige Dativo"
+        de: "der Schmetterling",
+    pron: "dea shmé-ter-ling",
+    es: "la mariposa",
+    type: "Sustantivo",
+    category: "Tiere",
+    plural: "die Schmetterlinge",
+    en: "colorful butterfly",
+    exampleSentenceDe: "Der Schmetterling ist schön.",
+    exampleSentenceEs: "La mariposa es bonita."
   }, {
-    de: "erklären",
-    pron: "ea-klé-ren",
-    es: "explicar",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Ich kann das nicht erklären.",
-    exampleSentenceEs: "Yo no puedo explicar eso.",
-    regimen: "jdm. + Akk."
+        de: "die Kirche",
+    pron: "di kír-je",
+    es: "la iglesia",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Kirchen",
+    en: "old stone church",
+    exampleSentenceDe: "Die Kirche ist sehr alt.",
+    exampleSentenceEs: "La iglesia es muy antigua."
   }, {
-    de: "wiederholen",
-    pron: "ví-da-jó-len",
-    es: "repetir",
-    type: "Verbo",
-    category: "Aktionen",
-    exampleSentenceDe: "Bitte wiederholen Sie das.",
-    exampleSentenceEs: "Por favor, repita eso.",
-    regimen: "No separable, + Akk."
+        de: "die Brücke",
+    pron: "di brü-ke",
+    es: "el puente",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Brücken",
+    en: "stone bridge over a river",
+    exampleSentenceDe: "Wir gehen über die Brücke.",
+    exampleSentenceEs: "Vamos por el puente."
+  }, {
+        de: "der Turm",
+    pron: "dea turm",
+    es: "la torre",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Türme",
+    en: "tall medieval tower",
+    exampleSentenceDe: "Der Turm ist sehr hoch.",
+    exampleSentenceEs: "La torre es muy alta."
+  }, {
+        de: "der Park",
+    pron: "dea park",
+    es: "el parque",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Parks",
+    en: "green park with trees",
+    exampleSentenceDe: "Ich laufe im Park.",
+    exampleSentenceEs: "Yo corro en el parque."
+  }, {
+        de: "das Rathaus",
+    pron: "das rát-haus",
+    es: "el ayuntamiento",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Rathäuser",
+    en: "historic city hall building",
+    exampleSentenceDe: "Das Rathaus ist im Zentrum.",
+    exampleSentenceEs: "El ayuntamiento está en el centro."
+  }, {
+        de: "die Bibliothek",
+    pron: "di bi-blio-ték",
+    es: "la biblioteca",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Bibliotheken",
+    en: "building full of books",
+    exampleSentenceDe: "Ich lerne in der Bibliothek.",
+    exampleSentenceEs: "Estudio en la biblioteca."
+  }, {
+        de: "das Stadion",
+    pron: "das shtá-dion",
+    es: "el estadio",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Stadien",
+    en: "large sports stadium",
+    exampleSentenceDe: "Das Fußballspiel ist im Stadion.",
+    exampleSentenceEs: "El partido de fútbol es en el estadio."
+  }, {
+        de: "das Theater",
+    pron: "das te-á-ter",
+    es: "el teatro",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Theater",
+    en: "classic theater stage",
+    exampleSentenceDe: "Wir gehen heute ins Theater.",
+    exampleSentenceEs: "Hoy vamos al teatro."
+  }, {
+        de: "das Zentrum",
+    pron: "das tsén-trum",
+    es: "el centro",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Zentren",
+    en: "busy city center square",
+    exampleSentenceDe: "Die Bank ist im Zentrum.",
+    exampleSentenceEs: "El banco está en el centro."
+  }, {
+        de: "der Markt",
+    pron: "dea markt",
+    es: "el mercado",
+    type: "Sustantivo",
+    category: "Orte",
+    plural: "die Märkte",
+    en: "fruit market stall",
+    exampleSentenceDe: "Ich kaufe Obst auf dem Markt.",
+    exampleSentenceEs: "Compro fruta en el mercado."
   }]
-}, {
+},
+{
+  id: 7,
+  title: "Kapitel 12: Reisen & Verkehr",
+  icon: <Car size={20} />,
+  emoji: "✈️",
+  words: [{
+    de: "die Ferien",
+    pron: "di fé-ri-en",
+    es: "las vacaciones (escolares)",
+    type: "Sustantivo",
+    category: "Reise",
+    exampleSentenceDe: "Die Ferien sind schön.",
+    exampleSentenceEs: "Las vacaciones son bonitas.",
+    plural: "die Ferien"
+  }, {
+    de: "der Urlaub",
+    pron: "dea úa-laup",
+    es: "las vacaciones (laborales)",
+    type: "Sustantivo",
+    category: "Reise",
+    exampleSentenceDe: "Ich habe Urlaub.",
+    exampleSentenceEs: "Tengo vacaciones.",
+    plural: "die Urlaube"
+  }, {
+    de: "Urlaub machen",
+    pron: "ú-a-laup má-jen",
+    es: "ir de vacaciones",
+    type: "Frase",
+    category: "Reise",
+    exampleSentenceDe: "Ich mache Urlaub in Spanien.",
+    exampleSentenceEs: "Yo voy de vacaciones a España.",
+    regimen: "Verbo+Akk. fijo"
+  }, {
+    de: "es gibt",
+    pron: "es guípt",
+    es: "hay (+ Acusativo)",
+    type: "Frase",
+    category: "Allgemein",
+    exampleSentenceDe: "Es gibt Kaffee.",
+    exampleSentenceEs: "Hay café.",
+    regimen: "⚠️ + Akkusativ"
+  }, {
+    de: "geöffnet",
+    pron: "gue-óf-net",
+    es: "abierto",
+    type: "Adjetivo",
+    category: "Status",
+    exampleSentenceDe: "Das Geschäft ist geöffnet.",
+    exampleSentenceEs: "La tienda está abierta.",
+    regimen: "≠ geschlossen"
+  }, {
+    de: "geschlossen",
+    pron: "gue-shló-sen",
+    es: "cerrado",
+    type: "Adjetivo",
+    category: "Status",
+    exampleSentenceDe: "Das Geschäft ist geschlossen.",
+    exampleSentenceEs: "La tienda está cerrada.",
+    regimen: "≠ offen"
+  }, {
+    de: "von - bis",
+    pron: "fon - bis",
+    es: "de - hasta",
+    type: "Preposición",
+    category: "Zeit",
+    exampleSentenceDe: "Ich arbeite von neun Uhr bis fünf Uhr.",
+    exampleSentenceEs: "Yo trabajo de nueve en punto hasta las cinco en punto.",
+    regimen: "+ Dativo"
+  }, {
+    de: "die Karte",
+    pron: "di kár-te",
+    es: "tarjeta / mapa",
+    type: "Sustantivo (Fem)",
+    category: "Tickets",
+    exampleSentenceDe: "Ich habe die Karte. Die Karte ist groß.",
+    exampleSentenceEs: "Tengo la tarjeta. La tarjeta es grande.",
+    plural: "die Karten"
+  }, {
+    de: "die Eintrittskarte",
+    pron: "di áin-trits-kár-te",
+    es: "boleto de entrada",
+    type: "Sustantivo (Fem)",
+    category: "Tickets",
+    exampleSentenceDe: "Ich brauche die Eintrittskarte.",
+    exampleSentenceEs: "Necesito el boleto de entrada.",
+    plural: "die Eintrittskarten"
+  }, {
+    de: "das Ticket",
+    pron: "das tí-ket",
+    es: "el ticket",
+    type: "Sustantivo (Neutro)",
+    category: "Tickets",
+    exampleSentenceDe: "Ich brauche das Ticket.",
+    exampleSentenceEs: "Necesito el ticket.",
+    plural: "die Tickets"
+  }, {
+    de: "kaufen",
+    pron: "káu-fen",
+    es: "comprar",
+    type: "Verbo",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich kaufe ein Brot.",
+    exampleSentenceEs: "Yo compro un pan.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "reservieren",
+    pron: "re-ze-a-fí-ren",
+    es: "reservar",
+    type: "Verbo",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich möchte einen Tisch reservieren.",
+    exampleSentenceEs: "Me gustaría reservar una mesa.",
+    regimen: "+ Akkusativ"
+  }, {
+    de: "der Weg",
+    pron: "dea vek",
+    es: "el camino",
+    type: "Sustantivo",
+    category: "Orientierung",
+    exampleSentenceDe: "Der Weg ist frei.",
+    exampleSentenceEs: "El camino está libre.",
+    plural: "die Wege"
+  }, {
+    de: "geradeaus",
+    pron: "gue-ra-de-áus",
+    es: "recto",
+    type: "Adverbio",
+    category: "Orientierung",
+    exampleSentenceDe: "Gehen Sie geradeaus, bitte.",
+    exampleSentenceEs: "Vaya recto, por favor.",
+    regimen: "Direccional"
+  }, {
+    de: "links / rechts",
+    pron: "links  rejts",
+    es: "izquierda / derecha",
+    type: "Adverbio",
+    category: "Orientierung",
+    exampleSentenceDe: "Gehen Sie links.",
+    exampleSentenceEs: "Vaya a la izquierda.",
+    regimen: "Direccional/lugar"
+  }, {
+    de: "der Unfall",
+    pron: "dea ún-fal",
+    es: "accidente",
+    type: "Sustantivo",
+    category: "Verkehr",
+    exampleSentenceDe: "Ich sehe einen Unfall. Der Unfall ist groß.",
+    exampleSentenceEs: "Yo veo un accidente. El accidente es grande.",
+    plural: "die Unfälle"
+  }, {
+    de: "die Polizei",
+    pron: "di po-li-tsái",
+    es: "policía",
+    type: "Sustantivo",
+    category: "Verkehr",
+    exampleSentenceDe: "Die Polizei ist hier.",
+    exampleSentenceEs: "La policía está aquí.",
+    plural: "die Polizeien"
+  }, {
+    de: "umsteigen",
+    pron: "um-shtái-guen",
+    es: "hacer transbordo",
+    type: "Verbo",
+    category: "Verkehr",
+    exampleSentenceDe: "Ich steige in den Bus um.",
+    exampleSentenceEs: "Yo hago transbordo al autobús.",
+    regimen: "Separable (um-)"
+  }, {
+    de: "das Zelt",
+    pron: "das tsélt",
+    es: "tienda de campaña",
+    type: "Sustantivo",
+    category: "Reise",
+    exampleSentenceDe: "Ich habe ein Zelt. Das Zelt ist groß.",
+    exampleSentenceEs: "Tengo una tienda de campaña. La tienda de campaña es grande.",
+    plural: "die Zelte"
+  }, {
+    de: "zelten",
+    pron: "tsél-ten",
+    es: "acampar",
+    type: "Verbo",
+    category: "Reise",
+    exampleSentenceDe: "Wir zelten im Sommer.",
+    exampleSentenceEs: "Acampamos en verano.",
+    regimen: "Intransitivo, sin caso"
+  },
+  {
+    de: "die Sonne",
+    pron: "di zó-ne",
+    es: "el sol",
+    type: "Sustantivo (Fem)",
+    category: "Wetter",
+    plural: "die Sonnen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Mond",
+    pron: "dea mont",
+    es: "la luna",
+    type: "Sustantivo (Masc)",
+    category: "Wetter",
+    plural: "die Monde",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Stern",
+    pron: "dea shtern",
+    es: "la estrella",
+    type: "Sustantivo (Masc)",
+    category: "Wetter",
+    plural: "die Sterne",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Regen",
+    pron: "dea ré-guen",
+    es: "la lluvia",
+    type: "Sustantivo (Masc)",
+    category: "Wetter",
+    plural: "-",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Schnee",
+    pron: "dea shné",
+    es: "la nieve",
+    type: "Sustantivo (Masc)",
+    category: "Wetter",
+    plural: "-",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Wind",
+    pron: "dea vint",
+    es: "el viento",
+    type: "Sustantivo (Masc)",
+    category: "Wetter",
+    plural: "die Winde",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Baum",
+    pron: "dea baum",
+    es: "el árbol",
+    type: "Sustantivo (Masc)",
+    category: "Natur",
+    plural: "die Bäume",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Blume",
+    pron: "di blú-me",
+    es: "la flor",
+    type: "Sustantivo (Fem)",
+    category: "Natur",
+    plural: "die Blumen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Wald",
+    pron: "dea valt",
+    es: "el bosque",
+    type: "Sustantivo (Masc)",
+    category: "Natur",
+    plural: "die Wälder",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Meer",
+    pron: "das mea",
+    es: "el mar",
+    type: "Sustantivo (Neutro)",
+    category: "Natur",
+    plural: "die Meere",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "regnen",
+    pron: "rég-nen",
+    es: "llover",
+    type: "Verbo",
+    category: "Wetter",
+    regimen: "Impersonal",
+    en: "dark storm cloud dropping rain",
+    exampleSentenceDe: "Morgen wird es regnen.",
+    exampleSentenceEs: "Mañana lloverá."
+  }, {
+        de: "schneien",
+    pron: "shnái-en",
+    es: "nevar",
+    type: "Verbo",
+    category: "Wetter",
+    regimen: "Impersonal",
+    en: "fluffy cloud dropping snowflakes",
+    exampleSentenceDe: "Im Winter schneit es oft.",
+    exampleSentenceEs: "En invierno nieva a menudo."
+  }, {
+        de: "scheinen",
+    pron: "shái-nen",
+    es: "brillar (sol)",
+    type: "Verbo",
+    category: "Wetter",
+    regimen: "Intransitivo",
+    en: "bright yellow sun shining",
+    exampleSentenceDe: "Die Sonne scheint heute.",
+    exampleSentenceEs: "El sol brilla hoy."
+  }, {
+        de: "frieren",
+    pron: "frí-ren",
+    es: "tener frío / congelarse",
+    type: "Verbo",
+    category: "Wetter",
+    regimen: "Irregular (friert)",
+    en: "frozen ice block",
+    exampleSentenceDe: "Ich friere sehr.",
+    exampleSentenceEs: "Tengo mucho frío."
+  }, {
+        de: "der Nebel",
+    pron: "dea né-bel",
+    es: "la niebla",
+    type: "Sustantivo",
+    category: "Wetter",
+    plural: "die Nebel",
+    en: "thick gray fog",
+    exampleSentenceDe: "Der Nebel is sehr dicht.",
+    exampleSentenceEs: "La niebla es muy densa."
+  }, {
+        de: "der Sturm",
+    pron: "dea shturm",
+    es: "la tormenta",
+    type: "Sustantivo",
+    category: "Wetter",
+    plural: "die Stürme",
+    en: "strong wind blowing trees",
+    exampleSentenceDe: "Ein Sturm kommt.",
+    exampleSentenceEs: "Viene una tormenta."
+  }, {
+        de: "kühl",
+    pron: "kül",
+    es: "fresco",
+    type: "Adjetivo",
+    category: "Wetter",
+    en: "cool autumn breeze",
+    exampleSentenceDe: "Es ist heute kühl.",
+    exampleSentenceEs: "Hoy hace fresco."
+  }, {
+        de: "warm",
+    pron: "varm",
+    es: "cálido",
+    type: "Adjetivo",
+    category: "Wetter",
+    en: "warm glowing sun",
+    exampleSentenceDe: "Das Wasser ist warm.",
+    exampleSentenceEs: "El agua está cálida."
+  }, {
+        de: "nass",
+    pron: "nas",
+    es: "mojado",
+    type: "Adjetivo",
+    category: "Wetter",
+    en: "water drops",
+    exampleSentenceDe: "Der Boden ist nass.",
+    exampleSentenceEs: "El suelo está mojado."
+  }, {
+        de: "trocken",
+    pron: "tró-ken",
+    es: "seco",
+    type: "Adjetivo",
+    category: "Wetter",
+    en: "dry cracked earth",
+    exampleSentenceDe: "Die Kleidung ist trocken.",
+    exampleSentenceEs: "La ropa está seca."
+  }, {
+        de: "der Blitz",
+    pron: "dea blits",
+    es: "el relámpago",
+    type: "Sustantivo",
+    category: "Wetter",
+    plural: "die Blitze",
+    en: "yellow lightning bolt",
+    exampleSentenceDe: "Ich sehe den Blitz.",
+    exampleSentenceEs: "Veo el relámpago."
+  }, {
+        de: "der Donner",
+    pron: "dea dó-ner",
+    es: "el trueno",
+    type: "Sustantivo",
+    category: "Wetter",
+    plural: "die Donner",
+    en: "dark thundercloud",
+    exampleSentenceDe: "Ich höre den Donner.",
+    exampleSentenceEs: "Escucho el trueno."
+  },
+  {
+    de: "der Strand",
+    pron: "dea shtrant",
+    es: "la playa",
+    type: "Sustantivo",
+    category: "Natur",
+    plural: "die Strände",
+    en: "a sandy beach with a colorful sun umbrella",
+    exampleSentenceDe: "Wir machen Urlaub am Strand.",
+    exampleSentenceEs: "Nosotros pasamos las vacaciones en la playa."
+  }, {
+        de: "der Berg",
+    pron: "dea beark",
+    es: "la montaña",
+    type: "Sustantivo",
+    category: "Natur",
+    plural: "die Berge",
+    en: "a high mountain with a snowy peak",
+    exampleSentenceDe: "Wir wandern oft in den Bergen.",
+    exampleSentenceEs: "Hacemos senderismo a menudo en las montañas."
+  }, {
+        de: "die Wolke",
+    pron: "di vol-ke",
+    es: "la nube",
+    type: "Sustantivo",
+    category: "Wetter",
+    plural: "die Wolken",
+    en: "a fluffy white cloud",
+    exampleSentenceDe: "Es gibt heute viele Wolken am Himmel.",
+    exampleSentenceEs: "Hoy hay muchas nubes en el cielo."
+  }, {
+        de: "das Gewitter",
+    pron: "das gue-vi-ta",
+    es: "la tormenta",
+    type: "Sustantivo",
+    category: "Wetter",
+    plural: "die Gewitter",
+    en: "a dark storm cloud with a yellow lightning bolt",
+    exampleSentenceDe: "Heute Abend gibt es ein Gewitter.",
+    exampleSentenceEs: "Esta noche habrá una tormenta."
+  }]
+},
+{
   id: 12,
-  title: "Kapitel 12: Fahrschuldeutsch: Auto",
+  title: "Kapitel 13: Fahrschuldeutsch: Auto",
   icon: <Car size={20} />,
   emoji: "🚗",
   words: [{
@@ -5553,1078 +7131,2538 @@ const chapters = [{
     exampleSentenceEs: "Tengo el seguro.",
     plural: "die Versicherungen"
   }]
-}, {
-  id: 13,
-  title: "Kapitel 13: Grammatik: Konnektoren",
-  icon: <Link2 size={20} />,
-  emoji: "🔗",
+},
+{
+  id: 8,
+  title: "Kapitel 14: Post & Bank",
+  icon: <Mail size={20} />,
+  emoji: "📮",
   words: [{
-    de: "und",
-    pron: "unt",
-    es: "y",
-    type: "Conector (Posición 0)",
-    category: "Konnektoren",
-    exampleSentenceDe: "Ich habe Kaffee und Kuchen.",
-    exampleSentenceEs: "Yo tengo café y pastel.",
-    regimen: "No afecta orden"
+    de: "die Post",
+    pron: "di post",
+    es: "el correo",
+    type: "Sustantivo (Fem)",
+    category: "Post",
+    exampleSentenceDe: "Ich brauche die Post.",
+    exampleSentenceEs: "Yo necesito el correo.",
+    plural: "die Post"
   }, {
-    de: "oder",
-    pron: "ó-dea",
-    es: "o (alternativa)",
-    type: "Conector (Posición 0)",
-    category: "Konnektoren",
-    exampleSentenceDe: "Möchtest du Tee oder Kaffee?",
-    exampleSentenceEs: "¿Quieres té o café?",
-    regimen: "No cuenta posición"
+    de: "der Brief",
+    pron: "dea bríf",
+    es: "carta",
+    type: "Sustantivo",
+    category: "Post",
+    exampleSentenceDe: "Ich habe den Brief. Der Brief ist hier.",
+    exampleSentenceEs: "Tengo la carta. La carta está aquí.",
+    plural: "die Briefe"
   }, {
-    de: "aber",
-    pron: "á-bea",
-    es: "pero",
-    type: "Conector (Posición 0)",
-    category: "Konnektoren",
-    exampleSentenceDe: "Ich habe Hunger, aber ich habe keine Zeit.",
-    exampleSentenceEs: "Tengo hambre, pero no tengo tiempo.",
-    regimen: "No cuenta posición"
+    de: "die Postkarte",
+    pron: "di póst-kar-te",
+    es: "tarjeta postal",
+    type: "Sustantivo",
+    category: "Post",
+    exampleSentenceDe: "Ich kaufe die Postkarte im Supermarkt.",
+    exampleSentenceEs: "Yo compro la postal en el supermercado.",
+    plural: "die Postkarten"
   }, {
-    de: "denn",
-    pron: "den",
-    es: "porque / pues",
-    type: "Conector (Posición 0)",
-    category: "Konnektoren",
-    exampleSentenceDe: "Ich habe Hunger, denn ich esse gern.",
-    exampleSentenceEs: "Tengo hambre, pues me gusta comer.",
-    regimen: "No cambia el orden"
+    de: "schicken",
+    pron: "shí-ken",
+    es: "enviar",
+    type: "Verbo",
+    category: "Post",
+    exampleSentenceDe: "Ich schicke die E-Mail morgen.",
+    exampleSentenceEs: "Yo envío el correo mañana.",
+    regimen: "+ Dativo (a quién) / + Akkusativ (qué)"
   }, {
-    de: "sondern",
-    pron: "són-dean",
-    es: "sino (que)",
-    type: "Conector (Posición 0)",
-    category: "Konnektoren",
-    exampleSentenceDe: "Ich bin nicht müde, sondern ich bin hungrig.",
-    exampleSentenceEs: "No estoy cansado, sino que tengo hambre.",
-    regimen: "Tras negación (nicht...)"
-  }, {
-    de: "für",
-    pron: "füa",
-    es: "para / por",
-    type: "Preposición (Akk)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Das Geschenk ist für dich.",
-    exampleSentenceEs: "El regalo es para ti.",
+    de: "bekommen",
+    pron: "be-kó-men",
+    es: "recibir",
+    type: "Verbo",
+    category: "Post",
+    exampleSentenceDe: "Ich bekomme ein Geschenk.",
+    exampleSentenceEs: "Yo recibo un regalo.",
     regimen: "+ Akkusativ"
   }, {
-    de: "ohne",
-    pron: "ó-ne",
-    es: "sin",
-    type: "Preposición (Akk)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Ich trinke Kaffee ohne Zucker.",
-    exampleSentenceEs: "Bebo café sin azúcar.",
-    regimen: "+ Akkusativ"
+    de: "abholen",
+    pron: "áp-jo-len",
+    es: "recoger",
+    type: "Verbo separable",
+    category: "Post",
+    exampleSentenceDe: "Ich hole dich am Bahnhof ab.",
+    exampleSentenceEs: "Te recojo en la estación de tren.",
+    regimen: "+Akk, separable (ab-)"
   }, {
-    de: "durch",
-    pron: "durj",
-    es: "a través de / por",
-    type: "Preposición (Akk)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Wir gehen durch den Park.",
-    exampleSentenceEs: "Nosotros vamos por el parque.",
-    regimen: "+ Akkusativ"
+    de: "die Briefmarke",
+    pron: "di bríf-mar-ke",
+    es: "estampilla",
+    type: "Sustantivo (Fem)",
+    category: "Post",
+    exampleSentenceDe: "Ich brauche die Briefmarke.",
+    exampleSentenceEs: "Yo necesito la estampilla.",
+    plural: "die Briefmarken"
   }, {
-    de: "gegen",
-    pron: "gué-guen",
-    es: "contra / hacia (hora)",
-    type: "Preposición (Akk)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Es ist gegen 10 Uhr.",
-    exampleSentenceEs: "Son las 10 en punto.",
-    regimen: "+ Akkusativ"
+    de: "der Absender",
+    pron: "dea áp-sen-dea",
+    es: "remitente",
+    type: "Sustantivo (Masc)",
+    category: "Post",
+    exampleSentenceDe: "Wer ist der Absender?",
+    exampleSentenceEs: "¿Quién es el remitente?",
+    plural: "die Absender"
   }, {
-    de: "um",
-    pron: "um",
-    es: "a las (hora) / alrededor de",
-    type: "Preposición (Akk)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Der Zug kommt um acht Uhr an.",
-    exampleSentenceEs: "El tren llega a las ocho en punto.",
-    regimen: "+ Akkusativ"
+    de: "der Empfänger",
+    pron: "dea em-pfén-gua",
+    es: "destinatario",
+    type: "Sustantivo (Masc)",
+    category: "Post",
+    exampleSentenceDe: "Wer ist der Empfänger?",
+    exampleSentenceEs: "¿Quién es el destinatario?",
+    plural: "die Empfänger"
   }, {
-    de: "mit",
-    pron: "mit",
-    es: "con",
-    type: "Preposición (Dat)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Ich gehe mit meinem Freund.",
-    exampleSentenceEs: "Voy con mi amigo.",
-    regimen: "⚠️ Obliga Dativo"
+    de: "die Adresse",
+    pron: "di a-dré-se",
+    es: "dirección",
+    type: "Sustantivo (Fem)",
+    category: "Post",
+    exampleSentenceDe: "Das ist die Adresse.",
+    exampleSentenceEs: "Esta es la dirección.",
+    plural: "die Adressen"
   }, {
-    de: "nach",
-    pron: "naj",
-    es: "hacia / después de",
-    type: "Preposición (Dat)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Nach dem Essen gehe ich nach Hause.",
-    exampleSentenceEs: "Después de la comida, voy a casa.",
-    regimen: "+ Dativo"
+    de: "das Telefon",
+    pron: "das te-le-fón",
+    es: "teléfono",
+    type: "Sustantivo (Neutro)",
+    category: "Kommunikation",
+    exampleSentenceDe: "Das ist mein Telefon.",
+    exampleSentenceEs: "Este es mi teléfono.",
+    plural: "die Telefone"
   }, {
-    de: "aus",
-    pron: "áus",
-    es: "de (origen / material)",
-    type: "Preposición (Dat)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Ich komme aus Spanien.",
-    exampleSentenceEs: "Yo vengo de España.",
-    regimen: "+ Dativo"
+    de: "das Handy",
+    pron: "das jén-di",
+    es: "celular",
+    type: "Sustantivo (Neutro)",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich habe ein Handy. Das Handy ist neu.",
+    exampleSentenceEs: "Tengo un celular. El celular es nuevo.",
+    plural: "die Handys"
   }, {
-    de: "bei",
-    pron: "bái",
-    es: "en casa de / en (empresa)",
-    type: "Preposición (Dat)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Ich bin bei meiner Freundin.",
-    exampleSentenceEs: "Yo estoy en casa de mi amiga.",
-    regimen: "+ Dativo"
+    de: "das Fax",
+    pron: "das faks",
+    es: "fax",
+    type: "Sustantivo (Neutro)",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich habe ein Fax. Das Fax ist neu.",
+    exampleSentenceEs: "Tengo un fax. El fax es nuevo.",
+    plural: "die Faxe"
   }, {
-    de: "von",
-    pron: "fon",
-    es: "de (procedencia / autor)",
-    type: "Preposición (Dat)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Das Buch ist von Anna.",
-    exampleSentenceEs: "El libro es de Anna.",
-    regimen: "+ Dativo"
+    de: "die Telefonnummer",
+    pron: "di te-le-fón-nu-mea",
+    es: "número de teléfono",
+    type: "Sustantivo (Fem)",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich habe die Telefonnummer. Die Telefonnummer ist neu.",
+    exampleSentenceEs: "Tengo el número de teléfono. El número de teléfono es nuevo.",
+    plural: "die Telefonnummern"
   }, {
-    de: "zu",
-    pron: "tsu",
-    es: "hacia (lugares / personas)",
-    type: "Preposición (Dat)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Ich gehe zu meiner Mutter.",
-    exampleSentenceEs: "Voy hacia mi madre.",
-    regimen: "+ Dativo"
+    de: "das Telefonbuch",
+    pron: "das te-le-fón-buj",
+    es: "guía telefónica",
+    type: "Sustantivo (Neutro)",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich suche das Telefonbuch.",
+    exampleSentenceEs: "Yo busco la guía telefónica.",
+    plural: "die Telefonbücher"
   }, {
-    de: "seit",
-    pron: "sait",
-    es: "desde (tiempo)",
-    type: "Preposición (Dat)",
-    category: "Präpositionen",
-    exampleSentenceDe: "Ich wohne seit einem Jahr in Berlin.",
-    exampleSentenceEs: "Vivo desde hace un año en Berlín.",
-    regimen: "+ Dativo"
+    de: "telefonieren",
+    pron: "te-le-fo-ní-ren",
+    es: "hablar por tel.",
+    type: "Verbo",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich telefoniere mit meiner Mutter.",
+    exampleSentenceEs: "Yo hablo por teléfono con mi madre.",
+    regimen: "+ mit + Dativ"
   }, {
-    de: "in",
-    pron: "in",
-    es: "en / dentro de",
-    type: "Prep. Mixta (Dat/Akk)",
-    category: "Wechselpräpositionen",
+    de: "anrufen",
+    pron: "án-ru-fen",
+    es: "llamar",
+    type: "Verbo",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich rufe meine Mutter an.",
+    exampleSentenceEs: "Yo llamo a mi madre.",
+    regimen: "Separable (an-) / + Akkusativ"
+  }, {
+    de: "sprechen (mit)",
+    pron: "shpré-jen mit",
+    es: "hablar con",
+    type: "Verbo",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich spreche mit meinem Freund.",
+    exampleSentenceEs: "Yo hablo con mi amigo.",
+    regimen: "mit + Dativ"
+  }, {
+    de: "besetzt",
+    pron: "be-tséts",
+    es: "ocupado (línea)",
+    type: "Adjetivo",
+    category: "Kommunikation",
+    exampleSentenceDe: "Die Telefonleitung ist besetzt.",
+    exampleSentenceEs: "La línea telefónica está ocupada.",
+    regimen: "≠ frei"
+  }, {
+    de: "die Bank",
+    pron: "di bank",
+    es: "banco",
+    type: "Sustantivo",
+    category: "Bank",
+    exampleSentenceDe: "Ich sitze auf der Bank.",
+    exampleSentenceEs: "Yo me siento en el banco.",
+    plural: "die Bänke"
+  }, {
+    de: "der Schalter",
+    pron: "dea shál-tea",
+    es: "ventanilla",
+    type: "Sustantivo",
+    category: "Bank",
+    exampleSentenceDe: "Ich gehe zum Schalter.",
+    exampleSentenceEs: "Voy a la ventanilla.",
+    plural: "die Schalter"
+  }, {
+    de: "das Geld",
+    pron: "das guélt",
+    es: "dinero",
+    type: "Sustantivo (Neutro)",
+    category: "Bank",
+    exampleSentenceDe: "Das ist das Geld.",
+    exampleSentenceEs: "Este es el dinero.",
+    plural: "kein Plural"
+  }, {
+    de: "bar zahlen",
+    pron: "bá-a tsá-len",
+    es: "pagar en efectivo",
+    type: "Frase",
+    category: "Bank",
+    exampleSentenceDe: "Ich möchte bar zahlen.",
+    exampleSentenceEs: "Quiero pagar en efectivo.",
+    regimen: "Verbo al final"
+  }, {
+    de: "die Kreditkarte",
+    pron: "di kre-dít-kar-te",
+    es: "tarjeta de crédito",
+    type: "Sustantivo (Fem)",
+    category: "Bank",
+    exampleSentenceDe: "Ich habe die Kreditkarte. Die Kreditkarte ist rot.",
+    exampleSentenceEs: "Tengo la tarjeta de crédito. La tarjeta de crédito es roja.",
+    plural: "die Kreditkarten"
+  }, {
+    de: "das Konto",
+    pron: "das kón-to",
+    es: "cuenta",
+    type: "Sustantivo (Neutro)",
+    category: "Bank",
+    exampleSentenceDe: "Ich habe das Konto.",
+    exampleSentenceEs: "Tengo la cuenta.",
+    plural: "die Konten"
+  }, {
+    de: "überweisen",
+    pron: "ú-ba-vái-sen",
+    es: "transferir dinero",
+    type: "Verbo",
+    category: "Bank",
+    exampleSentenceDe: "Ich überweise Geld auf das Konto.",
+    exampleSentenceEs: "Yo transfiero dinero a la cuenta.",
+    regimen: "Inseparable / + Akkusativ"
+  }, {
+    de: "das Formular",
+    pron: "das foa-mu-lá",
+    es: "formulario",
+    type: "Sustantivo",
+    category: "Bank",
+    exampleSentenceDe: "Ich habe das Formular. Das Formular ist neu.",
+    exampleSentenceEs: "Tengo el formulario. El formulario es nuevo.",
+    plural: "die Formulare"
+  }, {
+    de: "ausfüllen",
+    pron: "áus-fü-len",
+    es: "rellenar",
+    type: "Verbo",
+    category: "Bank",
+    exampleSentenceDe: "Ich muss das Formular ausfüllen.",
+    exampleSentenceEs: "Yo debo rellenar el formulario.",
+    regimen: "Separable (aus-)"
+  }, {
+    de: "ankreuzen",
+    pron: "án-krói-tsen",
+    es: "marcar con cruz",
+    type: "Verbo separable",
+    category: "Bank",
+    exampleSentenceDe: "Ich muss das Feld ankreuzen.",
+    exampleSentenceEs: "Tengo que marcar el campo con una cruz.",
+    regimen: "Separable (an-)"
+  }, {
+    de: "unterschreiben",
+    pron: "un-ta-shrái-ben",
+    es: "firmar",
+    type: "Verbo",
+    category: "Bank",
+    exampleSentenceDe: "Ich muss den Vertrag unterschreiben.",
+    exampleSentenceEs: "Yo debo firmar el contrato.",
+    regimen: "No separable + Akk"
+  }, {
+    de: "der Geldautomat",
+    pron: "dea guélt-áu-to-mat",
+    es: "cajero automático",
+    type: "Sustantivo (Masc)",
+    category: "Bank",
+    exampleSentenceDe: "Wo ist der Geldautomat?",
+    exampleSentenceEs: "¿Dónde está el cajero automático?",
+    plural: "die Geldautomaten"
+  }, {
+    de: "das Internet",
+    pron: "das ín-ta-net",
+    es: "internet",
+    type: "Sustantivo",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich habe das Internet. Das Internet ist gut.",
+    exampleSentenceEs: "Tengo internet. Internet es bueno.",
+    plural: "die Internets"
+  }, {
+    de: "der Computer",
+    pron: "dea kom-piú-ta",
+    es: "computador",
+    type: "Sustantivo (Masc)",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
+    exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
+    plural: "die Computer"
+  }, {
+    de: "der Pass / Ausweis",
+    pron: "dea pas  áus-vais",
+    es: "pasaporte / ID",
+    type: "Sustantivo",
+    category: "Dokumente",
+    exampleSentenceDe: "Ich brauche den Pass.",
+    exampleSentenceEs: "Necesito el pasaporte.",
+    plural: "die Pässe / Ausweise"
+  }, {
+    de: "gültig",
+    pron: "gúl-tij",
+    es: "válido/vigente",
+    type: "Adjetivo",
+    category: "Dokumente",
+    exampleSentenceDe: "Mein Pass ist gültig.",
+    exampleSentenceEs: "Mi pasaporte es válido.",
+    regimen: "≠ ungültig"
+  }, {
+    de: "das Paket",
+    pron: "das pa-két",
+    es: "el paquete",
+    type: "Sustantivo",
+    category: "Post",
+    exampleSentenceDe: "Ich habe das Paket. Das Paket ist groß.",
+    exampleSentenceEs: "Tengo el paquete. El paquete es grande.",
+    plural: "die Pakete"
+  }, {
+    de: "der Briefkasten",
+    pron: "dea brif-kás-ten",
+    es: "buzón de correo",
+    type: "Sustantivo",
+    category: "Post",
+    exampleSentenceDe: "Ich habe einen Briefkasten.",
+    exampleSentenceEs: "Tengo un buzón de correo.",
+    plural: "die Briefkästen"
+  }, {
+    de: "die Gebühr",
+    pron: "di gue-bü-a",
+    es: "tarifa(comisión)",
+    type: "Sustantivo",
+    category: "Bank",
+    exampleSentenceDe: "Die Gebühr ist zehn Euro.",
+    exampleSentenceEs: "La tarifa es de diez euros.",
+    plural: "die Gebühren"
+  }, {
+    de: "der Kredit",
+    pron: "dea kre-dít",
+    es: "crédito",
+    type: "Sustantivo",
+    category: "Bank",
+    exampleSentenceDe: "Ich habe den Kredit. Der Kredit ist gut.",
+    exampleSentenceEs: "Tengo el crédito. El crédito es bueno.",
+    plural: "die Kredite"
+  }, {
+    de: "abheben",
+    pron: "áp-jé-ben",
+    es: "retirar dinero",
+    type: "Verbo",
+    category: "Bank",
+    exampleSentenceDe: "Ich möchte Geld abheben.",
+    exampleSentenceEs: "Quiero retirar dinero.",
+    regimen: "Separable (ab-), +Akk"
+  }, {
+    de: "einzahlen",
+    pron: "áin-tsa-len",
+    es: "depositar",
+    type: "Verbo",
+    category: "Bank",
+    exampleSentenceDe: "Ich zahle Geld auf die Bank ein.",
+    exampleSentenceEs: "Yo deposito dinero en el banco.",
+    regimen: "Separable (ein-), +Akk"
+  }, {
+    de: "die Geheimzahl",
+    pron: "di gue-jáim-tsal",
+    es: "el PIN",
+    type: "Sustantivo",
+    category: "Bank",
+    exampleSentenceDe: "Ich habe die Geheimzahl vergessen.",
+    exampleSentenceEs: "Olvidé el PIN.",
+    plural: "die Geheimzahlen"
+  }]
+},
+{
+  id: 9,
+  title: "Kapitel 15: Gesundheit",
+  icon: <Heart size={20} />,
+  emoji: "🏥",
+  words: [{
+    de: "das Auge",
+    pron: "das áu-gue",
+    es: "ojo",
+    type: "Sustantivo (Neutro)",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe ein Auge. Das Auge ist braun.",
+    exampleSentenceEs: "Tengo un ojo. El ojo es marrón.",
+    plural: "die Augen"
+  }, {
+    de: "die Hand",
+    pron: "di jant",
+    es: "mano",
+    type: "Sustantivo (Fem)",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe eine Hand. Die Hand ist klein.",
+    exampleSentenceEs: "Tengo una mano. La mano es pequeña.",
+    plural: "die Hände"
+  }, {
+    de: "der Arm",
+    pron: "dea aam",
+    es: "brazo",
+    type: "Sustantivo",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe einen Arm.",
+    exampleSentenceEs: "Tengo un brazo.",
+    plural: "die Arme"
+  }, {
+    de: "das Bein",
+    pron: "das báin",
+    es: "pierna",
+    type: "Sustantivo",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe ein Bein.",
+    exampleSentenceEs: "Yo tengo una pierna.",
+    plural: "die Beine"
+  }, {
+    de: "der Kopf",
+    pron: "dea kopf",
+    es: "cabeza",
+    type: "Sustantivo (Masc)",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe Kopfschmerzen.",
+    exampleSentenceEs: "Tengo dolor de cabeza.",
+    plural: "die Köpfe"
+  }, {
+    de: "der Fuß",
+    pron: "dea fus",
+    es: "pie",
+    type: "Sustantivo (Masc)",
+    category: "Körper",
+    exampleSentenceDe: "Mein Fuß ist groß.",
+    exampleSentenceEs: "Mi pie es grande.",
+    plural: "die Füße"
+  }, {
+    de: "der Mund",
+    pron: "dea munt",
+    es: "boca",
+    type: "Sustantivo (Masc)",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe einen Mund.",
+    exampleSentenceEs: "Tengo una boca.",
+    plural: "die Münder"
+  }, {
+    de: "der Zahn",
+    pron: "dea tsán",
+    es: "diente",
+    type: "Sustantivo (Masc)",
+    category: "Körper",
+    exampleSentenceDe: "Mein Zahn ist schlecht.",
+    exampleSentenceEs: "Mi diente está mal.",
+    plural: "die Zähne"
+  }, {
+    de: "die Nase",
+    pron: "di ná-se",
+    es: "nariz",
+    type: "Sustantivo",
+    category: "Körper",
+    exampleSentenceDe: "Die Nase ist rot.",
+    exampleSentenceEs: "La nariz es roja.",
+    plural: "die Nasen"
+  }, {
+    de: "das Ohr",
+    pron: "das ó-a",
+    es: "oreja",
+    type: "Sustantivo",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe ein Ohr. Das Ohr ist rot.",
+    exampleSentenceEs: "Tengo una oreja. La oreja está roja.",
+    plural: "die Ohren"
+  }, {
+    de: "das Haar",
+    pron: "das já-a",
+    es: "pelo",
+    type: "Sustantivo",
+    category: "Körper",
+    exampleSentenceDe: "Das Haar ist rot.",
+    exampleSentenceEs: "El pelo es rojo.",
+    plural: "die Haare"
+  }, {
+    de: "der Bauch",
+    pron: "dea báuj",
+    es: "barriga",
+    type: "Sustantivo",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe Hunger. Mein Bauch ist leer.",
+    exampleSentenceEs: "Tengo hambre. Mi barriga está vacía.",
+    plural: "die Bäuche"
+  }, {
+    de: "der Finger",
+    pron: "dea fín-ga",
+    es: "dedo",
+    type: "Sustantivo (Masc)",
+    category: "Körper",
+    exampleSentenceDe: "Das ist mein Finger.",
+    exampleSentenceEs: "Este es mi dedo.",
+    plural: "die Finger"
+  }, {
+    de: "der Rücken",
+    pron: "dea rú-ken",
+    es: "espalda",
+    type: "Sustantivo (Masc)",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe Schmerzen im Rücken.",
+    exampleSentenceEs: "Tengo dolor en la espalda.",
+    plural: "die Rücken"
+  }, {
+    de: "der Hals",
+    pron: "dea jals",
+    es: "cuello",
+    type: "Sustantivo (Masc)",
+    category: "Körper",
+    exampleSentenceDe: "Ich habe Schmerzen am Hals.",
+    exampleSentenceEs: "Tengo dolor en el cuello.",
+    plural: "die Hälse"
+  }, {
+    de: "wehtun",
+    pron: "vé-tun",
+    es: "doler",
+    type: "Verbo separable",
+    category: "Krankheit",
+    exampleSentenceDe: "Mein Kopf tut weh.",
+    exampleSentenceEs: "Mi cabeza duele.",
+    regimen: "+ Dativo (a quién duele)"
+  }, {
+    de: "Wie geht es Ihnen?",
+    pron: "ví guet es í-nen",
+    es: "¿Cómo está usted?",
+    type: "Frase",
+    category: "Kommunikation",
+    exampleSentenceDe: "Hallo, wie geht es Ihnen?",
+    exampleSentenceEs: "Hola, ¿cómo está usted?",
+    regimen: "Formal"
+  }, {
+    de: "Es geht mir gut",
+    pron: "es guét mia gut",
+    es: "Me va bien",
+    type: "Frase",
+    category: "Kommunikation",
+    exampleSentenceDe: "Hallo! Mir geht es gut, danke.",
+    exampleSentenceEs: "¡Hola! Me va bien, gracias.",
+    regimen: "Dat: mir"
+  }, {
+    de: "schlafen",
+    pron: "shlá-fen",
+    es: "dormir",
+    type: "Verbo",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich schlafe heute.",
+    exampleSentenceEs: "Yo duermo hoy.",
+    regimen: "Irregular (schläft)"
+  }, {
+    de: "ins Bett gehen",
+    pron: "ins bet gué-en",
+    es: "ir a la cama",
+    type: "Frase",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich gehe jetzt ins Bett.",
+    exampleSentenceEs: "Yo voy a la cama ahora.",
+    regimen: "ins + Akkusativ"
+  }, {
+    de: "im Bett liegen",
+    pron: "im bet lí-guen",
+    es: "estar en la cama",
+    type: "Frase",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich liege im Bett.",
+    exampleSentenceEs: "Yo estoy en la cama.",
+    regimen: "in+Dat=fijo"
+  }, {
+    de: "krank",
+    pron: "kránk",
+    es: "enfermo",
+    type: "Adjetivo",
+    category: "Krankheit",
+    exampleSentenceDe: "Ich bin krank.",
+    exampleSentenceEs: "Yo estoy enfermo.",
+    regimen: "≠ gesund"
+  }, {
+    de: "das Fieber",
+    pron: "das fí-ba",
+    es: "fiebre",
+    type: "Sustantivo",
+    category: "Krankheit",
+    exampleSentenceDe: "Ich habe Fieber. Das Fieber ist hoch.",
+    exampleSentenceEs: "Tengo fiebre. La fiebre es alta.",
+    plural: "die Fieber"
+  }, {
+    de: "der Arzt",
+    pron: "dea artst",
+    es: "médico",
+    type: "Sustantivo (Masc)",
+    category: "Medizin",
+    exampleSentenceDe: "Ich bin krank. Ich gehe zum Arzt.",
+    exampleSentenceEs: "Estoy enfermo. Voy al médico.",
+    plural: "die Ärzte"
+  }, {
+    de: "der Doktor",
+    pron: "dea dók-toa",
+    es: "doctor",
+    type: "Sustantivo",
+    category: "Medizin",
+    exampleSentenceDe: "Der Doktor ist nett.",
+    exampleSentenceEs: "El doctor es amable.",
+    plural: "die Doktoren"
+  }, {
+    de: "die Apotheke",
+    pron: "di a-po-té-ke",
+    es: "farmacia",
+    type: "Sustantivo",
+    category: "Medizin",
+    exampleSentenceDe: "Ich gehe zur Apotheke.",
+    exampleSentenceEs: "Voy a la farmacia.",
+    plural: "die Apotheken"
+  }, {
+    de: "das Medikament",
+    pron: "das me-di-ka-mént",
+    es: "medicamento",
+    type: "Sustantivo (Neutro)",
+    category: "Medizin",
+    exampleSentenceDe: "Das Medikament ist neu.",
+    exampleSentenceEs: "El medicamento es nuevo.",
+    plural: "die Medikamente"
+  }, {
+    de: "das Rezept",
+    pron: "das re-tsépt",
+    es: "receta médica",
+    type: "Sustantivo (Neutro)",
+    category: "Medizin",
+    exampleSentenceDe: "Ich brauche das Rezept von dem Arzt.",
+    exampleSentenceEs: "Necesito la receta del médico.",
+    plural: "die Rezepte"
+  }, {
+    de: "die Praxis",
+    pron: "di prák-sis",
+    es: "consultorio",
+    type: "Sustantivo",
+    category: "Medizin",
+    exampleSentenceDe: "Ich gehe in die Praxis von dem Arzt.",
+    exampleSentenceEs: "Voy al consultorio del doctor.",
+    plural: "die Praxen"
+  }, {
+    de: "das Krankenhaus",
+    pron: "das krán-ken-jáus",
+    es: "hospital",
+    type: "Sustantivo",
+    category: "Medizin",
+    exampleSentenceDe: "Ich bin im Krankenhaus.",
+    exampleSentenceEs: "Estoy en el hospital.",
+    plural: "die Krankenhäuser"
+  }, {
+    de: "der Termin",
+    pron: "dea tea-mín",
+    es: "cita",
+    type: "Sustantivo (Masc)",
+    category: "Medizin",
+    exampleSentenceDe: "Ich habe einen Termin am Montag.",
+    exampleSentenceEs: "Tengo una cita el lunes.",
+    plural: "die Termine"
+  }, {
+    de: "Gute Besserung",
+    pron: "gú-te bé-se-rung",
+    es: "¡Que te mejores!",
+    type: "Frase",
+    category: "Kommunikation",
+    exampleSentenceDe: "Ich wünsche dir gute Besserung.",
+    exampleSentenceEs: "Te deseo que te mejores.",
+    regimen: "Fórmula fija"
+  }, {
+    de: "das Pflaster",
+    pron: "das pflás-ta",
+    es: "tirita(curita)",
+    type: "Sustantivo",
+    category: "Medizin",
+    exampleSentenceDe: "Ich habe das Pflaster. Das Pflaster ist klein.",
+    exampleSentenceEs: "Tengo la tirita. La tirita es pequeña.",
+    plural: "die Pflaster"
+  }, {
+    de: "die Salbe",
+    pron: "di sál-be",
+    es: "pomada",
+    type: "Sustantivo",
+    category: "Medizin",
+    exampleSentenceDe: "Ich habe die Salbe.",
+    exampleSentenceEs: "Tengo la pomada.",
+    plural: "die Salben"
+  }, {
+    de: "die Erkältung",
+    pron: "di ea-kél-tung",
+    es: "resfriado",
+    type: "Sustantivo",
+    category: "Krankheit",
+    exampleSentenceDe: "Ich habe die Erkältung.",
+    exampleSentenceEs: "Tengo el resfriado.",
+    plural: "die Erkältungen"
+  }, {
+    de: "husten",
+    pron: "jús-ten",
+    es: "toser",
+    type: "Verbo",
+    category: "Krankheit",
+    exampleSentenceDe: "Ich huste.",
+    exampleSentenceEs: "Yo toso.",
+    regimen: "Intransitivo"
+  }, {
+    de: "bluten",
+    pron: "blú-ten",
+    es: "sangrar",
+    type: "Verbo",
+    category: "Krankheit",
+    exampleSentenceDe: "Ich blute nicht.",
+    exampleSentenceEs: "Yo no sangro.",
+    regimen: "Intransitivo"
+  }, {
+    de: "sich verletzen",
+    pron: "zij fea-lét-sen",
+    es: "lastimarse",
+    type: "Verbo",
+    category: "Krankheit",
+    exampleSentenceDe: "Ich verletze mich nicht.",
+    exampleSentenceEs: "No me lastimo.",
+    regimen: "Reflexivo + Akkusativ"
+  }, {
+    de: "der Schmerz",
+    pron: "dea shmérts",
+    es: "el dolor",
+    type: "Sustantivo",
+    category: "Krankheit",
+    exampleSentenceDe: "Ich habe Schmerz. Der Schmerz ist stark.",
+    exampleSentenceEs: "Tengo dolor. El dolor es fuerte.",
+    plural: "die Schmerzen"
+  }, {
+    de: "schwanger",
+    pron: "shván-guea",
+    es: "embarazada",
+    type: "Adjetivo",
+    category: "Körper",
+    exampleSentenceDe: "Sie ist schwanger.",
+    exampleSentenceEs: "Ella está embarazada.",
+    regimen: "≠ nicht schwanger"
+  },
+  {
+    de: "die Seife",
+    pron: "di zái-fe",
+    es: "el jabón",
+    type: "Sustantivo (Fem)",
+    category: "Körperpflege",
+    plural: "die Seifen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "das Shampoo",
+    pron: "das shám-pu",
+    es: "el champú",
+    type: "Sustantivo (Neutro)",
+    category: "Körperpflege",
+    plural: "die Shampoos",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Zahnbürste",
+    pron: "di tsán-büa-ste",
+    es: "cepillo de dientes",
+    type: "Sustantivo (Fem)",
+    category: "Körperpflege",
+    plural: "die Zahnbürsten",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Zahnpasta",
+    pron: "di tsán-pas-ta",
+    es: "pasta de dientes",
+    type: "Sustantivo (Fem)",
+    category: "Körperpflege",
+    plural: "die Zahnpasten",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Kamm",
+    pron: "dea kam",
+    es: "el peine",
+    type: "Sustantivo (Masc)",
+    category: "Körperpflege",
+    plural: "die Kämme",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Föhn",
+    pron: "dea fön",
+    es: "secador de pelo",
+    type: "Sustantivo (Masc)",
+    category: "Körperpflege",
+    plural: "die Föhne",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Rasierer",
+    pron: "dea ra-zí-ra",
+    es: "la afeitadora",
+    type: "Sustantivo (Masc)",
+    category: "Körperpflege",
+    plural: "die Rasierer",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Tablette",
+    pron: "di ta-blé-te",
+    es: "la pastilla / píldora",
+    type: "Sustantivo (Fem)",
+    category: "Gesundheit",
+    plural: "die Tabletten",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Krankheit",
+    pron: "di kránk-hait",
+    es: "la enfermedad",
+    type: "Sustantivo (Fem)",
+    category: "Gesundheit",
+    plural: "die Krankheiten",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "die Gesundheit",
+    pron: "di gue-zúnt-hait",
+    es: "la salud",
+    type: "Sustantivo (Fem)",
+    category: "Gesundheit",
+    plural: "-",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Notfall",
+    pron: "dea nót-fal",
+    es: "la emergencia",
+    type: "Sustantivo (Masc)",
+    category: "Gesundheit",
+    plural: "die Notfälle",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Krankenwagen",
+    pron: "dea krán-ken-va-guen",
+    es: "la ambulancia",
+    type: "Sustantivo (Masc)",
+    category: "Gesundheit",
+    plural: "die Krankenwagen",
+    exampleSentenceDe: "undefined",
+    exampleSentenceEs: "undefined"
+  }, {
+        de: "der Muskel",
+    pron: "dea mús-kel",
+    es: "el músculo",
+    type: "Sustantivo",
+    category: "Körper",
+    plural: "die Muskeln",
+    en: "strong flexing bicep muscle",
+    exampleSentenceDe: "Der Muskel tut weh.",
+    exampleSentenceEs: "El músculo duele."
+  }, {
+        de: "der Knochen",
+    pron: "dea knó-jen",
+    es: "el hueso",
+    type: "Sustantivo",
+    category: "Körper",
+    plural: "die Knochen",
+    en: "white skeleton bone",
+    exampleSentenceDe: "Der Hund hat einen Knochen.",
+    exampleSentenceEs: "El perro tiene un hueso."
+  }, {
+        de: "die Haut",
+    pron: "di jaut",
+    es: "la piel",
+    type: "Sustantivo",
+    category: "Körper",
+    plural: "die Häute",
+    en: "smooth human skin texture",
+    exampleSentenceDe: "Meine Haut ist trocken.",
+    exampleSentenceEs: "Mi piel está seca."
+  }, {
+        de: "das Gehirn",
+    pron: "das gue-jírn",
+    es: "el cerebro",
+    type: "Sustantivo",
+    category: "Körper",
+    plural: "die Gehirne",
+    en: "pink anatomical human brain",
+    exampleSentenceDe: "Das Gehirn ist wichtig.",
+    exampleSentenceEs: "El cerebro es importante."
+  }, {
+        de: "das Herz",
+    pron: "das jerts",
+    es: "el corazón",
+    type: "Sustantivo",
+    category: "Körper",
+    plural: "die Herzen",
+    en: "red anatomical human heart",
+    exampleSentenceDe: "Mein Herz schlägt schnell.",
+    exampleSentenceEs: "Mi corazón late rápido."
+  }, {
+        de: "die Lunge",
+    pron: "di lúng-e",
+    es: "el pulmón",
+    type: "Sustantivo",
+    category: "Körper",
+    plural: "die Lungen",
+    en: "pink anatomical human lungs",
+    exampleSentenceDe: "Rauchen ist schlecht für die Lunge.",
+    exampleSentenceEs: "Fumar es malo para el pulmón."
+  }, {
+        de: "die Leber",
+    pron: "di lé-ber",
+    es: "el hígado",
+    type: "Sustantivo",
+    category: "Körper",
+    plural: "die Lebern",
+    en: "dark red anatomical human liver",
+    exampleSentenceDe: "Alkohol schadet der Leber.",
+    exampleSentenceEs: "El alcohol daña el hígado."
+  }, {
+        de: "atmen",
+    pron: "át-men",
+    es: "respirar",
+    type: "Verbo",
+    category: "Gesundheit",
+    regimen: "Intransitivo",
+    en: "person taking a deep breath",
+    exampleSentenceDe: "Er kann nicht gut atmen.",
+    exampleSentenceEs: "Él no puede respirar bien."
+  }, {
+        de: "schwitzen",
+    pron: "shví-tsen",
+    es: "sudar",
+    type: "Verbo",
+    category: "Gesundheit",
+    regimen: "Intransitivo",
+    en: "sweating tired person",
+    exampleSentenceDe: "Ich schwitze beim Sport.",
+    exampleSentenceEs: "Sudo durante el deporte."
+  }, {
+        de: "zittern",
+    pron: "tsí-tern",
+    es: "temblar",
+    type: "Verbo",
+    category: "Gesundheit",
+    regimen: "Intransitivo",
+    en: "shivering freezing person",
+    exampleSentenceDe: "Ich zittere vor Kälte.",
+    exampleSentenceEs: "Tiemblo de frío."
+  }]
+},
+{
+  id: 11,
+  title: "Kapitel 16: Schule & Beruf",
+  icon: <Briefcase size={20} />,
+  emoji: "💼",
+  words: [{
+    de: "die Schule",
+    pron: "di shú-le",
+    es: "escuela",
+    type: "Sustantivo",
+    category: "Bildung",
     exampleSentenceDe: "Ich bin in der Schule.",
     exampleSentenceEs: "Yo estoy en la escuela.",
-    regimen: "Wo=Dat, Wohin=Akk"
+    plural: "die Schulen"
   }, {
-    de: "an",
-    pron: "an",
-    es: "en (borde / fechas)",
-    type: "Prep. Mixta (Dat/Akk)",
-    category: "Wechselpräpositionen",
-    exampleSentenceDe: "Ich bin am Montag in Berlin.",
-    exampleSentenceEs: "Yo estoy el lunes en Berlín.",
-    regimen: "Wo?=Dat, Wohin?=Akk"
+    de: "die Klasse",
+    pron: "di klá-se",
+    es: "clase",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich bin in der Klasse.",
+    exampleSentenceEs: "Yo estoy en la clase.",
+    plural: "die Klassen"
   }, {
-    de: "auf",
-    pron: "áuf",
-    es: "sobre (con contacto)",
-    type: "Prep. Mixta (Dat/Akk)",
-    category: "Wechselpräpositionen",
-    exampleSentenceDe: "Das Buch ist auf dem Tisch.",
-    exampleSentenceEs: "El libro está sobre la mesa.",
-    regimen: "Wo:Dat/Wohin:Akk"
+    de: "der Lehrer / die Lehrerin",
+    pron: "dea lé-ra  di lé-re-rin",
+    es: "profesor / profesora",
+    type: "Sustantivo",
+    category: "Personen",
+    exampleSentenceDe: "Das ist mein Lehrer. Mein Lehrer ist nett.",
+    exampleSentenceEs: "Este es mi profesor. Mi profesor es simpático.",
+    plural: "die Lehrer / die Lehrerinnen"
   }, {
-    de: "unter",
-    pron: "ún-tea",
-    es: "debajo de",
-    type: "Prep. Mixta (Dat/Akk)",
-    category: "Wechselpräpositionen",
-    exampleSentenceDe: "Das Buch ist unter dem Tisch.",
-    exampleSentenceEs: "El libro está debajo de la mesa.",
-    regimen: "Wo=Dat, Wohin=Akk"
+    de: "der Schüler / die Schülerin",
+    pron: "dea shú-la  di shú-le-rin",
+    es: "alumno / alumna",
+    type: "Sustantivo",
+    category: "Personen",
+    exampleSentenceDe: "Der Schüler ist neu. Er ist in der Klasse.",
+    exampleSentenceEs: "El alumno es nuevo. Él está en la clase.",
+    plural: "die Schüler / die Schülerinnen"
   }, {
-    de: "über",
-    pron: "ú-ba",
-    es: "sobre (sin contacto) / acerca de",
-    type: "Prep. Mixta (Dat/Akk)",
-    category: "Wechselpräpositionen",
-    exampleSentenceDe: "Der Mann spricht über die Familie.",
-    exampleSentenceEs: "El hombre habla sobre la familia.",
-    regimen: "Akk=movim./Dat=lugar"
+    de: "der Student",
+    pron: "dea shtu-dént",
+    es: "estudiante (uni)",
+    type: "Sustantivo",
+    category: "Personen",
+    exampleSentenceDe: "Ich bin ein Student. Der Student ist neu.",
+    exampleSentenceEs: "Soy un estudiante. El estudiante es nuevo.",
+    plural: "die Studenten"
   }, {
-    de: "neben",
-    pron: "né-ben",
-    es: "al lado de",
-    type: "Prep. Mixta (Dat/Akk)",
-    category: "Wechselpräpositionen",
-    exampleSentenceDe: "Der Stuhl ist neben dem Tisch.",
-    exampleSentenceEs: "La silla está al lado de la mesa.",
-    regimen: "Wo?=Dat, Wohin?=Akk"
-  }, {
-    de: "zwischen",
-    pron: "tsví-shen",
-    es: "entre",
-    type: "Prep. Mixta (Dat/Akk)",
-    category: "Wechselpräpositionen",
-    exampleSentenceDe: "Das Buch ist zwischen dem Tisch und dem Stuhl.",
-    exampleSentenceEs: "El libro está entre la mesa y la silla.",
-    regimen: "Akk:movim./Dat:lugar"
-  }, {
-    de: "vor",
-    pron: "fó-a",
-    es: "delante de / antes de",
-    type: "Prep. Mixta (Dat/Akk)",
-    category: "Wechselpräpositionen",
-    exampleSentenceDe: "Vor dem Haus ist ein Baum.",
-    exampleSentenceEs: "Delante de la casa hay un árbol.",
-    regimen: "Wo?=Dat, Wohin?=Akk"
-  }, {
-    de: "hinter",
-    pron: "jín-tea",
-    es: "detrás de",
-    type: "Prep. Mixta (Dat/Akk)",
-    category: "Wechselpräpositionen",
-    exampleSentenceDe: "Das Buch ist hinter dem Tisch.",
-    exampleSentenceEs: "El libro está detrás de la mesa.",
-    regimen: "Wo?+Dat, Wohin?+Akk"
-  }, {
-    de: "obwohl",
-    pron: "op-vól",
-    es: "aunque",
-    type: "Conector Subordinante",
-    category: "Nebensätze",
-    exampleSentenceDe: "Ich gehe spazieren, obwohl es regnet.",
-    exampleSentenceEs: "Salgo a pasear, aunque llueve.",
-    regimen: "Verbo al final"
-  }, {
-    de: "wenn",
-    pron: "ven",
-    es: "si(condicional)",
-    type: "Conector Subordinante",
-    category: "Nebensätze",
-    exampleSentenceDe: "Wenn ich Zeit habe, lerne ich Deutsch.",
-    exampleSentenceEs: "Si tengo tiempo, aprendo alemán.",
-    regimen: "Verbo al final"
-  }, {
-    de: "als",
-    pron: "als",
-    es: "cuando",
-    type: "Conector Subordinante",
-    category: "Nebensätze",
-    exampleSentenceDe: "Ich bin klein, als ich Kind war.",
-    exampleSentenceEs: "Soy bajo, cuando era niño.",
-    regimen: "Verbo al final"
-  }, {
-    de: "deshalb",
-    pron: "des-hálp",
-    es: "por eso",
-    type: "Conector Posición 1",
-    category: "Konnektoren",
-    exampleSentenceDe: "Ich habe Hunger. Deshalb esse ich Pizza.",
-    exampleSentenceEs: "Tengo hambre. Por eso como pizza.",
-    regimen: "Verbo en pos.2 tras él"
-  }, {
-    de: "trotzdem",
-    pron: "tróts-dem",
-    es: "sin embargo",
-    type: "Conector Posición 1",
-    category: "Konnektoren",
-    exampleSentenceDe: "Es regnet. Trotzdem gehe ich spazieren.",
-    exampleSentenceEs: "Está lloviendo. Sin embargo, voy a pasear.",
-    regimen: "Ocupa posición 1, verbo pos.2"
-  }, {
-    de: "außerdem",
-    pron: "áu-sea-dem",
-    es: "además",
-    type: "Conector Posición 1",
-    category: "Konnektoren",
-    exampleSentenceDe: "Ich trinke Kaffee. Außerdem trinke ich Tee.",
-    exampleSentenceEs: "Bebo café. Además, bebo té.",
-    regimen: "Verbo en posición 1"
-  }, {
-    de: "nämlich",
-    pron: "ném-lij",
-    es: "es decir",
-    type: "Partícula",
-    category: "Partikeln",
-    exampleSentenceDe: "Ich habe ein Problem, nämlich: Ich habe keinen Hunger.",
-    exampleSentenceEs: "Tengo un problema, es decir: No tengo hambre.",
-    regimen: "Explica motivo"
-  }, {
-    de: "doch",
-    pron: "doj",
-    es: "sí (rechaza negación)",
-    type: "Partícula",
-    category: "Partikeln",
-    exampleSentenceDe: "Du bist müde. Nein! Ich bin doch nicht müde.",
-    exampleSentenceEs: "Estás cansado. ¡No! Sí que no estoy cansado.",
-    regimen: "Contradice negación"
-  }, {
-    de: "mal",
-    pron: "mal",
-    es: "(Partícula de énfasis)",
-    type: "Partícula",
-    category: "Partikeln",
-    exampleSentenceDe: "Das ist mal gut.",
-    exampleSentenceEs: "Esto está bien, ¡eh! / Esto sí que está bien.",
-    regimen: "Suaviza imperativo"
-  }, {
-    de: "ja",
-    pron: "yá",
-    es: "sí (Partícula de énfasis)",
-    type: "Partícula",
-    category: "Partikeln",
-    exampleSentenceDe: "Ja, das ist gut.",
-    exampleSentenceEs: "Sí, eso está bien.",
-    regimen: "Énfasis, sin traducción literal"
-  }]
-}, {
-  id: 14,
-  title: "Kapitel 14: Basisverben & Adjektive",
-  icon: <Sparkles size={20} />,
-  emoji: "✨",
-  words: [{
-    de: "sein",
-    pron: "záin",
-    es: "ser / estar",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich bin hier.",
-    exampleSentenceEs: "Yo estoy aquí.",
-    regimen: "+ Nominativ"
-  }, {
-    de: "haben",
-    pron: "já-ben",
-    es: "tener / haber",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich habe Hunger.",
-    exampleSentenceEs: "Yo tengo hambre.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "werden",
-    pron: "vér-den",
-    es: "llegar a ser / convertirse",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich werde Arzt.",
-    exampleSentenceEs: "Yo seré médico.",
-    regimen: "+ Nominativ (predicado)"
-  }, {
-    de: "machen",
-    pron: "má-jen",
-    es: "hacer",
+    de: "lernen",
+    pron: "lér-nen",
+    es: "aprender / estudiar",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich mache einen Kaffee.",
-    exampleSentenceEs: "Yo hago un café.",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich lerne Deutsch.",
+    exampleSentenceEs: "Yo aprendo alemán.",
     regimen: "+ Akkusativ"
   }, {
-    de: "tun",
-    pron: "tún",
-    es: "hacer (una acción)",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Was tust du heute?",
-    exampleSentenceEs: "¿Qué haces hoy?",
-    regimen: "+ Akkusativ"
+    de: "der Unterricht",
+    pron: "dea ún-tea-rijt",
+    es: "clase (sesión)",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Der Unterricht beginnt jetzt.",
+    exampleSentenceEs: "La clase empieza ahora.",
+    plural: "die Unterrichte"
   }, {
-    de: "sagen",
-    pron: "sá-guen",
-    es: "decir",
+    de: "der Kurs",
+    pron: "dea kúrs",
+    es: "curso",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Der Deutschkurs ist gut.",
+    exampleSentenceEs: "El curso de alemán es bueno.",
+    plural: "die Kurse"
+  }, {
+    de: "die Pause",
+    pron: "di páu-se",
+    es: "descanso/recreo",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Wir machen jetzt eine Pause.",
+    exampleSentenceEs: "Ahora hacemos un descanso.",
+    plural: "die Pausen"
+  }, {
+    de: "die Hausaufgabe",
+    pron: "di jáus-áuf-gá-be",
+    es: "tarea",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich mache die Hausaufgabe.",
+    exampleSentenceEs: "Yo hago la tarea.",
+    plural: "die Hausaufgaben"
+  }, {
+    de: "die Prüfung",
+    pron: "di prǘ-fung",
+    es: "examen",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Die Prüfung ist schwer.",
+    exampleSentenceEs: "El examen es difícil.",
+    plural: "die Prüfungen"
+  }, {
+    de: "die Lösung",
+    pron: "di lö-sung",
+    es: "solución",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich habe eine Lösung. Die Lösung ist einfach.",
+    exampleSentenceEs: "Tengo una solución. La solución es simple.",
+    plural: "die Lösungen"
+  }, {
+    de: "der Fehler",
+    pron: "dea fé-la",
+    es: "error",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich mache einen Fehler. Der Fehler ist groß.",
+    exampleSentenceEs: "Yo cometo un error. El error es grande.",
+    plural: "die Fehler"
+  }, {
+    de: "die Arbeit",
+    pron: "di ár-bait",
+    es: "trabajo",
+    type: "Sustantivo",
+    category: "Beruf",
+    exampleSentenceDe: "Die Arbeit ist interessant.",
+    exampleSentenceEs: "El trabajo es interesante.",
+    plural: "die Arbeiten"
+  }, {
+    de: "der Beruf",
+    pron: "dea be-rúf",
+    es: "profesión",
+    type: "Sustantivo",
+    category: "Beruf",
+    exampleSentenceDe: "Was ist dein Beruf?",
+    exampleSentenceEs: "¿Cuál es tu profesión?",
+    plural: "die Berufe"
+  }, {
+    de: "Mechaniker von Beruf",
+    pron: "me-já-ni-ka fon be-rúf",
+    es: "mecánico de profesión",
+    type: "Frase",
+    category: "Beruf",
+    exampleSentenceDe: "Ich bin Mechaniker von Beruf.",
+    exampleSentenceEs: "Soy mecánico de profesión.",
+    regimen: "von + dat., sin artículo"
+  }, {
+    de: "der Arbeitsplatz / Job",
+    pron: "dea ár-baits-plats  dshob",
+    es: "puesto de trabajo / empleo",
+    type: "Sustantivo",
+    category: "Beruf",
+    exampleSentenceDe: "Ich habe einen Arbeitsplatz. Der Arbeitsplatz ist gut.",
+    exampleSentenceEs: "Tengo un puesto de trabajo. El puesto de trabajo es bueno.",
+    plural: "die Arbeitsplätze"
+  }, {
+    de: "arbeiten",
+    pron: "ár-bai-ten",
+    es: "trabajar",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich sage \"Hallo\".",
-    exampleSentenceEs: "Yo digo \"Hola\".",
-    regimen: "+ Dativ + Akkusativ"
+    category: "Beruf",
+    exampleSentenceDe: "Ich arbeite heute.",
+    exampleSentenceEs: "Yo trabajo hoy.",
+    regimen: "+ an/bei + Dat"
   }, {
-    de: "gehen",
-    pron: "gué-en",
-    es: "ir / andar",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich gehe nach Hause.",
-    exampleSentenceEs: "Yo voy a casa.",
-    regimen: "+ Nominativ"
+    de: "der Chef / die Chefin",
+    pron: "dea shef  di shé-fin",
+    es: "jefe / jefa",
+    type: "Sustantivo",
+    category: "Personen",
+    exampleSentenceDe: "Der Chef ist nett.",
+    exampleSentenceEs: "El jefe es simpático.",
+    plural: "die Chefs / die Chefinnen"
   }, {
-    de: "kommen",
-    pron: "kó-men",
-    es: "venir",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich komme aus Spanien.",
-    exampleSentenceEs: "Yo vengo de España.",
-    regimen: "aus/von + Dativo"
+    de: "der Kollege / die Kollegin",
+    pron: "dea ko-lé-gue  di ko-lé-guin",
+    es: "colega",
+    type: "Sustantivo",
+    category: "Personen",
+    exampleSentenceDe: "Ich habe einen Kollegen. Mein Kollege ist nett.",
+    exampleSentenceEs: "Tengo un colega. Mi colega es simpático.",
+    plural: "die Kollegen / Kolleginnen"
   }, {
-    de: "sehen",
-    pron: "zé-en",
-    es: "ver",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich sehe den Mann.",
-    exampleSentenceEs: "Yo veo al hombre.",
-    regimen: "+ Akkusativ"
+    de: "die Firma / das Büro",
+    pron: "di fír-ma  das bü-ró",
+    es: "empresa / oficina",
+    type: "Sustantivo",
+    category: "Beruf",
+    exampleSentenceDe: "Ich arbeite in der Firma.",
+    exampleSentenceEs: "Yo trabajo en la empresa.",
+    plural: "die Firmen / die Büros"
   }, {
-    de: "wissen",
-    pron: "ví-sen",
-    es: "saber (información)",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich weiß die Antwort.",
-    exampleSentenceEs: "Yo sé la respuesta.",
-    regimen: "+ Akkusativ; ich weiß"
+    de: "arbeitslos",
+    pron: "ár-baits-lohs",
+    es: "desempleado",
+    type: "Adjetivo",
+    category: "Beruf",
+    exampleSentenceDe: "Ich bin arbeitslos.",
+    exampleSentenceEs: "Yo estoy desempleado.",
+    regimen: "≠ berufstätig"
   }, {
-    de: "kennen",
-    pron: "ké-nen",
-    es: "conocer (personas/lugares)",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich kenne den Mann.",
-    exampleSentenceEs: "Yo conozco al hombre.",
-    regimen: "+ Akkusativ"
+    de: "der Arbeiter",
+    pron: "dea ár-bai-ta",
+    es: "obrero",
+    type: "Sustantivo",
+    category: "Personen",
+    exampleSentenceDe: "Ich sehe der Arbeiter.",
+    exampleSentenceEs: "Yo veo al obrero.",
+    plural: "die Arbeiter"
   }, {
-    de: "finden",
-    pron: "fín-den",
-    es: "encontrar / parecer",
+    de: "das Praktikum",
+    pron: "das prák-ti-kum",
+    es: "pasantía",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich mache ein Praktikum in Deutschland.",
+    exampleSentenceEs: "Hago una pasantía en Alemania.",
+    plural: "die Praktika"
+  }, {
+    de: "die Ausbildung",
+    pron: "di áus-bíl-dung",
+    es: "formación dual",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Die Ausbildung ist wichtig.",
+    exampleSentenceEs: "La formación es importante.",
+    plural: "die Ausbildungen"
+  }, {
+    de: "der Urlaub",
+    pron: "dea úa-laup",
+    es: "vacaciones",
+    type: "Sustantivo",
+    category: "Beruf",
+    exampleSentenceDe: "Ich habe Urlaub.",
+    exampleSentenceEs: "Tengo vacaciones.",
+    plural: "die Urlaube"
+  }, {
+    de: "selbstständig",
+    pron: "sélpst-shtén-dij",
+    es: "independiente",
+    type: "Adjetivo",
+    category: "Beruf",
+    exampleSentenceDe: "Ich bin selbstständig.",
+    exampleSentenceEs: "Soy independiente.",
+    regimen: "≠ abhängig"
+  }, {
+    de: "die Stelle",
+    pron: "di shté-le",
+    es: "plaza/vacante",
+    type: "Sustantivo",
+    category: "Beruf",
+    exampleSentenceDe: "Ich suche die Stelle.",
+    exampleSentenceEs: "Yo busco la plaza.",
+    plural: "die Stellen"
+  }, {
+    de: "Geld verdienen",
+    pron: "guelt fea-dí-nen",
+    es: "ganar dinero",
+    type: "Frase",
+    category: "Beruf",
+    exampleSentenceDe: "Ich möchte Geld verdienen.",
+    exampleSentenceEs: "Yo quiero ganar dinero.",
+    regimen: "Verbo + Akkusativ"
+  }, {
+    de: "schwere / leichte Arbeit",
+    pron: "shvé-re  láij-te ar-báit",
+    es: "trabajo pesado/ligero",
+    type: "Frase",
+    category: "Beruf",
+    exampleSentenceDe: "Die Arbeit ist schwer.",
+    exampleSentenceEs: "El trabajo es pesado.",
+    regimen: "Adj. + sustantivo neutro"
+  }, {
+    de: "das Internet",
+    pron: "das ín-ta-net",
+    es: "internet",
+    type: "Sustantivo",
+    category: "Büro",
+    exampleSentenceDe: "Ich habe das Internet. Das Internet ist gut.",
+    exampleSentenceEs: "Tengo internet. Internet es bueno.",
+    plural: "die Internets"
+  }, {
+    de: "der Computer",
+    pron: "dea kom-piú-ta",
+    es: "computador",
+    type: "Sustantivo",
+    category: "Büro",
+    exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
+    exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
+    plural: "die Computer"
+  }, {
+    de: "der Drucker",
+    pron: "dea drú-ka",
+    es: "impresora",
+    type: "Sustantivo",
+    category: "Büro",
+    exampleSentenceDe: "Das ist mein Drucker. Der Drucker ist neu.",
+    exampleSentenceEs: "Esta es mi impresora. La impresora es nueva.",
+    plural: "die Drucker"
+  }, {
+    de: "der Bleistift",
+    pron: "dea blái-shtift",
+    es: "lápiz",
+    type: "Sustantivo",
+    category: "Büro",
+    exampleSentenceDe: "Das ist ein Bleistift. Der Bleistift ist blau.",
+    exampleSentenceEs: "Esto es un lápiz. El lápiz es azul.",
+    plural: "die Bleistifte"
+  }, {
+    de: "der Kugelschreiber",
+    pron: "dea kú-guel-shrái-ba",
+    es: "bolígrafo",
+    type: "Sustantivo",
+    category: "Büro",
+    exampleSentenceDe: "Ich habe einen Kugelschreiber. Der Kugelschreiber ist blau.",
+    exampleSentenceEs: "Tengo un bolígrafo. El bolígrafo es azul.",
+    plural: "die Kugelschreiber"
+  }, {
+    de: "der Schreibtisch",
+    pron: "dea shráip-tish",
+    es: "escritorio",
+    type: "Sustantivo",
+    category: "Büro",
+    exampleSentenceDe: "Der Schreibtisch ist groß.",
+    exampleSentenceEs: "El escritorio es grande.",
+    plural: "die Schreibtische"
+  }, {
+    de: "das Zeugnis",
+    pron: "das tsóik-nis",
+    es: "boletín de notas",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich habe das Zeugnis. Das Zeugnis ist gut.",
+    exampleSentenceEs: "Tengo el boletín de notas. El boletín de notas es bueno.",
+    plural: "die Zeugnisse"
+  }, {
+    de: "der Stundenplan",
+    pron: "dea shtún-den-plan",
+    es: "horario de clases",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich habe der Stundenplan.",
+    exampleSentenceEs: "Tengo el horario de clases.",
+    plural: "die Stundenpläne"
+  }, {
+    de: "fehlen",
+    pron: "fé-len",
+    es: "faltar",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich finde das Buch gut.",
-    exampleSentenceEs: "Yo encuentro el libro bueno.",
-    regimen: "+ Akkusativ"
+    category: "Bildung",
+    exampleSentenceDe: "Mir fehlen die Zähne.",
+    exampleSentenceEs: "Me faltan los dientes.",
+    regimen: "⚠️ Exige Dativo"
   }, {
-    de: "bleiben",
-    pron: "blái-ben",
-    es: "quedarse",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich bleibe hier.",
-    exampleSentenceEs: "Yo me quedo aquí.",
-    regimen: "+ sein, irr. (blieb)"
-  }, {
-    de: "lassen",
-    pron: "lá-sen",
-    es: "dejar / permitir",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich lasse das Fenster offen.",
-    exampleSentenceEs: "Yo dejo la ventana abierta.",
-    regimen: "+ Akk. (er lässt)"
-  }, {
-    de: "denken",
-    pron: "dén-ken",
-    es: "pensar",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich denke an dich.",
-    exampleSentenceEs: "Pienso en ti.",
-    regimen: "an/über + Akkusativ"
-  }, {
-    de: "groß / klein",
-    pron: "grós  kláin",
-    es: "grande / pequeño",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Das Haus ist groß. Das Haus ist nicht klein.",
-    exampleSentenceEs: "La casa es grande. La casa no es pequeña.",
-    regimen: "≠ klein"
-  }, {
-    de: "gut / schlecht",
-    pron: "gút  shlejt",
-    es: "bueno / malo",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Das Essen ist gut.",
-    exampleSentenceEs: "La comida está buena.",
-    regimen: "≠ schlecht / gut"
-  }, {
-    de: "neu / alt",
-    pron: "noi  alt",
-    es: "nuevo / viejo",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Mein Haus ist alt. Aber mein Auto ist neu.",
-    exampleSentenceEs: "Mi casa es vieja. Pero mi coche es nuevo.",
-    regimen: "≠ alt / neu"
-  }, {
-    de: "schön / hässlich",
-    pron: "shön  jés-lij",
-    es: "bonito / feo",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Das Haus ist schön.",
-    exampleSentenceEs: "La casa es bonita.",
-    regimen: "≠ hässlich"
-  }, {
-    de: "schwer / leicht",
-    pron: "shvéa  láijt",
-    es: "pesado (difícil) / ligero (fácil)",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Der Koffer ist schwer.",
-    exampleSentenceEs: "La maleta es pesada.",
-    regimen: "≠ leicht / schwer"
-  }, {
-    de: "richtig / falsch",
-    pron: "ríj-tij  falsh",
-    es: "correcto / incorrecto",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Das ist richtig.",
-    exampleSentenceEs: "Eso es correcto.",
-    regimen: "≠ falsch"
-  }, {
-    de: "wichtig",
-    pron: "víj-tij",
-    es: "importante",
-    type: "Adjetivo",
-    category: "Adjektive",
-    exampleSentenceDe: "Das ist wichtig.",
-    exampleSentenceEs: "Esto es importante.",
-    regimen: "≠ unwichtig"
-  }, {
-    de: "einfach / schwierig",
-    pron: "áin-faj  shví-rij",
-    es: "fácil / difícil",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Die Aufgabe ist einfach.",
-    exampleSentenceEs: "La tarea es fácil.",
-    regimen: "≠ schwierig / einfach"
-  }, {
-    de: "schnell / langsam",
-    pron: "shnel  láng-zam",
-    es: "rápido / lento",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Das Auto ist schnell.",
-    exampleSentenceEs: "El coche es rápido.",
-    regimen: "≠ langsam / schnell"
-  }, {
-    de: "laut / leise",
-    pron: "láut  lái-ze",
-    es: "fuerte (sonido) / silencioso",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Das Radio ist laut. Ich mache das Radio leise.",
-    exampleSentenceEs: "La radio está alta. Yo pongo la radio silenciosa.",
-    regimen: "≠ leise / laut"
-  }, {
-    de: "hell / dunkel",
-    pron: "jel  dún-kel",
-    es: "claro (luz) / oscuro",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Das Licht ist hell.",
-    exampleSentenceEs: "La luz es clara.",
-    regimen: "hell ≠ dunkel"
-  }, {
-    de: "heiß / kalt",
-    pron: "jáis  kalt",
-    es: "caliente / frío",
-    type: "Adjetivo",
-    category: "Gegensätze",
-    exampleSentenceDe: "Das Wasser ist heiß.",
-    exampleSentenceEs: "El agua está caliente.",
-    regimen: "≠ kalt / heiß"
-  }, {
-    de: "können",
-    pron: "kö́-nen",
-    es: "poder (habilidad/posibilidad)",
-    type: "Verbo Modal",
-    category: "Modalverben",
-    exampleSentenceDe: "Ich kann Deutsch sprechen.",
-    exampleSentenceEs: "Yo puedo hablar alemán.",
-    regimen: "+ Infinitiv (sin zu)"
-  }, {
-    de: "müssen",
-    pron: "mú-sen",
-    es: "tener que (obligación)",
-    type: "Verbo Modal",
-    category: "Modalverben",
-    exampleSentenceDe: "Ich muss jetzt nach Hause gehen.",
-    exampleSentenceEs: "Yo tengo que ir a casa ahora.",
-    regimen: "+ Infinitiv (sin zu)"
-  }, {
-    de: "dürfen",
-    pron: "dúa-fen",
-    es: "poder (permiso)",
-    type: "Verbo Modal",
-    category: "Modalverben",
-    exampleSentenceDe: "Hier dürfen Sie parken.",
-    exampleSentenceEs: "Aquí puede aparcar.",
-    regimen: "+ Infinitiv sin zu"
-  }, {
-    de: "sollen",
-    pron: "zó-len",
-    es: "deber (recomendación/orden)",
-    type: "Verbo Modal",
-    category: "Modalverben",
-    exampleSentenceDe: "Du sollst Wasser trinken.",
-    exampleSentenceEs: "Tú deberías beber agua.",
-    regimen: "+ Infinitiv (ohne zu)"
-  }, {
-    de: "wollen",
-    pron: "vó-len",
-    es: "querer (deseo fuerte)",
-    type: "Verbo Modal",
-    category: "Modalverben",
-    exampleSentenceDe: "Ich will einen Kaffee.",
-    exampleSentenceEs: "Yo quiero un café.",
-    regimen: "+ Infinitiv (sin zu)"
-  }, {
-    de: "mögen",
-    pron: "mö-guen",
-    es: "gustar (algo/alguien)",
-    type: "Verbo Modal",
-    category: "Modalverben",
-    exampleSentenceDe: "Ich mag Kaffee.",
-    exampleSentenceEs: "Me gusta el café.",
-    regimen: "+ Akkusativ"
-  }, {
-    de: "möchten",
-    pron: "mój-ten",
-    es: "gustaría (quisiera)",
-    type: "Verbo Modal (KII)",
-    category: "Modalverben",
-    exampleSentenceDe: "Ich möchte einen Kaffee.",
-    exampleSentenceEs: "Yo quisiera un café.",
-    regimen: "+ Akkusativ / + Infinitiv"
-  }, {
-    de: "geben",
-    pron: "gué-ben",
-    es: "dar",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich gebe dir mein Buch.",
-    exampleSentenceEs: "Yo te doy mi libro.",
-    regimen: "Dativo (a quién) + Akkusativ (qué)"
-  }, {
-    de: "nehmen",
-    pron: "né-men",
-    es: "tomar / agarrar",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich nehme einen Kaffee.",
-    exampleSentenceEs: "Yo tomo un café.",
-    regimen: "Irregular (nimmt) / + Akkusativ"
-  }, {
-    de: "brauchen",
-    pron: "bráu-jen",
-    es: "necesitar",
+    de: "bestehen",
+    pron: "be-shté-en",
+    es: "aprobar",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich brauche Wasser.",
-    exampleSentenceEs: "Yo necesito agua.",
-    regimen: "+ Akkusativ"
+    category: "Bildung",
+    exampleSentenceDe: "Die Prüfung besteht aus zehn Fragen.",
+    exampleSentenceEs: "El examen consta de diez preguntas.",
+    regimen: "+ Akkusativ, no separable"
   }, {
-    de: "helfen",
-    pron: "jél-fen",
-    es: "ayudar",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Kannst du mir helfen?",
-    exampleSentenceEs: "¿Puedes ayudarme?",
-    regimen: "+ Dativo"
+    de: "durchfallen",
+    pron: "dúrch-fa-len",
+    es: "reprobar",
+    type: "Verbo separable",
+    category: "Bildung",
+    exampleSentenceDe: "Ich falle bei der Prüfung durch.",
+    exampleSentenceEs: "Reprobo en el examen.",
+    regimen: "Separable (durch-)"
   }, {
-    de: "bringen",
-    pron: "brín-guen",
-    es: "traer",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich bringe dir das Buch.",
-    exampleSentenceEs: "Yo te traigo el libro.",
-    regimen: "+ Akk./Dat."
+    de: "die Besprechung",
+    pron: "di be-shpré-jung",
+    es: "la reunión",
+    type: "Sustantivo",
+    category: "Beruf",
+    exampleSentenceDe: "Die Besprechung ist um neun Uhr.",
+    exampleSentenceEs: "La reunión es a las nueve.",
+    plural: "die Besprechungen"
   }, {
-    de: "schreiben",
-    pron: "shrái-ben",
-    es: "escribir",
+    de: "kündigen",
+    pron: "kún-di-guen",
+    es: "renunciar",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich schreibe eine E-Mail.",
-    exampleSentenceEs: "Yo escribo un correo electrónico.",
+    category: "Beruf",
+    exampleSentenceDe: "Ich kündige meinen Job.",
+    exampleSentenceEs: "Yo renuncio a mi trabajo.",
+    regimen: "+ Dativ"
+  }, {
+    de: "befördern",
+    pron: "be-féa-den",
+    es: "ascender",
+    type: "Verbo",
+    category: "Beruf",
+    exampleSentenceDe: "Ich befördere meine Tasche.",
+    exampleSentenceEs: "Yo transporte mi bolso.",
     regimen: "+ Akkusativ"
   }, {
-    de: "lesen",
-    pron: "lé-sen",
-    es: "leer",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich lese ein Buch.",
-    exampleSentenceEs: "Yo leo un libro.",
-    regimen: "+ Akkusativ"
+    de: "die Universität",
+    pron: "di u-ni-vea-si-tét",
+    es: "universidad",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich bin an der Universität. Die Universität ist groß.",
+    exampleSentenceEs: "Yo estoy en la universidad. La universidad es grande.",
+    plural: "die Universitäten"
+  }, {
+    de: "anmelden",
+    pron: "án-mel-den",
+    es: "inscribirse",
+    type: "Verbo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich melde mich für den Kurs an.",
+    exampleSentenceEs: "Me inscribo para el curso.",
+    regimen: "Sep./refl. + Akkusativ"
+  }, {
+    de: "die Anmeldung",
+    pron: "di án-mel-dung",
+    es: "inscripción",
+    type: "Sustantivo",
+    category: "Bildung",
+    exampleSentenceDe: "Ich mache die Anmeldung für den Kurs.",
+    exampleSentenceEs: "Yo hago la inscripción para el curso.",
+    plural: "die Anmeldungen"
   }, {
     de: "sprechen",
     pron: "shpré-jen",
     es: "hablar",
-    type: "Verbo (Irregular)",
-    category: "Basisverben",
+    type: "Verbo",
+    category: "Aktionen",
     exampleSentenceDe: "Ich spreche Deutsch.",
     exampleSentenceEs: "Yo hablo alemán.",
-    regimen: "+ Akk./mit + Dat."
+    regimen: "+ Akkusativ, irr. (spricht)"
   }, {
-    de: "versuchen",
-    pron: "fea-zú-jen",
-    es: "intentar",
+    de: "verstehen",
+    pron: "fea-shté-en",
+    es: "entender",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich versuche, Deutsch zu lernen.",
-    exampleSentenceEs: "Intento aprender alemán.",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich verstehe das.",
+    exampleSentenceEs: "Yo entiendo eso.",
     regimen: "+ Akkusativ"
   }, {
-    de: "entscheiden",
-    pron: "ent-shái-den",
-    es: "decidir",
+    de: "fragen",
+    pron: "frá-guen",
+    es: "preguntar",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich kann nicht entscheiden.",
-    exampleSentenceEs: "Yo no puedo decidir.",
-    regimen: "sich + für/Akk"
+    category: "Aktionen",
+    exampleSentenceDe: "Ich frage dich.",
+    exampleSentenceEs: "Yo te pregunto.",
+    regimen: "+ Akkusativ (jdn.)"
   }, {
-    de: "vergessen",
-    pron: "fea-gué-sen",
-    es: "olvidar",
+    de: "antworten",
+    pron: "ánt-vor-ten",
+    es: "responder",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich vergesse meinen Schlüssel nicht.",
-    exampleSentenceEs: "No olvido mi llave.",
-    regimen: "+ Akkusativ, irr. (vergisst)"
-  }, {
-    de: "sich erinnern",
-    pron: "ziş ea-í-nen",
-    es: "recordar",
-    type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich erinnere mich an dich.",
-    exampleSentenceEs: "Yo te recuerdo a ti.",
-    regimen: "Reflexivo + an+Akk"
-  }, {
-    de: "passieren",
-    pron: "pa-sí-ren",
-    es: "suceder",
-    type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Was passiert heute?",
-    exampleSentenceEs: "¿Qué sucede hoy?",
+    category: "Aktionen",
+    exampleSentenceDe: "Ich antworte auf deine Frage.",
+    exampleSentenceEs: "Yo respondo a tu pregunta.",
     regimen: "⚠️ Exige Dativo"
   }, {
-    de: "erzählen",
-    pron: "ea-tsé-len",
-    es: "narrar",
+    de: "erklären",
+    pron: "ea-klé-ren",
+    es: "explicar",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Ich erzähle eine Geschichte.",
-    exampleSentenceEs: "Yo narro una historia.",
-    regimen: "+Dat./Akk."
+    category: "Aktionen",
+    exampleSentenceDe: "Ich kann das nicht erklären.",
+    exampleSentenceEs: "Yo no puedo explicar eso.",
+    regimen: "jdm. + Akk."
   }, {
-    de: "bedeuten",
-    pron: "be-dói-ten",
-    es: "significar",
+    de: "wiederholen",
+    pron: "ví-da-jó-len",
+    es: "repetir",
     type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Was bedeutet das?",
-    exampleSentenceEs: "¿Qué significa eso?",
-    regimen: "+ Akkusativ"
+    category: "Aktionen",
+    exampleSentenceDe: "Bitte wiederholen Sie das.",
+    exampleSentenceEs: "Por favor, repita eso.",
+    regimen: "No separable, + Akk."
+  },
+  {
+    de: "der Architekt / die Architektin",
+    pron: "dea ar-ji-tékt",
+    es: "arquitecto",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Architekten",
+    en: "architect with blueprints",
+    exampleSentenceDe: "Der Architekt plant das Haus.",
+    exampleSentenceEs: "El arquitecto planea la casa."
   }, {
-    de: "beginnen",
-    pron: "be-guí-nen",
-    es: "comenzar",
-    type: "Verbo",
-    category: "Basisverben",
-    exampleSentenceDe: "Der Kurs beginnt heute.",
-    exampleSentenceEs: "El curso comienza hoy.",
-    regimen: "+ Akkusativ/mit+Dat"
+        de: "der Anwalt / die Anwältin",
+    pron: "dea án-valt",
+    es: "abogado",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Anwälte",
+    en: "lawyer in a suit with a briefcase",
+    exampleSentenceDe: "Ich brauche einen Anwalt.",
+    exampleSentenceEs: "Necesito un abogado."
   }, {
-    de: "stehen",
-    pron: "shté-en",
-    es: "estar de pie",
-    type: "Verbo Posicional",
-    category: "Positionsverben",
-    exampleSentenceDe: "Der Tisch steht hier.",
-    exampleSentenceEs: "La mesa está aquí.",
-    regimen: "+ Dativ/Akkusativ (Wo/Wohin)"
+        de: "der Richter / die Richterin",
+    pron: "dea ríj-ter",
+    es: "juez",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Richter",
+    en: "judge holding a wooden gavel",
+    exampleSentenceDe: "Der Richter ist sehr streng.",
+    exampleSentenceEs: "El juez es muy estricto."
   }, {
-    de: "stellen",
-    pron: "shté-len",
-    es: "colocar vertical",
-    type: "Verbo Posicional",
-    category: "Positionsverben",
-    exampleSentenceDe: "Ich stelle die Flasche auf den Tisch.",
-    exampleSentenceEs: "Yo coloco la botella sobre la mesa.",
-    regimen: "+ Akkusativ (wo? Dativ)"
+        de: "der Schauspieler",
+    pron: "dea sháu-shpi-ler",
+    es: "actor",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Schauspieler",
+    en: "actor holding a theater mask",
+    exampleSentenceDe: "Er ist ein bekannter actor.",
+    exampleSentenceEs: "Él es un actor conocido."
   }, {
-    de: "liegen",
-    pron: "lí-guen",
-    es: "estar acostado",
-    type: "Verbo Posicional",
-    category: "Positionsverben",
-    exampleSentenceDe: "Ich liege auf dem Bett.",
-    exampleSentenceEs: "Yo estoy acostado en la cama.",
-    regimen: "⚠️ Wo? + Dativ"
+        de: "der Bäcker / die Bäckerin",
+    pron: "dea bé-ker",
+    es: "panadero",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Bäcker",
+    en: "baker holding fresh bread",
+    exampleSentenceDe: "Der Bäcker arbeitet in der Nacht.",
+    exampleSentenceEs: "El panadero trabaja en la noche."
   }, {
-    de: "legen",
-    pron: "lé-guen",
-    es: "colocar horizontal",
-    type: "Verbo Posicional",
-    category: "Positionsverben",
-    exampleSentenceDe: "Ich lege das Buch auf den Tisch.",
-    exampleSentenceEs: "Yo coloco el libro sobre la mesa.",
-    regimen: "Akk.+Wohin? (legen/liegen)"
+        de: "der Metzger / die Metzgerin",
+    pron: "dea méts-guer",
+    es: "carnicero",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Metzger",
+    en: "butcher cutting meat",
+    exampleSentenceDe: "Ich kaufe Fleisch beim Metzger.",
+    exampleSentenceEs: "Compro carne en el carnicero."
+  }, {
+        de: "der Friseur / die Friseurin",
+    pron: "dea fri-zöa",
+    es: "peluquero",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Friseure",
+    en: "hairdresser with scissors",
+    exampleSentenceDe: "Ich gehe morgen zum Friseur.",
+    exampleSentenceEs: "Mañana voy al peluquero."
+  }, {
+        de: "der Soldat / die Soldatin",
+    pron: "dea zol-dát",
+    es: "soldado",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Soldaten",
+    en: "soldier in uniform",
+    exampleSentenceDe: "Mein Bruder ist Soldat.",
+    exampleSentenceEs: "Mi hermano es soldado."
+  }, {
+        de: "der Künstler / die Künstlerin",
+    pron: "dea küns-tler",
+    es: "artista",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Künstler",
+    en: "artist holding a paint palette",
+    exampleSentenceDe: "Sie ist eine freie Künstlerin.",
+    exampleSentenceEs: "Ella es una artista independiente."
+  }, {
+        de: "der Bauer / die Bäuerin",
+    pron: "dea báu-er",
+    es: "granjero",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Bauern",
+    en: "farmer holding a pitchfork",
+    exampleSentenceDe: "Der Bauer hat viele Kühe.",
+    exampleSentenceEs: "El granjero tiene muchas vacas."
+  },
+  {
+    de: "der Kellner / die Kellnerin",
+    pron: "dea kel-na / di kel-ne-rin",
+    es: "el camarero / la camarera",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Kellner / die Kellnerinnen",
+    en: "a silver serving tray",
+    exampleSentenceDe: "Der Kellner bringt das Essen.",
+    exampleSentenceEs: "Camarero trae la comida."
+  }, {
+        de: "der Koch / die Köchin",
+    pron: "dea koj / di ko-jin",
+    es: "el cocinero / la cocinera",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Köche / die Köchinnen",
+    en: "a white chef hat and a spatula",
+    exampleSentenceDe: "Der Koch kocht sehr gut.",
+    exampleSentenceEs: "El cocinero cocina muy bien."
+  }, {
+        de: "der Polizist / die Polizistin",
+    pron: "dea po-li-tsist / di po-li-tsis-tin",
+    es: "el policía / la mujer policía",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Polizisten / die Polizistinnen",
+    en: "a silver police badge",
+    exampleSentenceDe: "Die Polizei hilft den Menschen.",
+    exampleSentenceEs: "La policía ayuda a las personas."
+  }, {
+        de: "der Ingenieur / die Ingenieurin",
+    pron: "dea in-ye-niur / di in-ye-niu-rin",
+    es: "el ingeniero / la ingeniera",
+    type: "Sustantivo",
+    category: "Beruf",
+    plural: "die Ingenieure / die Ingenieurinnen",
+    en: "a yellow safety helmet over blueprints",
+    exampleSentenceDe: "Sie arbeitet als Ingenieurin bei BMW.",
+    exampleSentenceEs: "Ella trabaja como ingeniera en BMW."
+  }, {
+        de: "das Heft",
+    pron: "das jeft",
+    es: "el cuaderno",
+    type: "Sustantivo",
+    category: "Büro",
+    plural: "die Hefte",
+    en: "a simple spiral notebook",
+    exampleSentenceDe: "Schreiben Sie das bitte in Ihr Heft.",
+    exampleSentenceEs: "Escriba eso en su cuaderno, por favor."
+  }, {
+        de: "das Papier",
+    pron: "das pa-pia",
+    es: "el papel",
+    type: "Sustantivo",
+    category: "Büro",
+    plural: "die Papiere",
+    en: "a stack of blank white paper sheets",
+    exampleSentenceDe: "Der Drucker braucht neues Papier.",
+    exampleSentenceEs: "La impresora necesita papel nuevo."
+  }, {
+        de: "der Radiergummi",
+    pron: "dea ra-dia-gu-mi",
+    es: "el borrador / la goma",
+    type: "Sustantivo",
+    category: "Büro",
+    plural: "die Radiergummis",
+    en: "a classic pink and blue eraser",
+    exampleSentenceDe: "Hast du einen Radiergummi für mich?",
+    exampleSentenceEs: "¿Tienes un borrador para mí?"
+  }, {
+        de: "der Rucksack",
+    pron: "dea ruk-sak",
+    es: "la mochila",
+    type: "Sustantivo",
+    category: "Büro",
+    plural: "die Rucksäcke",
+    en: "a colorful school backpack",
+    exampleSentenceDe: "Mein Rucksack ist sehr schwer.",
+    exampleSentenceEs: "Mi mochila es muy pesada."
   }]
-}, {
-  id: 15,
-  title: "Kapitel 15: Adverbien & Fragewörter",
-  icon: <Search size={20} />,
-  emoji: "❓",
+},
+{
+  id: 17,
+  title: "Kapitel 17: Digitale Welt & IT",
+  icon: <Laptop size={20} />,
+  emoji: "💻",
   words: [{
-    de: "heute",
-    pron: "jói-te",
-    es: "hoy",
-    type: "Adverbio",
-    category: "Zeitadverbien",
-    exampleSentenceDe: "Heute ist Montag.",
-    exampleSentenceEs: "Hoy es lunes.",
-    regimen: "Temporal"
+    de: "der Laptop",
+    pron: "dea láp-top",
+    es: "el portátil",
+    type: "Sustantivo (Masc)",
+    category: "Hardware",
+    plural: "die Laptops",
+    en: "a cute 3D isometric UI icon of a silver laptop computer",
+    exampleSentenceDe: "Ich brauche einen neuen Laptop.",
+    exampleSentenceEs: "Necesito un portátil nuevo."
   }, {
-    de: "morgen",
-    pron: "mór-guen",
-    es: "mañana",
-    type: "Adverbio",
-    category: "Zeitadverbien",
-    exampleSentenceDe: "Ich gehe morgen ins Kino.",
-    exampleSentenceEs: "Mañana voy al cine.",
-    regimen: "Temporal"
+    de: "der Bildschirm",
+    pron: "dea bilt-shirm",
+    es: "la pantalla",
+    type: "Sustantivo (Masc)",
+    category: "Hardware",
+    plural: "die Bildschirme",
+    en: "a cute 3D isometric UI icon of a glowing computer monitor",
+    exampleSentenceDe: "Der Bildschirm ist sehr groß.",
+    exampleSentenceEs: "La pantalla es muy grande."
   }, {
-    de: "gestern",
-    pron: "gués-tean",
-    es: "ayer",
-    type: "Adverbio",
-    category: "Zeitadverbien",
-    exampleSentenceDe: "Gestern war ich im Park.",
-    exampleSentenceEs: "Ayer estuve en el parque.",
-    regimen: "Temporal"
+    de: "die Tastatur",
+    pron: "di tas-ta-túr",
+    es: "el teclado",
+    type: "Sustantivo (Fem)",
+    category: "Hardware",
+    plural: "die Tastaturen",
+    en: "a cute 3D isometric UI icon of a mechanical computer keyboard",
+    exampleSentenceDe: "Meine Tastatur ist leider kaputt.",
+    exampleSentenceEs: "Mi teclado lamentablemente está roto."
   }, {
-    de: "jetzt",
-    pron: "yetst",
-    es: "ahora",
-    type: "Adverbio",
-    category: "Zeitadverbien",
-    exampleSentenceDe: "Ich lerne Deutsch jetzt.",
-    exampleSentenceEs: "Yo aprendo alemán ahora.",
-    regimen: "Temporal"
+    de: "die Maus",
+    pron: "di maus",
+    es: "el ratón",
+    type: "Sustantivo (Fem)",
+    category: "Hardware",
+    plural: "die Mäuse",
+    en: "a cute 3D isometric UI icon of a computer mouse emitting wireless signal waves",
+    exampleSentenceDe: "Meine neue Maus ist kabellos.",
+    exampleSentenceEs: "Mi ratón nuevo es inalámbrico."
   }, {
-    de: "bald",
-    pron: "balt",
-    es: "pronto",
-    type: "Adverbio",
-    category: "Zeitadverbien",
-    exampleSentenceDe: "Wir sehen uns bald.",
-    exampleSentenceEs: "Nos vemos pronto.",
-    regimen: "Temporal"
+    de: "das Passwort",
+    pron: "das pás-vort",
+    es: "la contraseña",
+    type: "Sustantivo (Neut)",
+    category: "Sicherheit",
+    plural: "die Passwörter",
+    en: "a cute 3D isometric UI icon of a golden key over a metallic padlock",
+    exampleSentenceDe: "Mein Passwort ist sehr sicher.",
+    exampleSentenceEs: "Mi contraseña es muy segura."
   }, {
-    de: "immer",
-    pron: "í-mea",
-    es: "siempre",
-    type: "Adverbio",
-    category: "Häufigkeit",
-    exampleSentenceDe: "Ich trinke Kaffee immer.",
-    exampleSentenceEs: "Yo bebo café siempre.",
-    regimen: "Frecuencia"
+    de: "die Datei",
+    pron: "di da-tái",
+    es: "el archivo",
+    type: "Sustantivo (Fem)",
+    category: "Software",
+    plural: "die Dateien",
+    en: "a cute 3D isometric UI icon of a digital document sheet with a folded corner",
+    exampleSentenceDe: "Ich lösche diese Datei.",
+    exampleSentenceEs: "Borro este archivo."
   }, {
-    de: "oft",
-    pron: "oft",
-    es: "a menudo",
-    type: "Adverbio",
-    category: "Häufigkeit",
-    exampleSentenceDe: "Ich trinke oft Kaffee.",
-    exampleSentenceEs: "A menudo bebo café.",
-    regimen: "Frecuencia"
+    de: "der Ordner",
+    pron: "dea ór-dner",
+    es: "la carpeta",
+    type: "Sustantivo (Masc)",
+    category: "Software",
+    plural: "die Ordner",
+    en: "a cute 3D isometric UI icon of a yellow folder organizer",
+    exampleSentenceDe: "Der Ordner ist auf dem Desktop.",
+    exampleSentenceEs: "La carpeta está en el escritorio."
   }, {
-    de: "manchmal",
-    pron: "mánch-mal",
-    es: "a veces",
-    type: "Adverbio",
-    category: "Häufigkeit",
-    exampleSentenceDe: "Manchmal trinke ich Kaffee.",
-    exampleSentenceEs: "A veces bebo café.",
-    regimen: "Frecuencia"
+    de: "der Kopfhörer",
+    pron: "dea kopf-jö-rer",
+    es: "los auriculares",
+    type: "Sustantivo (Masc)",
+    category: "Hardware",
+    plural: "die Kopfhörer",
+    en: "a cute 3D isometric UI icon of modern wireless headphones",
+    exampleSentenceDe: "Ich höre Musik mit dem Kopfhörer.",
+    exampleSentenceEs: "Escucho música con los auriculares."
   }, {
-    de: "nie",
-    pron: "ni",
-    es: "nunca",
-    type: "Adverbio",
-    category: "Häufigkeit",
-    exampleSentenceDe: "Ich sehe dich nie.",
-    exampleSentenceEs: "Yo te veo nunca.",
-    regimen: "Frecuencia"
+    de: "die App",
+    pron: "di ep",
+    es: "la aplicación",
+    type: "Sustantivo (Fem)",
+    category: "Software",
+    plural: "die Apps",
+    en: "a cute 3D isometric UI icon of a smartphone showing colorful utility widgets",
+    exampleSentenceDe: "Diese App ist sehr nützlich.",
+    exampleSentenceEs: "Esta aplicación es muy útil."
   }, {
-    de: "schon",
-    pron: "shon",
-    es: "ya",
-    type: "Adverbio",
-    category: "Zeitadverbien",
-    exampleSentenceDe: "Ich bin schon zu Hause.",
-    exampleSentenceEs: "Yo ya estoy en casa.",
-    regimen: "Temporal: ya, ya sea"
+    de: "der Drucker",
+    pron: "dea drú-ker",
+    es: "la impresora",
+    type: "Sustantivo (Masc)",
+    category: "Hardware",
+    plural: "die Drucker",
+    en: "a cute 3D isometric UI icon of a modern office printer ejecting a paper page",
+    exampleSentenceDe: "Der Drucker hat kein Papier mehr.",
+    exampleSentenceEs: "La impresora ya no tiene papel."
   }, {
-    de: "noch",
-    pron: "noj",
-    es: "todavía / aún",
-    type: "Adverbio",
-    category: "Zeitadverbien",
-    exampleSentenceDe: "Ich bin noch zu Hause.",
-    exampleSentenceEs: "Yo estoy todavía en casa.",
-    regimen: "Temporal: continuidad"
+    de: "das Netzwerk",
+    pron: "das néts-verk",
+    es: "la red",
+    type: "Sustantivo (Neut)",
+    category: "Internet",
+    plural: "die Netzwerke",
+    en: "a cute 3D isometric UI icon of interconnected digital nodes glowing blue",
+    exampleSentenceDe: "Das Netzwerk im Büro ist schnell.",
+    exampleSentenceEs: "La red en la oficina es rápida."
   }, {
-    de: "hier",
-    pron: "hí-a",
-    es: "aquí",
-    type: "Adverbio",
-    category: "Ortsadverbien",
-    exampleSentenceDe: "Ich bin hier.",
-    exampleSentenceEs: "Yo estoy aquí.",
-    regimen: "Lugar"
+    de: "der Link",
+    pron: "dea link",
+    es: "el enlace",
+    type: "Sustantivo (Masc)",
+    category: "Internet",
+    plural: "die Links",
+    en: "a cute 3D isometric UI icon of a chain link connection symbol",
+    exampleSentenceDe: "Bitte klicke auf diesen Link.",
+    exampleSentenceEs: "Por favor, haz clic en este enlace."
   }, {
-    de: "dort",
-    pron: "dort",
-    es: "allí",
-    type: "Adverbio",
-    category: "Ortsadverbien",
-    exampleSentenceDe: "Ich bin dort.",
-    exampleSentenceEs: "Yo estoy allí.",
-    regimen: "Lugar"
+    de: "das Internet",
+    pron: "das ín-ter-net",
+    es: "el internet",
+    type: "Sustantivo (Neut)",
+    category: "Internet",
+    plural: "die Internetanschlüsse",
+    en: "a cute 3D isometric UI icon of a digital globe spinning in a cloud",
+    exampleSentenceDe: "Das Internet ist heute langsam.",
+    exampleSentenceEs: "El internet hoy está lento."
   }, {
-    de: "oben / unten",
-    pron: "ó-ben  ún-ten",
-    es: "arriba / abajo",
-    type: "Adverbio",
-    category: "Ortsadverbien",
-    exampleSentenceDe: "Das Buch ist oben. Die Katze ist unten.",
-    exampleSentenceEs: "El libro está arriba. El gato está abajo.",
-    regimen: "Local"
+    de: "der Computer",
+    pron: "dea kom-piú-ter",
+    es: "el ordenador",
+    type: "Sustantivo (Masc)",
+    category: "Hardware",
+    plural: "die Computer",
+    en: "a cute 3D isometric UI icon of a desktop computer setup with a keyboard and mouse",
+    exampleSentenceDe: "Mein Computer ist sehr alt.",
+    exampleSentenceEs: "Mi ordenador es muy viejo."
   }, {
-    de: "vorn / hinten",
-    pron: "fon  jín-ten",
-    es: "adelante / atrás",
-    type: "Adverbio",
-    category: "Ortsadverbien",
-    exampleSentenceDe: "Ich sitze vorn.",
-    exampleSentenceEs: "Yo me siento adelante.",
-    regimen: "Local"
+    de: "das WLAN",
+    pron: "das ve-lan",
+    es: "el wifi",
+    type: "Sustantivo (Neut)",
+    category: "Internet",
+    plural: "die WLAN-Netze",
+    en: "a cute 3D isometric UI icon of a router emitting glowing wireless signal waves",
+    exampleSentenceDe: "Haben Sie das WLAN-Passwort?",
+    exampleSentenceEs: "¿Tiene la contraseña del wifi?"
   }, {
-    de: "draußen / drinnen",
-    pron: "dráu-sen  drí-nen",
-    es: "afuera / adentro",
-    type: "Adverbio",
-    category: "Ortsadverbien",
-    exampleSentenceDe: "Das Wetter ist schön. Wir sind draußen.",
-    exampleSentenceEs: "El tiempo es bueno. Estamos afuera.",
-    regimen: "Lugar"
+    de: "die Cloud",
+    pron: "di klaud",
+    es: "la nube",
+    type: "Sustantivo (Fem)",
+    category: "Internet",
+    plural: "die Clouds",
+    en: "a cute 3D isometric UI icon of a glowing blue cloud storage icon",
+    exampleSentenceDe: "Ich speichere die Fotos in der Cloud.",
+    exampleSentenceEs: "Guardo las fotos en la nube."
   }, {
-    de: "sehr",
-    pron: "zéa",
-    es: "muy",
-    type: "Adverbio",
-    category: "Gradadverbien",
-    exampleSentenceDe: "Das Wetter ist sehr gut.",
-    exampleSentenceEs: "El tiempo está muy bueno.",
-    regimen: "Intensificador"
+    de: "die Webseite",
+    pron: "di vép-zai-te",
+    es: "la página web",
+    type: "Sustantivo (Fem)",
+    category: "Internet",
+    plural: "die Webseiten",
+    en: "a cute 3D isometric UI icon of a web browser interface page showing layouts",
+    exampleSentenceDe: "Diese Webseite gefällt mir gut.",
+    exampleSentenceEs: "Esta página web me gusta mucho."
   }, {
-    de: "viel / wenig",
-    pron: "fil  vé-nij",
-    es: "mucho / poco",
-    type: "Adverbio",
-    category: "Gradadverbien",
-    exampleSentenceDe: "Ich trinke viel Wasser.",
-    exampleSentenceEs: "Bebo mucha agua.",
-    regimen: "Cantidad"
+    de: "die E-Mail-Adresse",
+    pron: "di í-meil-a-dré-se",
+    es: "la dirección de correo",
+    type: "Sustantivo (Fem)",
+    category: "Internet",
+    plural: "die E-Mail-Adressen",
+    en: "a cute 3D isometric UI icon of a digital technical mail envelope with an @ symbol",
+    exampleSentenceDe: "Wie ist deine E-Mail-Adresse?",
+    exampleSentenceEs: "¿Cuál es tu dirección de correo electrónico?"
   }, {
-    de: "wer?",
-    pron: "vea",
-    es: "¿quién?",
-    type: "Pronombre interrogativo",
-    category: "W-Fragen",
-    exampleSentenceDe: "Wer ist das?",
-    exampleSentenceEs: "¿Quién es ese/esa?",
-    regimen: "Solo personas, nom."
+    de: "die E-Mail",
+    pron: "di í-meil",
+    es: "el correo electrónico",
+    type: "Sustantivo (Fem)",
+    category: "Internet",
+    plural: "die E-Mails",
+    en: "a cute 3D isometric UI icon of an open envelope containing a glowing message paper",
+    exampleSentenceDe: "Ich schreibe eine wichtige E-Mail.",
+    exampleSentenceEs: "Escribo un correo electrónico importante."
   }, {
-    de: "was?",
-    pron: "vas",
-    es: "¿qué?",
-    type: "Pronombre interrogativo",
-    category: "W-Fragen",
-    exampleSentenceDe: "Was ist das?",
-    exampleSentenceEs: "¿Qué es eso?",
-    regimen: "Invariable"
+    de: "das System",
+    pron: "das zys-tém",
+    es: "el sistema",
+    type: "Sustantivo (Neut)",
+    category: "Software",
+    plural: "die Systeme",
+    en: "a cute 3D isometric UI icon of interlocking technical gears under a circuit board panel",
+    exampleSentenceDe: "Das System läuft sehr stabil.",
+    exampleSentenceEs: "El sistema funciona muy stable."
   }, {
-    de: "wo?",
-    pron: "vo",
-    es: "¿dónde?",
-    type: "Pronombre interrogativo",
-    category: "W-Fragen",
-    exampleSentenceDe: "Wo ist die Toilette?",
-    exampleSentenceEs: "¿Dónde está el baño?",
-    regimen: "Lugar, sin movimiento"
+    de: "das Update",
+    pron: "das áp-deit",
+    es: "la actualización",
+    type: "Sustantivo (Neut)",
+    category: "Software",
+    plural: "die Updates",
+    en: "a cute 3D isometric UI icon of a circle arrow download progress symbol",
+    exampleSentenceDe: "Das Update ist fertig.",
+    exampleSentenceEs: "La actualización está lista."
   }, {
-    de: "wann?",
-    pron: "van",
-    es: "¿cuándo?",
-    type: "Pronombre interrogativo",
-    category: "W-Fragen",
-    exampleSentenceDe: "Wann kommst du?",
-    exampleSentenceEs: "¿Cuándo vienes?",
-    regimen: "V al final"
+    de: "der Code",
+    pron: "der kout",
+    es: "el código",
+    type: "Sustantivo (Masc)",
+    category: "Software",
+    plural: "die Codes",
+    en: "a cute 3D isometric UI icon of code lines on a dark monitor",
+    exampleSentenceDe: "Der Code hat keine Fehler.",
+    exampleSentenceEs: "El código no tiene errores."
   }, {
-    de: "warum?",
-    pron: "va-rúm",
-    es: "¿por qué?",
-    type: "Pronombre interrogativo",
-    category: "W-Fragen",
-    exampleSentenceDe: "Warum bist du hier?",
-    exampleSentenceEs: "¿Por qué estás aquí?",
-    regimen: "Invariable, posición 1"
+    de: "der Benutzer",
+    pron: "dea be-nút-tser",
+    es: "el usuario",
+    type: "Sustantivo (Masc)",
+    category: "Software",
+    plural: "die Benutzer",
+    en: "a cute 3D isometric UI icon of a glowing blue user profile silhouette tag",
+    exampleSentenceDe: "Er ist ein neuer Benutzer.",
+    exampleSentenceEs: "Él es un usuario nuevo."
   }, {
-    de: "wie?",
-    pron: "ví",
-    es: "¿cómo?",
-    type: "Pronombre interrogativo",
-    category: "W-Fragen",
-    exampleSentenceDe: "Wie geht es Ihnen?",
-    exampleSentenceEs: "¿Cómo está usted?",
-    regimen: "Posición 1"
+    de: "der Screenshot",
+    pron: "dea scrín-shot",
+    es: "la captura de pantalla",
+    type: "Sustantivo (Masc)",
+    category: "Software",
+    plural: "die Screenshots",
+    en: "a cute 3D isometric UI icon of a scissor cutting a digital screen area",
+    exampleSentenceDe: "Ich mache einen Screenshot vom Bild.",
+    exampleSentenceEs: "Hago una captura de pantalla de la imagen."
   }, {
-    de: "woher?",
-    pron: "vo-jéa",
-    es: "¿de dónde?",
-    type: "Pronombre interrogativo",
-    category: "W-Fragen",
-    exampleSentenceDe: "Woher kommst du?",
-    exampleSentenceEs: "¿De dónde vienes?",
-    regimen: "+ kommen aus"
+    de: "der Virus",
+    pron: "dea ví-rus",
+    es: "el virus",
+    type: "Sustantivo (Masc)",
+    category: "Sicherheit",
+    plural: "die Viren",
+    en: "a cute 3D isometric UI icon of a red virus bug with sharp legs",
+    exampleSentenceDe: "Mein Laptop hat einen Virus.",
+    exampleSentenceEs: "Mi portátil tiene un virus."
   }, {
-    de: "wohin?",
-    pron: "vo-hín",
-    es: "¿a dónde?",
-    type: "Pronombre interrogativo",
-    category: "W-Fragen",
-    exampleSentenceDe: "Wohin gehst du?",
-    exampleSentenceEs: "¿A dónde vas?",
-    regimen: "Con verbos de movimiento"
+    de: "die Taste",
+    pron: "di tás-te",
+    es: "la tecla / botón",
+    type: "Sustantivo (Fem)",
+    category: "Hardware",
+    plural: "die Tasten",
+    en: "a cute 3D isometric UI icon of a single keyboard key button",
+    exampleSentenceDe: "Drücke die Enter-Taste.",
+    exampleSentenceEs: "Pulsa la tecla Enter."
   }, {
-    de: "welcher?",
-    pron: "vél-chea",
-    es: "¿cuál?",
-    type: "Pronombre interrogativo",
-    category: "W-Fragen",
-    exampleSentenceDe: "Welcher Bus ist das?",
-    exampleSentenceEs: "¿Cuál es ese autobús?",
-    regimen: "Concuerda en género/caso"
+    de: "digital",
+    pron: "di-gui-tál",
+    es: "digital",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "a cute 3D isometric UI icon of binary numbers zero and one glowing blue",
+    exampleSentenceDe: "Wir leben in einer digitalen Welt.",
+    exampleSentenceEs: "Vivimos en un mundo digital."
+  }, {
+    de: "online",
+    pron: "ón-lain",
+    es: "en línea",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "a cute 3D isometric UI icon of a green glowing active connection indicator light",
+    exampleSentenceDe: "Bist du heute Abend online?",
+    exampleSentenceEs: "¿Estarás en línea esta noche?"
+  }, {
+    de: "offline",
+    pron: "óf-lain",
+    es: "desconectado",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "a cute 3D isometric UI icon of a red offline disconnected plug symbol",
+    exampleSentenceDe: "Ich bin im Urlaub offline.",
+    exampleSentenceEs: "Estoy desconectado durante las vacaciones."
+  }, {
+    de: "kabellos",
+    pron: "ká-bel-los",
+    es: "inalámbrico",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "a cute 3D isometric UI icon of headphones emitting wireless radio waves with no cables",
+    exampleSentenceDe: "Die Kopfhörer sind kabellos.",
+    exampleSentenceEs: "Los auriculares son inalámbricos."
+  }, {
+    de: "automatisch",
+    pron: "au-to-má-tish",
+    es: "automático",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "a cute 3D isometric UI icon of moving metallic gears",
+    exampleSentenceDe: "Das System funktioniert automatisch.",
+    exampleSentenceEs: "El sistema funciona automáticamente."
+  }, {
+    de: "manuell",
+    pron: "ma-nu-él",
+    es: "manual",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "a cute 3D isometric UI icon of a hand turning a dial",
+    exampleSentenceDe: "Ich mache das lieber manuell.",
+    exampleSentenceEs: "Hago eso mejor manualmente."
+  }, {
+    de: "sicher",
+    pron: "zí-jer",
+    es: "seguro",
+    type: "Adjetivo",
+    category: "Sicherheit",
+    en: "a cute 3D isometric UI icon of a glowing green cyber security shield",
+    exampleSentenceDe: "Mein neues Passwort ist sehr sicher.",
+    exampleSentenceEs: "Mi nueva contraseña es muy segura."
+  }, {
+    de: "vernetzt",
+    pron: "fer-nétst",
+    es: "conectado / en red",
+    type: "Adjetivo",
+    category: "Internet",
+    en: "a cute 3D isometric UI icon of two connected digital glowing globes",
+    exampleSentenceDe: "Wir sind alle gut vernetzt.",
+    exampleSentenceEs: "Estamos todos bien conectados."
+  }, {
+    de: "virtuell",
+    pron: "vir-tu-él",
+    es: "virtual",
+    type: "Adjetivo",
+    category: "Eigenschaften",
+    en: "a cute 3D isometric UI icon of VR virtual reality goggles glowing purple",
+    exampleSentenceDe: "Wir machen ein virtuelles Treffen.",
+    exampleSentenceEs: "Hacemos una reunión virtual."
+  }, {
+    de: "gesperrt",
+    pron: "gue-shpért",
+    es: "bloqueado",
+    type: "Adjetivo",
+    category: "Sicherheit",
+    en: "a cute 3D isometric UI icon of a red digital lock",
+    exampleSentenceDe: "Mein Handy ist leider gesperrt.",
+    exampleSentenceEs: "Mi móvil está bloqueado lamentablemente."
+  }, {
+    de: "programmieren",
+    pron: "pro-gram-mí-ren",
+    es: "programar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a laptop screen with program code",
+    exampleSentenceDe: "Ich lerne programmieren.",
+    exampleSentenceEs: "Aprendo a programar."
+  }, {
+    de: "herunterladen",
+    pron: "je-rún-ter-la-den",
+    es: "descargar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Separable (herunter-) / + Akkusativ",
+    en: "a cute 3D isometric UI icon of a down arrow pointing to a hard drive disk",
+    exampleSentenceDe: "Ich lade das Lied herunter.",
+    exampleSentenceEs: "Descargo la canción."
+  }, {
+    de: "hochladen",
+    pron: "jój-la-den",
+    es: "subir (archivo)",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Separable (hoch-) / + Akkusativ",
+    en: "a cute 3D isometric UI icon of an up arrow pointing to a digital cloud",
+    exampleSentenceDe: "Er lädt das Video hoch.",
+    exampleSentenceEs: "Él sube el video."
+  }, {
+    de: "speichern",
+    pron: "shpái-jern",
+    es: "guardar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a classic 3.5 inch blue floppy disk storage",
+    exampleSentenceDe: "Bitte speichern Sie die Datei.",
+    exampleSentenceEs: "Por favor, guarde el archivo."
+  }, {
+    de: "löschen",
+    pron: "lö-shen",
+    es: "borrar / eliminar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a red trash can bin overflowing with paper crumbs",
+    exampleSentenceDe: "Ich möchte den Text löschen.",
+    exampleSentenceEs: "Quiero borrar el texto."
+  }, {
+    de: "klicken",
+    pron: "klí-ken",
+    es: "hacer clic",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "intransitivo",
+    en: "a cute 3D isometric UI icon of a glowing blue cursor clicking a button",
+    exampleSentenceDe: "Klicke auf den Button.",
+    exampleSentenceEs: "Haz clic en el botón."
+  }, {
+    de: "tippen",
+    pron: "tí-pen",
+    es: "escribir (teclado)",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "intransitivo",
+    en: "a cute 3D isometric UI icon of hands typing on a glowing laptop keyboard",
+    exampleSentenceDe: "Ich tippe sehr schnell.",
+    exampleSentenceEs: "Escribo a máquina muy rápido."
+  }, {
+    de: "senden",
+    pron: "zén-den",
+    es: "enviar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a paper plane flying out of a digital envelope",
+    exampleSentenceDe: "Ich sende das Dokument heute.",
+    exampleSentenceEs: "Envío el documento hoy."
+  }, {
+    de: "empfangen",
+    pron: "emp-fáng-en",
+    es: "recibir",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a digital tray box receiving incoming letter envelopes",
+    exampleSentenceDe: "Ich empfange ein Paket.",
+    exampleSentenceEs: "Recibo un paquete."
+  }, {
+    de: "teilen",
+    pron: "tái-len",
+    es: "compartir",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of three connected dots sharing network lines",
+    exampleSentenceDe: "Wir teilen die Datei.",
+    exampleSentenceEs: "Compartimos el archivo."
+  }, {
+    de: "kopieren",
+    pron: "ko-pí-ren",
+    es: "copiar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of two identical overlapping document sheets",
+    exampleSentenceDe: "Kannst du den Text kopieren?",
+    exampleSentenceEs: "¿Puedes copiar el texto?"
+  }, {
+    de: "einfügen",
+    pron: "áin-fü-guen",
+    es: "pegar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Separable (ein-) / + Akkusativ",
+    en: "a cute 3D isometric UI icon of a clipboard pasting text onto a page document",
+    exampleSentenceDe: "Füge das Bild hier ein.",
+    exampleSentenceEs: "Pega la imagen aquí."
+  }, {
+    de: "aktualisieren",
+    pron: "ak-tua-li-zí-ren",
+    es: "actualizar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of two circular green arrows turning",
+    exampleSentenceDe: "Ich muss die Seite aktualisieren.",
+    exampleSentenceEs: "Tengo que actualizar la página."
+  }, {
+    de: "drucken",
+    pron: "drú-ken",
+    es: "imprimir",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a paper sheet rolling out of a metal print head roller",
+    exampleSentenceDe: "Ich drucke den Brief.",
+    exampleSentenceEs: "Imprimo la carta."
   }]
-}];
+},
+{
+  id: 16,
+  title: "Kapitel 18: Elektrotechnik & Solar",
+  icon: <Zap size={20} />,
+  emoji: "⚡",
+  words: [{
+    de: "der Strom",
+    pron: "dea shtrom",
+    es: "la electricidad / corriente",
+    type: "Sustantivo (Masc)",
+    category: "Elektrizität",
+    plural: "die Ströme",
+    en: "a cute 3D isometric UI icon of a glowing yellow lightning bolt"
+  }, {
+    de: "die Spannung",
+    pron: "di shpá-nung",
+    es: "el voltaje / tensión",
+    type: "Sustantivo (Fem)",
+    category: "Elektrizität",
+    plural: "die Spannungen",
+    en: "a cute 3D isometric UI icon of an electrical voltmeter dial"
+  }, {
+    de: "der Stromkreis",
+    pron: "dea shtróm-krais",
+    es: "el circuito eléctrico",
+    type: "Sustantivo (Masc)",
+    category: "Elektrizität",
+    plural: "die Stromkreise",
+    en: "a cute 3D isometric UI icon of a closed electrical circuit with a glowing lightbulb"
+  }, {
+    de: "das Kabel",
+    pron: "das ká-bel",
+    es: "el cable",
+    type: "Sustantivo (Neutro)",
+    category: "Komponenten",
+    plural: "die Kabel",
+    en: "a cute 3D isometric UI icon of a thick industrial electrical copper cable spool"
+  }, {
+    de: "der Stecker",
+    pron: "dea shté-ka",
+    es: "el enchufe (macho)",
+    type: "Sustantivo (Masc)",
+    category: "Komponenten",
+    plural: "die Stecker",
+    en: "a cute 3D isometric UI icon of a standard European electrical plug"
+  }, {
+    de: "die Steckdose",
+    pron: "di shték-do-ze",
+    es: "la toma de corriente",
+    type: "Sustantivo (Fem)",
+    category: "Komponenten",
+    plural: "die Steckdosen",
+    en: "a cute 3D isometric UI icon of an electrical wall socket"
+  }, {
+    de: "der Schalter",
+    pron: "dea shál-ta",
+    es: "el interruptor",
+    type: "Sustantivo (Masc)",
+    category: "Komponenten",
+    plural: "die Schalter",
+    en: "a cute 3D isometric UI icon of a modern wall light switch"
+  }, {
+    de: "die Sicherung",
+    pron: "di zí-je-rung",
+    es: "el fusible / el taco",
+    type: "Sustantivo (Fem)",
+    category: "Komponenten",
+    plural: "die Sicherungen",
+    en: "a cute 3D isometric UI icon of an electrical fuse breaker box"
+  }, {
+    de: "der Transformator",
+    pron: "dea trans-for-má-tor",
+    es: "el transformador",
+    type: "Sustantivo (Masc)",
+    category: "Komponenten",
+    plural: "die Transformatoren",
+    en: "a cute 3D isometric UI icon of an industrial electrical power transformer"
+  }, {
+    de: "die Batterie",
+    pron: "di ba-te-rí",
+    es: "la batería",
+    type: "Sustantivo (Fem)",
+    category: "Energie",
+    plural: "die Batterien",
+    en: "a cute 3D isometric UI icon of a standard AA battery"
+  }, {
+    de: "der Akku",
+    pron: "dea á-ku",
+    es: "la batería recargable",
+    type: "Sustantivo (Masc)",
+    category: "Energie",
+    plural: "die Akkus",
+    en: "a cute 3D isometric UI icon of a lithium ion rechargeable battery pack"
+  }, {
+    de: "der Zähler",
+    pron: "dea tsé-la",
+    es: "el medidor eléctrico",
+    type: "Sustantivo (Masc)",
+    category: "Komponenten",
+    plural: "die Zähler",
+    en: "a cute 3D isometric UI icon of a smart electrical power meter"
+  }, {
+    de: "die Erdung",
+    pron: "di ér-dung",
+    es: "la toma de tierra",
+    type: "Sustantivo (Fem)",
+    category: "Sicherheit",
+    plural: "die Erdungen",
+    en: "a cute 3D isometric UI icon of a copper grounding rod symbol"
+  }, {
+    de: "der Kurzschluss",
+    pron: "dea kúrts-shlus",
+    es: "el cortocircuito",
+    type: "Sustantivo (Masc)",
+    category: "Sicherheit",
+    plural: "die Kurzschlüsse",
+    en: "a cute 3D isometric UI icon of electric sparks and a broken wire"
+  }, {
+    de: "die Solaranlage",
+    pron: "di zo-lár-an-la-gue",
+    es: "el sistema solar / fotovoltaico",
+    type: "Sustantivo (Fem)",
+    category: "Solartechnik",
+    plural: "die Solaranlagen",
+    en: "a cute 3D isometric UI icon of a house roof with shiny solar panels"
+  }, {
+    de: "das Solarmodul",
+    pron: "das zo-lár-mo-dul",
+    es: "el módulo solar",
+    type: "Sustantivo (Neutro)",
+    category: "Solartechnik",
+    plural: "die Solarmodule",
+    en: "a cute 3D isometric UI icon of a single large blue solar panel"
+  }, {
+    de: "die Solarzelle",
+    pron: "di zo-lár-tse-le",
+    es: "la célula solar",
+    type: "Sustantivo (Fem)",
+    category: "Solartechnik",
+    plural: "die Solarzellen",
+    en: "a cute 3D isometric UI icon of a micro photovoltaic solar cell grid"
+  }, {
+    de: "der Wechselrichter",
+    pron: "dea vék-sel-rij-ta",
+    es: "el inversor (AC/DC)",
+    type: "Sustantivo (Masc)",
+    category: "Solartechnik",
+    plural: "die Wechselrichter",
+    en: "a cute 3D isometric UI icon of a modern solar power inverter box"
+  }, {
+    de: "der Speicher",
+    pron: "dea shpái-ja",
+    es: "el acumulador / banco de baterías",
+    type: "Sustantivo (Masc)",
+    category: "Solartechnik",
+    plural: "die Speicher",
+    en: "a cute 3D isometric UI icon of a home solar battery storage system"
+  }, {
+    de: "das Netz",
+    pron: "das nets",
+    es: "la red eléctrica",
+    type: "Sustantivo (Neutro)",
+    category: "Infrastruktur",
+    plural: "die Netze",
+    en: "a cute 3D isometric UI icon of electrical power transmission towers"
+  }, {
+    de: "der Ertrag",
+    pron: "dea ea-trák",
+    es: "el rendimiento / producción",
+    type: "Sustantivo (Masc)",
+    category: "Solartechnik",
+    plural: "die Erträge",
+    en: "a cute 3D isometric UI icon of a rising chart with a sun symbol"
+  }, {
+    de: "die Gleichspannung",
+    pron: "di gláij-shpa-nung",
+    es: "tensión continua (DC)",
+    type: "Sustantivo (Fem)",
+    category: "Elektrizität",
+    plural: "die Gleichspannungen",
+    en: "a cute 3D isometric UI icon showing the Direct Current DC symbol"
+  }, {
+    de: "die Wechselspannung",
+    pron: "di vék-sel-shpa-nung",
+    es: "tensión alterna (AC)",
+    type: "Sustantivo (Fem)",
+    category: "Elektrizität",
+    plural: "die Wechselspannungen",
+    en: "a cute 3D isometric UI icon showing the Alternating Current AC sine wave symbol"
+  }, {
+    de: "die Leistung",
+    pron: "di láis-tung",
+    es: "la potencia (W/kW)",
+    type: "Sustantivo (Fem)",
+    category: "Elektrizität",
+    plural: "die Leistungen",
+    en: "a cute 3D isometric UI icon of a glowing energy core"
+  }, {
+    de: "die Dachmontage",
+    pron: "di daj-mon-tá-je",
+    es: "el montaje en techo",
+    type: "Sustantivo (Fem)",
+    category: "Installation",
+    plural: "die Dachmontagen",
+    en: "a cute 3D isometric UI icon of construction brackets on a rooftop"
+  }, {
+    de: "das Werkzeug",
+    pron: "das véak-tsoik",
+    es: "la herramienta",
+    type: "Sustantivo (Neutro)",
+    category: "Werkzeuge",
+    plural: "die Werkzeuge",
+    en: "a cute 3D isometric UI icon of a red toolbox"
+  }, {
+    de: "der Schraubenzieher",
+    pron: "dea shrjáu-ben-tsi-a",
+    es: "el destornillador",
+    type: "Sustantivo (Masc)",
+    category: "Werkzeuge",
+    plural: "die Schraubenzieher",
+    en: "a cute 3D isometric UI icon of a yellow and black screwdriver"
+  }, {
+    de: "die Zange",
+    pron: "di tsáng-e",
+    es: "el alicate / pinza",
+    type: "Sustantivo (Fem)",
+    category: "Werkzeuge",
+    plural: "die Zangen",
+    en: "a cute 3D isometric UI icon of a pair of metal pliers with rubber grips"
+  }, {
+    de: "der Bohrer",
+    pron: "dea bó-ra",
+    es: "el taladro",
+    type: "Sustantivo (Masc)",
+    category: "Werkzeuge",
+    plural: "die Bohrer",
+    en: "a cute 3D isometric UI icon of a power drill"
+  }, {
+    de: "das Multimeter",
+    pron: "das mul-ti-mé-ta",
+    es: "el multímetro",
+    type: "Sustantivo (Neutro)",
+    category: "Werkzeuge",
+    plural: "die Multimeter",
+    en: "a cute 3D isometric UI icon of a digital multimeter with probes"
+  }, {
+    de: "der Helm",
+    pron: "dea jelm",
+    es: "el casco de seguridad",
+    type: "Sustantivo (Masc)",
+    category: "Sicherheit",
+    plural: "die Helme",
+    en: "a cute 3D isometric UI icon of a yellow hard hat"
+  }, {
+    de: "die Handschuhe",
+    pron: "di jánt-shu-e",
+    es: "los guantes de trabajo",
+    type: "Sustantivo (Plural)",
+    category: "Sicherheit",
+    plural: "-",
+    en: "a cute 3D isometric UI icon of heavy duty protective work gloves"
+  }, {
+    de: "die Leiter",
+    pron: "di lái-ta",
+    es: "la escalera",
+    type: "Sustantivo (Fem)",
+    category: "Werkzeuge",
+    plural: "die Leitern",
+    en: "a cute 3D isometric UI icon of a tall aluminum stepladder"
+  }, {
+    de: "der Elektriker",
+    pron: "dea e-lék-tri-ka",
+    es: "el electricista",
+    type: "Sustantivo (Masc)",
+    category: "Beruf",
+    plural: "die Elektriker",
+    en: "a cute 3D isometric UI icon of a worker holding cables"
+  }, {
+    de: "der Techniker",
+    pron: "dea téj-ni-ka",
+    es: "el técnico",
+    type: "Sustantivo (Masc)",
+    category: "Beruf",
+    plural: "die Techniker",
+    en: "a cute 3D isometric UI icon of a worker with blueprints and tools"
+  }, {
+    de: "die Gefahr",
+    pron: "di gue-fár",
+    es: "el peligro / riesgo",
+    type: "Sustantivo (Fem)",
+    category: "Sicherheit",
+    plural: "die Gefahren",
+    en: "a cute 3D isometric UI icon of a yellow high voltage warning sign"
+  }, {
+    de: "gefährlich",
+    pron: "gue-féa-lij",
+    es: "peligroso",
+    type: "Adjetivo",
+    category: "Sicherheit",
+    en: "a cute 3D isometric UI icon of a skull and crossbones hazard symbol"
+  }, {
+    de: "messen",
+    pron: "mé-sen",
+    es: "medir",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a measuring tape extended"
+  }, {
+    de: "anschließen",
+    pron: "án-shli-sen",
+    es: "conectar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Separable (an-) / + Akkusativ",
+    en: "a cute 3D isometric UI icon of two electrical wires being connected together"
+  }, {
+    de: "installieren",
+    pron: "ins-ta-lí-ren",
+    es: "instalar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a wrench tightening a bolt on a machine"
+  }, {
+    de: "prüfen",
+    pron: "prü-fen",
+    es: "comprobar / revisar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a green checkmark over a technical clipboard"
+  }, {
+    de: "warten",
+    pron: "vár-ten",
+    es: "mantener (mantenimiento)",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of an oil can and a gear"
+  }, {
+    de: "einschalten",
+    pron: "áin-shal-ten",
+    es: "encender (equipo)",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Separable (ein-) / + Akkusativ",
+    en: "a cute 3D isometric UI icon of a green glowing ON button"
+  }, {
+    de: "ausschalten",
+    pron: "áus-shal-ten",
+    es: "apagar (equipo)",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Separable (aus-) / + Akkusativ",
+    en: "a cute 3D isometric UI icon of a red OFF button"
+  }, {
+    de: "löten",
+    pron: "lö-ten",
+    es: "soldar (electrónica)",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a soldering iron melting silver wire"
+  }, {
+    de: "isolieren",
+    pron: "i-zo-lí-ren",
+    es: "aislar (cableado)",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "+ Akkusativ",
+    en: "a cute 3D isometric UI icon of a roll of black electrical insulation tape"
+  }, {
+    de: "abisolieren",
+    pron: "áp-i-zo-li-ren",
+    es: "pelar un cable",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Separable (ab-) / + Akkusativ",
+    en: "a cute 3D isometric UI icon of wire strippers removing plastic from a copper wire"
+  }, {
+    de: "austauschen",
+    pron: "áus-tau-shen",
+    es: "reemplazar / cambiar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Separable (aus-) / + Akkusativ",
+    en: "a cute 3D isometric UI icon of two mechanical parts swapping places with arrows"
+  }, {
+    de: "einspeisen",
+    pron: "áin-shpai-zen",
+    es: "inyectar (a la red)",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Separable (ein-) / + Akkusativ",
+    en: "a cute 3D isometric UI icon of electricity flowing from a house into a power grid tower"
+  }, {
+    de: "funktionieren",
+    pron: "funk-tsio-ní-ren",
+    es: "funcionar",
+    type: "Verbo",
+    category: "Aktionen",
+    regimen: "Intransitivo",
+    en: "a cute 3D isometric UI icon of two interlocking gears turning smoothly"
+  }]
+}
+];
 
 // --- NUEVOS MÓDULOS DE ESTUDIO GOETHE ---
 export const goetheModules = [{
@@ -6722,9 +9760,9 @@ export const goetheModules = [{
             <GrammarAccordion title="B. Números, Horas y Días (Sospechosos habituales)">
               <p>El 80% de las preguntas de opción múltiple te pondrán a dudar entre tres números. Presta atención a las preposiciones:</p>
               <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><strong>um</strong> (a las...) ➡´©Å <em>um 8 Uhr</em> (hora exacta del evento).</li>
-                <li><strong>von... bis...</strong> (de... a...) ➡´©Å horarios de atención.</li>
-                <li><strong>ab</strong> (a partir de...) ➡´©Å <em>ab 14 Uhr</em> (desde las 2 pm).</li>
+                <li><strong>um</strong> (a las...) ➡️ <em>um 8 Uhr</em> (hora exacta del evento).</li>
+                <li><strong>von... bis...</strong> (de... a...) ➡️ horarios de atención.</li>
+                <li><strong>ab</strong> (a partir de...) ➡️ <em>ab 14 Uhr</em> (desde las 2 pm).</li>
               </ul>
             </GrammarAccordion>
             <GrammarAccordion title="C. El conector 'aber' (El engaño clásico)">
@@ -6740,7 +9778,7 @@ export const goetheModules = [{
     subtitle: "Aplica la 'Regla del Pescador'",
     content: <div className="mt-6 max-w-3xl mx-auto">
             <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded-r-lg">
-              <p className="font-bold text-yellow-800">­ƒÆí La Regla del Pescador</p>
+              <p className="font-bold text-yellow-800">💡 La Regla del Pescador</p>
               <p className="text-sm text-yellow-700 mt-1">No intentes atrapar toda el agua del río traduciendo cada palabra. Lee la pregunta primero, cierra los ojos, ignora el relleno y "pesca" solo el dato (precio, hora, lugar).</p>
             </div>
             <AudioSim title="Escenario 1: Anuncio de tráfico (Teil 2)" textDe="Achtung Autofahrer! Auf der Autobahn gibt es einen Stau. Bitte fahren Sie langsam und nutzen Sie das Reißverschlusssystem." textEs="¡Atención conductores! Hay un atasco en la autopista. Por favor, conduzcan despacio y utilicen el sistema de cremallera." />
@@ -6862,9 +9900,9 @@ export const goetheModules = [{
             <GrammarAccordion title="La trampa clásica del Goethe-Institut">
               <p>Los textos o audios suelen usar un adjetivo negativo, pero la respuesta correcta usa su <strong>antónimo en positivo</strong>.</p>
               <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li>Si el texto dice: <em>"Das Hotel ist nicht teuer"</em> ➡´©Å Busca la opción: <strong>billig / günstig</strong>.</li>
-                <li>Si el anuncio dice: <em>"Das Zimmer ist nicht dunkel"</em> ➡´©Å Busca la opción: <strong>hell</strong>.</li>
-                <li>Si dice: <em>"Die Maschine ist nicht neu"</em> ➡´©Å Busca la opción: <strong>alt</strong>.</li>
+                <li>Si el texto dice: <em>"Das Hotel ist nicht teuer"</em> ➡️ Busca la opción: <strong>billig / günstig</strong>.</li>
+                <li>Si el anuncio dice: <em>"Das Zimmer ist nicht dunkel"</em> ➡️ Busca la opción: <strong>hell</strong>.</li>
+                <li>Si dice: <em>"Die Maschine ist nicht neu"</em> ➡️ Busca la opción: <strong>alt</strong>.</li>
               </ul>
             </GrammarAccordion>
           </div>
@@ -6877,7 +9915,7 @@ export const goetheModules = [{
               <p className="text-sm text-slate-300">Viaje + Plan + <strong className="text-amber-400">Información</strong></p>
             </div>
             <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-lg w-full">
-              <p className="font-bold text-amber-800">­ƒÆí La Regla del Tren de Palabras</p>
+              <p className="font-bold text-amber-800">💡 La Regla del Tren de Palabras</p>
               <p className="text-sm text-amber-700 mt-1">El último vagón (la derecha) te dice QUÉ es el objeto. Los vagones de la izquierda solo lo describen. ¡Aplica esto cuando veas palabras gigantes!</p>
             </div>
           </div>
@@ -7071,7 +10109,7 @@ export const goetheModules = [{
     subtitle: "Simulador de Redacción",
     content: <div className="mt-6 max-w-3xl mx-auto">
             <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 mb-4 rounded-r-lg">
-              <p className="font-bold text-emerald-800">­ƒÆí Escribe 3 oraciones cortas</p>
+              <p className="font-bold text-emerald-800">💡 Escribe 3 oraciones cortas</p>
               <p className="text-sm text-emerald-700 mt-1">No te compliques. El examen pide 3 puntos. Escribe una oración exacta para cada punto con el verbo en Posición 2. Menos es más.</p>
             </div>
 
@@ -7113,10 +10151,10 @@ export const goetheModules = [{
             <GrammarAccordion title="1. W-Fragen (Preguntas Abiertas)">
               <p>Buscan información específica. <strong>El verbo siempre va en posición 2.</strong></p>
               <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><strong>Wer?</strong> (¿Quién?) ➡´©Å <em>Wer bist du?</em></li>
-                <li><strong>Wie?</strong> (¿Cómo?) ➡´©Å <em>Wie heißt du?</em></li>
-                <li><strong>Was?</strong> (¿Qué?) ➡´©Å <em>Was machst du?</em></li>
-                <li><strong>Wann?</strong> (¿Cuándo?) ➡´©Å <em>Wann kommst du?</em></li>
+                <li><strong>Wer?</strong> (¿Quién?) ➡️ <em>Wer bist du?</em></li>
+                <li><strong>Wie?</strong> (¿Cómo?) ➡️ <em>Wie heißt du?</em></li>
+                <li><strong>Was?</strong> (¿Qué?) ➡️ <em>Was machst du?</em></li>
+                <li><strong>Wann?</strong> (¿Cuándo?) ➡️ <em>Wann kommst du?</em></li>
                 <li><strong>Wo / Woher / Wohin?</strong> (¿Dónde / De dónde / A dónde?)</li>
               </ul>
             </GrammarAccordion>
@@ -7225,7 +10263,7 @@ export const studyPlanModules = [{
             </div>
             <div className="border-l-4 border-amber-500 bg-amber-50 p-4 rounded-r-xl">
               <p className="text-amber-800 text-sm font-medium">
-                ­ƒÆí <strong>¡Atención!</strong> Si cambias el orden y pones el tiempo al principio, el verbo sigue firme en Posición 2: <em>"Heute <strong>wohne</strong> ich in Madrid."</em>
+                💡 <strong>¡Atención!</strong> Si cambias el orden y pones el tiempo al principio, el verbo sigue firme en Posición 2: <em>"Heute <strong>wohne</strong> ich in Madrid."</em>
               </p>
             </div>
             <DraggableSentenceBuilder verb="kommst" subject="du" complement="aus Kolumbien" />
@@ -7469,7 +10507,7 @@ export const studyPlanModules = [{
     content: <div className="space-y-6 text-left">
             <div className="border-l-4 border-indigo-500 bg-indigo-50 p-4 rounded-r-xl text-sm">
               <p className="text-indigo-900">
-                ✍´©Å <strong>Ejemplo:</strong> <em>Ich kaufe <strong>einen</strong> Käse (masculino) y <strong>eine</strong> Tomate (femenino).</em>
+                ✍️ <strong>Ejemplo:</strong> <em>Ich kaufe <strong>einen</strong> Käse (masculino) y <strong>eine</strong> Tomate (femenino).</em>
               </p>
             </div>
             <AccusativeShield words={[{
@@ -7578,7 +10616,7 @@ export const studyPlanModules = [{
     subtitle: "Modales y prefijos separables combinados",
     content: <div className="space-y-6 text-left">
             <p className="text-slate-700 text-xs sm:text-sm">
-              ­ƒÆí <strong>Regla de oro:</strong> Si usas un verbo modal con un verbo separable, el prefijo separable NO se rompe, sino que el verbo va completo al final:
+              💡 <strong>Regla de oro:</strong> Si usas un verbo modal con un verbo separable, el prefijo separable NO se rompe, sino que el verbo va completo al final:
             </p>
             <PincerSwitch exercises={[{
         subject: "Ich",
@@ -7628,7 +10666,7 @@ export const studyPlanModules = [{
             </div>
             <div className="border-l-4 border-amber-500 bg-amber-50 p-4 rounded-r-xl text-sm">
               <p className="text-amber-800">
-                ­ƒÆí <strong>Preposiciones exigentes:</strong> mit, nach, aus, zu, von, bei, seit, ab siempre exigen Dativo.
+                💡 <strong>Preposiciones exigentes:</strong> mit, nach, aus, zu, von, bei, seit, ab siempre exigen Dativo.
               </p>
             </div>
           </div>

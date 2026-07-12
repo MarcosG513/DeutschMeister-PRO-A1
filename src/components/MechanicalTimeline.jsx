@@ -35,22 +35,22 @@ const MechanicalTimeline = ({
 
       {/* Cajas de la Oración */}
       <div className="relative min-h-[140px] bg-white border border-slate-100 rounded-xl p-4 flex flex-col justify-between mb-6 overflow-hidden">
-        <div className="grid grid-cols-4 gap-2 text-center text-[10px] font-bold text-slate-400 uppercase">
-          <span>Posición 1</span>
-          <span>Posición 2</span>
-          <span>Complemento</span>
-          <span>Final Absoluto</span>
+        <div className="flex flex-row justify-between text-center text-[10px] font-bold text-slate-400 uppercase w-full">
+          <span className="w-1/4">Posición 1</span>
+          <span className="w-1/4">Posición 2</span>
+          <span className="w-1/4">Complemento</span>
+          <span className="w-1/4">Final Absoluto</span>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 items-center my-4 relative">
+        <div className="flex flex-row gap-2 items-center my-4 relative w-full">
           {/* Sujeto */}
-          <div className="bg-blue-50 border-2 border-blue-200 text-blue-900 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all">
+          <div className="w-1/4 bg-blue-50 border-2 border-blue-200 text-blue-900 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all">
             {present.subject}
             <span className="block text-[9px] font-normal text-blue-600/80 mt-0.5">Sujeto</span>
           </div>
 
           {/* Verbo Principal / Auxiliar */}
-          <div className="relative h-[56px] flex items-center justify-center">
+          <div className="w-1/4 relative h-[56px] flex items-center justify-center">
             {/* Verbo en Presente */}
             <div 
               className="absolute inset-0 bg-indigo-50 border-2 border-indigo-200 text-indigo-900 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center"
@@ -79,13 +79,13 @@ const MechanicalTimeline = ({
           </div>
 
           {/* Complemento */}
-          <div className="bg-slate-50 border-2 border-slate-200 text-slate-800 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all">
+          <div className="w-1/4 bg-slate-50 border-2 border-slate-200 text-slate-800 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all">
             {present.complement}
             <span className="block text-[9px] font-normal text-slate-500 mt-0.5">Relleno</span>
           </div>
 
           {/* Participio */}
-          <div className="relative h-[56px] flex items-center justify-center">
+          <div className="w-1/4 relative h-[56px] flex items-center justify-center">
             <div 
               className="absolute inset-0 bg-emerald-50 border-2 border-emerald-200 text-emerald-950 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center"
               style={{

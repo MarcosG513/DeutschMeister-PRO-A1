@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check } from 'lucide-react';
 import { getSafeId, nativeSpeak } from '../utils/helpers';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
@@ -148,8 +148,12 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   const openAiTutor = passedOpenAiTutor || (() => {});
 
   const [flipped, setFlipped] = useState(false);
-  const { isListening, startListening } = useSpeechRecognition();
-  const [speechFeedback, setSpeechFeedback] = useState(null); // 'success', 'error', null
+  const { isListening, startListening, stopListening } = useSpeechRecognition();
+  const [pronunciationStatus, setPronunciationStatus] = useState(null); // 'listening', 'success', 'error'
+  const [recognizedText, setRecognizedText] = useState("");
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const feedbackTimeoutRef = useRef(null);
+
   const isLongText = wordObj.de.length > 20;
   const safeId = getSafeId(wordObj.de).substring(0, 150);
   const isUnlocked = unlockedCards && unlockedCards[safeId]?.unlocked;
@@ -168,35 +172,67 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
     }
   }, [isUnlocked, cardImages, safeId, wordObj, lazyLoadImage]);
 
+  // Si la escucha del hook se detiene y seguimos en 'listening', cancelamos el estado
+  useEffect(() => {
+    if (!isListening && pronunciationStatus === 'listening') {
+      setPronunciationStatus(null);
+    }
+  }, [isListening, pronunciationStatus]);
+
+  useEffect(() => {
+    return () => {
+      if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
+    };
+  }, []);
+
   const handlePronunciation = (e) => {
     e.stopPropagation();
-    setSpeechFeedback(null);
+    if (pronunciationStatus === 'listening') {
+      stopListening();
+      setPronunciationStatus(null);
+      return;
+    }
+
+    setPronunciationStatus('listening');
+    setRecognizedText("");
+    if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
+
     startListening((transcript) => {
-      // Clean up punctuation and case for comparison
-      const cleanTarget = wordObj.de.toLowerCase().replace(/[^a-zäöüß0-9]/g, '');
-      const cleanTranscript = transcript.toLowerCase().replace(/[^a-zäöüß0-9]/g, '');
-      if (cleanTranscript.includes(cleanTarget) || cleanTarget.includes(cleanTranscript)) {
-        setSpeechFeedback('success');
+      // Normalización de cadenas (minúsculas y sin puntuación)
+      const cleanSpoken = transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+      const cleanSingular = wordObj.de.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+      const cleanPlural = (wordObj.plural && wordObj.plural !== "-") 
+        ? wordObj.plural.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim() 
+        : "";
+
+      if (cleanSpoken === cleanSingular) {
+        setPronunciationStatus('success-singular');
+      } else if (cleanPlural && cleanSpoken === cleanPlural) {
+        setPronunciationStatus('success-plural');
       } else {
-        setSpeechFeedback('error');
+        setPronunciationStatus('error');
+        setRecognizedText(transcript); // Para mostrar el badge de qué escuchó
       }
-      setTimeout(() => setSpeechFeedback(null), 3000);
+
+      feedbackTimeoutRef.current = setTimeout(() => {
+        setPronunciationStatus(null);
+      }, 4000);
     });
   };
 
   return (
-    <div onClick={() => setFlipped(!flipped)} className="relative h-56 perspective-1000 cursor-pointer w-full group">
+    <div onClick={() => setFlipped(!flipped)} className="relative h-[310px] md:h-[330px] perspective-1000 cursor-pointer w-full group">
       <div className={`w-full h-full transition-all duration-500 preserve-3d ${flipped ? 'rotate-y-180' : ''}`}>
         
         {/* FRENTE */}
-        <div className={`absolute inset-0 backface-hidden bg-white border-2 border-slate-200 rounded-xl shadow-sm flex flex-col items-center justify-center text-center group-hover:border-blue-300 overflow-hidden ${flipped ? 'pointer-events-none' : 'pointer-events-auto'}`}>
+        <div className={`absolute inset-0 backface-hidden bg-white border-2 border-slate-200 rounded-xl shadow-sm flex flex-col justify-between items-center text-center group-hover:border-blue-300 overflow-hidden ${flipped ? 'pointer-events-none' : 'pointer-events-auto'}`}>
           {wordObj.category === 'Uhrzeit' ? (
-            <div className="w-full h-[55%] border-b border-slate-100 relative">
+            <div className="w-full h-[140px] md:h-[150px] shrink-0 border-b border-slate-100 relative">
                <SVGClock deWord={wordObj.de} />
             </div>
           ) : imgData ? (
-            <div className="w-full h-[55%] bg-slate-50 border-b border-slate-100 relative group/regen">
-               <img src={(typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:'))) ? imgData : (typeof imgData === 'string' ? `data:image/png;base64,${imgData}` : '')} alt={wordObj.de} className="w-full h-full object-contain mix-blend-multiply p-1 cursor-zoom-in hover:scale-105 transition-transform" onClick={(e) => { e.stopPropagation(); if (typeof setFullscreenImage === 'function') setFullscreenImage(imgData); }} />
+            <div className="w-full flex-1 min-h-0 bg-slate-50 border-b border-slate-100 relative group/regen flex items-center justify-center">
+               <img src={(typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:'))) ? imgData : (typeof imgData === 'string' ? `data:image/png;base64,${imgData}` : '')} alt={wordObj.de} className="object-contain max-h-full max-w-full p-2 shrink-0 rounded-lg mix-blend-multiply cursor-zoom-in hover:scale-105 transition-transform" onClick={(e) => { e.stopPropagation(); if (typeof setFullscreenImage === 'function') setFullscreenImage(imgData); }} />
                {!isRegenerated && (
                  <button onClick={(e) => { e.stopPropagation(); generateCardImage(wordObj, e, true); }} className="absolute top-1 right-1 bg-white/90 hover:bg-white text-blue-600 p-1.5 rounded-md shadow transition-opacity" title="Regenerar (Consume 1 crédito)" aria-label="Regenerar imagen de tarjeta">
                    <RefreshCw size={14} className={isGenLoading ? "animate-spin" : ""} />
@@ -204,7 +240,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                )}
             </div>
           ) : (
-            <div className="w-full h-[55%] bg-slate-50 flex flex-col items-center justify-center relative border-b border-slate-100 group/imgbtn z-10">
+            <div className="w-full flex-1 min-h-0 bg-slate-50 flex flex-col items-center justify-center relative border-b border-slate-100 group/imgbtn z-10">
                <span className="text-4xl opacity-20 absolute pointer-events-none">{wordObj.emoji || "📝"}</span>
                {generateCardImage && (
                  <button 
@@ -218,45 +254,135 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                )}
             </div>
           )}
-          <div className="flex-1 flex flex-col items-center justify-center w-full px-2 relative z-20">
-             <span className={`font-bold ${speechFeedback === 'success' ? 'text-green-500' : speechFeedback === 'error' ? 'text-red-500' : 'text-slate-900'} transition-colors ${isLongText ? 'text-base' : 'text-lg'}`}>{wordObj.de}</span>
-             {wordObj.pron && <span className="text-sm text-blue-500 mt-1 font-medium truncate max-w-[200px] sm:max-w-xs text-ellipsis overflow-hidden">/{wordObj.pron}/</span>}
-             
-             <div className="absolute left-2 bottom-2 flex gap-1 z-30">
-                <button onClick={(e) => { e.stopPropagation(); if(openAiTutor) openAiTutor(wordObj, e); }} className="text-slate-400 hover:text-blue-500 p-1 rounded-full transition-colors" title="Preguntar a IA" aria-label="Preguntar a tutor de Inteligencia Artificial">
-                  <Bot size={16} />
+          <div className="w-full shrink-0 flex flex-col items-center justify-center px-2 py-3 pb-8 relative z-20">
+              <div className="flex flex-col items-center text-center mt-1.5 mb-2 w-full px-2 shrink-0">
+                {/* Grid de 3 columnas: Espacio vacío (izq) - Palabra Centrada - Botón (der) */}
+                <div className="grid grid-cols-[28px_1fr_28px] items-center w-full mb-1">
+                  <div></div> {/* Pilar invisible izquierdo para equilibrar */}
+ 
+                  <div className="flex items-center justify-center gap-1 min-w-0">
+                    <h3 className={`font-bold text-xl md:text-2xl leading-tight text-center break-words w-full px-2 shrink-0 ${
+                      pronunciationStatus?.startsWith('success') 
+                        ? 'text-emerald-500' 
+                        : pronunciationStatus === 'error' 
+                          ? 'text-rose-500' 
+                          : 'text-slate-800'
+                    }`}>
+                      {wordObj.de}
+                    </h3>
+                    {pronunciationStatus === 'success-singular' && <Check size={16} className="text-emerald-500 animate-bounce shrink-0" />}
+                  </div>
+ 
+                  <div className="flex justify-center items-center">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsPlayingAudio(true);
+                        
+                        let textToSpeak = wordObj.de;
+                        if (wordObj.plural && wordObj.plural !== "-") {
+                          textToSpeak = `${wordObj.de}... ${wordObj.plural}`;
+                        }
+                        
+                        if (typeof nativeSpeak === 'function') {
+                          nativeSpeak(textToSpeak);
+                        }
+                        
+                        setTimeout(() => setIsPlayingAudio(false), 2500);
+                      }}
+                      className={`p-1.5 rounded-full transition-all duration-300 flex items-center justify-center ${
+                        isPlayingAudio
+                          ? 'bg-indigo-100 text-indigo-600 scale-110 shadow-sm animate-pulse'
+                          : 'text-slate-400 hover:bg-slate-100 hover:text-indigo-500 active:scale-95'
+                      }`}
+                      title="Escuchar pronunciación"
+                    >
+                      <Volume2 size={16} />
+                    </button>
+                  </div>
+                </div>
+ 
+                {/* Badge de Error de Pronunciación */}
+                {pronunciationStatus === 'error' && recognizedText && (
+                  <div className="mt-0.5 mb-1.5 bg-rose-50 text-rose-700 text-[9px] md:text-xs px-2 py-0.5 rounded border border-rose-100 shadow-sm animate-fade-in max-w-[90%] break-words font-medium">
+                    Entendí: "{recognizedText}"
+                  </div>
+                )}
+ 
+                {/* Fonética matemáticamente centrada */}
+                {wordObj.pron && (
+                  <p className="text-base md:text-lg text-slate-500 font-medium leading-tight mb-3 shrink-0 px-2 break-words w-full text-center">[{wordObj.pron}]</p>
+                )}
+                
+                {wordObj.plural && wordObj.plural !== "-" && (
+                  <div className="mt-1 flex flex-col items-center bg-slate-50/80 px-4 py-2 rounded-xl border border-slate-200 w-[95%] max-w-[240px] md:max-w-[280px] shadow-sm shrink-0">
+                    <div className="flex items-center justify-center gap-1 min-w-0 w-full">
+                      <span className={`text-base md:text-lg font-semibold leading-tight text-center break-words transition-colors truncate ${
+                        pronunciationStatus === 'success-plural' ? 'text-emerald-600 font-bold' : 'text-slate-700'
+                      }`}>
+                        Pl: {wordObj.plural}
+                      </span>
+                      {pronunciationStatus === 'success-plural' && <Check size={14} className="text-emerald-600 animate-bounce shrink-0" />}
+                    </div>
+                    {wordObj.pluralPron && (
+                      <span className="text-xs md:text-sm text-slate-400 font-medium leading-tight mt-1 text-center break-words w-full">
+                        [{wordObj.pluralPron}]
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+              
+              <div className="absolute left-2 bottom-2 flex gap-1 z-30">
+                 <button onClick={(e) => { e.stopPropagation(); if(openAiTutor) openAiTutor(wordObj, e); }} className="text-slate-400 hover:text-blue-500 p-1 rounded-full transition-colors" title="Preguntar a IA" aria-label="Preguntar a tutor de Inteligencia Artificial">
+                    <Bot size={16} />
+                 </button>
+              </div>
+ 
+              <div className="absolute right-2 bottom-2 flex gap-1 z-30">
+                <button 
+                  onClick={handlePronunciation} 
+                  className={`p-1.5 rounded-full transition-colors ${
+                    pronunciationStatus === 'listening' 
+                      ? 'bg-red-50 text-red-500 animate-pulse border border-red-200' 
+                      : 'text-slate-400 hover:text-green-500 hover:bg-slate-100'
+                  }`} 
+                  title="Practicar pronunciación" 
+                  aria-label="Practicar pronunciación por micrófono"
+                >
+                  <Mic size={16} />
                 </button>
+              </div>
              </div>
-
-             <div className="absolute right-2 bottom-2 flex gap-1 z-30">
-               <button onClick={handlePronunciation} className={`p-1 rounded-full transition-colors ${isListening ? 'bg-red-100 text-red-500 animate-pulse' : 'text-slate-400 hover:text-green-500 hover:bg-slate-100'}`} title="Practicar pronunciación" aria-label="Practicar pronunciación por micrófono">
-                 <Mic size={16} />
-               </button>
-               <button onClick={(e) => { e.stopPropagation(); nativeSpeak(wordObj.de); }} className="text-slate-400 hover:text-blue-500 hover:bg-slate-100 p-1 rounded-full transition-colors" title="Escuchar" aria-label="Escuchar palabra en alemán">
-                 <Volume2 size={16} />
-               </button>
-             </div>
-          </div>
         </div>
 
         {/* ATRÁS */}
-        <div className={`absolute inset-0 backface-hidden rotate-y-180 bg-[#1e3a8a] border-2 border-[#1e3a8a] text-white rounded-xl shadow-md flex flex-col items-center p-3 pb-8 text-center overflow-hidden ${flipped ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+        <div className={`absolute inset-0 backface-hidden rotate-y-180 bg-[#1e3a8a] border-2 border-[#1e3a8a] text-white rounded-xl shadow-md flex flex-col w-full h-full justify-between items-center p-3 pb-7 text-center overflow-hidden ${flipped ? 'pointer-events-auto' : 'pointer-events-none'}`}>
           
-          <div className="flex-1 flex flex-col items-center justify-center w-full min-h-0">
-            <span className="text-[10px] font-semibold text-blue-300/80 mb-1 tracking-wider uppercase">{wordObj.type}</span>
-            <span className={`font-bold text-yellow-400 leading-tight break-words px-2 max-w-full block ${wordObj.es.length > 20 ? 'text-base' : 'text-lg md:text-xl'}`}>{wordObj.es}</span>
+          <div className="flex-1 flex flex-col items-center justify-center w-full h-auto py-1.5 min-h-0">
+            <span className="text-[9px] font-semibold text-blue-300/80 mb-0.5 tracking-wider uppercase">{wordObj.type}</span>
+            <span className="font-bold text-lg md:text-xl text-yellow-400 leading-tight text-center break-words w-full px-2 shrink-0">{wordObj.es}</span>
             {/* Renderizado de oraciones reales */}
             {(wordObj.exampleSentenceDe || (wordObj.exampleSentenceDeBlocks && wordObj.exampleSentenceDeBlocks.length > 0)) && (
               (() => {
                 const oracionDe = wordObj.exampleSentenceDe || wordObj.exampleSentenceDeBlocks.join(" ");
                 const deLength = oracionDe.length;
-                // Ajuste dinámico de tamaño de letra según longitud de la oración
-                const deTextClass = deLength > 60 ? "text-[11px] leading-tight" : deLength > 40 ? "text-xs leading-snug" : "text-sm leading-normal font-bold";
-                const esTextClass = deLength > 40 ? "text-[10px] leading-tight" : "text-xs leading-snug";
+                // Invertimos las jerarquías: Alemán protagonista (grande), Español soporte (pequeño/tenue)
+                const deTextClass = deLength > 60 
+                  ? "text-[11px] md:text-xs leading-tight font-bold text-white" 
+                  : deLength > 40 
+                    ? "text-xs md:text-sm leading-snug font-bold text-white" 
+                    : "text-sm md:text-base leading-snug font-bold text-white";
+                
+                const esTextClass = deLength > 60 
+                  ? "text-[9px] md:text-[10px] leading-tight font-medium text-blue-200/70" 
+                  : deLength > 40 
+                    ? "text-[10px] md:text-xs leading-snug font-medium text-blue-200/70" 
+                    : "text-xs md:text-sm leading-snug font-medium text-blue-200/70";
                 
                 return (
                   <div 
-                    className="mt-2 w-full px-3 py-2 bg-white/10 rounded-xl cursor-pointer hover:bg-white/20 transition-all active:scale-95 flex flex-col gap-1 shadow-sm border border-white/5 max-h-[105px] overflow-y-auto custom-scrollbar relative z-50"
+                    className="mt-1.5 w-full px-2.5 py-1.5 bg-white/10 rounded-xl cursor-pointer hover:bg-white/20 transition-all active:scale-95 flex flex-col gap-0.5 shadow-sm border border-white/5 relative z-50 min-h-0"
                     onClick={(e) => { 
                       e.stopPropagation(); 
                       const oracionCompleta = wordObj.exampleSentenceDe || (wordObj.exampleSentenceDeBlocks && wordObj.exampleSentenceDeBlocks.length > 0 ? wordObj.exampleSentenceDeBlocks.join(" ") : "");
@@ -267,12 +393,12 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                     onPointerDown={(e) => e.stopPropagation()}
                     title="Escuchar oración en alemán"
                   >
-                    <p className={`text-white font-bold drop-shadow-sm pointer-events-none ${deTextClass}`}>
+                    <p className={`drop-shadow-sm pointer-events-none ${deTextClass}`}>
                       "{oracionDe}"
                     </p>
                     
                     {wordObj.exampleSentenceEs && (
-                      <p className={`text-blue-200 italic font-medium pointer-events-none ${esTextClass}`}>
+                      <p className={`italic pointer-events-none ${esTextClass}`}>
                         {wordObj.exampleSentenceEs}
                       </p>
                     )}
@@ -300,4 +426,27 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   );
 };
 
-export default React.memo(PresentationVocabCard);
+export default React.memo(PresentationVocabCard, (prevProps, nextProps) => {
+  const prevDe = prevProps.wordObj?.de;
+  const nextDe = nextProps.wordObj?.de;
+  if (prevDe !== nextDe) return false;
+
+  const safeId = prevDe ? getSafeId(prevDe).substring(0, 150) : '';
+
+  if (prevProps.isRevealed !== nextProps.isRevealed) return false;
+  if (prevProps.isImageLoading !== nextProps.isImageLoading) return false;
+
+  const prevImage = prevProps.cardImages?.[safeId];
+  const nextImage = nextProps.cardImages?.[safeId];
+  if (prevImage !== nextImage) return false;
+
+  const prevUnlocked = prevProps.unlockedCards?.[safeId]?.unlocked;
+  const nextUnlocked = nextProps.unlockedCards?.[safeId]?.unlocked;
+  if (prevUnlocked !== nextUnlocked) return false;
+
+  const prevRegenerated = prevProps.unlockedCards?.[safeId]?.regenerated;
+  const nextRegenerated = nextProps.unlockedCards?.[safeId]?.regenerated;
+  if (prevRegenerated !== nextRegenerated) return false;
+
+  return true;
+});

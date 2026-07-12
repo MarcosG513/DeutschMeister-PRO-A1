@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 
@@ -6,6 +6,28 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState(null);
+  const webRecognitionRef = useRef(null);
+  const nativeListeningRef = useRef(false);
+
+  const stopListening = useCallback(async () => {
+    setIsListening(false);
+    nativeListeningRef.current = false;
+    if (Capacitor.isNativePlatform()) {
+      try {
+        await SpeechRecognition.stop();
+      } catch (e) {
+        console.error('Error stopping speech recognition:', e);
+      }
+    } else {
+      if (webRecognitionRef.current) {
+        try {
+          webRecognitionRef.current.stop();
+        } catch (e) {
+          console.error('Error stopping web speech recognition:', e);
+        }
+      }
+    }
+  }, []);
 
   const startListening = useCallback(async (onResultCallback) => {
     setIsListening(true);
@@ -24,7 +46,8 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
           }
         }
         
-        await SpeechRecognition.start({
+        nativeListeningRef.current = true;
+        const result = await SpeechRecognition.start({
           language: targetLanguage,
           maxResults: 1,
           prompt: 'Habla en alemán',
@@ -32,19 +55,22 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
           popup: false,
         });
 
-        SpeechRecognition.addListener('partialResults', (data) => {
-          if (data.matches && data.matches.length > 0) {
-             const result = data.matches[0];
-             setTranscript(result);
-             if (onResultCallback) onResultCallback(result);
-             setIsListening(false);
-             SpeechRecognition.stop();
+        // Solo procesamos el resultado si no fue cancelado manualmente mediante stopListening
+        if (nativeListeningRef.current) {
+          if (result && result.matches && result.matches.length > 0) {
+            const matches = result.matches;
+            setTranscript(matches[0]);
+            if (onResultCallback) onResultCallback(matches[0]);
+          } else {
+            setError('No se detectó audio.');
           }
-        });
+        }
       } catch (e) {
         console.error('Error starting capacitor speech recognition:', e);
         setError('Error al iniciar micrófono en Android.');
+      } finally {
         setIsListening(false);
+        nativeListeningRef.current = false;
       }
     } else {
       const WebSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -58,6 +84,7 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
       recognition.lang = targetLanguage;
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
+      webRecognitionRef.current = recognition;
 
       recognition.onstart = () => {};
 
@@ -88,5 +115,5 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
     }
   }, [targetLanguage]);
 
-  return { isListening, transcript, error, startListening };
+  return { isListening, transcript, error, startListening, stopListening };
 };
