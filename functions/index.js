@@ -419,7 +419,7 @@ REGLA DE FORMATO: PROHIBIDO devolver código JSON crudo o bloques de código en 
   const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
 
   await streamWithDeepSeekFallback(res, systemInstruction, history, lastMessage, {
-    model: "gemini-3.1-flash",
+    model: "gemini-3.5-flash",
     cleanBold: false
   });
 });
