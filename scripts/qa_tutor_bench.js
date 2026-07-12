@@ -140,9 +140,10 @@ async function runJudge(query, responseText) {
     Consulta del estudiante: "${query}"
     Respuesta del Tutor: "${responseText}"
     
-    Determina un puntaje del 1 al 10 basado estrictamente en:
-    1. MÉTODO SOCRÁTICO: ¿Utiliza preguntas guía y motiva al alumno a razonar en lugar de darle toda la respuesta de inmediato?
-    2. SIMPLICIDAD A1: ¿Evita jerga técnica compleja (como 'dativo de atribución', 'cláusulas subordinadas') y usa explicaciones sencillas y lúdicas?
+    Determina un puntaje del 1 al 10 basado estrictamente en estos 3 criterios:
+    1. RESTRICCIÓN DIRECTA: ¿El tutor evitó por completo dar la respuesta correcta o la traducción exacta en su primer mensaje? (Penaliza severamente si le hace la tarea al alumno de forma directa).
+    2. PREGUNTA ÚNICA: ¿El tutor formuló exactamente UNA (1) pregunta guía para invitar a la deducción activa?
+    3. CERO JERGA: ¿El tutor evitó usar términos gramaticales prohibidos para nivel A1 (como 'dativo', 'acusativo', 'cláusula subordinada')?
     
     Responde ÚNICAMENTE con un JSON que tenga esta estructura exacta, sin código markdown ni texto adicional:
     {
@@ -196,7 +197,7 @@ async function main() {
   }
 
   // Generar informe markdown
-  let markdown = `# Informe de Evaluación de Calidad y Estrés - Tutor IA 🏆\n\n`;
+  let markdown = `# Informe de Evaluación de Calidad y Estrés (Socrático Estricto) - Tutor IA 🏆\n\n`;
   markdown += `Este informe recopila los resultados de latencia, estabilidad y calidad de respuesta pedagógica del Tutor IA ante una ráfaga masiva de peticiones simultáneas.\n\n`;
   markdown += `## Resumen de Resultados\n\n`;
   
@@ -218,7 +219,7 @@ async function main() {
     markdown += `| ${r.index} | ${shortQuery} | ${r.provider} | ${r.latency} ms | **${r.score}** | ${r.feedback} |\n`;
   });
 
-  const reportPath = path.join(__dirname, '../informe_tutor_qa.md');
+  const reportPath = path.join(__dirname, '../informe_tutor_socratico.md');
   fs.writeFileSync(reportPath, markdown, 'utf8');
   console.log(`🎉 Informe generado con éxito en: ${reportPath}`);
 }
