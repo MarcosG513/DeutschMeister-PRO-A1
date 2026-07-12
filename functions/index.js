@@ -203,7 +203,7 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
 
 // =========================================================================
 // 1. SIMULADOR DE ROL A1 (RoleplaySimulator)
-// Modelo: Gemini 2.5 Flash / DeepSeek Fallback
+// Modelo: gemini-3.5-flash (primario) / deepseek-v3.2 via enterprise (fallback)
 // =========================================================================
 export const runRoleplaySimulator = onRequest({
   secrets: [geminiFreeKey, falKey],
@@ -242,10 +242,83 @@ export const runRoleplaySimulator = onRequest({
   const history = historialConversacion.slice(0, -1);
   const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
 
-  await streamWithDeepSeekFallback(res, finalSystemPrompt, history, lastMessage, {
-    model: "gemini-3.1-flash-lite",
-    cleanBold: true
-  });
+  // Cabeceras SSE
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+
+  // ── PRIMARY: gemini-3.5-flash ─────────────────────────────────────────────
+  try {
+    console.log("Roleplay FinOps: Intentando con Gemini 3.5 Flash...");
+    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+    const geminiModel = genAI.getGenerativeModel({
+      model: "gemini-3.5-flash",
+      systemInstruction: finalSystemPrompt
+    });
+    let validHistory = history.slice(0);
+    if (validHistory.length > 0 && validHistory[0].role !== "user") validHistory.shift();
+    const chat = geminiModel.startChat({ history: validHistory });
+    const resultStream = await chat.sendMessageStream(lastMessage);
+    for await (const chunk of resultStream.stream) {
+      const raw = chunk.text();
+      if (raw) {
+        const clean = raw.replace(/\*\*/g, '').replace(/\*/g, '');
+        res.write(`data: ${JSON.stringify({ text: clean })}\n\n`);
+      }
+    }
+    res.write('data: [DONE]\n\n');
+    res.end();
+    return;
+
+  // ── CIRCUIT BREAKER → FALLBACK: deepseek-v3.2 via openrouter/enterprise ──
+  } catch (error) {
+    console.warn("Roleplay FinOps: Gemini falló, activando fallback DeepSeek V3.2:", error.message);
+    try {
+      fal.config({ credentials: falKey.value() });
+      let promptBuilder = "";
+      if (history && history.length > 0) {
+        promptBuilder += "Historial de conversación previa:\n";
+        history.forEach(msg => {
+          const roleLabel = msg.role === 'user' ? 'Usuario' : 'Asistente';
+          const text = msg.parts && msg.parts[0] ? msg.parts[0].text : '';
+          promptBuilder += `${roleLabel}: ${text}\n`;
+        });
+        promptBuilder += "\n";
+      }
+      promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
+      const falStream = await fal.stream("openrouter/router/enterprise", {
+        input: {
+          model: "deepseek/deepseek-v3.2",
+          prompt: promptBuilder,
+          system_prompt: finalSystemPrompt,
+          temperature: 0.7
+        }
+      });
+      let lastOutput = "";
+      for await (const event of falStream) {
+        const currentOutput = event.output || "";
+        if (currentOutput.length > lastOutput.length) {
+          const raw = currentOutput.substring(lastOutput.length);
+          lastOutput = currentOutput;
+          if (raw) {
+            const clean = raw.replace(/\*\*/g, '').replace(/\*/g, '');
+            res.write(`data: ${JSON.stringify({ text: clean })}\n\n`);
+          }
+        }
+      }
+      res.write('data: [DONE]\n\n');
+      res.end();
+    } catch (fallbackErr) {
+      console.error("Roleplay FinOps: Error crítico en fallback:", fallbackErr);
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Servicio no disponible temporalmente. Inténtalo más tarde." });
+      } else {
+        res.write(`data: ${JSON.stringify({ error: "Stream fallback error: " + fallbackErr.message })}\n\n`);
+        res.end();
+      }
+    }
+  }
 });
 
 // =========================================================================
