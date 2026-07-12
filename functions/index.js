@@ -278,10 +278,10 @@ Por favor, actúa como un examinador oficial del Goethe-Institut para el nivel A
 Devuelve tu respuesta estructurada en español usando Markdown con el formato de Evaluación General y Análisis Quirúrgico.
 `;
 
-    // Se utiliza DeepSeek V4-Pro para máxima precisión y análisis pedagógico
+    // Se utiliza DeepSeek V3.2 para máxima precisión y análisis pedagógico
     const result = await fal.subscribe("openrouter/router/enterprise", {
       input: {
-        model: "deepseek/deepseek-v4-pro",
+        model: "deepseek/deepseek-v3.2",
         prompt: promptDefinido,
         system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo.",
         temperature: 0.2,
@@ -292,8 +292,8 @@ Devuelve tu respuesta estructurada en español usando Markdown con el formato de
       output: result.data.output
     };
   } catch (error) {
-    console.error("Error en evaluateEmail:", error);
-    throw new HttpsError("internal", "Error al procesar la evaluación de correo", error.message);
+    console.error("Error crítico en evaluateEmail (Fal/OpenRouter):", error);
+    throw new HttpsError("internal", "Error procesando la evaluación con la IA");
   }
 });
 
