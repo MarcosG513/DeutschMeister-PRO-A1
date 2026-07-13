@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">DeutschMeister PRO</string>
-    <string name="title_activity_main">DeutschMeister PRO</string>
-    <string name="package_name">com.deutschmeister.app</string>
-    <string name="custom_url_scheme">com.deutschmeister.app</string>
-</resources>

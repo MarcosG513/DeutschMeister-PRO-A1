@@ -1339,14 +1339,45 @@ export const generateReadingTest = onCall({
   const promptUser = `Genera la prueba de comprensión lectora para el tema: "${tema}".`;
 
   try {
-    const jsonOutput = await invokeWithDeepSeekFallback(systemInstruction, promptUser, {
-      isJson: true,
-      temperature: 0.7,
-      model: "gemini-2.5-flash"
+    console.log("ReadingTest FinOps: Intentando con Gemini 3.5 Flash...");
+    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3.5-flash",
+      systemInstruction: systemInstruction,
+      generationConfig: {
+        responseMimeType: "application/json",
+        temperature: 0.7
+      }
     });
-    return jsonOutput;
-  } catch (error) {
-    console.error("Error en generateReadingTest:", error);
-    throw new HttpsError("internal", "Error generando el examen de comprensión lectora: " + error.message);
+
+    const result = await model.generateContent(promptUser);
+    const responseText = result.response.text().trim();
+    return JSON.parse(responseText);
+  } catch (geminiError) {
+    console.warn("ReadingTest FinOps: Gemini falló, activando fallback a DeepSeek V3.2:", geminiError.message);
+    try {
+      fal.config({
+        credentials: falKey.value()
+      });
+      console.log("ReadingTest FinOps: Invocando DeepSeek via Fal.ai...");
+
+      const finalPromptUser = promptUser + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
+      const response = await fal.subscribe("openrouter/router/enterprise", {
+        input: {
+          model: "deepseek/deepseek-v3.2",
+          prompt: finalPromptUser,
+          system_prompt: systemInstruction,
+          temperature: 0.7,
+          top_p: 0.9
+        }
+      });
+
+      const outputText = response.data.output || response.data.text || "";
+      const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+      return JSON.parse(cleanJson);
+    } catch (fallbackError) {
+      console.error("ReadingTest FinOps: Error crítico en fallback de DeepSeek:", fallbackError);
+      throw new HttpsError("internal", "Error generando el examen de comprensión lectora en ambos proveedores: " + fallbackError.message);
+    }
   }
 });
