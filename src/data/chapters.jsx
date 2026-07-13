@@ -11,6 +11,10 @@ import MechanicalTimeline from '../components/MechanicalTimeline';
 import PincerSwitch from '../components/PincerSwitch';
 import LiveEvaluator from '../components/LiveEvaluator';
 import LocativeMapSimulator from '../components/LocativeMapSimulator';
+import AcousticRadar from '../components/AcousticRadar';
+import TextHighlighter from '../components/TextHighlighter';
+import FormularBuilder from '../components/FormularBuilder';
+import VoiceExaminer from '../components/VoiceExaminer';
 export
 // --- DATA: EL VOCABULARIO COMPLETO ---
 const chapters = [
@@ -9747,43 +9751,38 @@ export const goetheModules = [{
       }} {...props} />
           </div>
   }, {
-    title: "Gramática para el Oído",
-    subtitle: "La pista de aterrizaje de la información",
-    content: <div className="mt-8 max-w-3xl mx-auto space-y-4">
-            <GrammarAccordion title="A. El Imperativo Encubierto (Infinitivo al final)">
-              <p>En los anuncios públicos (Teil 2), en lugar de conjugar el imperativo formal, suelen usar el verbo en <strong>infinitivo al final</strong> para dar instrucciones generales.</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><strong>Bitte die Türen schließen!</strong> (¡Por favor, cerrar las puertas!)</li>
-                <li><strong>Bitte nicht einsteigen!</strong> (¡Por favor, no subir!)</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="B. Números, Horas y Días (Sospechosos habituales)">
-              <p>El 80% de las preguntas de opción múltiple te pondrán a dudar entre tres números. Presta atención a las preposiciones:</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><strong>um</strong> (a las...) ➡️ <em>um 8 Uhr</em> (hora exacta del evento).</li>
-                <li><strong>von... bis...</strong> (de... a...) ➡️ horarios de atención.</li>
-                <li><strong>ab</strong> (a partir de...) ➡️ <em>ab 14 Uhr</em> (desde las 2 pm).</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="C. El conector 'aber' (El engaño clásico)">
-              <p>Te van a mencionar una de las opciones falsas primero, y luego usarán <strong>aber</strong> (pero) o <strong>leider</strong> (lamentablemente) para darte la respuesta real.</p>
-              <div className="bg-red-50 text-red-800 p-3 rounded mt-2 border border-red-100">
-                Audio: "Ich wollte um 3 Uhr kommen, <strong>aber</strong> mein Auto ist kaputt. Ich komme um 4 Uhr."<br />
-                <em>Respuesta real: A las 4.</em>
-              </div>
-            </GrammarAccordion>
+    title: "Acoustic Radar: Anuncios",
+    subtitle: "Presta atención a las instrucciones y anuncios públicos",
+    content: <div className="mt-8 max-w-3xl mx-auto space-y-6">
+            <AcousticRadar 
+              title="Escenario 1: Anuncio de tráfico (Teil 2)" 
+              textDe="Achtung Autofahrer! Auf der Autobahn gibt es einen Stau. Bitte fahren Sie langsam und nutzen Sie das Reißverschlusssystem." 
+              textEs="¡Atención conductores! Hay un atasco en la autopista. Por favor, conduzcan despacio y utilicen el sistema de cremallera."
+              options={["Un accidente", "Un atasco / tráfico", "Obras en la vía"]}
+              correctOption="Un atasco / tráfico"
+              question="¿Cuál es el problema reportado en la autopista?"
+            />
+            <AcousticRadar 
+              title="Escenario 2: Mensaje de voz (Teil 3)" 
+              textDe="Hallo, hier ist der IT-Service. Dein Computer ist repariert. Du kannst ihn morgen ab 9 Uhr abholen. Bitte ruf uns nicht zurück." 
+              textEs="Hola, aquí el servicio técnico. Tu ordenador está reparado. Puedes recogerlo mañana a partir de las 9. Por favor, no nos devuelvas la llamada."
+              options={["A las 8 Uhr", "A las 9 Uhr", "A las 10 Uhr"]}
+              correctOption="A las 9 Uhr"
+              question="¿A partir de qué hora se puede recoger el ordenador?"
+            />
           </div>
   }, {
-    title: "Simulador de Escenarios",
-    subtitle: "Aplica la 'Regla del Pescador'",
-    content: <div className="mt-6 max-w-3xl mx-auto">
-            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded-r-lg">
-              <p className="font-bold text-yellow-800">💡 La Regla del Pescador</p>
-              <p className="text-sm text-yellow-700 mt-1">No intentes atrapar toda el agua del río traduciendo cada palabra. Lee la pregunta primero, cierra los ojos, ignora el relleno y "pesca" solo el dato (precio, hora, lugar).</p>
-            </div>
-            <AudioSim title="Escenario 1: Anuncio de tráfico (Teil 2)" textDe="Achtung Autofahrer! Auf der Autobahn gibt es einen Stau. Bitte fahren Sie langsam und nutzen Sie das Reißverschlusssystem." textEs="¡Atención conductores! Hay un atasco en la autopista. Por favor, conduzcan despacio y utilicen el sistema de cremallera." />
-            <AudioSim title="Escenario 2: Mensaje de voz (Teil 3)" textDe="Hallo, hier ist der IT-Service. Dein Computer ist repariert. Du kannst ihn morgen ab 9 Uhr abholen. Bitte ruf uns nicht zurück." textEs="Hola, aquí el servicio técnico. Tu ordenador está reparado. Puedes recogerlo mañana a partir de las 9. Por favor, no nos devuelvas la llamada." />
-            <AudioSim title="Escenario 3: Conversación en tienda (Teil 1)" textDe="Entschuldigung, was kostet diese Software? – Normalerweise 50 Euro, aber heute ist sie im Angebot für 20 Euro." textEs="Disculpe, ¿cuánto cuesta este software? - Normalmente 50 euros, pero hoy está en oferta por 20 euros." />
+    title: "Acoustic Radar: Compras y Precios",
+    subtitle: "Escucha con atención las ofertas de último minuto",
+    content: <div className="mt-8 max-w-3xl mx-auto space-y-6">
+            <AcousticRadar 
+              title="Escenario 3: Conversación en tienda (Teil 1)" 
+              textDe="Entschuldigung, was kostet diese Software? – Normalerweise 50 Euro, aber heute ist sie im Angebot für 20 Euro." 
+              textEs="Disculpe, ¿cuánto cuesta este software? - Normalmente 50 euros, pero hoy está en oferta por 20 euros."
+              options={["50 Euro", "30 Euro", "20 Euro"]}
+              correctOption="20 Euro"
+              question="¿Cuánto cuesta la oferta del día de la biblioteca de software?"
+            />
           </div>
   }]
 }, {
@@ -9869,42 +9868,48 @@ export const goetheModules = [{
           </div>
   }, {
     title: "Patrones Visuales",
-    subtitle: "Gramática para los ojos",
-    content: <div className="mt-8 max-w-3xl mx-auto space-y-4">
-            <GrammarAccordion title="A. Palabras Compuestas (Komposita)">
-              <p>El alemán pega las palabras en lugar de usar preposiciones. <strong>La palabra principal siempre es la última.</strong></p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li>Sprache + Schule = <strong>die Sprachschule</strong> (Escuela de idiomas).</li>
-                <li>Kinder + Kleidung = <strong>die Kinderkleidung</strong> (Ropa de niños).</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="B. Fórmulas de Correo (Teil 1)">
-              <p>Detecta el tono inmediatamente:</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><strong>Informal:</strong> Empieza con <em>Hallo / Liebe(r)</em>. Termina con <em>Viele Grüße</em>.</li>
-                <li><strong>Formal:</strong> Empieza con <em>Sehr geehrte(r)</em>. Termina con <em>Mit freundlichen Grüßen</em>.</li>
-              </ul>
-            </GrammarAccordion>
-            <GrammarAccordion title="C. Gramática 'Telegráfica' (Teil 3)">
-              <p>Los carteles casi no usan verbos conjugados, usan <strong>infinitivos o participios</strong> secos.</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li><em>En vez de "No puede aparcar":</em> <strong>Parken verboten</strong> (Aparcar prohibido).</li>
-                <li><em>En vez de "Mantenga cerrado":</em> <strong>Tür bitte geschlossen halten</strong>.</li>
-              </ul>
-            </GrammarAccordion>
+    subtitle: "Letreros y Normas (Teil 3) - Encuentra las palabras prohibidas o permitidas",
+    content: <div className="mt-8 max-w-3xl mx-auto space-y-6">
+            <TextHighlighter 
+              sentence="Parken auf dem Gehweg ist hier absolut verboten." 
+              trapWord="verboten" 
+              correctAntonym="erlaubt" 
+              options={["gestattet", "erlaubt", "verboten"]} 
+              translation="Aparcar en la acera está absolutamente prohibido aquí." 
+            />
+            <TextHighlighter 
+              sentence="Bitte halten Sie die Tür geschlossen." 
+              trapWord="geschlossen" 
+              correctAntonym="offen" 
+              options={["auf", "offen", "geschlossen"]} 
+              translation="Por favor, mantenga la puerta cerrada." 
+            />
           </div>
   }, {
     title: "El Juego de los Espejos",
     subtitle: "Dominando los antónimos en las opciones (A, B, C)",
-    content: <div className="mt-8 max-w-3xl mx-auto space-y-4">
-            <GrammarAccordion title="La trampa clásica del Goethe-Institut">
-              <p>Los textos o audios suelen usar un adjetivo negativo, pero la respuesta correcta usa su <strong>antónimo en positivo</strong>.</p>
-              <ul className="mt-2 space-y-2 list-disc pl-5">
-                <li>Si el texto dice: <em>"Das Hotel ist nicht teuer"</em> ➡️ Busca la opción: <strong>billig / günstig</strong>.</li>
-                <li>Si el anuncio dice: <em>"Das Zimmer ist nicht dunkel"</em> ➡️ Busca la opción: <strong>hell</strong>.</li>
-                <li>Si dice: <em>"Die Maschine ist nicht neu"</em> ➡️ Busca la opción: <strong>alt</strong>.</li>
-              </ul>
-            </GrammarAccordion>
+    content: <div className="mt-8 max-w-3xl mx-auto space-y-6">
+            <TextHighlighter 
+              sentence="Das Hotel ist nicht teuer" 
+              trapWord="nicht teuer" 
+              correctAntonym="billig" 
+              options={["teuer", "groß", "billig"]} 
+              translation="El hotel no es caro (billig = barato)." 
+            />
+            <TextHighlighter 
+              sentence="Das Zimmer ist nicht dunkel" 
+              trapWord="nicht dunkel" 
+              correctAntonym="hell" 
+              options={["kalt", "hell", "schön"]} 
+              translation="La habitación no es oscura (hell = clara/iluminada)." 
+            />
+            <TextHighlighter 
+              sentence="Die Maschine ist nicht neu" 
+              trapWord="nicht neu" 
+              correctAntonym="alt" 
+              options={["schnell", "alt", "kaputt"]} 
+              translation="La máquina no es nueva (alt = vieja)." 
+            />
           </div>
   }, {
     title: "La Regla del Tren",
@@ -10105,6 +10110,18 @@ export const goetheModules = [{
             </GrammarAccordion>
           </div>
   }, {
+    title: "Burocracia Drag & Drop",
+    subtitle: "Teil 1: Rellenar Formularios (Anmeldung)",
+    content: (
+      <div className="mt-8 max-w-3xl mx-auto">
+        <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 mb-6 rounded-r-lg">
+          <p className="font-bold text-emerald-800">📋 El Arte del Formulario</p>
+          <p className="text-sm text-emerald-700 mt-1">Arrastra tus datos personales a la ranura correcta del documento oficial. ¡Cuidado con confundir Vorname y Nachname!</p>
+        </div>
+        <FormularBuilder />
+      </div>
+    )
+  }, {
     title: "La Regla Simple y Seguro",
     subtitle: "Simulador de Redacción",
     content: <div className="mt-6 max-w-3xl mx-auto">
@@ -10225,15 +10242,28 @@ export const goetheModules = [{
   }, {
     title: "Simulador: Teil 2 & 3",
     subtitle: "Intercambios y Peticiones Reales",
-    content: <div className="mt-6 max-w-3xl mx-auto">
-            <h3 className="font-bold text-slate-700 mb-3">Teil 2: Intercambio de Información</h3>
-            <InteractiveQA question="Trinkst du am Wochenende Bier?" answer="Ja, ich trinke gern ein Bier am Samstag." note="Tema: Comida | Tarjeta: Cerveza (Bier)" />
-            <InteractiveQA question="Wo kaufst du deine Schuhe?" answer="Ich kaufe meine Schuhe im Supermarkt." note="Tema: Compras | Tarjeta: Zapatos (Schuhe) -> Usamos W-Frage (Wo)" />
+    content: (
+      <div className="mt-6 max-w-3xl mx-auto space-y-6">
+        <h3 className="font-bold text-slate-700 mb-3">Teil 1: Presentación Personal</h3>
+        <VoiceExaminer 
+          question="Wie heißt du und woher kommst du?" 
+          expectedKeywords={["heiße", "bin", "komme", "aus"]} 
+          note="Preséntate y di tu país de origen." 
+        />
 
-            <h3 className="font-bold text-slate-700 mt-8 mb-3">Teil 3: Peticiones de Cortesía</h3>
-            <InteractiveQA question="Können Sie mir bitte das Deutschbuch geben?" answer="Ja, klar! Hier ist es." note="Imagen en la tarjeta: Un libro de alemán (das Buch)" />
-            <InteractiveQA question="Kannst du mir bitte einen Apfel geben?" answer="Natürlich, bitte sehr!" note="Imagen en la tarjeta: Una manzana (der Apfel). Recuerda que es masculino, por eso usamos 'einen'." />
-          </div>
+        <h3 className="font-bold text-slate-700 mb-3 mt-8">Teil 2: Intercambio de Información</h3>
+        <VoiceExaminer 
+          question="Trinkst du am Wochenende Bier?" 
+          expectedKeywords={["Ja", "Nein", "trinke", "gern", "Bier", "Samstag", "Wochenende"]} 
+          note="Tema: Comida | Tarjeta: Cerveza (Bier)" 
+        />
+        <VoiceExaminer 
+          question="Wo kaufst du deine Schuhe?" 
+          expectedKeywords={["kaufe", "Schuhe", "Supermarkt", "Geschäft", "Laden", "Internet"]} 
+          note="Tema: Compras | Tarjeta: Zapatos (Schuhe) -> Usamos W-Frage (Wo)" 
+        />
+      </div>
+    )
   }]
 }];
 
