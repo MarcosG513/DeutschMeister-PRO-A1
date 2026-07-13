@@ -1218,13 +1218,13 @@ export const generateCardImage = onCall({
   const esColor = palabraLimpia === "weiß" || palabraLimpia === "schwarz" || palabraLimpia === "grau" || palabraLimpia === "rot" || palabraLimpia === "blau" || palabraLimpia === "gelb" || palabraLimpia === "grün" || palabraLimpia === "braun" || palabraLimpia === "orange" || palabraLimpia === "rosa" || palabraLimpia === "lila" || palabraLimpia.includes("farbe") || categoryLimpia.includes("farben") || categoryLimpia.includes("color") || tipoLimpio.includes("color");
   const esPersonaje = !esColor && (tipoLimpio.includes("adjetivo") || tipoLimpio.includes("verbo") || tipoLimpio.includes("acción") || tipoLimpio.includes("pronombre") || tipoLimpio.includes("sentimiento"));
 
-  // ── CACHE CHECK BARRIER (pregenerated_images) ─────────────────────────────
+  // ── CACHE CHECK BARRIER (global_flashcards) ───────────────────────────────
   const safeWordId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
   try {
-    const cacheRef = db.collection("pregenerated_images").doc(safeWordId);
+    const cacheRef = db.collection("global_flashcards").doc(safeWordId);
     const docSnap = await cacheRef.get();
-    if (docSnap.exists) {
-      console.log(`✅ Cache Hit Backend: Imagen recuperada de pregenerated_images [${safeWordId}]`);
+    if (docSnap.exists && docSnap.data().imageUrl) {
+      console.log(`✅ Cache Hit Backend: Imagen recuperada de global_flashcards [${safeWordId}]`);
       return { imageUrl: docSnap.data().imageUrl };
     }
   } catch (cacheErr) {
