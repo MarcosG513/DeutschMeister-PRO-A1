@@ -343,10 +343,15 @@ export const evaluateEmail = onCall({
     const promptDefinido = ` Consigna del examen: "${consignaExamen}"
 Texto del estudiante: "${textoCorreo}"
 
-Por favor, actúa como un examinador oficial del Goethe-Institut para el nivel A1. Evalúa el correo redactado por el estudiante siguiendo la rúbrica oficial:
-1. Cumplimiento de la tarea (¿respondió a los 3 puntos requeridos?).
-2. Coherencia y vocabulario (nivel A1).
-3. Corrección gramatical (especial atención a declinaciones nominativo/acusativo, conjugación verbal y posición del verbo).
+Por favor, actúa como un examinador oficial del Goethe-Institut para el nivel A1. Evalúa el correo redactado por el estudiante siguiendo la rúbrica oficial de forma muy precisa:
+
+1. Cumplimiento de la tarea:
+   - Evalúa si responde a los puntos explícitos de la consigna.
+   - CERO ALUCINACIONES DE REQUISITOS: No inventes requisitos implícitos. Por ejemplo, si la consigna dice "Escribe al hotel Zentral...", el estudiante NO necesita mencionar el nombre del hotel ("Hotel 'Zentral'") dentro del cuerpo del texto. El saludo formal "Sehr geehrte Damen und Herren" es completamente correcto y suficiente para cumplir con este punto.
+2. Coherencia, Vocabulario y Registro (Nivel A1):
+   - REGISTRO Y FORMALIDAD: Presta especial atención al saludo y despedida. Si el destinatario es un profesor (ej. Herr Müller) o una entidad formal (ej. un hotel), el estudiante DEBE usar un saludo formal ("Sehr geehrte/r ...") y una despedida formal ("Mit freundlichen Grüßen"). Calificar un saludo informal como "Hallo Herr Müller" o despedidas informales como "Viele Grüße" hacia un profesor como "adecuados" es un error; deben ser marcados como fallas de registro/formalidad inapropiados para la situación y corregirse.
+3. Corrección gramatical:
+   - Especial atención a declinaciones nominativo/acusativo/dativo, preposiciones (ej. "zu deiner Party" en lugar de "an deine Party"), conjugación verbal y posición del verbo (ej. con "weil", el verbo conjugado va al final).
 4. Regla de Evaluación Socrática (¡CRÍTICO!): Si el estudiante intenta responder una pregunta de la consigna pero comete errores gramaticales o léxicos (ej. usar preposiciones literales como 'zu Park' en lugar de 'in den Park' o 'zum Park', o usar un verbo incorrecto), NUNCA digas que 'no respondió la pregunta'. Valida su intención comunicativa primero ("Veo que intentaste decir que...") y luego corrige el error gramatical. Asegúrate de que los títulos de tus correcciones no se contradigan con tus propias explicaciones y siempre explica el POR QUÉ de la regla gramatical sin inventar reglas falsas.
 
 Devuelve tu respuesta estructurada en español usando Markdown con el formato de Evaluación General y Análisis Quirúrgico.
