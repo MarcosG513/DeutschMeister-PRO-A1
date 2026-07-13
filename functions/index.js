@@ -375,7 +375,8 @@ Devuelve tu respuesta estructurada en español usando Markdown con el formato de
 // =========================================================================
 export const generateStory = onRequest({
   secrets: [geminiFreeKey, falKey],
-  cors: true
+  cors: true,
+  timeoutSeconds: 120
 }, async (req, res) => {
   if (req.method === "OPTIONS") {
     res.set("Access-Control-Allow-Origin", "*");
@@ -413,12 +414,49 @@ export const generateStory = onRequest({
         }
       }`;
 
-    console.log("FinOps: Iniciando generateStory con fallback...");
-    const jsonOutput = await invokeWithDeepSeekFallback(promptSistema, promptDefinido, {
-      isJson: true,
-      temperature: 0.7,
-      model: "gemini-3.5-flash"
-    });
+    console.log("Story FinOps: Iniciando generateStory con Gemini 3.5 Flash...");
+    
+    let jsonOutput;
+    try {
+      const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+      const model = genAI.getGenerativeModel({
+        model: "gemini-3.5-flash",
+        systemInstruction: promptSistema,
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0.7
+        }
+      });
+      const result = await model.generateContent(promptDefinido);
+      const responseText = result.response.text().trim();
+      jsonOutput = JSON.parse(responseText);
+    } catch (geminiError) {
+      console.warn("Story FinOps: Gemini falló, activando fallback a DeepSeek V3.2:", geminiError.message);
+      try {
+        fal.config({
+          credentials: falKey.value()
+        });
+        console.log("Story FinOps: Invocando DeepSeek via Fal.ai...");
+        
+        const finalPromptUser = promptDefinido + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
+        const response = await fal.subscribe("openrouter/router/enterprise", {
+          input: {
+            model: "deepseek/deepseek-v3.2",
+            prompt: finalPromptUser,
+            system_prompt: promptSistema,
+            temperature: 0.7,
+            top_p: 0.9
+          }
+        });
+        
+        const outputText = response.data.output || response.data.text || "";
+        const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+        jsonOutput = JSON.parse(cleanJson);
+      } catch (fallbackError) {
+        console.error("Story FinOps: Error crítico en fallback de DeepSeek:", fallbackError);
+        throw fallbackError;
+      }
+    }
 
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
