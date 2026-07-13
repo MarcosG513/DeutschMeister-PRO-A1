@@ -33,6 +33,8 @@ const PresentationViewer = ({
 
   if (!presentation) return null;
 
+  const slide = presentation.slides[currentSlide] || presentation.slides[0] || { title: '', subtitle: '', content: null };
+
   const currentModuleIndex = goetheModules.findIndex(m => m.id === presentation.id);
   const nextModule = currentModuleIndex >= 0 && currentModuleIndex < goetheModules.length - 1 ? goetheModules[currentModuleIndex + 1] : null;
   const isLastSlide = currentSlide === presentation.slides.length - 1;
@@ -99,18 +101,18 @@ const PresentationViewer = ({
           <div className="max-w-6xl mx-auto w-full animate-in slide-in-from-bottom-4 fade-in duration-300" key={currentSlide}>
             <div className="mb-6 md:mb-10 text-center">
               <h1 className={`text-3xl md:text-5xl font-black mb-3 ${isBlueprint ? 'text-white' : isMedical ? 'text-emerald-950' : 'text-amber-950'}`}>
-                {presentation.slides[currentSlide].title}
+                {slide.title}
               </h1>
-              {presentation.slides[currentSlide].subtitle && (
+              {slide.subtitle && (
                 <h2 className={`text-lg md:text-xl font-medium ${isBlueprint ? 'text-blue-300' : isMedical ? 'text-emerald-700' : 'text-amber-700/80'}`}>
-                  {presentation.slides[currentSlide].subtitle}
+                  {slide.subtitle}
                 </h2>
               )}
             </div>
             <div className="w-full">
-              {typeof presentation.slides[currentSlide].content === 'function'
-                ? presentation.slides[currentSlide].content(slideProps)
-                : presentation.slides[currentSlide].content}
+              {typeof slide.content === 'function'
+                ? slide.content(slideProps)
+                : slide.content}
             </div>
           </div>
         </div>
