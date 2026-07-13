@@ -326,7 +326,8 @@ export const runRoleplaySimulator = onRequest({
 // =========================================================================
 export const evaluateEmail = onCall({
   secrets: [falKey],
-  maxInstances: 6
+  maxInstances: 6,
+  timeoutSeconds: 120
 }, async request => {
   const {
     textoCorreo,
@@ -357,7 +358,7 @@ Devuelve tu respuesta estructurada en español usando Markdown con el formato de
         model: "deepseek/deepseek-v3.2",
         prompt: promptDefinido,
         system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo.",
-        temperature: 0.2,
+        temperature: 0.3,
         top_p: 0.9
       }
     });
