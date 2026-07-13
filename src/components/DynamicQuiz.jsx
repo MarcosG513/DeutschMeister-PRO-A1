@@ -19,11 +19,12 @@ const SUGGESTED_TOPICS = [
 const DynamicQuiz = ({ onExit }) => {
   const [tema, setTema] = useState("");
   const [loading, setLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("🧠 Analizando las reglas del Goethe A1...");
+  const [loadingMessage, setLoadingMessage] = useState("🧠 Iniciando enlace neuronal con el Goethe-Institut...");
   const [quizData, setQuizData] = useState(null);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOpt, setSelectedOpt] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [score, setScore] = useState(0);
   const [error, setError] = useState(null);
   const [currentStreak, setCurrentStreak] = useState(() => {
     return parseInt(localStorage.getItem('dm_quiz_streak') || '0', 10);
@@ -40,21 +41,29 @@ const DynamicQuiz = ({ onExit }) => {
     }
   }, [currentStreak, bestStreak]);
 
-  // Rotador automático de frases del loader
+  // Rotador automático de frases del loader (Cargador Hipnótico)
   useEffect(() => {
     if (!loading) return;
     const messages = [
-      "🧠 Analizando las reglas del Goethe A1...",
-      "⚙️ Fabricando trampas gramaticales...",
-      "🤖 Redactando escenarios realistas...",
-      "📝 Imprimiendo tu examen personalizado..."
+      "🧠 Iniciando enlace neuronal con el Goethe-Institut...",
+      "📚 Escaneando los archivos de gramática A1...",
+      "⚙️ Forjando oraciones y trampas sintácticas...",
+      "🔍 Ocultando las pistas en el texto alemán...",
+      "📝 Redactando retroalimentación socrática...",
+      "⚖️ Calibrando la dificultad del examen...",
+      "🎨 Pintando botones de esmeralda y ámbar...",
+      "🚀 Acelerando motores de inferencia IA...",
+      "🇩🇪 Verificando la ortografía de los Umlaute...",
+      "🛡️ Blindando la estructura del JSON...",
+      "🔥 Preparando el motor de rachas...",
+      "✨ Imprimiendo tu examen personalizado..."
     ];
     let idx = 0;
     setLoadingMessage(messages[0]);
     const interval = setInterval(() => {
       idx = (idx + 1) % messages.length;
       setLoadingMessage(messages[idx]);
-    }, 3000);
+    }, 2200);
     return () => clearInterval(interval);
   }, [loading]);
 
@@ -65,6 +74,7 @@ const DynamicQuiz = ({ onExit }) => {
     setError(null);
     setQuizData(null);
     setCurrentIdx(0);
+    setScore(0);
     setSelectedOpt(null);
     setIsSubmitted(false);
 
@@ -102,6 +112,7 @@ const DynamicQuiz = ({ onExit }) => {
     const isCorrect = selectedOpt === currentQuestion.respuesta_correcta;
 
     if (isCorrect) {
+      setScore(prev => prev + 1);
       setCurrentStreak(prev => prev + 1);
     } else {
       setCurrentStreak(0);
@@ -111,12 +122,7 @@ const DynamicQuiz = ({ onExit }) => {
   const handleNext = () => {
     setSelectedOpt(null);
     setIsSubmitted(false);
-    if (currentIdx < quizData.preguntas.length - 1) {
-      setCurrentIdx(prev => prev + 1);
-    } else {
-      // Quiz finalizado, resetear quizData para volver al inicio o poder hacer otro
-      setQuizData(null);
-    }
+    setCurrentIdx(prev => prev + 1);
   };
 
   return (
@@ -206,15 +212,18 @@ const DynamicQuiz = ({ onExit }) => {
           </div>
         )}
 
-        {/* SKELETON LOADER ANIMADO */}
+        {/* SKELETON LOADER ANIMADO (Cargador Hipnótico) */}
         {loading && (
           <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm flex flex-col items-center">
             <div className="relative mb-6">
               <Loader2 className="animate-spin text-blue-500" size={48} />
               <span className="absolute inset-0 flex items-center justify-center text-xl font-bold">🧠</span>
             </div>
-            <div className="text-lg font-bold text-slate-700 animate-pulse text-center mb-8">
+            <div className="text-lg font-bold text-slate-700 animate-pulse text-center mb-4 leading-relaxed">
               {loadingMessage}
+            </div>
+            <div className="w-full max-w-xs bg-slate-100 h-1.5 rounded-full overflow-hidden mb-8 shadow-inner">
+              <div className="bg-blue-500 h-full rounded-full animate-pulse w-full"></div>
             </div>
             
             {/* Pregunta ficticia */}
@@ -231,7 +240,7 @@ const DynamicQuiz = ({ onExit }) => {
         )}
 
         {/* VISTA 2: QUIZ ACTIVO */}
-        {!loading && quizData && (
+        {!loading && quizData && currentIdx < quizData.preguntas.length && (
           <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm flex flex-col items-center">
             {/* Cabecera de la pregunta */}
             <div className="w-full flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
@@ -340,6 +349,57 @@ const DynamicQuiz = ({ onExit }) => {
             })()}
           </div>
         )}
+
+        {/* BOLETÍN DE RESULTADOS FINAL */}
+        {!loading && quizData && currentIdx >= quizData.preguntas.length && (() => {
+          const percentage = Math.round((score / quizData.preguntas.length) * 100);
+          const getFeedback = () => {
+            if (percentage >= 90) return { grade: "Sehr Gut (Sobresaliente)", color: "text-emerald-600 border-emerald-200", bg: "bg-emerald-50", icon: "🏆", msg: "¡Dominio absoluto! Tienes nivel nativo en este tema." };
+            if (percentage >= 70) return { grade: "Gut (Notable)", color: "text-blue-600 border-blue-200", bg: "bg-blue-50", icon: "🎯", msg: "¡Muy bien! Esquivaste casi todas las trampas." };
+            if (percentage >= 60) return { grade: "Ausreichend (Suficiente)", color: "text-amber-600 border-amber-200", bg: "bg-amber-50", icon: "⚠️", msg: "Aprobado por los pelos. Te recomiendo leer la teoría de nuevo." };
+            return { grade: "Nicht bestanden (Reprobado)", color: "text-rose-600 border-rose-200", bg: "bg-rose-50", icon: "❌", msg: "Caíste en las trampas. ¡No te rindas, repasa y vuelve a intentarlo!" };
+          };
+          const feedback = getFeedback();
+          return (
+            <div className="bg-white rounded-2xl border border-slate-200 p-8 sm:p-10 shadow-sm flex flex-col items-center animate-in zoom-in-95 duration-300">
+              <span className="text-6xl mb-4">{feedback.icon}</span>
+              <h3 className="text-2xl font-black text-slate-800 text-center mb-1">Boletín de Resultados</h3>
+              <p className="text-slate-500 text-sm mb-6">Tema: {quizData.titulo_quiz || tema}</p>
+              
+              <div className={`w-full max-w-md p-6 rounded-2xl border text-center mb-8 ${feedback.bg} ${feedback.color}`}>
+                <span className="text-sm font-bold uppercase tracking-wider block mb-1">Calificación</span>
+                <span className="text-2xl font-black block mb-3">{feedback.grade}</span>
+                <span className="text-5xl font-black block mb-4">{score} / {quizData.preguntas.length}</span>
+                <div className="w-full bg-slate-200/50 h-3 rounded-full overflow-hidden mb-4">
+                  <div className={`h-full rounded-full ${percentage >= 60 ? 'bg-emerald-500' : 'bg-rose-500'}`} style={{ width: `${percentage}%` }}></div>
+                </div>
+                <p className="text-slate-700 text-sm font-medium leading-relaxed">{feedback.msg}</p>
+              </div>
+              
+              <div className="w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <button 
+                  onClick={() => generateQuiz(tema)} 
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow flex items-center justify-center gap-2"
+                >
+                  Reintentar Tema
+                </button>
+                <button 
+                  onClick={() => { setQuizData(null); setTema(""); setScore(0); setCurrentIdx(0); }} 
+                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 px-6 rounded-xl border border-slate-200 transition"
+                >
+                  Elegir Nuevo Tema
+                </button>
+              </div>
+              
+              <button 
+                onClick={onExit} 
+                className="text-sm font-bold text-slate-400 hover:text-slate-600 transition underline mt-2"
+              >
+                Salir al Menú Principal
+              </button>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
