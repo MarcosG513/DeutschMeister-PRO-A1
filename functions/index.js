@@ -1427,3 +1427,71 @@ export const generateReadingTest = onCall({
     }
   }
 });
+
+export const generateDynamicQuiz = onCall({
+  timeoutSeconds: 60,
+  memory: "512MiB",
+  secrets: [geminiFreeKey, falKey],
+}, async (request) => {
+  const { tema } = request.data || {};
+  if (!tema) {
+    throw new HttpsError("invalid-argument", "El parámetro 'tema' es obligatorio.");
+  }
+
+  const systemInstruction = `Actúa como un examinador oficial del Goethe-Institut especializado en el nivel A1 (Marco Común Europeo de Referencia). Tu objetivo es evaluar al estudiante mediante un quiz de 5 preguntas de opción múltiple.
+El usuario proporcionará el tema gramatical o de vocabulario a evaluar (ejemplo: 'Dativo', 'Comida', 'Direcciones').
+
+Genera un JSON estrictamente válido que contenga:
+1. "titulo_quiz": Un título atractivo y contextualizado en español sobre el tema.
+2. "preguntas": Un array de exactamente 5 objetos de preguntas, cada uno con:
+   - "pregunta": Una oración corta en alemán con un hueco (___) o una pregunta situacional sencilla A1.
+   - "opciones": Un array de exactamente 4 opciones de respuesta cortas en alemán.
+   - "respuesta_correcta": La opción exacta del array que es la correcta.
+   - "explicacion_socratica": Una breve explicación pedagógica en español de 1 o 2 líneas de por qué es correcta y por qué las demás no lo son.
+
+Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocabulario básico, presente e imperativo, estructuras sencillas).`;
+
+  const promptUser = `Genera un quiz de 5 preguntas para el nivel Goethe A1 sobre el siguiente tema: ${tema}.`;
+
+  try {
+    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+    const geminiModel = genAI.getGenerativeModel({
+      model: "gemini-3.5-flash",
+      generationConfig: {
+        responseMimeType: "application/json",
+      }
+    });
+
+    const result = await geminiModel.generateContent({
+      contents: [{ role: "user", parts: [{ text: promptUser }] }],
+      systemInstruction: systemInstruction,
+    });
+
+    const responseText = result.response.text().trim();
+    return JSON.parse(responseText);
+  } catch (geminiError) {
+    console.warn("DynamicQuiz FinOps: Gemini falló, activando fallback a DeepSeek V3.2:", geminiError.message);
+    try {
+      fal.config({ credentials: falKey.value() });
+      console.log("DynamicQuiz FinOps: Invocando DeepSeek via Fal.ai...");
+
+      const finalPromptUser = promptUser + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código \`\`\`json ni texto adicional fuera del JSON.";
+      const response = await fal.subscribe("openrouter/router/enterprise", {
+        input: {
+          model: "deepseek/deepseek-v3.2",
+          prompt: finalPromptUser,
+          system_prompt: systemInstruction,
+          temperature: 0.3,
+          top_p: 0.9
+        }
+      });
+
+      const outputText = response.data.output || response.data.text || "";
+      const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+      return JSON.parse(cleanJson);
+    } catch (fallbackError) {
+      console.error("DynamicQuiz FinOps: Error crítico en fallback de DeepSeek:", fallbackError);
+      throw new HttpsError("internal", "Error generando el quiz dinámico en ambos proveedores: " + fallbackError.message);
+    }
+  }
+});

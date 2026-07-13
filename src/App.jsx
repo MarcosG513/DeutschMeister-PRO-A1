@@ -21,6 +21,7 @@ import { fetchWithRetry, compressImageBase64 as compressImage, nativeSpeak, getS
 import EmailSimulator from './components/EmailSimulator';
 import ReadingComprehension from './components/ReadingComprehension';
 import PresentationViewer from './components/PresentationViewer';
+import DynamicQuiz from './components/DynamicQuiz';
 
 // --- CONFIGURACIÓN API & FIREBASE ---
 // Se removió el apiKey local, ahora se usan Firebase Functions.
@@ -1357,73 +1358,7 @@ export default function App() {
         speakText={speakText}
         lazyLoadImage={lazyLoadImage}
         onNextModule={setActivePresentationId}
-      /> : viewMode === "quiz" ? <div className="flex flex-col min-h-[100svh] w-full bg-white overflow-y-auto animate-in fade-in duration-300 p-4 sm:p-8">
-          <div className="max-w-4xl mx-auto w-full">
-               <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                 <div>
-                   <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                     <Gamepad2 className="text-blue-600" /> Quiz de Vocabulario
-                   </h2>
-                   <p className="text-slate-500 text-sm mt-1">Prueba tus conocimientos sobre los capítulos seleccionados.</p>
-                 </div>
-                 
-                 <button onClick={() => {
-            setViewMode("flashcards");
-            setQuizState(null);
-            showInterstitial();
-          }} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm self-start sm:self-auto" title="Volver a los módulos">
-                   <X size={18} /> Salir del Quiz
-                 </button>
-               </div>
-
-               <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm flex flex-col items-center">
-                 {/* Racha y Puntuación */}
-                 <div className="flex justify-center items-center gap-6 mb-8 w-full">
-                   <div className="flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-full font-bold shadow-sm">
-                     <Flame size={20} className={currentStreak > 0 ? "animate-pulse text-orange-500" : ""} /> Racha: {currentStreak}
-                   </div>
-                   <div className="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold shadow-sm">
-                     <Trophy size={20} /> Mejor: {bestStreak}
-                   </div>
-                 </div>
-
-                 <h3 className="text-xl font-medium text-slate-500 mb-4 text-center">¿Qué significa esta palabra?</h3>
-                 
-                 {/* Interfaz de Pregunta (Pronunciación y Audio) */}
-                 <div className="w-full max-w-xl flex flex-col items-center justify-center font-black text-slate-800 mb-8 bg-slate-50 border-2 border-slate-100 py-10 px-4 rounded-xl shadow-inner relative group">
-                   <span className="text-4xl md:text-5xl">{quizState?.word.de}</span>
-                   {quizState?.word.pron && <div className="flex items-center gap-2 mt-3 text-blue-500 italic font-medium text-lg">
-                        /{quizState.word.pron}/
-                        <button onClick={e => {
-                e.stopPropagation();
-                nativeSpeak(quizState.word.de);
-              }} className="p-1.5 hover:text-blue-600 hover:bg-blue-100 rounded-full transition"><Volume2 size={20} /></button>
-                      </div>}
-                 </div>
-                 
-                 <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   {quizState?.options.map((opt, i) => {
-              let btnClass = "bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-slate-700";
-              if (quizState.selected) {
-                if (opt === quizState.word.es) btnClass = "bg-green-50 border-2 border-green-500 text-green-700 font-bold shadow-sm";else if (opt === quizState.selected) btnClass = "bg-red-50 border-2 border-red-500 text-red-700";else btnClass = "bg-slate-50 border-2 border-slate-100 text-slate-400 opacity-50";
-              }
-              return <button key={i} onClick={() => handleQuizAnswer(opt)} disabled={!!quizState.selected} className={`py-4 px-6 rounded-xl text-lg transition-all ${btnClass}`}>
-                              {opt}
-                            </button>;
-            })}
-                 </div>
-                 {quizState?.selected && <div className="mt-8 flex flex-col items-center gap-4 w-full animate-in slide-in-from-bottom-4">
-                     <div className={`flex items-center gap-2 text-xl font-bold ${quizState.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                       {quizState.isCorrect ? <CheckCircle size={28} /> : <XCircle size={28} />}
-                       {quizState.isCorrect ? "¡Richtig! (¡Correcto!)" : `Falsch. Era: ${quizState.word.es}`}
-                     </div>
-                     <button onClick={generateNextQuizWord} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 transition w-full sm:w-auto">
-                       Siguiente Palabra ➔
-                     </button>
-                   </div>}
-               </div>
-          </div>
-        </div> : <>
+      /> : viewMode === "quiz" ? <DynamicQuiz onExit={() => { setViewMode('flashcards'); showInterstitial(); }} /> : <>
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
             <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
