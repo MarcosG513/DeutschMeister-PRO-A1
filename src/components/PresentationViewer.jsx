@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Presentation, Link2, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { goetheModules } from '../data/chapters';
+import { goetheModules, studyPlanModules } from '../data/chapters';
 
 const PresentationViewer = ({
   presentation,
@@ -13,7 +13,7 @@ const PresentationViewer = ({
   unlockedCards,
   speakText,
   lazyLoadImage,
-  setActivePresentationId
+  onNextModule
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -33,11 +33,24 @@ const PresentationViewer = ({
 
   if (!presentation) return null;
 
-  const slide = presentation.slides[currentSlide] || presentation.slides[0] || { title: '', subtitle: '', content: null };
+  let currentCollection = goetheModules;
+  let currentModuleIndex = goetheModules.findIndex(m => m.id === presentation?.id);
 
-  const currentModuleIndex = goetheModules.findIndex(m => m.id === presentation.id);
-  const nextModule = currentModuleIndex >= 0 && currentModuleIndex < goetheModules.length - 1 ? goetheModules[currentModuleIndex + 1] : null;
-  const isLastSlide = currentSlide === presentation.slides.length - 1;
+  // Si no está en Goethe, buscamos en el Plan de Estudios
+  if (currentModuleIndex === -1) {
+    currentModuleIndex = studyPlanModules.findIndex(m => m.id === presentation?.id);
+    if (currentModuleIndex !== -1) {
+      currentCollection = studyPlanModules;
+    }
+  }
+
+  const nextModule = (currentModuleIndex >= 0 && currentModuleIndex < currentCollection.length - 1) 
+    ? currentCollection[currentModuleIndex + 1] 
+    : null;
+  
+  const hasNextModule = Boolean(nextModule && nextModule.title);
+  const slide = presentation?.slides?.[currentSlide] || presentation?.slides?.[0] || { title: '', subtitle: '', content: null };
+  const isLastSlide = currentSlide === (presentation?.slides?.length || 0) - 1;
 
   const isBlueprint = presentation.theme === 'blueprint';
   const isMedical = presentation.theme === 'medical';
@@ -130,7 +143,7 @@ const PresentationViewer = ({
 
           {isLastSlide && nextModule && nextModule.id ? (
             <button 
-              onClick={() => setActivePresentationId(nextModule.id)} 
+              onClick={() => onNextModule(nextModule.id)} 
               className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-500/30 animate-pulse animate-duration-1000"
             >
               Siguiente Módulo: {nextModule?.title} <ChevronRight size={20} />

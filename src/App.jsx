@@ -1356,7 +1356,7 @@ export default function App() {
         unlockedCards={unlockedCards}
         speakText={speakText}
         lazyLoadImage={lazyLoadImage}
-        setActivePresentationId={setActivePresentationId}
+        onNextModule={setActivePresentationId}
       /> : viewMode === "quiz" ? <div className="flex flex-col min-h-[100svh] w-full bg-white overflow-y-auto animate-in fade-in duration-300 p-4 sm:p-8">
           <div className="max-w-4xl mx-auto w-full">
                <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
@@ -1591,7 +1591,7 @@ export default function App() {
             unlockedCards={unlockedCards}
             speakText={speakText}
             lazyLoadImage={lazyLoadImage}
-            setActivePresentationId={setActivePresentationId}
+            onNextModule={setActivePresentationId}
           />}
 
           {/* VISTA: CONFIGURACIÓN DEL QUIZ */}
@@ -1639,78 +1639,22 @@ export default function App() {
           {viewMode === "studyPlan" && activeStudyPlanId && (() => {
             const activeModule = studyPlanModules.find(m => m.id === activeStudyPlanId);
             if (!activeModule) return null;
-            const hasSlides = !!activeModule.slides && activeModule.slides.length > 0;
-            const slideIndex = hasSlides ? currentStudyPlanSlide >= activeModule.slides.length ? 0 : currentStudyPlanSlide : 0;
-            const currentSlide = hasSlides ? activeModule.slides[slideIndex] : null;
-            return <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-slate-200 animate-in fade-in slide-in-from-bottom-4 mb-10">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 bg-emerald-100 text-emerald-600 rounded-2xl">
-                      <BookOpen size={24} />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl sm:text-3xl font-black text-slate-800">{activeModule.title}</h2>
-                      <p className="text-emerald-600 font-bold mt-2 flex items-center gap-2 text-sm">
-                        <GraduationCap size={18} /> Clase Magistral Oficial
-                        {hasSlides && ` • Diapositiva ${slideIndex + 1} de ${activeModule.slides.length}`}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {hasSlides && currentSlide ? <div className="space-y-6">
-                    <div className="mb-6 text-center">
-                      <h3 className="text-xl md:text-3xl font-bold text-slate-800 mb-2">
-                        {currentSlide.title}
-                      </h3>
-                      {currentSlide.subtitle && <p className="text-slate-500 text-sm font-medium">
-                          {currentSlide.subtitle}
-                        </p>}
-                    </div>
-                    <div className="w-full py-4 min-h-[250px]">
-                      {typeof currentSlide.content === 'function' ? currentSlide.content({
-                    cardImages,
-                    generateCardImage,
-                    isImageLoading,
-                    openAiTutor,
-                    setFullscreenImage,
-                    unlockedCards
-                  }) : currentSlide.content}
-                    </div>
-                    
-                    <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
-                      <button onClick={() => setCurrentStudyPlanSlide(Math.max(0, slideIndex - 1))} disabled={slideIndex === 0} className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-30 transition">
-                        <ChevronLeft size={20} /> Anterior
-                      </button>
-                      <div className="flex gap-1.5">
-                        {activeModule.slides.map((_, idx) => <div key={idx} className={`w-2 h-2 rounded-full transition-all ${idx === slideIndex ? 'bg-emerald-600 w-6' : 'bg-emerald-100'}`} />)}
-                      </div>
-                      <button onClick={() => {
-                    if (slideIndex < activeModule.slides.length - 1) {
-                      setCurrentStudyPlanSlide(slideIndex + 1);
-                    }
-                  }} disabled={slideIndex === activeModule.slides.length - 1} className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-30 transition">
-                        Siguiente <ChevronRight size={20} />
-                      </button>
-                    </div>
-                  </div> : <div className="prose prose-slate max-w-none">
-                    <MarkdownMessage text={activeModule.content} />
-                  </div>}
-
-                {/* BOTÓN PARA VER LA PRESENTACIÓN */}
-                {activeModule.presentationUrl && <div className="mt-8 pt-6 border-t border-slate-200 flex justify-center sm:justify-start">
-                    <button onClick={async e => {
-                  e.preventDefault();
-                  const granted = await showRewardVideo();
-                  if (granted) {
-                    window.open(activeModule.presentationUrl, "_blank");
-                  }
-                }} className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all hover:scale-105">
-                      <Presentation size={20} />
-                      Abrir Presentación de la Clase
-                    </button>
-                  </div>}
-              </div>;
+            return <PresentationViewer
+              presentation={activeModule}
+              onClose={() => {
+                setViewMode('flashcards');
+                setActiveStudyPlanId(null);
+              }}
+              cardImages={cardImages}
+              generateCardImage={generateCardImage}
+              isImageLoading={isImageLoading}
+              openAiTutor={openAiTutor}
+              setFullscreenImage={setFullscreenImage}
+              unlockedCards={unlockedCards}
+              speakText={speakText}
+              lazyLoadImage={lazyLoadImage}
+              onNextModule={setActiveStudyPlanId}
+            />;
           })()}
           
           {/* VISTAS: FLASHCARDS Y TABLA */}
