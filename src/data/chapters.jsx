@@ -9751,6 +9751,36 @@ export const goetheModules = [{
       }} {...props} />
           </div>
   }, {
+    title: "Clase Magistral: Fonética y Pronunciación",
+    subtitle: "Decodificando los sonidos del alemán",
+    content: (
+      <div className="mt-8 max-w-3xl mx-auto space-y-4 text-slate-700">
+        <p className="text-lg mb-4">Para superar el examen de comprensión auditiva, debes entrenar tu oído para identificar las vocales modificadas (Umlaute) y las combinaciones de consonantes.</p>
+        <GrammarAccordion title="1. Las Vocales Umlaute (ä, ö, ü)">
+          <ul className="space-y-2 list-disc pl-5">
+            <li><strong>Ä, ä (e abierta):</strong> Suena como una 'e' larga. Ejemplo: <em>Käse</em> (ké-se).</li>
+            <li><strong>Ö, ö (o cerrada):</strong> Pon los labios para decir 'o', pero pronuncia 'e'. Ejemplo: <em>schön</em> (shön).</li>
+            <li><strong>Ü, ü (u cerrada):</strong> Pon los labios para decir 'u', pero pronuncia 'i'. Ejemplo: <em>müde</em> (mü-de).</li>
+          </ul>
+        </GrammarAccordion>
+        <GrammarAccordion title="2. Dígrafos Vocálicos (ei, ie, eu)">
+          <ul className="space-y-2 list-disc pl-5">
+            <li><strong>ei / ai:</strong> Suena como "ai". Ejemplo: <em>zwei</em> (tsvai).</li>
+            <li><strong>ie:</strong> Suena como una "i" alargada. Ejemplo: <em>spielen</em> (shpi-len).</li>
+            <li><strong>eu / äu:</strong> Suena como "oi". Ejemplo: <em>heute</em> (hoi-te), <em>Häuser</em> (hoi-sa).</li>
+          </ul>
+        </GrammarAccordion>
+        <GrammarAccordion title="3. Consonantes Clave (ß, v, w, z, sch, st, sp)">
+          <ul className="space-y-2 list-disc pl-5">
+            <li><strong>ß (Eszett):</strong> Suena como una "s" fuerte. Ejemplo: <em>groß</em> (gros).</li>
+            <li><strong>v / w:</strong> La 'v' suena como 'f' (<em>Vater</em>). La 'w' suena como la 'v' en inglés (<em>Wasser</em>).</li>
+            <li><strong>z:</strong> Suena como "ts". Ejemplo: <em>Zehn</em> (tsen).</li>
+            <li><strong>sch / st / sp:</strong> "sch" es como pedir silencio (shhh). Al inicio, "st" y "sp" suenan "sht" y "shp" (<em>Straße, spielen</em>).</li>
+          </ul>
+        </GrammarAccordion>
+      </div>
+    )
+  }, {
     title: "Acoustic Radar: Anuncios",
     subtitle: "Presta atención a las instrucciones y anuncios públicos",
     content: <div className="mt-8 max-w-3xl mx-auto space-y-6">
@@ -9866,6 +9896,54 @@ export const goetheModules = [{
         emoji: "🚫"
       }} {...props} />
           </div>
+  }, {
+    title: "Clase Magistral: El Sistema de Casos",
+    subtitle: "La brújula para entender quién hace qué",
+    content: (
+      <div className="mt-8 max-w-3xl mx-auto space-y-4 text-slate-700">
+        <p className="text-lg mb-4">A diferencia del español, el alemán usa "casos" para marcar la función de una palabra en la oración. En los textos del examen, identificar el caso te dirá quién realiza la acción y quién la recibe.</p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left border-collapse border border-slate-200 bg-white rounded-lg shadow-sm">
+            <thead className="bg-slate-100 font-bold text-slate-800">
+              <tr>
+                <th className="p-3 border border-slate-200">Caso</th>
+                <th className="p-3 border border-slate-200">Masc (der)</th>
+                <th className="p-3 border border-slate-200">Fem (die)</th>
+                <th className="p-3 border border-slate-200">Neutro (das)</th>
+                <th className="p-3 border border-slate-200">Plural (die)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="p-3 border border-slate-200 font-bold bg-blue-50">Nominativo (Sujeto)</td>
+                <td className="p-3 border border-slate-200">der / ein</td>
+                <td className="p-3 border border-slate-200">die / eine</td>
+                <td className="p-3 border border-slate-200">das / ein</td>
+                <td className="p-3 border border-slate-200">die / meine</td>
+              </tr>
+              <tr>
+                <td className="p-3 border border-slate-200 font-bold bg-emerald-50">Acusativo (Objeto Directo)</td>
+                <td className="p-3 border border-slate-200 font-bold text-emerald-700">den / einen</td>
+                <td className="p-3 border border-slate-200">die / eine</td>
+                <td className="p-3 border border-slate-200">das / ein</td>
+                <td className="p-3 border border-slate-200">die / meine</td>
+              </tr>
+              <tr>
+                <td className="p-3 border border-slate-200 font-bold bg-amber-50">Dativo (Objeto Indirecto)</td>
+                <td className="p-3 border border-slate-200 font-bold text-amber-700">dem / einem</td>
+                <td className="p-3 border border-slate-200 font-bold text-amber-700">der / einer</td>
+                <td className="p-3 border border-slate-200 font-bold text-amber-700">dem / einem</td>
+                <td className="p-3 border border-slate-200 font-bold text-amber-700">den / meinen (+n)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mt-4 rounded-r-lg">
+          <p className="font-bold text-amber-800">💡 Truco de Lectura Rápida</p>
+          <p className="text-sm text-amber-700 mt-1">Si ves <strong>"den"</strong> o <strong>"einen"</strong>, sabes inmediatamente que esa palabra masculina es la víctima (Acusativo) de la acción, NO el sujeto que la realiza.</p>
+        </div>
+      </div>
+    )
   }, {
     title: "Patrones Visuales",
     subtitle: "Letreros y Normas (Teil 3) - Encuentra las palabras prohibidas o permitidas",
@@ -10074,6 +10152,36 @@ export const goetheModules = [{
         emoji: "💍"
       }} {...props} />
           </div>
+  }, {
+    title: "Clase Magistral: Arquitectura de la Oración",
+    subtitle: "Sintaxis alemana para redactar sin errores",
+    content: (
+      <div className="mt-8 max-w-3xl mx-auto space-y-4 text-slate-700">
+        <p className="text-lg mb-4">Para el Goethe Zertifikat A1, los examinadores evalúan principalmente si respetas el orden estricto de las palabras. Domina estas dos reglas y tu escritura será perfecta.</p>
+        <GrammarAccordion title="1. La Regla de Oro (Posición 2)">
+          <p>El verbo conjugado es el REY y siempre ocupa la posición 2 en una oración afirmativa, sin importar con qué palabra inicies.</p>
+          <div className="bg-slate-100 p-3 rounded mt-2 border border-slate-200 font-mono text-sm">
+            [1. Ich] <strong>[2. spiele]</strong> [3. heute] [4. Fußball].<br/>
+            [1. Heute] <strong>[2. spiele]</strong> [3. ich] [4. Fußball].
+          </div>
+        </GrammarAccordion>
+        <GrammarAccordion title="2. Conectores Fantasma (ADUSO)">
+          <p>Las palabras <strong>A</strong>ber (pero), <strong>D</strong>enn (porque), <strong>U</strong>nd (y), <strong>S</strong>ondern (sino) y <strong>O</strong>der (o) ocupan la <strong>Posición 0</strong>. No afectan el lugar del verbo.</p>
+          <div className="bg-slate-100 p-3 rounded mt-2 border border-slate-200 font-mono text-sm">
+            [0. Und] [1. ich] <strong>[2. lerne]</strong> [3. Deutsch].
+          </div>
+        </GrammarAccordion>
+        <GrammarAccordion title="3. La Regla TeKaMoLo">
+          <p>Si tienes mucha información de relleno en la oración, ordénala así:</p>
+          <ul className="space-y-1 mt-2">
+            <li>⏱️ <strong>Te</strong>mporal (¿Cuándo? - <em>heute</em>)</li>
+            <li>🎯 <strong>Ka</strong>usal (¿Por qué? - <em>wegen des Regens</em>)</li>
+            <li>🎭 <strong>Mo</strong>dal (¿Cómo? - <em>schnell</em>)</li>
+            <li>📍 <strong>Lo</strong>kal (¿Dónde? - <em>nach Hause</em>)</li>
+          </ul>
+        </GrammarAccordion>
+      </div>
+    )
   }, {
     title: "Caja de Herramientas (Redemittel)",
     subtitle: "Frases comodín para salvar el examen",

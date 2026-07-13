@@ -1356,6 +1356,7 @@ export default function App() {
         unlockedCards={unlockedCards}
         speakText={speakText}
         lazyLoadImage={lazyLoadImage}
+        setActivePresentationId={setActivePresentationId}
       /> : viewMode === "quiz" ? <div className="flex flex-col min-h-[100svh] w-full bg-white overflow-y-auto animate-in fade-in duration-300 p-4 sm:p-8">
           <div className="max-w-4xl mx-auto w-full">
                <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
@@ -1590,6 +1591,7 @@ export default function App() {
             unlockedCards={unlockedCards}
             speakText={speakText}
             lazyLoadImage={lazyLoadImage}
+            setActivePresentationId={setActivePresentationId}
           />}
 
           {/* VISTA: CONFIGURACIÓN DEL QUIZ */}

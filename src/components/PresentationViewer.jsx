@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Presentation, Link2, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { goetheModules } from '../data/chapters';
 
 const PresentationViewer = ({
   presentation,
@@ -11,9 +12,14 @@ const PresentationViewer = ({
   setFullscreenImage,
   unlockedCards,
   speakText,
-  lazyLoadImage
+  lazyLoadImage,
+  setActivePresentationId
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [presentation.id]);
 
   const nextSlide = () => {
     if (currentSlide < presentation.slides.length - 1) setCurrentSlide(prev => prev + 1);
@@ -22,6 +28,10 @@ const PresentationViewer = ({
   const prevSlide = () => {
     if (currentSlide > 0) setCurrentSlide(prev => prev - 1);
   };
+
+  const currentModuleIndex = goetheModules.findIndex(m => m.id === presentation.id);
+  const nextModule = currentModuleIndex >= 0 && currentModuleIndex < goetheModules.length - 1 ? goetheModules[currentModuleIndex + 1] : null;
+  const isLastSlide = currentSlide === presentation.slides.length - 1;
 
   const isBlueprint = presentation.theme === 'blueprint';
   const isMedical = presentation.theme === 'medical';
@@ -112,9 +122,24 @@ const PresentationViewer = ({
             ))}
           </div>
 
-          <button onClick={currentSlide === presentation.slides.length - 1 ? onClose : nextSlide} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition ${isBlueprint ? 'bg-blue-500 text-blue-950 hover:bg-blue-400' : isMedical ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-amber-600 text-white hover:bg-amber-700'}`}>
-            {currentSlide === presentation.slides.length - 1 ? 'Finalizar' : 'Siguiente'} <ChevronRight size={20} />
-          </button>
+          {isLastSlide ? (
+            nextModule ? (
+              <button 
+                onClick={() => setActivePresentationId(nextModule.id)} 
+                className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-500/30 animate-pulse animate-duration-1000"
+              >
+                Siguiente Módulo: {nextModule.title} <ChevronRight size={20} />
+              </button>
+            ) : (
+              <button onClick={onClose} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition ${isBlueprint ? 'bg-blue-500 text-blue-950 hover:bg-blue-400' : isMedical ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-amber-600 text-white hover:bg-amber-700'}`}>
+                Finalizar <ChevronRight size={20} />
+              </button>
+            )
+          ) : (
+            <button onClick={nextSlide} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition ${isBlueprint ? 'bg-blue-500 text-blue-950 hover:bg-blue-400' : isMedical ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-amber-600 text-white hover:bg-amber-700'}`}>
+              Siguiente <ChevronRight size={20} />
+            </button>
+          )}
         </div>
       </div>
     </div>
