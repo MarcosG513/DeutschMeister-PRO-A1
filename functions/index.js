@@ -1218,6 +1218,20 @@ export const generateCardImage = onCall({
   const esColor = palabraLimpia === "weiß" || palabraLimpia === "schwarz" || palabraLimpia === "grau" || palabraLimpia === "rot" || palabraLimpia === "blau" || palabraLimpia === "gelb" || palabraLimpia === "grün" || palabraLimpia === "braun" || palabraLimpia === "orange" || palabraLimpia === "rosa" || palabraLimpia === "lila" || palabraLimpia.includes("farbe") || categoryLimpia.includes("farben") || categoryLimpia.includes("color") || tipoLimpio.includes("color");
   const esPersonaje = !esColor && (tipoLimpio.includes("adjetivo") || tipoLimpio.includes("verbo") || tipoLimpio.includes("acción") || tipoLimpio.includes("pronombre") || tipoLimpio.includes("sentimiento"));
 
+  // ── CACHE CHECK BARRIER (pregenerated_images) ─────────────────────────────
+  const safeWordId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
+  try {
+    const cacheRef = db.collection("pregenerated_images").doc(safeWordId);
+    const docSnap = await cacheRef.get();
+    if (docSnap.exists) {
+      console.log(`✅ Cache Hit Backend: Imagen recuperada de pregenerated_images [${safeWordId}]`);
+      return { imageUrl: docSnap.data().imageUrl };
+    }
+  } catch (cacheErr) {
+    console.warn("⚠️ Cache check falló, continuando con generación:", cacheErr.message);
+  }
+  // ── FIN CACHE CHECK ───────────────────────────────────────────────────────
+
   try {
     fal.config({
       credentials: falKey.value()
@@ -1260,8 +1274,7 @@ export const generateCardImage = onCall({
     const dataUri = result.data.images?.[0]?.url || result.data?.url || result.images && result.images[0]?.url;
     if (!dataUri) throw new Error("No image data returned from FAL API");
 
-    // PARTE 1: Guardado Global en Caché
-    const safeWordId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
+    // PARTE 1: Guardado Global en Caché (safeWordId ya definido en el Cache Check)
     try {
       await db.collection("global_flashcards").doc(safeWordId).set({
         imageUrl: dataUri,
