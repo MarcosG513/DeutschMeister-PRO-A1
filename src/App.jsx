@@ -1341,7 +1341,7 @@ export default function App() {
   };
   return <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-[100svh] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
       
-      {viewMode === "presentation" && activePresentation ? <PresentationViewer
+      {viewMode === "presentation" && activePresentationId && activePresentation ? <PresentationViewer
         presentation={activePresentation}
         onClose={() => {
           setViewMode('flashcards');
@@ -1576,7 +1576,7 @@ export default function App() {
         <section className="flex-1 w-full min-w-0 pb-20 relative">
           
           {/* MODO PRESENTACIÓN VISUAL */}
-          {viewMode === "presentation" && activePresentation && <PresentationViewer
+          {viewMode === "presentation" && activePresentationId && activePresentation && <PresentationViewer
             presentation={activePresentation}
             onClose={() => {
               setViewMode('flashcards');

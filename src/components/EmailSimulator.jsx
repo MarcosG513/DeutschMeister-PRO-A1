@@ -39,6 +39,9 @@ const EmailSimulator = ({ initialText }) => {
       const result = await evaluateEmailFn({
         textoCorreo: text,
         consignaExamen: consigna.de
+      }).catch(err => {
+        console.warn("Petición abortada/fallida al cambiar de vista:", err);
+        throw err;
       });
       const outputText = result.data?.output || result.data;
       if (outputText) {

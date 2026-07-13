@@ -357,7 +357,10 @@ const ReadingComprehension = ({ onExit }) => {
     try {
       if (!functions) throw new Error("Firebase functions not initialized");
       const generateFn = httpsCallable(functions, 'generateReadingTest');
-      const response = await generateFn({ tema });
+      const response = await generateFn({ tema }).catch(err => {
+        console.warn("Petición abortada/fallida al cambiar de vista:", err);
+        throw err;
+      });
       
       if (response.data) {
         setReadingTest(response.data);
