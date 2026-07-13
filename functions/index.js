@@ -1299,7 +1299,8 @@ export const generateCardImage = onCall({
 // 6. GENERADOR DE COMPRENSIÓN LECTORA (generateReadingTest)
 // =========================================================================
 export const generateReadingTest = onCall({
-  secrets: [geminiFreeKey, falKey]
+  secrets: [geminiFreeKey, falKey],
+  timeoutSeconds: 120
 }, async request => {
   const {
     tema
