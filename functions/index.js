@@ -398,7 +398,7 @@ export const generateStory = onRequest({
       return;
     }
     const listaPalabras = palabrasVocabulario.join(", ");
-    const promptSistema = "Eres un creador de cuentos infantiles y profesor de alemán nivel A1. Tu objetivo es escribir historias coherentes, inmersivas y gramaticalmente perfectas integrando vocabulario específico.";
+    const promptSistema = "Eres un creador de cuentos infantiles y profesor de alemán nivel A1. Tu objetivo es escribir historias coherentes, inmersivas y gramaticalmente perfectas integrando vocabulario específico. DECLINACIÓN Y CASOS (CRÍTICO): Es obligatorio declinar correctamente los artículos y sustantivos según su función gramatical en la oración (Acusativo, Dativo). Aunque se den en nominativo (ej. 'der Hund', 'der Park'), debes adaptarlos en las oraciones (ej. 'Sie sieht den Hund' en vez de 'Sie sieht der Hund'; 'geht in den Park' o 'spielt im Park' en vez de 'geht in der Park').";
     const promptDefinido = `Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
       En el campo "cuento_aleman", debes envolver obligatoriamente cada una de estas palabras clave de vocabulario [${listaPalabras}] con doble asterisco "**" (ej. **palabra**) cada vez que las uses en el texto para que resalten.
       La salida debe coincidir EXACTAMENTE con este esquema JSON, sin texto adicional:
