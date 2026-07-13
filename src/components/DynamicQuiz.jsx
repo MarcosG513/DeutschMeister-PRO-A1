@@ -4,16 +4,22 @@ import { httpsCallable } from 'firebase/functions';
 import { functions } from '../App';
 
 const SUGGESTED_TOPICS = [
-  { text: "Declinación Nominativo/Acusativo", label: "Declinación" },
-  { text: "Verbos Separables (Trennbar)", label: "Separables" },
-  { text: "Preposiciones de Lugar", label: "Preposiciones" },
-  { text: "Vocabulario de Viajes y Hotel", label: "Viajes" },
-  { text: "En la Cafetería y Comida", label: "Comida" }
+  "Declinación (Der/Die/Das)",
+  "Verbos Separables",
+  "Preposiciones",
+  "Comida y Restaurante",
+  "Viajes y Transporte",
+  "Rutina Diaria",
+  "Familia y Amigos",
+  "Cuerpo y Salud",
+  "Trabajo y Escuela",
+  "Tiempo y Clima"
 ];
 
 const DynamicQuiz = ({ onExit }) => {
   const [tema, setTema] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("🧠 Analizando las reglas del Goethe A1...");
   const [quizData, setQuizData] = useState(null);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOpt, setSelectedOpt] = useState(null);
@@ -33,6 +39,24 @@ const DynamicQuiz = ({ onExit }) => {
       localStorage.setItem('dm_quiz_best_streak', currentStreak.toString());
     }
   }, [currentStreak, bestStreak]);
+
+  // Rotador automático de frases del loader
+  useEffect(() => {
+    if (!loading) return;
+    const messages = [
+      "🧠 Analizando las reglas del Goethe A1...",
+      "⚙️ Fabricando trampas gramaticales...",
+      "🤖 Redactando escenarios realistas...",
+      "📝 Imprimiendo tu examen personalizado..."
+    ];
+    let idx = 0;
+    setLoadingMessage(messages[0]);
+    const interval = setInterval(() => {
+      idx = (idx + 1) % messages.length;
+      setLoadingMessage(messages[idx]);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [loading]);
 
   const generateQuiz = async (selectedTema = tema) => {
     const queryTema = selectedTema.trim();
@@ -158,17 +182,17 @@ const DynamicQuiz = ({ onExit }) => {
             {/* Sugerencias Rápidas */}
             <div className="w-full max-w-lg text-left">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-3">Sugerencias rápidas</span>
-              <div className="flex flex-wrap gap-2">
+              <div className="overflow-x-auto whitespace-nowrap flex gap-2 pb-2 custom-scrollbar">
                 {SUGGESTED_TOPICS.map((topic, idx) => (
                   <button
                     key={idx}
                     onClick={() => {
-                      setTema(topic.text);
-                      generateQuiz(topic.text);
+                      setTema(topic);
+                      generateQuiz(topic);
                     }}
-                    className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 px-3.5 py-2 rounded-lg font-bold border border-slate-200 transition"
+                    className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 px-3.5 py-2 rounded-lg font-bold border border-slate-200 transition shrink-0"
                   >
-                    {topic.label}
+                    {topic}
                   </button>
                 ))}
               </div>
@@ -184,16 +208,20 @@ const DynamicQuiz = ({ onExit }) => {
 
         {/* SKELETON LOADER ANIMADO */}
         {loading && (
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm flex flex-col items-center animate-pulse">
-            <Loader2 className="animate-spin text-blue-500 mb-6" size={40} />
-            <div className="h-6 w-48 bg-slate-200 rounded mb-4"></div>
-            <div className="h-4 w-72 bg-slate-100 rounded mb-8"></div>
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm flex flex-col items-center">
+            <div className="relative mb-6">
+              <Loader2 className="animate-spin text-blue-500" size={48} />
+              <span className="absolute inset-0 flex items-center justify-center text-xl font-bold">🧠</span>
+            </div>
+            <div className="text-lg font-bold text-slate-700 animate-pulse text-center mb-8">
+              {loadingMessage}
+            </div>
             
             {/* Pregunta ficticia */}
-            <div className="w-full max-w-lg h-24 bg-slate-50 rounded-xl mb-6 border border-slate-200 border-dashed"></div>
+            <div className="w-full max-w-lg h-24 bg-slate-50 rounded-xl mb-6 border border-slate-200 border-dashed animate-pulse"></div>
             
             {/* Opciones ficticias */}
-            <div className="w-full max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="w-full max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-4 animate-pulse">
               <div className="h-14 bg-slate-100 rounded-xl"></div>
               <div className="h-14 bg-slate-100 rounded-xl"></div>
               <div className="h-14 bg-slate-100 rounded-xl"></div>

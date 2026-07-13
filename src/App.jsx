@@ -451,10 +451,7 @@ export default function App() {
   const [isTablasOpen, setIsTablasOpen] = useState(false);
   const [isPlanOpen, setIsPlanOpen] = useState(false);
   const [isGoetheOpen, setIsGoetheOpen] = useState(false);
-  const [quizState, setQuizState] = useState(null);
-  const [selectedQuizChapters, setSelectedQuizChapters] = useState([]);
-  const [currentStreak, setCurrentStreak] = useState(0);
-  const [bestStreak, setBestStreak] = useState(0);
+
 
   // Se ha removido el useEffect de migración, ya que se hará síncronamente arriba.
   const [storyState, setStoryState] = useState({
@@ -657,52 +654,6 @@ export default function App() {
     setRevealedCards(all);
   };
   const hideAll = () => setRevealedCards({});
-  const openQuizSetup = () => {
-    setSelectedQuizChapters(chapters.map(c => c.id));
-    setViewMode("quizSetup");
-  };
-  const startQuizSession = () => {
-    setCurrentStreak(0);
-    generateNextQuizWord();
-    setViewMode("quiz");
-  };
-  const generateNextQuizWord = () => {
-    let selectedCaps = chapters.filter(c => selectedQuizChapters.includes(c.id));
-    if (selectedCaps.length === 0) selectedCaps = chapters; // Fallback de seguridad
-
-    let pool = selectedCaps.flatMap(c => c.words);
-    if (pool.length < 4) pool = chapters.flatMap(c => c.words);
-    const randomWord = pool[Math.floor(Math.random() * pool.length)];
-    const options = [randomWord.es];
-    while (options.length < 4) {
-      const randomWrong = pool[Math.floor(Math.random() * pool.length)].es;
-      if (!options.includes(randomWrong)) options.push(randomWrong);
-    }
-    setQuizState({
-      word: randomWord,
-      options: options.sort(() => Math.random() - 0.5),
-      selected: null,
-      isCorrect: null
-    });
-  };
-  const handleQuizAnswer = opt => {
-    if (quizState.selected) return;
-    const isCorrect = opt === quizState.word.es;
-    setQuizState(prev => ({
-      ...prev,
-      selected: opt,
-      isCorrect: isCorrect
-    }));
-    if (isCorrect) {
-      setCurrentStreak(prev => {
-        const next = prev + 1;
-        setBestStreak(b => next > b ? next : b);
-        return next;
-      });
-    } else {
-      setCurrentStreak(0);
-    }
-  };
   const generateStory = async () => {
     if (!activeChapter) return;
     const palabrasValidas = displayedWords.filter(w => w.de.length > 2).slice(0, 8).map(w => w.de);
@@ -1440,7 +1391,9 @@ export default function App() {
                       <BookOpen size={18} /> Lectura 📖
                     </button>
                     <button onClick={() => {
-                openQuizSetup();
+                setViewMode('quiz');
+                setActivePresentationId(null);
+                setActiveStudyPlanId(null);
                 setIsMenuOpen(false);
               }} className="bg-yellow-600 text-slate-900 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
                       <Gamepad2 size={18} /> Quiz
@@ -1528,41 +1481,6 @@ export default function App() {
             lazyLoadImage={lazyLoadImage}
             onNextModule={setActivePresentationId}
           />}
-
-          {/* VISTA: CONFIGURACIÓN DEL QUIZ */}
-          {viewMode === "quizSetup" && <div className="animate-in fade-in duration-300">
-              <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                    <Gamepad2 className="text-blue-600" /> Preparar Quiz
-                  </h2>
-                  <p className="text-slate-500 text-sm mt-1">Selecciona los capítulos que deseas repasar.</p>
-                </div>
-                
-                <button onClick={() => setViewMode("flashcards")} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm self-start sm:self-auto">
-                   <X size={18} /> Salir
-                </button>
-              </div>
-
-              <div className="bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm">
-                <div className="max-h-60 overflow-y-auto custom-scrollbar border border-slate-200 rounded-xl p-2 mb-6 text-left max-w-xl mx-auto">
-                  {chapters.map(chap => <label key={chap.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition border-b border-slate-100 last:border-0">
-                      <input type="checkbox" checked={selectedQuizChapters.includes(chap.id)} onChange={e => {
-                    if (e.target.checked) setSelectedQuizChapters(prev => [...prev, chap.id]);else setSelectedQuizChapters(prev => prev.filter(id => id !== chap.id));
-                  }} className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
-                      <span className="text-lg">{chap.emoji}</span>
-                      <span className="font-medium text-slate-700">{chap.title}</span>
-                    </label>)}
-                </div>
-                <div className="flex justify-center">
-                  <button onClick={startQuizSession} disabled={selectedQuizChapters.length === 0} className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-blue-700 disabled:bg-slate-300 transition w-full sm:w-auto">
-                    Iniciar Quiz
-                  </button>
-                </div>
-              </div>
-          </div>}
-
-
 
           {/* VISTA: SIMULADOR DE ROL (GEMINI API) ✨ */}
           {viewMode === "roleplay" && typeof RoleplaySimulator !== 'undefined' && <RoleplaySimulator onExit={() => setViewMode("flashcards")} />}

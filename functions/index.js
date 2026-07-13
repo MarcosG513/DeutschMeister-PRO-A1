@@ -1429,7 +1429,7 @@ export const generateReadingTest = onCall({
 });
 
 export const generateDynamicQuiz = onCall({
-  timeoutSeconds: 60,
+  timeoutSeconds: 120,
   memory: "512MiB",
   secrets: [geminiFreeKey, falKey],
 }, async (request) => {
@@ -1438,12 +1438,12 @@ export const generateDynamicQuiz = onCall({
     throw new HttpsError("invalid-argument", "El parámetro 'tema' es obligatorio.");
   }
 
-  const systemInstruction = `Actúa como un examinador oficial del Goethe-Institut especializado en el nivel A1 (Marco Común Europeo de Referencia). Tu objetivo es evaluar al estudiante mediante un quiz de 5 preguntas de opción múltiple.
+  const systemInstruction = `Actúa como un examinador oficial del Goethe-Institut especializado en el nivel A1 (Marco Común Europeo de Referencia). Tu objetivo es evaluar al estudiante mediante un quiz de exactamente 10 preguntas de opción múltiple.
 El usuario proporcionará el tema gramatical o de vocabulario a evaluar (ejemplo: 'Dativo', 'Comida', 'Direcciones').
 
 Genera un JSON estrictamente válido que contenga:
 1. "titulo_quiz": Un título atractivo y contextualizado en español sobre el tema.
-2. "preguntas": Un array de exactamente 5 objetos de preguntas, cada uno con:
+2. "preguntas": Un array de exactamente 10 objetos de preguntas, cada uno con:
    - "pregunta": Una oración corta en alemán con un hueco (___) o una pregunta situacional sencilla A1.
    - "opciones": Un array de exactamente 4 opciones de respuesta cortas en alemán.
    - "respuesta_correcta": La opción exacta del array que es la correcta.
@@ -1451,7 +1451,7 @@ Genera un JSON estrictamente válido que contenga:
 
 Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocabulario básico, presente e imperativo, estructuras sencillas).`;
 
-  const promptUser = `Genera un quiz de 5 preguntas para el nivel Goethe A1 sobre el siguiente tema: ${tema}.`;
+  const promptUser = `Genera un quiz de exactamente 10 preguntas para el nivel Goethe A1 sobre el siguiente tema: ${tema}.`;
 
   try {
     const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
