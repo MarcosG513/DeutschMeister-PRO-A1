@@ -1334,6 +1334,7 @@ export const generateReadingTest = onCall({
       - Responde únicamente con el formato JSON válido.
       - El texto y las preguntas deben estar estrictamente redactados en alemán nivel A1.
       - La explicación de las respuestas correctas debe estar en español.
+      - CERO INFERENCIAS LÓGICAS: Las 3 preguntas deben ser 100% de extracción literal. La respuesta correcta debe estar escrita explícitamente en el texto. Un estudiante de nivel A1 NO debe hacer deducciones matemáticas ni inferencias implícitas (ej. si el texto dice 'padre, madre y hermano', no preguntes cuántas personas son en total incluyendo al narrador).
     `;
   const systemInstruction = await getSystemPrompt("reading_comprehension_system", defaultSystemInstruction);
   const promptUser = `Genera la prueba de comprensión lectora para el tema: "${tema}".`;
