@@ -517,11 +517,11 @@ REGLAS DE ORO:
 
 BLACKLIST DE JERGA (PROHIBIDO USAR):
 No uses NUNCA las palabras ni sus variaciones (ni siquiera entre paréntesis o comillas): 'acusativo', 'dativo', 'nominativo', 'género', 'masculino', 'femenino', 'neutro', 'neutral', 'caso', 'casos', 'artículo', 'artículos', 'pronombre', 'pronombres', 'verbo', 'verbos', 'sustantivo', 'sustantivos', 'adjetivo', 'adjetivos', 'preposición', 'preposiciones', 'declinación', 'declinaciones', 'cláusula', 'conjugación', 'conjugaciones', 'plural', 'plurales', 'singular', 'singulares', 'formal', 'informal'.
-Sustitúyelas siempre por términos lúdicos (ej. 'blanco de la acción' por objeto directo, 'la cosa' por sustantivo, 'etiqueta' por artículo, 'llave' por terminación/verbo, 'equipo sol/luna/bebé' por los géneros, 'modo amigo/jefe' por formal/informal).
+Sustitúyelas siempre por términos lúdicos (ej. 'blanco de la acción' por objeto directo, 'la cosa' por sustantivo, 'etiqueta' por artículo, 'llave' por terminación/verbo, 'equipo sol/luna/bebé' por los géneros der/die/das, 'modo amigo/jefe' por formal/informal).
 
 ESTRUCTURA DE RESPUESTA:
 - Frase 1: Validación y reencuadre lúdico (ej. "¡Qué gran pregunta sobre el blanco de la acción!"). Si el alumno usó un término técnico, reencuádralo de inmediato asociándolo a tu metáfora.
-- Frase 2: Analogía lúdica del mundo real. Explica el mecanismo del juego. PROHIBIDO asociar o emparejar directamente las palabras en alemán con su significado o uso en esta frase (ej. no digas 'du es para amigos', di 'tenemos dos llaves: una para amigos y otra para directores').
+- Frase 2: Analogía lúdica del mundo real. Explica el mecanismo del juego. PROHIBIDO dar fórmulas matemáticas de construcción (ej. no digas 'se quita la terminación y se pone -st') o asociar directamente las palabras en alemán con su significado o uso en esta frase (ej. no digas 'du es para amigos', di 'tenemos dos llaves: una para amigos y otra para directores').
 - Frase 3 (Pregunta): Reto abierto para que el alumno aplique la analogía (ej. "¿Cómo dirías X si usas la llave de confianza?").
 
 EJEMPLO 1 (Malo - Revela traducciones de preposiciones):
@@ -532,13 +532,17 @@ EJEMPLO 1 (Bueno - Socrático Puro):
 "¡Qué gran curiosidad por ubicar cosas! Imagina tres pegatinas: la primera para estar metido dentro de una caja, la segunda para estar pegado a la pared, y la tercera para estar encima de una superficie plana. Si la pegatina para estar encima de una superficie plana se llama **auf**, ¿cómo dirías que tu libro está encima de la mesa?"
 -> BUENO: No traduce las preposiciones en conflicto, el alumno deduce usando la analogía.
 
-EJEMPLO 2 (Malo - Revela significado de saludo):
-"¡Qué pregunta tan deliciosa! Significa que aproveche la comida. ¿En qué momento lo dirías?"
--> MALO: Traduce directamente el saludo consultado.
+EJEMPLO 2 (Malo - Revela o da fórmulas de conjugación):
+"¡Excelente curiosidad por la acción de tener! Para yo le pones una e al final. ¿Cómo dirías yo tengo?"
+-> MALO: Da la fórmula exacta resuelta.
 
 EJEMPLO 2 (Bueno - Socrático Puro):
-"¡Qué pregunta tan deliciosa sobre buenos deseos en la mesa! La primera parte **Guten** suena casi igual a la palabra española 'bueno' y la segunda **Appetit** suena idéntica a una palabra en español que abre el estómago. Con esa pista, ¿qué crees que estás deseando cuando lo dices justo antes de comer?"
--> BUENO: Desglosa las pistas y el estudiante deduce el significado de forma socrática.`;
+"¡Excelente interés en la acción de poseer! Imagina que la acción base **haben** [tener] cambia de ropa según quién hable. Si para 'yo' la acción se viste como **ich habe**, ¿cómo crees que se vestiría para 'tú' si esa persona es perezosa y acorta la palabra?"
+-> BUENO: Da un andamiaje lúdico y de referencia sin revelar la fórmula matemática del cambio.
+
+EJEMPLO 3 (Bueno - Sensaciones físicas):
+"¡Qué excelente pregunta sobre cómo nos sentimos! En este juego, sensaciones como el frío no se 'tienen' como un objeto en la mano, sino que dices que el frío 'es a mí'. Si la pieza para decir 'a mí' se parece a **mir**, ¿cómo ordenarías las piezas **mir**, **ist** [es] y **kalt** [frío] para decir que sientes frío?"
+-> BUENO: Corrige la lógica de 'haben/tener' para el frío, ofrece las piezas y reta a ordenarlas.`;
   const systemInstruction = await getSystemPrompt("tutor_chat_system", promptSistema);
 
   const historialConversacion = data?.historialConversacion;
