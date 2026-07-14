@@ -136,9 +136,9 @@ const DynamicQuiz = ({ onExit }) => {
             </h2>
             <p className="text-slate-500 text-sm mt-1">Quizzes dinámicos generados por IA a tu medida (A1 Goethe).</p>
           </div>
-          
-          <button 
-            onClick={onExit} 
+
+          <button
+            onClick={onExit}
             className="flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm self-start sm:self-auto"
             title="Volver a los módulos"
           >
@@ -162,21 +162,21 @@ const DynamicQuiz = ({ onExit }) => {
             <div className="p-4 bg-blue-50 text-blue-600 rounded-full mb-6">
               <Sparkles size={36} className="animate-spin animate-duration-[3000ms]" />
             </div>
-            
+
             <h3 className="text-xl font-bold text-slate-800 mb-2 text-center">¿Qué te gustaría repasar hoy?</h3>
             <p className="text-slate-500 text-sm mb-6 text-center max-w-md">Escribe cualquier tema gramatical o área de vocabulario del nivel A1. Nuestra IA creará una evaluación exclusiva para ti.</p>
-            
+
             {/* Input de búsqueda */}
             <div className="w-full max-w-lg flex flex-col sm:flex-row gap-2 mb-8">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Ej. Dativo, Acusativo, Números, La Familia..."
                 value={tema}
                 onChange={(e) => setTema(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') generateQuiz(); }}
                 className="flex-1 px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium text-slate-700 shadow-sm"
               />
-              <button 
+              <button
                 onClick={() => generateQuiz()}
                 disabled={!tema.trim()}
                 className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition shadow disabled:opacity-50 flex items-center justify-center gap-2"
@@ -225,10 +225,10 @@ const DynamicQuiz = ({ onExit }) => {
             <div className="w-full max-w-xs bg-slate-100 h-1.5 rounded-full overflow-hidden mb-8 shadow-inner">
               <div className="bg-blue-500 h-full rounded-full animate-pulse w-full"></div>
             </div>
-            
+
             {/* Pregunta ficticia */}
             <div className="w-full max-w-lg h-24 bg-slate-50 rounded-xl mb-6 border border-slate-200 border-dashed animate-pulse"></div>
-            
+
             {/* Opciones ficticias */}
             <div className="w-full max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-4 animate-pulse">
               <div className="h-14 bg-slate-100 rounded-xl"></div>
@@ -264,9 +264,9 @@ const DynamicQuiz = ({ onExit }) => {
               {quizData.preguntas[currentIdx].opciones.map((opt, i) => {
                 const isCorrectAnswer = opt === quizData.preguntas[currentIdx].respuesta_correcta;
                 const isSelected = opt === selectedOpt;
-                
+
                 let btnClass = "bg-white border-2 border-slate-200 text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/20";
-                
+
                 if (isSubmitted) {
                   if (isCorrectAnswer) {
                     // Correcta se pinta en verde esmeralda
@@ -311,7 +311,7 @@ const DynamicQuiz = ({ onExit }) => {
                   onClick={handleNext}
                   className="bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 py-3 rounded-xl transition shadow flex items-center gap-2"
                 >
-                  {currentIdx === quizData.preguntas.length - 1 ? "Finalizar Quiz" : "Siguiente"} 
+                  {currentIdx === quizData.preguntas.length - 1 ? "Finalizar Quiz" : "Siguiente"}
                   <ArrowRight size={18} />
                 </button>
               )}
@@ -322,12 +322,11 @@ const DynamicQuiz = ({ onExit }) => {
               const currentQuestion = quizData.preguntas[currentIdx];
               const isCorrect = selectedOpt === currentQuestion.respuesta_correcta;
               return (
-                <div 
-                  className={`w-full max-w-xl mt-8 p-4 sm:p-5 rounded-xl border border-dashed animate-in slide-in-from-top-4 duration-300 text-left ${
-                    isCorrect 
-                      ? 'bg-emerald-50/50 border-emerald-300 text-emerald-950' 
+                <div
+                  className={`w-full max-w-xl mt-8 p-4 sm:p-5 rounded-xl border border-dashed animate-in slide-in-from-top-4 duration-300 text-left ${isCorrect
+                      ? 'bg-emerald-50/50 border-emerald-300 text-emerald-950'
                       : 'bg-amber-50/50 border-amber-300 text-amber-950'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start gap-3">
                     {isCorrect ? (
@@ -365,7 +364,7 @@ const DynamicQuiz = ({ onExit }) => {
               <span className="text-6xl mb-4">{feedback.icon}</span>
               <h3 className="text-2xl font-black text-slate-800 text-center mb-1">Boletín de Resultados</h3>
               <p className="text-slate-500 text-sm mb-6">Tema: {quizData.titulo_quiz || tema}</p>
-              
+
               <div className={`w-full max-w-md p-6 rounded-2xl border text-center mb-8 ${feedback.bg} ${feedback.color}`}>
                 <span className="text-sm font-bold uppercase tracking-wider block mb-1">Calificación</span>
                 <span className="text-2xl font-black block mb-3">{feedback.grade}</span>
@@ -375,24 +374,24 @@ const DynamicQuiz = ({ onExit }) => {
                 </div>
                 <p className="text-slate-700 text-sm font-medium leading-relaxed">{feedback.msg}</p>
               </div>
-              
+
               <div className="w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                <button 
-                  onClick={() => generateQuiz(tema)} 
+                <button
+                  onClick={() => generateQuiz(tema)}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow flex items-center justify-center gap-2"
                 >
                   Reintentar Tema
                 </button>
-                <button 
-                  onClick={() => { setQuizData(null); setTema(""); setScore(0); setCurrentIdx(0); }} 
+                <button
+                  onClick={() => { setQuizData(null); setTema(""); setScore(0); setCurrentIdx(0); }}
                   className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 px-6 rounded-xl border border-slate-200 transition"
                 >
                   Elegir Nuevo Tema
                 </button>
               </div>
-              
-              <button 
-                onClick={onExit} 
+
+              <button
+                onClick={onExit}
                 className="text-sm font-bold text-slate-400 hover:text-slate-600 transition underline mt-2"
               >
                 Salir al Menú Principal
