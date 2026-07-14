@@ -1,0 +1,9 @@
+{
+  "schedules": [
+    {
+      "name": "QA_Audit_Weekly_Drift_Check",
+      "cron": "0 3 * * 1",
+      "command": "node scripts/qa_tutor_bench_v5.js > scripts/informe_deriva_semanal.md"
+    }
+  ]
+}

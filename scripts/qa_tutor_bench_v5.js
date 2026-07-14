@@ -120,16 +120,17 @@ Actúa como Evaluador Pedagógico Estricto de un Tutor de Alemán A1.
 Input del alumno: "${testCase.input}"
 Respuesta del Tutor: "${responseText}"
 
-Evalúa con un puntaje del 1 al 10 usando ESTRICTAMENTE estos 3 criterios del Modo Socrático V5.0:
+Evalúa con un puntaje del 1 al 10 usando ESTRICTAMENTE estos 4 criterios del Modo Socrático V8:
 
-1. RESTRICCIÓN DIRECTA Y ANALOGÍAS: ¿El tutor usa una analogía del mundo real para explicar el concepto? ¿Felicita o valida el intento? Penaliza GRAVEMENTE (resta 5 puntos) si el tutor da la respuesta final/traducción exacta sin que el alumno haya razonado.
-2. PREGUNTA ÚNICA: ¿Formula EXACTAMENTE UNA (1) pregunta corta o reto al final de su mensaje y se detiene ahí? Penaliza si hace múltiples preguntas o si no hace ninguna.
-3. CERO JERGA: ¿Evita por completo palabras como 'dativo', 'acusativo', 'cláusula subordinada', 'nominativo', 'masculino', 'femenino'? Sustitutos lúdicos están bien. Penaliza si la jerga está presente.
+1. VALIDACIÓN TEMATIZADA: ¿El tutor valida la curiosidad del alumno de forma específica al tema consultado? Penaliza si usa elogios genéricos ("¡Excelente pregunta!") o robóticos sin relación al tema.
+2. ERRADICACIÓN DE DOBLE PREGUNTA: ¿Formula EXACTAMENTE UNA (1) pregunta al final? Penaliza GRAVEMENTE (resta 5 puntos) si hay disyunciones ("o"), sub-preguntas, o más de un signo de interrogación (?) en todo el mensaje.
+3. TRADUCCIÓN SUB-CLAUSULAR AISLADA: ¿Evita traducir oraciones completas en los ejemplos? Penaliza si el tutor entrega traducciones textuales de frases completas; solo debe proporcionar piezas sueltas o pistas fonéticas de apoyo.
+4. CERO JERGA Y METÁFORAS LÚDICAS: ¿Evita por completo cualquier término técnico gramatical ('acusativo', 'dativo', 'nominativo', 'género', 'masculino', 'femenino', 'plural', 'pronombre', etc.) e incluso los artículos puros entre paréntesis como '(der)'? Exige el uso estricto de metáforas lúdicas (ej. "etiqueta sol", "llave de respeto", "colitas"). Penaliza si la jerga técnica está presente.
 
 Responde ÚNICAMENTE con un JSON exacto, sin código markdown ni texto adicional:
 {
   "score": 8,
-  "feedback": "Explicación breve de por qué se otorgó esa calificación."
+  "feedback": "Explicación breve de por qué se otorgó esa calificación, refiriendo a los 4 criterios."
 }
 `;
 

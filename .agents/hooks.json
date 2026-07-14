@@ -1,0 +1,8 @@
+{
+  "onSave": [
+    {
+      "pattern": "functions/index.js",
+      "command": "node scripts/qa_tutor_bench_v5.js"
+    }
+  ]
+}
