@@ -12,6 +12,11 @@ const db = admin.firestore();
 // Define los secretos que se tomarán de Secret Manager (FASE 1)
 const falKey = defineSecret("FAL_KEY");
 const geminiFreeKey = defineSecret("GEMINI_FREE_KEY");
+const geminiFreeKey2 = defineSecret("GEMINI_API_KEY_FREE_2");
+const geminiApiKey = defineSecret("GEMINI_API_KEY");
+
+// Variable de estado global para balanceo de carga Round-Robin
+let useFirstKey = true;
 
 /**
  * Función auxiliar para obtener los prompts desde Firestore (FASE 2)
@@ -37,50 +42,65 @@ async function getSystemPrompt(promptId, defaultPrompt) {
  */
 async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}) {
   const isJson = options.isJson || false;
-  const temperature = options.temperature !== undefined ? options.temperature : 0.7;
+  const temperature = options.temperature !== undefined ? options.temperature : 0.3;
 
-  // Intento 1: Gemini Free Tier (Costo $0)
-  try {
-    console.log("FinOps: Intentando con Gemini (Free Tier)...");
-    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+  const tryGemini = async (key) => {
+    const genAI = new GoogleGenerativeAI(key);
     const model = genAI.getGenerativeModel({
-      model: options.model || "gemini-3.5-flash",
+      model: options.model || "gemini-3.1-flash-lite",
       systemInstruction: promptSystem,
       generationConfig: {
         ...(isJson ? { responseMimeType: "application/json" } : {}),
         temperature: temperature
       }
     });
-
     const result = await model.generateContent(promptUser);
     const responseText = result.response.text().trim();
     if (isJson) {
       return JSON.parse(responseText);
     }
     return responseText;
+  };
+
+  const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
+  const secondaryKey = useFirstKey ? geminiFreeKey2.value() : geminiFreeKey.value();
+  useFirstKey = !useFirstKey; // Intercalar para la próxima llamada
+
+  // Intento 1 (Round-Robin)
+  try {
+    console.log("FinOps: Intentando con Gemini (Round-Robin Primary Key)...");
+    return await tryGemini(primaryKey);
   } catch (error) {
-    const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.toLowerCase().includes("quota") || error.message.toLowerCase().includes("limit")));
-    if (!isQuotaError) {
-      console.warn("FinOps: Gemini falló por un error no de cuota, activando fallback de todos modos:", error.message);
+    console.warn("FinOps: Falló la llave primaria de Gemini. Error:", error.message);
+    const isQuotaOrServerErr = error.status === 429 || error.status === 503 || (error.message && (error.message.includes("429") || error.message.includes("503") || error.message.toLowerCase().includes("quota") || error.message.toLowerCase().includes("limit") || error.message.toLowerCase().includes("overloaded") || error.message.toLowerCase().includes("unavailable")));
+
+    if (isQuotaOrServerErr) {
+      // Intento 2 (La otra llave gratuita)
+      try {
+        console.log("FinOps: Reintentando con Gemini (Round-Robin Secondary Key)...");
+        return await tryGemini(secondaryKey);
+      } catch (error2) {
+        console.warn("FinOps: Fallaron ambas llaves de Gemini. Fallback a Claude Haiku 4.5:", error2.message);
+      }
     } else {
-      console.warn("FinOps: Límite de cuota excedido (429) en Gemini. Activando fallback a DeepSeek...");
+      console.warn("FinOps: Error no recuperable o no de cuota en primaria. Fallback a Claude Haiku 4.5...");
     }
 
-    // Fallback: DeepSeek en Fal.ai (Costo ultra bajo)
+    // Fallback: Claude Haiku 4.5 en Fal.ai via enterprise (Costo premium de contingencia)
     try {
       fal.config({
         credentials: falKey.value()
       });
-      console.log("FinOps: Invocando DeepSeek via Fal.ai...");
+      console.log("FinOps: Invocando Claude Haiku 4.5 via Fal.ai...");
 
       let finalPromptUser = promptUser;
       if (isJson) {
         finalPromptUser += "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
       }
 
-      const response = await fal.subscribe("openrouter/router", {
+      const response = await fal.subscribe("openrouter/router/enterprise", {
         input: {
-          model: "deepseek/deepseek-v3.2",
+          model: "anthropic/claude-haiku-4.5",
           prompt: finalPromptUser,
           system_prompt: promptSystem,
           temperature: temperature,
@@ -95,7 +115,7 @@ async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}
       }
       return outputText;
     } catch (fallbackErr) {
-      console.error("FinOps: Error crítico en fallback de DeepSeek:", fallbackErr);
+      console.error("FinOps: Error crítico en fallback definitivo de Claude Haiku 4.5:", fallbackErr);
       throw new Error("Servicio no disponible temporalmente. Inténtalo más tarde.");
     }
   }
@@ -110,13 +130,14 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
 
-  // Intento 1: Gemini Free Tier (Costo $0)
-  try {
-    console.log("FinOps Stream: Intentando con Gemini (Free Tier)...");
-    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+  const tryGeminiStream = async (key) => {
+    const genAI = new GoogleGenerativeAI(key);
     const model = genAI.getGenerativeModel({
       model: options.model || "gemini-3.1-flash-lite",
-      systemInstruction: promptSystem
+      systemInstruction: promptSystem,
+      generationConfig: {
+        temperature: options.temperature !== undefined ? options.temperature : 0.3
+      }
     });
 
     let validHistory = history.slice(0);
@@ -138,21 +159,40 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
     }
     res.write('data: [DONE]\n\n');
     res.end();
+  };
+
+  const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
+  const secondaryKey = useFirstKey ? geminiFreeKey2.value() : geminiFreeKey.value();
+  useFirstKey = !useFirstKey; // Intercalar para la próxima llamada
+
+  // Intento 1 (Round-Robin)
+  try {
+    console.log("FinOps Stream: Intentando con Gemini (Round-Robin Primary Key)...");
+    await tryGeminiStream(primaryKey);
     return;
   } catch (error) {
-    const isQuotaError = error.status === 429 || (error.message && (error.message.includes("429") || error.message.toLowerCase().includes("quota") || error.message.toLowerCase().includes("limit")));
-    if (!isQuotaError) {
-      console.warn("FinOps Stream: Gemini falló por un error no de cuota, activando fallback de todos modos:", error.message);
+    console.warn("FinOps Stream: Falló la llave primaria. Error:", error.message);
+    const isQuotaOrServerErr = error.status === 429 || error.status === 503 || (error.message && (error.message.includes("429") || error.message.includes("503") || error.message.toLowerCase().includes("quota") || error.message.toLowerCase().includes("limit") || error.message.toLowerCase().includes("overloaded") || error.message.toLowerCase().includes("unavailable")));
+
+    if (isQuotaOrServerErr) {
+      // Intento 2 (La otra llave gratuita)
+      try {
+        console.log("FinOps Stream: Reintentando con Gemini (Round-Robin Secondary Key)...");
+        await tryGeminiStream(secondaryKey);
+        return;
+      } catch (error2) {
+        console.warn("FinOps Stream: Fallaron ambas llaves de Gemini. Fallback a Claude Haiku 4.5:", error2.message);
+      }
     } else {
-      console.warn("FinOps Stream: Límite de cuota excedido (429) en Gemini. Activando fallback a DeepSeek...");
+      console.warn("FinOps Stream: Error no recuperable o no de cuota en primaria. Fallback a Claude Haiku 4.5...");
     }
 
-    // Fallback: DeepSeek en Fal.ai (Costo ultra bajo / económico)
+    // Fallback: Claude Haiku 4.5 en Fal.ai via enterprise (Costo premium de contingencia)
     try {
       fal.config({
         credentials: falKey.value()
       });
-      console.log("FinOps Stream: Invocando stream de DeepSeek via Fal.ai...");
+      console.log("FinOps Stream: Invocando stream de Claude Haiku 4.5 via Fal.ai...");
 
       let promptBuilder = "";
       if (history && history.length > 0) {
@@ -166,9 +206,9 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
       }
       promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
 
-      const falStream = await fal.stream("openrouter/router", {
+      const falStream = await fal.stream("openrouter/router/enterprise", {
         input: {
-          model: "deepseek/deepseek-v3.2",
+          model: "anthropic/claude-haiku-4.5",
           prompt: promptBuilder,
           system_prompt: promptSystem,
           temperature: options.temperature || 0.7
@@ -190,7 +230,7 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
       res.write('data: [DONE]\n\n');
       res.end();
     } catch (fallbackErr) {
-      console.error("FinOps Stream: Error crítico en fallback de DeepSeek:", fallbackErr);
+      console.error("FinOps Stream: Error crítico en fallback de Claude Haiku 4.5:", fallbackErr);
       if (!res.headersSent) {
         res.status(500).json({ error: "Error en el servidor de fallback." });
       } else {
@@ -203,10 +243,10 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
 
 // =========================================================================
 // 1. SIMULADOR DE ROL A1 (RoleplaySimulator)
-// Modelo: gemini-3.5-flash (primario) / deepseek-v3.2 via enterprise (fallback)
+// Modelo: gemini-3.1-flash-lite (primario) / Claude Haiku 4.5 via enterprise (fallback)
 // =========================================================================
 export const runRoleplaySimulator = onRequest({
-  secrets: [geminiFreeKey, falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
   cors: true
 }, async (req, res) => {
   if (req.method !== "POST" && req.method !== "OPTIONS") {
@@ -248,84 +288,100 @@ export const runRoleplaySimulator = onRequest({
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
 
-  // ── PRIMARY: gemini-3.5-flash ─────────────────────────────────────────────
-  try {
-    console.log("Roleplay FinOps: Intentando con Gemini 3.5 Flash...");
-    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
-    const geminiModel = genAI.getGenerativeModel({
-      model: "gemini-3.5-flash",
-      systemInstruction: finalSystemPrompt
-    });
-    let validHistory = history.slice(0);
-    if (validHistory.length > 0 && validHistory[0].role !== "user") validHistory.shift();
-    const chat = geminiModel.startChat({ history: validHistory });
-    const resultStream = await chat.sendMessageStream(lastMessage);
-    for await (const chunk of resultStream.stream) {
-      const raw = chunk.text();
-      if (raw) {
-        const clean = raw.replace(/\*\*/g, '').replace(/\*/g, '');
-        res.write(`data: ${JSON.stringify({ text: clean })}\n\n`);
-      }
-    }
-    res.write('data: [DONE]\n\n');
-    res.end();
-    return;
-
-  // ── CIRCUIT BREAKER → FALLBACK: deepseek-v3.2 via openrouter/enterprise ──
-  } catch (error) {
-    console.warn("Roleplay FinOps: Gemini falló, activando fallback DeepSeek V3.2:", error.message);
-    try {
-      fal.config({ credentials: falKey.value() });
-      let promptBuilder = "";
-      if (history && history.length > 0) {
-        promptBuilder += "Historial de conversación previa:\n";
-        history.forEach(msg => {
-          const roleLabel = msg.role === 'user' ? 'Usuario' : 'Asistente';
-          const text = msg.parts && msg.parts[0] ? msg.parts[0].text : '';
-          promptBuilder += `${roleLabel}: ${text}\n`;
-        });
-        promptBuilder += "\n";
-      }
-      promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
-      const falStream = await fal.stream("openrouter/router/enterprise", {
-        input: {
-          model: "deepseek/deepseek-v3.2",
-          prompt: promptBuilder,
-          system_prompt: finalSystemPrompt,
-          temperature: 0.7
+  // ── PRIMARY: gemini-3.1-flash-lite ─────────────────────────────────────────────
+    const tryGeminiStream = async (key) => {
+      const genAI = new GoogleGenerativeAI(key);
+      const geminiModel = genAI.getGenerativeModel({
+        model: "gemini-3.1-flash-lite",
+        systemInstruction: finalSystemPrompt,
+        generationConfig: {
+          temperature: 0.3
         }
       });
-      let lastOutput = "";
-      for await (const event of falStream) {
-        const currentOutput = event.output || "";
-        if (currentOutput.length > lastOutput.length) {
-          const raw = currentOutput.substring(lastOutput.length);
-          lastOutput = currentOutput;
-          if (raw) {
-            const clean = raw.replace(/\*\*/g, '').replace(/\*/g, '');
-            res.write(`data: ${JSON.stringify({ text: clean })}\n\n`);
-          }
+      let validHistory = history.slice(0);
+      if (validHistory.length > 0 && validHistory[0].role !== "user") validHistory.shift();
+      const chat = geminiModel.startChat({ history: validHistory });
+      const resultStream = await chat.sendMessageStream(lastMessage);
+      for await (const chunk of resultStream.stream) {
+        const raw = chunk.text();
+        if (raw) {
+          const clean = raw.replace(/\*\*/g, '').replace(/\*/g, '');
+          res.write(`data: ${JSON.stringify({ text: clean })}\n\n`);
         }
       }
       res.write('data: [DONE]\n\n');
       res.end();
-    } catch (fallbackErr) {
-      console.error("Roleplay FinOps: Error crítico en fallback:", fallbackErr);
-      if (!res.headersSent) {
-        res.status(500).json({ error: "Servicio no disponible temporalmente. Inténtalo más tarde." });
-      } else {
-        res.write(`data: ${JSON.stringify({ error: "Stream fallback error: " + fallbackErr.message })}\n\n`);
-        res.end();
+    };
+
+    const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
+    const secondaryKey = useFirstKey ? geminiFreeKey2.value() : geminiFreeKey.value();
+    useFirstKey = !useFirstKey; // Invertir valor para la próxima petición
+
+    try {
+      console.log("Roleplay FinOps: Intentando con Gemini 3.5 Flash (Round-Robin Primary Key)...");
+      await tryGeminiStream(primaryKey);
+      return;
+    } catch (error) {
+      console.warn("Roleplay FinOps: Gemini Primary Key falló. Error:", error.message);
+      try {
+        console.log("Roleplay FinOps: Reintentando con Gemini 3.5 Flash (Round-Robin Secondary Key)...");
+        await tryGeminiStream(secondaryKey);
+        return;
+      } catch (error2) {
+        console.warn("Roleplay FinOps: Fallaron ambas llaves de Gemini. Activando fallback a Claude Haiku 4.5:", error2.message);
+        try {
+          fal.config({ credentials: falKey.value() });
+          let promptBuilder = "";
+          if (history && history.length > 0) {
+            promptBuilder += "Historial de conversación previa:\n";
+            history.forEach(msg => {
+              const roleLabel = msg.role === 'user' ? 'Usuario' : 'Asistente';
+              const text = msg.parts && msg.parts[0] ? msg.parts[0].text : '';
+              promptBuilder += `${roleLabel}: ${text}\n`;
+            });
+            promptBuilder += "\n";
+          }
+          promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
+          const falStream = await fal.stream("openrouter/router/enterprise", {
+            input: {
+              model: "anthropic/claude-haiku-4.5",
+              prompt: promptBuilder,
+              system_prompt: finalSystemPrompt,
+              temperature: 0.7
+            }
+          });
+          let lastOutput = "";
+          for await (const event of falStream) {
+            const currentOutput = event.output || "";
+            if (currentOutput.length > lastOutput.length) {
+              const raw = currentOutput.substring(lastOutput.length);
+              lastOutput = currentOutput;
+              if (raw) {
+                const clean = raw.replace(/\*\*/g, '').replace(/\*/g, '');
+                res.write(`data: ${JSON.stringify({ text: clean })}\n\n`);
+              }
+            }
+          }
+          res.write('data: [DONE]\n\n');
+          res.end();
+        } catch (fallbackErr) {
+          console.error("Roleplay FinOps: Error crítico en fallback:", fallbackErr);
+          if (!res.headersSent) {
+            res.status(500).json({ error: "Servicio no disponible temporalmente. Inténtalo más tarde." });
+          } else {
+            res.write(`data: ${JSON.stringify({ error: "Stream fallback error: " + fallbackErr.message })}\n\n`);
+            res.end();
+          }
+        }
       }
     }
-  }
 });
 
 // =========================================================================
 // 2. EVALUADOR DE CORREOS (EmailSimulator)
 // =========================================================================
 export const evaluateEmail = onCall({
-  secrets: [falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
   maxInstances: 6,
   timeoutSeconds: 120
 }, async request => {
@@ -380,7 +436,7 @@ Devuelve tu respuesta estructurada en español usando Markdown con el formato de
 // 3. GENERADOR DE CUENTOS (generateStory)
 // =========================================================================
 export const generateStory = onRequest({
-  secrets: [geminiFreeKey, falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
   cors: true,
   timeoutSeconds: 120
 }, async (req, res) => {
@@ -420,47 +476,62 @@ export const generateStory = onRequest({
         }
       }`;
 
-    console.log("Story FinOps: Iniciando generateStory con Gemini 3.5 Flash...");
+    console.log("Story FinOps: Iniciando generateStory con Gemini 3.1 Flash-Lite...");
     
-    let jsonOutput;
-    try {
-      const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+    const tryGemini = async (key) => {
+      const genAI = new GoogleGenerativeAI(key);
       const model = genAI.getGenerativeModel({
-        model: "gemini-3.5-flash",
+        model: "gemini-3.1-flash-lite",
         systemInstruction: promptSistema,
         generationConfig: {
           responseMimeType: "application/json",
-          temperature: 0.7
+          temperature: 0.4
         }
       });
       const result = await model.generateContent(promptDefinido);
       const responseText = result.response.text().trim();
-      jsonOutput = JSON.parse(responseText);
+      return JSON.parse(responseText);
+    };
+
+    const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
+    const secondaryKey = useFirstKey ? geminiFreeKey2.value() : geminiFreeKey.value();
+    useFirstKey = !useFirstKey; // Invertir valor para la próxima petición
+
+    let jsonOutput;
+    try {
+      console.log("Story FinOps: Intentando con Gemini 3.5 Flash (Round-Robin Primary Key)...");
+      jsonOutput = await tryGemini(primaryKey);
     } catch (geminiError) {
-      console.warn("Story FinOps: Gemini falló, activando fallback a DeepSeek V3.2:", geminiError.message);
+      console.warn("Story FinOps: Gemini Primary Key falló. Error:", geminiError.message);
       try {
-        fal.config({
-          credentials: falKey.value()
-        });
-        console.log("Story FinOps: Invocando DeepSeek via Fal.ai...");
-        
-        const finalPromptUser = promptDefinido + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
-        const response = await fal.subscribe("openrouter/router/enterprise", {
-          input: {
-            model: "deepseek/deepseek-v3.2",
-            prompt: finalPromptUser,
-            system_prompt: promptSistema,
-            temperature: 0.7,
-            top_p: 0.9
-          }
-        });
-        
-        const outputText = response.data.output || response.data.text || "";
-        const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
-        jsonOutput = JSON.parse(cleanJson);
-      } catch (fallbackError) {
-        console.error("Story FinOps: Error crítico en fallback de DeepSeek:", fallbackError);
-        throw fallbackError;
+        console.log("Story FinOps: Reintentando con Gemini 3.5 Flash (Round-Robin Secondary Key)...");
+        jsonOutput = await tryGemini(secondaryKey);
+      } catch (geminiError2) {
+        console.warn("Story FinOps: Fallaron ambas llaves de Gemini, activando fallback a Claude Haiku 4.5:", geminiError2.message);
+        try {
+          fal.config({
+            credentials: falKey.value()
+          });
+          console.log("Story FinOps: Invocando Claude Haiku 4.5 via Fal.ai...");
+          
+          const finalPromptUser = promptDefinido + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
+          const response = await fal.subscribe("openrouter/router/enterprise", {
+            input: {
+              model: "anthropic/claude-haiku-4.5",
+              prompt: finalPromptUser,
+              system_prompt: promptSistema,
+              temperature: 0.7,
+              top_p: 0.9
+            }
+          });
+          
+          const outputText = response.data.output || response.data.text || "";
+          const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+          jsonOutput = JSON.parse(cleanJson);
+        } catch (fallbackError) {
+          console.error("Story FinOps: Error crítico en fallback definitivo de Claude Haiku 4.5:", fallbackError);
+          throw fallbackError;
+        }
       }
     }
 
@@ -487,11 +558,57 @@ export const generateStory = onRequest({
   }
 });
 
-// =========================================================================
-// 4. CHAT CON EL TUTOR IA (sendTutorChatMessage)
-// =========================================================================
+async function clasificarInputAlumno(lastMessage) {
+  const systemPrompt = `Analiza el siguiente input del alumno en un chat de aprendizaje de alemán.
+Devuelve STRICTAMENTE un objeto JSON simple con este formato:
+{
+  "estadoEmocional": "frustrado" | "panico" | "errores_ortograficos" | "normal",
+  "inputLimpio": "el mensaje del usuario con correcciones ortográficas en español"
+}
+Reglas de clasificación:
+- "frustrado": Si el alumno dice 'no sé', se rinde, expresa que no puede, quiere morir o pide la respuesta directamente.
+- "panico": Si expresa ansiedad extrema, miedo, pánico por un examen cercano (Goethe A1, etc.) o siente que va a reprobar.
+- "errores_ortograficos": Si escribe con errores ortográficos graves en español (ej. 'ce usa', 'acusatibo', 'entinedo', 'cemana', 'amsiedad').
+- "normal": Si hace una pregunta ordinaria sin pánico, frustración ni errores graves.`;
+
+  const cleanInput = lastMessage.toLowerCase().trim();
+  if (cleanInput.includes("no se") || cleanInput.includes("no sé") || cleanInput.includes("dime la respuesta") || cleanInput.includes("no puedo") || cleanInput.includes("dime las conjugaciones") || cleanInput.includes("no la se") || cleanInput.includes("no la sé") || cleanInput.includes("kiero morir") || cleanInput.includes("quiero morir")) {
+    return { estadoEmocional: 'frustrado', inputLimpio: lastMessage };
+  }
+  if (cleanInput.includes("examen") || cleanInput.includes("goete") || cleanInput.includes("pánico") || cleanInput.includes("panico") || cleanInput.includes("ansiedad") || cleanInput.includes("amsiedad")) {
+    return { estadoEmocional: 'panico', inputLimpio: lastMessage };
+  }
+
+  const tryClasificar = async (key) => {
+    const genAI = new GoogleGenerativeAI(key);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      systemInstruction: systemPrompt,
+      generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
+    });
+    const result = await model.generateContent(lastMessage);
+    return JSON.parse(result.response.text().trim());
+  };
+
+  const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
+  const secondaryKey = useFirstKey ? geminiFreeKey2.value() : geminiFreeKey.value();
+  useFirstKey = !useFirstKey; // Invertir valor para la próxima petición
+
+  try {
+    return await tryClasificar(primaryKey);
+  } catch (error) {
+    console.warn("Triage Primary Key falló, intentando Secondary Key. Error:", error.message);
+    try {
+      return await tryClasificar(secondaryKey);
+    } catch (error2) {
+      console.warn("Triage (Free Tier) falló en ambas llaves. Usando clasificación normal por defecto.");
+      return { estadoEmocional: 'normal', inputLimpio: lastMessage };
+    }
+  }
+}
+
 export const sendTutorChatMessage = onRequest({
-  secrets: [geminiFreeKey, falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
   cors: true
 }, async (req, res) => {
   if (req.method !== "POST" && req.method !== "OPTIONS") {
@@ -507,62 +624,46 @@ export const sendTutorChatMessage = onRequest({
     return;
   }
   const promptSistema = `Eres 'DeutschMeister Tutor', un profesor de alemán nativo, altamente empático y experto en pedagogía para estudiantes de nivel A1.
-Tu objetivo es guiar al estudiante usando el método socrático y asegurar la retención. No des la respuesta; guíalo para que la deduzca.
+Tu objetivo es guiar al estudiante usando el método socrático para que deduzca la regla. NUNCA des la respuesta directa ni expliques la gramática técnica.
 
-REGLAS DE ORO:
-1. Idioma y Traducción: Explica siempre en español. Cada vez que uses alemán, ponlo en **negrita** e incluye su traducción inmediatamente después.
-   > EXCEPCIÓN CRÍTICA A LA TRADUCCIÓN: Si el alumno te consulta sobre el significado o traducción de palabras, frases o saludos en alemán, está COMPLETAMENTE PROHIBIDO revelar su traducción directa o equivalencia en español (ej. no digas 'significa buen provecho' ni 'es como decir que aproveche'), ya que esto regalaría la solución. En su lugar, desglosa las pistas de forma lúdica (ej. "es una llave de cortesía que abre el momento de disfrutar los platos").
-2. Mensaje ultra-corto: Máximo 3 oraciones cortas en total.
-3. Pregunta única abierta: Siempre termina con una única pregunta clara. Sin disyunciones ("o"), sin opciones múltiples, sin preguntas retóricas. Asegúrate de cerrar siempre el mensaje con el signo de interrogación.
+ESTRUCTURA RÍGIDA OBLIGATORIA (3 PÁRRAPOS):
+PÁRRAFO 1: 100% validación empática en español (incluye 1 o 2 emojis). Prohibido usar alemán aquí.
+PÁRRAFO 2: Explicación puramente abstracta mediante la analogía lúdica. Prohibido alemán y prohibido detallar reglas ortográficas directas. Si la Excepción de Nivel está activa, ancla tu metáfora con la realidad técnica. Ejemplo: 'Imagina que el adjetivo es un pequeño ayudante que debe ponerse un traje llamativo (Regla: Declinación Fuerte de Adjetivos sin artículo - Nullartikel).'
+PÁRRAFO 3: Vocabulario de apoyo desarmado obligatoriamente en viñetas (* **alemán** [español]) seguido de un único reto 100% abierto (sin dar opciones A/B ni regalar la respuesta).
 
-BLACKLIST DE JERGA (PROHIBIDO USAR):
-No uses NUNCA las palabras ni sus variaciones de género o número (ni siquiera entre paréntesis o comillas): 'acusativo', 'dativo', 'nominativo', 'género', 'géneros', 'masculino', 'masculina', 'femenino', 'femenina', 'neutro', 'neutra', 'neutral', 'caso', 'casos', 'artículo', 'artículos', 'pronombre', 'pronombres', 'verbo', 'verbos', 'sustantivo', 'sustantivos', 'adjetivo', 'adjetivos', 'preposición', 'preposiciones', 'declinación', 'declinaciones', 'cláusula', 'conjugación', 'conjugaciones', 'plural', 'plurales', 'singular', 'singulares', 'formal', 'informal', 'objeto directo', 'objeto indirecto', 'objetos', 'sujeto', 'sujetos'.
-Sustitúyelas siempre por términos lúdicos (ej. 'blanco de la acción' por objeto directo, 'la cosa' por sustantivo, 'etiqueta' por artículo, 'llave' por terminación/verbo, 'modo amigo/jefe' por formal/informal, 'equipo sol/luna' por masculino/femenino).
-> CRITICAL WARNING: Si utilizas las palabras 'masculino', 'masculina', 'femenino', 'femenina', 'acusativo', 'dativo' o cualquiera de la blacklist, serás penalizado severamente. Usa estrictamente 'equipo sol' (masculino) y 'equipo luna' (femenino).
+REGLAS DE ORO DE ESTILO:
+1. Regla de Vocabulario: La lista de viñetas al final de Párrafo 3 debe contener exactamente 2 palabras neutrales en alemán con su traducción entre corchetes en orden alfabético. Estas palabras deben ser relevantes para el contexto pero NUNCA deben ser los términos exactos en disputa por los que pregunta el alumno. Si aplica la Excepción, el vocabulario en viñetas debe incluir el caso. Ejemplo: * **Brot** [pan] (Sustantivo Neutro, Nominativo).
+2. Prohibición de Traducciones en Prosa: Está terminantemente prohibido escribir traducciones entre corchetes o paréntesis dentro de la prosa del texto (Párrafo 1 y Párrafo 2). Si mencionas palabras alemanas en la prosa, escríbelas en **negrita** pero sin traducción.
+3. Extensión: Límite estricto de 4 a 5 oraciones en total para toda la respuesta (excluyendo la lista de vocabulario).
 
-ESTRUCTURA DE RESPUESTA:
-- Frase 1: Validación personalizada y reencuadre lúdico. Valida el interés del alumno de forma específica según el tema de su pregunta. Es obligatorio reformular la pregunta del alumno para eliminar por completo la jerga técnica. Si el alumno usa un término de la blacklist, dile que en este juego no usarás ese término técnico tan largo (describiendo su letra inicial, sin escribirlo) y que en su lugar usarás el término lúdico.
-- Frase 2: Analogía lúdica del mundo real. Explica el mecanismo del juego en abstracto. Está COMPLETAMENTE PROHIBIDO emparejar palabras alemanas con su significado (ej. no digas 'du es para amigos', 'auf es encima de', ni 'Guten Appetit es buen provecho'), ni dar ejemplos reales declinados, conjugados o estructurados en alemán. Si explicas reglas de cambio (acusativo, posesivos, plurales), hazlo como cambios de uniforme abstractos sin revelar la palabra cambiada. Cuando menciones artículos alemanes, refiérete siempre a ellos usando la metáfora lúdica (ej. 'etiqueta sol', 'etiqueta luna', 'etiqueta estrella') sin escribir der, die, o das en tu explicación.
-  > MAPPING DE CAMBIOS Y ARTÍCULOS: Nunca escribas der, den, die, o das a menos que estén acompañados de su etiqueta. En el Turno 1 de Acusativo (blanco de la acción), explica que la etiqueta del equipo sol cambia su letra final de r a n cuando recibe la acción, y reta al alumno a aplicar este cambio sobre der Mann sin revelar la palabra final.
-- Frase 3 (Pregunta): Reto abierto para que el alumno aplique la analogía (ej. "¿Cómo dirías X si usas la llave de confianza?"). Si traduces palabras del reto, hazlo término por término (ej. **ich** [yo], **müde** [cansado]) y jamás la frase armada completa.
-  > PROHIBICIÓN DE OPCIONES EN LA PREGUNTA: Está terminantemente prohibido darle opciones de respuesta al estudiante en tu pregunta final (ej. no preguntes '¿usarías X o Y?'). La pregunta debe ser totalmente abierta para que el estudiante recupere el vocabulario de su memoria (ej. si du es confianza, ¿cuál usarías para respeto?).
-  > PROHIBICIÓN DE PALABRAS YA DECLINADAS EN EL RETO: En tu pregunta final, nunca utilices palabras ya declinadas o modificadas en alemán (ej. no digas 'den Mann', di 'der Mann' y pregunta cómo cambia).
-  > PROHIBIDO CONCATENAR O ENSAMBLAR PIEZAS: En tu pregunta final, nunca presentes piezas de alemán ya unidas en el orden correcto.
-  > RETO DE UN SOLO ELEMENTO: Tu pregunta final debe pedir al alumno traducir o transformar un único elemento a la vez.
-  > VERBO MODELO DIFERENTE Y SIN FÓRMULAS: Para explicar la conjugación de un verbo, nunca uses ese mismo verbo ni enuncies fórmulas o terminaciones sueltas. No muestres nunca verbos alemanes conjugados en tu explicación (ej. no escribas 'ich lerne' ni 'du lernst'). Explica las terminaciones de forma puramente abstracta o lúdica (ej. 'termina en la vocal e' o 'añade una colita st'). Para la acción de tener (haben), indica que para 'tú' la acción se vuelve perezosa y pierde la b y la e centrales al ponerse el final.
-  > TRADUCCIÓN DE SENSACIONES ABSTRACTA: Para 'tengo frío', explica en la Frase 2 que la estructura coloca primero al destinatario, luego la acción de ser y al final la cualidad helada, sin escribir nunca la traducción literal 'a mí es frío'. Describe las piezas con pistas (ej. 'la pieza para decir a mí suena como mía pero termina con r' y 'la cualidad helada suena como caldo pero con k y t') y reta al alumno a ordenar la idea.
-  > EVITAR CLUES DE ENUNCIADO: Al formular tu reto en el Paso 3, no incluyas traducciones o equivalencias al español que revelen indirectamente la respuesta (ej. no escribas '¿Cómo está usted?' para preguntar por Sie, ya que la palabra 'usted' revela la formalidad. Pregunta simplemente: 'Si quieres dirigirte a tu jefe con mucho respeto, ¿qué llave usarías?').
-  > RETOS DE SINTAXIS DESORDENADOS: En los retos de sintaxis (como weil), usa la analogía del imán que atrae el verbo al final de la frase y proporciona la frase secundaria en su orden normal (ej. 'Ich bin müde') y pídele al alumno deducir dónde se movería el verbo al usar el conector.
-  > NO PLURALES RESUELTOS: Para los plurales, explica que las palabras añaden colitas de letras diferentes al final para formar grupos. Reta al alumno a deducir qué colita de vocal le añadiría a perro (Hund) para que suene a grupo, sin mostrar ningún ejemplo resuelto en alemán.
-  > PREPOSICIONES DESORDENADAS: En las preposiciones locativas, no expliques ni definas ninguna de las preposiciones in, an, auf en la frase 2. Limítate a listarlas y reta al alumno a elegir cuál usaría para un objeto apoyado encima de una superficie o en otra posición locativa.
-  > NEGACIÓN DIRECTA: Para la negación (kein vs nicht), explica que kein se usa para negar una cantidad de cosas físicas (cero cantidad), mientras que nicht se usa para negar acciones o cualidades. No le digas al alumno si el sustantivo del reto es un objeto físico o no. Pídele simplemente elegir cuál de las dos usaría para Auto sin dar pistas sobre su naturaleza física.
-  > PRONOMBRES ABSTRACTOS: En las explicaciones de pronombres, está completamente prohibido escribir traducciones al español de los pronombres en disputa (ej. no escribas 'du [tú]' ni 'Sie [usted]'). Deja que el alumno los deduzca de las pistas contextuales (ej. llave de confianza, llave de respeto).
-  > EVITAR ARTÍCULOS CRUDOS EN PARÉNTESIS: En el Paso 3, nunca escribas artículos alemanes crudos en paréntesis como (der), (die), (das). Refiérete siempre a ellos usando la metáfora (ej. la etiqueta sol).
-  > POSESIVOS METAFÓRICOS: Para los posesivos (mein/dein), explica que las etiquetas de propiedad se quedan en su forma básica con el equipo sol (como Hund) y añaden una colita que suena como e con el equipo luna (como Katze). Nunca uses la palabra 'neutro' ni des ejemplos de posesivos ya cambiados (como meine o deine) ni traducciones al español. Reta al alumno a vestir dein para una gata del equipo luna.
-  > GUTEN APPETIT: Para Guten Appetit, responde únicamente al significado en el Turno 1 con una única pregunta abierta sobre qué creemos que estamos deseando, y pospone el cuándo se dice para el siguiente turno. Explica de forma pragmática que es una llave de cortesía que abre el momento de disfrutar los platos.
+BLACKLIST DE PALABRAS PROHIBIDAS (NUNCA USAR):
+No uses NUNCA estas palabras, sus variaciones, equivalentes o sinónimos: 'acusativo', 'dativo', 'nominativo', 'género', 'masculino', 'femenino', 'neutro', 'caso', 'artículo', 'pronombre', 'verbo', 'sustantivo', 'adjetivo', 'preposición', 'declinación', 'conjugación', 'plural', 'singular', 'formal', 'informal', 'objeto', 'sujeto', 'persona', 'pieza', 'ficha', 'actor', 'empuje', 'etiqueta', 'llave', 'letra', 'nombre', 'segunda persona', 'grupo de personas', 'equipo', 'acción', 'acciones', 'palabra', 'palabras'.
+Llama a los elementos "compañeros", "reino del sol/luna" o "el que habla/escucha".
+EXCEPCIÓN DE NIVEL: Si el estudiante DEMUESTRA conocimientos gramaticales o PIDE EXPLÍCITAMENTE la regla formal (ej. 'explícame declinaciones', 'usa terminaciones gramaticales'), TIENES PERMITIDO levantar la Blacklist. En este caso, debes mantener tu analogía lúdica, pero incluir la estructura gramatical exacta o la regla formal a la que te refieres DENTRO DE UN PARÉNTESIS al lado del ejemplo o de la explicación, para tender un puente entre la metáfora y la gramática real.
 
-EJEMPLO 1 (Malo - Revela traducciones de preposiciones):
-"¡Excelente pregunta! Imagina que **in** [en] es dentro de una caja, **an** [en] es pegado a la pared, y **auf** [sobre] es encima de la mesa. ¿Dónde colocarías el libro si está sobre la mesa?"
--> MALO: Traduce las preposiciones en disputa, regalando la respuesta.
+CERO ARTÍCULOS Y TRADUCCIONES PROHIBIDAS:
+1. Está estrictamente prohibido escribir artículos alemanes sueltos o junto a nombres (nunca escribas 'der', 'die', 'das', 'den', 'dem', 'ein', 'eine') en ninguna parte del texto o viñetas.
+2. Tienes prohibido revelar la traducción o significado de las palabras clave por las que pregunta el alumno (como du, sie, kein, nicht, in, an, auf, weil, o verbos en conjugación).
 
-EJEMPLO 1 (Bueno - Socrático Puro):
-"¡Qué gran curiosidad por ubicar cosas! Imagina tres pegatinas: la primera para estar metido dentro de una caja, la segunda para estar pegado a la pared, y la tercera para estar encima de una superficie plana. Si la pegatina para estar encima de una superficie plana se llama **auf**, ¿cómo dirías que tu libro está encima de la mesa?"
--> BUENO: No traduce las preposiciones en conflicto, el alumno deduce usando la analogía.
+FEW-SHOT EXAMPLES:
 
-EJEMPLO 2 (Malo - Revela o da fórmulas de conjugación):
-"¡Excelente curiosidad por la acción de tener! Para yo le pones una e al final. ¿Cómo dirías yo tengo?"
--> MALO: Da la fórmula exacta resuelta.
+EJEMPLO 1 (Pregunta: "¿Cómo se usa el caso acusativo?"):
+¡Qué alegría ver tu curiosidad por explorar el alemán! 😊
 
-EJEMPLO 2 (Bueno - Socrático Puro):
-"¡Me encanta tu curiosidad por vestir las acciones! Imagina que una acción cambia su uniforme según quién hable, como ponerse una chaqueta diferente. Por ejemplo, si para la acción de buscar (**suchen**) el uniforme de 'yo' es **ich suche**, ¿cómo crees que se vestiría la acción de tener (**haben**) para 'tú' si se acorta de forma perezosa?"
--> BUENO: Da un andamiaje lúdico y de referencia sin revelar la fórmula matemática del cambio del verbo consultado.
+Imagina que tu frase es un campo de juego donde un elemento lanza un pase y otro lo recibe en la meta. En este juego, cuando el receptor del pase es un compañero del reino del sol, cambia su forma final para mostrar que sintió el impacto del balón. En cambio, si el receptor es del reino de la luna o de la estrella, mantiene su apariencia habitual sin ningún cambio. 🌟
 
-EJEMPLO 3 (Bueno - Sensaciones físicas):
-"¡Me encanta tu interés por expresar cómo te sientes físicamente! Imagina que en alemán el frío no es un objeto que posees en tu bolsillo, sino una manta helada que te cubre. Si en este juego dices que el frío 'te es a ti', y la pieza para 'a mí' suena muy parecido a la palabra española mía pero con r al final, ¿cómo crees que se diría la frase completa?"
--> BUENO: Corrige la lógica de 'haben/tener' para el frío, ofrece la analogía y el significado sin revelar el orden final en alemán.
-`;
-const systemInstruction = await getSystemPrompt("tutor_chat_system", promptSistema);
+¿Si usas **Apfel** (del reino del sol) en la posición que recibe el impacto, cómo crees que cambiaría su sonido final?
+* **Käse** [queso]
+* **Wein** [vino]
 
+EJEMPLO 2 (Pregunta: "Diferencia entre du y sie"):
+¡Hola! Me alegra mucho tu interés por comprender cómo nos comunicamos en alemán. 😊
+
+Imagina que eliges tu vestimenta según con quién vas a reunirte. Usas ropa cómoda y casual con tus conocidos de total confianza, pero vistes de forma formal y respetuosa ante tu profesor o un desconocido. Las elecciones que haces reflejan exactamente esa misma cercanía o respeto profesional. 🌟
+
+Si quieres hablar con tu profesor en la escuela, ¿cómo te dirigirías a él para mostrar el respeto adecuado?
+* **Familie** [familia]
+* **Chef** [jefe]`;
   const historialConversacion = data?.historialConversacion;
   if (!historialConversacion || !Array.isArray(historialConversacion)) {
     res.status(400).send("Faltan parámetros requeridos: historialConversacion");
@@ -572,9 +673,26 @@ const systemInstruction = await getSystemPrompt("tutor_chat_system", promptSiste
   const history = historialConversacion.slice(0, -1);
   const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
 
-  await streamWithDeepSeekFallback(res, systemInstruction, history, lastMessage, {
-    model: "gemini-3.5-flash",
-    cleanBold: false
+  const triage = await clasificarInputAlumno(lastMessage);
+
+  let instruccionEmocional = "";
+  if (triage.estadoEmocional === "frustrado") {
+    instruccionEmocional = `\n\n[ALERTA DE TRIAGE: El alumno está frustrado o quiere rendirse. En el PÁRRAFO 1 de tu respuesta, valida cálidamente su frustración, anímalo a seguir intentándolo y recuérdale que cometer errores es parte de aprender, usando emojis de soporte.]\n`;
+  } else if (triage.estadoEmocional === "panico") {
+    instruccionEmocional = `\n\n[ALERTA DE TRIAGE: El alumno tiene pánico, ansiedad o miedo por su examen cercano (como Goethe A1). En el PÁRRAFO 1, valida calurosamente su ansiedad, transmítele calma absoluta y dile que estás seguro de que le irá genial con práctica, usando emojis de apoyo.]\n`;
+  } else if (triage.estadoEmocional === "errores_ortograficos") {
+    instruccionEmocional = `\n\n[ALERTA DE TRIAGE: El alumno escribió con errores ortográficos graves en español. En el PÁRRAFO 1, valida su duda sobre el input corregido: "${triage.inputLimpio}" de manera empática y amigable, sin corregirlo de forma ruda o explícita.]\n`;
+  } else {
+    instruccionEmocional = `\n\n[ALERTA DE TRIAGE: El alumno realiza una pregunta en estado normal. Comienza en el PÁRRAFO 1 validando su duda de manera empática e inspiradora.]\n`;
+  }
+
+  const basePrompt = await getSystemPrompt("tutor_chat_system", promptSistema);
+  const activeSystemPrompt = basePrompt + instruccionEmocional;
+
+  await streamWithDeepSeekFallback(res, activeSystemPrompt, history, lastMessage, {
+    model: "gemini-3.1-flash-lite",
+    cleanBold: false,
+    temperature: 0.3
   });
 });
 
@@ -599,7 +717,8 @@ async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, categ
   const invocarModelo = async apiKeyValue => {
     const genAI = new GoogleGenerativeAI(apiKeyValue);
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.1-flash-lite"
+      model: "gemini-3.1-flash-lite",
+      generationConfig: { temperature: 0.2 }
     });
     const result = await model.generateContent(promptDirectorArte);
     return result.response.text().trim().replace(/['"]/g, '');
@@ -607,7 +726,12 @@ async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, categ
   try {
     return await invocarModelo(freeKeyVal);
   } catch (error) {
-    return conceptoEspanol;
+    try {
+      console.warn("getVisualDescriptionForConcept Key 1 failed, trying Key 2...");
+      return await invocarModelo(geminiFreeKey2.value());
+    } catch (error2) {
+      return conceptoEspanol;
+    }
   }
 }
 
@@ -617,7 +741,8 @@ async function getCleanEnglishTranslation(wordEspanol, freeKeyVal) {
   const invocarModelo = async apiKeyValue => {
     const genAI = new GoogleGenerativeAI(apiKeyValue);
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.1-flash-lite"
+      model: "gemini-3.1-flash-lite",
+      generationConfig: { temperature: 0.1 }
     });
     const result = await model.generateContent(prompt);
     return result.response.text().trim().toLowerCase().replace(/[^a-z\s-]/g, '');
@@ -625,7 +750,12 @@ async function getCleanEnglishTranslation(wordEspanol, freeKeyVal) {
   try {
     return await invocarModelo(freeKeyVal);
   } catch (error) {
-    return wordEspanol;
+    try {
+      console.warn("getCleanEnglishTranslation Key 1 failed, trying Key 2...");
+      return await invocarModelo(geminiFreeKey2.value());
+    } catch (error2) {
+      return wordEspanol;
+    }
   }
 }
 
@@ -1281,7 +1411,7 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
   return JSON.stringify(promptObj);
 }
 export const generateCardImage = onCall({
-  secrets: [falKey, geminiFreeKey]
+  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey]
 }, async request => {
   const {
     wordObj,
@@ -1319,19 +1449,22 @@ export const generateCardImage = onCall({
     });
 
     // Si no tenemos un concepto en inglés predefinido, usamos Gemini para traducirlo rápido
+    const activeFreeKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
+    useFirstKey = !useFirstKey; // Invertir valor para la próxima petición
+
     let concepto = conceptoIngles;
     if (esColor) {
       // Si es un color, obtenemos la traducción limpia en inglés (ej. "blanco" -> "white")
       // y definimos una salpicadura de pintura de ese color en lugar de personas
-      const colorEn = await getCleanEnglishTranslation(wordObj.es, geminiFreeKey.value());
+      const colorEn = await getCleanEnglishTranslation(wordObj.es, activeFreeKey);
       concepto = `a vibrant splash of ${colorEn} paint`;
     } else if (esPersonaje) {
       // Ignorar la descripción de icono predefinida (por ej. luna, estrella, nube con caritas)
       // para forzar la generación de un personaje humano que represente la emoción/acción.
-      concepto = await getCleanEnglishTranslation(wordObj.es, geminiFreeKey.value());
+      concepto = await getCleanEnglishTranslation(wordObj.es, activeFreeKey);
     } else if (!concepto) {
       const category = (request.data.category || "") + (wordObj.category ? ` - ${wordObj.category}` : "");
-      concepto = await getVisualDescriptionForConcept(wordObj.es, geminiFreeKey.value(), category);
+      concepto = await getVisualDescriptionForConcept(wordObj.es, activeFreeKey, category);
     }
 
     // Ensamblar el prompt usando la Fábrica
@@ -1380,7 +1513,7 @@ export const generateCardImage = onCall({
 // 6. GENERADOR DE COMPRENSIÓN LECTORA (generateReadingTest)
 // =========================================================================
 export const generateReadingTest = onCall({
-  secrets: [geminiFreeKey, falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
   timeoutSeconds: 120
 }, async request => {
   const {
@@ -1421,46 +1554,59 @@ export const generateReadingTest = onCall({
   const systemInstruction = await getSystemPrompt("reading_comprehension_system", defaultSystemInstruction);
   const promptUser = `Genera la prueba de comprensión lectora para el tema: "${tema}".`;
 
-  try {
-    console.log("ReadingTest FinOps: Intentando con Gemini 3.5 Flash...");
-    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+  const tryGemini = async (key) => {
+    const genAI = new GoogleGenerativeAI(key);
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.1-flash-lite",
       systemInstruction: systemInstruction,
       generationConfig: {
         responseMimeType: "application/json",
-        temperature: 0.7
+        temperature: 0.3
       }
     });
-
     const result = await model.generateContent(promptUser);
     const responseText = result.response.text().trim();
     return JSON.parse(responseText);
+  };
+
+  const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
+  const secondaryKey = useFirstKey ? geminiFreeKey2.value() : geminiFreeKey.value();
+  useFirstKey = !useFirstKey; // Invertir valor para la próxima petición
+
+  try {
+    console.log("ReadingTest FinOps: Intentando con Gemini 3.1 Flash-Lite (Round-Robin Primary Key)...");
+    return await tryGemini(primaryKey);
   } catch (geminiError) {
-    console.warn("ReadingTest FinOps: Gemini falló, activando fallback a DeepSeek V3.2:", geminiError.message);
+    console.warn("ReadingTest FinOps: Gemini Primary Key falló. Error:", geminiError.message);
     try {
-      fal.config({
-        credentials: falKey.value()
-      });
-      console.log("ReadingTest FinOps: Invocando DeepSeek via Fal.ai...");
+      console.log("ReadingTest FinOps: Reintentando con Gemini 3.1 Flash-Lite (Round-Robin Secondary Key)...");
+      return await tryGemini(secondaryKey);
+    } catch (geminiError2) {
+      console.warn("ReadingTest FinOps: Fallaron ambas llaves de Gemini. Activando fallback a Claude Haiku 4.5:", geminiError2.message);
+      try {
+        fal.config({
+          credentials: falKey.value()
+        });
+        console.log("ReadingTest FinOps: Invocando Claude Haiku 4.5 via Fal.ai...");
 
-      const finalPromptUser = promptUser + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
-      const response = await fal.subscribe("openrouter/router/enterprise", {
-        input: {
-          model: "deepseek/deepseek-v3.2",
-          prompt: finalPromptUser,
-          system_prompt: systemInstruction,
-          temperature: 0.7,
-          top_p: 0.9
-        }
-      });
+        const finalPromptUser = promptUser + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
+        const response = await fal.subscribe("openrouter/router/enterprise", {
+          input: {
+            model: "anthropic/claude-haiku-4.5",
+            prompt: finalPromptUser,
+            system_prompt: systemInstruction,
+            temperature: 0.7,
+            top_p: 0.9
+          }
+        });
 
-      const outputText = response.data.output || response.data.text || "";
-      const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
-      return JSON.parse(cleanJson);
-    } catch (fallbackError) {
-      console.error("ReadingTest FinOps: Error crítico en fallback de DeepSeek:", fallbackError);
-      throw new HttpsError("internal", "Error generando el examen de comprensión lectora en ambos proveedores: " + fallbackError.message);
+        const outputText = response.data.output || response.data.text || "";
+        const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+        return JSON.parse(cleanJson);
+      } catch (fallbackError) {
+        console.error("ReadingTest FinOps: Error crítico en fallback de Claude Haiku 4.5:", fallbackError);
+        throw new HttpsError("internal", "Error generando el examen de comprensión lectora en ambos proveedores: " + fallbackError.message);
+      }
     }
   }
 });
@@ -1468,7 +1614,7 @@ export const generateReadingTest = onCall({
 export const generateDynamicQuiz = onCall({
   timeoutSeconds: 120,
   memory: "512MiB",
-  secrets: [geminiFreeKey, falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
 }, async (request) => {
   const { tema } = request.data || {};
   if (!tema) {
@@ -1490,12 +1636,13 @@ Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocab
 
   const promptUser = `Genera un quiz de exactamente 10 preguntas para el nivel Goethe A1 sobre el siguiente tema: ${tema}.`;
 
-  try {
-    const genAI = new GoogleGenerativeAI(geminiFreeKey.value());
+  const tryGemini = async (key) => {
+    const genAI = new GoogleGenerativeAI(key);
     const geminiModel = genAI.getGenerativeModel({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.1-flash-lite",
       generationConfig: {
         responseMimeType: "application/json",
+        temperature: 0.2
       }
     });
 
@@ -1506,29 +1653,44 @@ Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocab
 
     const responseText = result.response.text().trim();
     return JSON.parse(responseText);
+  };
+
+  const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
+  const secondaryKey = useFirstKey ? geminiFreeKey2.value() : geminiFreeKey.value();
+  useFirstKey = !useFirstKey; // Invertir valor para la próxima petición
+
+  try {
+    console.log("DynamicQuiz FinOps: Intentando con Gemini 3.1 Flash-Lite (Round-Robin Primary Key)...");
+    return await tryGemini(primaryKey);
   } catch (geminiError) {
-    console.warn("DynamicQuiz FinOps: Gemini falló, activando fallback a DeepSeek V3.2:", geminiError.message);
+    console.warn("DynamicQuiz FinOps: Gemini Primary Key falló. Error:", geminiError.message);
     try {
-      fal.config({ credentials: falKey.value() });
-      console.log("DynamicQuiz FinOps: Invocando DeepSeek via Fal.ai...");
+      console.log("DynamicQuiz FinOps: Reintentando con Gemini 3.1 Flash-Lite (Round-Robin Secondary Key)...");
+      return await tryGemini(secondaryKey);
+    } catch (geminiError2) {
+      console.warn("DynamicQuiz FinOps: Fallaron ambas llaves de Gemini. Activando fallback a Claude Haiku 4.5:", geminiError2.message);
+      try {
+        fal.config({ credentials: falKey.value() });
+        console.log("DynamicQuiz FinOps: Invocando Claude Haiku 4.5 via Fal.ai...");
 
-      const finalPromptUser = promptUser + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código \`\`\`json ni texto adicional fuera del JSON.";
-      const response = await fal.subscribe("openrouter/router/enterprise", {
-        input: {
-          model: "deepseek/deepseek-v3.2",
-          prompt: finalPromptUser,
-          system_prompt: systemInstruction,
-          temperature: 0.3,
-          top_p: 0.9
-        }
-      });
+        const finalPromptUser = promptUser + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código \`\`\`json ni texto adicional fuera del JSON.";
+        const response = await fal.subscribe("openrouter/router/enterprise", {
+          input: {
+            model: "anthropic/claude-haiku-4.5",
+            prompt: finalPromptUser,
+            system_prompt: systemInstruction,
+            temperature: 0.3,
+            top_p: 0.9
+          }
+        });
 
-      const outputText = response.data.output || response.data.text || "";
-      const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
-      return JSON.parse(cleanJson);
-    } catch (fallbackError) {
-      console.error("DynamicQuiz FinOps: Error crítico en fallback de DeepSeek:", fallbackError);
-      throw new HttpsError("internal", "Error generando el quiz dinámico en ambos proveedores: " + fallbackError.message);
+        const outputText = response.data.output || response.data.text || "";
+        const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+        return JSON.parse(cleanJson);
+      } catch (fallbackError) {
+        console.error("DynamicQuiz FinOps: Error crítico en fallback de Claude Haiku 4.5:", fallbackError);
+        throw new HttpsError("internal", "Error generando el quiz dinámico en ambos proveedores: " + fallbackError.message);
+      }
     }
   }
 });

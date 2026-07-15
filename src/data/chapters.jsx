@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Activity, BookOpen, Bot, Briefcase, Car, Clock, Coffee, Edit as Edit3, Headphones, Heart, Home, Link2, List, Mail, Mic, PlayCircle, Search, ShoppingCart, Star as Sparkles, Volume2, Laptop, Zap } from 'lucide-react';
 import GrammarAccordion from '../components/GrammarAccordion';
 import AudioSim from '../components/AudioSim';
-import InteractiveQA from '../components/InteractiveQA';
-import EmailSimulator from '../components/EmailSimulator';
+const InteractiveQA = lazy(() => import('../components/InteractiveQA'));
+const EmailSimulator = lazy(() => import('../components/EmailSimulator'));
 import PresentationVocabCard from '../components/PresentationVocabCard';
 import DraggableSentenceBuilder from '../components/DraggableSentenceBuilder';
 import AccusativeShield from '../components/AccusativeShield';

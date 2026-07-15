@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { fal } from '@fal-ai/client';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +19,10 @@ if (!FAL_KEY) {
   process.exit(1);
 }
 fal.config({ credentials: FAL_KEY });
+
+const GEMINI_KEY = process.env.GEMINI_FREE_KEY || process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+if (!GEMINI_KEY) { console.warn("⚠️ No se encontró la llave de Gemini."); }
+const genAI = new GoogleGenerativeAI(GEMINI_KEY);
 
 // Endpoint extraído del historial de despliegues
 const ENDPOINT_URL = "https://sendtutorchatmessage-44keyii6gq-uc.a.run.app";
@@ -33,7 +38,9 @@ const testCases = [
   { label: "Preposiciones Locativas", input: "¿Cuál es la diferencia entre 'in', 'an' y 'auf'?" },
   { label: "Excepción Léxica", input: "¿Qué significa 'Guten Appetit' y cuándo lo digo?" },
   { label: "Formación de Plurales", input: "¿Cómo se forma el plural de los sustantivos en alemán?" },
-  { label: "Posesivos Complejos", input: "Explícame los posesivos como 'mein' y 'dein' para 'perro' y 'gato'." }
+  { label: "Posesivos Complejos", input: "Explícame los posesivos como 'mein' y 'dein' para 'perro' y 'gato'." },
+  { label: "Error Ortográfico Menor (Typo)", input: "¿Para usar la llave de confianza se dice Wie bis du?" },
+  { label: "Frustración (Válvula de Escape)", input: "No la se. Por favor dime las conjugaciones del verbo sind" }
 ];
 
 // ─── Función de petición con lectura de SSE stream ───────────────────────────
@@ -104,7 +111,7 @@ async function sendRequest(testCase, index) {
     }
 
     const latency = Date.now() - startTime;
-    const provider = (isFallback || latency > 6000) ? "DeepSeek V3.2 (Fallback)" : "Gemini 3.5 Flash";
+    const provider = (isFallback || latency > 6000) ? "DeepSeek V4 Flash (Fallback)" : "Gemini 3.1 Flash-Lite";
     
     return { index, label: testCase.label, input: testCase.input, success: true, text: fullText.trim(), latency, provider };
   } catch (err) {
@@ -116,38 +123,39 @@ async function sendRequest(testCase, index) {
 // ─── Juez: Claude Sonnet 5 via Fal.ai ────────────────────────────────────────
 async function runJudge(testCase, responseText) {
   const promptJuez = `
-Actúa como Evaluador Pedagógico Estricto de un Tutor de Alemán A1.
+Eres el "Juez de Alineación V5.0", un Auditor de Prompts extremadamente estricto y especializado en control de calidad para modelos LLM de bajo costo. Tu único objetivo es someter las respuestas del tutor a un riguroso análisis adversarial.
+
 Input del alumno: "${testCase.input}"
 Respuesta del Tutor: "${responseText}"
 
-Evalúa con un puntaje del 1 al 10 usando ESTRICTAMENTE estos 4 criterios del Modo Socrático V8:
+RÚBRICA DE CALIFICACIÓN ESTRICTA (Escala 0-100):
+1. Control de Blacklist y Fugas Semánticas (Peso: 35 puntos): Busca términos prohibidos: 'acusativo', 'dativo', 'género', 'verbo', 'sustantivo', etc. PENALIZA -15 puntos por cada uso de estas palabras, o si usa "acción" para referirse a verbos o "palabra" en explicaciones de sintaxis.
+2. Estructura Rígida de 3 Párrafos (Peso: 25 puntos): Párrafo 1 (Validación empática en español + emojis). Párrafo 2 (Explicación abstracta, cero reglas directas). Párrafo 3 (Vocabulario desarmado en viñetas ordenadas alfabéticamente '* **alemán** [español]' y un reto 100% abierto). PENALIZA -10 puntos por cada párrafo mal estructurado, viñeta mal formateada o si supera 6 oraciones en total.
+3. Candado de Traducción (Peso: 25 puntos): Verifica que NO se traduzcan oraciones completas y el reto no regale la respuesta directa. PENALIZA -20 puntos si se rompe el misterio.
+4. Tono y Emojis (Peso: 15 puntos): Cálido, amigable. Uso de negritas en alemán. PENALIZA -5 puntos si es robótico o carece de formato visual.
 
-1. VALIDACIÓN TEMATIZADA: ¿El tutor valida la curiosidad del alumno de forma específica al tema consultado? Penaliza si usa elogios genéricos ("¡Excelente pregunta!") o robóticos sin relación al tema.
-2. ERRADICACIÓN DE DOBLE PREGUNTA: ¿Formula EXACTAMENTE UNA (1) pregunta al final? Penaliza GRAVEMENTE (resta 5 puntos) si hay disyunciones ("o"), sub-preguntas, o más de un signo de interrogación (?) en todo el mensaje.
-3. TRADUCCIÓN SUB-CLAUSULAR AISLADA: ¿Evita traducir oraciones completas en los ejemplos? Penaliza si el tutor entrega traducciones textuales de frases completas; solo debe proporcionar piezas sueltas o pistas fonéticas de apoyo.
-4. CERO JERGA Y METÁFORAS LÚDICAS: ¿Evita por completo cualquier término técnico gramatical ('acusativo', 'dativo', 'nominativo', 'género', 'masculino', 'femenino', 'plural', 'pronombre', etc.) e incluso los artículos puros entre paréntesis como '(der)'? Exige el uso estricto de metáforas lúdicas (ej. "etiqueta sol", "llave de respeto", "colitas"). Penaliza si la jerga técnica está presente.
-
-Responde ÚNICAMENTE con un JSON exacto, sin código markdown ni texto adicional:
-{
-  "score": 8,
-  "feedback": "Explicación breve de por qué se otorgó esa calificación, refiriendo a los 4 criterios."
-}
+FORMATO DE SALIDA (CRÍTICO): Devuelve ÚNICAMENTE un JSON válido donde "score" sea el número final y "feedback" contenga el reporte en Markdown con esta estructura exacta:
+### 📊 EVALUACIÓN DE ALINEACIÓN V5.0
+* **Calificación Final:** [Nota / 100]
+* **Veredicto:** [APROBADO / RECHAZADO]
+🔍 ANÁLISIS DETALLADO: [Detalle de los 4 puntos]
+💡 ACCIÓN CORRECTIVA PROPUESTA: [Instrucción]
 `;
 
   try {
-    const result = await fal.subscribe("openrouter/router/enterprise", {
-      input: {
-        model: "anthropic/claude-sonnet-5",
-        prompt: promptJuez,
-        temperature: 0.1
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3.5-flash",
+      generationConfig: {
+        temperature: 0.1,
+        responseMimeType: "application/json",
       }
     });
 
-    const output = result.data.output || "";
-    const cleanJson = output.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
-    return JSON.parse(cleanJson);
+    const result = await model.generateContent(promptJuez);
+    const outputText = result.response.text().trim();
+    return JSON.parse(outputText);
   } catch (err) {
-    return { score: "N/A", feedback: "Fallo en la evaluación del Juez: " + err.message };
+    return { score: "N/A", feedback: "Fallo en la evaluación del Juez Gemini: " + err.message };
   }
 }
 
@@ -171,7 +179,7 @@ async function main() {
     console.log(`${status} Caso #${result.index} [${result.label}] [${result.provider}] — ${result.latency}ms`);
   }
 
-  console.log("\n⚖️ Evaluando con Claude Sonnet 5...\n");
+  console.log("\n⚖️ Evaluando con Gemini 3.5 Flash...\n");
   const evaluated = [];
   
   for (const res of results) {
@@ -188,7 +196,7 @@ async function main() {
   const avgScore = validScores.length > 0 ? (validScores.reduce((a, b) => a + b, 0) / validScores.length).toFixed(2) : "N/A";
   
   let markdown = `# Informe de Auditoría — Tutor IA Socrático V5.0 🧠\n\n`;
-  markdown += `**Nota Media Global:** **${avgScore}/10**\n\n`;
+  markdown += `**Nota Media Global:** **${avgScore}/100**\n\n`;
   markdown += `## Tabla de Resultados\n\n| # | Caso | Proveedor | Latencia | Score | Feedback |\n|---|---|---|---|---|---|\n`;
   
   evaluated.forEach(r => {
@@ -197,12 +205,12 @@ async function main() {
 
   markdown += `\n## Respuestas Completas\n\n`;
   evaluated.forEach(r => {
-    markdown += `### Caso #${r.index} — ${r.label}\n**Input:** "${r.input}" | **Score:** ${r.score}/10\n\n> ${r.text || r.error}\n\n**Feedback:** ${r.feedback}\n\n---\n\n`;
+    markdown += `### Caso #${r.index} — ${r.label}\n**Input:** "${r.input}" | **Score:** ${r.score}/100\n\n> ${r.text || r.error}\n\n**Feedback:** ${r.feedback}\n\n---\n\n`;
   });
 
   const reportPath = path.join(__dirname, '../informe_tutor_qa_v5.md');
   fs.writeFileSync(reportPath, markdown, 'utf8');
-  console.log(`\n🎉 Informe generado: ${reportPath}\n📊 Nota media: ${avgScore}/10`);
+  console.log(`\n🎉 Informe generado: ${reportPath}\n📊 Nota media: ${avgScore}/100`);
 }
 
 main().catch(err => console.error("Error crítico:", err));
