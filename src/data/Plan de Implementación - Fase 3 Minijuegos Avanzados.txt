@@ -1,0 +1,587 @@
+Plan de Implementación - Fase 3: Minijuegos Avanzados
+Desarrollaremos dos nuevos minijuegos gamificados interactivos para el Plan de Estudios A1: el Escudo del Acusativo (para entrenar la declinación de acusativos) y la Línea de Tiempo Mecánica (para visualizar la regla del Perfekt/Satzklammer). Además, refactorizaremos los módulos sp_2, sp_3, sp_6 y sp_7 en chapters.jsx a la estructura de diapositivas interactivas.
+
+Cambios Propuestos
+[NEW] 
+AccusativeShield.jsx
+Un juego donde el usuario debe aplicar el escudo para declinar artículos masculinos en acusativo y dejar pasar los femeninos/neutros sin cambios.
+
+jsx
+
+import React, { useState } from 'react';
+import { Shield, ArrowRight, CheckCircle2, AlertTriangle, RotateCcw } from 'lucide-react';
+import { nativeSpeak } from '../utils/helpers';
+const AccusativeShield = ({ words = [] }) => {
+  const list = words.length > 0 ? words : [
+    { word: "Apfel", gender: "der", translation: "manzana" },
+    { word: "Tomate", gender: "die", translation: "tomate" },
+    { word: "Brot", gender: "das", translation: "pan" },
+    { word: "Käse", gender: "der", translation: "queso" },
+    { word: "Milch", gender: "die", translation: "leche" }
+  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showFeedback, setShowFeedback] = useState(null); // 'correct' | 'incorrect'
+  const [feedbackMsg, setFeedbackMsg] = useState("");
+  const [finished, setFinished] = useState(false);
+  const currentWord = list[currentIndex];
+  const handleAction = (applyShield) => {
+    if (showFeedback) return;
+    const isMasculine = currentWord.gender === "der";
+    let correct = false;
+    let explanation = "";
+    if (applyShield) {
+      if (isMasculine) {
+        correct = true;
+        explanation = `¡Correcto! El masculino '${currentWord.gender} ${currentWord.word}' cambia en Acusativo a 'den ${currentWord.word}' (o 'einen ${currentWord.word}').`;
+        if (typeof nativeSpeak === 'function') nativeSpeak(`den ${currentWord.word}`);
+      } else {
+        correct = false;
+        explanation = `¡Error! El sustantivo es ${currentWord.gender === "die" ? "femenino" : "neutro"} (${currentWord.gender} ${currentWord.word}). Solo los masculinos cambian en acusativo.`;
+      }
+    } else {
+      if (!isMasculine) {
+        correct = true;
+        explanation = `¡Correcto! '${currentWord.gender} ${currentWord.word}' es ${currentWord.gender === "die" ? "femenino" : "neutro"}, por lo que no cambia en acusativo.`;
+        if (typeof nativeSpeak === 'function') nativeSpeak(`${currentWord.gender} ${currentWord.word}`);
+      } else {
+        correct = false;
+        explanation = `¡Error! '${currentWord.gender} ${currentWord.word}' es masculino. El acusativo exige cambiar '${currentWord.gender}' a 'den' (o 'einen').`;
+      }
+    }
+    if (correct) {
+      setScore(prev => prev + 1);
+      setShowFeedback('correct');
+    } else {
+      setShowFeedback('incorrect');
+    }
+    setFeedbackMsg(explanation);
+    setTimeout(() => {
+      setShowFeedback(null);
+      setFeedbackMsg("");
+      if (currentIndex + 1 < list.length) {
+        setCurrentIndex(prev => prev + 1);
+      } else {
+        setFinished(true);
+      }
+    }, 3500);
+  };
+  const resetGame = () => {
+    setCurrentIndex(0);
+    setScore(0);
+    setShowFeedback(null);
+    setFeedbackMsg("");
+    setFinished(false);
+  };
+  if (finished) {
+    return (
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-sm max-w-md mx-auto">
+        <h4 className="font-bold text-xl text-slate-800 mb-2">🛡️ Resultados del Escudo</h4>
+        <div className="text-4xl font-extrabold text-indigo-600 my-4">{score} / {list.length}</div>
+        <p className="text-sm text-slate-600 mb-6">
+          {score === list.length 
+            ? "¡Excelente! Has dominado la regla del acusativo. ¡Ningún masculino logró burlar tu escudo!" 
+            : "Sigue practicando. Recuerda: ¡Solo declinamos los sustantivos masculinos (der → den)!"}
+        </p>
+        <button 
+          onClick={resetGame}
+          className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold transition shadow-sm"
+        >
+          <RotateCcw size={18} /> Jugar de nuevo
+        </button>
+      </div>
+    );
+  }
+  return (
+    <div className={`bg-white border-2 rounded-2xl p-6 shadow-sm max-w-md mx-auto transition-all duration-300 ${
+      showFeedback === 'correct' 
+        ? 'border-emerald-500 bg-emerald-50/50' 
+        : showFeedback === 'incorrect' 
+          ? 'border-rose-500 bg-rose-50/50' 
+          : 'border-slate-200'
+    }`}>
+      <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
+        <span>🛡️ El Escudo del Acusativo</span>
+        <span>Palabra {currentIndex + 1} de {list.length}</span>
+      </div>
+      {/* Word Box */}
+      <div className="my-6 text-center">
+        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase mb-2 ${
+          currentWord.gender === "der" 
+            ? "bg-blue-100 text-blue-800" 
+            : currentWord.gender === "die" 
+              ? "bg-rose-100 text-rose-800" 
+              : "bg-amber-100 text-amber-800"
+        }`}>
+          {currentWord.gender}
+        </span>
+        <h3 className="text-3xl font-black text-slate-800 tracking-tight">{currentWord.word}</h3>
+        <p className="text-sm text-slate-400 mt-1 italic">({currentWord.translation})</p>
+      </div>
+      {/* Feedback Alert */}
+      {showFeedback && (
+        <div className={`flex items-start gap-2 p-3 rounded-xl border mb-6 text-xs sm:text-sm font-medium animate-in fade-in zoom-in-95 ${
+          showFeedback === 'correct' 
+            ? 'bg-emerald-100 border-emerald-200 text-emerald-800' 
+            : 'bg-rose-100 border-rose-200 text-rose-800'
+        }`}>
+          {showFeedback === 'correct' ? <CheckCircle2 size={18} className="shrink-0 text-emerald-600 mt-0.5" /> : <AlertTriangle size={18} className="shrink-0 text-rose-600 mt-0.5" />}
+          <span>{feedbackMsg}</span>
+        </div>
+      )}
+      {/* Action Buttons */}
+      <div className="grid grid-cols-2 gap-3">
+        <button
+          onClick={() => handleAction(true)}
+          disabled={showFeedback !== null}
+          className="flex flex-col items-center justify-center p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none"
+        >
+          <Shield size={22} className="mb-1" />
+          <span className="text-sm">Aplicar Escudo</span>
+          <span className="text-[10px] font-medium opacity-80">(Cambiar a -en)</span>
+        </button>
+        <button
+          onClick={() => handleAction(false)}
+          disabled={showFeedback !== null}
+          className="flex flex-col items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold border border-slate-200 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none"
+        >
+          <ArrowRight size={22} className="mb-1" />
+          <span className="text-sm">Dejar Pasar</span>
+          <span className="text-[10px] font-medium opacity-85">(Sin cambios)</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+export default AccusativeShield;
+[NEW] 
+MechanicalTimeline.jsx
+Un visualizador dinámico controlado por un slider para animar el reordenamiento del verbo auxiliar a la Posición 2 y el participio al final de la oración (Das Perfekt).
+
+jsx
+
+import React, { useState } from 'react';
+import { ArrowRight, History, Play } from 'lucide-react';
+import { nativeSpeak } from '../utils/helpers';
+const MechanicalTimeline = ({ 
+  present = { subject: "Ich", verb: "kaufe", complement: "eine Pizza" },
+  past = { auxiliary: "habe", participle: "gekauft" }
+}) => {
+  const [timelineVal, setTimelineVal] = useState(0);
+  const t = parseFloat(timelineVal);
+  const speakSentence = () => {
+    if (t < 0.5) {
+      if (typeof nativeSpeak === 'function') nativeSpeak(`${present.subject} ${present.verb} ${present.complement}`);
+    } else {
+      if (typeof nativeSpeak === 'function') nativeSpeak(`${present.subject} ${past.auxiliary} ${present.complement} ${past.participle}`);
+    }
+  };
+  return (
+    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm max-w-xl mx-auto my-6 text-left">
+      <div className="flex justify-between items-center mb-6">
+        <h4 className="font-bold text-slate-800 text-sm tracking-wide uppercase flex items-center gap-2">
+          ⚙️ Línea de Tiempo Mecánica: Das Perfekt
+        </h4>
+        <button 
+          onClick={speakSentence}
+          className="p-2 bg-indigo-50 text-indigo-600 rounded-full hover:bg-indigo-100 transition"
+          title="Escuchar oración activa"
+        >
+          <Play size={16} fill="currentColor" />
+        </button>
+      </div>
+      {/* Cajas de la Oración */}
+      <div className="relative min-h-[140px] bg-white border border-slate-100 rounded-xl p-4 flex flex-col justify-between mb-6 overflow-hidden">
+        <div className="grid grid-cols-4 gap-2 text-center text-[10px] font-bold text-slate-400 uppercase">
+          <span>Posición 1</span>
+          <span>Posición 2</span>
+          <span>Complemento</span>
+          <span>Final Absoluto</span>
+        </div>
+        <div className="grid grid-cols-4 gap-2 items-center my-4 relative">
+          {/* Sujeto */}
+          <div className="bg-blue-50 border-2 border-blue-200 text-blue-900 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all">
+            {present.subject}
+            <span className="block text-[9px] font-normal text-blue-600/80 mt-0.5">Sujeto</span>
+          </div>
+          {/* Verbo Principal / Auxiliar */}
+          <div className="relative h-[56px] flex items-center justify-center">
+            {/* Verbo en Presente */}
+            <div 
+              className="absolute inset-0 bg-indigo-50 border-2 border-indigo-200 text-indigo-900 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center"
+              style={{
+                opacity: 1 - t,
+                transform: `translateY(${-t * 20}px) scale(${1 - t * 0.2})`,
+                pointerEvents: t > 0.8 ? 'none' : 'auto'
+              }}
+            >
+              {present.verb}
+              <span className="block text-[9px] font-normal text-indigo-600/80">Verbo</span>
+            </div>
+            {/* Auxiliar en Pasado */}
+            <div 
+              className="absolute inset-0 bg-emerald-600 border-2 border-emerald-600 text-white rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center shadow-sm"
+              style={{
+                opacity: t,
+                transform: `translateY(${(1 - t) * 20}px) scale(${0.8 + t * 0.2})`,
+                pointerEvents: t < 0.2 ? 'none' : 'auto'
+              }}
+            >
+              {past.auxiliary}
+              <span className="block text-[9px] font-normal text-emerald-100 mt-0.5">Auxiliar</span>
+            </div>
+          </div>
+          {/* Complemento */}
+          <div className="bg-slate-50 border-2 border-slate-200 text-slate-800 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all">
+            {present.complement}
+            <span className="block text-[9px] font-normal text-slate-500 mt-0.5">Relleno</span>
+          </div>
+          {/* Participio */}
+          <div className="relative h-[56px] flex items-center justify-center">
+            <div 
+              className="absolute inset-0 bg-emerald-50 border-2 border-emerald-200 text-emerald-950 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center"
+              style={{
+                opacity: t,
+                transform: `translateX(${(1 - t) * -40}px) scale(${0.7 + t * 0.3})`,
+                pointerEvents: t < 0.2 ? 'none' : 'auto'
+              }}
+            >
+              {past.participle}
+              <span className="block text-[9px] font-normal text-emerald-600/80 mt-0.5">Participio</span>
+            </div>
+            
+            {t < 0.5 && (
+              <div className="absolute inset-0 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-[10px] text-slate-300 font-semibold uppercase">
+                Vacío
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      {/* Controles de Slider */}
+      <div className="space-y-3">
+        <div className="flex justify-between text-xs font-bold text-slate-500 px-1">
+          <span className={t < 0.3 ? "text-indigo-600 font-black" : ""}>PRESENTE (Präsens)</span>
+          <span className={t > 0.7 ? "text-emerald-600 font-black" : ""}>PASADO (Perfekt)</span>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <History size={18} className="text-slate-400" />
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={timelineVal}
+            onChange={(e) => setTimelineVal(e.target.value)}
+            className="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+          />
+          <ArrowRight size={18} className="text-slate-400" />
+        </div>
+      </div>
+      <div className="mt-4 text-center">
+        <p className="text-xs text-slate-500">
+          {t < 0.3 ? (
+            <span>El verbo principal <strong>"{present.verb}"</strong> reina en la Posición 2.</span>
+          ) : t > 0.7 ? (
+            <span>El auxiliar <strong>"{past.auxiliary}"</strong> toma la Posición 2, y el verbo original muta a <strong>"{past.participle}"</strong> al final absoluto.</span>
+          ) : (
+            <span>¡Moviendo el motor verbal al final de la oración!</span>
+          )}
+        </p>
+      </div>
+    </div>
+  );
+};
+export default MechanicalTimeline;
+[MODIFY] 
+chapters.jsx
+Se importan los nuevos componentes y se refactorizan sp_2, sp_3, sp_6, y sp_7 para usar arrays de diapositivas (slides: []) e integrar los minijuegos interactivos.
+
+diff
+
+import EmailSimulator from '../components/EmailSimulator';
+ import PresentationVocabCard from '../components/PresentationVocabCard';
+ import DraggableSentenceBuilder from '../components/DraggableSentenceBuilder';
++import AccusativeShield from '../components/AccusativeShield';
++import MechanicalTimeline from '../components/MechanicalTimeline';
+ 
+ export // --- DATA: EL VOCABULARIO COMPLETO ---
+diff
+
+{
+     id: 'sp_2',
+     title: 'Capítulo 2: Mi Círculo, Géneros y Negación',
+-    content: `### Capítulo 2: Mi Círculo, Géneros y Negación\n\nEl alemán clasifica todo en tres géneros. No intentes buscarles lógica con el español, ¡aprende el "color" de la palabra!\n\n| Masculino | Femenino | Neutro | Plural |\n|---|---|---|---|\n| der (el) | die (la) | das (lo) | die (los/las) |\n| ein (un) | eine (una) | ein (un) | - (unos no existe) |\n\n### 🔑 La Matriz de Posesivos\nTodos los posesivos (*mein*=mi, *dein*=tu, *sein*=su) funcionan exactamente igual que *ein*. **Añade una "-e" al final si la palabra es femenina o plural.**\nEjemplo: *mein Vater* (Masc) vs. *mein**e** Mutter* (Fem) vs. *mein**e** Eltern* (Plural).\n\n> **🚫 La Negación:**\n> * Para negar verbos/acciones usa **nicht**: *Ich tanze nicht.*\n> * Para negar sustantivos usa **kein / keine** ("el asesino de ein"): *Ich habe keine Kinder.*`,
+-    presentationUrl: 'https://drive.google.com/file/d/1ydPXeoc5VGUyyP2C-_eBo7e0RB-CTTGS/view?usp=drive_web'
++    presentationUrl: 'https://drive.google.com/file/d/1ydPXeoc5VGUyyP2C-_eBo7e0RB-CTTGS/view?usp=drive_web',
++    slides: [
++      {
++        title: "Los Tres Géneros en Alemán",
++        subtitle: "Aprende el color de las palabras",
++        content: (
++          <div className="space-y-6 text-left">
++            <p className="text-slate-700 leading-relaxed">
++              El alemán clasifica todo en tres géneros. No intentes buscarles lógica con el español, ¡aprende el "color" de la palabra!
++            </p>
++            <div className="overflow-x-auto">
++              <table className="w-full text-left border-collapse border border-slate-200 text-sm">
++                <thead>
++                  <tr className="bg-slate-100">
++                    <th className="p-3 border border-slate-200 font-bold">Género</th>
++                    <th className="p-3 border border-slate-200 font-bold">Definido</th>
++                    <th className="p-3 border border-slate-200 font-bold">Indefinido</th>
++                    <th className="p-3 border border-slate-200 font-bold">Plural</th>
++                  </tr>
++                </thead>
++                <tbody>
++                  <tr>
++                    <td className="p-3 border border-slate-200 font-bold text-blue-600">Masculino</td>
++                    <td className="p-3 border border-slate-200 font-mono">der (el)</td>
++                    <td className="p-3 border border-slate-200 font-mono">ein (un)</td>
++                    <td className="p-3 border border-slate-200 font-mono">die (los/las)</td>
++                  </tr>
++                  <tr className="bg-slate-50/50">
++                    <td className="p-3 border border-slate-200 font-bold text-rose-600">Femenino</td>
++                    <td className="p-3 border border-slate-200 font-mono">die (la)</td>
++                    <td className="p-3 border border-slate-200 font-mono">eine (una)</td>
++                    <td className="p-3 border border-slate-200 font-mono">die (los/las)</td>
++                  </tr>
++                  <tr>
++                    <td className="p-3 border border-slate-200 font-bold text-amber-600">Neutro</td>
++                    <td className="p-3 border border-slate-200 font-mono">das (lo)</td>
++                    <td className="p-3 border border-slate-200 font-mono">ein (un)</td>
++                    <td className="p-3 border border-slate-200 font-mono">die (los/las)</td>
++                  </tr>
++                </tbody>
++              </table>
++            </div>
++          </div>
++        )
++      },
++      {
++        title: "Práctica de Géneros y Posesivos",
++        subtitle: "Añade una '-e' al final si la palabra es femenina o plural",
++        content: (
++          <div className="space-y-6 text-left">
++            <p className="text-slate-700 leading-relaxed">
++              Todos los posesivos (<em>mein</em>=mi, <em>dein</em>=tu, <em>sein</em>=su) funcionan exactamente igual que <em>ein</em>.
++            </p>
++            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-sm">
++              <p>👉 <strong>mein Vater</strong> (Masculino: sin -e al final)</p>
++              <p>👉 <strong>meine Mutter</strong> (Femenino: añade -e al final)</p>
++              <p>👉 <strong>meine Eltern</strong> (Plural: añade -e al final)</p>
++            </div>
++            <AccusativeShield 
++              words={[
++                { word: "Vater", gender: "der", translation: "padre" },
++                { word: "Mutter", gender: "die", translation: "madre" },
++                { word: "Kind", gender: "das", translation: "hijo/niño" },
++                { word: "Bruder", gender: "der", translation: "hermano" },
++                { word: "Schwester", gender: "die", translation: "hermana" }
++              ]} 
++            />
++          </div>
++        )
++      }
++    ]
+   },
+   {
+     id: 'sp_3',
+     title: 'Capítulo 3: El Misterioso Caso Acusativo',
+-    content: `### Capítulo 3: El Misterioso Caso Acusativo\n\nEl Acusativo es la "víctima" o el Objeto Directo de una acción. Responde a *¿Qué compras?* o *¿A quién buscas?*\n\n> **🎯 La Regla de Oro del Acusativo:** Al Acusativo solo le importan los masculinos. Deja exactamente igual al femenino, al neutro y al plural. ¡Solo ataca a las palabras masculinas poniéndoles la terminación **-en**!\n\n| Género | Nominativo (Sujeto) | Acusativo (Objeto Directo) |\n|---|---|---|\n| **Masculino** | der, ein, kein, mein | **den, einen, keinen, meinen** |\n| **Femenino** | die, eine, keine | die, eine, keine |\n| **Neutro** | das, ein, kein | das, ein, kein |\n| **Plural** | die, meine, keine | die, meine, keine |\n\n**Verbos activadores:** *kaufen, brauchen, essen, trinken, haben, möchten*.\nEjemplo: *Ich kaufe **einen** Käse (masculino) und eine Tomate (femenino).*`,
+-    presentationUrl: 'https://drive.google.com/file/d/1QusIBIw3hhDxZvtnB3eocWlPWW43dlIp/view?usp=drive_web'
++    presentationUrl: 'https://drive.google.com/file/d/1QusIBIw3hhDxZvtnB3eocWlPWW43dlIp/view?usp=drive_web',
++    slides: [
++      {
++        title: "La Regla de Oro del Acusativo",
++        subtitle: "Al Acusativo solo le importan los masculinos",
++        content: (
++          <div className="space-y-6 text-left">
++            <p className="text-slate-700 leading-relaxed">
++              El Acusativo es el Objeto Directo de una acción. Responde a <em>¿Qué compras?</em> o <em>¿A quién buscas?</em>. <strong>¡Solo ataca a las palabras masculinas cambiándolas a -en!</strong>
++            </p>
++            <div className="overflow-x-auto">
++              <table className="w-full text-left border-collapse border border-slate-200 text-sm">
++                <thead>
++                  <tr className="bg-slate-100 font-bold">
++                    <th className="p-3 border border-slate-200">Género</th>
++                    <th className="p-3 border border-slate-200">Nominativo</th>
++                    <th className="p-3 border border-slate-200">Acusativo</th>
++                  </tr>
++                </thead>
++                <tbody>
++                  <tr className="bg-blue-50/50">
++                    <td className="p-3 border border-slate-200 font-bold text-blue-600">Masculino</td>
++                    <td className="p-3 border border-slate-200">der / ein / kein</td>
++                    <td className="p-3 border border-slate-200 font-bold">den / einen / keinen</td>
++                  </tr>
++                  <tr>
++                    <td className="p-3 border border-slate-200 font-bold text-rose-600">Femenino</td>
++                    <td className="p-3 border border-slate-200">die / eine / keine</td>
++                    <td className="p-3 border border-slate-200">die / eine / keine</td>
++                  </tr>
++                  <tr>
++                    <td className="p-3 border border-slate-200 font-bold text-amber-600">Neutro</td>
++                    <td className="p-3 border border-slate-200">das / ein / kein</td>
++                    <td className="p-3 border border-slate-200">das / ein / kein</td>
++                  </tr>
++                </tbody>
++              </table>
++            </div>
++          </div>
++        )
++      },
++      {
++        title: "Desafío de Compras y Alimentos",
++        subtitle: "Verbos activadores: kaufen, brauchen, essen, trinken, haben",
++        content: (
++          <div className="space-y-6 text-left">
++            <div className="border-l-4 border-indigo-500 bg-indigo-50 p-4 rounded-r-xl text-sm">
++              <p className="text-indigo-900">
++                ✍️ <strong>Ejemplo:</strong> <em>Ich kaufe <strong>einen</strong> Käse (masculino) und <strong>eine</strong> Tomate (femenino).</em>
++              </p>
++            </div>
++            <AccusativeShield 
++              words={[
++                { word: "Apfel", gender: "der", translation: "manzana" },
++                { word: "Tomate", gender: "die", translation: "tomate" },
++                { word: "Käse", gender: "der", translation: "queso" },
++                { word: "Brot", gender: "das", translation: "pan" },
++                { word: "Wein", gender: "der", translation: "vino" }
++              ]} 
++            />
++          </div>
++        )
++      }
++    ]
+   },
+diff
+
+{
+     id: 'sp_6',
+     title: 'Capítulo 6: Descifrando el Dativo',
+-    content: `### Capítulo 6: Descifrando el Dativo\n\nEl Dativo es el traje especial para el "Receptor" de una acción (el Objeto Indirecto).\n\n> **🔑 El Código M-R-M-N:** Los artículos cambian completamente. Memoriza estas 4 letras finales:\n> * Masc: de**m** | Fem: de**r** | Neutro: de**m** | Plural: de**n** (+n al sustantivo)\n\n### El Embudo de Preposiciones Exigentes\nSi ves una de estas preposiciones, la palabra que sigue entra automáticamente en Dativo:\n**mit** (con), **nach** (hacia), **aus** (de adentro), **zu** (hacia), **von** (de), **bei** (en casa de), **seit** (desde), **ab** (a partir de).\n\nEjemplo: *Ich fahre **mit dem** Zug.* (Voy con el tren).\nPronombres en Dativo: *mir* (a mí), *dir* (a ti), *ihm* (a él), *ihr* (a ella).`,
+-    presentationUrl: 'https://drive.google.com/file/d/1n_dLlwAlx9mJMoytcMC4wV3TjNCb59-r/view?usp=drive_web'
++    presentationUrl: 'https://drive.google.com/file/d/1n_dLlwAlx9mJMoytcMC4wV3TjNCb59-r/view?usp=drive_web',
++    slides: [
++      {
++        title: "El Código M-R-M-N",
++        subtitle: "El Dativo es el receptor u objeto indirecto de la acción",
++        content: (
++          <div className="space-y-6 text-left">
++            <p className="text-slate-700 leading-relaxed">
++              El Dativo es el traje especial para el "Receptor" de una acción. Memoriza estas 4 letras finales para los artículos:
++            </p>
++            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-sm">
++              <div className="bg-blue-50 border border-blue-200 p-3 rounded-xl">
++                <span className="font-bold text-blue-600 block">Masculino</span>
++                <span className="font-mono text-lg font-black">de<b>m</b></span>
++              </div>
++              <div className="bg-rose-50 border border-rose-200 p-3 rounded-xl">
++                <span className="font-bold text-rose-600 block">Femenino</span>
++                <span className="font-mono text-lg font-black">de<b>r</b></span>
++              </div>
++              <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl">
++                <span className="font-bold text-amber-600 block">Neutro</span>
++                <span className="font-mono text-lg font-black">de<b>m</b></span>
++              </div>
++              <div className="bg-purple-50 border border-purple-200 p-3 rounded-xl">
++                <span className="font-bold text-purple-600 block">Plural</span>
++                <span className="font-mono text-lg font-black">de<b>n</b> (+n)</span>
++              </div>
++            </div>
++            <div className="border-l-4 border-amber-500 bg-amber-50 p-4 rounded-r-xl text-sm">
++              <p className="text-amber-800">
++                💡 <strong>Preposiciones exigentes:</strong> mit, nach, aus, zu, von, bei, seit, ab siempre exigen Dativo.
++              </p>
++            </div>
++          </div>
++        )
++      },
++      {
++        title: "Línea de Tiempo de Acciones",
++        subtitle: "Moviéndonos entre tiempos verbales con Dativo",
++        content: (
++          <div className="space-y-6 text-left">
++            <p className="text-slate-700 text-sm">
++              Observa cómo cambia la estructura de una acción en Dativo al pasarla del presente al pasado:
++            </p>
++            <MechanicalTimeline 
++              present={{ subject: "Ich", verb: "fahre", complement: "mit dem Zug" }}
++              past={{ auxiliary: "bin", participle: "gefahren" }}
++            />
++          </div>
++        )
++      }
++    ]
+   },
+   {
+     id: 'sp_7',
+     title: 'Capítulo 7: Das Perfekt (El Pasado)',
+-    content: `### Capítulo 7: Das Perfekt (El Pasado)\n\nPara contar anécdotas o hablar de vacaciones, usamos Das Perfekt. Es un rompecabezas mecánico de dos pilares.\n\n| Sujeto | Ayudante (Pos 2) | Relleno | El Participio (Final) |\n|---|---|---|---|\n| Ich | habe | eine Pizza | gekauft. |\n\n### ¿Haben o Sein?\n* **Haben (90%):** El Ancla. Acciones estáticas (comer, leer, trabajar). *Ich habe gelesen.*\n* **Sein (10%):** La Flecha. Desplazamiento (A → B) o cambio de estado. *Ich bin nach Berlin geflogen.*\n\n> **⏩ El Atajo Práctico (Präteritum):** Para "tener" y "ser", no uses el Perfekt, usa el atajo.\n> * haben → **hatte** (tuve/tenía)\n> * sein → **war** (fui/estaba)\n> ¡Van solos en Posición 2 sin participio final!`,
+-    presentationUrl: 'https://drive.google.com/file/d/1rWmyyVBBceZm2lzbaNY8Luuvv5X6vgfU/view?usp=drive_web'
++    presentationUrl: 'https://drive.google.com/file/d/1rWmyyVBBceZm2lzbaNY8Luuvv5X6vgfU/view?usp=drive_web',
++    slides: [
++      {
++        title: "Estructura de Das Perfekt",
++        subtitle: "Un rompecabezas mecánico de dos pilares",
++        content: (
++          <div className="space-y-6 text-left">
++            <p className="text-slate-700 leading-relaxed">
++              Para hablar del pasado en el día a día, usamos el Perfekt. Consta del verbo auxiliar (<em>haben</em> o <em>sein</em>) en Posición 2 y el participio al final.
++            </p>
++            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
++              <div className="grid grid-cols-4 gap-2 text-center font-bold text-xs sm:text-sm">
++                <div className="bg-blue-100 text-blue-800 p-2.5 rounded-lg">Sujeto</div>
++                <div className="bg-indigo-600 text-white p-2.5 rounded-lg">Auxiliar (Pos 2)</div>
++                <div className="bg-slate-100 text-slate-800 p-2.5 rounded-lg">Relleno</div>
++                <div className="bg-emerald-600 text-white p-2.5 rounded-lg">Participio (Final)</div>
++              </div>
++              <div className="grid grid-cols-4 gap-2 text-center mt-3 text-slate-700 font-mono text-xs sm:text-sm">
++                <div className="p-2 border border-dashed border-slate-300 rounded-lg">Ich</div>
++                <div className="p-2 border border-dashed border-indigo-300 rounded-lg font-bold text-indigo-700">habe</div>
++                <div className="p-2 border border-dashed border-slate-300 rounded-lg">eine Pizza</div>
++                <div className="p-2 border border-dashed border-emerald-300 rounded-lg font-bold text-emerald-700">gekauft.</div>
++              </div>
++            </div>
++          </div>
++        )
++      },
++      {
++        title: "Entrenamiento de Desplazamiento",
++        subtitle: "Usa 'haben' para acciones estáticas y 'sein' para desplazamiento",
++        content: (
++          <div className="space-y-6 text-left">
++            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
++              <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl">
++                <h5 className="font-bold text-blue-800 mb-1">Haben (Estático)</h5>
++                <p className="text-blue-700">Comer, beber, comprar, tener, leer...</p>
++                <em className="text-slate-500 block mt-1">Ich habe gelernt.</em>
++              </div>
++              <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl">
++                <h5 className="font-bold text-emerald-800 mb-1">Sein (Desplazamiento)</h5>
++                <p className="text-emerald-700">Ir, venir, volar, conducir, levantarse...</p>
++                <em className="text-slate-500 block mt-1">Ich bin geflogen.</em>
++              </div>
++            </div>
++            <MechanicalTimeline 
++              present={{ subject: "Ich", verb: "kaufe", complement: "eine Pizza" }}
++              past={{ auxiliary: "habe", participle: "gekauft" }}
++            />
++          </div>
++        )
++      }
++    ]
+   },
+Plan de Verificación
+Pruebas Automatizadas
+Compilar para verificar la sintaxis de React y JSX:
+bash
+
+npm.cmd run build
+Pruebas Manuales
+Abrir "Capítulo 2" y "Capítulo 3" en el Plan de Estudios.
+Verificar que rendericen la diapositiva interactiva con el juego "Escudo del Acusativo" y que funcione según el género.
+Abrir "Capítulo 6" y "Capítulo 7".
+Deslizar el control del slider de la "Línea de Tiempo Mecánica" y verificar la animación de las palabras del presente al Perfekt.

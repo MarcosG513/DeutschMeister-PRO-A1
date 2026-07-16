@@ -260,8 +260,14 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                 <div className="grid grid-cols-[28px_1fr_28px] items-center w-full mb-1">
                   <div></div> {/* Pilar invisible izquierdo para equilibrar */}
  
-                  <div className="flex items-center justify-center gap-1 min-w-0">
-                    <h3 className={`font-bold text-xl md:text-2xl leading-tight text-center break-words w-full px-2 shrink-0 ${
+                  <div className="flex items-center justify-center gap-1 min-w-0 w-full overflow-hidden">
+                    <h3 className={`font-bold leading-tight text-center break-words min-w-0 w-full px-2 shrink-0 overflow-hidden ${
+                      (wordObj.de?.length || 0) > 20
+                        ? 'text-xs md:text-sm'
+                        : (wordObj.de?.length || 0) > 12
+                          ? 'text-sm md:text-base'
+                          : 'text-base md:text-lg'
+                    } ${
                       pronunciationStatus?.startsWith('success') 
                         ? 'text-emerald-500' 
                         : pronunciationStatus === 'error' 
@@ -311,13 +317,13 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
  
                 {/* Fonética matemáticamente centrada */}
                 {wordObj.pron && (
-                  <p className="text-base md:text-lg text-slate-500 font-medium leading-tight mb-3 shrink-0 px-2 break-words w-full text-center">[{wordObj.pron}]</p>
+                  <p className="text-xs md:text-sm text-slate-500 font-medium leading-tight mb-2 shrink-0 px-2 break-words w-full text-center">[{wordObj.pron}]</p>
                 )}
                 
                 {wordObj.plural && wordObj.plural !== "-" && (
                   <div className="mt-1 flex flex-col items-center bg-slate-50/80 px-4 py-2 rounded-xl border border-slate-200 w-[95%] max-w-[240px] md:max-w-[280px] shadow-sm shrink-0">
                     <div className="flex items-center justify-center gap-1 min-w-0 w-full">
-                      <span className={`text-base md:text-lg font-semibold leading-tight text-center break-words transition-colors truncate ${
+                      <span className={`text-sm md:text-base font-semibold leading-tight text-center break-words transition-colors truncate ${
                         pronunciationStatus === 'success-plural' ? 'text-emerald-600 font-bold' : 'text-slate-700'
                       }`}>
                         Pl: {wordObj.plural}
@@ -361,7 +367,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
           
           <div className="flex-1 flex flex-col items-center justify-center w-full h-auto py-1.5 min-h-0">
             <span className="text-[9px] font-semibold text-blue-300/80 mb-0.5 tracking-wider uppercase">{wordObj.type}</span>
-            <span className="font-bold text-lg md:text-xl text-yellow-400 leading-tight text-center break-words w-full px-2 shrink-0">{wordObj.es}</span>
+            <span className="font-bold text-sm md:text-base text-yellow-400 leading-tight text-center break-words w-full px-2 shrink-0">{wordObj.es}</span>
             {/* Renderizado de oraciones reales */}
             {(wordObj.exampleSentenceDe || (wordObj.exampleSentenceDeBlocks && wordObj.exampleSentenceDeBlocks.length > 0)) && (
               (() => {

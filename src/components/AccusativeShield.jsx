@@ -123,7 +123,7 @@ const AccusativeShield = ({ words = [] }) => {
         }`}>
           {shieldApplied ? "den" : currentWord.gender}
         </span>
-        <h3 className="text-3xl font-black text-slate-800 tracking-tight">{currentWord.word}</h3>
+        <h3 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight max-w-full break-words whitespace-normal text-center overflow-hidden px-2">{currentWord.word}</h3>
         <p className="text-sm text-slate-400 mt-1 italic">({currentWord.translation})</p>
       </div>
 
@@ -144,7 +144,7 @@ const AccusativeShield = ({ words = [] }) => {
         <button
           onClick={() => handleAction(true)}
           disabled={showFeedback !== null}
-          className="flex flex-col items-center justify-center p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none"
+          className="flex flex-col items-center justify-center p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none max-w-full break-words whitespace-normal text-center overflow-hidden"
         >
           <Shield size={22} className="mb-1" />
           <span className="text-sm">Aplicar Escudo</span>
@@ -154,7 +154,7 @@ const AccusativeShield = ({ words = [] }) => {
         <button
           onClick={() => handleAction(false)}
           disabled={showFeedback !== null}
-          className="flex flex-col items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold border border-slate-200 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none"
+          className="flex flex-col items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold border border-slate-200 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none max-w-full break-words whitespace-normal text-center overflow-hidden"
         >
           <ArrowRight size={22} className="mb-1" />
           <span className="text-sm">Dejar Pasar</span>

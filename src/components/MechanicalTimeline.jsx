@@ -44,7 +44,7 @@ const MechanicalTimeline = ({
 
         <div className="flex flex-row gap-2 items-center my-4 relative w-full">
           {/* Sujeto */}
-          <div className="w-1/4 bg-blue-50 border-2 border-blue-200 text-blue-900 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all">
+          <div className="w-1/4 bg-blue-50 border-2 border-blue-200 text-blue-900 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all max-w-full break-words whitespace-normal text-center overflow-hidden">
             {present.subject}
             <span className="block text-[9px] font-normal text-blue-600/80 mt-0.5">Sujeto</span>
           </div>
@@ -53,33 +53,33 @@ const MechanicalTimeline = ({
           <div className="w-1/4 relative h-[56px] flex items-center justify-center">
             {/* Verbo en Presente */}
             <div 
-              className="absolute inset-0 bg-indigo-50 border-2 border-indigo-200 text-indigo-900 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center"
+              className="absolute inset-0 bg-indigo-50 border-2 border-indigo-200 text-indigo-900 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{
                 opacity: 1 - t,
                 transform: `translateY(${-t * 20}px) scale(${1 - t * 0.2})`,
                 pointerEvents: t > 0.8 ? 'none' : 'auto'
               }}
             >
-              {present.verb}
+              <span className="max-w-full break-words whitespace-normal text-center overflow-hidden">{present.verb}</span>
               <span className="block text-[9px] font-normal text-indigo-600/80">Verbo</span>
             </div>
 
             {/* Auxiliar en Pasado */}
             <div 
-              className="absolute inset-0 bg-emerald-600 border-2 border-emerald-600 text-white rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center shadow-sm"
+              className="absolute inset-0 bg-emerald-600 border-2 border-emerald-600 text-white rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center shadow-sm max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{
                 opacity: t,
                 transform: `translateY(${(1 - t) * 20}px) scale(${0.8 + t * 0.2})`,
                 pointerEvents: t < 0.2 ? 'none' : 'auto'
               }}
             >
-              {past.auxiliary}
+              <span className="max-w-full break-words whitespace-normal text-center overflow-hidden">{past.auxiliary}</span>
               <span className="block text-[9px] font-normal text-emerald-100 mt-0.5">Auxiliar</span>
             </div>
           </div>
 
           {/* Complemento */}
-          <div className="w-1/4 bg-slate-50 border-2 border-slate-200 text-slate-800 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all">
+          <div className="w-1/4 bg-slate-50 border-2 border-slate-200 text-slate-800 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all max-w-full break-words whitespace-normal text-center overflow-hidden">
             {present.complement}
             <span className="block text-[9px] font-normal text-slate-500 mt-0.5">Relleno</span>
           </div>
@@ -87,14 +87,14 @@ const MechanicalTimeline = ({
           {/* Participio */}
           <div className="w-1/4 relative h-[56px] flex items-center justify-center">
             <div 
-              className="absolute inset-0 bg-emerald-50 border-2 border-emerald-200 text-emerald-950 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center"
+              className="absolute inset-0 bg-emerald-50 border-2 border-emerald-200 text-emerald-950 rounded-xl p-3 text-center font-bold text-sm sm:text-base transition-all flex flex-col justify-center items-center max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{
                 opacity: t,
                 transform: `translateX(${(1 - t) * -40}px) scale(${0.7 + t * 0.3})`,
                 pointerEvents: t < 0.2 ? 'none' : 'auto'
               }}
             >
-              {past.participle}
+              <span className="max-w-full break-words whitespace-normal text-center overflow-hidden">{past.participle}</span>
               <span className="block text-[9px] font-normal text-emerald-600/80 mt-0.5">Participio</span>
             </div>
             

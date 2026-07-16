@@ -15,6 +15,7 @@ import AcousticRadar from '../components/AcousticRadar';
 import TextHighlighter from '../components/TextHighlighter';
 import FormularBuilder from '../components/FormularBuilder';
 import VoiceExaminer from '../components/VoiceExaminer';
+import { nativeSpeak } from '../utils/helpers';
 export
 // --- DATA: EL VOCABULARIO COMPLETO ---
 const chapters = [
@@ -10406,7 +10407,7 @@ export const studyPlanModules = [{
             </div>
             <DraggableSentenceBuilder verb="kommst" subject="du" complement="aus Kolumbien" />
             <div className="mt-8">
-              <h4 className="font-bold text-slate-700 mb-3">­ƒöä Reto Aleatorio: Posición 2</h4>
+              <h4 className="font-bold text-slate-700 mb-3">🛠️ Reto Aleatorio: Posición 2</h4>
               <DraggableSentenceBuilder pool={[{
           subject: "Ich",
           verb: "lerne",
@@ -10572,9 +10573,9 @@ export const studyPlanModules = [{
               Todos los posesivos (<em>mein</em>=mi, <em>dein</em>=tu, <em>sein</em>=su) funcionan exactamente igual que <em>ein</em>.
             </p>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-sm">
-              <p>­ƒæë <strong>mein Vater</strong> (Masculino: sin -e al final)</p>
-              <p>­ƒæë <strong>meine Mutter</strong> (Femenino: añade -e al final)</p>
-              <p>­ƒæë <strong>meine Eltern</strong> (Plural: añade -e al final)</p>
+              <p>👉 <strong>mein Vater</strong> (Masculino: sin -e al final)</p>
+              <p>👉 <strong>meine Mutter</strong> (Femenino: añade -e al final)</p>
+              <p>👉 <strong>meine Eltern</strong> (Plural: añade -e al final)</p>
             </div>
             <AccusativeShield words={[{
         word: "Vater",
@@ -10684,8 +10685,8 @@ export const studyPlanModules = [{
             </p>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3 text-sm">
               <h5 className="font-bold text-slate-800">Estructura Satzklammer (La Pinza):</h5>
-              <p>­ƒæë <strong>aufstehen</strong> (levantarse): Ich <strong>stehe</strong> um 7 Uhr <strong>auf</strong>.</p>
-              <p>­ƒæë <strong>einkaufen</strong> (comprar): Er <strong>kauft</strong> im Supermarkt <strong>ein</strong>.</p>
+              <p>👉 <strong>aufstehen</strong> (levantarse): Ich <strong>stehe</strong> um 7 Uhr <strong>auf</strong>.</p>
+              <p>👉 <strong>einkaufen</strong> (comprar): Er <strong>kauft</strong> im Supermarkt <strong>ein</strong>.</p>
             </div>
           </div>
   }, {

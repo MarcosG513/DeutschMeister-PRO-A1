@@ -132,7 +132,7 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
           <div key={idx} className="flex flex-col items-center">
             <div 
               onClick={() => word && removeWord(idx)}
-              className={`w-full h-16 px-4 py-2.5 rounded-xl border-2 flex items-center justify-center font-bold text-lg md:text-xl cursor-pointer transition-all ${
+              className={`w-full min-h-[4rem] h-auto px-2 py-2 rounded-xl border-2 flex items-center justify-center font-bold text-sm md:text-lg cursor-pointer transition-all max-w-full break-words whitespace-normal text-center overflow-hidden ${
                 word 
                   ? isValid === true
                     ? 'bg-emerald-600 border-emerald-600 text-white shadow-md'
@@ -152,13 +152,13 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
       </div>
 
       {/* Pool de palabras */}
-      <div className="flex flex-wrap gap-3 justify-center w-full min-h-[44px]">
+      <div className="flex flex-wrap gap-2.5 justify-center w-full min-h-[44px]">
         {pool.map((word, idx) => (
           <button
             key={idx}
             onClick={() => selectWord(word)}
             disabled={isValid !== null}
-            className="px-5 py-3 bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-800 font-bold rounded-xl border-2 border-slate-200 shadow-sm transition-transform hover:scale-105 active:scale-95 text-lg md:text-xl"
+            className="px-4 py-2 bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-800 font-bold rounded-xl border-2 border-slate-200 shadow-sm transition-transform hover:scale-105 active:scale-95 text-sm md:text-lg max-w-full break-words whitespace-normal text-center overflow-hidden"
           >
             {word}
           </button>

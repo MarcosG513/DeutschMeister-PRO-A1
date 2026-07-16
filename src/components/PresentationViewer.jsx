@@ -89,16 +89,16 @@ const PresentationViewer = ({
     <div className="flex flex-col min-h-[100svh] w-full bg-white animate-in fade-in zoom-in-95 duration-200">
       <div className={containerClass}>
         <div className={headerClass}>
-          <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-lg ${isBlueprint ? 'bg-blue-900 text-blue-300' : isMedical ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-700'}`}>
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className={`p-2 rounded-lg shrink-0 ${isBlueprint ? 'bg-blue-900 text-blue-300' : isMedical ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-700'}`}>
               <Presentation size={24} />
             </div>
-            <div>
-              <h2 className="font-bold text-lg leading-tight">{presentation.title}</h2>
+            <div className="flex-1 min-w-0 pr-4">
+              <h2 className="font-bold text-sm sm:text-lg leading-tight line-clamp-2">{presentation.title}</h2>
               <p className={`text-xs ${isBlueprint ? 'text-blue-400' : isMedical ? 'text-emerald-600' : 'text-amber-600'}`}>{currentSlide + 1} / {presentation.slides.length}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0">
             {presentation.presentationUrl && (
               <a href={presentation.presentationUrl} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold transition-all border ${isBlueprint ? 'border-blue-700 text-blue-300 hover:bg-blue-800' : isMedical ? 'border-emerald-200 text-emerald-700 hover:bg-emerald-50' : 'border-amber-900/20 text-amber-700 hover:bg-amber-100'}`}>
                 <Link2 size={16} /> Diapositivas
@@ -144,9 +144,14 @@ const PresentationViewer = ({
           {isLastSlide && nextModule && nextModule.id ? (
             <button 
               onClick={() => onNextModule(nextModule.id)} 
-              className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-500/30 animate-pulse animate-duration-1000"
+              className="flex flex-col items-center justify-center px-4 py-1.5 rounded-lg font-bold transition bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-500/30 animate-pulse animate-duration-1000 text-center"
             >
-              Siguiente Módulo: {nextModule?.title} <ChevronRight size={20} />
+              <div className="flex items-center gap-1 text-sm font-bold">
+                Siguiente Módulo <ChevronRight size={16} />
+              </div>
+              <span className="block text-[10px] sm:text-xs font-normal text-emerald-200 truncate max-w-[120px] sm:max-w-xs">
+                {nextModule?.title}
+              </span>
             </button>
           ) : (
             <button 

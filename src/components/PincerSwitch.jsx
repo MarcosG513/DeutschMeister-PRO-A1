@@ -51,21 +51,21 @@ const PincerSwitch = ({ exercises = [] }) => {
         </div>
 
         <div className="grid grid-cols-4 gap-2 text-center font-bold text-xs sm:text-sm my-2">
-          <div className="bg-blue-50 border border-blue-200 text-blue-800 p-2.5 rounded-lg flex flex-col justify-center items-center">
+          <div className="bg-blue-50 border border-blue-200 text-blue-800 p-1 sm:p-2.5 rounded-lg flex flex-col justify-center items-center break-words whitespace-normal text-[10px] sm:text-xs md:text-sm leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">
             {current.subject}
           </div>
 
           <div className="relative h-[48px] flex items-center justify-center">
             {/* Prefijo + Raíz juntos */}
             <div 
-              className="absolute inset-0 bg-rose-50 border-2 border-rose-200 text-rose-800 rounded-lg p-2 flex flex-col justify-center items-center transition-all duration-500"
+              className="absolute inset-0 bg-rose-50 border-2 border-rose-200 text-rose-800 rounded-lg p-1 flex flex-col justify-center items-center transition-all duration-500 max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{
                 opacity: isActive ? 0 : 1,
                 transform: isActive ? 'scale(0.8) translateY(-20px)' : 'scale(1) translateY(0)',
                 pointerEvents: isActive ? 'none' : 'auto'
               }}
             >
-              <span className="font-extrabold text-xs sm:text-sm text-rose-700">
+              <span className="font-extrabold text-[10px] sm:text-xs md:text-sm text-rose-700 break-words whitespace-normal leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">
                 <span className="underline">{current.prefix}</span>{current.verbRaiz}
               </span>
               <span className="text-[8px] font-medium text-rose-500">Incorrecto</span>
@@ -73,25 +73,25 @@ const PincerSwitch = ({ exercises = [] }) => {
 
             {/* Solo Raíz */}
             <div 
-              className="absolute inset-0 bg-indigo-600 border border-indigo-600 text-white rounded-lg p-2 flex flex-col justify-center items-center transition-all duration-500 shadow-sm"
+              className="absolute inset-0 bg-indigo-600 border border-indigo-600 text-white rounded-lg p-1 flex flex-col justify-center items-center transition-all duration-500 shadow-sm max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{
                 opacity: isActive ? 1 : 0,
                 transform: isActive ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(20px)',
                 pointerEvents: isActive ? 'auto' : 'none'
               }}
             >
-              <span className="font-black text-xs sm:text-sm">{current.verbRaiz}</span>
+              <span className="font-black text-[10px] sm:text-xs md:text-sm break-words whitespace-normal leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">{current.verbRaiz}</span>
               <span className="text-[8px] font-medium text-indigo-200">Raíz</span>
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 text-slate-700 p-2.5 rounded-lg flex flex-col justify-center items-center">
+          <div className="bg-slate-50 border border-slate-200 text-slate-700 p-1 sm:p-2.5 rounded-lg flex flex-col justify-center items-center break-words whitespace-normal text-[10px] sm:text-xs md:text-sm leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">
             {current.complement}
           </div>
 
           <div className="relative h-[48px] flex items-center justify-center">
             <div 
-              className="absolute inset-0 border border-dashed border-slate-200 rounded-lg flex items-center justify-center text-[10px] text-slate-300 transition-all duration-500"
+              className="absolute inset-0 border border-dashed border-slate-200 rounded-lg flex items-center justify-center text-[10px] text-slate-300 transition-all duration-500 max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{ opacity: isActive ? 0 : 1 }}
             >
               Vacío
@@ -99,14 +99,14 @@ const PincerSwitch = ({ exercises = [] }) => {
 
             {/* Prefijo volando al final */}
             <div 
-              className="absolute inset-0 bg-emerald-600 border border-emerald-600 text-white rounded-lg p-2 flex flex-col justify-center items-center transition-all duration-500 shadow-sm"
+              className="absolute inset-0 bg-emerald-600 border-emerald-600 text-white rounded-lg p-1 flex flex-col justify-center items-center transition-all duration-500 shadow-sm max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{
                 opacity: isActive ? 1 : 0,
                 transform: isActive ? 'translateX(0) scale(1)' : 'translateX(-100px) scale(0.6)',
                 pointerEvents: isActive ? 'auto' : 'none'
               }}
             >
-              <span className="font-black text-xs sm:text-sm">{current.prefix}</span>
+              <span className="font-black text-[10px] sm:text-xs md:text-sm break-words whitespace-normal leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">{current.prefix}</span>
               <span className="text-[8px] font-medium text-emerald-100">Prefijo</span>
             </div>
           </div>
