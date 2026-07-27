@@ -272,10 +272,11 @@ export const runRoleplaySimulator = onRequest({
   const defaultSystemInstruction = `Eres un hablante nativo de alemán en un escenario de juego de rol de nivel A1: "${escenario}".
       REGLAS ESTRICTAS:
       1. Usa SOLO alemán de nivel A1. Cada frase: máximo 8 palabras. Vocabulario básico cotidiano. Solo tiempo presente.
-      2. No uses gramática compleja: sin subjuntivos ni voz pasiva.
+      2. No uses gramática compleja: sin voz pasiva ni subjuntivos (excepto fórmulas fijas de cortesía A1 como 'möchten' o 'hätte').
       3. UNA SOLA acción o pregunta por turno. Máximo 2 frases en total. Cero monólogos.
-      4. CORRECCIÓN DE ERRORES: Si el usuario comete un error grave de alemán, NO lo corrijas entre paréntesis ni salgas del personaje. En su lugar, repite la idea correcta de forma natural dentro del rol. Ejemplo: si dice "Ich krank bin", tú como médico respondes normalmente como si hubieras entendido, manteniendo el flujo del escenario.
-      5. PROHIBICIÓN ABSOLUTA DE FORMATO: Nunca uses asteriscos (*), negritas (**) ni Markdown de ningún tipo. Solo texto plano.`;
+      4. CORRECCIÓN IMPLÍCITA: Si el usuario comete un error, NO lo corrijas explícitamente y nunca salgas de tu rol. Responde integrando la estructura correcta de forma natural. Ej: Si dice 'Ich krank bin', tú respondes: 'Oh, Sie sind krank? Was fehlt Ihnen?'
+      5. INICIO DE SESIÓN: Si es el primer turno de la conversación, limita tu respuesta ESTRICTAMENTE a la frase de apertura indicada en el escenario, sin agregar nada más.
+      6. PROHIBICIÓN ABSOLUTA DE FORMATO: Nunca uses asteriscos (*), negritas (**) ni Markdown de ningún tipo. Solo texto plano.`;
   const systemInstruction = await getSystemPrompt("roleplay_simulator", defaultSystemInstruction);
   const finalSystemPrompt = systemInstruction.replace("${escenario}", escenario);
 
@@ -465,13 +466,19 @@ export const generateStory = onRequest({
         "titulo": "Título en alemán",
         "cuento_aleman": "El microcuento en alemán...",
         "traduccion_espanol": "Traducción fluida al español",
-        "palabras_clave_usadas": [ { "palabra": "Palabra", "contexto": "Oración donde se usó" } ],
+        "palabras_clave_usadas": [ 
+          { 
+            "palabra": "Forma original recibida", 
+            "contexto": "Oración completa en alemán donde se usó" 
+          } 
+        ],
         "pregunta_comprension": {
-           "pregunta": "Pregunta corta",
-           "opciones": ["Opción A", "Opción B", "Opción C"],
-           "respuesta_correcta": "La opción exacta"
+           "pregunta": "Pregunta en alemán A1",
+           "opciones": ["Opción A en alemán", "Opción B en alemán", "Opción C en alemán"],
+           "respuesta_correcta": "La opción exacta en alemán"
         }
-      }`;
+      }
+      NOTA CRÍTICA DE LIBERTAD MORFOLÓGICA: Al registrar la 'Forma original recibida' en el array de palabras_clave_usadas, tienes total permiso para alterar la palabra morfológicamente dentro del 'cuento_aleman' (por ejemplo, pasar de Buch a Bücher o declinar en Akkusativ/Dativ) para que el alemán suene 100% natural.`;
 
     console.log("Story FinOps: Iniciando generateStory con Gemini 3.5 Flash-Lite...");
     
@@ -1511,7 +1518,7 @@ export const generateReadingTest = onCall({
             "pregunta_aleman": "...",
             "opciones_aleman": ["Opción A", "Opción B", "Opción C"],
             "respuesta_correcta": "La opción exacta (debe coincidir exactamente con una de las opciones del array opciones_aleman)",
-            "explicacion_espanol": "La 'explicacion_espanol' debe ser una retroalimentación socrática y didáctica que sirva de refuerzo. Debe explicar claramente por qué la respuesta correcta es la adecuada basándose en el texto, de modo que el alumno aprenda tanto si acierta como si falla."
+            "explicacion_espanol": "Una retroalimentación didáctica y concluyente en español. Debe explicar claramente y de forma ultra-sencilla por qué la opción correcta es la adecuada basándose en el texto, y por qué las otras no lo son, asegurando que el alumno aprenda tanto si acertó como si falló. PROHIBIDO hacer preguntas abiertas o retóricas al final."
           }
         ]
       }
