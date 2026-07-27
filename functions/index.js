@@ -2,7 +2,7 @@ import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { onRequest } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import admin from "firebase-admin";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { fal } from "@fal-ai/client";
 
 // Inicializa Firebase Admin
@@ -1536,16 +1536,46 @@ export const generateReadingTest = onCall({
 
   const tryGemini = async (key) => {
     const genAI = new GoogleGenerativeAI(key);
+
+    const readingSchema = {
+      type: SchemaType.OBJECT,
+      properties: {
+        titulo_aleman: { type: SchemaType.STRING, description: "Título en alemán para la lectura" },
+        texto_aleman: { type: SchemaType.STRING, description: "Texto de lectura corto y sencillo en alemán nivel A1" },
+        preguntas: {
+          type: SchemaType.ARRAY,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              pregunta_aleman: { type: SchemaType.STRING, description: "Pregunta de opción múltiple en alemán" },
+              opciones_aleman: {
+                type: SchemaType.ARRAY,
+                items: { type: SchemaType.STRING },
+                description: "3 opciones de respuesta en alemán"
+              },
+              respuesta_correcta: { type: SchemaType.STRING, description: "La opción exacta de respuesta correcta" },
+              explicacion_espanol: { type: SchemaType.STRING, description: "Una retroalimentación didáctica y concluyente en español. Debe explicar claramente por qué la opción correcta es la adecuada. PROHIBIDO hacer preguntas abiertas o retóricas al final." }
+            },
+            required: ["pregunta_aleman", "opciones_aleman", "respuesta_correcta", "explicacion_espanol"]
+          },
+          description: "Lista de exactamente 3 preguntas de opción múltiple"
+        }
+      },
+      required: ["titulo_aleman", "texto_aleman", "preguntas"]
+    };
+
     const model = genAI.getGenerativeModel({
       model: "gemini-3.5-flash-lite",
       systemInstruction: systemInstruction,
       generationConfig: {
-        responseMimeType: "application/json"
+        responseMimeType: "application/json",
+        responseSchema: readingSchema
       }
     });
     const result = await model.generateContent(promptUser);
     const responseText = result.response.text().trim();
-    return JSON.parse(responseText);
+    const cleanJson = responseText.replace(/^```json\s*/i, "").replace(/```$/, "").replace(/```/g, "").trim();
+    return JSON.parse(cleanJson);
   };
 
   const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
