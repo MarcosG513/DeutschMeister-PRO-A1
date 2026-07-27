@@ -47,11 +47,10 @@ async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}
   const tryGemini = async (key) => {
     const genAI = new GoogleGenerativeAI(key);
     const model = genAI.getGenerativeModel({
-      model: options.model || "gemini-3.1-flash-lite",
+      model: options.model || "gemini-3.5-flash-lite",
       systemInstruction: promptSystem,
       generationConfig: {
-        ...(isJson ? { responseMimeType: "application/json" } : {}),
-        temperature: temperature
+        ...(isJson ? { responseMimeType: "application/json" } : {})
       }
     });
     const result = await model.generateContent(promptUser);
@@ -132,11 +131,12 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
 
   const tryGeminiStream = async (key) => {
     const genAI = new GoogleGenerativeAI(key);
+    const thinkingLvl = (options.thinking_level || "MEDIUM").toUpperCase();
     const model = genAI.getGenerativeModel({
-      model: options.model || "gemini-3.1-flash-lite",
+      model: options.model || "gemini-3.5-flash-lite",
       systemInstruction: promptSystem,
       generationConfig: {
-        temperature: options.temperature !== undefined ? options.temperature : 0.3
+        thinkingConfig: { thinkingLevel: thinkingLvl }
       }
     });
 
@@ -243,7 +243,7 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
 
 // =========================================================================
 // 1. SIMULADOR DE ROL A1 (RoleplaySimulator)
-// Modelo: gemini-3.1-flash-lite (primario) / Claude Haiku 4.5 via enterprise (fallback)
+// Modelo: gemini-3.5-flash-lite (primario) / Claude Haiku 4.5 via enterprise (fallback)
 // =========================================================================
 export const runRoleplaySimulator = onRequest({
   secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
@@ -288,15 +288,12 @@ export const runRoleplaySimulator = onRequest({
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
 
-  // ── PRIMARY: gemini-3.1-flash-lite ─────────────────────────────────────────────
+  // ── PRIMARY: gemini-3.5-flash-lite ─────────────────────────────────────────────
     const tryGeminiStream = async (key) => {
       const genAI = new GoogleGenerativeAI(key);
       const geminiModel = genAI.getGenerativeModel({
-        model: "gemini-3.1-flash-lite",
-        systemInstruction: finalSystemPrompt,
-        generationConfig: {
-          temperature: 0.3
-        }
+        model: "gemini-3.5-flash-lite",
+        systemInstruction: finalSystemPrompt
       });
       let validHistory = history.slice(0);
       if (validHistory.length > 0 && validHistory[0].role !== "user") validHistory.shift();
@@ -476,16 +473,15 @@ export const generateStory = onRequest({
         }
       }`;
 
-    console.log("Story FinOps: Iniciando generateStory con Gemini 3.1 Flash-Lite...");
+    console.log("Story FinOps: Iniciando generateStory con Gemini 3.5 Flash-Lite...");
     
     const tryGemini = async (key) => {
       const genAI = new GoogleGenerativeAI(key);
       const model = genAI.getGenerativeModel({
-        model: "gemini-3.1-flash-lite",
+        model: "gemini-3.5-flash-lite",
         systemInstruction: promptSistema,
         generationConfig: {
-          responseMimeType: "application/json",
-          temperature: 0.4
+          responseMimeType: "application/json"
         }
       });
       const result = await model.generateContent(promptDefinido);
@@ -582,9 +578,9 @@ Reglas de clasificación:
   const tryClasificar = async (key) => {
     const genAI = new GoogleGenerativeAI(key);
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.5-flash-lite",
       systemInstruction: systemPrompt,
-      generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
+      generationConfig: { responseMimeType: "application/json", thinkingConfig: { thinkingLevel: "MINIMAL" } }
     });
     const result = await model.generateContent(lastMessage);
     return JSON.parse(result.response.text().trim());
@@ -669,9 +665,9 @@ Tu esencia es conversacional, cálida y paciente. Tu objetivo no es ser un dicci
   const activeSystemPrompt = basePrompt + instruccionEmocional;
 
   await streamWithDeepSeekFallback(res, activeSystemPrompt, history, lastMessage, {
-    model: "gemini-3.1-flash-lite",
+    model: "gemini-3.5-flash-lite",
     cleanBold: false,
-    temperature: 0.3
+    thinking_level: "medium"
   });
 });
 
@@ -696,8 +692,7 @@ async function getVisualDescriptionForConcept(conceptoEspanol, freeKeyVal, categ
   const invocarModelo = async apiKeyValue => {
     const genAI = new GoogleGenerativeAI(apiKeyValue);
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.1-flash-lite",
-      generationConfig: { temperature: 0.2 }
+      model: "gemini-3.5-flash-lite"
     });
     const result = await model.generateContent(promptDirectorArte);
     return result.response.text().trim().replace(/['"]/g, '');
@@ -720,8 +715,7 @@ async function getCleanEnglishTranslation(wordEspanol, freeKeyVal) {
   const invocarModelo = async apiKeyValue => {
     const genAI = new GoogleGenerativeAI(apiKeyValue);
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.1-flash-lite",
-      generationConfig: { temperature: 0.1 }
+      model: "gemini-3.5-flash-lite"
     });
     const result = await model.generateContent(prompt);
     return result.response.text().trim().toLowerCase().replace(/[^a-z\s-]/g, '');
@@ -1536,11 +1530,10 @@ export const generateReadingTest = onCall({
   const tryGemini = async (key) => {
     const genAI = new GoogleGenerativeAI(key);
     const model = genAI.getGenerativeModel({
-      model: "gemini-3.1-flash-lite",
+      model: "gemini-3.5-flash-lite",
       systemInstruction: systemInstruction,
       generationConfig: {
-        responseMimeType: "application/json",
-        temperature: 0.3
+        responseMimeType: "application/json"
       }
     });
     const result = await model.generateContent(promptUser);
@@ -1553,12 +1546,12 @@ export const generateReadingTest = onCall({
   useFirstKey = !useFirstKey; // Invertir valor para la próxima petición
 
   try {
-    console.log("ReadingTest FinOps: Intentando con Gemini 3.1 Flash-Lite (Round-Robin Primary Key)...");
+    console.log("ReadingTest FinOps: Intentando con Gemini 3.5 Flash-Lite (Round-Robin Primary Key)...");
     return await tryGemini(primaryKey);
   } catch (geminiError) {
     console.warn("ReadingTest FinOps: Gemini Primary Key falló. Error:", geminiError.message);
     try {
-      console.log("ReadingTest FinOps: Reintentando con Gemini 3.1 Flash-Lite (Round-Robin Secondary Key)...");
+      console.log("ReadingTest FinOps: Reintentando con Gemini 3.5 Flash-Lite (Round-Robin Secondary Key)...");
       return await tryGemini(secondaryKey);
     } catch (geminiError2) {
       console.warn("ReadingTest FinOps: Fallaron ambas llaves de Gemini. Activando fallback a Claude Haiku 4.5:", geminiError2.message);
@@ -1618,10 +1611,9 @@ Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocab
   const tryGemini = async (key) => {
     const genAI = new GoogleGenerativeAI(key);
     const geminiModel = genAI.getGenerativeModel({
-      model: "gemini-3.1-flash-lite",
+      model: "gemini-3.5-flash-lite",
       generationConfig: {
-        responseMimeType: "application/json",
-        temperature: 0.2
+        responseMimeType: "application/json"
       }
     });
 
@@ -1639,12 +1631,12 @@ Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocab
   useFirstKey = !useFirstKey; // Invertir valor para la próxima petición
 
   try {
-    console.log("DynamicQuiz FinOps: Intentando con Gemini 3.1 Flash-Lite (Round-Robin Primary Key)...");
+    console.log("DynamicQuiz FinOps: Intentando con Gemini 3.5 Flash-Lite (Round-Robin Primary Key)...");
     return await tryGemini(primaryKey);
   } catch (geminiError) {
     console.warn("DynamicQuiz FinOps: Gemini Primary Key falló. Error:", geminiError.message);
     try {
-      console.log("DynamicQuiz FinOps: Reintentando con Gemini 3.1 Flash-Lite (Round-Robin Secondary Key)...");
+      console.log("DynamicQuiz FinOps: Reintentando con Gemini 3.5 Flash-Lite (Round-Robin Secondary Key)...");
       return await tryGemini(secondaryKey);
     } catch (geminiError2) {
       console.warn("DynamicQuiz FinOps: Fallaron ambas llaves de Gemini. Activando fallback a Claude Haiku 4.5:", geminiError2.message);

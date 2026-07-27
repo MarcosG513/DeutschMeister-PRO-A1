@@ -51,11 +51,11 @@ const PincerSwitch = ({ exercises = [] }) => {
         </div>
 
         <div className="grid grid-cols-4 gap-2 text-center font-bold text-xs sm:text-sm my-2">
-          <div className="bg-blue-50 border border-blue-200 text-blue-800 p-1 sm:p-2.5 rounded-lg flex flex-col justify-center items-center break-words whitespace-normal text-[10px] sm:text-xs md:text-sm leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">
+          <div className="bg-blue-50 border border-blue-200 text-blue-800 p-1 sm:p-2.5 rounded-lg flex flex-col justify-center items-center break-words whitespace-normal text-[10px] sm:text-xs md:text-sm leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden w-full">
             {current.subject}
           </div>
 
-          <div className="relative h-[48px] flex items-center justify-center">
+          <div className="relative min-h-[48px] md:min-h-[64px] h-auto py-2 flex items-center justify-center w-full">
             {/* Prefijo + Raíz juntos */}
             <div 
               className="absolute inset-0 bg-rose-50 border-2 border-rose-200 text-rose-800 rounded-lg p-1 flex flex-col justify-center items-center transition-all duration-500 max-w-full break-words whitespace-normal text-center overflow-hidden"
@@ -85,11 +85,11 @@ const PincerSwitch = ({ exercises = [] }) => {
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 text-slate-700 p-1 sm:p-2.5 rounded-lg flex flex-col justify-center items-center break-words whitespace-normal text-[10px] sm:text-xs md:text-sm leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">
+          <div className="bg-slate-50 border border-slate-200 text-slate-700 p-1 sm:p-2.5 rounded-lg flex flex-col justify-center items-center break-words whitespace-normal text-[10px] sm:text-xs md:text-sm leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden w-full">
             {current.complement}
           </div>
 
-          <div className="relative h-[48px] flex items-center justify-center">
+          <div className="relative min-h-[48px] md:min-h-[64px] h-auto py-2 flex items-center justify-center w-full">
             <div 
               className="absolute inset-0 border border-dashed border-slate-200 rounded-lg flex items-center justify-center text-[10px] text-slate-300 transition-all duration-500 max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{ opacity: isActive ? 0 : 1 }}
