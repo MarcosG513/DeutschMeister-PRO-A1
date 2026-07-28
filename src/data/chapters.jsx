@@ -15,6 +15,7 @@ import AcousticRadar from '../components/AcousticRadar';
 import TextHighlighter from '../components/TextHighlighter';
 import FormularBuilder from '../components/FormularBuilder';
 import VoiceExaminer from '../components/VoiceExaminer';
+import ClockSVG from '../components/ClockSVG';
 import { nativeSpeak } from '../utils/helpers';
 export
 // --- DATA: EL VOCABULARIO COMPLETO ---
@@ -10308,787 +10309,471 @@ export const goetheModules = [{
               </div>
             </GrammarAccordion>
           </div>
-  }, {
-    title: "Simulador: Teil 1 (Presentación)",
-    subtitle: "Sich vorstellen (Toca el altavoz para escuchar)",
-    content: <div className="mt-6 max-w-3xl mx-auto">
-            <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm text-slate-800">
-              <div className="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
-                <Bot size={32} className="text-indigo-600 bg-indigo-50 p-1.5 rounded-full" />
-                <p className="font-bold text-slate-700">Examinador: Bitte stellen Sie sich vor.</p>
-                <button onClick={() => nativeSpeak("Bitte stellen Sie sich vor.")} className="text-indigo-500 hover:bg-indigo-50 p-2 rounded-full transition ml-auto"><Volume2 size={20} /></button>
-              </div>
+  }]
+}];
 
-              <div className="space-y-3 pl-2">
-                {[{
-            de: "Ich heiße Marcos.",
-            es: "Me llamo Marcos."
-          }, {
-            de: "Ich bin 35 Jahre alt.",
-            es: "Tengo 35 años."
-          }, {
-            de: "Ich komme aus Kolumbien und ich wohne in Barranquilla.",
-            es: "Vengo de Colombia y vivo en Barranquilla."
-          }, {
-            de: "Ich spreche Spanisch und ein bisschen Deutsch.",
-            es: "Hablo español y un poco de alemán."
-          }, {
-            de: "Ich bin Elektroniker von Beruf.",
-            es: "Soy técnico electrónico de profesión."
-          }, {
-            de: "Meine Hobbys sind Lesen und Sport machen.",
-            es: "Mis pasatiempos son leer y hacer deporte."
-          }].map((item, i) => <div key={i} className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg hover:bg-slate-100 transition">
-                    <button onClick={() => nativeSpeak(item.de)} className="text-slate-400 hover:text-indigo-600 transition"><PlayCircle size={18} /></button>
-                    <div>
-                      <p className="font-bold text-slate-800">{item.de}</p>
-                      <p className="text-xs text-slate-500">{item.es}</p>
-                    </div>
-                  </div>)}
-              </div>
-            </div>
-          </div>
-  }, {
-    title: "Simulador: Teil 2 & 3",
-    subtitle: "Intercambios y Peticiones Reales",
-    content: (
-      <div className="mt-6 max-w-3xl mx-auto space-y-6">
-        <h3 className="font-bold text-slate-700 mb-3">Teil 1: Presentación Personal</h3>
-        <VoiceExaminer 
-          question="Wie heißt du und woher kommst du?" 
-          expectedKeywords={["heiße", "bin", "komme", "aus"]} 
-          note="Preséntate y di tu país de origen." 
-        />
+const TimeClockSimulator = ({ initialTime = "14:30" }) => {
+  const [hour, setHour] = React.useState(14);
+  const [minute, setMinute] = React.useState(30);
 
-        <h3 className="font-bold text-slate-700 mb-3 mt-8">Teil 2: Intercambio de Información</h3>
-        <VoiceExaminer 
-          question="Trinkst du am Wochenende Bier?" 
-          expectedKeywords={["Ja", "Nein", "trinke", "gern", "Bier", "Samstag", "Wochenende"]} 
-          note="Tema: Comida | Tarjeta: Cerveza (Bier)" 
-        />
-        <VoiceExaminer 
-          question="Wo kaufst du deine Schuhe?" 
-          expectedKeywords={["kaufe", "Schuhe", "Supermarkt", "Geschäft", "Laden", "Internet"]} 
-          note="Tema: Compras | Tarjeta: Zapatos (Schuhe) -> Usamos W-Frage (Wo)" 
-        />
+  const getGermanTime = (h, m) => {
+    const formalHour = String(h).padStart(2, '0');
+    const formalMinute = String(m).padStart(2, '0');
+    const formal = `${formalHour}:${formalMinute} Uhr`;
+
+    let informal = "";
+    const nextHour = (h % 12) + 1;
+    const current12 = (h % 12) || 12;
+
+    if (m === 0) informal = `${current12} Uhr Punkt`;
+    else if (m === 15) informal = `Viertel nach ${current12}`;
+    else if (m === 30) informal = `halb ${nextHour}`;
+    else if (m === 45) informal = `Viertel vor ${nextHour}`;
+    else if (m < 30) informal = `${m} nach ${current12}`;
+    else informal = `${60 - m} vor ${nextHour}`;
+
+    return { formal, informal };
+  };
+
+  const { formal, informal } = getGermanTime(hour, minute);
+
+  return (
+    <div className="p-6 bg-slate-900 text-white rounded-2xl max-w-md mx-auto shadow-lg border border-slate-800 text-center space-y-4">
+      <div className="text-4xl font-black text-amber-400 font-mono tracking-wider">
+        {String(hour).padStart(2, '0')}:{String(minute).padStart(2, '0')}
       </div>
-    )
-  }]
-}];
+      <div className="flex flex-col gap-2 bg-slate-800/80 p-4 rounded-xl border border-slate-700">
+        <div className="text-sm"><span className="text-slate-400 font-semibold">Hora Formal (Oficial):</span> <strong className="text-emerald-400">{formal}</strong></div>
+        <div className="text-sm"><span className="text-slate-400 font-semibold">Hora Informal (Cotidiana):</span> <strong className="text-indigo-300">{informal}</strong></div>
+      </div>
+      <div className="flex justify-center gap-6 pt-2">
+        <div className="flex flex-col items-center gap-1">
+          <label className="text-xs text-slate-400 font-bold">Hora ({hour}h)</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="23" 
+            value={hour} 
+            onChange={e => setHour(Number(e.target.value))} 
+            className="accent-amber-400 cursor-pointer w-28"
+          />
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <label className="text-xs text-slate-400 font-bold">Minutos ({minute}m)</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="55" 
+            step="5"
+            value={minute} 
+            onChange={e => setMinute(Number(e.target.value))} 
+            className="accent-indigo-400 cursor-pointer w-28"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
-// --- NUEVO: PLAN DE ESTUDIOS (CLASES MAGISTRALES) ---
-export const studyPlanModules = [{
-  id: 'sp_1',
-  title: 'Capítulo 1: Los Cimientos y Primeros Pasos',
-  presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
-  slides: [{
-    title: "La Regla de Oro de la Posición 2",
-    subtitle: "El verbo conjugado es el rey inamovible de la oración afirmativa",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 text-lg leading-relaxed">
-              El alemán funciona como un sistema modular de bloques. La regla absoluta y más importante para comenzar es que el verbo conjugado <strong>SIEMPRE</strong> ocupa la segunda posición.
-            </p>
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-              <div className="grid grid-cols-3 gap-2 text-center font-bold text-xs sm:text-sm">
-                <div className="bg-blue-100 text-blue-800 p-3 rounded-lg">Posición 1 (Sujeto)</div>
-                <div className="bg-indigo-600 text-white p-3 rounded-lg ring-4 ring-indigo-200">Posición 2 (Verbo)</div>
-                <div className="bg-slate-100 text-slate-800 p-3 rounded-lg">Posición 3 (Resto)</div>
-              </div>
-              <div className="grid grid-cols-3 gap-2 text-center mt-3 text-slate-700 font-medium text-xs sm:text-sm">
-                <div className="p-2 border border-dashed border-slate-300 rounded-lg">Ich</div>
-                <div className="p-2 border border-dashed border-indigo-300 rounded-lg font-bold text-indigo-700">wohne</div>
-                <div className="p-2 border border-dashed border-slate-300 rounded-lg">in Madrid.</div>
-              </div>
-            </div>
-            <div className="border-l-4 border-amber-500 bg-amber-50 p-4 rounded-r-xl">
-              <p className="text-amber-800 text-sm font-medium">
-                💡 <strong>¡Atención!</strong> Si cambias el orden y pones el tiempo al principio, el verbo sigue firme en Posición 2: <em>"Heute <strong>wohne</strong> ich in Madrid."</em>
-              </p>
-            </div>
-            <DraggableSentenceBuilder verb="kommst" subject="du" complement="aus Kolumbien" />
-            <div className="mt-8">
-              <h4 className="font-bold text-slate-700 mb-3">🛠️ Reto Aleatorio: Posición 2</h4>
-              <DraggableSentenceBuilder pool={[{
-          subject: "Ich",
-          verb: "lerne",
-          complement: "Deutsch"
-        }, {
-          subject: "Wir",
-          verb: "trinken",
-          complement: "Kaffee"
-        }, {
-          subject: "Er",
-          verb: "wohnt",
-          complement: "in Berlin"
-        }, {
-          subject: "Sie",
-          verb: "spielt",
-          complement: "Fußball"
-        }, {
-          subject: "Das Kind",
-          verb: "isst",
-          complement: "einen Apfel"
-        }]} />
-            </div>
-          </div>
-  }, {
-    title: "El Motor de Conjugación",
-    subtitle: "Cómo conjugar verbos regulares y los auxiliares clave",
-    content: <div className="mt-6 max-w-3xl mx-auto space-y-4">
-            <p className="text-slate-700">Para conjugar verbos regulares, tomamos la raíz del verbo (ej. <strong>komm-</strong>) y añadimos la terminación según el actor:</p>
-            
-            <div className="overflow-x-auto my-5 rounded-xl border border-slate-200 shadow-sm">
-              <table className="w-full text-left border-collapse text-sm min-w-[600px]">
-                <thead className="bg-slate-100/80 text-slate-800">
-                  <tr>
-                    <th className="px-4 py-3 font-bold border-b border-slate-200 whitespace-nowrap">Actor</th>
-                    <th className="px-4 py-3 font-bold border-b border-slate-200 whitespace-nowrap">Terminación</th>
-                    <th className="px-4 py-3 font-bold border-b border-slate-200 whitespace-nowrap">Ej. (kommen)</th>
-                    <th className="px-4 py-3 font-bold border-b border-slate-200 whitespace-nowrap text-indigo-600">sein (Ser)</th>
-                    <th className="px-4 py-3 font-bold border-b border-slate-200 whitespace-nowrap text-emerald-600">haben (Tener)</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-slate-100">
-                  <tr>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600"><strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded">ich</strong></td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">-e</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">komme</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-indigo-600 font-medium">bin</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-emerald-600 font-medium">habe</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600"><strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded">du</strong></td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">-st</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">kommst</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-indigo-600 font-medium">bist</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-emerald-600 font-medium">hast</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600"><strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded">er/sie/es</strong></td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">-t</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">kommt</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-indigo-600 font-medium">ist</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-emerald-600 font-medium">hat</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600"><strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded">wir</strong></td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">-en</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">kommen</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-indigo-600 font-medium">sind</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-emerald-600 font-medium">haben</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600"><strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded">ihr</strong></td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">-t</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">kommt</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-indigo-600 font-medium">seid</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-emerald-600 font-medium">habt</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600"><strong className="font-bold text-indigo-600 bg-indigo-50 px-1 rounded">sie/Sie</strong></td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">-en</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-slate-600">kommen</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-indigo-600 font-medium">sind</td>
-                    <td className="px-4 py-3 align-top leading-relaxed text-emerald-600 font-medium">haben</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-  }, {
-    title: "Preguntas: Abiertas vs Cerradas",
-    subtitle: "¿Cómo hacer preguntas en alemán?",
-    content: <div className="space-y-6 text-left">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                <h4 className="font-bold text-indigo-700 text-lg mb-2">W-Fragen (Abiertas)</h4>
-                <p className="text-slate-600 text-sm mb-4">
-                  La palabra de pregunta (Wer, Was, Wo, Wie) va en Posición 1. El verbo en la 2 y el sujeto en la 3.
-                </p>
-                <div className="bg-white p-3 rounded-lg border border-slate-100 font-mono text-xs text-slate-800">
-                  <span className="text-indigo-600 font-bold">Wo</span> (Pos 1) + <span className="text-emerald-600 font-bold">wohnst</span> (Pos 2) + du? (Pos 3)
-                </div>
-              </div>
-              <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                <h4 className="font-bold text-indigo-700 text-lg mb-2">Ja/Nein-Fragen (Cerradas)</h4>
-                <p className="text-slate-600 text-sm mb-4">
-                  El verbo salta a la Posición 1 para llamar la atención. La respuesta esperada es "Sí" o "No".
-                </p>
-                <div className="bg-white p-3 rounded-lg border border-slate-100 font-mono text-xs text-slate-800">
-                  <span className="text-emerald-600 font-bold">Wohnst</span> (Pos 1) + du (Pos 2) + in Berlin?
-                </div>
-              </div>
-            </div>
-          </div>
-  }]
-}, {
-  id: 'sp_2',
-  title: 'Capítulo 2: Mi Círculo, Géneros y Negación',
-  presentationUrl: 'https://drive.google.com/file/d/1ydPXeoc5VGUyyP2C-_eBo7e0RB-CTTGS/view?usp=drive_web',
-  slides: [{
-    title: "Los Tres Géneros en Alemán",
-    subtitle: "Aprende el color de las palabras",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed">
-              El alemán clasifica todo en tres géneros. No intentes buscarles lógica con el español, ¡aprene el "color" de la palabra!
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse border border-slate-200 text-sm">
-                <thead>
-                  <tr className="bg-slate-100">
-                    <th className="p-3 border border-slate-200 font-bold">Género</th>
-                    <th className="p-3 border border-slate-200 font-bold">Definido</th>
-                    <th className="p-3 border border-slate-200 font-bold">Indefinido</th>
-                    <th className="p-3 border border-slate-200 font-bold">Plural</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="p-3 border border-slate-200 font-bold text-blue-600">Masculino</td>
-                    <td className="p-3 border border-slate-200 font-mono">der (el)</td>
-                    <td className="p-3 border border-slate-200 font-mono">ein (un)</td>
-                    <td className="p-3 border border-slate-200 font-mono">die (los/las)</td>
-                  </tr>
-                  <tr className="bg-slate-50/50">
-                    <td className="p-3 border border-slate-200 font-bold text-rose-600">Femenino</td>
-                    <td className="p-3 border border-slate-200 font-mono">die (la)</td>
-                    <td className="p-3 border border-slate-200 font-mono">eine (una)</td>
-                    <td className="p-3 border border-slate-200 font-mono">die (los/las)</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 border border-slate-200 font-bold text-amber-600">Neutro</td>
-                    <td className="p-3 border border-slate-200 font-mono">das (lo)</td>
-                    <td className="p-3 border border-slate-200 font-mono">ein (un)</td>
-                    <td className="p-3 border border-slate-200 font-mono">die (los/las)</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-  }, {
-    title: "Práctica de Géneros y Posesivos",
-    subtitle: "Añade una '-e' al final si la palabra es femenina o plural",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed">
-              Todos los posesivos (<em>mein</em>=mi, <em>dein</em>=tu, <em>sein</em>=su) funcionan exactamente igual que <em>ein</em>.
-            </p>
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-sm">
-              <p>👉 <strong>mein Vater</strong> (Masculino: sin -e al final)</p>
-              <p>👉 <strong>meine Mutter</strong> (Femenino: añade -e al final)</p>
-              <p>👉 <strong>meine Eltern</strong> (Plural: añade -e al final)</p>
-            </div>
-            <AccusativeShield words={[{
-        word: "Vater",
-        gender: "der",
-        translation: "padre"
-      }, {
-        word: "Mutter",
-        gender: "die",
-        translation: "madre"
-      }, {
-        word: "Kind",
-        gender: "das",
-        translation: "hijo/niño"
-      }, {
-        word: "Bruder",
-        gender: "der",
-        translation: "hermano"
-      }, {
-        word: "Schwester",
-        gender: "die",
-        translation: "hermana"
-      }]} />
-          </div>
-  }]
-}, {
-  id: 'sp_3',
-  title: 'Capítulo 3: El Misterioso Caso Acusativo',
-  presentationUrl: 'https://drive.google.com/file/d/1QusIBIw3hhDxZvtnB3eocWlPWW43dlIp/view?usp=drive_web',
-  slides: [{
-    title: "La Regla de Oro del Acusativo",
-    subtitle: "Al Acusativo solo le importan los masculinos",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed">
-              El Acusativo es el Objeto Directo de una acción. Responde a <em>¿Qué compras?</em> o <em>¿A quién buscas?</em>. <strong>¡Solo ataca a las palabras masculinas cambiándolas a -en!</strong>
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse border border-slate-200 text-sm">
-                <thead>
-                  <tr className="bg-slate-100 font-bold">
-                    <th className="p-3 border border-slate-200">Género</th>
-                    <th className="p-3 border border-slate-200">Nominativo</th>
-                    <th className="p-3 border border-slate-200">Acusativo</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-blue-50/50">
-                    <td className="p-3 border border-slate-200 font-bold text-blue-600">Masculino</td>
-                    <td className="p-3 border border-slate-200">der / ein / kein</td>
-                    <td className="p-3 border border-slate-200 font-bold">den / einen / keinen</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 border border-slate-200 font-bold text-rose-600">Femenino</td>
-                    <td className="p-3 border border-slate-200">die / eine / keine</td>
-                    <td className="p-3 border border-slate-200">die / eine / keine</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 border border-slate-200 font-bold text-amber-600">Neutro</td>
-                    <td className="p-3 border border-slate-200">das / ein / kein</td>
-                    <td className="p-3 border border-slate-200">das / ein / kein</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-  }, {
-    title: "Desafío de Compras y Alimentos",
-    subtitle: "Verbos activadores: kaufen, brauchen, essen, trinken, haben",
-    content: <div className="space-y-6 text-left">
-            <div className="border-l-4 border-indigo-500 bg-indigo-50 p-4 rounded-r-xl text-sm">
-              <p className="text-indigo-900">
-                ✍️ <strong>Ejemplo:</strong> <em>Ich kaufe <strong>einen</strong> Käse (masculino) y <strong>eine</strong> Tomate (femenino).</em>
-              </p>
-            </div>
-            <AccusativeShield words={[{
-        word: "Apfel",
-        gender: "der",
-        translation: "manzana"
-      }, {
-        word: "Tomate",
-        gender: "die",
-        translation: "tomate"
-      }, {
-        word: "Käse",
-        gender: "der",
-        translation: "queso"
-      }, {
-        word: "Brot",
-        gender: "das",
-        translation: "pan"
-      }, {
-        word: "Wein",
-        gender: "der",
-        translation: "vino"
-      }]} />
-          </div>
-  }]
-}, {
-  id: 'sp_4',
-  title: 'Capítulo 4: Rutina y Verbos Separables',
-  presentationUrl: 'https://drive.google.com/file/d/1s4MSGKeK7xVZF2qGN4JSXu5dl43VkhOC/view?usp=drive_web',
-  slides: [{
-    title: "Los Verbos Separables",
-    subtitle: "Trennbare Verben y el efecto pinza",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed">
-              Los <strong>Trennbare Verben</strong> son acciones que se dividen en dos partes al conjugarse. La raíz conjugada se queda en Posición 2 y el prefijo vuela al final absoluto de la oración.
-            </p>
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3 text-sm">
-              <h5 className="font-bold text-slate-800">Estructura Satzklammer (La Pinza):</h5>
-              <p>👉 <strong>aufstehen</strong> (levantarse): Ich <strong>stehe</strong> um 7 Uhr <strong>auf</strong>.</p>
-              <p>👉 <strong>einkaufen</strong> (comprar): Er <strong>kauft</strong> im Supermarkt <strong>ein</strong>.</p>
-            </div>
-          </div>
-  }, {
-    title: "Práctica del Efecto Pinza",
-    subtitle: "Visualiza cómo el prefijo se separa y va al final",
-    content: <div className="space-y-6 text-left">
-            <PincerSwitch exercises={[{
-        subject: "Ich",
-        verbRaiz: "stehe",
-        prefix: "auf",
-        complement: "um 7 Uhr",
-        verbOriginal: "aufstehen",
-        translation: "Yo me levanto a las 7"
-      }, {
-        subject: "Er",
-        verbRaiz: "kauft",
-        prefix: "ein",
-        complement: "im Supermarkt",
-        verbOriginal: "einkaufen",
-        translation: "Él compra en el supermercado"
-      }]} />
-          </div>
-  }]
-}, {
-  id: 'sp_5',
-  title: 'Capítulo 5: Darle actitud - Verbos Modales',
-  presentationUrl: 'https://drive.google.com/file/d/12ef-35y8c5SaFbw4v1xIZX74-5E8mX6c/view?usp=drive_web',
-  slides: [{
-    title: "Los Verbos Modales",
-    subtitle: "Habilidad, obligación, permiso, deseo y voluntad",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed text-sm">
-              El verbo modal se coloca en la Posición 2 (con la terminación del actor), y el verbo principal de acción se envía al final de la oración en su forma original (Infinitivo).
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse border border-slate-200 text-xs sm:text-sm">
-                <thead>
-                  <tr className="bg-slate-100 font-bold">
-                    <th className="p-2.5 border border-slate-200">Verbo</th>
-                    <th className="p-2.5 border border-slate-200">Intención</th>
-                    <th className="p-2.5 border border-slate-200">Ejemplo</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="p-2.5 border border-slate-200 font-bold">können</td>
-                    <td className="p-2.5 border border-slate-200">Habilidad</td>
-                    <td className="p-2.5 border border-slate-200 font-mono">Ich <strong>kann</strong> schwimmen.</td>
-                  </tr>
-                  <tr className="bg-slate-50/50">
-                    <td className="p-2.5 border border-slate-200 font-bold">müssen</td>
-                    <td className="p-2.5 border border-slate-200">Obligación</td>
-                    <td className="p-2.5 border border-slate-200 font-mono">Wir <strong>müssen</strong> arbeiten.</td>
-                  </tr>
-                  <tr>
-                    <td className="p-2.5 border border-slate-200 font-bold">dürfen</td>
-                    <td className="p-2.5 border border-slate-200">Permiso</td>
-                    <td className="p-2.5 border border-slate-200 font-mono">Man <strong>darf</strong> hier parken.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-  }, {
-    title: "El Sándwich Verbal",
-    subtitle: "Modales y prefijos separables combinados",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 text-xs sm:text-sm">
-              💡 <strong>Regla de oro:</strong> Si usas un verbo modal con un verbo separable, el prefijo separable NO se rompe, sino que el verbo va completo al final:
-            </p>
-            <PincerSwitch exercises={[{
-        subject: "Ich",
-        verbRaiz: "will",
-        prefix: "aufstehen",
-        complement: "um 7 Uhr",
-        verbOriginal: "wollen + aufstehen",
-        translation: "Quiero levantarme a las 7 (El verbo separable va completo al final)"
-      }, {
-        subject: "Wir",
-        verbRaiz: "müssen",
-        prefix: "einkaufen",
-        complement: "am Nachmittag",
-        verbOriginal: "müssen + einkaufen",
-        translation: "Tenemos que comprar por la tarde"
-      }]} />
-          </div>
-  }]
-}, {
-  id: 'sp_6',
-  title: 'Capítulo 6: Descifrando el Dativo',
-  presentationUrl: 'https://drive.google.com/file/d/1n_dLlwAlx9mJMoytcMC4wV3TjNCb59-r/view?usp=drive_web',
-  slides: [{
-    title: "El Código M-R-M-N",
-    subtitle: "El Dativo es el receptor u objeto indirecto de la acción",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed">
-              El Dativo es el traje especial para el "Receptor" de una acción. Memoriza estas 4 letras finales para los artículos:
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-sm">
-              <div className="bg-blue-50 border border-blue-200 p-3 rounded-xl">
-                <span className="font-bold text-blue-600 block">Masculino</span>
-                <span className="font-mono text-lg font-black">de<b>m</b></span>
-              </div>
-              <div className="bg-rose-50 border border-rose-200 p-3 rounded-xl">
-                <span className="font-bold text-rose-600 block">Femenino</span>
-                <span className="font-mono text-lg font-black">de<b>r</b></span>
-              </div>
-              <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl">
-                <span className="font-bold text-amber-600 block">Neutro</span>
-                <span className="font-mono text-lg font-black">de<b>m</b></span>
-              </div>
-              <div className="bg-purple-50 border border-purple-200 p-3 rounded-xl">
-                <span className="font-bold text-purple-600 block">Plural</span>
-                <span className="font-mono text-lg font-black">de<b>n</b> (+n)</span>
-              </div>
-            </div>
-            <div className="border-l-4 border-amber-500 bg-amber-50 p-4 rounded-r-xl text-sm">
-              <p className="text-amber-800">
-                💡 <strong>Preposiciones exigentes:</strong> mit, nach, aus, zu, von, bei, seit, ab siempre exigen Dativo.
-              </p>
-            </div>
-          </div>
-  }, {
-    title: "Línea de Tiempo de Acciones",
-    subtitle: "Moviéndonos entre tiempos verbales con Dativo",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 text-sm">
-              Observa cómo cambia la estructura de una acción en Dativo al pasarla del presente al pasado:
-            </p>
-            <MechanicalTimeline present={{
-        subject: "Ich",
-        verb: "fahre",
-        complement: "mit dem Zug"
-      }} past={{
-        auxiliary: "bin",
-        participle: "gefahren"
-      }} />
-          </div>
-  }]
-}, {
-  id: 'sp_7',
-  title: 'Capítulo 7: Das Perfekt (El Pasado)',
-  presentationUrl: 'https://drive.google.com/file/d/1rWmyyVBBceZm2lzbaNY8Luuvv5X6vgfU/view?usp=drive_web',
-  slides: [{
-    title: "Estructura de Das Perfekt",
-    subtitle: "Un rompecabezas mecánico de dos pilares",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed">
-              Para hablar del pasado en el día a día, usamos el Perfekt. Consta del verbo auxiliar (<em>haben</em> o <em>sein</em>) en Posición 2 y el participio al final.
-            </p>
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-              <div className="grid grid-cols-4 gap-2 text-center font-bold text-xs sm:text-sm">
-                <div className="bg-blue-100 text-blue-800 p-2.5 rounded-lg">Sujeto</div>
-                <div className="bg-indigo-600 text-white p-2.5 rounded-lg">Auxiliar (Pos 2)</div>
-                <div className="bg-slate-100 text-slate-800 p-2.5 rounded-lg">Relleno</div>
-                <div className="bg-emerald-600 text-white p-2.5 rounded-lg">Participio (Final)</div>
-              </div>
-              <div className="grid grid-cols-4 gap-2 text-center mt-3 text-slate-700 font-mono text-xs sm:text-sm">
-                <div className="p-2 border border-dashed border-slate-300 rounded-lg">Ich</div>
-                <div className="p-2 border border-dashed border-indigo-300 rounded-lg font-bold text-indigo-700">habe</div>
-                <div className="p-2 border border-dashed border-slate-300 rounded-lg">eine Pizza</div>
-                <div className="p-2 border border-dashed border-emerald-300 rounded-lg font-bold text-emerald-700">gekauft.</div>
-              </div>
-            </div>
-          </div>
-  }, {
-    title: "Entrenamiento de Desplazamiento",
-    subtitle: "Usa 'haben' para acciones estáticas y 'sein' para desplazamiento",
-    content: <div className="space-y-6 text-left">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl">
-                <h5 className="font-bold text-blue-800 mb-1">Haben (Estático)</h5>
-                <p className="text-blue-700">Comer, beber, comprar, tener, leer...</p>
-                <em className="text-slate-500 block mt-1">Ich habe gelernt.</em>
-              </div>
-              <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl">
-                <h5 className="font-bold text-emerald-800 mb-1">Sein (Desplazamiento)</h5>
-                <p className="text-emerald-700">Ir, venir, volar, conducir, levantarse...</p>
-                <em className="text-slate-500 block mt-1">Ich bin geflogen.</em>
-              </div>
-            </div>
-            <MechanicalTimeline present={{
-        subject: "Ich",
-        verb: "kaufe",
-        complement: "eine Pizza"
-      }} past={{
-        auxiliary: "habe",
-        participle: "gekauft"
-      }} />
-          </div>
-  }]
-}, {
-  id: 'sp_8',
-  title: 'Capítulo 8: Kit Médica (Imperativo)',
-  presentationUrl: 'https://drive.google.com/file/d/1hvauciZnzhQPR7Jcvlhktq7VRdc_Xvrq/view?usp=drive_web',
-  slides: [{
-    title: "El Imperativo en Alemán",
-    subtitle: "Cómo dar órdenes, recetas y consejos de forma eficiente",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed">
-              Para dar órdenes o instrucciones directas en alemán, eliminamos los pronombres personales y adaptamos la forma del verbo.
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse border border-slate-200 text-xs sm:text-sm">
-                <thead>
-                  <tr className="bg-slate-100 font-bold">
-                    <th className="p-3 border border-slate-200">Tipo de Receptor</th>
-                    <th className="p-3 border border-slate-200">Ejemplo</th>
-                    <th className="p-3 border border-slate-200">Regla Básica</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="p-3 border border-slate-200 font-bold">Tú (du) - Informal</td>
-                    <td className="p-3 border border-slate-200 font-mono text-indigo-700 font-bold">Komm!</td>
-                    <td className="p-3 border border-slate-200">Se elimina el "du" y la terminación "-st".</td>
-                  </tr>
-                  <tr className="bg-slate-50/50">
-                    <td className="p-3 border border-slate-200 font-bold">Ustedes (ihr) - Plural</td>
-                    <td className="p-3 border border-slate-200 font-mono text-indigo-700 font-bold">Kommt!</td>
-                    <td className="p-3 border border-slate-200">Se elimina el pronombre "ihr", pero se conserva la "-t".</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 border border-slate-200 font-bold">Usted (Sie) - Formal</td>
-                    <td className="p-3 border border-slate-200 font-mono text-indigo-700 font-bold">Kommen Sie!</td>
-                    <td className="p-3 border border-slate-200">Se mantiene el verbo en infinitivo y se agrega "Sie".</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-  }, {
-    title: "Excepciones Críticas y Consejos",
-    subtitle: "Cambios vocálicos y el uso de 'sollen'",
-    content: <div className="space-y-6 text-left">
-            <div className="border-l-4 border-amber-500 bg-amber-50 p-4 rounded-r-xl text-sm">
-              <p className="text-amber-800">
-                ⚠️ <strong>¡Atención con las irregularidades!</strong>
-              </p>
-              <ul className="list-disc pl-5 mt-2 space-y-1 text-xs text-amber-900 font-medium">
-                <li><strong>sprechen</strong> → <em>Sprich!</em> (Cambio vocálico de e → i).</li>
-                <li><strong>fahren</strong> → <em>Fahr!</em> (Pierde la diéresis de ä → a).</li>
-                <li><strong>sein</strong> → <em>Sei! / Seid! / Seien Sie!</em> (Completamente irregular).</li>
-              </ul>
-            </div>
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm">
-              <p className="text-slate-700">
-                Para transmitir consejos del médico o deberes usamos el verbo modal <strong>sollen</strong>:
-                <br /><em className="text-indigo-700 font-mono font-bold block mt-2">"Du sollst viel Wasser trinken." (Debes tomar mucha agua).</em>
-              </p>
-            </div>
-          </div>
-  }]
-}, {
-  id: 'sp_9',
-  title: 'Capítulo 9: Uniendo Ideas (Fantasma Cero)',
-  presentationUrl: 'https://drive.google.com/file/d/1ja2uZyZv5RMsli1g6RVJAleFgRD4YVnG/view?usp=drive_web',
-  slides: [{
-    title: "Los Conectores Fantasma Cero",
-    subtitle: "Uniendo frases fluidamente sin romper la posición 2",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed text-sm">
-              Los conectores del acrónimo <strong>ADUSO</strong> operan como conectores fantasmas de <strong>Posición 0</strong>. El orden sujeto-verbo de la siguiente frase no cambia.
-            </p>
-            <div className="grid grid-cols-5 gap-1.5 text-center text-xs font-black">
-              <div className="bg-blue-100 border border-blue-200 p-2 rounded-lg text-blue-900"><b>A</b>ber<span className="block font-normal text-[9px] text-blue-700/80">pero</span></div>
-              <div className="bg-indigo-100 border border-indigo-200 p-2 rounded-lg text-indigo-900"><b>D</b>enn<span className="block font-normal text-[9px] text-indigo-700/80">porque</span></div>
-              <div className="bg-emerald-100 border border-emerald-200 p-2 rounded-lg text-emerald-900"><b>U</b>nd<span className="block font-normal text-[9px] text-emerald-700/80">y</span></div>
-              <div className="bg-rose-100 border border-rose-200 p-2 rounded-lg text-rose-900"><b>S</b>ondern<span className="block font-normal text-[9px] text-rose-700/80">sino</span></div>
-              <div className="bg-amber-100 border border-amber-200 p-2 rounded-lg text-amber-900"><b>O</b>der<span className="block font-normal text-[9px] text-amber-700/80">o</span></div>
-            </div>
-          </div>
-  }, {
-    title: "Desafío de Conectores",
-    subtitle: "El conector ocupa la Posición 0, el verbo inamovible en la 2",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 text-sm">
-              Ordena la segunda oración. Recuerda que el conector ADUSO queda flotando al principio (Posición 0), pero el verbo conjugado debe ir en la <strong>Posición 2</strong>.
-            </p>
-            <DraggableSentenceBuilder pool={[{
-        subject: "und ich",
-        verb: "trinke",
-        complement: "einen Kaffee"
-      }, {
-        subject: "aber er",
-        verb: "trinkt",
-        complement: "nur Wasser"
-      }, {
-        subject: "denn wir",
-        verb: "haben",
-        complement: "keinen Hunger"
-      }]} />
-          </div>
-  }]
-}, {
-  id: 'sp_10',
-  title: 'Capítulo 10: El Manual del Navegante',
-  presentationUrl: 'https://drive.google.com/file/d/1wS542v_rcsuYj1cpEsTzahsmKDBQQxjV/view?usp=drive_web',
-  slides: [{
-    title: "Wechselpräpositionen (Espaciales)",
-    subtitle: "¿Cuándo usar Dativo (Wo) o Acusativo (Wohin)?",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed text-sm">
-              Las preposiciones espaciales cambian de caso dependiendo de si indicamos reposición/estado o movimiento de un sitio a otro:
-            </p>
-            <div className="grid grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                <h5 className="font-bold text-amber-800 mb-1">¿Wo? (Reposición)</h5>
-                <p className="text-slate-600 text-xs">¿En dónde está? El objeto está quieto.</p>
-                <span className="font-bold text-amber-700 block mt-2">Exige DATIVO</span>
-              </div>
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                <h5 className="font-bold text-blue-800 mb-1">¿Wohin? (Dirección)</h5>
-                <p className="text-slate-600 text-xs">¿A dónde va? Implica desplazamiento de A a B.</p>
-                <span className="font-bold text-blue-700 block mt-2">Exige ACUSATIVO</span>
-              </div>
-            </div>
-            <div className="border-l-4 border-indigo-500 bg-indigo-50 p-4 rounded-r-xl text-xs sm:text-sm">
-              <p className="text-indigo-900">
-                💡 <strong>Contracciones:</strong> in + dem = <strong>im</strong> (Dat) | in + das = <strong>ins</strong> (Acu) | an + dem = <strong>am</strong> (Dat).
-              </p>
-            </div>
-          </div>
-  }, {
-    title: "Simulación y Reto de Navegación",
-    subtitle: "Completa la contracción correcta para reposo o desplazamiento",
-    content: <div className="space-y-6 text-left">
-            <LocativeMapSimulator />
-          </div>
-  }]
-}, {
-  id: 'sp_11',
-  title: 'Capítulo 11: Declinación Fuerte (Nullartikel)',
-  presentationUrl: 'https://drive.google.com/file/d/1uXg-DLwnQLSTdsSFbT8yPmHpTBWM2miu/view?usp=drive_web1',
-  slides: [{
-    title: "La Declinación Fuerte de Adjetivos",
-    subtitle: "Nullartikel: Cuando no hay artículo que indique género o caso",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 leading-relaxed text-sm">
-              Cuando un adjetivo va antes de un sustantivo y <strong>no hay artículo</strong> (o hay un número invariable), el adjetivo debe adoptar las terminaciones fuertes de los artículos definidos para indicar el género y caso del sustantivo.
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse border border-slate-200 text-xs">
-                <thead>
-                  <tr className="bg-slate-100 font-bold text-center">
-                    <th className="p-2 border border-slate-200">Caso</th>
-                    <th className="p-2 border border-slate-200">Masc (der)</th>
-                    <th className="p-2 border border-slate-200">Fem (die)</th>
-                    <th className="p-2 border border-slate-200">Neutro (das)</th>
-                    <th className="p-2 border border-slate-200">Plural (die)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-center">
-                    <td className="p-2 border border-slate-200 font-bold text-left">Nominativo</td>
-                    <td className="p-2 border border-slate-200 font-mono">-er</td>
-                    <td className="p-2 border border-slate-200 font-mono">-e</td>
-                    <td className="p-2 border border-slate-200 font-mono">-es</td>
-                    <td className="p-2 border border-slate-200 font-mono">-e</td>
-                  </tr>
-                  <tr className="bg-slate-50/50 text-center">
-                    <td className="p-2 border border-slate-200 font-bold text-left">Acusativo</td>
-                    <td className="p-2 border border-slate-200 font-mono">-en</td>
-                    <td className="p-2 border border-slate-200 font-mono">-e</td>
-                    <td className="p-2 border border-slate-200 font-mono">-es</td>
-                    <td className="p-2 border border-slate-200 font-mono">-e</td>
-                  </tr>
-                  <tr className="text-center">
-                    <td className="p-2 border border-slate-200 font-bold text-left">Dativo</td>
-                    <td className="p-2 border border-slate-200 font-mono">-em</td>
-                    <td className="p-2 border border-slate-200 font-mono">-er</td>
-                    <td className="p-2 border border-slate-200 font-mono">-em</td>
-                    <td className="p-2 border border-slate-200 font-mono">-en</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-  }, {
-    title: "Autoevaluación de Declinación Fuerte",
-    subtitle: "Completa el espacio con la terminación correcta del adjetivo",
-    content: <div className="space-y-6 text-left">
-            <p className="text-slate-700 text-sm">
-              Pon a prueba tu conocimiento. Escribe la terminación correspondiente en cada espacio en blanco:
-            </p>
-            <LiveEvaluator exercises={[{
-        text: "Ich mag alt___ Käse",
-        answer: "en",
-        translation: "Me gusta el queso viejo (der Käse, Acusativo)"
-      }, {
-        text: "Gut___ Brot ist teuer",
-        answer: "es",
-        translation: "El buen pan es caro (das Brot, Nominativo)"
-      }, {
-        text: "Sie hilft mir mit groß___ Freude",
-        answer: "er",
-        translation: "Ella me ayuda con gran alegría (die Freude, Dativo)"
-      }, {
-        text: "Dort stehen... klein___ Kinder",
-        answer: "e",
-        translation: "Allí están dos niños pequeños (Plural, Nominativo)"
-      }]} />
-          </div>
-  }]
-}];
+const DativeMatrixClicker = ({ mode, ...props }) => (
+  <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center">
+    <AccusativeShield 
+      words={[
+        { word: "dem Mann", gender: "der", translation: "al hombre (Masculino: dem)" },
+        { word: "der Frau", gender: "die", translation: "a la mujer (Femenino: der)" },
+        { word: "dem Kind", gender: "das", translation: "al niño (Neutro: dem)" },
+        { word: "den Kindern", gender: "die", translation: "a los niños (Plural: den + n)" }
+      ]}
+      {...props}
+    />
+  </div>
+);
+
+// --- PLAN DE ESTUDIOS MAESTRO A1 (12 CAPÍTULOS DEFINITIVOS V9.2) ---
+export const studyPlanModules = [
+  // =========================================================================
+  // BLOQUE I: CIEMIENTOS, IDENTIDAD Y TIEMPO
+  // =========================================================================
+  {
+    id: 'sp_1',
+    title: 'Capítulo 1: La Célula Sintáctica y Conjugación Regular',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "La Regla de Oro de la Posición 2 (Verb Second - V2)",
+        subtitle: "El verbo conjugado es el rey inamovible de la oración afirmativa",
+        content: `El alemán funciona como un sistema modular de bloques. La regla matemática inquebrantable de la sintaxis alemana es que el verbo conjugado **SIEMPRE ocupa la Posición 2** en oraciones afirmativas y negativas.\n\n* **Posición 1 (Sujeto o Tiempo):** \`Ich\` / \`Heute\`\n* **Posición 2 (VERBO CONJUGADO):** \`wohne\` / \`wohne\`\n* **Posición 3 (Sujeto tras Inversión o Resto):** \`in Madrid\` / \`ich in Madrid\`\n\n⚠️ **Inversión Sintáctica:** Si mueves un elemento de tiempo o lugar a la Posición 1 para darle énfasis, el sujeto salta automáticamente a la Posición 3 para proteger la Posición 2 del verbo: *"Heute wohne ich in Madrid."*\n\n🚫 **Trampa Hispanohablante:** En español decimos "Hoy yo vivo en Berlín". Traducir esto literalmente como \`*Heute ich wohne in Berlin\` rompe la regla V2 y es un error grave en el Goethe A1. La forma correcta es: **Heute wohne ich in Berlin**.`
+      },
+      {
+        title: "El Motor de Conjugación Regular y Cambios Vocálicos",
+        subtitle: "Extracción de la raíz, desinencias estándar y excepciones fonéticas",
+        content: `Para conjugar un verbo en presente (*Präsens*), retiramos la terminación **-en** e inyectamos las desinencias estándar: \`ich -e\`, \`du -st\`, \`er/sie/es -t\`, \`wir -en\`, \`ihr -t\`, \`sie/Sie -en\`.\n\n⚡ **La Regla de la -e- Epentética:**\nSi la raíz de un verbo termina en **-t** o **-d** (*arbeit-en*, *find-en*), es fonéticamente imposible pronunciar las terminaciones \`-st\` o \`-t\`. Por ello, se inserta una **-e- de apoyo** en las segundas y terceras personas: *du arbeit**e**st*, *er find**e**t*, *ihr arbeit**e**t*.\n\n📚 **Cambios Vocálicos Fuertes (Solo en Singular du/er/sie/es):**\n1. **e ➔ i / ie:** *sprechen* ➔ du **sprichst**, er **spricht** | *lesen* ➔ du **liest**.\n2. **a ➔ ä (Pierden el Umlaut en plural):** *fahren* ➔ du **fährst**, er **fährt**.`
+      },
+      {
+        title: "Verbos Auxiliares Irregulares Absolutos: sein y haben",
+        subtitle: "Los dos pilares fundamentales del idioma alemán",
+        content: `Los verbos **sein** (ser/estar) y **haben** (tener/haber) no siguen reglas estándar. Deben memorizarse como fórmulas fijas:\n\n**sein (Ser / Estar):**\n* ich **bin** | du **bist** | er/sie/es **ist**\n* wir **sind** | ihr **seid** | sie/Sie **sind**\n\n**haben (Tener / Haber):**\n* ich **habe** | du **hast** *(pierde la -b-)* | er/sie/es **hat** *(pierde la -b-)*\n* wir **haben** | ihr **habt** | sie/Sie **haben**\n\n💡 **Tip Examen Goethe A1 (Sprechen Teil 1):** Usa la estructura V2 para tu presentación personal: *"Ich bin Juan, ich komme aus Kolumbien und wohne in Madrid."*`
+      },
+      {
+        title: "Reto Interactivo: Inversión Sintáctica V2",
+        subtitle: "Ordena los bloques asegurando la Posición 2 del verbo",
+        content: props => (
+          <DraggableSentenceBuilder 
+            mode="inversion"
+            pool={[
+              { subject: "Ich", verb: "lerne", complement: "heute Deutsch" },
+              { subject: "Heute", verb: "lerne", complement: "ich Deutsch" },
+              { subject: "Wir", verb: "trinken", complement: "einen Kaffee" },
+              { subject: "Am Morgen", verb: "trinken", complement: "wir einen Kaffee" }
+            ]} 
+            {...props} 
+          />
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_2',
+    title: 'Capítulo 2: El Universo del Sustantivo (Géneros, Plurales y Posesivos)',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "Tríada Cromática y Pistas Morfológicas de Género",
+        subtitle: "Anclaje visual y sufijos de género indudable",
+        content: `En alemán, cada sustantivo debe aprenderse junto a su artículo y su color de anclaje:\n* 🔵 **Masculino (der / ein):** Color Azul (Equipo Sol)\n* 🔴 **Femenino (die / eine):** Color Rojo (Equipo Luna)\n* 🟢 **Neutro (das / ein):** Color Verde (Equipo Estrella)\n\n🔍 **Sufijos Morfológicos Seguros:**\n* **Siempre Femeninos (die):** \`-ung\` (*die Wohnung*), \`-heit\` (*die Gesundheit*), \`-keit\` (*die Möglichkeit*), \`-schaft\` (*die Landschaft*), \`-in\` (*die Lehrerin*).\n* **Siempre Neutros (das):** \`-chen\` (*das Mädchen*), \`-lein\` (*das Fräulein*), sustantivos verbales (*das Essen*).\n* **Siempre Masculinos (der):** Días, meses, estaciones (*der Montag*, *der Januar*, *der Sommer*), sufijos \`-ling\` (*der Lehrling*), \`-ismus\` (*der Tourismus*).\n\n🚫 **Trampa Hispanohablante:** No traslades el género del español. En alemán el sol es femenino (*die Sonne*) y la luna es masculino (*der Mond*).`
+      },
+      {
+        title: "Morfología Temprana del Plural y Precios en A1",
+        subtitle: "Las 5 terminaciones de plural y la lectura invertida comercial",
+        content: `El plural en alemán (**siempre con artículo die**) sigue 5 patrones: 1. **-e** (*die Hunde*), 2. **-er** con Umlaut (*die Bücher*), 3. **-n/-en** (*die Frauen*), 4. **-s** (*die Autos*), 5. **Sin terminación** (*die Fenster* / *die Äpfel*).\n\n💶 **Morfología Numérica Comercial (Trampa de Escucha):**\n* Los números del 21 al 99 se leen a la inversa (unidades antes que decenas unidas por *und*): *24 ➔ vier-und-zwei-und-zwanzig*.\n* En los precios, la palabra **Euro** o **Cent** interrumpe físicamente la cifra: **4,99 €** se lee estrictamente como **vier Euro neunundneunzig** (NUNCA \`*vier comma neunundneunzig\`).`
+      },
+      {
+        title: "La Matriz de Clones de 'ein' (Pronombres Posesivos)",
+        subtitle: "Los posesivos imitan exactamente la flexión del artículo indeterminado",
+        content: `Los determinantes posesivos (**mein, dein, sein, ihr, unser, euer**) NO cambian según el poseedor, sino según el **género del objeto poseído** imitando las terminaciones de **ein**:\n\n* Si el sustantivo es **Masculino/Neutro** ➔ Forma base: **mein** Vater, **mein** Kind, **dein** Auto.\n* Si el sustantivo es **Femenino/Plural** ➔ Añade **-e**: **meine** Mutter, **meine** Eltern, **deine** Taschen.\n\n📊 **Tabla Maestra de Posesivos (Nominativo):**\n* **ich (yo):** mein / meine\n* **du (tú):** dein / deine\n* **er (él) / es (neutro):** sein / seine\n* **sie (ella) / sie (ellos):** ihr / ihre\n* **wir (nosotros):** unser / unsere\n* **ihr (vosotros):** euer / eure *(pierde la -e- interna)*\n* **Sie (Usted/Ustedes):** Ihr / Ihre *(siempre en Mayúscula)*`
+      },
+      {
+        title: "Reto Interactivo: Escudo de Posesivos y Género",
+        subtitle: "Asigna el artículo y posesivo correcto a los miembros de la familia",
+        content: props => (
+          <AccusativeShield 
+            mode="possessives"
+            words={[
+              { word: "Vater", gender: "der", translation: "padre (mein Vater)" },
+              { word: "Mutter", gender: "die", translation: "madre (meine Mutter)" },
+              { word: "Kind", gender: "das", translation: "hijo/a (dein Kind)" },
+              { word: "Eltern", gender: "die", translation: "padres (seine Eltern)" }
+            ]}
+            {...props} 
+          />
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_3',
+    title: 'Capítulo 3: Negación Integral y la Arquitectura del Tiempo',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "La Frontera de la Negación: kein vs. nicht",
+        subtitle: "Aprende qué negar y dónde colocar la palabra de negación",
+        content: `En español usamos "NO" para todo. En alemán existe una frontera gramatical estricta:\n\n1. **kein / keine (El Asesino de 'ein'):**\nNiega **exclusivamente sustantivos** que llevan artículo indeterminado (*ein/eine*) o van sin artículo (*Nullartikel*):\n* *Ich habe ein Auto.* ➔ *Ich habe **kein** Auto.*\n* *Ich trinke Wasser.* ➔ *Ich trinke **kein** Wasser.*\n\n2. **nicht (Negador Universal):**\nNiega verbos, adjetivos, nombres propios, lugares o sustantivos con artículo determinado (*der/die/das*) o posesivo:\n* **Verbos (nicht va al final absoluto):** *Ich komme heute **nicht**.*\n* **Adjetivos (nicht va inmediatamente antes):** *Das Auto ist **nicht** neu.*\n* **Lugares / Nombres:** *Ich wohne **nicht** in Berlin.*`
+      },
+      {
+        title: "El Cronómetro Alemán: Hora Formal vs. Informal",
+        subtitle: "Dominando los horarios para las pruebas de audición (Hören) del Goethe A1",
+        content: `En el examen Goethe A1, las trampas de horarios son muy frecuentes. Debes dominar ambas estructuras:\n\n* **Hora Formal (Sistema 24 hrs - Estaciones, Aeropuertos, Citas Oficiales):**\nSe lee literalmente en orden: [Hora] + **Uhr** + [Minutos].\n  * 14:30 ➔ *vierzehn Uhr dreißig*\n  * 08:15 ➔ *acht Uhr fünfzehn*\n\n* **Hora Informal (Sistema 12 hrs - Conversación Cotidiana):**\nSe basa en cuartos (**Viertel**) y medias horas (**halb**).\n  * **halb (media hora ANTES de la hora siguiente):** 14:30 = **halb drei** *(media hora para las 3)*.\n  * **Viertel nach (cuarto pasado de):** 14:15 = **Viertel nach zwei**.\n  * **Viertel vor (cuarto para):** 14:45 = **Viertel vor drei**.`
+      },
+      {
+        title: "Tríada Preposicional Temporal: um, am, im",
+        subtitle: "La regla mnemotécnica para no dudar jamás con el tiempo",
+        content: `Memoriza este esquema para usar las preposiciones de tiempo exactas:\n\n1. **um (Horas exactas):**\n   * **um** 8 Uhr | **um** wie viel Uhr?\n\n2. **am (Días de la semana, fechas y partes del día):**\n   * **am** Montag | **am** Morgen | **am** 15. Mai\n   * *(Excepción: in der Nacht)*\n\n3. **im (Meses, estaciones del año y años con 'im Jahr'):**\n   * **im** Juli | **im** Sommer | **im** Jahr 2026\n\n💡 **Tip Goethe A1:** En las notas breves del examen (*Schreiben Teil 2*), la fecha y hora deben usar estas preposiciones: *"Ich komme **am** Samstag **um** 15 Uhr."*`
+      },
+      {
+        title: "Simulador Interactivo: El Reloj Alemán",
+        subtitle: "Mueve las manecillas y alterna entre hora formal e informal",
+        content: props => (
+          <TimeClockSimulator mode="clock_and_preps" {...props}/>
+        )
+      }
+    ]
+  },
+
+  // =========================================================================
+  // BLOQUE II: EL SISTEMA DE CASOS (DECLINACIÓN ACTIVA)
+  // =========================================================================
+  {
+    id: 'sp_4',
+    title: 'Capítulo 4: El Objeto Directo: Acusativo y Pronombres',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "El Filtro Masculino: La Regla de la N-Mutation",
+        subtitle: "Por qué Femenino, Neutro y Plural son 100% inmunes al Acusativo",
+        content: `El caso Acusativo (*Akkusativ*) señala el **Objeto Directo** de la oración (¿Qué compras? ¿A quién buscas?).\n\n⚡ **REGLA DE ORO DE LA N-MUTATION:**\nEl Acusativo **SOLO ALTERA LOS ARTÍCULOS MASCULINOS**, añadiéndoles una terminación en **-en**. Todos los demás géneros quedan 100% INTACTOS.\n\n* 🔵 **Masculino:** **der** Tisch ➔ **den** Tisch | **ein** Apfel ➔ **einen** Apfel | **kein** Hund ➔ **keinen** Hund | **mein** Bruder ➔ **meinen** Bruder\n* 🔴 **Femenino:** **die** Frau ➔ **die** Frau | **eine** Tomate ➔ **eine** Tomate *(Sin cambio)*\n* 🟢 **Neutro:** **das** Auto ➔ **das** Auto | **ein** Brot ➔ **ein** Brot *(Sin cambio)*\n* 🟣 **Plural:** **die** Bücher ➔ **die** Bücher | **meine** Kinder ➔ **meine** Kinder *(Sin cambio)*`
+      },
+      {
+        title: "Pronombres Personales de Objeto Directo",
+        subtitle: "Sustituyendo personas u objetos en Acusativo",
+        content: `Cuando el Objeto Directo es un pronombre personal ("Me buscas", "Lo compro", "Te amo"), el pronombre muta a su forma de Acusativo:\n\n* **ich (yo) ➔ mich** (*Sie sucht mich* - Ella me busca)\n* **du (tú) ➔ dich** (*Ich liebe dich* - Te amo)\n* **er (él) ➔ ihn** *(⚠️ Mutación -en)* (*Ich kenne ihn* - Lo conozco a él)\n* **es (neutro) ➔ es** (*Ich kaufe es* - Lo compro)\n* **sie (ella) ➔ sie** (*Ich sehe sie* - La veo a ella)\n* **wir (nosotros) ➔ uns** (*Er besucht uns* - Nos visita)\n* **ihr (vosotros) ➔ euch** (*Ich höre euch* - Os escucho)\n* **sie/Sie (ellos/Usted) ➔ sie / Sie** (*Ich frage Sie* - Le pregunto a Usted)\n\n🚫 **Trampa Hispanohablante:** En español decimos "Busco a mi hermano" (usando la preposición 'a'). En alemán **NO EXISTE LA PREPOSICIÓN 'A'** para objetos personales. El Acusativo la absorbe: **Ich suche meinen Bruder** (NUNCA \`*Ich suche an meinen Bruder\`).`
+      },
+      {
+        title: "Verbos Transitivos y Preposiciones Puras de Acusativo",
+        subtitle: "Activadores sintácticos y el pronombre interrogativo Wen",
+        content: `El caso Acusativo no solo se activa con verbos transitivos puros (*haben, brauchen, suchen, finden, essen, trinken*) y la estructura existencial **es gibt**. También se rige de forma obligatoria por preposiciones puras:\n\n* **für (para):** *Das Geschenk ist für **meinen** Vater (Masc).* / *für mich.*\n* **ohne (sin):** *Ich trinke Kaffee ohne **einen** Zucker (Masc).* / *ohne dich.*\n* **gegen (contra / hacia una hora aproximada):** *Er kommt gegen **den** Abend.*\n\n🔍 **El Interrogativo de Objeto:** Cuando preguntas por la persona que recibe la acción directa, la palabra *Wer* (quién) muta a Acusativo: **Wen** (*¿A quién?*).\n* *"**Wen** suchst du?" ➔ "Ich suche **meinen** Bruder."*`
+      },
+      {
+        title: "Reto Interactivo: Mutación de Pronombres y Artículos",
+        subtitle: "Aplica el escudo de Acusativo en oraciones de compras y contactos",
+        content: props => (
+          <AccusativeShield 
+            mode="pronouns"
+            words={[
+              { word: "Mann", gender: "der", translation: "hombre (den Mann / ihn)" },
+              { word: "Kaffee", gender: "der", translation: "café (einen Kaffee)" },
+              { word: "Frau", gender: "die", translation: "mujer (die Frau / sie)" },
+              { word: "Brot", gender: "das", translation: "pan (das Brot / es)" }
+            ]}
+            {...props} 
+          />
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_5',
+    title: 'Capítulo 5: El Objeto Indirecto: Dativo y el Código M-R-M-N',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "El Código Mnemotécnico M-R-M-N (MaRiMaNa)",
+        subtitle: "La mutación universal de todos los artículos en caso Dativo",
+        content: `El Dativo (*Dativ*) representa el **Objeto Indirecto** (el receptor beneficiario o perjudicado de la acción). A diferencia del Acusativo, **EL DATIVO ALTERA TODOS LOS GÉNEROS Y EL PLURAL**.\n\n💡 **Regla Mnemotécnica M-R-M-N (MaRiMaNa):**\nMemoriza las letras finales de los artículos definidos en Dativo:\n* 🔵 **Masculino (der):** de**m** / einem / meinem  *(Letra M)*\n* 🔴 **Femenino (die):** de**r** / einer / meiner  *(Letra R)*\n* 🟢 **Neutro (das):** de**m** / einem / meinem  *(Letra M)*\n* 🟣 **Plural (die):** de**n** / - / meinen **+ -n al sustantivo** *(Letra N)*\n\n⚠️ **La Regla de la -n del Plural Dativo:**\nEn Dativo Plural, además de cambiar el artículo a **den**, debes agregar obligatoriamente una **-n** al final del sustantivo plural: *mit den Kinder**n***, *mit den Busse**n***. *(Excepción: Sustantivos que ya terminan en -n o -s, como Frauen o Autos)*.`
+      },
+      {
+        title: "Pronombres de Receptor (Dativo)",
+        subtitle: "Expresando a quién le das, muestras o dices algo",
+        content: `Los pronombres personales cambian en Dativo para marcar al receptor:\n\n* **ich ➔ mir** (*Du hilfst mir* - Me ayudas a mí)\n* **du ➔ dir** (*Ich danke dir* - Te lo agradezco a ti)\n* **er / es ➔ ihm** (*Das Buch gehört ihm* - El libro es de él)\n* **sie ➔ ihr** (*Ich antwortet ihr* - Le respondo a ella)\n* **wir ➔ uns** (*Er schenkt uns ein Buch* - Nos regala un libro)\n* **ihr ➔ euch** (*Wie geht es euch?* - ¿Cómo os va a vosotros?)\n* **sie / Sie ➔ ihnen / Ihnen** (*Wie geht es Ihnen?* - ¿Cómo le va a Usted?)\n\n🚫 **Trampa Hispanohablante:** En español, "le" sirve tanto para él como para ella ("Yo le ayudo a él / a ella"). En alemán la distinción es absoluta: **Ich helfe ihm** (a él) vs. **Ich helfe ihr** (a ella).`
+      },
+      {
+        title: "Preposiciones Fijas de Dativo y Contracciones de Dirección",
+        subtitle: "Satélites de caso invariable y el pronombre interrogativo Wem",
+        content: `Las preposiciones *aus, bei, mit, nach, seit, von, zu* exigen Dativo al 100% de las veces. En el habla nativa, las preposiciones de movimiento y procedencia se fusionan con el artículo:\n\n* **zu + dem ➔ zum** (Masc/Neutro): *Ich gehe **zum** Arzt (der) / **zum** Kino (das).*\n* **zu + der ➔ zur** (Femenino): *Ich gehe **zur** Schule (die) / **zur** Arbeit (die).*\n* **von + dem ➔ vom** (Masc/Neutro): *Ich komme **vom** Supermarkt.*\n\n🔍 **El Interrogativo de Receptor:** Si la acción se dirige a un beneficiario, el pronombre interrogativo muta a: **Wem** (*¿A quién le... ?*).\n* *"**Wem** hilfst du?" ➔ "Ich hilfe **dem** (zum) Kind."*`
+      },
+      {
+        title: "Selector Interactivo: Matriz M-R-M-N",
+        subtitle: "Conmuta géneros y observa la mutación de artículos y la -n del plural",
+        content: props => (
+          <DativeMatrixClicker mode="matrix_mnrn" {...props}/>
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_6',
+    title: 'Capítulo 6: El Mapa Espacial: Wechselpräpositionen',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "La Ecuación del Espacio: ¿Wo? vs. ¿Wohin?",
+        subtitle: "El dilema existencial de las 9 preposiciones de doble vía",
+        content: `Existen 9 preposiciones espaciales cuyo caso cambia según la dinámica del movimiento:\n\n**in** (dentro) | **an** (contacto vertical) | **auf** (contacto horizontal)\n**über** (encima sin contacto) | **unter** (debajo) | **vor** (delante)\n**hinter** (detrás) | **neben** (al lado) | **zwischen** (entre)\n\n📐 **LA ECUACIÓN MATEMÁTICA DEL ESPACIO:**\n\n$$\\text{¿Wo? (Ubicación / Reposo / Lugar Fijo)} \\implies \\mathbf{\\text{DATIVO}}$$\n$$\\text{¿Wohin? (Dirección / Movimiento } A \\to B) \\implies \\mathbf{\\text{ACUSATIVO}}$$\n\n* **Ejemplo ¿Wo? (Dativo):** *Das Buch liegt **auf dem** Tisch.* (El libro está quieto sobre la mesa).\n* **Ejemplo ¿Wohin? (Acusativo):** *Ich lege das Buch **auf den** Tisch.* (Pongo el libro viajando hacia la mesa).`
+      },
+      {
+        title: "Parejas Verbales: Estado vs. Acción de Colocar",
+        subtitle: "Verbos que fijan el caso Dativo o Acusativo en la oración",
+        content: `En alemán, los verbos de posición se dividen en parejas estrictas:\n\n| Verbo Estático ( Dativo - ¿Wo? ) | Verbo de Acción ( Acusativo - ¿Wohin? ) |\n| :--- | :--- |\n| **stehen** (estar de pie/vertical) | **stellen** (poner en vertical) |\n| *Das Glas steht auf dem Tisch.* | *Ich stelle das Glas auf den Tisch.* |\n| **liegen** (estar echado/horizontal) | **legen** (tumbar/acostar) |\n| *Das Buch liegt auf dem Bett.* | *Ich lege das Buch auf das Bett.* |\n| **sitzen** (estar sentado) | **setzen (sich)** (sentarse) |\n| *Der Mann sitzt auf dem Stuhl.* | *Er setzt sich auf den Stuhl.* |\n| **hängen** (estar colgado) | **hängen** (colgar algo) |\n| *Das Bild hängt an der Wand.* | *Ich hänge das Bild an die Wand.* |`
+      },
+      {
+        title: "Contracciones Nativas Indispensables de A1",
+        subtitle: "Fusionando preposición y artículo para hablar con fluidez natural",
+        content: `En la conversación cotidiana y en los exámenes Goethe, es obligatorio usar contracciones preposicionales:\n\n* **in + dem** (Dativo Masc/Neutro) ➔ **im** (*Ich bin **im** Supermarkt*)\n* **in + das** (Acusativo Neutro) ➔ **ins** (*Ich gehe **ins** Kino*)\n* **an + dem** (Dativo Masc/Neutro) ➔ **am** (*Er wartet **am** Bahnhof*)\n* **an + das** (Acusativo Neutro) ➔ **ans** (*Wir fahren **ans** Meer*)\n* **zu + dem** (Dativo Masc/Neutro) ➔ **zum** (*Ich fahre **zum** Flughafen*)\n* **zu + der** (Dativo Femenino) ➔ **zur** (*Ich gehe **zur** Bäckerei*)\n\n🚫 **Trampa Hispanohablante:** Usar la preposición "en" del español para ambas situaciones ("Estoy en el cine" / "Voy en el cine"). En alemán: **Ich bin im Kino** (Dativo) vs. **Ich gehe ins Kino** (Acusativo).`
+      },
+      {
+        title: "Simulador 3D: Mapa Locativo Interactivo",
+        subtitle: "Arrastra objetos y comprueba el cambio automático entre Dativo y Acusativo",
+        content: props => (
+          <LocativeMapSimulator mode="spatial_3d" {...props}/>
+        )
+      }
+    ]
+  },
+
+  // =========================================================================
+  // BLOQUE III: MECÁNICA VERBAL AVANZADA
+  // =========================================================================
+  {
+    id: 'sp_7',
+    title: 'Capítulo 7: Verbos Separables e Inseparables (La Pinza)',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "El Efecto Pinza Verbal (Satzklammer)",
+        subtitle: "El divorcio sintáctico de los verbos separables en presente",
+        content: `Los verbos separables (*Trennbare Verben*) están formados por un prefijo y un verbo base. En oraciones afirmativas o interrogativas, sufren una separación estructural:\n\n$$\\text{[Sujeto]} + \\mathbf{\\text{[VERBO BASE CONJUGADO] (Pos 2)}} + \\text{[Complementos]} + \\mathbf{\\text{[PREFIJO] (Final Absoluto)}}$$\n\n* **aufstehen (auf + stehen):** *Ich **stehe** jeden Morgen um 6 Uhr **auf**.*\n* **einkaufen (ein + kaufen):** *Er **kauft** im Supermarkt **ein**.*\n* **anrufen (an + rufen):** *Wir **rufen** dich später **an**.*\n\n⚠️ **En Preguntas:**\n* *W-Frage:* **Wann** **stehst** du **auf**?\n* *Ja/Nein-Frage:* **Kaufst** du heute **ein**?`
+      },
+      {
+        title: "El Escudo Inseparable: Prefijos que JAMÁS se Rompen",
+        subtitle: "Protege tu sintaxis identificando los 5 prefijos inseparables del A1",
+        content: `Para no romper verbos de forma incorrecta, debes aprender los **prefijos inseparables** (*Untrennbare Verben*). Estos prefijos forman una sola palabra con la raíz y **NUNCA viajan al final de la oración**:\n\n🛡️ **Los 5 Inseparables Clave de A1:**\n1. **be-:** *bezahlen* (pagar) ➔ *Ich **bezahle** die Rechnung.* (NUNCA \`*Ich zahle die Rechnung be\`)\n2. **ver-:** *verstehen* (entender) ➔ *Ich **verstehe** das Wort nicht.*\n3. **er-:** *erklären* (explicar) ➔ *Der Lehrer **erklärt** die Grammatik.*\n4. **ge-:** *gehören* (pertenecer) ➔ *Das Buch **gehört** mir.*\n5. **ent-:** *entschuldigen* (disculparse) ➔ *Ich **entschuldige** mich.*`
+      },
+      {
+        title: "Interruptor Mecánico: Separable vs. Inseparable",
+        subtitle: "Juega con la pinza sintáctica y ejercita la colocación del prefijo",
+        content: props => (
+          <PincerSwitch mode="separable_vs_inseparable" {...props}/>
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_8',
+    title: 'Capítulo 8: Verbos Modales y el Sándwich Estructurado',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "Los 5 Modales de A1 + möchten",
+        subtitle: "Expresando habilidad, obligación, permiso, prohibición, deseo y consejo",
+        content: `Los verbos modales alteran la actitud de la oración y forman un **contenedor sintáctico cerrado (Sándwich Verbal)**:\n\n1. **können (Saber / Poder):** Habilidad o capacidad física. (*Ich kann Deutsch sprechen.*)\n2. **müssen (Tener que / Deber):** Obligación estricta o ley. (*Ich muss die Miete bezahlen.*)\n3. **dürfen (Tener permiso):** Con *nicht* expresa **PROHIBICIÓN ABSOLUTA**: (*Hier darf man nicht rauchen.*)\n4. **wollen (Querer / Intención firme):** Plan o deseo decidido. (*Ich will nach Deutschland reisen.*)\n5. **sollen (Deber / Recomendación):** Consejo médico o encargo de otro. (*Der Arzt sagt, ich soll Sport machen.*)\n6. **möchten (Gustaría / Deseo cortés):** (*Ich möchte einen Kaffee, bitte.*)`
+      },
+      {
+        title: "La Anomalía Fonética del Singular",
+        subtitle: "1ª y 3ª persona del singular NUNCA llevan terminación",
+        content: `Todos los verbos modales sufren una mutación en singular: **cambian la vocal de la raíz y la 1ª persona (ich) y 3ª persona (er/sie/es) son EXACTAMENTE IDENTICAS y sin terminación**:\n\n| Pronombre | können | müssen | dürfen | wollen | sollen | möchten |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **ich** | **kann** | **muss** | **darf** | **will** | **soll** | **möchte** |\n| **du** | kannst | musst | darfst | willst | sollst | möchtest |\n| **er/sie/es**| **kann** | **muss** | **darf** | **will** | **soll** | **möchte** |\n| **wir** | können | müssen | dürfen | wollen | sollen | möchten |\n| **ihr** | könnt | müsst | dürft | wollt | sollt | möchtet |\n| **sie/Sie** | können | müssen | dürfen | wollen | sollen | möchten |\n\n⚠️ **Sándwich Modal con Verbos Separables:**\nCuando un modal se combina con un verbo separable, el verbo de acción viaja al final **SIN SEPARARSE**: *Ich muss um 7 Uhr **aufstehen***.`
+      },
+      {
+        title: "Tablero de Control: El Sándwich Modal",
+        subtitle: "Configura la actitud de la oración y congela el verbo principal al final",
+        content: props => (
+          <PincerSwitch isModal={true} {...props}/>
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_9',
+    title: 'Capítulo 9: El Modo Imperativo y Kit de Comunicación Oficial',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "La Tríada del Imperativo según el Interlocutor",
+        subtitle: "Dar órdenes, instrucciones, recetas médicas y peticiones de servicio",
+        content: `El imperativo se construye eliminando elementos según a quién te dirijas:\n\n1. **du (Informal Singular - Tú):**\nElimina el pronombre **du** y la terminación **-st**:\n* *du kommst* ➔ **Komm!** | *du machst* ➔ **Mach!**\n\n2. **ihr (Informal Plural - Vosotros):**\nElimina el pronombre **ihr** y conserva la **-t**:\n* *ihr kommt* ➔ **Kommt!** | *ihr macht* ➔ **Macht!**\n\n3. **Sie (Formal - Usted / Ustedes):**\nInvierte el orden: **Infinitivo + Sie**:\n* *Sie kommen* ➔ **Kommen Sie!** | *Sie machen* ➔ **Machen Sie!**`
+      },
+      {
+        title: "Excepciones Críticas y Mutaciones en Imperativo",
+        subtitle: "Verbos fuertes y el comportamiento del auxiliar 'sein'",
+        content: `⚠️ **Excepciones de Examen Goethe A1:**\n\n1. **Verbos con cambio e ➔ i / ie:** Mantienen el cambio en la forma de *du*, pero **SIN TERMINACIÓN**:\n   * *sprechen* ➔ **Sprich!** (NUNCA \`*Sprichst!\`)\n   * *lesen* ➔ **Lies!** | *geben* ➔ **Gib mir das Brot!**\n\n2. **Verbos con Umlaut (a ➔ ä):** **PIERDEN EL UMLAUT** en imperativo:\n   * *fahren* ➔ **Fahr langsamer!** (NUNCA \`*Fähr!\`)\n\n3. **El Verbo sein (Ser/Estar):**\n   * **du:** **Sei ruhig!** *(¡Estate tranquilo!)*\n   * **ihr:** **Seid pünktlich!** *(¡Sed puntuales!)*\n   * **Sie:** **Seien Sie vorsichtig!** *(¡Tenga cuidado!)*`
+      },
+      {
+        title: "Simulador de Voz: Comandos e Instrucciones Oficiales",
+        subtitle: "Escucha órdenes médicas e instrucciones formales del Goethe A1",
+        content: props => (
+          <VoiceExaminer autoStart={false} isInteractive={true} mode="imperative_commands" {...props}/>
+        )
+      }
+    ]
+  },
+
+  // =========================================================================
+  // BLOQUE IV: CONEXIÓN TEXTUAL Y MODIFICACIÓN DE ELEMENTOS
+  // =========================================================================
+  {
+    id: 'sp_10',
+    title: 'Capítulo 10: Das Perfekt y los Tiempos Pasados Clave',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "Estructura de Dos Pilares (Das Perfekt)",
+        subtitle: "El pasado hablado en alemán mediante auxiliar y participio final",
+        content: `El pasado hablado (*Das Perfekt*) se construye como un rompecabezas de dos piezas interconectadas:\n\n$$\\text{[Sujeto]} + \\mathbf{\\text{[AUXILIAR HABEN / SEIN] (Pos 2)}} + \\text{[Relleno]} + \\mathbf{\\text{[PARTICIPIO II] (Final Absoluto)}}$$\n\n* *Presente:* Ich kaufe eine Pizza.\n* *Perfekt:* Ich **habe** eine Pizza **gekauft**.\n\n⚙️ **Formación del Participio II (Partizip II):**\n* **Verbos Regulares:** **ge-** + Raíz + **-t** (*ge-kauf-t*, *ge-mach-t*)\n* **Verbos Irregulares:** **ge-** + Raíz + **-en** (*ge-gess-en*, *ge-sehens-en*)\n* **Verbos terminados en -ieren:** **NO LLEVAN 'ge-'**: *studiert*, *fotografiert*.`
+      },
+      {
+        title: "Matriz de Selección: ¿Haben o Sein?",
+        subtitle: "El criterio físico para elegir el auxiliar correcto",
+        content: `La elección del auxiliar responde a reglas físicas claras:\n\n1. **Usa SEIN (La Flecha de Movimiento):**\nExige *sein* cuando hay **desplazamiento físico de A ➔ B** o **cambio de estado vital**:\n* **Desplazamiento:** *kommen* (gekommen), *gehen* (gegangen), *fahren* (gefahren), *fliegen* (geflogen).\n* **Cambio de estado:** *aufstehen* (aufgestanden), *einschlafen* (eingeschlafen).\n* **Excepciones fijas con sein:** *sein* (gewesen), *bleiben* (geblieben).\n  * *Ejemplo:* *Ich **bin** nach Berlin **geflogen**.*\n\n2. **Usa HABEN (El Ancla Estática - 90% de los verbos):**\nPara verbos transitivos (con Acusativo) y acciones estáticas: *lernen* (gelernt), *essen* (gegessen), *kaufen* (gekauft).\n  * *Ejemplo:* *Wir **haben** Deutsch **gelernt**.*`
+      },
+      {
+        title: "El Pasado de Auxiliares: Präteritum de sein y haben",
+        subtitle: "Uso de war y hatte para hablar con fluidez natural en A1",
+        content: `Aun cuando el pasaje hablado general es el *Perfekt*, los hablantes nativos en nivel A1 **NUNCA dicen** \`*Ich bin krank gewesen\` o \`*Ich habe Zeit gehabt\`. En su lugar, se usan las formas directas de **Präteritum**:\n\n1. **war (era / estaba - de sein):**\n   * ich **war** | du **warst** | er/sie/es **war** | wir **waren**\n   * *Gestern **war** ich krank.* (Ayer estaba enfermo).\n\n2. **hatte (tenía / había - de haben):**\n   * ich **hatte** | du **hattest** | er/sie/es **hatte** | wir **hatten**\n   * *Ich **hatte** keine Zeit.* (No tenía tiempo).\n\n💡 **Tip Examen Goethe A1:** Usar *war* y *hatte* en la prueba escrita (*Schreiben*) demuestra dominio nativo y ahorra espacio sintáctico.`
+      },
+      {
+        title: "Línea de Tiempo Cinemática: Presente a Pasado",
+        subtitle: "Desliza el control para transformar oraciones de presente a Perfekt / Präteritum",
+        content: props => (
+          <MechanicalTimeline mode="perfekt_and_praeteritum" {...props}/>
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_11',
+    title: 'Capítulo 11: Coordinación de Textos: Conectores Posición 0 y 1',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "Zona Libre: Conectores Fantasma Posición 0 (ADUSO)",
+        subtitle: "Conecta oraciones sin alterar la regla V2 y domina la puntuación",
+        content: `Los conectores coordinantes de **Posición 0 (ADUSO)** (*Aber, Denn, Und, Sondern, Oder*) unen dos oraciones independientes. No alteran la posición del verbo, por lo que la estructura posterior es: \`Conector (Pos 0)\` + \`Sujeto (Pos 1)\` + \`VERBO (Pos 2)\`.\n\n⚠️ **Regla de Oro de Puntuación (Goethe-Schreiben):**\nLos conectores **aber** (pero) y **denn** (porque) exigen **OBLIGATORIAMENTE UNA COMA ANTES** de su escritura. Omitirla resta puntos directos en la sección de redacción:\n* *Ich möchte kommen**, aber** ich habe keine Zeit.*\n* *Ich bleibe zu Hause**, denn** ich bin krank.*`
+      },
+      {
+        title: "Conectores Adverbiales de Posición 1 (dann, deshalb)",
+        subtitle: "Conectores que ocupan espacio y fuerzan la inversión verbal",
+        content: `A diferencia de ADUSO, conectores como **dann** (luego/después) y **deshalb** (por eso) ocupan la **Posición 1** de la segunda oración y **FUERZAN INVERSIÓN VERBAL** (el verbo va inmediatamente después del conector):\n\n* **dann (luego / después):**\n  * *Ich esse zu Abend, **dann** (Pos 1) **gehe** (Pos 2) ich schlafen.*\n\n* **deshalb (por eso / por lo tanto):**\n  * *Ich bin krank, **deshalb** (Pos 1) **bleibe** (Pos 2) ich zu Hause.*\n\n📊 **Comparación Directa de Posiciones:**\n* Con ADUSO (Pos 0): *...denn ich **bin** krank.*\n* Con Adverbio (Pos 1): *...deshalb **bin** ich krank.*`
+      },
+      {
+        title: "Kit de Redacción A1 para el Examen Goethe (Schreiben)",
+        subtitle: "Estructura oficial para redactar correos y mensajes breves",
+        content: `En la prueba escrita del Goethe A1 (*Schreiben Teil 2*), debes estructurar tu correo con 3 bloques clave:\n\n1. **Encabezado y Saludo:**\n   * Informal: *Liebe Maria,* (femenino) / *Lieber Markus,* (masculino)\n   * Formal: *Sehr geehrte Frau Müller,* / *Sehr geehrter Herr Schneider,*\n\n2. **Cuerpo del Texto (Usa conectores ADUSO y time/place):**\n   * *Ich kann am Samstag nicht kommen, **denn** ich muss arbeiten.*\n   * *Am Sonntag habe ich Zeit, **deshalb** möchte ich dich besuchen.*\n\n3. **Despedida Oficial:**\n   * Informal: *Viele Grüße / Liebe Grüße, [Tu Nombre]*\n   * Formal: *Mit freundlichen Grüßen, [Tu Nombre]*`
+      },
+      {
+        title: "Reto Interactivo: Constructor de Oraciones Compuestas",
+        subtitle: "Ensambla bloques con conectores de Posición 0 y Posición 1",
+        content: props => (
+          <DraggableSentenceBuilder 
+            mode="advanced_connectors"
+            pool={[
+              { subject: "Ich lerne Deutsch", verb: "und", complement: "ich verstehe alles" },
+              { subject: "Er ist müde", verb: "deshalb", complement: "geht er ins Bett" }
+            ]}
+            {...props} 
+          />
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_12',
+    title: 'Capítulo 12: Declinación de Adjetivos en A1 (Débil y Mixta)',
+    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    slides: [
+      {
+        title: "Declinación Débil (Tras Artículo Determinado)",
+        subtitle: "Cuando der / die / das ya señalan el género del sustantivo",
+        content: `Cuando el sustantivo lleva un artículo determinado (**der, die, das**), el artículo ya muestra el género con claridad. Por ello, el adjetivo solo requiere una terminación "débil" súper sencilla:\n\n1. **En Nominativo Singular (Sujeto):** Añade una simple **-e** para todos los géneros:\n   * *der gut**e** Mann* (Masculino)\n   * *die schön**e** Frau* (Femenino)\n   * *das klein**e** Kind* (Neutro)\n\n2. **En Acusativo Masculino y TODOS los Plurales:** Cambia a **-en**:\n   * *Ich sehe den gut**en** Mann.* (Acusativo Masculino)\n   * *die alt**en** Bücher* (Plural)`
+      },
+      {
+        title: "Declinación Mixta (Tras Artículo Indeterminado / kein / mein)",
+        subtitle: "El adjetivo rescata la bandera de género que el artículo indefinido no muestra",
+        content: `Cuando usas un artículo indeterminado (**ein, kein**) o un posesivo (**mein, dein**), las palabras *ein* (masculino) y *ein* (neutro) son idénticas y no revelan el género. El adjetivo debe "rescatar" la bandera del género adoptando la terminación fuerte del artículo determinado correspondiente:\n\n* 🔵 **Masculino Nominativo (ein ➔ der):** *ein gut**er** Mann* *(Añade **-er** por der)*\n* 🟢 **Neutro Nominativo/Acusativo (ein ➔ das):** *ein kalt**es** Bier* *(Añade **-es** por das)*\n* 🔴 **Femenino Nominativo/Acusativo (eine ➔ die):** *eine schön**e** Frau* *(Añade **-e** por die)*\n* 🔵 **Acusativo Masculino (einen ➔ den):** *Ich kaufe einen alt**en** Käse.* *(Añade **-en** por den)*`
+      },
+      {
+        title: "Matriz Resumen y Ejemplos de Examen Goethe A1",
+        subtitle: "Entrenamiento directo para preguntas de lectura y opción múltiple",
+        content: `Analiza cómo reacciona la terminación del adjetivo en estas frases reales de examen:\n\n1. *Ich trinke einen **heißen** Tee (Masc - Akk).* ➔ Usa **einen** (Acusativo Masculino), por ende el adjetivo exige **-en** (*heißen*).\n2. *Das ist ein **schönes** Haus (Neutro - Nom).* ➔ Usa **ein** (Neutro), el adjetivo rescata la bandera de *das* agregando **-es** (*schönes*).\n3. *Die **neuen** Studenten lernen Deutsch.* ➔ Es Plural con artículo determinado **die**, por lo que el adjetivo lleva **-en** (*neuen*).\n4. *Er hat kein **neues** Auto (Neutro - Akk).* ➔ Usa **kein** (Neutro Acusativo), el adjetivo añade **-es** (*neues*).`
+      },
+      {
+        title: "Evaluador en Vivo: Declinación de Adjetivos",
+        subtitle: "Completa la terminación correcta del adjetivo y recibe feedback instantáneo",
+        content: props => (
+          <LiveEvaluator 
+            mode="adjective_declension"
+            {...props} 
+          />
+        )
+      }
+    ]
+  }
+];

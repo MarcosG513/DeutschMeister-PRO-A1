@@ -82,7 +82,152 @@ const PresentationViewer = ({
     setFullscreenImage,
     unlockedCards,
     speakText,
-    lazyLoadImage
+    lazyLoadImage,
+    onComplete: nextSlide
+  };
+
+  // Helper de Formato Inline para Negritas (**texto**), Cursivas (*texto*) y Código (`texto`)
+  const formatInlineMarkdown = (text) => {
+    if (!text) return '';
+    
+    let clean = text.trim()
+      .replace(/([a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\)\]\:\;\,\.\/\-])\*(?!\*)/g, '$1')
+      .replace(/(?<!\*)\*(?!\*)/g, '');
+
+    const parts = clean.split(/(\*\*.*?\*\*|\*.*?\*|`.*?`)/g);
+
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+        return <strong key={i} className="font-bold text-slate-900">{part.slice(2, -2)}</strong>;
+      }
+      if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
+        return <em key={i} className="italic text-indigo-900 font-medium">{part.slice(1, -1)}</em>;
+      }
+      if (part.startsWith('`') && part.endsWith('`') && part.length > 2) {
+        return (
+          <code key={i} className="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono text-sm font-semibold border border-amber-200">
+            {part.slice(1, -1)}
+          </code>
+        );
+      }
+      return part;
+    });
+  };
+
+  // --- UNIVERSAL SLIDE ENGINE ---
+  const renderSlideContent = (slide, props) => {
+    if (!slide || !slide.content) return null;
+
+    // 1. Renderizado de Componentes Interactivos (Función JSX: VoiceExaminer, AccusativeShield, etc.)
+    if (typeof slide.content === 'function') {
+      return slide.content(props);
+    }
+
+    // 2. Si es un elemento React JSX directo
+    if (React.isValidElement(slide.content)) {
+      return slide.content;
+    }
+
+    // 3. Renderizado de Texto, Tablas, Fórmulas y Listas en Markdown
+    if (typeof slide.content === 'string') {
+      // Sanitización global de asteriscos huérfanos y símbolos
+      const cleanContent = slide.content
+        .replace(/([a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\)\]\:\;\,\.\/\-])\*(?!\*)/g, '$1')
+        .replace(/(?<!\*)\*(?!\*)/g, '')
+        .replace(/\n\n+/g, '\n\n');
+
+      const blocks = cleanContent.split('\n\n');
+
+      return (
+        <div className="space-y-4 text-slate-800 leading-relaxed text-left max-w-4xl mx-auto">
+          {blocks.map((block, bIdx) => {
+            const lines = block.split('\n').filter(l => l.trim() !== '');
+            if (lines.length === 0) return null;
+
+            // A. Detección de FÓRMULAS / SINTAXIS (\text{...} o $$)
+            if (block.includes('\\text{') || block.includes('$$') || block.includes('\\mathbf{')) {
+              const cleanFormula = block
+                .replace(/\$\$/g, '')
+                .replace(/\\text\{([^}]+)\}/g, '$1')
+                .replace(/\\mathbf\{([^}]+)\}/g, '$1')
+                .replace(/\\implies/g, '➔')
+                .replace(/\\to/g, '➔')
+                .trim();
+
+              return (
+                <div key={bIdx} className="my-3 p-4 bg-gradient-to-r from-indigo-950 to-slate-900 text-amber-300 rounded-xl font-mono text-center text-sm md:text-base shadow-lg border border-indigo-700/50">
+                  {formatInlineMarkdown(cleanFormula)}
+                </div>
+              );
+            }
+
+            // B. Detección de TABLAS MARKDOWN (| col1 | col2 |)
+            if (lines.length >= 2 && lines[0].includes('|') && lines[1].includes('|')) {
+              const tableRows = lines.filter(line => !line.includes('---'));
+              const headerCells = tableRows[0].split('|').map(c => c.trim()).filter(Boolean);
+              const bodyRows = tableRows.slice(1).map(row => row.split('|').map(c => c.trim()).filter(Boolean));
+
+              return (
+                <div key={bIdx} className="my-4 overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+                  <table className="w-full text-left text-sm border-collapse bg-white">
+                    <thead>
+                      <tr className="bg-slate-900 text-white font-semibold">
+                        {headerCells.map((cell, hIdx) => (
+                          <th key={hIdx} className="p-3 border-b border-slate-700">
+                            {formatInlineMarkdown(cell)}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {bodyRows.map((row, rIdx) => (
+                        <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}>
+                          {row.map((cell, cIdx) => (
+                            <td key={cIdx} className="p-3 text-slate-700 font-medium">
+                              {formatInlineMarkdown(cell)}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              );
+            }
+
+            // C. Detección de LISTAS (* ítem o - ítem)
+            if (lines.every(l => l.trim().startsWith('* ') || l.trim().startsWith('- '))) {
+              return (
+                <ul key={bIdx} className="space-y-2 my-2 pl-2">
+                  {lines.map((line, lIdx) => {
+                    const itemText = line.trim().replace(/^[\*\-]\s+/, '');
+                    return (
+                      <li key={lIdx} className="flex items-start gap-2 text-base text-slate-700">
+                        <span className="inline-block w-2 h-2 rounded-full bg-indigo-500 mt-2 shrink-0" />
+                        <span>{formatInlineMarkdown(itemText)}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              );
+            }
+
+            // D. PÁRRAFO ESTÁNDAR CON SALTOS SIMPLES
+            return (
+              <div key={bIdx} className="space-y-1">
+                {lines.map((line, lIdx) => (
+                  <p key={lIdx} className="text-base leading-relaxed">
+                    {formatInlineMarkdown(line)}
+                  </p>
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    return slide.content;
   };
 
   return (
@@ -123,9 +268,7 @@ const PresentationViewer = ({
               )}
             </div>
             <div className="w-full">
-              {typeof slide.content === 'function'
-                ? slide.content(slideProps)
-                : slide.content}
+              {renderSlideContent(slide, slideProps)}
             </div>
           </div>
         </div>

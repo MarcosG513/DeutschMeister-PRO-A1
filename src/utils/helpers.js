@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
+import localforage from 'localforage';
 
 export const fetchWithRetry = async (url, options, retries = 5, backoff = 1000) => {
   for (let i = 0; i < retries; i++) {
@@ -110,5 +111,30 @@ export const nativeSpeak = async (text) => {
     } else {
       console.error("Web Speech API no está soportada en este navegador.");
     }
+  }
+};
+
+export const awardCoins = async (amount) => {
+  try {
+    const currentCoins = (await localforage.getItem('dm_user_coins')) || 0;
+    await localforage.setItem('dm_user_coins', currentCoins + amount);
+    window.dispatchEvent(new Event('coinsUpdated'));
+  } catch (error) {
+    console.error("Error otorgando monedas:", error);
+  }
+};
+
+export const spendCoins = async (amount) => {
+  try {
+    const currentCoins = (await localforage.getItem('dm_user_coins')) || 0;
+    if (currentCoins >= amount) {
+      await localforage.setItem('dm_user_coins', currentCoins - amount);
+      window.dispatchEvent(new Event('coinsUpdated'));
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error gastando monedas:", error);
+    return false;
   }
 };

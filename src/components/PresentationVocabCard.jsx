@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check } from 'lucide-react';
-import { getSafeId, nativeSpeak } from '../utils/helpers';
+import { getSafeId, nativeSpeak, awardCoins } from '../utils/helpers';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 const SVGClock = ({ deWord }) => {
@@ -283,6 +283,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
+                        awardCoins(1);
                         setIsPlayingAudio(true);
                         
                         let textToSpeak = wordObj.de;

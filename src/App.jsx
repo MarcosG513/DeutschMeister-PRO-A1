@@ -1,11 +1,12 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
-import { Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown } from 'lucide-react';
+import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { Capacitor } from '@capacitor/core';
+import { App as CapacitorApp } from '@capacitor/app';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { initializeAdMob, showRewardVideo, showInterstitial } from './services/AdService';
 import localforage from 'localforage';
@@ -19,6 +20,8 @@ import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, nativeSpeak, getSafeId } from './utils/helpers';
 
+
+import Profile from './components/Profile';
 
 const EmailSimulator = lazy(() => import('./components/EmailSimulator'));
 const ReadingComprehension = lazy(() => import('./components/ReadingComprehension'));
@@ -117,6 +120,15 @@ const compressImageBase64 = (base64Str, maxWidth = 512, quality = 0.6) => {
 
 // --- Las bases de datos se importan desde './data/chapters' ---
 
+const loadingPhrases = [
+  "Buscando inspiración en la Selva Negra... 🌲",
+  "Poniendo el verbo en la Posición 2... 👑",
+  "Comprando un billete de tren hacia Berlín... 🚆",
+  "Mezclando palabras con un poco de chucrut... 🥨",
+  "Despertando al fantasma de Goethe... 👻",
+  "Declinando adjetivos a la velocidad de la luz... ⚡"
+];
+
 export default function App() {
   useEffect(() => {
     initializeAdMob();
@@ -144,6 +156,18 @@ export default function App() {
     de: "",
     es: ""
   });
+  const [loadingPhraseIdx, setLoadingPhraseIdx] = useState(0);
+
+  useEffect(() => {
+    if (!storyState?.loading) {
+      setLoadingPhraseIdx(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setLoadingPhraseIdx(prev => (prev + 1) % loadingPhrases.length);
+    }, 2200);
+    return () => clearInterval(interval);
+  }, [storyState?.loading]);
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
   const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
   const [isStoryAudioPaused, setIsStoryAudioPaused] = useState(false);
@@ -251,19 +275,17 @@ export default function App() {
   const chatEndRef = useRef(null);
   useEffect(() => {
     if (!auth) return;
-    const initAuth = async () => {
-      try {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        try {
           await signInAnonymously(auth);
-        } else {
-          await signInAnonymously(auth);
+        } catch (e) {
+          console.error("Error en login anónimo:", e);
         }
-      } catch (e) {
-        console.error("Auth error:", e);
       }
-    };
-    initAuth();
-    const unsubscribe = onAuthStateChanged(auth, setUser);
+    });
     return () => unsubscribe();
   }, []);
   useEffect(() => {
@@ -304,6 +326,42 @@ export default function App() {
       behavior: "smooth"
     });
   }, [chatMessages, isTutorOpen, isChatLoading, isTutorFullscreen]);
+
+  // --- GESTIÓN NATIVA DEL HARDWARE BACK BUTTON (ANDROID LIFO LAYER) ---
+  useEffect(() => {
+    const backButtonListener = CapacitorApp.addListener('backButton', () => {
+      if (isFullscreen || fullscreenImage) {
+        setIsFullscreen(false);
+        setFullscreenImage(null);
+        return;
+      }
+      if (isTutorOpen) {
+        setIsTutorOpen(false);
+        return;
+      }
+      if (storyState?.isOpen) {
+        setStoryState(prev => ({ ...prev, isOpen: false }));
+        return;
+      }
+      if (activePresentationId || activeStudyPlanId) {
+        setActivePresentationId(null);
+        setActiveStudyPlanId(null);
+        return;
+      }
+      if (viewMode !== "flashcards") {
+        setViewMode("flashcards");
+        return;
+      }
+      CapacitorApp.exitApp();
+    });
+
+    return () => {
+      backButtonListener.then(listener => listener.remove());
+    };
+  }, [
+    isFullscreen, fullscreenImage, isTutorOpen, storyState, 
+    activePresentationId, activeStudyPlanId, viewMode
+  ]);
   const activeChapter = useMemo(() => chapters.find(c => c.id === activeChapterId), [activeChapterId]);
   const activePresentation = useMemo(() => goetheModules.find(p => p.id === activePresentationId), [activePresentationId]);
   useEffect(() => {
@@ -975,7 +1033,13 @@ export default function App() {
     const textToSpeak = typeof word === 'string' ? word : word.de;
     nativeSpeak(textToSpeak);
   };
-  return <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-[100svh] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
+  return <Suspense fallback={
+    <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-6 gap-3">
+      <Loader2 className="animate-spin text-yellow-400" size={36} />
+      <span className="font-bold text-slate-300 text-sm">Cargando interfaz...</span>
+    </div>
+  }>
+    <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-[100svh] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
       
       {viewMode === "presentation" && activePresentationId && activePresentation ? <PresentationViewer
         presentation={activePresentation}
@@ -993,6 +1057,12 @@ export default function App() {
         speakText={speakText}
         lazyLoadImage={lazyLoadImage}
         onNextModule={setActivePresentationId}
+      /> : viewMode === "profile" ? <Profile
+        onExit={() => setViewMode('flashcards')}
+        user={user}
+        auth={auth}
+        unlockedCardsCount={Object.keys(unlockedCards || {}).length}
+        totalCardsCount={1089}
       /> : viewMode === "quiz" ? <DynamicQuiz onExit={() => { setViewMode('flashcards'); showInterstitial(); }} /> : <>
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
@@ -1007,8 +1077,11 @@ export default function App() {
                     <p className="text-xs text-slate-400">Alemán Técnico & Preparación Goethe Zertifikat</p>
                   </div>
                 </div>
-                {/* HAMBURGER + FULLSCREEN ON MOBILE */}
+                {/* HAMBURGER + FULLSCREEN + PROFILE ON MOBILE */}
                 <div className="flex items-center gap-2 md:hidden">
+                  <button onClick={() => setViewMode('profile')} className="bg-slate-800 text-blue-400 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Perfil">
+                    <User size={20} />
+                  </button>
                   <button onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Abrir menú">
                     <Menu size={20} />
                   </button>
@@ -1026,9 +1099,12 @@ export default function App() {
                 <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
               </div>
 
-              {/* HAMBURGER + FULLSCREEN ON DESKTOP */}
+              {/* HAMBURGER + FULLSCREEN + PROFILE ON DESKTOP */}
               <div className="hidden md:flex items-center gap-2">
-                <button onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 px-4 py-2 rounded-lg transition flex items-center gap-2 font-bold shadow-md">
+                <button onClick={() => setViewMode('profile')} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-2 shadow-md cursor-pointer text-sm">
+                  <User size={18} /> Perfil
+                </button>
+                <button onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 px-4 py-2 rounded-lg transition flex items-center gap-2 font-bold shadow-md text-sm">
                   <Menu size={18} /> Menú
                 </button>
                 <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 p-2.5 rounded-lg transition flex items-center justify-center shadow-md">
@@ -1081,6 +1157,12 @@ export default function App() {
                 setIsMenuOpen(false);
               }} className="bg-yellow-600 text-slate-900 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
                       <Gamepad2 size={18} /> Quiz
+                    </button>
+                    <button onClick={() => {
+                setViewMode('profile');
+                setIsMenuOpen(false);
+              }} className="bg-blue-600 text-white col-span-2 py-2.5 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-xs shadow-sm">
+                      <User size={18} /> Mi Perfil y Configuración
                     </button>
                   </div>
 
@@ -1364,7 +1446,7 @@ export default function App() {
                 </div>
                 {storyState.loading ? <div className="py-12 flex flex-col items-center justify-center gap-3 text-indigo-500 flex-grow">
                     <Loader2 size={40} className="animate-spin" />
-                    <p className="font-bold animate-pulse">Imaginando historia mágica...</p>
+                    <div className="animate-pulse text-indigo-600 font-medium transition-opacity duration-300 text-center px-4">{loadingPhrases[loadingPhraseIdx]}</div>
                   </div> : <div className="space-y-4 flex-grow overflow-hidden flex flex-col">
                     <div className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[280px]">
                       <div className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow" onClick={() => speakStory(storyState.de)}>
@@ -1472,5 +1554,5 @@ export default function App() {
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   `
     }} />
-</div>;
+</div></Suspense>;
 }

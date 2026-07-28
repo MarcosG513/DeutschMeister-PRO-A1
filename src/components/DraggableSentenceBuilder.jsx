@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, CheckCircle2, AlertCircle } from 'lucide-react';
-import { nativeSpeak } from '../utils/helpers';
+import { Volume2, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
+import { nativeSpeak, spendCoins } from '../utils/helpers';
 
 const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePool }) => {
   const [currentSentence, setCurrentSentence] = useState({ subject, verb, complement });
@@ -8,6 +8,7 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
   const [slots, setSlots] = useState([null, null, null]);
   const [isValid, setIsValid] = useState(null); // true, false, o null
   const [shake, setShake] = useState(false);
+  const [hintUsed, setHintUsed] = useState(false);
 
   // Sincronizar y elegir oración inicial del pool o de props directos
   useEffect(() => {
@@ -33,7 +34,24 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
     setPool(shuffled);
     setSlots([null, null, null]);
     setIsValid(null);
+    setHintUsed(false);
   }, [currentSentence]);
+
+  const buyHint = async () => {
+    if (hintUsed || isValid !== null) return;
+    const success = await spendCoins(10);
+    if (success) {
+      setHintUsed(true);
+      if (activeSubject && (pool.includes(activeSubject) || slots.includes(activeSubject))) {
+        // Auto-colocar la primera palabra (activeSubject) en la Posición 1
+        const newSlots = [activeSubject, slots[1], slots[2]];
+        setSlots(newSlots);
+        setPool(prev => prev.filter(w => w !== activeSubject));
+      }
+    } else {
+      alert("¡Monedas insuficientes! Necesitas al menos 🪙 10 para comprar una pista.");
+    }
+  };
 
   const selectWord = (word) => {
     if (isValid !== null) return;
@@ -110,20 +128,32 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
           ? 'bg-rose-50 border-rose-300 shadow-rose-100/50' 
           : 'bg-slate-50 border-slate-200'
     } max-w-xl mx-auto ${shake ? 'animate-bounce' : ''}`}>
-      <div className="flex justify-between items-center mb-4 w-full">
+      <div className="flex flex-wrap justify-between items-center gap-2 mb-4 w-full">
         <h4 className="font-bold text-slate-800 text-sm tracking-wide uppercase">
           🔧 Constructor de Oraciones: Regla Posición 2
         </h4>
-        {isValid === true && (
-          <span className="text-emerald-600 font-bold text-xs flex items-center gap-1">
-            <CheckCircle2 size={16} /> ¡Excelente! Verbo en Posición 2
-          </span>
-        )}
-        {isValid === false && (
-          <span className="text-rose-600 font-bold text-xs flex items-center gap-1">
-            <AlertCircle size={16} /> ¡Error! El verbo no está en Posición 2
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {isValid === null && (
+            <button
+              onClick={buyHint}
+              disabled={hintUsed}
+              className="flex items-center gap-1 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold px-2.5 py-1 rounded-lg text-xs shadow-sm transition active:scale-95 cursor-pointer disabled:opacity-50"
+            >
+              <Sparkles size={13} className="text-amber-500" />
+              <span>{hintUsed ? 'Pista Usada' : 'Pista (🪙 10)'}</span>
+            </button>
+          )}
+          {isValid === true && (
+            <span className="text-emerald-600 font-bold text-xs flex items-center gap-1">
+              <CheckCircle2 size={16} /> ¡Excelente! Verbo en Posición 2
+            </span>
+          )}
+          {isValid === false && (
+            <span className="text-rose-600 font-bold text-xs flex items-center gap-1">
+              <AlertCircle size={16} /> ¡Error! El verbo no está en Posición 2
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Cajas receptoras */}

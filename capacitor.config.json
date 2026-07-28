@@ -1,6 +1,6 @@
 {
   "appId": "com.deutschmeister.app",
-  "appName": "DeutschMeister PRO",
+  "appName": "Deutsch A1",
   "webDir": "dist",
   "plugins": {
     "StatusBar": {

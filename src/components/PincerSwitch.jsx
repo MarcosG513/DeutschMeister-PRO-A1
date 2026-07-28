@@ -34,7 +34,7 @@ const PincerSwitch = ({ exercises = [] }) => {
     <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm max-w-xl mx-auto my-6 text-left">
       <div className="flex justify-between items-center mb-4">
         <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-          🗜️ El Interruptor de Pinza (Verbo Separable)
+          🗜️ {current.isModal ? 'El Sándwich Verbal (Verbo Modal + Infinitivo)' : 'El Interruptor de Pinza (Verbo Separable)'}
         </span>
         <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
           {current.verbOriginal}
@@ -66,7 +66,11 @@ const PincerSwitch = ({ exercises = [] }) => {
               }}
             >
               <span className="font-extrabold text-[10px] sm:text-xs md:text-sm text-rose-700 break-words whitespace-normal leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">
-                <span className="underline">{current.prefix}</span>{current.verbRaiz}
+                {current.isModal ? (
+                  <>{current.verbRaiz} {current.prefix}</>
+                ) : (
+                  <><span className="underline">{current.prefix}</span>{current.verbRaiz}</>
+                )}
               </span>
               <span className="text-[8px] font-medium text-rose-500">Incorrecto</span>
             </div>

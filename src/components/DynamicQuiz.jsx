@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Gamepad2, CheckCircle2, XCircle, Flame, Trophy, Sparkles, ArrowRight, Loader2, X } from 'lucide-react';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../App';
+import { spendCoins } from '../utils/helpers';
 
 const SUGGESTED_TOPICS = [
   "Declinación (Der/Die/Das)",
@@ -22,10 +23,11 @@ const DynamicQuiz = ({ onExit }) => {
   const [loadingMessage, setLoadingMessage] = useState("🧠 Iniciando enlace neuronal con el Goethe-Institut...");
   const [quizData, setQuizData] = useState(null);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [selectedOpt, setSelectedOpt] = useState(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [isCorrect, setIsCorrect] = useState(null);
   const [score, setScore] = useState(0);
   const [error, setError] = useState(null);
+  const [eliminatedOptions, setEliminatedOptions] = useState([]);
   const [currentStreak, setCurrentStreak] = useState(() => {
     return parseInt(localStorage.getItem('dm_quiz_streak') || '0', 10);
   });
@@ -75,8 +77,8 @@ const DynamicQuiz = ({ onExit }) => {
     setQuizData(null);
     setCurrentIdx(0);
     setScore(0);
-    setSelectedOpt(null);
-    setIsSubmitted(false);
+    setSelectedOption(null);
+    setIsCorrect(null);
 
     try {
       if (!functions) throw new Error("Firebase functions not initialized");
@@ -99,19 +101,15 @@ const DynamicQuiz = ({ onExit }) => {
     }
   };
 
-  const handleOptionSelect = (opt) => {
-    if (isSubmitted) return;
-    setSelectedOpt(opt);
-  };
+  const handleOptionClick = (opcion) => {
+    if (selectedOption !== null) return;
+    const preguntaActual = quizData.preguntas[currentIdx];
+    const correct = opcion === preguntaActual.respuesta_correcta;
 
-  const submitAnswer = () => {
-    if (!selectedOpt || isSubmitted) return;
-    setIsSubmitted(true);
+    setSelectedOption(opcion);
+    setIsCorrect(correct);
 
-    const currentQuestion = quizData.preguntas[currentIdx];
-    const isCorrect = selectedOpt === currentQuestion.respuesta_correcta;
-
-    if (isCorrect) {
+    if (correct) {
       setScore(prev => prev + 1);
       setCurrentStreak(prev => prev + 1);
     } else {
@@ -119,9 +117,27 @@ const DynamicQuiz = ({ onExit }) => {
     }
   };
 
+  const buyHint = async () => {
+    if (!quizData?.preguntas?.[currentIdx] || selectedOption !== null) return;
+    const preguntaActual = quizData.preguntas[currentIdx];
+    const incorrects = preguntaActual.opciones.filter(
+      opt => opt !== preguntaActual.respuesta_correcta && !eliminatedOptions.includes(opt)
+    );
+    if (incorrects.length === 0) return;
+
+    const success = await spendCoins(10);
+    if (success) {
+      const toEliminate = incorrects.slice(0, 2);
+      setEliminatedOptions(prev => [...prev, ...toEliminate]);
+    } else {
+      alert("¡Monedas insuficientes! Necesitas al menos 🪙 10 para comprar una pista 50/50.");
+    }
+  };
+
   const handleNext = () => {
-    setSelectedOpt(null);
-    setIsSubmitted(false);
+    setSelectedOption(null);
+    setIsCorrect(null);
+    setEliminatedOptions([]);
     setCurrentIdx(prev => prev + 1);
   };
 
@@ -243,13 +259,23 @@ const DynamicQuiz = ({ onExit }) => {
         {!loading && quizData && currentIdx < quizData.preguntas.length && (
           <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm flex flex-col items-center">
             {/* Cabecera de la pregunta */}
-            <div className="w-full flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
+            <div className="w-full flex flex-wrap justify-between items-center gap-2 mb-6 border-b border-slate-100 pb-4">
               <span className="font-bold text-slate-800 bg-slate-100 px-3 py-1.5 rounded-lg text-sm">
                 Tema: {quizData.titulo_quiz || tema}
               </span>
-              <span className="text-slate-500 text-sm font-bold">
-                Pregunta {currentIdx + 1} de {quizData.preguntas.length}
-              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={buyHint}
+                  disabled={selectedOption !== null}
+                  className="flex items-center gap-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold px-3 py-1.5 rounded-lg text-xs shadow-sm transition active:scale-95 cursor-pointer disabled:opacity-50"
+                >
+                  <Sparkles size={14} className="text-amber-500" />
+                  <span>Comprar Pista (🪙 10)</span>
+                </button>
+                <span className="text-slate-500 text-sm font-bold">
+                  Pregunta {currentIdx + 1} de {quizData.preguntas.length}
+                </span>
+              </div>
             </div>
 
             {/* Pregunta principal */}
@@ -262,32 +288,30 @@ const DynamicQuiz = ({ onExit }) => {
             {/* Listado de Opciones */}
             <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
               {quizData.preguntas[currentIdx].opciones.map((opt, i) => {
-                const isCorrectAnswer = opt === quizData.preguntas[currentIdx].respuesta_correcta;
-                const isSelected = opt === selectedOpt;
+                const preguntaActual = quizData.preguntas[currentIdx];
+                const isCorrectAnswer = opt === preguntaActual.respuesta_correcta;
+                const isSelected = opt === selectedOption;
+                const isEliminated = eliminatedOptions.includes(opt);
 
-                let btnClass = "bg-white border-2 border-slate-200 text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/20";
+                let btnClass = "bg-white border-2 border-slate-200 text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/20 cursor-pointer";
 
-                if (isSubmitted) {
+                if (isEliminated) {
+                  btnClass = "bg-slate-100 border-slate-200 text-slate-300 line-through opacity-40 cursor-not-allowed";
+                } else if (selectedOption !== null) {
                   if (isCorrectAnswer) {
-                    // Correcta se pinta en verde esmeralda
                     btnClass = "bg-emerald-500 border-emerald-500 text-white font-bold shadow-md shadow-emerald-500/20";
                   } else if (isSelected) {
-                    // Seleccionada incorrecta se pinta en rojo rosa
                     btnClass = "bg-rose-500 border-rose-500 text-white font-bold shadow-md shadow-rose-500/20";
                   } else {
-                    // Otras opciones
-                    btnClass = "bg-slate-50 border-slate-100 text-slate-400 opacity-55";
+                    btnClass = "bg-slate-50 border-slate-100 text-slate-400 opacity-50 cursor-not-allowed";
                   }
-                } else if (isSelected) {
-                  // Seleccionada pero sin enviar
-                  btnClass = "bg-blue-50 border-blue-500 text-blue-700 font-bold shadow-inner";
                 }
 
                 return (
                   <button
                     key={i}
-                    onClick={() => handleOptionSelect(opt)}
-                    disabled={isSubmitted}
+                    onClick={() => !isEliminated && handleOptionClick(opt)}
+                    disabled={selectedOption !== null || isEliminated}
                     className={`py-4 px-6 rounded-xl text-lg transition-all text-center leading-normal ${btnClass}`}
                   >
                     {opt}
@@ -296,56 +320,42 @@ const DynamicQuiz = ({ onExit }) => {
               })}
             </div>
 
-            {/* Acciones de Pregunta */}
-            <div className="w-full max-w-xl mt-6 flex justify-end">
-              {!isSubmitted ? (
-                <button
-                  onClick={submitAnswer}
-                  disabled={!selectedOpt}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition shadow disabled:opacity-40"
-                >
-                  Comprobar
-                </button>
-              ) : (
-                <button
-                  onClick={handleNext}
-                  className="bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 py-3 rounded-xl transition shadow flex items-center gap-2"
-                >
-                  {currentIdx === quizData.preguntas.length - 1 ? "Finalizar Quiz" : "Siguiente"}
-                  <ArrowRight size={18} />
-                </button>
-              )}
-            </div>
-
-            {/* Retroalimentación Bimodal (Explicación Socrática) */}
-            {isSubmitted && (() => {
-              const currentQuestion = quizData.preguntas[currentIdx];
-              const isCorrect = selectedOpt === currentQuestion.respuesta_correcta;
+            {/* INYECCIÓN DE LA EXPLICACIÓN DIDÁCTICA (Caja de Alerta) */}
+            {selectedOption !== null && (() => {
+              const preguntaActual = quizData.preguntas[currentIdx];
+              const explicacionText = preguntaActual.explicacion_didactica || preguntaActual.explicacion_socratica;
               return (
                 <div
-                  className={`w-full max-w-xl mt-8 p-4 sm:p-5 rounded-xl border border-dashed animate-in slide-in-from-top-4 duration-300 text-left ${isCorrect
-                      ? 'bg-emerald-50/50 border-emerald-300 text-emerald-950'
-                      : 'bg-amber-50/50 border-amber-300 text-amber-950'
-                    }`}
+                  className={`w-full max-w-xl flex flex-col gap-2 p-4 sm:p-5 rounded-xl border mt-6 animate-in fade-in zoom-in-95 transition-all duration-300 ${
+                    isCorrect 
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
+                      : 'bg-rose-50 border-rose-200 text-rose-800'
+                  }`}
                 >
-                  <div className="flex items-start gap-3">
-                    {isCorrect ? (
-                      <CheckCircle2 className="text-emerald-600 shrink-0 mt-0.5" size={24} />
-                    ) : (
-                      <XCircle className="text-amber-600 shrink-0 mt-0.5" size={24} />
-                    )}
-                    <div>
-                      <h4 className="font-bold text-lg mb-1.5">
-                        {isCorrect ? '¡Richtig! (¡Correcto!)' : 'Falsch (Incorrecto)'}
-                      </h4>
-                      <p className="text-sm font-medium leading-relaxed">
-                        {currentQuestion.explicacion_socratica}
-                      </p>
-                    </div>
+                  <div className="font-bold flex items-center gap-2 text-lg">
+                    {isCorrect ? '✅ ¡Correcto!' : '❌ Falsch (Incorrecto)'}
                   </div>
+                  {explicacionText && (
+                    <p className="text-sm font-medium leading-relaxed opacity-90">
+                      {explicacionText}
+                    </p>
+                  )}
                 </div>
               );
             })()}
+
+            {/* Botón Siguiente Pregunta / Finalizar Quiz (Renderizado ÚNICAMENTE si se ha seleccionado respuesta) */}
+            {selectedOption !== null && (
+              <div className="w-full max-w-xl mt-6 flex justify-end">
+                <button
+                  onClick={handleNext}
+                  className="bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 py-3 rounded-xl transition shadow flex items-center gap-2 cursor-pointer"
+                >
+                  {currentIdx === quizData.preguntas.length - 1 ? "Finalizar Quiz" : "Siguiente Pregunta"}
+                  <ArrowRight size={18} />
+                </button>
+              </div>
+            )}
           </div>
         )}
 

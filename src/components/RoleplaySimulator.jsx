@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader2, Send, X, Volume2, Sparkles } from 'lucide-react';
 import { showRewardVideo } from '../services/AdService';
-import { nativeSpeak } from '../utils/helpers';
+import { nativeSpeak, awardCoins } from '../utils/helpers';
 
 const RoleplaySimulator = ({
   onExit
@@ -162,6 +162,7 @@ const RoleplaySimulator = ({
     }];
     setMessages(newMsgs);
     setInput("");
+    await awardCoins(10);
     setLoading(true);
     try {
       const response = await fetch(`https://runroleplaysimulator-44keyii6gq-uc.a.run.app`, {

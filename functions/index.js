@@ -1503,10 +1503,10 @@ export const generateReadingTest = onCall({
     throw new HttpsError("invalid-argument", "Falta el parámetro requerido: tema");
   }
   const defaultSystemInstruction = `
-      Eres un profesor de alemán de nivel A1. El usuario te dará un tema de su interés.
+      Eres un profesor de alemán de nivel A1 del Goethe-Institut. El usuario te dará un tema de su interés.
       Tu tarea es generar:
       1. Un título en alemán para la lectura.
-      2. Un texto de lectura corto y sencillo en alemán nivel A1 sobre el tema (máximo 80-100 palabras, usando frases muy sencillas, tiempo presente y vocabulario básico).
+      2. Un texto de lectura en alemán nivel A1 sobre el tema con una longitud mínima estricta de 100 a 130 palabras, dividido fluidamente en 2 o 3 párrafos. Usa conectores A1 (und, oder, aber, denn) para unir ideas y dar mayor volumen de lectura.
       3. Un cuestionario de exactamente 3 preguntas de opción múltiple en alemán para medir la comprensión lectora del texto.
       
       Debes devolver ÚNICAMENTE un JSON con esta estructura exacta:
@@ -1523,13 +1523,48 @@ export const generateReadingTest = onCall({
         ]
       }
 
-      REGLAS CRÍTICAS:
+      === RIGOR GOETHE ZERTIFIKAT A1 (LESEN) ===
+      1. LONGITUD OBLIGATORIA Y CONECTORES: El 'texto_aleman' DEBE tener estrictamente entre 100 y 130 palabras. Tienes PROHIBIDO hacer listas de oraciones cortas y robóticas. Escribe 2 o 3 párrafos fluidos uniendo las ideas con conectores A1 (und, oder, aber, denn, deshalb).
+      2. PROHIBIDA LA EXTRACCIÓN LITERAL (El Juego de los Espejos): Las preguntas de comprensión JAMÁS deben resolverse buscando la misma frase exacta en el texto. Debes obligar al alumno a usar deducción por antónimos o sinónimos simples. Ej: Si el texto dice 'Das Hotel ist nicht teuer' (El hotel no es caro), la opción correcta de la pregunta debe ser 'Es ist billig / günstig' (Es barato).
+      3. DISTRACTORES LETALES: Las 2 opciones incorrectas de cada pregunta DEBEN ser sustantivos o datos que SÍ aparecen en el texto, pero que pertenecen a otro sujeto, lugar o momento. Prohibido usar palabras que no estén en la lectura para despistar.
+
+      === EJEMPLO DE SALIDA ESPERADA (FEW-SHOT PATTERN) ===
+      Estudia este ejemplo. Nota cómo el texto tiene más de 100 palabras, usa conectores, la primera pregunta usa la trampa de antónimos (nicht teuer -> billig) y los distractores son palabras que sí aparecen en la lectura pero en otro contexto:
+
+      {
+        "titulo_aleman": "Ein Wochenende in Berlin",
+        "texto_aleman": "Ich heiße Martin und ich besuche dieses Wochenende Berlin. Die Stadt ist sehr groß und interessant. Das Wetter ist leider schlecht, denn es regnet viel. Mein Hotelzimmer ist klein, aber es ist nicht teuer. Ich besuche viele Museen, weil ich Geschichte liebe. Am Mittag esse ich eine Currywurst mit Pommes. Das ist sehr typisch hier. Meine Schwester Anna wohnt auch in Berlin, aber sie studiert heute an der Universität. Am Abend gehen wir zusammen in ein Restaurant. Wir trinken ein Bier und sprechen viel. Morgen fahre ich mit dem Zug zurück nach Hamburg. Die Reise war kurz, aber sehr schön.",
+        "preguntas": [
+          {
+            "pregunta_aleman": "Wie ist das Hotelzimmer von Martin?",
+            "opciones_aleman": [
+              "Es ist billig.",
+              "Es ist groß.",
+              "Es ist teuer."
+            ],
+            "respuesta_correcta": "Es ist billig.",
+            "explicacion_espanol": "La respuesta correcta es 'Es ist billig' (Es barato) porque el texto dice 'es ist nicht teuer' (no es caro). 'Es ist groß' es incorrecta porque el texto dice que es pequeña (la ciudad es la grande)."
+          },
+          {
+            "pregunta_aleman": "Was macht Anna heute?",
+            "opciones_aleman": [
+              "Sie studiert an der Universität.",
+              "Sie isst eine Currywurst.",
+              "Sie fährt mit dem Zug."
+            ],
+            "respuesta_correcta": "Sie studiert an der Universität.",
+            "explicacion_espanol": "La respuesta es 'Sie studiert an der Universität'. Las otras opciones son trampas: Martin es quien come Currywurst y quien viaja en tren, no Anna."
+          }
+        ]
+      }
+
+      REGLAS DE FORMATO Y LENGUAJE:
+      - RETROALIMENTACIÓN CONCLUYENTE: En 'explicacion_espanol', ofrece una conclusión didáctica sin preguntas abiertas o retóricas al final.
       - Usa diacríticos/umlauts estándar del alemán (ä, ö, ü, ß) en lugar de dígrafos (como "fuer" en lugar de "für", o "schoen" en lugar de "schön").
       - NO coloques espacios antes de los signos de puntuación (ej. escribe "Familie." y no "Familie .", "Personen:" y no "Personen :", "Vater," y no "Vater ,"). El texto debe tener una puntuación limpia y profesional.
       - Responde únicamente con el formato JSON válido.
       - El texto y las preguntas deben estar estrictamente redactados en alemán nivel A1.
       - La explicación de las respuestas correctas debe estar en español.
-      - CERO INFERENCIAS LÓGICAS: Las 3 preguntas deben ser 100% de extracción literal. La respuesta correcta debe estar escrita explícitamente en el texto. Un estudiante de nivel A1 NO debe hacer deducciones matemáticas ni inferencias implícitas (ej. si el texto dice 'padre, madre y hermano', no preguntes cuántas personas son en total incluyendo al narrador).
     `;
   const systemInstruction = await getSystemPrompt("reading_comprehension_system", defaultSystemInstruction);
   const promptUser = `Genera la prueba de comprensión lectora para el tema: "${tema}".`;
@@ -1630,27 +1665,56 @@ export const generateDynamicQuiz = onCall({
     throw new HttpsError("invalid-argument", "El parámetro 'tema' es obligatorio.");
   }
 
-  const systemInstruction = `Actúa como un examinador oficial del Goethe-Institut especializado en el nivel A1 (Marco Común Europeo de Referencia). Tu objetivo es evaluar al estudiante mediante un quiz de exactamente 10 preguntas de opción múltiple.
-El usuario proporcionará el tema gramatical o de vocabulario a evaluar (ejemplo: 'Dativo', 'Comida', 'Direcciones').
+  const systemInstruction = `=== REGULACIÓN PEDAGÓGICA Y DE CONTENIDO ===
+Actúa como un examinador oficial del Goethe-Institut especializado en el nivel A1 (Start Deutsch 1). Tu objetivo es evaluar al estudiante mediante un quiz de exactamente 10 preguntas de opción múltiple.
+El usuario proporcionará el tema gramatical o de vocabulario a evaluar.
 
 Genera un JSON estrictamente válido que contenga:
-1. "titulo_quiz": Un título atractivo y contextualizado en español sobre el tema.
-2. "preguntas": Un array de exactamente 10 objetos de preguntas, cada uno con:
-   - "pregunta": Una oración corta en alemán con un hueco (___) o una pregunta situacional sencilla A1.
-   - "opciones": Un array de exactamente 4 opciones de respuesta cortas en alemán.
-   - "respuesta_correcta": La opción exacta del array que es la correcta.
-   - "explicacion_socratica": Una breve explicación pedagógica en español de 1 o 2 líneas de por qué es correcta y por qué las demás no lo son.
+1. 'titulo_quiz': Un título atractivo y contextualizado en español sobre el tema.
+2. 'preguntas': Un array de exactamente 10 objetos de preguntas independientes. Para evitar la monotonía, varía los verbos, contextos y sustantivos en cada pregunta. Cada objeto debe tener:
+   - 'pregunta': Una oración corta en alemán con un hueco (___) o una pregunta situacional sencilla A1.
+   - 'opciones': Un array de exactamente 3 opciones de respuesta cortas en alemán (alineado al estándar real A/B/C del Goethe A1).
+   - 'respuesta_correcta': La opción exacta del array que es la correcta.
+   - 'explicacion_didactica': Una breve explicación pedagógica en español de máximo 2 líneas que aclare la regla aplicada y descarte los distractores de forma ultra-sencilla.
 
-Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocabulario básico, presente e imperativo, estructuras sencillas).`;
+Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocabulario básico, presente e imperativo, estructuras sencillas). Cero excepciones avanzadas.`;
 
   const promptUser = `Genera un quiz de exactamente 10 preguntas para el nivel Goethe A1 sobre el siguiente tema: ${tema}.`;
 
   const tryGemini = async (key) => {
     const genAI = new GoogleGenerativeAI(key);
+
+    const quizSchema = {
+      type: SchemaType.OBJECT,
+      properties: {
+        titulo_quiz: { type: SchemaType.STRING, description: "Título atractivo en español sobre el tema" },
+        preguntas: {
+          type: SchemaType.ARRAY,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              pregunta: { type: SchemaType.STRING, description: "Oración corta en alemán con hueco (___) o pregunta situacional A1" },
+              opciones: {
+                type: SchemaType.ARRAY,
+                items: { type: SchemaType.STRING },
+                description: "Exactamente 3 opciones de respuesta en alemán"
+              },
+              respuesta_correcta: { type: SchemaType.STRING, description: "La opción exacta del array que es correcta" },
+              explicacion_didactica: { type: SchemaType.STRING, description: "Breve explicación pedagógica en español de máximo 2 líneas" }
+            },
+            required: ["pregunta", "opciones", "respuesta_correcta", "explicacion_didactica"]
+          },
+          description: "Lista de exactamente 10 preguntas independientes A1"
+        }
+      },
+      required: ["titulo_quiz", "preguntas"]
+    };
+
     const geminiModel = genAI.getGenerativeModel({
       model: "gemini-3.5-flash-lite",
       generationConfig: {
-        responseMimeType: "application/json"
+        responseMimeType: "application/json",
+        responseSchema: quizSchema
       }
     });
 
@@ -1660,7 +1724,18 @@ Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocab
     });
 
     const responseText = result.response.text().trim();
-    return JSON.parse(responseText);
+    const cleanJson = responseText.replace(/^```json\s*/i, "").replace(/```$/, "").replace(/```/g, "").trim();
+    const data = JSON.parse(cleanJson);
+
+    // Mapear explicacion_didactica a explicacion_socratica para asegurar compatibilidad 100% con el frontend
+    if (data && Array.isArray(data.preguntas)) {
+      data.preguntas = data.preguntas.map(q => ({
+        ...q,
+        explicacion_socratica: q.explicacion_didactica || q.explicacion_socratica,
+        explicacion_didactica: q.explicacion_didactica || q.explicacion_socratica
+      }));
+    }
+    return data;
   };
 
   const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
