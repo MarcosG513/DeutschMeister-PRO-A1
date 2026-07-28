@@ -10561,17 +10561,66 @@ export const studyPlanModules = [
       {
         title: "El Código Mnemotécnico M-R-M-N (MaRiMaNa)",
         subtitle: "La mutación universal de todos los artículos en caso Dativo",
-        content: `El Dativo (*Dativ*) representa el **Objeto Indirecto** (el receptor beneficiario o perjudicado de la acción). A diferencia del Acusativo, **EL DATIVO ALTERA TODOS LOS GÉNEROS Y EL PLURAL**.\n\n💡 **Regla Mnemotécnica M-R-M-N (MaRiMaNa):**\nMemoriza las letras finales de los artículos definidos en Dativo:\n* 🔵 **Masculino (der):** de**m** / einem / meinem  *(Letra M)*\n* 🔴 **Femenino (die):** de**r** / einer / meiner  *(Letra R)*\n* 🟢 **Neutro (das):** de**m** / einem / meinem  *(Letra M)*\n* 🟣 **Plural (die):** de**n** / - / meinen **+ -n al sustantivo** *(Letra N)*\n\n⚠️ **La Regla de la -n del Plural Dativo:**\nEn Dativo Plural, además de cambiar el artículo a **den**, debes agregar obligatoriamente una **-n** al final del sustantivo plural: *mit den Kinder**n***, *mit den Busse**n***. *(Excepción: Sustantivos que ya terminan en -n o -s, como Frauen o Autos)*.`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <p className="text-slate-700 text-xs sm:text-sm">
+              El Dativo marca el <strong>Objeto Indirecto</strong> y altera TODOS los géneros:
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-xl font-mono text-center space-y-1">
+                <span className="text-[10px] bg-blue-200 text-blue-900 font-bold px-1.5 py-0.5 rounded block">🔵 Masc (M)</span>
+                <strong className="text-blue-900 block text-sm">dem</strong>
+                <span className="text-[11px] text-slate-500">einem / meinem</span>
+              </div>
+              <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-xl font-mono text-center space-y-1">
+                <span className="text-[10px] bg-rose-200 text-rose-900 font-bold px-1.5 py-0.5 rounded block">🔴 Fem (R)</span>
+                <strong className="text-rose-900 block text-sm">der</strong>
+                <span className="text-[11px] text-slate-500">einer / meiner</span>
+              </div>
+              <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl font-mono text-center space-y-1">
+                <span className="text-[10px] bg-emerald-200 text-emerald-900 font-bold px-1.5 py-0.5 rounded block">🟢 Neutro (M)</span>
+                <strong className="text-emerald-900 block text-sm">dem</strong>
+                <span className="text-[11px] text-slate-500">einem / meinem</span>
+              </div>
+              <div className="p-2.5 bg-purple-50 border border-purple-200 rounded-xl font-mono text-center space-y-1">
+                <span className="text-[10px] bg-purple-200 text-purple-900 font-bold px-1.5 py-0.5 rounded block">🟣 Plural (N)</span>
+                <strong className="text-purple-900 block text-sm">den + -n</strong>
+                <span className="text-[11px] text-slate-500">meinen Kinder<strong>n</strong></span>
+              </div>
+            </div>
+          </div>
+        )
       },
       {
         title: "Pronombres de Receptor (Dativo)",
         subtitle: "Expresando a quién le das, muestras o dices algo",
-        content: `Los pronombres personales cambian en Dativo para marcar al receptor:\n\n* **ich ➔ mir** (*Du hilfst mir* - Me ayudas a mí)\n* **du ➔ dir** (*Ich danke dir* - Te lo agradezco a ti)\n* **er / es ➔ ihm** (*Das Buch gehört ihm* - El libro es de él)\n* **sie ➔ ihr** (*Ich antwortet ihr* - Le respondo a ella)\n* **wir ➔ uns** (*Er schenkt uns ein Buch* - Nos regala un libro)\n* **ihr ➔ euch** (*Wie geht es euch?* - ¿Cómo os va a vosotros?)\n* **sie / Sie ➔ ihnen / Ihnen** (*Wie geht es Ihnen?* - ¿Cómo le va a Usted?)\n\n🚫 **Trampa Hispanohablante:** En español, "le" sirve tanto para él como para ella ("Yo le ayudo a él / a ella"). En alemán la distinción es absoluta: **Ich helfe ihm** (a él) vs. **Ich helfe ihr** (a ella).`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-xs text-center">
+              <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg">ich ➔ <strong className="text-indigo-600">mir</strong></div>
+              <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg">du ➔ <strong className="text-indigo-600">dir</strong></div>
+              <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg">er/es ➔ <strong className="text-indigo-600">ihm</strong></div>
+              <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg">sie ➔ <strong className="text-indigo-600">ihr</strong></div>
+            </div>
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-950">
+              🚫 <strong>Diferencia vs Español:</strong> En español "le" sirve para él y ella. En alemán: <strong>Ich helfe ihm</strong> (a él) vs. <strong>Ich helfe ihr</strong> (a ella).
+            </div>
+          </div>
+        )
       },
       {
         title: "Preposiciones Fijas de Dativo y Contracciones de Dirección",
         subtitle: "Satélites de caso invariable y el pronombre interrogativo Wem",
-        content: `Las preposiciones *aus, bei, mit, nach, seit, von, zu* exigen Dativo al 100% de las veces. En el habla nativa, las preposiciones de movimiento y procedencia se fusionan con el artículo:\n\n* **zu + dem ➔ zum** (Masc/Neutro): *Ich gehe **zum** Arzt (der) / **zum** Kino (das).*\n* **zu + der ➔ zur** (Femenino): *Ich gehe **zur** Schule (die) / **zur** Arbeit (die).*\n* **von + dem ➔ vom** (Masc/Neutro): *Ich komme **vom** Supermarkt.*\n\n🔍 **El Interrogativo de Receptor:** Si la acción se dirige a un beneficiario, el pronombre interrogativo muta a: **Wem** (*¿A quién le... ?*).\n* *"**Wem** hilfst du?" ➔ "Ich hilfe **dem** (zum) Kind."*`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <p className="text-xs text-slate-600 font-semibold">Preposiciones innegociables: <em>aus, bei, mit, nach, seit, von, zu</em></p>
+            <div className="grid grid-cols-3 gap-2 font-mono text-xs text-center">
+              <div className="p-2 bg-indigo-50 border border-indigo-200 rounded-lg">zu + dem ➔ <strong>zum</strong></div>
+              <div className="p-2 bg-indigo-50 border border-indigo-200 rounded-lg">zu + der ➔ <strong>zur</strong></div>
+              <div className="p-2 bg-indigo-50 border border-indigo-200 rounded-lg">von + dem ➔ <strong>vom</strong></div>
+            </div>
+          </div>
+        )
       },
       {
         title: "Selector Interactivo: Matriz M-R-M-N",
@@ -10679,12 +10728,57 @@ export const studyPlanModules = [
       {
         title: "Los 5 Modales de A1 + möchten",
         subtitle: "Expresando habilidad, obligación, permiso, prohibición, deseo y consejo",
-        content: `Los verbos modales alteran la actitud de la oración y forman un **contenedor sintáctico cerrado (Sándwich Verbal)**:\n\n1. **können (Saber / Poder):** Habilidad o capacidad física. (*Ich kann Deutsch sprechen.*)\n2. **müssen (Tener que / Deber):** Obligación estricta o ley. (*Ich muss die Miete bezahlen.*)\n3. **dürfen (Tener permiso):** Con *nicht* expresa **PROHIBICIÓN ABSOLUTA**: (*Hier darf man nicht rauchen.*)\n4. **wollen (Querer / Intención firme):** Plan o deseo decidido. (*Ich will nach Deutschland reisen.*)\n5. **sollen (Deber / Recomendación):** Consejo médico o encargo de otro. (*Der Arzt sagt, ich soll Sport machen.*)\n6. **möchten (Gustaría / Deseo cortés):** (*Ich möchte einen Kaffee, bitte.*)`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+              <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-xl space-y-1">
+                <span className="font-bold text-blue-950">können</span>
+                <span className="text-[10px] bg-blue-200 text-blue-900 px-1.5 py-0.5 rounded block">Poder / Saber</span>
+                <p className="text-[11px] text-slate-600 font-mono">kann sprechen</p>
+              </div>
+              <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-xl space-y-1">
+                <span className="font-bold text-rose-950">müssen</span>
+                <span className="text-[10px] bg-rose-200 text-rose-900 px-1.5 py-0.5 rounded block">Obligación</span>
+                <p className="text-[11px] text-slate-600 font-mono">muss bezahlen</p>
+              </div>
+              <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-xl space-y-1">
+                <span className="font-bold text-amber-950">dürfen</span>
+                <span className="text-[10px] bg-amber-200 text-amber-900 px-1.5 py-0.5 rounded block">Permiso / Prohibición</span>
+                <p className="text-[11px] text-slate-600 font-mono">darf nicht</p>
+              </div>
+              <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
+                <span className="font-bold text-emerald-950">wollen</span>
+                <span className="text-[10px] bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded block">Querer</span>
+                <p className="text-[11px] text-slate-600 font-mono">will reisen</p>
+              </div>
+              <div className="p-2.5 bg-purple-50 border border-purple-200 rounded-xl space-y-1">
+                <span className="font-bold text-purple-950">sollen</span>
+                <span className="text-[10px] bg-purple-200 text-purple-900 px-1.5 py-0.5 rounded block">Consejo</span>
+                <p className="text-[11px] text-slate-600 font-mono">soll Sport machen</p>
+              </div>
+              <div className="p-2.5 bg-indigo-50 border border-indigo-200 rounded-xl space-y-1">
+                <span className="font-bold text-indigo-950">möchten</span>
+                <span className="text-[10px] bg-indigo-200 text-indigo-900 px-1.5 py-0.5 rounded block">Deseo cortés</span>
+                <p className="text-[11px] text-slate-600 font-mono">möchte Kaffee</p>
+              </div>
+            </div>
+          </div>
+        )
       },
       {
         title: "La Anomalía Fonética del Singular",
         subtitle: "1ª y 3ª persona del singular NUNCA llevan terminación",
-        content: `Todos los verbos modales sufren una mutación en singular: **cambian la vocal de la raíz y la 1ª persona (ich) y 3ª persona (er/sie/es) son EXACTAMENTE IDENTICAS y sin terminación**:\n\n| Pronombre | können | müssen | dürfen | wollen | sollen | möchten |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **ich** | **kann** | **muss** | **darf** | **will** | **soll** | **möchte** |\n| **du** | kannst | musst | darfst | willst | sollst | möchtest |\n| **er/sie/es**| **kann** | **muss** | **darf** | **will** | **soll** | **möchte** |\n| **wir** | können | müssen | dürfen | wollen | sollen | möchten |\n| **ihr** | könnt | müsst | dürft | wollt | sollt | möchtet |\n| **sie/Sie** | können | müssen | dürfen | wollen | sollen | möchten |\n\n⚠️ **Sándwich Modal con Verbos Separables:**\nCuando un modal se combina con un verbo separable, el verbo de acción viaja al final **SIN SEPARARSE**: *Ich muss um 7 Uhr **aufstehen***.`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-950 space-y-1">
+              <strong>⚡ REGLA DE ORO DEL SINGULAR:</strong>
+              <p>Las formas de <strong>ich</strong> y <strong>er/sie/es</strong> son 100% IDÉNTICAS y NO llevan terminación (<em>ich kann / er kann</em>).</p>
+            </div>
+            <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono text-slate-700">
+              💡 <strong>Con Verbos Separables:</strong> El verbo principal viaja al final SIN SEPARARSE: <em>Ich muss um 7 Uhr <strong>aufstehen</strong>.</em>
+            </div>
+          </div>
+        )
       },
       {
         title: "Tablero de Control: El Sándwich Modal",
@@ -10954,17 +11048,52 @@ export const studyPlanModules = [
       {
         title: "Zona Libre: Conectores Fantasma Posición 0 (ADUSO)",
         subtitle: "Conecta oraciones sin alterar la regla V2 y domina la puntuación",
-        content: `Los conectores coordinantes de **Posición 0 (ADUSO)** (*Aber, Denn, Und, Sondern, Oder*) unen dos oraciones independientes. No alteran la posición del verbo, por lo que la estructura posterior es: \`Conector (Pos 0)\` + \`Sujeto (Pos 1)\` + \`VERBO (Pos 2)\`.\n\n⚠️ **Regla de Oro de Puntuación (Goethe-Schreiben):**\nLos conectores **aber** (pero) y **denn** (porque) exigen **OBLIGATORIAMENTE UNA COMA ANTES** de su escritura. Omitirla resta puntos directos en la sección de redacción:\n* *Ich möchte kommen**, aber** ich habe keine Zeit.*\n* *Ich bleibe zu Hause**, denn** ich bin krank.*`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <p className="text-xs text-slate-600">Conectores de <strong>Posición 0</strong> (No alteran el orden de la oración):</p>
+            <div className="flex flex-wrap gap-1.5 justify-center font-mono font-bold text-xs">
+              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Aber</span>
+              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Denn</span>
+              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Und</span>
+              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Sondern</span>
+              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Oder</span>
+            </div>
+            <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-900">
+              ⚠️ <strong>Coma Obligatoria:</strong> Exigen coma antes de <em>aber</em> y <em>denn</em>: <em>Ich möchte kommen, <strong>aber</strong> ich habe keine Zeit.</em>
+            </div>
+          </div>
+        )
       },
       {
         title: "Conectores Adverbiales de Posición 1 (dann, deshalb)",
         subtitle: "Conectores que ocupan espacio y fuerzan la inversión verbal",
-        content: `A diferencia de ADUSO, conectores como **dann** (luego/después) y **deshalb** (por eso) ocupan la **Posición 1** de la segunda oración y **FUERZAN INVERSIÓN VERBAL** (el verbo va inmediatamente después del conector):\n\n* **dann (luego / después):**\n  * *Ich esse zu Abend, **dann** (Pos 1) **gehe** (Pos 2) ich schlafen.*\n\n* **deshalb (por eso / por lo tanto):**\n  * *Ich bin krank, **deshalb** (Pos 1) **bleibe** (Pos 2) ich zu Hause.*\n\n📊 **Comparación Directa de Posiciones:**\n* Con ADUSO (Pos 0): *...denn ich **bin** krank.*\n* Con Adverbio (Pos 1): *...deshalb **bin** ich krank.*`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+              <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-xl space-y-1">
+                <span className="font-bold text-indigo-950 block">dann (luego)</span>
+                <p className="font-mono text-slate-700">..., dann <strong>gehe</strong> ich schlafen.</p>
+              </div>
+              <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-xl space-y-1">
+                <span className="font-bold text-indigo-950 block">deshalb (por eso)</span>
+                <p className="font-mono text-slate-700">..., deshalb <strong>bleibe</strong> ich hier.</p>
+              </div>
+            </div>
+          </div>
+        )
       },
       {
         title: "Kit de Redacción A1 para el Examen Goethe (Schreiben)",
         subtitle: "Estructura oficial para redactar correos y mensajes breves",
-        content: `En la prueba escrita del Goethe A1 (*Schreiben Teil 2*), debes estructurar tu correo con 3 bloques clave:\n\n1. **Encabezado y Saludo:**\n   * Informal: *Liebe Maria,* (femenino) / *Lieber Markus,* (masculino)\n   * Formal: *Sehr geehrte Frau Müller,* / *Sehr geehrter Herr Schneider,*\n\n2. **Cuerpo del Texto (Usa conectores ADUSO y time/place):**\n   * *Ich kann am Samstag nicht kommen, **denn** ich muss arbeiten.*\n   * *Am Sonntag habe ich Zeit, **deshalb** möchte ich dich besuchen.*\n\n3. **Despedida Oficial:**\n   * Informal: *Viele Grüße / Liebe Grüße, [Tu Nombre]*\n   * Formal: *Mit freundlichen Grüßen, [Tu Nombre]*`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-2 font-mono">
+              <div className="text-slate-500 border-b pb-1">1. Saludo: <em>Liebe Maria, / Lieber Markus,</em></div>
+              <div className="text-slate-700 border-b pb-1">2. Cuerpo: <em>Ich komme am Samstag, denn ich habe Zeit.</em></div>
+              <div className="text-slate-900">3. Despedida: <em>Viele Grüße, [Dein Name]</em></div>
+            </div>
+          </div>
+        )
       },
       {
         title: "Reto Interactivo: Constructor de Oraciones Compuestas",
@@ -10990,17 +11119,41 @@ export const studyPlanModules = [
       {
         title: "Declinación Débil (Tras Artículo Determinado)",
         subtitle: "Cuando der / die / das ya señalan el género del sustantivo",
-        content: `Cuando el sustantivo lleva un artículo determinado (**der, die, das**), el artículo ya muestra el género con claridad. Por ello, el adjetivo solo requiere una terminación "débil" súper sencilla:\n\n1. **En Nominativo Singular (Sujeto):** Añade una simple **-e** para todos los géneros:\n   * *der gut**e** Mann* (Masculino)\n   * *die schön**e** Frau* (Femenino)\n   * *das klein**e** Kind* (Neutro)\n\n2. **En Acusativo Masculino y TODOS los Plurales:** Cambia a **-en**:\n   * *Ich sehe den gut**en** Mann.* (Acusativo Masculino)\n   * *die alt**en** Bücher* (Plural)`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <p className="text-slate-700 text-xs sm:text-sm">El artículo ya señala el género. El adjetivo añade terminaciones sencillas:</p>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+              <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-lg">der gut<strong>e</strong> Mann (Nom)</div>
+              <div className="p-2.5 bg-sky-50 border border-sky-200 rounded-lg">den gut<strong>en</strong> Mann (Akk)</div>
+            </div>
+          </div>
+        )
       },
       {
         title: "Declinación Mixta (Tras Artículo Indeterminado / kein / mein)",
         subtitle: "El adjetivo rescata la bandera de género que el artículo indefinido no muestra",
-        content: `Cuando usas un artículo indeterminado (**ein, kein**) o un posesivo (**mein, dein**), las palabras *ein* (masculino) y *ein* (neutro) son idénticas y no revelan el género. El adjetivo debe "rescatar" la bandera del género adoptando la terminación fuerte del artículo determinado correspondiente:\n\n* 🔵 **Masculino Nominativo (ein ➔ der):** *ein gut**er** Mann* *(Añade **-er** por der)*\n* 🟢 **Neutro Nominativo/Acusativo (ein ➔ das):** *ein kalt**es** Bier* *(Añade **-es** por das)*\n* 🔴 **Femenino Nominativo/Acusativo (eine ➔ die):** *eine schön**e** Frau* *(Añade **-e** por die)*\n* 🔵 **Acusativo Masculino (einen ➔ den):** *Ich kaufe einen alt**en** Käse.* *(Añade **-en** por den)*`
+        content: props => (
+          <div className="space-y-3 my-2">
+            <p className="text-slate-700 text-xs sm:text-sm">El adjetivo rescata la bandera de género:</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono text-center">
+              <div className="p-2 bg-blue-50 border border-blue-200 rounded-lg">ein gut<strong>er</strong> (Masc)</div>
+              <div className="p-2 bg-rose-50 border border-rose-200 rounded-lg">eine schön<strong>e</strong> (Fem)</div>
+              <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-lg">ein kalt<strong>es</strong> (Neutro)</div>
+              <div className="p-2 bg-purple-50 border border-purple-200 rounded-lg">meine alt<strong>en</strong> (Plural)</div>
+            </div>
+          </div>
+        )
       },
       {
         title: "Matriz Resumen y Ejemplos de Examen Goethe A1",
         subtitle: "Entrenamiento directo para preguntas de lectura y opción múltiple",
-        content: `Analiza cómo reacciona la terminación del adjetivo en estas frases reales de examen:\n\n1. *Ich trinke einen **heißen** Tee (Masc - Akk).* ➔ Usa **einen** (Acusativo Masculino), por ende el adjetivo exige **-en** (*heißen*).\n2. *Das ist ein **schönes** Haus (Neutro - Nom).* ➔ Usa **ein** (Neutro), el adjetivo rescata la bandera de *das* agregando **-es** (*schönes*).\n3. *Die **neuen** Studenten lernen Deutsch.* ➔ Es Plural con artículo determinado **die**, por lo que el adjetivo lleva **-en** (*neuen*).\n4. *Er hat kein **neues** Auto (Neutro - Akk).* ➔ Usa **kein** (Neutro Acusativo), el adjetivo añade **-es** (*neues*).`
+        content: props => (
+          <div className="space-y-2 my-2 text-xs">
+            <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg font-mono">1. Ich trinke einen <strong>heißen</strong> Tee. (Masc Akk)</div>
+            <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg font-mono">2. Das ist ein <strong>schönes</strong> Haus. (Neutro Nom)</div>
+            <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg font-mono">3. Die <strong>neuen</strong> Studenten lernen. (Plural Nom)</div>
+          </div>
+        )
       },
       {
         title: "Evaluador en Vivo: Declinación de Adjetivos",
