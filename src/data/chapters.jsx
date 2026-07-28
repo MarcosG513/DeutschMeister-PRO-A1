@@ -11045,56 +11045,173 @@ export const studyPlanModules = [
     title: 'Capítulo 11: Coordinación de Textos: Conectores Posición 0 y 1',
     presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
     slides: [
+      // SLIDE 1: ADUSO + REGLA DE PUNTUACIÓN + ABER VS SONDERN
       {
         title: "Zona Libre: Conectores Fantasma Posición 0 (ADUSO)",
-        subtitle: "Conecta oraciones sin alterar la regla V2 y domina la puntuación",
+        subtitle: "Conecta oraciones sin alterar la regla V2 y domina la puntuación obligatoria",
         content: props => (
-          <div className="space-y-3 my-2">
-            <p className="text-xs text-slate-600">Conectores de <strong>Posición 0</strong> (No alteran el orden de la oración):</p>
-            <div className="flex flex-wrap gap-1.5 justify-center font-mono font-bold text-xs">
-              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Aber</span>
-              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Denn</span>
-              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Und</span>
-              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Sondern</span>
-              <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded-lg border border-amber-300">Oder</span>
+          <div className="space-y-3.5 my-2">
+            <p className="text-slate-800 text-xs sm:text-sm leading-relaxed">
+              Los conectores coordinantes de <strong>Posición 0 (ADUSO)</strong> unen dos oraciones independientes. Actúan como "fantasmas sintácticos": no cuentan como posición y preservan la estructura intacta en la segunda oración:
+            </p>
+
+            {/* Grilla ADUSO */}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 font-mono text-xs text-center">
+              <div className="p-2 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <strong className="text-indigo-900 block font-bold text-sm">Aber</strong>
+                <span className="text-[10px] text-slate-500 font-sans">Pero</span>
+              </div>
+              <div className="p-2 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <strong className="text-indigo-900 block font-bold text-sm">Denn</strong>
+                <span className="text-[10px] text-slate-500 font-sans">Porque</span>
+              </div>
+              <div className="p-2 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <strong className="text-indigo-900 block font-bold text-sm">Und</strong>
+                <span className="text-[10px] text-slate-500 font-sans">Y</span>
+              </div>
+              <div className="p-2 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <strong className="text-indigo-900 block font-bold text-sm">Sondern</strong>
+                <span className="text-[10px] text-slate-500 font-sans">Sino</span>
+              </div>
+              <div className="p-2 bg-indigo-50 border border-indigo-200 rounded-lg col-span-2 sm:col-span-1">
+                <strong className="text-indigo-900 block font-bold text-sm">Oder</strong>
+                <span className="text-[10px] text-slate-500 font-sans">O</span>
+              </div>
             </div>
-            <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-900">
-              ⚠️ <strong>Coma Obligatoria:</strong> Exigen coma antes de <em>aber</em> y <em>denn</em>: <em>Ich möchte kommen, <strong>aber</strong> ich habe keine Zeit.</em>
+
+            {/* Fórmula Sintáctica */}
+            <div className="p-2.5 bg-slate-900 text-amber-300 rounded-xl font-mono text-xs text-center border border-slate-800 shadow-inner">
+              <code>[Conector Pos 0] + [Sujeto Pos 1] + [VERBO CONJUGADO Pos 2] + [Complementos]</code>
+            </div>
+
+            {/* Comparativa Aber vs Sondern */}
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5 text-xs">
+              <span className="font-bold text-slate-900 text-xs block">🔍 La Diferencia Crucial: Aber vs. Sondern</span>
+              <p className="text-slate-600">
+                • <strong>Aber (Pero):</strong> Añade una limitación o contraste sin contradecir la negación: <em>"Ich habe Zeit, aber ich bin müde."</em><br />
+                • <strong>Sondern (Sino):</strong> Exige una <strong>negación previa (nicht/kein)</strong> y rectifica la idea: <em>"Ich trinke keinen Tee, <strong>sondern</strong> Kaffee."</em>
+              </p>
+            </div>
+
+            {/* Alerta Roja de Puntuación */}
+            <div className="p-3 bg-rose-50 border-l-4 border-rose-500 rounded-r-xl text-xs space-y-1">
+              <span className="font-bold text-rose-950 block">⚠️ Regla de Oro de Puntuación (Penalización Directa Goethe-Schreiben):</span>
+              <p className="text-rose-900 leading-relaxed">
+                Los conectores <strong>aber</strong>, <strong>denn</strong> y <strong>sondern</strong> exigen <strong>OBLIGATORIAMENTE UNA COMA ANTES</strong> de su escritura. Omitirla resta puntos directos en la redacción de la prueba:<br />
+                • <em>Ich möchte kommen<strong>, aber</strong> ich habe keine Zeit.</em><br />
+                • <em>Ich bleibe zu Hause<strong>, denn</strong> ich bin krank.</em>
+              </p>
             </div>
           </div>
         )
       },
+
+      // SLIDE 2: CONECTORES POSICIÓN 1 + INVERSIÓN + COMPARATIVA
       {
         title: "Conectores Adverbiales de Posición 1 (dann, deshalb)",
-        subtitle: "Conectores que ocupan espacio y fuerzan la inversión verbal",
+        subtitle: "Conectores que ocupan espacio sintáctico y fuerzan la inversión verbal",
         content: props => (
-          <div className="space-y-3 my-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-              <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-xl space-y-1">
-                <span className="font-bold text-indigo-950 block">dann (luego)</span>
-                <p className="font-mono text-slate-700">..., dann <strong>gehe</strong> ich schlafen.</p>
+          <div className="space-y-3.5 my-2">
+            <p className="text-slate-800 text-xs sm:text-sm leading-relaxed">
+              A diferencia de ADUSO, conectores como <strong>dann</strong> (luego/después) y <strong>deshalb</strong> (por eso/por lo tanto) son adverbios. Ocupan físicamente la <strong>Posición 1</strong> de la segunda oración y <strong>FUERZAN INVERSIÓN VERBAL</strong> (el verbo salta a la Posición 2 antes del sujeto):
+            </p>
+
+            {/* Fórmula de Inversión */}
+            <div className="p-2.5 bg-slate-900 text-amber-300 rounded-xl font-mono text-xs text-center border border-slate-800 shadow-inner">
+              <code>[Conector Pos 1] + [VERBO CONJUGADO Pos 2] + [Sujeto Pos 3] + [Complementos]</code>
+            </div>
+
+            {/* Detalle de Conectores */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-xl space-y-1.5 text-xs">
+                <span className="font-bold text-amber-950 block text-sm">dann (luego / después)</span>
+                <p className="text-amber-900/80">Secuencia temporal de acciones consecuentes:</p>
+                <div className="p-2 bg-white rounded border border-amber-200 font-mono text-slate-800">
+                  Ich esse, <strong className="text-amber-800">dann</strong> <strong className="text-indigo-700">gehe</strong> ich schlafen.
+                </div>
               </div>
-              <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-xl space-y-1">
-                <span className="font-bold text-indigo-950 block">deshalb (por eso)</span>
-                <p className="font-mono text-slate-700">..., deshalb <strong>bleibe</strong> ich hier.</p>
+
+              <div className="p-3 bg-amber-50/80 border border-amber-200 rounded-xl space-y-1.5 text-xs">
+                <span className="font-bold text-amber-950 block text-sm">deshalb (por eso / consecuencia)</span>
+                <p className="text-amber-900/80">Causa ➔ Consecuencia directa:</p>
+                <div className="p-2 bg-white rounded border border-amber-200 font-mono text-slate-800">
+                  Ich bin krank, <strong className="text-amber-800">deshalb</strong> <strong className="text-indigo-700">bleibe</strong> ich zu Hause.
+                </div>
+              </div>
+            </div>
+
+            {/* Cuadro Comparativo Posición 0 vs Posición 1 */}
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+              <span className="font-bold text-slate-900 block text-xs">📊 Matriz Comparativa Directa de Posiciones:</span>
+              <div className="space-y-1.5 font-mono">
+                <div className="p-2 bg-white rounded border border-slate-200 flex justify-between items-center">
+                  <span className="text-slate-500 font-sans text-[11px]">Con ADUSO (Pos 0):</span>
+                  <span className="text-slate-800">...denn ich <strong className="text-indigo-700">bin</strong> krank.</span>
+                </div>
+                <div className="p-2 bg-white rounded border border-slate-200 flex justify-between items-center">
+                  <span className="text-slate-500 font-sans text-[11px]">Con Adverbio (Pos 1):</span>
+                  <span className="text-slate-800">...deshalb <strong className="text-indigo-700">bin</strong> ich krank.</span>
+                </div>
               </div>
             </div>
           </div>
         )
       },
+
+      // SLIDE 3: KIT DE REDACCIÓN OFICIAL Y EMAIL TEMPLATE
       {
         title: "Kit de Redacción A1 para el Examen Goethe (Schreiben)",
-        subtitle: "Estructura oficial para redactar correos y mensajes breves",
+        subtitle: "Estructura oficial para redactar correos, invitaciones y excusas breves",
         content: props => (
-          <div className="space-y-3 my-2">
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-2 font-mono">
-              <div className="text-slate-500 border-b pb-1">1. Saludo: <em>Liebe Maria, / Lieber Markus,</em></div>
-              <div className="text-slate-700 border-b pb-1">2. Cuerpo: <em>Ich komme am Samstag, denn ich habe Zeit.</em></div>
-              <div className="text-slate-900">3. Despedida: <em>Viele Grüße, [Dein Name]</em></div>
+          <div className="space-y-3.5 my-2">
+            <p className="text-slate-800 text-xs sm:text-sm leading-relaxed">
+              En la prueba escrita (<em>Schreiben Teil 2</em>), debes redactar una nota o correo breve (aprox. 30 palabras) cubriendo los 3 puntos solicitados. Sigue esta plantilla oficial:
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+              {/* 1. Saludo */}
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
+                <span className="font-bold text-slate-900 block text-xs border-b pb-1 border-slate-200">1. Encabezado y Saludo</span>
+                <p className="text-slate-600"><strong>Informal:</strong></p>
+                <p className="font-mono text-indigo-700">Liebe Maria, / Lieber Markus,</p>
+                <p className="text-slate-600 pt-1"><strong>Formal:</strong></p>
+                <p className="font-mono text-indigo-700">Sehr geehrte Frau Müller, / Sehr geehrter Herr Schneider,</p>
+              </div>
+
+              {/* 2. Cuerpo */}
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
+                <span className="font-bold text-slate-900 block text-xs border-b pb-1 border-slate-200">2. Cuerpo del Texto</span>
+                <p className="text-slate-600 leading-relaxed">
+                  Responde los 3 puntos del examen combinando frases simples con conectores (<em>denn, aber, deshalb</em>):
+                </p>
+                <p className="font-mono text-slate-800 bg-white p-1.5 rounded border border-slate-200 text-[11px]">
+                  Ich kann am Samstag nicht kommen, <strong>denn</strong> ich muss arbeiten.
+                </p>
+              </div>
+
+              {/* 3. Despedida */}
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
+                <span className="font-bold text-slate-900 block text-xs border-b pb-1 border-slate-200">3. Despedida Oficial</span>
+                <p className="text-slate-600"><strong>Informal:</strong></p>
+                <p className="font-mono text-indigo-700">Viele Grüße / Liebe Grüße,</p>
+                <p className="text-slate-600 pt-1"><strong>Formal:</strong></p>
+                <p className="font-mono text-indigo-700">Mit freundlichen Grüßen,</p>
+              </div>
+            </div>
+
+            {/* Alerta de Trampa de Redacción */}
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-950 space-y-1">
+              <span className="font-bold block">🚨 Trampa de Examen en el Saludo:</span>
+              <p className="leading-relaxed">
+                Después del saludo (ej: <em>Liebe Maria,</em>) siempre va una <strong>COMA</strong>, y la primera palabra del cuerpo de la carta debe empezar <strong>OBLIGATORIAMENTE EN MINÚSCULA</strong> (salvo que sea un sustantivo):<br />
+                • Correcto: <em>Liebe Maria,<br /><strong>i</strong>ch danke dir für die Einladung...</em>
+              </p>
             </div>
           </div>
         )
       },
+
+      // SLIDE 4: RETO INTERACTIVO
       {
         title: "Reto Interactivo: Constructor de Oraciones Compuestas",
         subtitle: "Ensambla bloques con conectores de Posición 0 y Posición 1",
