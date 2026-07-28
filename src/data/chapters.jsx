@@ -8,6 +8,8 @@ import PresentationVocabCard from '../components/PresentationVocabCard';
 import DraggableSentenceBuilder from '../components/DraggableSentenceBuilder';
 import AccusativeShield from '../components/AccusativeShield';
 import AccusativeCards from '../components/AccusativeCards';
+import SyntaxFlow from '../components/SyntaxFlow';
+import LocativeEquationCards from '../components/LocativeEquationCards';
 import MechanicalTimeline from '../components/MechanicalTimeline';
 import PincerSwitch from '../components/PincerSwitch';
 import LiveEvaluator from '../components/LiveEvaluator';
@@ -10588,7 +10590,19 @@ export const studyPlanModules = [
       {
         title: "La Ecuación del Espacio: ¿Wo? vs. ¿Wohin?",
         subtitle: "El dilema existencial de las 9 preposiciones de doble vía",
-        content: `Existen 9 preposiciones espaciales cuyo caso cambia según la dinámica del movimiento:\n\n**in** (dentro) | **an** (contacto vertical) | **auf** (contacto horizontal)\n**über** (encima sin contacto) | **unter** (debajo) | **vor** (delante)\n**hinter** (detrás) | **neben** (al lado) | **zwischen** (entre)\n\n📐 **LA ECUACIÓN MATEMÁTICA DEL ESPACIO:**\n\n$$\\text{¿Wo? (Ubicación / Reposo / Lugar Fijo)} \\implies \\mathbf{\\text{DATIVO}}$$\n$$\\text{¿Wohin? (Dirección / Movimiento } A \\to B) \\implies \\mathbf{\\text{ACUSATIVO}}$$\n\n* **Ejemplo ¿Wo? (Dativo):** *Das Buch liegt **auf dem** Tisch.* (El libro está quieto sobre la mesa).\n* **Ejemplo ¿Wohin? (Acusativo):** *Ich lege das Buch **auf den** Tisch.* (Pongo el libro viajando hacia la mesa).`
+        content: props => (
+          <div className="space-y-3">
+            <p className="text-slate-800 text-sm md:text-base leading-relaxed">
+              Existen 9 preposiciones espaciales cuyo caso cambia dinámicamente según la intención de la oración:
+            </p>
+            {/* Componente Modular de Ecuación Espacial */}
+            <LocativeEquationCards {...props}/>
+            <div className="space-y-1 text-xs sm:text-sm text-slate-700">
+              <p><strong>Ejemplo ¿Wo? (Dativo):</strong> Das Buch liegt <em>auf dem</em> Tisch. (El libro está quieto sobre la mesa).</p>
+              <p><strong>Ejemplo ¿Wohin? (Acusativo):</strong> Ich lege das Buch <em>auf den</em> Tisch. (Pongo el libro viajando hacia la mesa).</p>
+            </div>
+          </div>
+        )
       },
       {
         title: "Parejas Verbales: Estado vs. Acción de Colocar",
@@ -10621,7 +10635,27 @@ export const studyPlanModules = [
       {
         title: "El Efecto Pinza Verbal (Satzklammer)",
         subtitle: "El divorcio sintáctico de los verbos separables en presente",
-        content: `Los verbos separables (*Trennbare Verben*) están formados por un prefijo y un verbo base. En oraciones afirmativas o interrogativas, sufren una separación estructural:\n\n$$\\text{[Sujeto]} + \\mathbf{\\text{[VERBO BASE CONJUGADO] (Pos 2)}} + \\text{[Complementos]} + \\mathbf{\\text{[PREFIJO] (Final Absoluto)}}$$\n\n* **aufstehen (auf + stehen):** *Ich **stehe** jeden Morgen um 6 Uhr **auf**.*\n* **einkaufen (ein + kaufen):** *Er **kauft** im Supermarkt **ein**.*\n* **anrufen (an + rufen):** *Wir **rufen** dich später **an**.*\n\n⚠️ **En Preguntas:**\n* *W-Frage:* **Wann** **stehst** du **auf**?\n* *Ja/Nein-Frage:* **Kaufst** du heute **ein**?`
+        content: props => (
+          <div className="space-y-3">
+            <p className="text-slate-800 text-sm md:text-base leading-relaxed">
+              Los verbos separables (<em>Trennbare Verben</em>) están formados por un prefijo y un verbo base. En oraciones afirmativas o interrogativas, sufren una separación estructural:
+            </p>
+            {/* Componente Modular de Flujo Sintáctico */}
+            <SyntaxFlow 
+              steps={[
+                { badge: "1", name: "📌 Sujeto", description: "El ejecutor de la oración en Posición 1" },
+                { badge: "2", name: "🔥 Verbo Base Conjugado", description: "Ocupa la Posición 2 obligatoria" },
+                { badge: "3", name: "💬 Complementos", description: "Información extra (tiempo, modo, lugar)" },
+                { badge: "4", name: "🔒 Prefijo Separable", description: "Cierre de la pinza verbal al final absoluto" }
+              ]}
+              {...props} 
+            />
+            <div className="space-y-1 text-xs sm:text-sm text-slate-700 pt-1">
+              <p><strong>aufstehen:</strong> Ich <strong>stehe</strong> jeden Morgen um 6 Uhr <strong>auf</strong>.</p>
+              <p><strong>einkaufen:</strong> Er <strong>kauft</strong> im Supermarkt <strong>ein</strong>.</p>
+            </div>
+          </div>
+        )
       },
       {
         title: "El Escudo Inseparable: Prefijos que JAMÁS se Rompen",
@@ -10697,7 +10731,27 @@ export const studyPlanModules = [
       {
         title: "Estructura de Dos Pilares (Das Perfekt)",
         subtitle: "El pasado hablado en alemán mediante auxiliar y participio final",
-        content: `El pasado hablado (*Das Perfekt*) se construye como un rompecabezas de dos piezas interconectadas:\n\n$$\\text{[Sujeto]} + \\mathbf{\\text{[AUXILIAR HABEN / SEIN] (Pos 2)}} + \\text{[Relleno]} + \\mathbf{\\text{[PARTICIPIO II] (Final Absoluto)}}$$\n\n* *Presente:* Ich kaufe eine Pizza.\n* *Perfekt:* Ich **habe** eine Pizza **gekauft**.\n\n⚙️ **Formación del Participio II (Partizip II):**\n* **Verbos Regulares:** **ge-** + Raíz + **-t** (*ge-kauf-t*, *ge-mach-t*)\n* **Verbos Irregulares:** **ge-** + Raíz + **-en** (*ge-gess-en*, *ge-sehens-en*)\n* **Verbos terminados en -ieren:** **NO LLEVAN 'ge-'**: *studiert*, *fotografiert*.`
+        content: props => (
+          <div className="space-y-3">
+            <p className="text-slate-800 text-sm md:text-base leading-relaxed">
+              El pasado hablado (<em>Das Perfekt</em>) se construye como un rompecabezas mecánico de dos piezas interconectadas:
+            </p>
+            {/* Componente Modular de Flujo Sintáctico */}
+            <SyntaxFlow 
+              steps={[
+                { badge: "1", name: "📌 Sujeto", description: "El ejecutor de la oración" },
+                { badge: "2", name: "⚡ Auxiliar Conjugado (haben / sein)", description: "Verbo auxiliar en Posición 2" },
+                { badge: "3", name: "💬 Complementos (Relleno)", description: "Objetos directos, tiempo o lugar" },
+                { badge: "4", name: "🔒 Participio II (Partizip II)", description: "Acción pasada congelada al final (ge-...-t / -en)" }
+              ]}
+              {...props} 
+            />
+            <div className="space-y-1 text-xs sm:text-sm text-slate-700 pt-1">
+              <p><strong>Presente:</strong> Ich kaufe eine Pizza.</p>
+              <p><strong>Perfekt:</strong> Ich <strong>habe</strong> eine Pizza <strong>gekauft</strong>.</p>
+            </div>
+          </div>
+        )
       },
       {
         title: "Matriz de Selección: ¿Haben o Sein?",
