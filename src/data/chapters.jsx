@@ -7,6 +7,7 @@ const EmailSimulator = lazy(() => import('../components/EmailSimulator'));
 import PresentationVocabCard from '../components/PresentationVocabCard';
 import DraggableSentenceBuilder from '../components/DraggableSentenceBuilder';
 import AccusativeShield from '../components/AccusativeShield';
+import AccusativeCards from '../components/AccusativeCards';
 import MechanicalTimeline from '../components/MechanicalTimeline';
 import PincerSwitch from '../components/PincerSwitch';
 import LiveEvaluator from '../components/LiveEvaluator';
@@ -10509,7 +10510,18 @@ export const studyPlanModules = [
       {
         title: "El Filtro Masculino: La Regla de la N-Mutation",
         subtitle: "Por qué Femenino, Neutro y Plural son 100% inmunes al Acusativo",
-        content: `El caso Acusativo (Akkusativ) señala el **Objeto Directo** de la oración (¿Qué compras? ¿A quién buscas?).\n\n⚡ **REGLA DE ORO DE LA N-MUTATION:**\nEl Acusativo **SOLO ALTERA LOS ARTÍCULOS MASCULINOS**, añadiéndoles una terminación en **-en**. Todos los demás géneros quedan 100% INTACTOS.\n\n🔵 **Masculino (El único que cambia):**\n* **Artículo Determinado:** \`der Tisch\` ➔ \`den Tisch\`\n* **Artículo Indeterminado:** \`ein Apfel\` ➔ \`einen Apfel\`\n* **Artículo Negativo:** \`kein Hund\` ➔ \`keinen Hund\`\n* **Posesivo:** \`mein Bruder\` ➔ \`meinen Bruder\`\n*(💡 Toda la familia masculina añade -en al pasar a Objeto Directo)*\n\n🔴 **Femenino (Inmune):**\n* \`die Frau\` ➔ \`die Frau\`\n* \`eine Tomate\` ➔ \`eine Tomate\` *(Sin cambios)*\n\n🟢 **Neutro (Inmune):**\n* \`das Auto\` ➔ \`das Auto\`\n* \`ein Brot\` ➔ \`ein Brot\` *(Sin cambios)*\n\n🟣 **Plural (Inmune):**\n* \`die Bücher\` ➔ \`die Bücher\`\n* \`meine Kinder\` ➔ \`meine Kinder\` *(Sin cambios)*`
+        content: props => (
+          <div className="space-y-4">
+            <p className="text-slate-800 text-sm md:text-base leading-relaxed">
+              El caso Acusativo (Akkusativ) señala el <strong>Objeto Directo</strong> de la oración (¿Qué compras? ¿A quién buscas?).
+            </p>
+            <div className="p-3 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl text-amber-900 text-xs md:text-sm font-medium">
+              ⚡ <strong>REGLA DE ORO:</strong> El Acusativo <strong>SOLO ALTERA LOS ARTÍCULOS MASCULINOS</strong>, añadiendo la terminación <strong>-en</strong>. Los demás géneros son 100% inmunes.
+            </div>
+            {/* Componente Modular de Tarjetas de Acusativo */}
+            <AccusativeCards {...props}/>
+          </div>
+        )
       },
       {
         title: "Pronombres Personales de Objeto Directo",
