@@ -10700,20 +10700,158 @@ export const studyPlanModules = [
     title: 'Capítulo 9: El Modo Imperativo y Kit de Comunicación Oficial',
     presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
     slides: [
+      // SLIDE 1: LA TRÍADA SINTÁCTICA (DISEÑO EN 3 TARJETAS)
       {
         title: "La Tríada Sintáctica del Imperativo",
         subtitle: "Cómo dar instrucciones correctas eliminando pronombres y terminaciones",
-        content: `El modo imperativo se utiliza para dar órdenes, consejos, recetas médicas o hacer peticiones de servicio. Su construcción depende enteramente de tu interlocutor y sigue una regla de eliminación estricta:\n\n1. **du (Informal Singular - Tú):**\nMecánica: Tomas la forma conjugada del presente, eliminas el pronombre **du** y arrancas la terminación **-st**.\n* **Presente:** Du kommst ➔ **Imperativo:** Komm! *(¡Ven!)*\n* **Presente:** Du machst ➔ **Imperativo:** Mach! *(¡Haz!)*\n\n2. **ihr (Informal Plural - Vosotros):**\nMecánica: Es idéntico a la conjugación del presente, pero eliminas por completo el pronombre **ihr**. La terminación **-t** se conserva.\n* **Presente:** Ihr kommt ➔ **Imperativo:** Kommt! *(¡Venid!)*\n* **Presente:** Ihr macht ➔ **Imperativo:** Macht! *(¡Haced!)*\n\n3. **Sie (Formal Singular/Plural - Usted/Ustedes):**\nMecánica: Es una inversión sintáctica pura. Se mantiene el verbo en infinitivo y se coloca al inicio, seguido obligatoriamente del pronombre de cortesía.\n* **Presente:** Sie kommen ➔ **Imperativo:** Kommen Sie! *(Venga Usted / Vengan Ustedes)*\n\n📌 **Regla de Oro Sintáctica:** En el imperativo, el verbo (modificado o en infinitivo) ocupa de forma obligatoria la **Posición 1** de la oración.`
+        content: props => (
+          <div className="space-y-4 my-2">
+            <p className="text-slate-700 text-sm leading-relaxed">
+              El modo imperativo da órdenes, recetas y peticiones. Se construye eliminando elementos según tu interlocutor:
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Informal Singular: du */}
+              <div className="p-3.5 bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-xl space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-blue-900 dark:text-blue-200 text-sm">1. du (Tú)</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-200 text-blue-800">Informal</span>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400">Elimina el pronombre <strong>du</strong> y la terminación <strong>-st</strong>.</p>
+                <div className="bg-white dark:bg-slate-900 p-2 rounded-lg text-xs space-y-1 font-mono border border-blue-100">
+                  <div className="text-slate-400 line-through">Du kommst</div>
+                  <div className="text-blue-600 dark:text-blue-400 font-bold text-sm">➔ Komm!</div>
+                </div>
+              </div>
+
+              {/* Informal Plural: ihr */}
+              <div className="p-3.5 bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900/50 rounded-xl space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-indigo-900 dark:text-indigo-200 text-sm">2. ihr (Vosotros)</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-800">Plural</span>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400">Elimina el pronombre <strong>ihr</strong>. La <strong>-t</strong> se conserva.</p>
+                <div className="bg-white dark:bg-slate-900 p-2 rounded-lg text-xs space-y-1 font-mono border border-indigo-100">
+                  <div className="text-slate-400 line-through">Ihr kommt</div>
+                  <div className="text-indigo-600 dark:text-indigo-400 font-bold text-sm">➔ Kommt!</div>
+                </div>
+              </div>
+
+              {/* Formal: Sie */}
+              <div className="p-3.5 bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-900/50 rounded-xl space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-purple-900 dark:text-purple-200 text-sm">3. Sie (Usted)</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-200 text-purple-800">Formal</span>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400">Inversión sintáctica: <strong>Infinitivo + Sie</strong>.</p>
+                <div className="bg-white dark:bg-slate-900 p-2 rounded-lg text-xs space-y-1 font-mono border border-purple-100">
+                  <div className="text-slate-400">Sie kommen</div>
+                  <div className="text-purple-600 dark:text-purple-400 font-bold text-sm">➔ Kommen Sie!</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900 font-medium flex items-center gap-2">
+              <span>📌</span>
+              <span><strong>Regla de Oro:</strong> En el imperativo, el verbo conjugado siempre ocupa la <strong>Posición 1</strong>.</span>
+            </div>
+          </div>
+        )
       },
+
+      // SLIDE 2: EXCEPCIONES Y MUTACIONES (TARJETAS DE ALERTA DE EXAMEN)
       {
         title: "Excepciones Críticas y Mutaciones Vocálicas",
         subtitle: "Las tres grandes trampas del examen oficial del Goethe A1",
-        content: `Los examinadores evalúan con lupa los verbos que sufren alterations morfológicas. Memoriza estas tres reglas de supervivencia:\n\n1. **La Mutación Radical del Verbo sein (Ser / Estar):**\nNo sigue ninguna regla del presente. Aprende sus tres formas fijas de memoria:\n* **Para du:** Sei ruhig! *(¡Estate tranquilo!)*\n* **Para ihr:** Seid pünktlich! *(¡Sed puntuales!)*\n* **Para Sie:** Seien Sie vorsichtig! *(¡Tenga Usted cuidado!)*\n\n2. **El dilema del Umlaut (a ➔ ä):**\nLos verbos fuertes que añaden diéresis en el presente singular (*du fährst*) **PIERDEN EL UMLAUT** por completo en el imperativo:\n* **Presente:** Du fährst ➔ **Imperativo:** Fahr langsamer! *(¡Conduce más despacio! NUNCA Fähr!)*.\n\n3. **El cambio vocálico (e ➔ i / ie):**\nA diferencia del caso anterior, si el verbo cambia de e a i en presente, el imperativo **CONSERVA la mutación**, pero recuerda quitar la -st:\n* **Presente:** Du sprichst ➔ **Imperativo:** Sprich bitte langsam! *(¡Habla despacio, por favor!)*.\n* **Presente:** Du liest ➔ **Imperativo:** Lies den Text! *(¡Lee el texto!)*.`
+        content: props => (
+          <div className="space-y-3 my-2">
+            {/* Alerta 1: Verbo sein */}
+            <div className="p-3.5 bg-rose-50/80 border-l-4 border-rose-500 rounded-r-xl space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-rose-950 text-sm">1. Mutación Radical del Verbo sein</span>
+                <span className="text-[10px] bg-rose-200 text-rose-800 px-2 py-0.5 rounded-full font-bold">¡Irregular!</span>
+              </div>
+              <p className="text-xs text-rose-900/80">No sigue el presente. Aprende sus tres formas fijas de memoria:</p>
+              <div className="grid grid-cols-3 gap-1.5 pt-1 text-center text-xs font-mono">
+                <div className="bg-white p-1.5 rounded border border-rose-200"><strong>du:</strong> <span className="text-rose-600">Sei!</span></div>
+                <div className="bg-white p-1.5 rounded border border-rose-200"><strong>ihr:</strong> <span className="text-rose-600">Seid!</span></div>
+                <div className="bg-white p-1.5 rounded border border-rose-200"><strong>Sie:</strong> <span className="text-rose-600">Seien Sie!</span></div>
+              </div>
+            </div>
+
+            {/* Alerta 2: Pérdida del Umlaut */}
+            <div className="p-3.5 bg-amber-50/80 border-l-4 border-amber-500 rounded-r-xl space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-amber-950 text-sm">2. Pérdida del Umlaut (a ➔ ä)</span>
+                <span className="text-[10px] bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full font-bold">Trampa Goethe</span>
+              </div>
+              <p className="text-xs text-amber-900/80">Los verbos con Umlaut en presente <strong>LO PIERDEN</strong> en imperativo:</p>
+              <div className="bg-white p-2 rounded border border-amber-200 text-xs font-mono flex items-center justify-between">
+                <span className="text-slate-400">Du fährst</span>
+                <span className="text-amber-700 font-bold">➔ Fahr langsamer!</span>
+                <span className="text-[10px] text-rose-500 font-sans">(NUNCA *Fähr!)</span>
+              </div>
+            </div>
+
+            {/* Alerta 3: Cambio vocálico e -> i */}
+            <div className="p-3.5 bg-emerald-50/80 border-l-4 border-emerald-500 rounded-r-xl space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-emerald-950 text-sm">3. Cambio Vocálico (e ➔ i / ie)</span>
+                <span className="text-[10px] bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Conserva cambio</span>
+              </div>
+              <p className="text-xs text-emerald-900/80">Mantiene el cambio a <strong>i/ie</strong> pero elimina la terminación <strong>-st</strong>:</p>
+              <div className="bg-white p-2 rounded border border-emerald-200 text-xs font-mono space-y-1">
+                <div className="flex justify-between"><span>Du sprichst</span> <strong className="text-emerald-700">➔ Sprich bitte!</strong></div>
+                <div className="flex justify-between"><span>Du liest</span> <strong className="text-emerald-700">➔ Lies den Text!</strong></div>
+              </div>
+            </div>
+          </div>
+        )
       },
+
+      // SLIDE 3: KIT DE REDACCIÓN Y CORTESÍA (BLOQUES CON ICONOS)
       {
         title: "Kit de Redacción y Fórmulas de Cortesía",
-        subtitle: "Expresiones reales para las pruebas de interacción oral (Sprech-Cards) y cartas médicas",
-        content: `En el simulador de voz y en la sección escrita (*Schreiben*) tendrás que formular peticiones de inmediato. Utiliza estas estructuras nativas según el contexto del examen:\n\n🏥 **Entorno Médico y Salud (Verbo sollen + Imperativo):**\nPara dar consejos de salud oficiales, puedes usar el imperativo formal o suavizarlo con el verbo modal *sollen* (deber moral):\n* *Trinken Sie viel Wasser!* *(¡Beba mucha agua!)*\n* *Nehmen Sie die Tabletten vor dem Essen!* *(¡Tome las pastillas antes de la comida!)*\n* **Alternativa Modal:** *Du sollst im Bett bleiben.* *(Debes quedarte en la cama)*.\n\n🧳 **Entorno de Servicio y Convivencia (La Partícula bitte):**\nEl imperativo puro puede sonar agresivo para un nativo. En tus pruebas del Goethe, añade siempre la partícula **bitte** *(por favor)* inmediatamente después del verbo o del pronombre formal para ganar puntos de cortesía:\n* *Geben Sie mir bitte das Formular!* *(¡Deme el formulario, por favor!)*\n* *Machen Sie das Fenster bitte zu!* *(Ojo: verbo separable zumachen, el prefijo viaja al final absoluto)*.\n* *Wiederholen Sie das bitte!* *(¡Repita eso, por favor!)*.`
+        subtitle: "Expresiones reales para las pruebas orales (Sprech-Cards) y cartas médicas",
+        content: props => (
+          <div className="space-y-3.5 my-2">
+            {/* Bloque Médico */}
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
+                <span className="text-base">🏥</span>
+                <span>Entorno Médico y Salud (sollen + Imperativo)</span>
+              </div>
+              <div className="space-y-1.5 text-xs">
+                <div className="p-2 bg-white rounded-lg border border-slate-200 font-mono text-slate-800 flex justify-between">
+                  <span>Trinken Sie viel Wasser!</span>
+                  <span className="text-slate-400 font-sans">(¡Beba mucha agua!)</span>
+                </div>
+                <div className="p-2 bg-white rounded-lg border border-slate-200 font-mono text-slate-800 flex justify-between">
+                  <span>Nehmen Sie die Tabletten!</span>
+                  <span className="text-slate-400 font-sans">(¡Tome las pastillas!)</span>
+                </div>
+              </div>
+              <p className="text-[11px] text-indigo-700 font-medium">💡 Alternativa Modal: <em>Du sollst im Bett bleiben.</em> (Debes quedarte en cama).</p>
+            </div>
+
+            {/* Bloque Cortesía con bitte */}
+            <div className="p-3.5 bg-amber-50/60 border border-amber-200 rounded-xl space-y-2">
+              <div className="flex items-center gap-2 text-amber-950 font-bold text-sm">
+                <span className="text-base">🧳</span>
+                <span>Entorno de Servicio (La Partícula bitte)</span>
+              </div>
+              <p className="text-xs text-amber-900/80">Añade <strong>bitte</strong> inmediatamente después del verbo o pronombre formal:</p>
+              <div className="space-y-1.5 text-xs font-mono">
+                <div className="p-2 bg-white rounded-lg border border-amber-200 text-slate-800">
+                  Geben Sie mir <span className="bg-amber-200 text-amber-900 px-1 rounded font-bold">bitte</span> das Formular!
+                </div>
+                <div className="p-2 bg-white rounded-lg border border-amber-200 text-slate-800">
+                  Machen Sie das Fenster <span className="bg-amber-200 text-amber-900 px-1 rounded font-bold">bitte</span> zu!
+                </div>
+              </div>
+            </div>
+          </div>
+        )
       },
       {
         title: "Simulador de Voz: Comandos e Instrucciones Oficiales",
