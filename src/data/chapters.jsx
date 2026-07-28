@@ -10701,20 +10701,33 @@ export const studyPlanModules = [
     presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
     slides: [
       {
-        title: "La Tríada del Imperativo según el Interlocutor",
-        subtitle: "Dar órdenes, instrucciones, recetas médicas y peticiones de servicio",
-        content: `El imperativo se construye eliminando elementos según a quién te dirijas:\n\n1. **du (Informal Singular - Tú):**\nElimina el pronombre **du** y la terminación **-st**:\n* *du kommst* ➔ **Komm!** | *du machst* ➔ **Mach!**\n\n2. **ihr (Informal Plural - Vosotros):**\nElimina el pronombre **ihr** y conserva la **-t**:\n* *ihr kommt* ➔ **Kommt!** | *ihr macht* ➔ **Macht!**\n\n3. **Sie (Formal - Usted / Ustedes):**\nInvierte el orden: **Infinitivo + Sie**:\n* *Sie kommen* ➔ **Kommen Sie!** | *Sie machen* ➔ **Machen Sie!**`
+        title: "La Tríada Sintáctica del Imperativo",
+        subtitle: "Cómo dar instrucciones correctas eliminando pronombres y terminaciones",
+        content: `El modo imperativo se utiliza para dar órdenes, consejos, recetas médicas o hacer peticiones de servicio. Su construcción depende enteramente de tu interlocutor y sigue una regla de eliminación estricta:\n\n1. **du (Informal Singular - Tú):**\nMecánica: Tomas la forma conjugada del presente, eliminas el pronombre **du** y arrancas la terminación **-st**.\n* **Presente:** Du kommst ➔ **Imperativo:** Komm! *(¡Ven!)*\n* **Presente:** Du machst ➔ **Imperativo:** Mach! *(¡Haz!)*\n\n2. **ihr (Informal Plural - Vosotros):**\nMecánica: Es idéntico a la conjugación del presente, pero eliminas por completo el pronombre **ihr**. La terminación **-t** se conserva.\n* **Presente:** Ihr kommt ➔ **Imperativo:** Kommt! *(¡Venid!)*\n* **Presente:** Ihr macht ➔ **Imperativo:** Macht! *(¡Haced!)*\n\n3. **Sie (Formal Singular/Plural - Usted/Ustedes):**\nMecánica: Es una inversión sintáctica pura. Se mantiene el verbo en infinitivo y se coloca al inicio, seguido obligatoriamente del pronombre de cortesía.\n* **Presente:** Sie kommen ➔ **Imperativo:** Kommen Sie! *(Venga Usted / Vengan Ustedes)*\n\n📌 **Regla de Oro Sintáctica:** En el imperativo, el verbo (modificado o en infinitivo) ocupa de forma obligatoria la **Posición 1** de la oración.`
       },
       {
-        title: "Excepciones Críticas y Mutaciones en Imperativo",
-        subtitle: "Verbos fuertes y el comportamiento del auxiliar 'sein'",
-        content: `⚠️ **Excepciones de Examen Goethe A1:**\n\n1. **Verbos con cambio e ➔ i / ie:** Mantienen el cambio en la forma de *du*, pero **SIN TERMINACIÓN**:\n   * *sprechen* ➔ **Sprich!** (NUNCA \`*Sprichst!\`)\n   * *lesen* ➔ **Lies!** | *geben* ➔ **Gib mir das Brot!**\n\n2. **Verbos con Umlaut (a ➔ ä):** **PIERDEN EL UMLAUT** en imperativo:\n   * *fahren* ➔ **Fahr langsamer!** (NUNCA \`*Fähr!\`)\n\n3. **El Verbo sein (Ser/Estar):**\n   * **du:** **Sei ruhig!** *(¡Estate tranquilo!)*\n   * **ihr:** **Seid pünktlich!** *(¡Sed puntuales!)*\n   * **Sie:** **Seien Sie vorsichtig!** *(¡Tenga cuidado!)*`
+        title: "Excepciones Críticas y Mutaciones Vocálicas",
+        subtitle: "Las tres grandes trampas del examen oficial del Goethe A1",
+        content: `Los examinadores evalúan con lupa los verbos que sufren alterations morfológicas. Memoriza estas tres reglas de supervivencia:\n\n1. **La Mutación Radical del Verbo sein (Ser / Estar):**\nNo sigue ninguna regla del presente. Aprende sus tres formas fijas de memoria:\n* **Para du:** Sei ruhig! *(¡Estate tranquilo!)*\n* **Para ihr:** Seid pünktlich! *(¡Sed puntuales!)*\n* **Para Sie:** Seien Sie vorsichtig! *(¡Tenga Usted cuidado!)*\n\n2. **El dilema del Umlaut (a ➔ ä):**\nLos verbos fuertes que añaden diéresis en el presente singular (*du fährst*) **PIERDEN EL UMLAUT** por completo en el imperativo:\n* **Presente:** Du fährst ➔ **Imperativo:** Fahr langsamer! *(¡Conduce más despacio! NUNCA Fähr!)*.\n\n3. **El cambio vocálico (e ➔ i / ie):**\nA diferencia del caso anterior, si el verbo cambia de e a i en presente, el imperativo **CONSERVA la mutación**, pero recuerda quitar la -st:\n* **Presente:** Du sprichst ➔ **Imperativo:** Sprich bitte langsam! *(¡Habla despacio, por favor!)*.\n* **Presente:** Du liest ➔ **Imperativo:** Lies den Text! *(¡Lee el texto!)*.`
+      },
+      {
+        title: "Kit de Redacción y Fórmulas de Cortesía",
+        subtitle: "Expresiones reales para las pruebas de interacción oral (Sprech-Cards) y cartas médicas",
+        content: `En el simulador de voz y en la sección escrita (*Schreiben*) tendrás que formular peticiones de inmediato. Utiliza estas estructuras nativas según el contexto del examen:\n\n🏥 **Entorno Médico y Salud (Verbo sollen + Imperativo):**\nPara dar consejos de salud oficiales, puedes usar el imperativo formal o suavizarlo con el verbo modal *sollen* (deber moral):\n* *Trinken Sie viel Wasser!* *(¡Beba mucha agua!)*\n* *Nehmen Sie die Tabletten vor dem Essen!* *(¡Tome las pastillas antes de la comida!)*\n* **Alternativa Modal:** *Du sollst im Bett bleiben.* *(Debes quedarte en la cama)*.\n\n🧳 **Entorno de Servicio y Convivencia (La Partícula bitte):**\nEl imperativo puro puede sonar agresivo para un nativo. En tus pruebas del Goethe, añade siempre la partícula **bitte** *(por favor)* inmediatamente después del verbo o del pronombre formal para ganar puntos de cortesía:\n* *Geben Sie mir bitte das Formular!* *(¡Deme el formulario, por favor!)*\n* *Machen Sie das Fenster bitte zu!* *(Ojo: verbo separable zumachen, el prefijo viaja al final absoluto)*.\n* *Wiederholen Sie das bitte!* *(¡Repita eso, por favor!)*.`
       },
       {
         title: "Simulador de Voz: Comandos e Instrucciones Oficiales",
         subtitle: "Escucha órdenes médicas e instrucciones formales del Goethe A1",
         content: props => (
-          <VoiceExaminer autoStart={false} isInteractive={true} mode="imperative_commands" {...props}/>
+          <VoiceExaminer 
+            autoStart={false} 
+            isInteractive={true} 
+            mode="imperative_commands" 
+            question="Repite o responde con un comando oficial: 'Sprechen Sie bitte langsam!'"
+            expectedKeywords={["sprechen", "kommen", "nehmen", "langsam", "herein", "platz", "sei", "seid", "seien"]}
+            note="Tip Examen Goethe A1: El imperativo formal invierte el orden: 'Kommen Sie bitte!'"
+            {...props}
+          />
         )
       }
     ]
