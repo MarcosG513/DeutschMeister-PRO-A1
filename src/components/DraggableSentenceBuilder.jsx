@@ -20,7 +20,10 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
     }
   }, [sentencePool, subject, verb, complement]);
 
-  const { subject: activeSubject, verb: activeVerb, complement: activeComplement } = currentSentence || {};
+  const rawSentence = currentSentence || {};
+  const activeSubject = rawSentence.subject || (rawSentence.words ? rawSentence.words[0] : null);
+  const activeVerb = rawSentence.verb || (rawSentence.words ? rawSentence.words[1] : null);
+  const activeComplement = rawSentence.complement || (rawSentence.words ? rawSentence.words.slice(2).join(" ") : null);
 
   // Inicializar y desordenar palabras en el pool
   useEffect(() => {

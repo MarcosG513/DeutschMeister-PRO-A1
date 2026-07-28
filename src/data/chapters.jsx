@@ -10421,11 +10421,9 @@ export const studyPlanModules = [
           <DraggableSentenceBuilder 
             mode="inversion"
             pool={[
-              { subject: "Ich", verb: "lerne", complement: "heute Deutsch" },
-              { subject: "Heute", verb: "lerne", complement: "ich Deutsch" },
-              { subject: "Wir", verb: "trinken", complement: "einen Kaffee" },
-              { subject: "Am Morgen", verb: "trinken", complement: "wir einen Kaffee" }
-            ]} 
+              { id: 1, words: ["Heute", "wohne", "ich", "in Madrid"], correctOrder: ["Heute", "wohne", "ich", "in Madrid"] },
+              { id: 2, words: ["Am Morgen", "trinken", "wir", "einen Kaffee"], correctOrder: ["Am Morgen", "trinken", "wir", "einen Kaffee"] }
+            ]}
             {...props} 
           />
         )
@@ -10459,10 +10457,10 @@ export const studyPlanModules = [
           <AccusativeShield 
             mode="possessives"
             words={[
-              { word: "Vater", gender: "der", translation: "padre (mein Vater)" },
-              { word: "Mutter", gender: "die", translation: "madre (meine Mutter)" },
-              { word: "Kind", gender: "das", translation: "hijo/a (dein Kind)" },
-              { word: "Eltern", gender: "die", translation: "padres (seine Eltern)" }
+              { id: 1, word: "Vater", type: "Masc", gender: "der", correct: "mein", alt: "meine", translation: "padre (mein Vater)" },
+              { id: 2, word: "Mutter", type: "Fem", gender: "die", correct: "meine", alt: "mein", translation: "madre (meine Mutter)" },
+              { id: 3, word: "Kind", type: "Neutro", gender: "das", correct: "dein", alt: "deine", translation: "hijo/a (dein Kind)" },
+              { id: 4, word: "Eltern", type: "Plural", gender: "die", correct: "seine", alt: "sein", translation: "padres (seine Eltern)" }
             ]}
             {...props} 
           />
@@ -10494,7 +10492,7 @@ export const studyPlanModules = [
         title: "Simulador Interactivo: El Reloj Alemán",
         subtitle: "Mueve las manecillas y alterna entre hora formal e informal",
         content: props => (
-          <TimeClockSimulator mode="clock_and_preps" {...props}/>
+          <TimeClockSimulator initialTime="14:30" isInteractive={true} {...props} />
         )
       }
     ]
@@ -10530,10 +10528,10 @@ export const studyPlanModules = [
           <AccusativeShield 
             mode="pronouns"
             words={[
-              { word: "Mann", gender: "der", translation: "hombre (den Mann / ihn)" },
-              { word: "Kaffee", gender: "der", translation: "café (einen Kaffee)" },
-              { word: "Frau", gender: "die", translation: "mujer (die Frau / sie)" },
-              { word: "Brot", gender: "das", translation: "pan (das Brot / es)" }
+              { id: 1, word: "den Mann", type: "Masc", gender: "der", correct: "ihn", alt: "er", translation: "hombre (den Mann / ihn)" },
+              { id: 2, word: "einen Kaffee", type: "Masc", gender: "der", correct: "einen", alt: "ein", translation: "café (einen Kaffee)" },
+              { id: 3, word: "die Frau", type: "Fem", gender: "die", correct: "sie", alt: "ihr", translation: "mujer (die Frau / sie)" },
+              { id: 4, word: "das Brot", type: "Neutro", gender: "das", correct: "ein", alt: "einen", translation: "pan (das Brot / es)" }
             ]}
             {...props} 
           />
@@ -10735,8 +10733,8 @@ export const studyPlanModules = [
           <DraggableSentenceBuilder 
             mode="advanced_connectors"
             pool={[
-              { subject: "Ich lerne Deutsch", verb: "und", complement: "ich verstehe alles" },
-              { subject: "Er ist müde", verb: "deshalb", complement: "geht er ins Bett" }
+              { id: 1, words: ["Ich lerne Deutsch", "und", "ich", "verstehe", "alles"], correctOrder: ["Ich lerne Deutsch", "und", "ich", "verstehe", "alles"] },
+              { id: 2, words: ["Er ist müde", "deshalb", "geht", "er", "ins Bett"], correctOrder: ["Er ist müde", "deshalb", "geht", "er", "ins Bett"] }
             ]}
             {...props} 
           />

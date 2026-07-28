@@ -118,19 +118,27 @@ const PresentationViewer = ({
   const renderSlideContent = (slide, props) => {
     if (!slide || !slide.content) return null;
 
-    // 1. Renderizado de Componentes Interactivos (Función JSX: VoiceExaminer, AccusativeShield, etc.)
+    // 1. Ejecutar componentes interactivos si es una función de React
     if (typeof slide.content === 'function') {
-      return slide.content(props);
+      return (
+        <div className="w-full my-2 animate-in fade-in zoom-in-95 duration-200">
+          {slide.content(props)}
+        </div>
+      );
     }
 
     // 2. Si es un elemento React JSX directo
     if (React.isValidElement(slide.content)) {
-      return slide.content;
+      return (
+        <div className="w-full my-2 animate-in fade-in zoom-in-95 duration-200">
+          {slide.content}
+        </div>
+      );
     }
 
-    // 3. Renderizado de Texto, Tablas, Fórmulas y Listas en Markdown
+    // 3. Procesar contenido en formato Texto / Markdown / Tablas
     if (typeof slide.content === 'string') {
-      // Sanitización global de asteriscos huérfanos y símbolos
+      // Sanitización inicial
       const cleanContent = slide.content
         .replace(/([a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\)\]\:\;\,\.\/\-])\*(?!\*)/g, '$1')
         .replace(/(?<!\*)\*(?!\*)/g, '')
@@ -139,41 +147,24 @@ const PresentationViewer = ({
       const blocks = cleanContent.split('\n\n');
 
       return (
-        <div className="space-y-4 text-slate-800 leading-relaxed text-left max-w-4xl mx-auto">
+        <div className="space-y-4 text-slate-800 leading-relaxed text-sm md:text-base text-left max-w-4xl mx-auto">
           {blocks.map((block, bIdx) => {
             const lines = block.split('\n').filter(l => l.trim() !== '');
             if (lines.length === 0) return null;
 
-            // A. Detección de FÓRMULAS / SINTAXIS (\text{...} o $$)
-            if (block.includes('\\text{') || block.includes('$$') || block.includes('\\mathbf{')) {
-              const cleanFormula = block
-                .replace(/\$\$/g, '')
-                .replace(/\\text\{([^}]+)\}/g, '$1')
-                .replace(/\\mathbf\{([^}]+)\}/g, '$1')
-                .replace(/\\implies/g, '➔')
-                .replace(/\\to/g, '➔')
-                .trim();
-
-              return (
-                <div key={bIdx} className="my-3 p-4 bg-gradient-to-r from-indigo-950 to-slate-900 text-amber-300 rounded-xl font-mono text-center text-sm md:text-base shadow-lg border border-indigo-700/50">
-                  {formatInlineMarkdown(cleanFormula)}
-                </div>
-              );
-            }
-
-            // B. Detección de TABLAS MARKDOWN (| col1 | col2 |)
+            // A. TABLAS MARKDOWN ESTILIZADAS CON TAILWIND
             if (lines.length >= 2 && lines[0].includes('|') && lines[1].includes('|')) {
               const tableRows = lines.filter(line => !line.includes('---'));
               const headerCells = tableRows[0].split('|').map(c => c.trim()).filter(Boolean);
               const bodyRows = tableRows.slice(1).map(row => row.split('|').map(c => c.trim()).filter(Boolean));
 
               return (
-                <div key={bIdx} className="my-4 overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
-                  <table className="w-full text-left text-sm border-collapse bg-white">
+                <div key={bIdx} className="my-4 overflow-x-auto rounded-xl border border-slate-200 shadow-sm bg-white">
+                  <table className="w-full text-left text-xs sm:text-sm border-collapse">
                     <thead>
-                      <tr className="bg-slate-900 text-white font-semibold">
+                      <tr className="bg-indigo-950 text-white font-semibold">
                         {headerCells.map((cell, hIdx) => (
-                          <th key={hIdx} className="p-3 border-b border-slate-700">
+                          <th key={hIdx} className="p-3 border-b border-indigo-900">
                             {formatInlineMarkdown(cell)}
                           </th>
                         ))}
@@ -181,7 +172,7 @@ const PresentationViewer = ({
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {bodyRows.map((row, rIdx) => (
-                        <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}>
+                        <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50/70'}>
                           {row.map((cell, cIdx) => (
                             <td key={cIdx} className="p-3 text-slate-700 font-medium">
                               {formatInlineMarkdown(cell)}
@@ -195,16 +186,33 @@ const PresentationViewer = ({
               );
             }
 
-            // C. Detección de LISTAS (* ítem o - ítem)
+            // B. FÓRMULAS Y ESTRUCTURAS SINTÁCTICAS ($$ o \text)
+            if (block.includes('$$') || block.includes('\\text{') || block.includes('\\mathbf{')) {
+              const cleanFormula = block
+                .replace(/\$\$/g, '')
+                .replace(/\\text\{([^}]+)\}/g, '$1')
+                .replace(/\\mathbf\{([^}]+)\}/g, '$1')
+                .replace(/\\implies/g, '➔')
+                .replace(/\\to/g, '➔')
+                .trim();
+
+              return (
+                <div key={bIdx} className="my-3 p-4 bg-gradient-to-r from-slate-900 to-indigo-950 text-amber-300 rounded-xl font-mono text-center text-xs md:text-sm border border-indigo-700/40 shadow-inner">
+                  {cleanFormula}
+                </div>
+              );
+            }
+
+            // C. LISTAS CON VIÑETA
             if (lines.every(l => l.trim().startsWith('* ') || l.trim().startsWith('- '))) {
               return (
-                <ul key={bIdx} className="space-y-2 my-2 pl-2">
+                <ul key={bIdx} className="space-y-2 my-2 pl-1">
                   {lines.map((line, lIdx) => {
                     const itemText = line.trim().replace(/^[\*\-]\s+/, '');
                     return (
-                      <li key={lIdx} className="flex items-start gap-2 text-base text-slate-700">
-                        <span className="inline-block w-2 h-2 rounded-full bg-indigo-500 mt-2 shrink-0" />
-                        <span>{formatInlineMarkdown(itemText)}</span>
+                      <li key={lIdx} className="flex items-start gap-2.5 text-slate-700">
+                        <span className="inline-block w-2 h-2 rounded-full bg-indigo-600 mt-2 shrink-0" />
+                        <div>{formatInlineMarkdown(itemText)}</div>
                       </li>
                     );
                   })}
@@ -212,11 +220,11 @@ const PresentationViewer = ({
               );
             }
 
-            // D. PÁRRAFO ESTÁNDAR CON SALTOS SIMPLES
+            // D. PÁRRAFO ESTÁNDAR
             return (
-              <div key={bIdx} className="space-y-1">
+              <div key={bIdx} className="space-y-1.5">
                 {lines.map((line, lIdx) => (
-                  <p key={lIdx} className="text-base leading-relaxed">
+                  <p key={lIdx} className="leading-relaxed">
                     {formatInlineMarkdown(line)}
                   </p>
                 ))}
@@ -227,7 +235,7 @@ const PresentationViewer = ({
       );
     }
 
-    return slide.content;
+    return null;
   };
 
   return (

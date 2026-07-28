@@ -18,12 +18,15 @@ const AccusativeShield = ({ words = [] }) => {
   const [finished, setFinished] = useState(false);
   const [shieldApplied, setShieldApplied] = useState(false);
 
-  const currentWord = list[currentIndex];
+  const currentRaw = list[currentIndex] || {};
+  const effectiveGender = currentRaw.gender || (currentRaw.type === "Masc" ? "der" : currentRaw.type === "Fem" ? "die" : currentRaw.type === "Neutro" ? "das" : "die");
+  const wordText = currentRaw.word || currentRaw.de || "";
+  const currentWord = { ...currentRaw, gender: effectiveGender, word: wordText };
 
   const handleAction = (applyShield) => {
     if (showFeedback) return;
 
-    const isMasculine = currentWord.gender === "der";
+    const isMasculine = currentWord.gender === "der" || currentRaw.type === "Masc";
     let correct = false;
     let explanation = "";
 
