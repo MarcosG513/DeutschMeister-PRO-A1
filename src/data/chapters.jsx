@@ -11233,42 +11233,185 @@ export const studyPlanModules = [
     title: 'Capítulo 12: Declinación de Adjetivos en A1 (Débil y Mixta)',
     presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
     slides: [
+      // SLIDE 1: DECLINACIÓN DÉBIL (SCHWACHE DEKLINATION)
       {
-        title: "Declinación Débil (Tras Artículo Determinado)",
-        subtitle: "Cuando der / die / das ya señalan el género del sustantivo",
+        title: "Declinación Débil (Tras Artículo Determinado: der / die / das)",
+        subtitle: "Principio de Redundancia: Cuando el artículo ya muestra el género con claridad",
         content: props => (
-          <div className="space-y-3 my-2">
-            <p className="text-slate-700 text-xs sm:text-sm">El artículo ya señala el género. El adjetivo añade terminaciones sencillas:</p>
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-lg">der gut<strong>e</strong> Mann (Nom)</div>
-              <div className="p-2.5 bg-sky-50 border border-sky-200 rounded-lg">den gut<strong>en</strong> Mann (Akk)</div>
+          <div className="space-y-3.5 my-2">
+            <p className="text-slate-800 text-xs sm:text-sm leading-relaxed">
+              Cuando el sustantivo lleva un artículo determinado (<strong>der, die, das</strong>), este artículo ya 'enseña la bandera' del género y caso. Por tanto, el adjetivo no necesita esforzarse y adopta una terminación 'débil' súper sencilla dividida en 2 clubes:
+            </p>
+
+            {/* Comparativa El Club de la -E vs El Club de la -EN */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              {/* El Club de la -E */}
+              <div className="p-3 bg-indigo-50/80 border border-indigo-200 rounded-xl space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-indigo-950 text-sm">1. El Club de la -e</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-800">Singular Base</span>
+                </div>
+                <p className="text-indigo-900/80 text-[11px]">Se usa en <strong>Nominativo Singular</strong> (todos) y <strong>Acusativo Femenino/Neutro</strong>:</p>
+                <div className="space-y-1 font-mono text-[11px]">
+                  <div className="p-1.5 bg-white rounded border border-indigo-100 flex justify-between">
+                    <span>🔵 Masc Nom:</span>
+                    <strong className="text-indigo-700">der gut-e Mann</strong>
+                  </div>
+                  <div className="p-1.5 bg-white rounded border border-indigo-100 flex justify-between">
+                    <span>🔴 Fem Nom/Akk:</span>
+                    <strong className="text-indigo-700">die schön-e Frau</strong>
+                  </div>
+                  <div className="p-1.5 bg-white rounded border border-indigo-100 flex justify-between">
+                    <span>🟢 Neut Nom/Akk:</span>
+                    <strong className="text-indigo-700">das klein-e Kind</strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* El Club de la -EN */}
+              <div className="p-3 bg-rose-50/80 border border-rose-200 rounded-xl space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-rose-950 text-sm">2. El Club de la -en</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-200 text-rose-800">Akk Masc + Plural</span>
+                </div>
+                <p className="text-rose-900/80 text-[11px]">Se activa en <strong>Acusativo Masculino</strong>, en <strong>Dativo</strong> y en <strong>TODOS los Plurales</strong>:</p>
+                <div className="space-y-1 font-mono text-[11px]">
+                  <div className="p-1.5 bg-white rounded border border-rose-100 flex justify-between">
+                    <span>🔵 Masc Akk:</span>
+                    <strong className="text-rose-700">den gut-en Mann</strong>
+                  </div>
+                  <div className="p-1.5 bg-white rounded border border-rose-100 flex justify-between">
+                    <span>🟣 Plural (Todos):</span>
+                    <strong className="text-rose-700">die alt-en Bücher</strong>
+                  </div>
+                  <div className="p-1.5 bg-white rounded border border-rose-100 flex justify-between">
+                    <span>📍 Dativo (Todos):</span>
+                    <strong className="text-rose-700">mit dem alt-en Mann</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-950">
+              💡 <strong>Regla Mnemotécnica:</strong> Si hay un cambio de artículo (ej. <em>der ➔ den</em> o en Dativo <em>dem/der</em>) o es plural, ¡el adjetivo siempre termina en <strong>-en</strong>!
             </div>
           </div>
         )
       },
+
+      // SLIDE 2: DECLINACIÓN MIXTA (GEMISCHTE DEKLINATION)
       {
-        title: "Declinación Mixta (Tras Artículo Indeterminado / kein / mein)",
-        subtitle: "El adjetivo rescata la bandera de género que el artículo indefinido no muestra",
+        title: "Declinación Mixta (Tras ein / kein / Posesivos: mein, dein...)",
+        subtitle: "La Bandera de Rescate (Signalendung): Cuando el adjetivo debe revelar el género",
         content: props => (
-          <div className="space-y-3 my-2">
-            <p className="text-slate-700 text-xs sm:text-sm">El adjetivo rescata la bandera de género:</p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono text-center">
-              <div className="p-2 bg-blue-50 border border-blue-200 rounded-lg">ein gut<strong>er</strong> (Masc)</div>
-              <div className="p-2 bg-rose-50 border border-rose-200 rounded-lg">eine schön<strong>e</strong> (Fem)</div>
-              <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-lg">ein kalt<strong>es</strong> (Neutro)</div>
-              <div className="p-2 bg-purple-50 border border-purple-200 rounded-lg">meine alt<strong>en</strong> (Plural)</div>
+          <div className="space-y-3.5 my-2">
+            <p className="text-slate-800 text-xs sm:text-sm leading-relaxed">
+              Las palabras <strong>ein</strong> (masculino) y <strong>ein</strong> (neutro) son idénticas en Nominativo. Al no revelar el género, el adjetivo está obligado a <strong>rescatar la bandera cromática</strong> del artículo determinado (<em>der, die, das</em>):
+            </p>
+
+            {/* Grilla de Rescate de Banderas */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono">
+              {/* Masculino */}
+              <div className="p-3 bg-blue-50/80 border border-blue-200 rounded-xl space-y-1">
+                <div className="flex justify-between items-center font-sans mb-1">
+                  <span className="font-bold text-blue-900">🔵 Masculino (Rescata -er de 'der')</span>
+                </div>
+                <div className="p-2 bg-white rounded border border-blue-100 text-slate-800 flex justify-between">
+                  <span>ein gut<strong className="text-blue-700 underline decoration-2">-er</strong> Mann</span>
+                  <span className="text-[10px] text-slate-400 font-sans">(Nominativo)</span>
+                </div>
+                <div className="p-2 bg-white rounded border border-blue-100 text-slate-800 flex justify-between">
+                  <span>einen alt<strong className="text-rose-600 underline decoration-2">-en</strong> Käse</span>
+                  <span className="text-[10px] text-slate-400 font-sans">(Acusativo)</span>
+                </div>
+              </div>
+
+              {/* Neutro */}
+              <div className="p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl space-y-1">
+                <div className="flex justify-between items-center font-sans mb-1">
+                  <span className="font-bold text-emerald-900">🟢 Neutro (Rescata -es de 'das')</span>
+                </div>
+                <div className="p-2 bg-white rounded border border-emerald-100 text-slate-800 flex justify-between">
+                  <span>ein kalt<strong className="text-emerald-700 underline decoration-2">-es</strong> Bier</span>
+                  <span className="text-[10px] text-slate-400 font-sans">(Nom/Akk)</span>
+                </div>
+                <div className="p-2 bg-white rounded border border-emerald-100 text-slate-800 flex justify-between">
+                  <span>mein neues<strong className="text-emerald-700 underline decoration-2">-es</strong> Auto</span>
+                  <span className="text-[10px] text-slate-400 font-sans">(Posesivo)</span>
+                </div>
+              </div>
+
+              {/* Femenino */}
+              <div className="p-3 bg-rose-50/80 border border-rose-200 rounded-xl space-y-1">
+                <div className="flex justify-between items-center font-sans mb-1">
+                  <span className="font-bold text-rose-900">🔴 Femenino (Rescata -e de 'die')</span>
+                </div>
+                <div className="p-2 bg-white rounded border border-rose-100 text-slate-800 flex justify-between">
+                  <span>eine schön<strong className="text-rose-700 underline decoration-2">-e</strong> Frau</span>
+                  <span className="text-[10px] text-slate-400 font-sans">(Nom/Akk)</span>
+                </div>
+              </div>
+
+              {/* Plural (keine / meine) */}
+              <div className="p-3 bg-purple-50/80 border border-purple-200 rounded-xl space-y-1">
+                <div className="flex justify-between items-center font-sans mb-1">
+                  <span className="font-bold text-purple-900">🟣 Plural (Siempre -en)</span>
+                </div>
+                <div className="p-2 bg-white rounded border border-purple-100 text-slate-800 flex justify-between">
+                  <span>meine alt<strong className="text-purple-700 underline decoration-2">-en</strong> Bücher</span>
+                  <span className="text-[10px] text-slate-400 font-sans">(Plural)</span>
+                </div>
+              </div>
             </div>
           </div>
         )
       },
+
+      // SLIDE 3: ATAJOS Y LA TRAMPA PREDICATIVA
       {
-        title: "Matriz Resumen y Ejemplos de Examen Goethe A1",
-        subtitle: "Entrenamiento directo para preguntas de lectura y opción múltiple",
+        title: "Atajos de Examen Goethe A1 y La Trampa Predicativa",
+        subtitle: "Cuándo el adjetivo NO se declina y la regla de aceleración de respuesta",
         content: props => (
-          <div className="space-y-2 my-2 text-xs">
-            <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg font-mono">1. Ich trinke einen <strong>heißen</strong> Tee. (Masc Akk)</div>
-            <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg font-mono">2. Das ist ein <strong>schönes</strong> Haus. (Neutro Nom)</div>
-            <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg font-mono">3. Die <strong>neuen</strong> Studenten lernen. (Plural Nom)</div>
+          <div className="space-y-3.5 my-2">
+            {/* Trampa #1: Adjetivo Predicativo */}
+            <div className="p-3.5 bg-rose-50 border-l-4 border-rose-500 rounded-r-xl space-y-1.5 text-xs">
+              <div className="flex justify-between items-center">
+                <span className="font-bold text-rose-950 text-sm">🚨 TRAMPA #1 DEL GOETHE: Adjetivo Predicativo (SIN DECLINACIÓN)</span>
+                <span className="text-[10px] bg-rose-200 text-rose-800 font-bold px-2 py-0.5 rounded-full">Atención</span>
+              </div>
+              <p className="text-rose-900 leading-relaxed">
+                Si el adjetivo va <strong>DETRÁS del verbo</strong> (especialmente con <em>sein, werden, bleiben</em>) y NO acompaña directamente a un sustantivo, <strong>¡NO SE DECLINA NUNCA!</strong>
+              </p>
+              <div className="space-y-1 font-mono pt-1">
+                <div className="p-2 bg-white rounded border border-rose-200 flex justify-between text-slate-800">
+                  <span>• Das Auto ist <strong className="text-rose-600">neu</strong>.</span>
+                  <span className="text-slate-400 font-sans text-[11px]">(Detrás del verbo ➔ SIN terminación)</span>
+                </div>
+                <div className="p-2 bg-white rounded border border-rose-200 flex justify-between text-slate-800">
+                  <span>• Das <strong className="text-indigo-700">neue</strong> Auto ist teuer.</span>
+                  <span className="text-slate-400 font-sans text-[11px]">(Delante del sustantivo ➔ Se declina)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Atajo #2: El Algoritmo Rápido -EN */}
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+              <span className="font-bold text-slate-900 block text-xs">⚡ Algoritmo de Respuesta Rápida para Preguntas Múltiples:</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-[11px]">
+                <div className="p-2 bg-white rounded border border-slate-200 text-center">
+                  <span className="text-slate-500 font-sans block text-[10px]">¿Es Plural?</span>
+                  <strong className="text-indigo-700 text-xs">Terminación -EN</strong>
+                </div>
+                <div className="p-2 bg-white rounded border border-slate-200 text-center">
+                  <span className="text-slate-500 font-sans block text-[10px]">¿Acusativo Masc (den/einen)?</span>
+                  <strong className="text-indigo-700 text-xs">Terminación -EN</strong>
+                </div>
+                <div className="p-2 bg-white rounded border border-slate-200 text-center">
+                  <span className="text-slate-500 font-sans block text-[10px]">¿Dativo (dem/der/den)?</span>
+                  <strong className="text-indigo-700 text-xs">Terminación -EN</strong>
+                </div>
+              </div>
+            </div>
           </div>
         )
       },
