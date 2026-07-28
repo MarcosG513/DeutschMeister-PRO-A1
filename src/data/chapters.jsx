@@ -10436,7 +10436,7 @@ export const studyPlanModules = [
   {
     id: 'sp_2',
     title: 'Capítulo 2: El Universo del Sustantivo (Géneros, Plurales y Posesivos)',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/1ydPXeoc5VGUyyP2C-_eBo7e0RB-CTTGS/view?usp=drive_web',
     slides: [
       {
         title: "Tríada Cromática y Pistas Morfológicas de Género",
@@ -10474,7 +10474,7 @@ export const studyPlanModules = [
   {
     id: 'sp_3',
     title: 'Capítulo 3: Negación Integral y la Arquitectura del Tiempo',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: null,
     slides: [
       {
         title: "La Frontera de la Negación: kein vs. nicht",
@@ -10507,7 +10507,7 @@ export const studyPlanModules = [
   {
     id: 'sp_4',
     title: 'Capítulo 4: El Objeto Directo: Acusativo y Pronombres',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/1QusIBIw3hhDxZvtnB3eocWlPWW43dlIp/view?usp=drive_web',
     slides: [
       {
         title: "El Filtro Masculino: La Regla de la N-Mutation",
@@ -10556,7 +10556,7 @@ export const studyPlanModules = [
   {
     id: 'sp_5',
     title: 'Capítulo 5: El Objeto Indirecto: Dativo y el Código M-R-M-N',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/1n_dLlwAlx9mJMoytcMC4wV3TjNCb59-r/view?usp=drive_web',
     slides: [
       {
         title: "El Código Mnemotécnico M-R-M-N (MaRiMaNa)",
@@ -10634,7 +10634,7 @@ export const studyPlanModules = [
   {
     id: 'sp_6',
     title: 'Capítulo 6: El Mapa Espacial: Wechselpräpositionen',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/1wS542v_rcsuYj1cpEsTzahsmKDBQQxjV/view?usp=drive_web',
     slides: [
       {
         title: "La Ecuación del Espacio: ¿Wo? vs. ¿Wohin?",
@@ -10679,7 +10679,7 @@ export const studyPlanModules = [
   {
     id: 'sp_7',
     title: 'Capítulo 7: Verbos Separables e Inseparables (La Pinza)',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/1s4MSGKeK7xVZF2qGN4JSXu5dl43VkhOC/view?usp=drive_web',
     slides: [
       {
         title: "El Efecto Pinza Verbal (Satzklammer)",
@@ -10723,7 +10723,7 @@ export const studyPlanModules = [
   {
     id: 'sp_8',
     title: 'Capítulo 8: Verbos Modales y el Sándwich Estructurado',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/12ef-35y8c5SaFbw4v1xIZX74-5E8mX6c/view?usp=drive_web',
     slides: [
       {
         title: "Los 5 Modales de A1 + möchten",
@@ -10792,7 +10792,7 @@ export const studyPlanModules = [
   {
     id: 'sp_9',
     title: 'Capítulo 9: El Modo Imperativo y Kit de Comunicación Oficial',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/1hvauciZnzhQPR7Jcvlhktq7VRdc_Xvrq/view?usp=drive_web',
     slides: [
       // SLIDE 1: LA TRÍADA SINTÁCTICA (DISEÑO EN 3 TARJETAS)
       {
@@ -10994,7 +10994,7 @@ export const studyPlanModules = [
   {
     id: 'sp_10',
     title: 'Capítulo 10: Das Perfekt y los Tiempos Pasados Clave',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/1rWmyyVBBceZm2lzbaNY8Luuvv5X6vgfU/view?usp=drive_web',
     slides: [
       {
         title: "Estructura de Dos Pilares (Das Perfekt)",
@@ -11043,7 +11043,7 @@ export const studyPlanModules = [
   {
     id: 'sp_11',
     title: 'Capítulo 11: Coordinación de Textos: Conectores Posición 0 y 1',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/1ja2uZyZv5RMsli1g6RVJAleFgRD4YVnG/view?usp=drive_web',
     slides: [
       // SLIDE 1: ADUSO + REGLA DE PUNTUACIÓN + ABER VS SONDERN
       {
@@ -11231,7 +11231,7 @@ export const studyPlanModules = [
   {
     id: 'sp_12',
     title: 'Capítulo 12: Declinación de Adjetivos en A1 (Débil y Mixta)',
-    presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
+    presentationUrl: 'https://drive.google.com/file/d/1uXg-DLwnQLSTdsSFbT8yPmHpTBWM2miu/view?usp=drive_web1',
     slides: [
       // SLIDE 1: DECLINACIÓN DÉBIL (SCHWACHE DEKLINATION)
       {
