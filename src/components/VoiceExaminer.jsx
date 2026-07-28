@@ -8,6 +8,7 @@ const VoiceExaminer = ({
   expectedKeywords = ["sprechen", "kommen", "nehmen", "langsam", "herein", "platz", "sei", "seid", "seien"],
   note = "Tip Examen Goethe A1: El imperativo formal invierte el orden: 'Kommen Sie bitte!'",
   mode,
+  scenarios,
   isInteractive = true,
   autoStart = false,
   onComplete
@@ -28,6 +29,10 @@ const VoiceExaminer = ({
     { text: "Kommen Sie bitte herein!", keywords: ["kommen", "herein"] },
     { text: "Nehmen Sie bitte Platz!", keywords: ["nehmen", "platz"] }
   ];
+
+  const activeOptions = (scenarios && scenarios.length > 0)
+    ? scenarios.map(s => ({ text: s.german ? `${s.german} ${s.translation || ''}` : s.text, raw: s.german || s.text, context: s.context }))
+    : defaultOptions;
 
   const handleStart = () => {
     setResult(null);
@@ -99,7 +104,7 @@ const VoiceExaminer = ({
               <Hand size={12} /> O selecciona una instrucción táctil:
             </p>
             <div className="flex flex-col gap-1.5">
-              {defaultOptions.map((opt, idx) => (
+              {activeOptions.map((opt, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleOptionSelect(opt)}
@@ -109,7 +114,7 @@ const VoiceExaminer = ({
                       : 'bg-indigo-900/80 hover:bg-indigo-800 text-indigo-200 border-indigo-700/50 hover:text-white'
                   }`}
                 >
-                  🗣️ {opt.text}
+                  {opt.context ? `${opt.context}: ` : '🗣️ '}{opt.text}
                 </button>
               ))}
             </div>

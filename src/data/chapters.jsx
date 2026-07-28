@@ -10723,9 +10723,32 @@ export const studyPlanModules = [
             autoStart={false} 
             isInteractive={true} 
             mode="imperative_commands" 
-            question="Repite o responde con un comando oficial: 'Sprechen Sie bitte langsam!'"
-            expectedKeywords={["sprechen", "kommen", "nehmen", "langsam", "herein", "platz", "sei", "seid", "seien"]}
-            note="Tip Examen Goethe A1: El imperativo formal invierte el orden: 'Kommen Sie bitte!'"
+            question="Repite o responde con un comando oficial:"
+            expectedKeywords={["trinken", "macht", "zeigen", "sprechen", "kommen", "nehmen", "wasser", "buch", "pass"]}
+            note="Tip Examen Goethe A1: Selecciona o pronuncia cualquier instrucción para practicar el imperativo."
+            scenarios={[
+              {
+                context: "🏥 Entorno Médico",
+                instruction: "Consejo médico formal:",
+                german: "Trinken Sie viel Wasser!",
+                translation: "(¡Beba mucha agua!)",
+                tip: "Tip: Petición educada con 'Sie'."
+              },
+              {
+                context: "🏫 En el Aula",
+                instruction: "Orden a un grupo (ihr):",
+                german: "Macht das Buch auf!",
+                translation: "(¡Abrid el libro!)",
+                tip: "Tip: El verbo separable 'aufmachen' envía el prefijo 'auf' al final absoluto."
+              },
+              {
+                context: "🚆 En la Estación",
+                instruction: "Pide el pasaporte en Acusativo:",
+                german: "Zeigen Sie Ihren Pass!",
+                translation: "(¡Muestre su pasaporte!)",
+                tip: "Tip: 'Pass' es Masculino (der), cambia a 'Ihren Pass'!"
+              }
+            ]}
             {...props}
           />
         )
