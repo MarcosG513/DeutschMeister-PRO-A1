@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
-import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Maximize, Minimize, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown } from 'lucide-react';
+import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
@@ -185,7 +185,6 @@ export default function App() {
       }
     };
   }, []);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenImage, setFullscreenImage] = useState(null);
   const [user, setUser] = useState(null);
   const [cardImages, setCardImages] = useState({});
@@ -330,8 +329,7 @@ export default function App() {
   // --- GESTIÓN NATIVA DEL HARDWARE BACK BUTTON (ANDROID LIFO LAYER) ---
   useEffect(() => {
     const backButtonListener = CapacitorApp.addListener('backButton', () => {
-      if (isFullscreen || fullscreenImage) {
-        setIsFullscreen(false);
+      if (fullscreenImage) {
         setFullscreenImage(null);
         return;
       }
@@ -359,7 +357,7 @@ export default function App() {
       backButtonListener.then(listener => listener.remove());
     };
   }, [
-    isFullscreen, fullscreenImage, isTutorOpen, storyState, 
+    fullscreenImage, isTutorOpen, storyState, 
     activePresentationId, activeStudyPlanId, viewMode
   ]);
   const activeChapter = useMemo(() => chapters.find(c => c.id === activeChapterId), [activeChapterId]);
@@ -1039,14 +1037,13 @@ export default function App() {
       <span className="font-bold text-slate-300 text-sm">Cargando interfaz...</span>
     </div>
   }>
-    <div className={isFullscreen ? "fixed inset-0 z-[9999] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto" : "min-h-[100svh] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative"}>
+    <div className="min-h-[100svh] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative">
       
       {viewMode === "presentation" && activePresentationId && activePresentation ? <PresentationViewer
         presentation={activePresentation}
         onClose={() => {
           setViewMode('flashcards');
           setActivePresentationId(null);
-          setIsFullscreen(false);
         }}
         cardImages={cardImages}
         generateCardImage={generateCardImage}
@@ -1077,16 +1074,13 @@ export default function App() {
                     <p className="text-xs text-slate-400">Alemán Técnico & Preparación Goethe Zertifikat</p>
                   </div>
                 </div>
-                {/* HAMBURGER + FULLSCREEN + PROFILE ON MOBILE */}
+                {/* HAMBURGER + PROFILE ON MOBILE */}
                 <div className="flex items-center gap-2 md:hidden">
                   <button onClick={() => setViewMode('profile')} className="bg-slate-800 text-blue-400 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Perfil">
                     <User size={20} />
                   </button>
                   <button onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Abrir menú">
                     <Menu size={20} />
-                  </button>
-                  <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Pantalla completa">
-                    {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
                   </button>
                 </div>
               </div>
@@ -1099,16 +1093,13 @@ export default function App() {
                 <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
               </div>
 
-              {/* HAMBURGER + FULLSCREEN + PROFILE ON DESKTOP */}
+              {/* HAMBURGER + PROFILE ON DESKTOP */}
               <div className="hidden md:flex items-center gap-2">
                 <button onClick={() => setViewMode('profile')} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-2 shadow-md cursor-pointer text-sm">
                   <User size={18} /> Perfil
                 </button>
                 <button onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 px-4 py-2 rounded-lg transition flex items-center gap-2 font-bold shadow-md text-sm">
                   <Menu size={18} /> Menú
-                </button>
-                <button onClick={toggleFullScreen} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 p-2.5 rounded-lg transition flex items-center justify-center shadow-md">
-                  {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
                 </button>
               </div>
             </div>
@@ -1261,7 +1252,6 @@ export default function App() {
                               onClick={() => {
                                 setActivePresentationId(pres.id);
                                 setViewMode('presentation');
-                                setIsFullscreen(true);
                                 setIsMenuOpen(false);
                               }}
                               className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all text-left ${
