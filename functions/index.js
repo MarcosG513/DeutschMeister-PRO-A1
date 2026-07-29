@@ -376,29 +376,14 @@ export const runRoleplaySimulator = onRequest({
 });
 
 // =========================================================================
-// 2. EVALUADOR DE CORREOS (EmailSimulator)
+// 2. EVALUADOR DE CORREOS (EmailSimulator) - Migrado a Gemini 3.5 Flash-Lite
 // =========================================================================
-export const evaluateEmail = onCall({
-  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
-  maxInstances: 6,
-  timeoutSeconds: 120
-}, async request => {
-  const {
-    textoCorreo,
-    consignaExamen
-  } = request.data;
-  if (!textoCorreo || !consignaExamen) {
-    throw new HttpsError("invalid-argument", "Faltan parámetros requeridos");
-  }
-  try {
-    fal.config({
-      credentials: falKey.value()
-    });
-    const promptDefinido = ` Consigna del examen: "${consignaExamen}"
-Texto del estudiante: "${textoCorreo}"
+export const evaluateEmail = onCall(
+  { secrets: [geminiApiKey], maxInstances: 6 },
+  async (request) => {
+    const { textoCorreo, consignaExamen } = request.data;
 
-Por favor, actúa como un examinador oficial del Goethe-Institut para el nivel A1. Evalúa el correo redactado por el estudiante siguiendo la rúbrica oficial de forma muy precisa:
-
+    const systemPrompt = `Por favor, actúa como un examinador oficial del Goethe-Institut para el nivel A1. Evalúa el correo redactado por el estudiante siguiendo la rúbrica oficial de forma muy precisa:
 1. Cumplimiento de la tarea:
    - Evalúa si responde a los puntos explícitos de la consigna.
    - CERO ALUCINACIONES DE REQUISITOS: No inventes requisitos implícitos. Por ejemplo, si la consigna dice "Escribe al hotel Zentral...", el estudiante NO necesita mencionar el nombre del hotel ("Hotel 'Zentral'") dentro del cuerpo del texto. El saludo formal "Sehr geehrte Damen und Herren" es completamente correcto y suficiente para cumplir con este punto.
@@ -406,29 +391,34 @@ Por favor, actúa como un examinador oficial del Goethe-Institut para el nivel A
    - REGISTRO Y FORMALIDAD: Presta especial atención al saludo y despedida. Si el destinatario es un profesor (ej. Herr Müller) o una entidad formal (ej. un hotel), el estudiante DEBE usar un saludo formal ("Sehr geehrte/r ...") y una despedida formal ("Mit freundlichen Grüßen"). Calificar un saludo informal como "Hallo Herr Müller" o despedidas informales como "Viele Grüße" hacia un profesor como "adecuados" es un error; deben ser marcados como fallas de registro/formalidad inapropiados para la situación y corregirse.
 3. Corrección gramatical:
    - Especial atención a declinaciones nominativo/acusativo/dativo, preposiciones (ej. "zu deiner Party" en lugar de "an deine Party"), conjugación verbal y posición del verbo (ej. con "weil", el verbo conjugado va al final).
-4. Regla de Evaluación Socrática (¡CRÍTICO!): Si el estudiante intenta responder una pregunta de la consigna pero comete errores gramaticales o léxicos (ej. usar preposiciones literales como 'zu Park' en lugar de 'in den Park' o 'zum Park', o usar un verbo incorrecto), NUNCA digas que 'no respondió la pregunta'. Valida su intención comunicativa primero ("Veo que intentaste decir que...") y luego corrige el error gramatical. Asegúrate de que los títulos de tus correcciones no se contradigan con tus propias explicaciones y siempre explica el POR QUÉ de la regla gramatical sin inventar reglas falsas.
+4. Regla de Evaluación Socrática (¡CRÍTICO!): 
+   Si el estudiante intenta responder una pregunta de la consigna pero comete errores gramaticales o léxicos (ej. usar preposiciones literales como 'zu Park' en lugar de 'in den Park' o 'zum Park', o usar un verbo incorrecto), NUNCA digas que 'no respondió la pregunta'. Valida su intención comunicativa primero ("Veo que intentaste decir que...") y luego corrige el error gramatical. Asegúrate de que los títulos de tus correcciones no se contradigan con tus propias explicaciones y siempre explica el POR QUÉ de la regla gramatical sin inventar reglas falsas.
 
-Devuelve tu respuesta estructurada en español usando Markdown con el formato de Evaluación General y Análisis Quirúrgico.
-`;
+Devuelve tu respuesta estructurada en español usando Markdown con el formato de Evaluación General y Análisis Quirúrgico.`;
 
-    // Se utiliza DeepSeek V3.2 para máxima precisión y análisis pedagógico
-    const result = await fal.subscribe("openrouter/router/enterprise", {
-      input: {
-        model: "deepseek/deepseek-v3.2",
-        prompt: promptDefinido,
-        system_prompt: "Eres un examinador estricto pero empático, metodológico y preciso de alemán nativo.",
-        temperature: 0.3,
-        top_p: 0.9
-      }
-    });
-    return {
-      output: result.data.output
-    };
-  } catch (error) {
-    console.error("Error crítico en evaluateEmail (Fal/OpenRouter):", error);
-    throw new HttpsError("internal", "Error procesando la evaluación con la IA");
+    const userPrompt = `Consigna del examen: "${consignaExamen}"\nTexto del estudiante: "${textoCorreo}"`;
+
+    try {
+      const genAI = new GoogleGenerativeAI(geminiApiKey.value());
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-3.5-flash-lite",
+        systemInstruction: systemPrompt
+      });
+
+      const result = await model.generateContent({
+        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        generationConfig: {
+          temperature: 0.3, // Temperatura baja para garantizar precisión sintáctica estricta sin alucinaciones
+        }
+      });
+      
+      return result.response.text();
+    } catch (error) {
+      console.error("❌ Error en la Evaluación de Correo (Gemini 3.5 Flash-Lite):", error);
+      throw new Error("Error procesando la evaluación.");
+    }
   }
-});
+);
 
 // =========================================================================
 // 3. GENERADOR DE CUENTOS (generateStory)
