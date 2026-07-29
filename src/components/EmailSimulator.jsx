@@ -5,9 +5,9 @@ import MarkdownMessage from './MarkdownMessage';
 import { functions } from '../App';
 
 const consignasGoethe = [
-  { de: "Ihre Freundin Anna hat Geburtstag. Schreiben Sie eine E-Mail: Gratulation? Wann besuchen? Geschenk?", es: "Tu amiga Anna cumple años. Escribe un correo: ¿Felicitación? ¿Cuándo la visitas? ¿Regalo?" },
-  { de: "Sie machen am Wochenende einen Ausflug. Schreiben Sie eine E-Mail an Ihren Freund: Wohin? Wann treffen? Was mitbringen?", es: "Harás una excursión el fin de semana. Escribe un correo a tu amigo: ¿A dónde? ¿Cuándo encontrarse? ¿Qué llevar?" },
-  { de: "Sie möchten am Samstag eine Party machen. Schreiben Sie eine E-Mail an Ihre Freunde: Einladung? Wann und wo? Essen und Getränke?", es: "Quieres hacer una fiesta el sábado. Escribe a tus amigos: ¿Invitación? ¿Cuándo y dónde? ¿Comida y bebida?" }
+  { de: "Ihre Freundin Anna hat Geburtstag. Schreiben Sie eine E-Mail: Gratulation? Wann besuchen? Geschenk? (Schreiben Sie ca. 30 Wörter)", es: "Tu amiga Anna cumple años. Escribe un correo: ¿Felicitación? ¿Cuándo la visitas? ¿Regalo? (Escribe aprox. 30 palabras)" },
+  { de: "Sie machen am Wochenende einen Ausflug. Schreiben Sie eine E-Mail an Ihren Freund: Wohin? Wann treffen? Was mitbringen? (Schreiben Sie ca. 30 Wörter)", es: "Harás una excursión el fin de semana. Escribe un correo a tu amigo: ¿A dónde? ¿Cuándo encontrarse? ¿Qué llevar? (Escribe aprox. 30 palabras)" },
+  { de: "Sie möchten am Samstag eine Party machen. Schreiben Sie eine E-Mail an Ihre Freunde: Einladung? Wann und wo? Essen und Getränke? (Schreiben Sie ca. 30 Wörter)", es: "Quieres hacer una fiesta el sábado. Escribe a tus amigos: ¿Invitación? ¿Cuándo y dónde? ¿Comida y bebida? (Escribe aprox. 30 palabras)" }
 ];
 
 const EmailSimulator = ({ initialText }) => {
@@ -18,6 +18,8 @@ const EmailSimulator = ({ initialText }) => {
     const randomIndex = Math.floor(Math.random() * consignasGoethe.length);
     return consignasGoethe[randomIndex];
   });
+
+  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   const cambiarTema = () => {
     let nextIndex;
@@ -52,7 +54,7 @@ const EmailSimulator = ({ initialText }) => {
     } catch (e) {
       console.error("Function Evaluation failed, falling back to local:", e);
       const words = text.trim().split(/\s+/);
-      const wordCount = words.length;
+      const currentCount = words.length;
       const hasSalutation = /hallo|liebe|lieber|sehr geehrte|guten/i.test(text);
       const hasClosing = /grüße|gruß|tschüss|bis bald/i.test(text);
       let feedback = "### 📊 Evaluación de tu correo (Offline)\n\n";
@@ -63,15 +65,17 @@ const EmailSimulator = ({ initialText }) => {
         feedback += "❌ **Atención:** Te falta un saludo adecuado (ej. *Liebe/Lieber...*) o una despedida (ej. *Viele Grüße*).\n";
       }
       feedback += "\n**2. Longitud del texto:**\n";
-      if (wordCount >= 25) {
-        feedback += `✅ Buen trabajo. Has escrito ${wordCount} palabras (se recomiendan ~30 para el Goethe A1).\n`;
+      if (currentCount >= 25 && currentCount <= 40) {
+        feedback += `✅ Excelente extensión. Has escrito ${currentCount} palabras (la meta oficial es ca. 30 Wörter).\n`;
+      } else if (currentCount < 25) {
+        feedback += `⚠️ Tu texto es un poco corto (${currentCount} palabras). Intenta desarrollar más los puntos para alcanzar las ~30 palabras recomendadas.\n`;
       } else {
-        feedback += `⚠️ Tu texto es un poco corto (${wordCount} palabras). Intenta desarrollar más los puntos.\n`;
+        feedback += `⚠️ Tu texto es un poco extenso (${currentCount} palabras). En el nivel A1 se busca concisión (ca. 30 Wörter).\n`;
       }
       feedback += "\n**3. Consejos clave:**\n";
       feedback += "* Revisa siempre que los verbos conjugados estén en la **posición 2**.\n";
       feedback += "* Escribe todos los sustantivos con **Mayúscula** inicial.\n";
-      feedback += "* Verifica que hayas respondido exactamente a los 3 puntos de las instrucciones.\n";
+      feedback += "* Recuerda que en alemán las despedidas (*Viele Grüße*) **NO llevan coma** al final.\n";
       setEvaluation(feedback);
     } finally {
       setLoading(false);
@@ -107,11 +111,22 @@ const EmailSimulator = ({ initialText }) => {
         value={text} 
         onChange={e => setText(e.target.value)}
       ></textarea>
-      <div className="p-3 bg-slate-50 border-t border-slate-200 flex justify-end">
+      <div className="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="flex items-center gap-2 text-xs font-semibold">
+          <span className="text-slate-500">Wortanzahl (Longitud):</span>
+          <span className={`px-2.5 py-0.5 rounded-full font-mono font-bold transition-all ${
+            wordCount >= 25 && wordCount <= 40 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' :
+            wordCount >= 15 ? 'bg-amber-100 text-amber-800 border border-amber-300' :
+            'bg-rose-100 text-rose-800 border border-rose-300'
+          }`}>
+            {wordCount} / ~30 Wörter
+          </span>
+        </div>
+
         <button 
           onClick={evaluateEmail} 
           disabled={loading || !text.trim()} 
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm shadow flex items-center gap-2 transition-all disabled:opacity-50"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-2 transition-all disabled:opacity-50"
         >
           {loading ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle size={16} />}
           Evaluar Correo
