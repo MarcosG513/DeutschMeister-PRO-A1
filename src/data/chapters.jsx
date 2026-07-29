@@ -17,6 +17,7 @@ import LocativeMapSimulator from '../components/LocativeMapSimulator';
 import AcousticRadar from '../components/AcousticRadar';
 import TextHighlighter from '../components/TextHighlighter';
 import FormularBuilder from '../components/FormularBuilder';
+import OfficialFormExam from '../components/OfficialFormExam';
 import VoiceExaminer from '../components/VoiceExaminer';
 import ClockSVG from '../components/ClockSVG';
 import { nativeSpeak } from '../utils/helpers';
@@ -10226,16 +10227,10 @@ export const goetheModules = [{
             </GrammarAccordion>
           </div>
   }, {
-    title: "Burocracia Drag & Drop",
-    subtitle: "Teil 1: Rellenar Formularios (Anmeldung)",
-    content: (
-      <div className="mt-8 max-w-3xl mx-auto">
-        <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 mb-6 rounded-r-lg">
-          <p className="font-bold text-emerald-800">📋 El Arte del Formulario</p>
-          <p className="text-sm text-emerald-700 mt-1">Arrastra tus datos personales a la ranura correcta del documento oficial. ¡Cuidado con confundir Vorname y Nachname!</p>
-        </div>
-        <FormularBuilder />
-      </div>
+    title: "El Arte del Formulario (Schreiben Teil 1)",
+    subtitle: "Estrategia oficial para completar formularios de examen sin perder puntos",
+    content: props => (
+      <OfficialFormExam {...props} />
     )
   }, {
     title: "La Regla Simple y Seguro",
