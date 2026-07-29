@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { httpsCallable } from 'firebase/functions';
 import { Loader2, CheckCircle, Edit as Edit3 } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
@@ -10,6 +10,13 @@ const consignasGoethe = [
   { de: "Sie möchten am Samstag eine Party machen. Schreiben Sie eine E-Mail an Ihre Freunde: Einladung? Wann und wo? Essen und Getränke? (Schreiben Sie ca. 30 Wörter)", es: "Quieres hacer una fiesta el sábado. Escribe a tus amigos: ¿Invitación? ¿Cuándo y dónde? ¿Comida y bebida? (Escribe aprox. 30 palabras)" }
 ];
 
+const EVALUATION_STEPS = [
+  { icon: "🔍", text: "Analizando fórmula de saludo y despedida..." },
+  { icon: "📐", text: "Auditando la regla del verbo en Posición 2 (V2)..." },
+  { icon: "📊", text: "Verificando longitud de texto (~30 palabras)..." },
+  { icon: "🎯", text: "Calculando puntaje final oficial Goethe A1..." }
+];
+
 const EmailSimulator = ({ initialText }) => {
   const [text, setText] = useState(initialText || "");
   const [evaluation, setEvaluation] = useState(null);
@@ -18,6 +25,32 @@ const EmailSimulator = ({ initialText }) => {
     const randomIndex = Math.floor(Math.random() * consignasGoethe.length);
     return consignasGoethe[randomIndex];
   });
+
+  const [currentStep, setCurrentStep] = useState(0);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    let stepInterval;
+    let progressInterval;
+
+    if (loading) {
+      setCurrentStep(0);
+      setProgress(0);
+
+      stepInterval = setInterval(() => {
+        setCurrentStep((prev) => (prev < EVALUATION_STEPS.length - 1 ? prev + 1 : prev));
+      }, 1200);
+
+      progressInterval = setInterval(() => {
+        setProgress((prev) => (prev < 95 ? prev + 5 : prev));
+      }, 150);
+    }
+
+    return () => {
+      clearInterval(stepInterval);
+      clearInterval(progressInterval);
+    };
+  }, [loading]);
 
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
@@ -128,10 +161,61 @@ const EmailSimulator = ({ initialText }) => {
           disabled={loading || !text.trim()} 
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-2 transition-all disabled:opacity-50"
         >
-          {loading ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle size={16} />}
-          Evaluar Correo
+          {loading ? (
+            <>
+              <Loader2 size={16} className="animate-spin" />
+              <span>Examinando...</span>
+            </>
+          ) : (
+            <>
+              <CheckCircle size={16} />
+              <span>Evaluar Correo</span>
+            </>
+          )}
         </button>
       </div>
+
+      {/* 🚀 OVERLAY DE CARGA ANIMADA (Scanner Goethe) */}
+      {loading && (
+        <div className="p-5 sm:p-6 bg-slate-900 text-white rounded-2xl border border-amber-500/40 shadow-xl space-y-5 animate-in fade-in zoom-in-95 duration-300 mx-3 my-4">
+          
+          {/* Cabecera del Escáner */}
+          <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+              </span>
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-400 font-mono">
+                Examinador Goethe A1 en Vivo
+              </span>
+            </div>
+            <span className="text-xs text-slate-400 font-mono">{progress}%</span>
+          </div>
+
+          {/* Mensaje Dinámico de Análisis */}
+          <div className="flex items-center gap-3 p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+            <span className="text-xl animate-bounce">{EVALUATION_STEPS[currentStep].icon}</span>
+            <span className="text-xs sm:text-sm font-semibold text-slate-200">
+              {EVALUATION_STEPS[currentStep].text}
+            </span>
+          </div>
+
+          {/* Barra de Progreso Neón */}
+          <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+            <div 
+              className="bg-gradient-to-r from-amber-500 to-emerald-400 h-full transition-all duration-300 rounded-full"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+
+          {/* Micro-Tip Goethe durante la espera */}
+          <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-xs text-amber-300/90 italic leading-snug">
+            💡 <strong>Goethe Tip:</strong> ¿Sabías que en el saludo formal 'Sehr geehrte Frau...' siempre va coma al final y la siguiente línea empieza en minúscula?
+          </div>
+        </div>
+      )}
+
       {evaluation && (
         <div className="p-4 bg-blue-50 border-t-2 border-blue-200 animate-in slide-in-from-top-2">
           <MarkdownMessage text={evaluation} />
