@@ -9679,6 +9679,7 @@ export const goetheModules = [{
   title: 'Hören (Comprensión Auditiva)',
   desc: 'Supervivencia en estaciones y llamadas',
   theme: 'blueprint',
+  presentationUrl: 'https://drive.google.com/file/d/1HaRoaGMXPAHwQbmeVkqMoaotGvM5TjBH/view?usp=sharing',
   slides: [{
     title: "Supervivencia Auditiva: El Examen Hören",
     subtitle: "Entrena tu oído para identificar información clave",
@@ -9825,6 +9826,7 @@ export const goetheModules = [{
   title: 'Lesen (Comprensión Lectora)',
   desc: 'Textos del día a día y letreros',
   theme: 'notebook',
+  presentationUrl: 'https://drive.google.com/file/d/1v0X84LxezwiLTIOll5OqIs5VfY6khT5Z/view?usp=drive_link',
   slides: [{
     title: "Entendiendo Textos Diarios",
     subtitle: "El Examen Lesen (Comprensión Lectora)",
@@ -10013,6 +10015,7 @@ export const goetheModules = [{
   title: 'Schreiben (Expresión Escrita)',
   desc: 'Formularios y Correos exactos',
   theme: 'medical',
+  presentationUrl: 'https://drive.google.com/file/d/19bbbF3M4RfIRbQ4PkxZlCsPcbibYQLPx/view?usp=drive_link',
   slides: [{
     title: "Tu Firma y tu Voz",
     subtitle: "El Examen Schreiben (Escritura)",
@@ -10251,6 +10254,7 @@ export const goetheModules = [{
   title: 'Sprechen (Expresión Oral)',
   desc: 'Presentaciones y Peticiones Educadas',
   theme: 'blueprint',
+  presentationUrl: 'https://drive.google.com/file/d/1_yvgsDvmHvQvSYoXJvKImN9WLxkEdgGA/view?usp=drive_link',
   slides: [{
     title: "Guía Maestra: El Examen Oral",
     subtitle: "Sprechen A1/A2",
