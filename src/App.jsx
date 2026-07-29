@@ -1117,7 +1117,7 @@ export default function App() {
           {/* SIDEBAR DRAWER MENÚ DESLIZABLE */}
           {isMenuOpen && <>
               <div onClick={() => setIsMenuOpen(false)} className="fixed inset-0 bg-slate-950/60 z-40 transition-opacity animate-in fade-in duration-200" />
-              <aside className="fixed inset-y-0 left-0 w-80 bg-slate-900 text-slate-100 z-50 shadow-2xl flex flex-col transform transition-transform duration-300 animate-in slide-in-from-left">
+              <aside className="fixed inset-y-0 left-0 w-[88vw] sm:w-80 md:w-96 max-w-sm bg-slate-900 text-slate-100 z-50 shadow-2xl flex flex-col transform transition-transform duration-300 animate-in slide-in-from-left">
                 {/* Cabecera del Menú */}
                 <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950">
                   <div className="flex items-center gap-2">
@@ -1172,15 +1172,37 @@ export default function App() {
                       <span>📘 Tablas Maestras</span>
                       <ChevronRight size={16} className={`transform transition-transform ${isTablasOpen ? 'rotate-90' : ''}`} />
                     </button>
-                    {isTablasOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
-                        {chapters.map(chap => <button key={chap.id} onClick={async () => {
-                  setActiveChapterId(chap.id);
-                  if (viewMode !== 'flashcards' && viewMode !== 'table') setViewMode('flashcards');
-                  setIsMenuOpen(false);
-                }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center gap-2.5 ${activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table') ? 'bg-blue-900/30 text-blue-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
-                            <span className="text-sm shrink-0">{chap.emoji}</span>
-                            <span className="truncate">{chap.title}</span>
-                          </button>)}
+                    {isTablasOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20 p-1.5 space-y-1">
+                        {chapters.map(chap => {
+                          const isActive = activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table');
+                          return (
+                            <button
+                              key={chap.id}
+                              onClick={async () => {
+                                setActiveChapterId(chap.id);
+                                if (viewMode !== 'flashcards' && viewMode !== 'table') setViewMode('flashcards');
+                                setIsMenuOpen(false);
+                              }}
+                              className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all text-left ${
+                                isActive
+                                  ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
+                                  : 'hover:bg-slate-800/60 text-slate-300 border border-transparent'
+                              }`}
+                            >
+                              <span className="mt-0.5 text-amber-400 shrink-0 text-base">
+                                {chap.emoji || <BookOpen size={16} />}
+                              </span>
+                              <div className="flex flex-col min-w-0 flex-1 space-y-0.5">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">
+                                  {typeof chap.id === 'number' ? `Capítulo ${chap.id}` : String(chap.id).replace(/(sp_|g_|kap_)/i, 'Módulo ')}
+                                </span>
+                                <span className="text-xs font-medium text-slate-100 leading-snug whitespace-normal break-words">
+                                  {chap.title.replace(/^(Capítulo|Kapitel)\s+\d+:\s*/i, '')}
+                                </span>
+                              </div>
+                            </button>
+                          );
+                        })}
                       </div>}
                   </div>
 
@@ -1190,15 +1212,37 @@ export default function App() {
                       <span>🎓 Plan de Estudio</span>
                       <ChevronRight size={16} className={`transform transition-transform ${isPlanOpen ? 'rotate-90' : ''}`} />
                     </button>
-                    {isPlanOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
-                        {studyPlanModules.map(mod => <button key={mod.id} onClick={() => {
-                  setActiveStudyPlanId(mod.id);
-                  setViewMode('studyPlan');
-                  setIsMenuOpen(false);
-                }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center gap-2.5 ${activeStudyPlanId === mod.id && viewMode === 'studyPlan' ? 'bg-emerald-900/30 text-emerald-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
-                            <span className="text-emerald-500 shrink-0"><Sparkles size={14} /></span>
-                            <span className="truncate">{mod.title}</span>
-                          </button>)}
+                    {isPlanOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20 p-1.5 space-y-1">
+                        {studyPlanModules.map(mod => {
+                          const isActive = activeStudyPlanId === mod.id && viewMode === 'studyPlan';
+                          return (
+                            <button
+                              key={mod.id}
+                              onClick={() => {
+                                setActiveStudyPlanId(mod.id);
+                                setViewMode('studyPlan');
+                                setIsMenuOpen(false);
+                              }}
+                              className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all text-left ${
+                                isActive
+                                  ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
+                                  : 'hover:bg-slate-800/60 text-slate-300 border border-transparent'
+                              }`}
+                            >
+                              <span className="mt-0.5 text-amber-400 shrink-0">
+                                <Sparkles size={16} />
+                              </span>
+                              <div className="flex flex-col min-w-0 flex-1 space-y-0.5">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">
+                                  {mod.id ? String(mod.id).replace(/(sp_|g_|kap_)/i, 'Módulo ') : 'Sección'}
+                                </span>
+                                <span className="text-xs font-medium text-slate-100 leading-snug whitespace-normal break-words">
+                                  {mod.title.replace(/^(Capítulo|Kapitel)\s+\d+:\s*/i, '')}
+                                </span>
+                              </div>
+                            </button>
+                          );
+                        })}
                       </div>}
                   </div>
 
@@ -1208,16 +1252,38 @@ export default function App() {
                       <span>🏛️ Módulos Goethe</span>
                       <ChevronRight size={16} className={`transform transition-transform ${isGoetheOpen ? 'rotate-90' : ''}`} />
                     </button>
-                    {isGoetheOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20">
-                        {goetheModules.map(pres => <button key={pres.id} onClick={() => {
-                  setActivePresentationId(pres.id);
-                  setViewMode('presentation');
-                  setIsFullscreen(true);
-                  setIsMenuOpen(false);
-                }} className={`w-full text-left pl-8 pr-4 py-2.5 text-xs transition flex items-center justify-between ${activePresentationId === pres.id && viewMode === 'presentation' ? 'bg-indigo-900/30 text-indigo-300 font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800/20'}`}>
-                            <span className="truncate">{pres.title}</span>
-                            <PlayCircle size={14} className="shrink-0" />
-                          </button>)}
+                    {isGoetheOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20 p-1.5 space-y-1">
+                        {goetheModules.map(pres => {
+                          const isActive = activePresentationId === pres.id && viewMode === 'presentation';
+                          return (
+                            <button
+                              key={pres.id}
+                              onClick={() => {
+                                setActivePresentationId(pres.id);
+                                setViewMode('presentation');
+                                setIsFullscreen(true);
+                                setIsMenuOpen(false);
+                              }}
+                              className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all text-left ${
+                                isActive
+                                  ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
+                                  : 'hover:bg-slate-800/60 text-slate-300 border border-transparent'
+                              }`}
+                            >
+                              <span className="mt-0.5 text-amber-400 shrink-0">
+                                <PlayCircle size={16} />
+                              </span>
+                              <div className="flex flex-col min-w-0 flex-1 space-y-0.5">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">
+                                  {pres.id ? String(pres.id).replace(/(sp_|g_|kap_)/i, 'Módulo ') : 'Sección'}
+                                </span>
+                                <span className="text-xs font-medium text-slate-100 leading-snug whitespace-normal break-words">
+                                  {pres.title.replace(/^(Capítulo|Kapitel)\s+\d+:\s*/i, '')}
+                                </span>
+                              </div>
+                            </button>
+                          );
+                        })}
                       </div>}
                   </div>
                 </div>
