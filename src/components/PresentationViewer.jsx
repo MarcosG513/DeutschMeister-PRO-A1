@@ -57,7 +57,7 @@ const PresentationViewer = ({
   const isNotebook = presentation.theme === 'notebook';
 
   let containerClass = "flex-1 flex flex-col overflow-hidden ";
-  let headerClass = "flex justify-between items-center p-4 border-b shrink-0 ";
+  let headerClass = "flex flex-col p-4 border-b shrink-0 ";
   let bodyClass = "flex-1 overflow-y-auto p-6 md:p-12 flex flex-col justify-start ";
 
   if (isBlueprint) {
@@ -242,24 +242,83 @@ const PresentationViewer = ({
     <div className="flex flex-col min-h-[100svh] w-full bg-white animate-in fade-in zoom-in-95 duration-200">
       <div className={containerClass}>
         <div className={headerClass}>
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className={`p-2 rounded-lg shrink-0 ${isBlueprint ? 'bg-blue-900 text-blue-300' : isMedical ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-700'}`}>
-              <Presentation size={24} />
+          {/* BLOQUE 1: TÍTULO PRINCIPAL Y BOTÓN DE CERRAR */}
+          <div className="w-full flex justify-between items-start gap-4">
+            <div className="flex items-start gap-3 flex-1 min-w-0">
+              <div className={`p-2 rounded-lg shrink-0 ${isBlueprint ? 'bg-blue-900 text-blue-300' : isMedical ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-700'}`}>
+                <Presentation size={24} />
+              </div>
+              <h2 className="text-lg md:text-xl font-extrabold leading-tight break-words flex-1 min-w-0">
+                {presentation.title}
+              </h2>
             </div>
-            <div className="flex-1 min-w-0 pr-4">
-              <h2 className="font-bold text-sm sm:text-lg leading-tight line-clamp-2">{presentation.title}</h2>
-              <p className={`text-xs ${isBlueprint ? 'text-blue-400' : isMedical ? 'text-emerald-600' : 'text-amber-600'}`}>{currentSlide + 1} / {presentation.slides.length}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 shrink-0">
-            {presentation.presentationUrl && (
-              <a href={presentation.presentationUrl} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold transition-all border ${isBlueprint ? 'border-blue-700 text-blue-300 hover:bg-blue-800' : isMedical ? 'border-emerald-200 text-emerald-700 hover:bg-emerald-50' : 'border-amber-900/20 text-amber-700 hover:bg-amber-100'}`}>
-                <Link2 size={16} /> Diapositivas
-              </a>
-            )}
-            <button onClick={onClose} className={`p-2 rounded-full transition ${isBlueprint ? 'hover:bg-blue-900 text-blue-300' : 'hover:bg-slate-200 text-slate-500'}`}>
+            <button 
+              onClick={onClose} 
+              className={`p-2 rounded-full transition shrink-0 ${isBlueprint ? 'hover:bg-blue-900 text-blue-300' : 'hover:bg-slate-200 text-slate-500'}`}
+              aria-label="Cerrar presentación"
+            >
               <X size={24} />
             </button>
+          </div>
+
+          {/* BLOQUE 2: BARRA DE CONTROLES INDEPENDIENTE (Hereda el tema dinámico) */}
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-black/5 dark:bg-white/5 p-2.5 sm:p-3 rounded-2xl w-full mt-4">
+            {/* Controles de Navegación de Diapositiva */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={prevSlide}
+                disabled={currentSlide === 0}
+                className="p-2 rounded-xl bg-white/50 hover:bg-white/80 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm text-slate-800"
+                aria-label="Diapositiva anterior"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <span className="text-xs sm:text-sm font-bold px-2 font-mono opacity-80">
+                Slide {currentSlide + 1} / {presentation.slides.length}
+              </span>
+
+              <button
+                onClick={nextSlide}
+                disabled={currentSlide === presentation.slides.length - 1}
+                className="p-2 rounded-xl bg-white/50 hover:bg-white/80 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm text-slate-800"
+                aria-label="Siguiente diapositiva"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Botón "Diapositivas" (Enlace externo o Estado Deshabilitado) */}
+            <div>
+              {presentation.presentationUrl ? (
+                <a
+                  href={presentation.presentationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-white/80 hover:bg-white shadow-sm border border-black/10 rounded-xl transition-all active:scale-95 text-slate-800"
+                >
+                  <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  <span>Diapositivas</span>
+                </a>
+              ) : (
+                <button
+                  disabled
+                  title="Sin presentación externa disponible"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-black/5 border border-black/10 rounded-xl cursor-not-allowed opacity-60"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                  <span>Próximamente</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
