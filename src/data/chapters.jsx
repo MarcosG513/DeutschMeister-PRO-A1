@@ -10474,7 +10474,7 @@ export const studyPlanModules = [
   {
     id: 'sp_3',
     title: 'Capítulo 3: Negación Integral y la Arquitectura del Tiempo',
-    presentationUrl: null,
+    presentationUrl: 'https://drive.google.com/file/d/19pXqHghxkD35YlPmPZqhgPh7yC8Uo33n/view?usp=sharing',
     slides: [
       {
         title: "La Frontera de la Negación: kein vs. nicht",
