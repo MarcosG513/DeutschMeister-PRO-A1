@@ -68,15 +68,45 @@ export async function playGermanAudio(text, options = {}) {
       const response = await synthesizeFn({ text: cleanText, voice, type });
 
       if (response.data && response.data.audioUrl) {
-        const audioFetch = await fetch(response.data.audioUrl);
-        if (!audioFetch.ok) {
-          try { await audioStore.removeItem(cacheKey); } catch (_) {}
-          throw new Error(`Fallo al descargar blob de audio: HTTP ${audioFetch.status}`);
-        }
-        audioBlob = await audioFetch.blob();
+        const remoteAudioUrl = response.data.audioUrl;
 
-        // Guardar persistentemente en IndexedDB para futuros usos
-        await audioStore.setItem(cacheKey, audioBlob);
+        try {
+          // Intento de descarga para almacenamiento en IndexedDB (Nivel 1)
+          const audioFetch = await fetch(remoteAudioUrl);
+          if (audioFetch.ok) {
+            audioBlob = await audioFetch.blob();
+            await audioStore.setItem(cacheKey, audioBlob);
+          } else {
+            throw new Error(`Fetch failed: HTTP ${audioFetch.status}`);
+          }
+        } catch (fetchError) {
+          console.warn("[TTS CORS/Network Warning] No se pudo guardar en caché local. Reproduciendo directamente desde URL remota:", fetchError);
+          try { await audioStore.removeItem(cacheKey); } catch (_) {}
+
+          // RESILIENCIA: Reproducir directamente desde la URL remota sin requerir Blob ni CORS estricto
+          const directAudio = new Audio(remoteAudioUrl);
+          currentAudioInstance = directAudio;
+
+          directAudio.onended = () => {
+            if (currentAudioInstance === directAudio) {
+              currentAudioInstance = null;
+            }
+            if (onEnd) onEnd();
+          };
+
+          directAudio.onerror = (audioErr) => {
+            console.warn("[TTS Remote Playback Error] Falló reproducción remota, usando motor nativo:", audioErr);
+            if (currentAudioInstance === directAudio) {
+              currentAudioInstance = null;
+            }
+            nativeSpeak(cleanText);
+            if (onError) onError(audioErr);
+            if (onEnd) onEnd();
+          };
+
+          await directAudio.play();
+          return; // Salir con éxito de la función
+        }
       } else {
         throw new Error("Respuesta inválida del endpoint de síntesis");
       }
