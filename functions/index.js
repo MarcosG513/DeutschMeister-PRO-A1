@@ -4,6 +4,7 @@ import { defineSecret } from "firebase-functions/params";
 import admin from "firebase-admin";
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { fal } from "@fal-ai/client";
+import crypto from "crypto";
 import {
   executeBackendGemini,
   executeBackendGeminiChatStream,
@@ -1540,3 +1541,170 @@ Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocab
     }
   }
 });
+
+// =========================================================================
+// SÍNTESIS DE VOZ Y PRONUNCIACIÓN HUMANA EN ALEMÁN (Gemini 3.8 Flash TTS)
+// Arquitectura de Caché Global Nivel 2 y 3 (Firestore + Cloud Storage + Fal.ai)
+// =========================================================================
+
+// Sanitización determinista de texto alemán a ID seguro para Firestore y Storage
+function getSafeAudioId(text) {
+  return "audio_" + text
+    .trim()
+    .toLowerCase()
+    .normalize("NFC")
+    .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9_]/gi, "_")
+    .substring(0, 120);
+}
+
+export const synthesizeGermanSpeech = onCall(
+  {
+    secrets: [geminiPaidKey, falKey],
+    timeoutSeconds: 60,
+    memory: "512MiB",
+    cors: true
+  },
+  async (request) => {
+    const { text, voice = "Charon", type = "vocab" } = request.data || {};
+    if (!text || typeof text !== "string") {
+      throw new HttpsError("invalid-argument", "El parámetro 'text' es obligatorio y debe ser una cadena.");
+    }
+
+    const cleanText = text.replace(/[*_#`~]/g, "").trim();
+    if (!cleanText) {
+      throw new HttpsError("invalid-argument", "El texto proporcionado está vacío.");
+    }
+
+    const audioId = getSafeAudioId(cleanText);
+    const db = admin.firestore();
+
+    // ─────────────────────────────────────────────────────────────
+    // RESOLUCIÓN RESILIENTE DEL BUCKET DE CLOUD STORAGE
+    // ─────────────────────────────────────────────────────────────
+    const storageClient = admin.storage();
+    let bucket;
+    try {
+      const [buckets] = await storageClient.bucket().storage.getBuckets();
+      const bucketNames = buckets.map(b => b.name);
+      console.log("[TTS Storage] Buckets disponibles en el proyecto:", bucketNames);
+      
+      const matchedBucket = buckets.find(b => 
+        (b.name.includes("deutschmeister-pro") || b.name.includes("firebasestorage") || b.name.includes("appspot")) &&
+        !b.name.includes("cloudfunctions") && 
+        !b.name.includes("artifacts")
+      );
+      bucket = matchedBucket || buckets[0] || storageClient.bucket();
+      console.log(`[TTS Storage] Bucket seleccionado: ${bucket.name}`);
+    } catch (bErr) {
+      console.warn("[TTS Storage] Falló listado dinámico de buckets, usando configuración por defecto:", bErr.message);
+      bucket = storageClient.bucket(admin.app().options?.storageBucket || "deutschmeister-pro.firebasestorage.app");
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // PASO 1: REVISAR EN FIRESTORE SI YA EXISTE EN LA NUBE ($0 IA)
+    // ─────────────────────────────────────────────────────────────
+    const audioDocRef = db.collection("global_audio_pronunciations").doc(audioId);
+    const docSnap = await audioDocRef.get();
+
+    if (docSnap.exists) {
+      const data = docSnap.data();
+      if (data && data.audioUrl) {
+        console.log(`[TTS Cache Hit] Audio encontrado en Firestore [${audioId}]`);
+        return {
+          success: true,
+          audioUrl: data.audioUrl,
+          audioId: audioId,
+          fromCloudCache: true
+        };
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // PASO 2: GENERACIÓN CON GEMINI 3.8 FLASH TTS
+    // ─────────────────────────────────────────────────────────────
+    try {
+      fal.config({ credentials: falKey.value() });
+
+      console.log(`[TTS Engine] Generando voz (${voice}) para [${cleanText.substring(0, 40)}]...`);
+      const result = await fal.subscribe("google/gemini-3.8-flash-tts", {
+        input: {
+          prompt: cleanText,
+          voice: voice, // Voces recomendadas: "Charon" (pedagógica masculina) o "Kore" (femenina)
+          style_instructions: "Speak in clear, natural, standard German (Hochdeutsch) with precise A1 pedagogical pronunciation and natural pacing."
+        }
+      });
+
+      if (!result.data || !result.data.audio || !result.data.audio.url) {
+        throw new Error("No se recibió una URL válida del motor TTS.");
+      }
+
+      const tempAudioUrl = result.data.audio.url;
+
+      // ─────────────────────────────────────────────────────────────
+      // PASO 3: DESCARGAR BUFFER Y PERSISTIR EN FIREBASE STORAGE
+      // ─────────────────────────────────────────────────────────────
+      const audioFetch = await fetch(tempAudioUrl);
+      if (!audioFetch.ok) {
+        throw new Error(`Fallo al descargar audio temporal: HTTP ${audioFetch.status}`);
+      }
+      const audioBuffer = Buffer.from(await audioFetch.arrayBuffer());
+
+      const contentType = audioFetch.headers.get("content-type") || result.data?.audio?.content_type || "audio/mpeg";
+      const fileExt = contentType.includes("wav") ? "wav" : (contentType.includes("ogg") ? "ogg" : "mp3");
+      const storageFilePath = `pronunciations/${type}/${audioId}.${fileExt}`;
+      const file = bucket.file(storageFilePath);
+
+      const downloadToken = crypto.randomUUID();
+      await file.save(audioBuffer, {
+        metadata: {
+          contentType: contentType,
+          cacheControl: "public, max-age=31536000",
+          metadata: {
+            firebaseStorageDownloadTokens: downloadToken,
+            text: cleanText,
+            voice: voice,
+            type: type,
+            generatedAt: new Date().toISOString()
+          }
+        }
+      });
+
+      // Hacer público el archivo en Cloud Storage para lectura directa si la política lo permite
+      try {
+        await file.makePublic();
+      } catch (pubErr) {
+        console.warn("[TTS Storage Warning] makePublic vía ACL omitido:", pubErr.message);
+      }
+
+      const bucketName = bucket.name;
+      // URL permanente con token de descarga Firebase (compatible universalmente con navegadores y Capacitor)
+      const permanentAudioUrl = `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${encodeURIComponent(storageFilePath)}?alt=media&token=${downloadToken}`;
+
+      // ─────────────────────────────────────────────────────────────
+      // PASO 4: REGISTRAR EN FIRESTORE EN LA COLECCIÓN GLOBAL
+      // ─────────────────────────────────────────────────────────────
+      await audioDocRef.set({
+        audioId: audioId,
+        text: cleanText,
+        audioUrl: permanentAudioUrl,
+        storagePath: storageFilePath,
+        voice: voice,
+        type: type,
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+
+      console.log(`[TTS Engine Success] Audio persistido exitosamente: ${audioId}`);
+      return {
+        success: true,
+        audioUrl: permanentAudioUrl,
+        audioId: audioId,
+        fromCloudCache: false
+      };
+    } catch (error) {
+      console.error("[TTS Server Error] Fallo al sintetizar audio:", error);
+      throw new HttpsError("internal", error.message || "Error procesando síntesis de audio.");
+    }
+  }
+);

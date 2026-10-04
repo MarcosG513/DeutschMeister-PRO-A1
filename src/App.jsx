@@ -15,6 +15,7 @@ import AudioSim from './components/AudioSim';
 import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, nativeSpeak, getSafeId } from './utils/helpers';
+import { playGermanAudio, stopCurrentAudio } from './services/aiAudioService';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 
 
@@ -587,194 +588,68 @@ export default function App() {
     }
     return tokens;
   };
-  const speakStory = text => {
-    if (!text) return;
-    const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
+  const handlePlayStory = (storyGermanText) => {
+    if (!storyGermanText) return;
     if (isPlayingStoryAudio) {
-      if (Capacitor.isNativePlatform()) {
-        if (isStoryAudioPaused) {
-          // Reanudar native
-          const remainingWords = wordsOnlyRef.current.slice(currentWordIndex).map(w => w.text).join(' ');
-          const remainingClean = remainingWords.replace(/\*\*/g, '');
-          TextToSpeech.speak({
-            text: remainingClean,
-            lang: 'de-DE',
-            rate: 0.70,
-            volume: 1.0
-          }).then(() => {
-            if (!isPausedRef.current) {
-              setIsPlayingStoryAudio(false);
-              setIsStoryAudioPaused(false);
-              setCurrentWordIndex(-1);
-            }
-          }).catch(e => console.error("Error speak", e));
-          setIsStoryAudioPaused(false);
-          isPausedRef.current = false;
-          if (adaptiveTimerRef.current) {
-            adaptiveTimerRef.current(currentWordIndex);
-          }
-        } else {
-          // Pausar native
-          TextToSpeech.stop();
-          setIsStoryAudioPaused(true);
-          isPausedRef.current = true;
-          if (window.activeStoryTimeout) {
-            clearTimeout(window.activeStoryTimeout);
-            window.activeStoryTimeout = null;
-          }
-        }
-      } else if ('speechSynthesis' in window) {
-        if (isStoryAudioPaused) {
-          window.speechSynthesis.resume();
-          setIsStoryAudioPaused(false);
-          isPausedRef.current = false;
-          if (adaptiveTimerRef.current) {
-            adaptiveTimerRef.current(currentWordIndex);
-          }
-        } else {
-          window.speechSynthesis.pause();
-          setIsStoryAudioPaused(true);
-          isPausedRef.current = true;
-          if (window.activeStoryTimeout) {
-            clearTimeout(window.activeStoryTimeout);
-            window.activeStoryTimeout = null;
-          }
-        }
-      } else {
-        if (isStoryAudioPaused) {
-          window.isStoryPausedPlaceholder = false;
-          setIsStoryAudioPaused(false);
-          isPausedRef.current = false;
-        } else {
-          window.isStoryPausedPlaceholder = true;
-          setIsStoryAudioPaused(true);
-          isPausedRef.current = true;
-        }
+      stopCurrentAudio();
+      setIsPlayingStoryAudio(false);
+      setIsStoryAudioPaused(false);
+      setCurrentWordIndex(-1);
+      if (window.activeStoryTimeout) {
+        clearTimeout(window.activeStoryTimeout);
+        window.activeStoryTimeout = null;
       }
       return;
     }
+
     setIsPlayingStoryAudio(true);
     setIsStoryAudioPaused(false);
-    isPausedRef.current = false;
     setCurrentWordIndex(0);
-    const tokens = parseTextToTokens(cleanedText);
+
+    const tokens = parseTextToTokens(storyGermanText);
     const wordsOnly = tokens.filter(t => t.isWord);
     wordsOnlyRef.current = wordsOnly;
-    const cleanText = cleanedText.replace(/\*\*/g, '');
-    let hasNativeBoundary = false;
-    const runAdaptiveTimer = startIndex => {
-      if (startIndex >= wordsOnly.length) return;
-      let localIdx = startIndex;
-      const tick = () => {
-        if (hasNativeBoundary) return;
-        if (localIdx >= wordsOnly.length) return;
-        setCurrentWordIndex(localIdx);
-        const currentWord = wordsOnly[localIdx];
-        const wordLen = currentWord ? currentWord.text.length : 5;
-        const rate = 0.70;
-        const baseMs = 85;
-        const minMs = 350;
-        const duration = Math.max(minMs, wordLen * baseMs) / rate;
-        localIdx++;
-        if (localIdx < wordsOnly.length) {
-          window.activeStoryTimeout = setTimeout(tick, duration);
-        } else {
-          setTimeout(() => {
-            if (!hasNativeBoundary) {
-              setIsPlayingStoryAudio(false);
-              setIsStoryAudioPaused(false);
-              setCurrentWordIndex(-1);
-            }
-          }, duration);
-        }
-      };
-      if (window.activeStoryTimeout) clearTimeout(window.activeStoryTimeout);
-      window.activeStoryTimeout = setTimeout(tick, 0);
+
+    let localIdx = 0;
+    const tick = () => {
+      if (localIdx >= wordsOnly.length) return;
+      setCurrentWordIndex(localIdx);
+      const currentWord = wordsOnly[localIdx];
+      const wordLen = currentWord ? currentWord.text.length : 5;
+      const duration = Math.max(300, wordLen * 110);
+      localIdx++;
+      if (localIdx < wordsOnly.length) {
+        window.activeStoryTimeout = setTimeout(tick, duration);
+      }
     };
-    adaptiveTimerRef.current = runAdaptiveTimer;
-    if (Capacitor.isNativePlatform()) {
-      TextToSpeech.stop();
-      TextToSpeech.speak({
-        text: cleanText,
-        lang: 'de-DE',
-        rate: 0.70,
-        volume: 1.0
-      }).then(() => {
-        if (!isPausedRef.current) {
-          setIsPlayingStoryAudio(false);
-          setIsStoryAudioPaused(false);
-          setCurrentWordIndex(-1);
-        }
-      }).catch(e => console.error("Error Native Speak", e));
-      runAdaptiveTimer(0);
-    } else if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.getVoices(); // Carga segura de voces
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'de-DE';
-      utterance.rate = 0.70;
-      utterance.volume = 1.0;
-      utteranceRef.current = utterance;
-      utterance.onboundary = event => {
-        if (event.name === 'word') {
-          if (event.charIndex > 0) {
-            hasNativeBoundary = true;
-            if (window.activeStoryTimeout) {
-              clearTimeout(window.activeStoryTimeout);
-              window.activeStoryTimeout = null;
-            }
-          }
-          const charIndex = event.charIndex;
-          const currentToken = wordsOnlyRef.current.find(w => charIndex >= w.charStart && charIndex < w.charEnd);
-          if (currentToken) {
-            setCurrentWordIndex(currentToken.wordIndex);
-          }
-        }
-      };
-      utterance.onend = () => {
+    if (window.activeStoryTimeout) clearTimeout(window.activeStoryTimeout);
+    window.activeStoryTimeout = setTimeout(tick, 0);
+
+    playGermanAudio(storyGermanText, {
+      type: "story",
+      voice: "Charon",
+      onEnd: () => {
+        setIsPlayingStoryAudio(false);
+        setIsStoryAudioPaused(false);
+        setCurrentWordIndex(-1);
         if (window.activeStoryTimeout) {
           clearTimeout(window.activeStoryTimeout);
           window.activeStoryTimeout = null;
         }
+      },
+      onError: () => {
         setIsPlayingStoryAudio(false);
         setIsStoryAudioPaused(false);
         setCurrentWordIndex(-1);
-        utteranceRef.current = null;
-      };
-      utterance.onerror = () => {
         if (window.activeStoryTimeout) {
           clearTimeout(window.activeStoryTimeout);
           window.activeStoryTimeout = null;
         }
-        setIsPlayingStoryAudio(false);
-        setIsStoryAudioPaused(false);
-        setCurrentWordIndex(-1);
-        utteranceRef.current = null;
-      };
-      runAdaptiveTimer(0);
-      window.speechSynthesis.speak(utterance);
-    } else {
-      let wordIdx = 0;
-      setCurrentWordIndex(0);
-      const runInterval = () => {
-        if (window.activeStoryInterval) clearInterval(window.activeStoryInterval);
-        window.activeStoryInterval = setInterval(() => {
-          if (window.isStoryPausedPlaceholder) return;
-          wordIdx++;
-          if (wordIdx < wordsOnly.length) {
-            setCurrentWordIndex(wordIdx);
-          } else {
-            clearInterval(window.activeStoryInterval);
-            setIsPlayingStoryAudio(false);
-            setIsStoryAudioPaused(false);
-            setCurrentWordIndex(-1);
-          }
-        }, 450);
-      };
-      window.isStoryPausedPlaceholder = false;
-      runInterval();
-    }
+      }
+    });
   };
+
+  const speakStory = handlePlayStory;
   const groupWordsByCategory = words => {
     return words.reduce((acc, word) => {
       const cat = word.category || "General";
@@ -1419,6 +1294,7 @@ export default function App() {
                 <div className="flex justify-between items-center mb-4 flex-shrink-0">
                   <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2"><Sparkles className="text-indigo-500" /> Cuento A1 Generado</h3>
                   <button onClick={() => {
+                    stopCurrentAudio();
                     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
                     if (Capacitor.isNativePlatform()) {
                       try {
@@ -1462,14 +1338,18 @@ export default function App() {
                         })}
                         </div>
                       </div>
-                      <button onClick={() => speakStory(storyState.de)} className={`absolute top-2 right-2 p-2 bg-white rounded-full shadow-md transition-all ${isPlayingStoryAudio ? 'scale-110 opacity-100' : 'text-indigo-600 opacity-0 group-hover:opacity-100'}`} title={isPlayingStoryAudio ? isStoryAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación" : "Escuchar cuento"} aria-label={isPlayingStoryAudio ? isStoryAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación" : "Escuchar cuento"}>
-                        {isPlayingStoryAudio ? isStoryAudioPaused ? <Volume2 size={16} className="text-amber-500 animate-pulse" /> : <div className="relative w-4 h-4 flex items-center justify-center">
-                              <span className="absolute w-full h-full bg-indigo-400 rounded-full animate-ping opacity-75"></span>
-                              <div className="flex gap-0.5">
-                                <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
-                                <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
-                              </div>
-                            </div> : <Volume2 size={16} />}
+                      <button onClick={() => handlePlayStory(storyState.de)} className={`absolute top-2 right-2 p-2 bg-white rounded-full shadow-md transition-all ${isPlayingStoryAudio ? 'scale-110 opacity-100' : 'text-indigo-600 opacity-0 group-hover:opacity-100'}`} title={isPlayingStoryAudio ? "Detener pronunciación" : "Escuchar cuento"} aria-label={isPlayingStoryAudio ? "Detener pronunciación" : "Escuchar cuento"}>
+                        {isPlayingStoryAudio ? (
+                          <div className="relative w-4 h-4 flex items-center justify-center">
+                            <span className="absolute w-full h-full bg-indigo-400 rounded-full animate-ping opacity-75"></span>
+                            <div className="flex gap-0.5">
+                              <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
+                              <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
+                            </div>
+                          </div>
+                        ) : (
+                          <Volume2 size={16} />
+                        )}
                       </button>
                     </div>
                     <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex-shrink-0">

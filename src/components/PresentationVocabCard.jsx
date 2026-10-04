@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check } from 'lucide-react';
 import { getSafeId, nativeSpeak, awardCoins } from '../utils/helpers';
+import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 const SVGClock = ({ deWord }) => {
@@ -153,6 +154,33 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   const [recognizedText, setRecognizedText] = useState("");
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const feedbackTimeoutRef = useRef(null);
+
+  const handleSpeakWord = (e) => {
+    if (e) e.stopPropagation();
+    awardCoins(1);
+    setIsPlayingAudio(true);
+    playGermanAudio(wordObj.de, {
+      type: "vocab",
+      voice: "Charon",
+      onEnd: () => setIsPlayingAudio(false),
+      onError: () => setIsPlayingAudio(false)
+    });
+  };
+
+  const sentenceText = wordObj.exampleSentenceDe || 
+    (Array.isArray(wordObj.exampleSentenceDeBlocks) ? wordObj.exampleSentenceDeBlocks.join(" ") : "");
+
+  const handleSpeakSentence = (e) => {
+    if (e) e.stopPropagation();
+    if (!sentenceText) return;
+    setIsPlayingAudio(true);
+    playGermanAudio(sentenceText, {
+      type: "sentence",
+      voice: "Charon",
+      onEnd: () => setIsPlayingAudio(false),
+      onError: () => setIsPlayingAudio(false)
+    });
+  };
 
   const isLongText = wordObj.de.length > 20;
   const safeId = getSafeId(wordObj.de).substring(0, 150);
@@ -337,22 +365,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
  
                   <div className="flex justify-center items-center">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        awardCoins(1);
-                        setIsPlayingAudio(true);
-                        
-                        let textToSpeak = wordObj.de;
-                        if (wordObj.plural && wordObj.plural !== "-") {
-                          textToSpeak = `${wordObj.de}... ${wordObj.plural}`;
-                        }
-                        
-                        if (typeof nativeSpeak === 'function') {
-                          nativeSpeak(textToSpeak);
-                        }
-                        
-                        setTimeout(() => setIsPlayingAudio(false), 2500);
-                      }}
+                      onClick={handleSpeakWord}
                       className={`p-1.5 rounded-full transition-all duration-300 flex items-center justify-center ${
                         isPlayingAudio
                           ? 'bg-indigo-100 text-indigo-600 scale-110 shadow-sm animate-pulse'
@@ -446,13 +459,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                 return (
                   <div 
                     className="mt-1.5 w-full px-2.5 py-1.5 bg-white/10 rounded-xl cursor-pointer hover:bg-white/20 transition-all active:scale-95 flex flex-col gap-0.5 shadow-sm border border-white/5 relative z-50 min-h-0"
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      const oracionCompleta = wordObj.exampleSentenceDe || (wordObj.exampleSentenceDeBlocks && wordObj.exampleSentenceDeBlocks.length > 0 ? wordObj.exampleSentenceDeBlocks.join(" ") : "");
-                      if (oracionCompleta) {
-                        nativeSpeak(oracionCompleta, 'de-DE'); 
-                      }
-                    }}
+                    onClick={handleSpeakSentence}
                     onPointerDown={(e) => e.stopPropagation()}
                     title="Escuchar oración en alemán"
                   >
@@ -478,7 +485,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
           </div>
 
           <div className="absolute right-2 bottom-2 flex gap-1 z-50">
-             <button onClick={(e) => { e.stopPropagation(); nativeSpeak(wordObj.de || wordObj, 'de-DE'); }} className="text-blue-300 hover:text-white hover:bg-white/10 p-1 rounded-full transition-colors" title="Escuchar" aria-label="Escuchar palabra en alemán">
+             <button onClick={handleSpeakWord} className="text-blue-300 hover:text-white hover:bg-white/10 p-1 rounded-full transition-colors" title="Escuchar" aria-label="Escuchar palabra en alemán">
                <Volume2 size={16} />
              </button>
           </div>

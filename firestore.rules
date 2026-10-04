@@ -10,6 +10,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /global_audio_pronunciations/{document} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     match /public_content/data/flashcardImages/{imageId} {
       allow read: if true;
       allow write: if isAuthenticated();
