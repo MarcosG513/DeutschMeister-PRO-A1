@@ -30,6 +30,25 @@ export function stopCurrentAudio() {
   }
 }
 
+/**
+ * Obtiene la URL de audio (Data URI o Storage) desde el backend para caching en memoria.
+ */
+export async function getGermanSpeechUrl(text, options = {}) {
+  const { voice = "Charon", type = "story" } = options;
+  if (!text || typeof text !== "string") return null;
+  const cleanText = text.replace(/[*_#`~]/g, "").trim();
+  if (!cleanText) return null;
+
+  const fns = appFunctions || getFunctions();
+  const synthesizeFn = httpsCallable(fns, "synthesizeGermanSpeech");
+  const response = await synthesizeFn({ text: cleanText, voice, type });
+
+  if (response.data && response.data.audioUrl) {
+    return response.data.audioUrl;
+  }
+  throw new Error("No se recibió URL o Data URI de audio.");
+}
+
 export async function playGermanAudio(text, options = {}) {
   const { onStart, onEnd, onError, voice = "Charon", type = "vocab" } = options;
   if (!text || typeof text !== "string") return;
@@ -69,15 +88,7 @@ export async function playGermanAudio(text, options = {}) {
     }
 
     // 2. Invocar Backend (Google Direct -> Fal -> Cloud Storage o Base64)
-    const fns = appFunctions || getFunctions();
-    const synthesizeFn = httpsCallable(fns, "synthesizeGermanSpeech");
-    const response = await synthesizeFn({ text: cleanText, voice, type });
-
-    if (!response.data || !response.data.audioUrl) {
-      throw new Error("No se recibió URL o Data URI de audio.");
-    }
-
-    const audioSource = response.data.audioUrl;
+    const audioSource = await getGermanSpeechUrl(cleanText, { voice, type });
 
     // 3. Reproducción
     const audio = new Audio(audioSource);

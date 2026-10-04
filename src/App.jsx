@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
-import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize } from 'lucide-react';
+import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
@@ -15,7 +15,7 @@ import AudioSim from './components/AudioSim';
 import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId } from './utils/helpers';
-import { playGermanAudio, stopCurrentAudio } from './services/aiAudioService';
+import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 
 
@@ -163,21 +163,36 @@ export default function App() {
     }, 2200);
     return () => clearInterval(interval);
   }, [storyState?.loading]);
-  const [currentWordIndex, setCurrentWordIndex] = useState(-1);
+  const [isStoryAudioLoading, setIsStoryAudioLoading] = useState(false);
   const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
-  const [isStoryAudioPaused, setIsStoryAudioPaused] = useState(false);
-  const utteranceRef = useRef(null);
-  const wordsOnlyRef = useRef([]);
-  const adaptiveTimerRef = useRef(null);
-  const isPausedRef = useRef(false);
+  const [currentWordIndex, setCurrentWordIndex] = useState(-1);
+  const storyAudioInstanceRef = useRef(null); // Instancia HTML5 Audio en memoria
+  const storyAudioUrlRef = useRef(null);      // Buffer/Data URI guardado mientras el modal esté abierto
+
+  const closeStoryModal = () => {
+    if (storyAudioInstanceRef.current) {
+      storyAudioInstanceRef.current.pause();
+      storyAudioInstanceRef.current.src = "";
+      storyAudioInstanceRef.current = null;
+    }
+    storyAudioUrlRef.current = null; // Libera la memoria del audio
+    setIsPlayingStoryAudio(false);
+    setIsStoryAudioLoading(false);
+    setCurrentWordIndex(-1);
+    setStoryState(prev => ({
+      ...prev,
+      isOpen: false
+    }));
+  };
+
   useEffect(() => {
     return () => {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
+      if (storyAudioInstanceRef.current) {
+        storyAudioInstanceRef.current.pause();
+        storyAudioInstanceRef.current.src = "";
+        storyAudioInstanceRef.current = null;
       }
-      if (window.activeStoryInterval) {
-        clearInterval(window.activeStoryInterval);
-      }
+      storyAudioUrlRef.current = null;
     };
   }, []);
   const [fullscreenImage, setFullscreenImage] = useState(null);
@@ -353,7 +368,7 @@ export default function App() {
         return;
       }
       if (storyState?.isOpen) {
-        setStoryState(prev => ({ ...prev, isOpen: false }));
+        closeStoryModal();
         return;
       }
       if (activePresentationId || activeStudyPlanId) {
@@ -411,6 +426,16 @@ export default function App() {
   const hideAll = () => setRevealedCards({});
   const generateStory = async () => {
     if (!activeChapter) return;
+    if (storyAudioInstanceRef.current) {
+      storyAudioInstanceRef.current.pause();
+      storyAudioInstanceRef.current.src = "";
+      storyAudioInstanceRef.current = null;
+    }
+    storyAudioUrlRef.current = null;
+    setIsPlayingStoryAudio(false);
+    setIsStoryAudioLoading(false);
+    setCurrentWordIndex(-1);
+
     const palabrasValidas = displayedWords.filter(w => w.de.length > 2).slice(0, 8).map(w => w.de);
     if (palabrasValidas.length === 0) {
       setStoryState({
@@ -588,68 +613,97 @@ export default function App() {
     }
     return tokens;
   };
-  const handlePlayStory = (storyGermanText) => {
-    if (!storyGermanText) return;
-    if (isPlayingStoryAudio) {
-      stopCurrentAudio();
-      setIsPlayingStoryAudio(false);
-      setIsStoryAudioPaused(false);
-      setCurrentWordIndex(-1);
-      if (window.activeStoryTimeout) {
-        clearTimeout(window.activeStoryTimeout);
-        window.activeStoryTimeout = null;
-      }
-      return;
-    }
+  const calculateWordTimings = (tokens) => {
+    const words = tokens.filter(t => t.isWord);
+    const totalChars = words.reduce((sum, w) => sum + w.text.length, 0);
+    let accumulated = 0;
 
-    setIsPlayingStoryAudio(true);
-    setIsStoryAudioPaused(false);
-    setCurrentWordIndex(0);
-
-    const tokens = parseTextToTokens(storyGermanText);
-    const wordsOnly = tokens.filter(t => t.isWord);
-    wordsOnlyRef.current = wordsOnly;
-
-    let localIdx = 0;
-    const tick = () => {
-      if (localIdx >= wordsOnly.length) return;
-      setCurrentWordIndex(localIdx);
-      const currentWord = wordsOnly[localIdx];
-      const wordLen = currentWord ? currentWord.text.length : 5;
-      const duration = Math.max(300, wordLen * 110);
-      localIdx++;
-      if (localIdx < wordsOnly.length) {
-        window.activeStoryTimeout = setTimeout(tick, duration);
-      }
-    };
-    if (window.activeStoryTimeout) clearTimeout(window.activeStoryTimeout);
-    window.activeStoryTimeout = setTimeout(tick, 0);
-
-    playGermanAudio(storyGermanText, {
-      type: "story",
-      voice: "Charon",
-      onEnd: () => {
-        setIsPlayingStoryAudio(false);
-        setIsStoryAudioPaused(false);
-        setCurrentWordIndex(-1);
-        if (window.activeStoryTimeout) {
-          clearTimeout(window.activeStoryTimeout);
-          window.activeStoryTimeout = null;
-        }
-      },
-      onError: () => {
-        setIsPlayingStoryAudio(false);
-        setIsStoryAudioPaused(false);
-        setCurrentWordIndex(-1);
-        if (window.activeStoryTimeout) {
-          clearTimeout(window.activeStoryTimeout);
-          window.activeStoryTimeout = null;
-        }
-      }
+    return words.map((w, idx) => {
+      const startRatio = accumulated / (totalChars || 1);
+      accumulated += w.text.length;
+      const endRatio = accumulated / (totalChars || 1);
+      return { wordIndex: idx, startRatio, endRatio };
     });
   };
 
-  const speakStory = handlePlayStory;
+  const handleToggleStoryAudio = async () => {
+    if (!storyState.de) return;
+
+    // 1. Si ya se está reproduciendo, pausar
+    if (isPlayingStoryAudio && storyAudioInstanceRef.current) {
+      storyAudioInstanceRef.current.pause();
+      setIsPlayingStoryAudio(false);
+      return;
+    }
+
+    // 2. Si ya fue pausado y el audio ya existe en memoria, reanudar de inmediato (0 API calls)
+    if (storyAudioInstanceRef.current && storyAudioUrlRef.current) {
+      // Si terminó, reiniciar desde el inicio
+      if (storyAudioInstanceRef.current.ended) {
+        storyAudioInstanceRef.current.currentTime = 0;
+        setCurrentWordIndex(0);
+      }
+      storyAudioInstanceRef.current.play();
+      setIsPlayingStoryAudio(true);
+      return;
+    }
+
+    // 3. Primera reproducción: Llamar a la API y guardar en memoria
+    try {
+      setIsStoryAudioLoading(true);
+      stopCurrentAudio(); // Detiene cualquier otro sonido en la app
+
+      const audioSource = await getGermanSpeechUrl(storyState.de, {
+        voice: "Charon",
+        type: "story"
+      });
+
+      storyAudioUrlRef.current = audioSource;
+
+      const audio = new Audio(audioSource);
+      storyAudioInstanceRef.current = audio;
+
+      const tokens = parseTextToTokens(storyState.de);
+      const wordTimings = calculateWordTimings(tokens);
+
+      audio.onplay = () => {
+        setIsStoryAudioLoading(false);
+        setIsPlayingStoryAudio(true);
+      };
+
+      audio.ontimeupdate = () => {
+        if (!audio.duration || audio.duration === 0) return;
+        const currentProgress = audio.currentTime / audio.duration;
+        const active = wordTimings.find(
+          w => currentProgress >= w.startRatio && currentProgress < w.endRatio
+        );
+        if (active && active.wordIndex !== currentWordIndex) {
+          setCurrentWordIndex(active.wordIndex);
+        }
+      };
+
+      audio.onended = () => {
+        setIsPlayingStoryAudio(false);
+        setCurrentWordIndex(-1);
+      };
+
+      audio.onerror = (e) => {
+        console.warn("[Story Audio Error] Fallo al reproducir:", e);
+        setIsPlayingStoryAudio(false);
+        setIsStoryAudioLoading(false);
+        setCurrentWordIndex(-1);
+      };
+
+      await audio.play();
+    } catch (err) {
+      console.error("Error al obtener audio del cuento:", err);
+      setIsStoryAudioLoading(false);
+      setIsPlayingStoryAudio(false);
+    }
+  };
+
+  const handlePlayStory = handleToggleStoryAudio;
+  const speakStory = handleToggleStoryAudio;
   const groupWordsByCategory = words => {
     return words.reduce((acc, word) => {
       const cat = word.category || "General";
@@ -1293,37 +1347,14 @@ export default function App() {
               <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 animate-in zoom-in-95 max-h-[85svh] flex flex-col overflow-hidden">
                 <div className="flex justify-between items-center mb-4 flex-shrink-0">
                   <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2"><Sparkles className="text-indigo-500" /> Cuento A1 Generado</h3>
-                  <button onClick={() => {
-                    stopCurrentAudio();
-                    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-                    if (Capacitor.isNativePlatform()) {
-                      try {
-                        TextToSpeech.stop();
-                      } catch (e) {}
-                    }
-                    if (window.activeStoryInterval) {
-                      clearInterval(window.activeStoryInterval);
-                      window.activeStoryInterval = null;
-                    }
-                    if (window.activeStoryTimeout) {
-                      clearTimeout(window.activeStoryTimeout);
-                      window.activeStoryTimeout = null;
-                    }
-                    setIsPlayingStoryAudio(false);
-                    setIsStoryAudioPaused(false);
-                    setCurrentWordIndex(-1);
-                    setStoryState(prev => ({
-                      ...prev,
-                      isOpen: false
-                    }));
-                  }} className="text-slate-400 hover:bg-slate-100 p-2 rounded-full"><X size={20} /></button>
+                  <button onClick={closeStoryModal} className="text-slate-400 hover:bg-slate-100 p-2 rounded-full"><X size={20} /></button>
                 </div>
                 {storyState.loading ? <div className="py-12 flex flex-col items-center justify-center gap-3 text-indigo-500 flex-grow">
                     <Loader2 size={40} className="animate-spin" />
                     <div className="animate-pulse text-indigo-600 font-medium transition-opacity duration-300 text-center px-4">{loadingPhrases[loadingPhraseIdx]}</div>
                   </div> : <div className="space-y-4 flex-grow overflow-hidden flex flex-col">
                     <div className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[280px]">
-                      <div className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow" onClick={() => speakStory(storyState.de)}>
+                      <div className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow" onClick={handleToggleStoryAudio}>
                         <div translate="no" className="notranslate font-normal text-lg leading-relaxed text-slate-800">
                           {parseTextToTokens(storyState.de).map((token, idx) => {
                           if (token.isWord) {
@@ -1338,17 +1369,39 @@ export default function App() {
                         })}
                         </div>
                       </div>
-                      <button onClick={() => handlePlayStory(storyState.de)} className={`absolute top-2 right-2 p-2 bg-white rounded-full shadow-md transition-all ${isPlayingStoryAudio ? 'scale-110 opacity-100' : 'text-indigo-600 opacity-0 group-hover:opacity-100'}`} title={isPlayingStoryAudio ? "Detener pronunciación" : "Escuchar cuento"} aria-label={isPlayingStoryAudio ? "Detener pronunciación" : "Escuchar cuento"}>
-                        {isPlayingStoryAudio ? (
-                          <div className="relative w-4 h-4 flex items-center justify-center">
-                            <span className="absolute w-full h-full bg-indigo-400 rounded-full animate-ping opacity-75"></span>
-                            <div className="flex gap-0.5">
-                              <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
-                              <div className="w-1 h-3 bg-indigo-600 rounded-sm"></div>
+                      <button 
+                        onClick={handleToggleStoryAudio}
+                        disabled={isStoryAudioLoading}
+                        className={`absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-md transition-all text-xs font-semibold ${
+                          isStoryAudioLoading
+                            ? 'bg-indigo-100 text-indigo-500 cursor-not-allowed opacity-100'
+                            : isPlayingStoryAudio 
+                              ? 'bg-indigo-600 text-white hover:bg-indigo-700 scale-105 opacity-100' 
+                              : 'bg-white text-indigo-600 hover:bg-indigo-50 border border-indigo-200 opacity-90 group-hover:opacity-100'
+                        }`}
+                        title={isStoryAudioLoading ? "Preparando voz de estudio..." : isPlayingStoryAudio ? "Pausar cuento" : "Escuchar cuento"} 
+                        aria-label={isStoryAudioLoading ? "Preparando voz de estudio..." : isPlayingStoryAudio ? "Pausar cuento" : "Escuchar cuento"}
+                      >
+                        {isStoryAudioLoading ? (
+                          <>
+                            <Loader2 size={14} className="animate-spin text-indigo-500" />
+                            <span className="hidden sm:inline">Preparando voz de estudio...</span>
+                          </>
+                        ) : isPlayingStoryAudio ? (
+                          <>
+                            <div className="flex items-center gap-0.5">
+                              <span className="w-1 h-3 bg-white rounded-sm animate-pulse"></span>
+                              <span className="w-1 h-2 bg-white rounded-sm animate-pulse delay-75"></span>
+                              <span className="w-1 h-3.5 bg-white rounded-sm animate-pulse delay-150"></span>
                             </div>
-                          </div>
+                            <Pause size={14} className="ml-0.5" />
+                            <span className="hidden sm:inline">Pausar</span>
+                          </>
                         ) : (
-                          <Volume2 size={16} />
+                          <>
+                            <Play size={14} className="fill-current" />
+                            <span>{storyAudioUrlRef.current ? "Reanudar" : "Escuchar cuento"}</span>
+                          </>
                         )}
                       </button>
                     </div>
