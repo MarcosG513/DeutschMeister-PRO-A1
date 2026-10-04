@@ -69,7 +69,10 @@ export async function playGermanAudio(text, options = {}) {
 
       if (response.data && response.data.audioUrl) {
         const audioFetch = await fetch(response.data.audioUrl);
-        if (!audioFetch.ok) throw new Error(`Fallo al descargar blob de audio: HTTP ${audioFetch.status}`);
+        if (!audioFetch.ok) {
+          try { await audioStore.removeItem(cacheKey); } catch (_) {}
+          throw new Error(`Fallo al descargar blob de audio: HTTP ${audioFetch.status}`);
+        }
         audioBlob = await audioFetch.blob();
 
         // Guardar persistentemente en IndexedDB para futuros usos
@@ -92,11 +95,12 @@ export async function playGermanAudio(text, options = {}) {
       if (onEnd) onEnd();
     };
 
-    audio.onerror = (e) => {
+    audio.onerror = async (e) => {
       URL.revokeObjectURL(blobUrl);
       if (currentAudioInstance === audio) {
         currentAudioInstance = null;
       }
+      try { await audioStore.removeItem(cacheKey); } catch (_) {}
       console.warn("[TTS Playback Error] Fallo al reproducir Blob, activando fallback nativo:", e);
       nativeSpeak(cleanText);
       if (onEnd) onEnd();
@@ -104,6 +108,7 @@ export async function playGermanAudio(text, options = {}) {
 
     await audio.play();
   } catch (error) {
+    try { await audioStore.removeItem(cacheKey); } catch (_) {}
     console.warn("[TTS Pipeline Warning] Activando fallback a motor nativo:", error);
     nativeSpeak(cleanText);
     if (onError) onError(error);

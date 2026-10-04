@@ -1581,37 +1581,23 @@ export const synthesizeGermanSpeech = onCall(
     const db = admin.firestore();
 
     // ─────────────────────────────────────────────────────────────
-    // RESOLUCIÓN RESILIENTE DEL BUCKET DE CLOUD STORAGE
+    // DEFINICIÓN DEL BUCKET OFICIAL DE FIREBASE STORAGE
     // ─────────────────────────────────────────────────────────────
-    const storageClient = admin.storage();
-    let bucket;
-    try {
-      const [buckets] = await storageClient.bucket().storage.getBuckets();
-      const bucketNames = buckets.map(b => b.name);
-      console.log("[TTS Storage] Buckets disponibles en el proyecto:", bucketNames);
-      
-      const matchedBucket = buckets.find(b => 
-        (b.name.includes("deutschmeister-pro") || b.name.includes("firebasestorage") || b.name.includes("appspot")) &&
-        !b.name.includes("cloudfunctions") && 
-        !b.name.includes("artifacts")
-      );
-      bucket = matchedBucket || buckets[0] || storageClient.bucket();
-      console.log(`[TTS Storage] Bucket seleccionado: ${bucket.name}`);
-    } catch (bErr) {
-      console.warn("[TTS Storage] Falló listado dinámico de buckets, usando configuración por defecto:", bErr.message);
-      bucket = storageClient.bucket(admin.app().options?.storageBucket || "deutschmeister-pro.firebasestorage.app");
-    }
+    const STORAGE_BUCKET_NAME = process.env.STORAGE_BUCKET || "deutschmeister-pro.firebasestorage.app";
+    const bucket = admin.storage().bucket(STORAGE_BUCKET_NAME);
 
     // ─────────────────────────────────────────────────────────────
     // PASO 1: REVISAR EN FIRESTORE SI YA EXISTE EN LA NUBE ($0 IA)
+    // AUTOSANACIÓN: Purga automática de URLs corruptas de gcf-v2-sources
     // ─────────────────────────────────────────────────────────────
     const audioDocRef = db.collection("global_audio_pronunciations").doc(audioId);
     const docSnap = await audioDocRef.get();
 
     if (docSnap.exists) {
       const data = docSnap.data();
-      if (data && data.audioUrl) {
-        console.log(`[TTS Cache Hit] Audio encontrado en Firestore [${audioId}]`);
+      // Si la URL existente apunta al bucket corrupto gcf-v2-sources, ignorarla y forzar regeneración limpia
+      if (data && data.audioUrl && !data.audioUrl.includes("gcf-v2-sources") && !data.audioUrl.includes("gcf-v2-uploads")) {
+        console.log(`[TTS Cache Hit] Audio válido encontrado en Firestore [${audioId}]`);
         return {
           success: true,
           audioUrl: data.audioUrl,
@@ -1619,6 +1605,7 @@ export const synthesizeGermanSpeech = onCall(
           fromCloudCache: true
         };
       }
+      console.log(`[TTS Cache Purge] URL corrupta o interna detectada para [${audioId}], regenerando en bucket oficial...`);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -1651,36 +1638,40 @@ export const synthesizeGermanSpeech = onCall(
       }
       const audioBuffer = Buffer.from(await audioFetch.arrayBuffer());
 
-      const contentType = audioFetch.headers.get("content-type") || result.data?.audio?.content_type || "audio/mpeg";
-      const fileExt = contentType.includes("wav") ? "wav" : (contentType.includes("ogg") ? "ogg" : "mp3");
-      const storageFilePath = `pronunciations/${type}/${audioId}.${fileExt}`;
-      const file = bucket.file(storageFilePath);
-
       const downloadToken = crypto.randomUUID();
-      await file.save(audioBuffer, {
-        metadata: {
-          contentType: contentType,
-          cacheControl: "public, max-age=31536000",
-          metadata: {
-            firebaseStorageDownloadTokens: downloadToken,
-            text: cleanText,
-            voice: voice,
-            type: type,
-            generatedAt: new Date().toISOString()
-          }
-        }
-      });
+      const filePath = `pronunciations/${type}/${audioId}.wav`;
+      const file = bucket.file(filePath);
 
-      // Hacer público el archivo en Cloud Storage para lectura directa si la política lo permite
+      let permanentAudioUrl;
       try {
-        await file.makePublic();
-      } catch (pubErr) {
-        console.warn("[TTS Storage Warning] makePublic vía ACL omitido:", pubErr.message);
-      }
+        await file.save(audioBuffer, {
+          metadata: {
+            contentType: "audio/wav",
+            metadata: {
+              firebaseStorageDownloadTokens: downloadToken
+            }
+          }
+        });
 
-      const bucketName = bucket.name;
-      // URL permanente con token de descarga Firebase (compatible universalmente con navegadores y Capacitor)
-      const permanentAudioUrl = `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${encodeURIComponent(storageFilePath)}?alt=media&token=${downloadToken}`;
+        // URL oficial de Firebase Storage garantizada
+        permanentAudioUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(filePath)}?alt=media&token=${downloadToken}`;
+      } catch (storageErr) {
+        console.warn(`[TTS Storage] Aviso: Bucket oficial '${bucket.name}' no accesible (${storageErr.message}). Utilizando bucket resiliente de audio...`);
+        const vaultBucket = admin.storage().bucket("deutschmeister-audio-vault");
+        const vaultFile = vaultBucket.file(filePath);
+        await vaultFile.save(audioBuffer, {
+          metadata: {
+            contentType: "audio/wav",
+            metadata: {
+              firebaseStorageDownloadTokens: downloadToken,
+              text: cleanText,
+              voice: voice
+            }
+          }
+        });
+        try { await vaultFile.makePublic(); } catch (_) {}
+        permanentAudioUrl = `https://storage.googleapis.com/deutschmeister-audio-vault/${filePath}`;
+      }
 
       // ─────────────────────────────────────────────────────────────
       // PASO 4: REGISTRAR EN FIRESTORE EN LA COLECCIÓN GLOBAL
@@ -1689,7 +1680,7 @@ export const synthesizeGermanSpeech = onCall(
         audioId: audioId,
         text: cleanText,
         audioUrl: permanentAudioUrl,
-        storagePath: storageFilePath,
+        storagePath: filePath,
         voice: voice,
         type: type,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
