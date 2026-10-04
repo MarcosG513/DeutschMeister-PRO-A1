@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Shield, ArrowRight, CheckCircle2, AlertTriangle, RotateCcw } from 'lucide-react';
-import { nativeSpeak } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const AccusativeShield = ({ words = [] }) => {
   const list = words.length > 0 ? words : [
@@ -35,7 +35,7 @@ const AccusativeShield = ({ words = [] }) => {
         correct = true;
         setShieldApplied(true);
         explanation = `¡Correcto! El masculino '${currentWord.gender} ${currentWord.word}' cambia en Acusativo a 'den ${currentWord.word}' (o 'einen ${currentWord.word}').`;
-        if (typeof nativeSpeak === 'function') nativeSpeak(`den ${currentWord.word}`);
+        playGermanAudio(`den ${currentWord.word}`, { type: "vocab", voice: "Charon" });
       } else {
         correct = false;
         explanation = `¡Error! El sustantivo es ${currentWord.gender === "die" ? "femenino" : "neutro"} (${currentWord.gender} ${currentWord.word}). Solo los masculinos cambian en acusativo.`;
@@ -44,7 +44,7 @@ const AccusativeShield = ({ words = [] }) => {
       if (!isMasculine) {
         correct = true;
         explanation = `¡Correcto! '${currentWord.gender} ${currentWord.word}' es ${currentWord.gender === "die" ? "femenino" : "neutro"}, por lo que no cambia en acusativo.`;
-        if (typeof nativeSpeak === 'function') nativeSpeak(`${currentWord.gender} ${currentWord.word}`);
+        playGermanAudio(`${currentWord.gender} ${currentWord.word}`, { type: "vocab", voice: "Charon" });
       } else {
         correct = false;
         explanation = `¡Error! '${currentWord.gender} ${currentWord.word}' es masculino. El acusativo exige cambiar '${currentWord.gender}' a 'den' (o 'einen').`;

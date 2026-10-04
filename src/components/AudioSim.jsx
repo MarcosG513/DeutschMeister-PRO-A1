@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { Volume2 } from 'lucide-react';
-import { nativeSpeak } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const AudioSim = ({ title, textDe, textEs }) => {
   const [playing, setPlaying] = useState(false);
   
   const playAudio = async () => {
     setPlaying(true);
-    await nativeSpeak(textDe);
-    setTimeout(() => setPlaying(false), 2000);
+    await playGermanAudio(textDe, {
+      type: "dialogue",
+      voice: "Charon",
+      onStart: () => setPlaying(true),
+      onEnd: () => setPlaying(false),
+      onError: () => setPlaying(false)
+    });
   };
 
   return (

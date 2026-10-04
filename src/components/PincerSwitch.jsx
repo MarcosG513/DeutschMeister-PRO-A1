@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Scissors, Play, CheckCircle2, RotateCcw, ArrowRight } from 'lucide-react';
-import { nativeSpeak } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const PincerSwitch = ({ exercises = [] }) => {
   const list = exercises.length > 0 ? exercises : [
@@ -16,9 +16,10 @@ const PincerSwitch = ({ exercises = [] }) => {
 
   const triggerPincer = () => {
     setIsActive(true);
-    if (typeof nativeSpeak === 'function') {
-      nativeSpeak(`${current.subject} ${current.verbRaiz} ${current.complement} ${current.prefix}`);
-    }
+    playGermanAudio(`${current.subject} ${current.verbRaiz} ${current.complement} ${current.prefix}`, {
+      type: "sentence",
+      voice: "Charon"
+    });
   };
 
   const resetPincer = () => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
-import { nativeSpeak, spendCoins } from '../utils/helpers';
+import { spendCoins } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePool }) => {
   const [currentSentence, setCurrentSentence] = useState({ subject, verb, complement });
@@ -87,9 +88,7 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
 
     if (verbIsSecond) {
       setIsValid(true);
-      if (typeof nativeSpeak === 'function') {
-        nativeSpeak(`${slots[0]} ${slots[1]} ${slots[2]}`);
-      }
+      playGermanAudio(`${slots[0]} ${slots[1]} ${slots[2]}`, { type: "sentence", voice: "Charon" });
     } else {
       setIsValid(false);
       setShake(true);
@@ -203,9 +202,7 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
           <span>{slots.join(" ")}</span>
           <button 
             onClick={() => {
-              if (typeof nativeSpeak === 'function') {
-                nativeSpeak(slots.join(" "));
-              }
+              playGermanAudio(slots.join(" "), { type: "sentence", voice: "Charon" });
             }} 
             className="text-emerald-700 hover:text-emerald-900 p-1 rounded-full hover:bg-emerald-200/50 transition-colors" 
             title="Escuchar"

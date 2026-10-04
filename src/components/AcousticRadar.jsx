@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Volume2, CheckCircle2, XCircle } from 'lucide-react';
-import { nativeSpeak } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const AcousticRadar = ({ title, textDe, textEs, options, correctOption, question }) => {
   const [playing, setPlaying] = useState(false);
@@ -9,8 +9,13 @@ const AcousticRadar = ({ title, textDe, textEs, options, correctOption, question
 
   const playAudio = async () => {
     setPlaying(true);
-    await nativeSpeak(textDe);
-    setPlaying(false);
+    await playGermanAudio(textDe, {
+      type: "dialogue",
+      voice: "Charon",
+      onStart: () => setPlaying(true),
+      onEnd: () => setPlaying(false),
+      onError: () => setPlaying(false)
+    });
   };
 
   const handleSelect = (option) => {

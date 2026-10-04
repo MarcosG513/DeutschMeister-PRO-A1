@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowRight, History, Play } from 'lucide-react';
-import { nativeSpeak } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const MechanicalTimeline = ({ 
   present = { subject: "Ich", verb: "kaufe", complement: "eine Pizza" },
@@ -12,9 +12,9 @@ const MechanicalTimeline = ({
 
   const speakSentence = () => {
     if (t < 0.5) {
-      if (typeof nativeSpeak === 'function') nativeSpeak(`${present.subject} ${present.verb} ${present.complement}`);
+      playGermanAudio(`${present.subject} ${present.verb} ${present.complement}`, { type: "sentence", voice: "Charon" });
     } else {
-      if (typeof nativeSpeak === 'function') nativeSpeak(`${present.subject} ${past.auxiliary} ${present.complement} ${past.participle}`);
+      playGermanAudio(`${present.subject} ${past.auxiliary} ${present.complement} ${past.participle}`, { type: "sentence", voice: "Charon" });
     }
   };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Compass, CheckCircle2, AlertTriangle, RotateCcw, ArrowRight } from 'lucide-react';
-import { nativeSpeak } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const LocativeMapSimulator = ({ exercises = [] }) => {
   const list = exercises.length > 0 ? exercises : [
@@ -57,7 +57,7 @@ const LocativeMapSimulator = ({ exercises = [] }) => {
       setScore(prev => prev + 1);
       setShowFeedback('correct');
       const completeSentence = current.sentence.replace("___", option);
-      if (typeof nativeSpeak === 'function') nativeSpeak(completeSentence);
+      playGermanAudio(completeSentence, { type: "sentence", voice: "Charon" });
     } else {
       setShowFeedback('incorrect');
       setShake(true);

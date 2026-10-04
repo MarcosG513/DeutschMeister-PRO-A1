@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mic, MicOff, CheckCircle2, AlertCircle, Bot, Sparkles, Hand } from 'lucide-react';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
-import { nativeSpeak } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const VoiceExaminer = ({
   question = "Repite o responde con un comando oficial: 'Sprechen Sie bitte langsam!'",
@@ -51,9 +51,7 @@ const VoiceExaminer = ({
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option.text);
-    if (typeof nativeSpeak === 'function') {
-      nativeSpeak(option.text);
-    }
+    playGermanAudio(option.text, { type: "dialogue", voice: "Charon" });
     setResult('success');
     if (typeof onComplete === 'function') onComplete();
   };

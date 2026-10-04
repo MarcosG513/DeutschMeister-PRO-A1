@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader2, Send, X, Volume2, Sparkles } from 'lucide-react';
-import { nativeSpeak, awardCoins } from '../utils/helpers';
+import { awardCoins } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const RoleplaySimulator = ({
   onExit
@@ -295,7 +296,7 @@ const RoleplaySimulator = ({
       <div className="flex-1 overflow-y-auto p-6 bg-slate-50 flex flex-col gap-4 custom-scrollbar">
         {messages.filter(m => m.role !== 'user' || m.parts[0].text !== "Hola, inicia la simulación según las instrucciones.").map((msg, i) => <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[80%] rounded-2xl px-5 py-3 shadow-sm flex items-start gap-3 ${msg.role === 'user' ? 'bg-purple-600 text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'}`}>
-              {msg.role === 'model' && <button onClick={() => nativeSpeak(msg.parts[0].text)} className="mt-1 text-slate-400 hover:text-purple-600 transition shrink-0"><Volume2 size={16} /></button>}
+              {msg.role === 'model' && <button onClick={() => playGermanAudio(msg.parts[0].text, { type: "dialogue", voice: "Charon" })} className="mt-1 text-slate-400 hover:text-purple-600 transition shrink-0"><Volume2 size={16} /></button>}
               <span className="leading-relaxed text-[15px]">{msg.parts[0].text}</span>
             </div>
           </div>)}

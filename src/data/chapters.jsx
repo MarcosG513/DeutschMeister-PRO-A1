@@ -20,7 +20,6 @@ import FormularBuilder from '../components/FormularBuilder';
 import OfficialFormExam from '../components/OfficialFormExam';
 import VoiceExaminer from '../components/VoiceExaminer';
 import ClockSVG from '../components/ClockSVG';
-import { nativeSpeak } from '../utils/helpers';
 const rawChapters = [
 {
   id: 0,

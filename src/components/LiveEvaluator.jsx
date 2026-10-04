@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CheckCircle2, RotateCcw } from 'lucide-react';
-import { nativeSpeak } from '../utils/helpers';
+import { playGermanAudio } from '../services/aiAudioService';
 
 const LiveEvaluator = ({ exercises = [] }) => {
   const list = exercises.length > 0 ? exercises : [
@@ -24,9 +24,7 @@ const LiveEvaluator = ({ exercises = [] }) => {
 
     if (isCorrect) {
       const sentenceText = list[idx].text.replace("___", val.trim()) + ".";
-      if (typeof nativeSpeak === 'function') {
-        nativeSpeak(sentenceText);
-      }
+      playGermanAudio(sentenceText, { type: "sentence", voice: "Charon" });
     }
   };
 

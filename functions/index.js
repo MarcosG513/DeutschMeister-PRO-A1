@@ -1552,11 +1552,81 @@ function getSafeAudioId(text) {
   return "audio_" + text
     .trim()
     .toLowerCase()
-    .normalize("NFC")
-    .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
     .replace(/[^a-z0-9_]/gi, "_")
     .substring(0, 120);
+}
+
+/**
+ * 1. Invocación Directa a la API de Google AI Studio (Consume Créditos del Google Developer Program)
+ */
+async function synthesizeWithGoogleDirect(text, voice, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash-tts:generateContent?key=${apiKey}`;
+  const payload = {
+    contents: [{ parts: [{ text }] }],
+    generationConfig: {
+      responseModalities: ["AUDIO"],
+      speechConfig: {
+        voiceConfig: {
+          prebuiltVoiceConfig: {
+            voiceName: voice || "Charon" // 'Charon' (masculina pedagógica) o 'Kore' (femenina)
+          }
+        }
+      }
+    }
+  };
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`Google Direct API HTTP ${response.status}: ${errorBody}`);
+  }
+
+  const json = await response.json();
+  const inlineData = json.candidates?.[0]?.content?.parts?.[0]?.inlineData;
+  if (!inlineData || !inlineData.data) {
+    throw new Error("La API directa de Google no devolvió datos de audio válidos.");
+  }
+
+  return {
+    buffer: Buffer.from(inlineData.data, "base64"),
+    mimeType: inlineData.mimeType || "audio/wav",
+    provider: "google-direct"
+  };
+}
+
+/**
+ * 2. Invocación de Respaldo a Fal.ai
+ */
+async function synthesizeWithFalFallback(text, voice, falKeyValue) {
+  fal.config({ credentials: falKeyValue });
+
+  const result = await fal.subscribe("google/gemini-3.8-flash-tts", {
+    input: {
+      prompt: text,
+      voice: voice || "Charon",
+      style_instructions: "Speak in clear, natural, standard German (Hochdeutsch) with precise A1 pedagogical pronunciation and natural pacing."
+    }
+  });
+
+  if (!result.data || !result.data.audio || !result.data.audio.url) {
+    throw new Error("Fal.ai no devolvió URL de audio.");
+  }
+
+  const audioRes = await fetch(result.data.audio.url);
+  if (!audioRes.ok) throw new Error(`Fallo descargando audio de Fal.ai: HTTP ${audioRes.status}`);
+
+  return {
+    buffer: Buffer.from(await audioRes.arrayBuffer()),
+    mimeType: result.data.audio.content_type || "audio/wav",
+    provider: "fal-fallback"
+  };
 }
 
 export const synthesizeGermanSpeech = onCall(
@@ -1577,125 +1647,111 @@ export const synthesizeGermanSpeech = onCall(
       throw new HttpsError("invalid-argument", "El texto proporcionado está vacío.");
     }
 
+    const isStory = type === "story";
     const audioId = getSafeAudioId(cleanText);
     const db = admin.firestore();
 
-    // ─────────────────────────────────────────────────────────────
-    // DEFINICIÓN DEL BUCKET OFICIAL DE FIREBASE STORAGE
-    // ─────────────────────────────────────────────────────────────
-    const STORAGE_BUCKET_NAME = process.env.STORAGE_BUCKET || "deutschmeister-pro.firebasestorage.app";
-    const bucket = admin.storage().bucket(STORAGE_BUCKET_NAME);
-
-    // ─────────────────────────────────────────────────────────────
-    // PASO 1: REVISAR EN FIRESTORE SI YA EXISTE EN LA NUBE ($0 IA)
-    // AUTOSANACIÓN: Purga automática de URLs corruptas de gcf-v2-sources
-    // ─────────────────────────────────────────────────────────────
-    const audioDocRef = db.collection("global_audio_pronunciations").doc(audioId);
-    const docSnap = await audioDocRef.get();
-
-    if (docSnap.exists) {
-      const data = docSnap.data();
-      // Si la URL existente apunta al bucket corrupto gcf-v2-sources, ignorarla y forzar regeneración limpia
-      if (data && data.audioUrl && !data.audioUrl.includes("gcf-v2-sources") && !data.audioUrl.includes("gcf-v2-uploads")) {
-        console.log(`[TTS Cache Hit] Audio válido encontrado en Firestore [${audioId}]`);
-        return {
-          success: true,
-          audioUrl: data.audioUrl,
-          audioId: audioId,
-          fromCloudCache: true
-        };
+    // ── NIVEL 2: REVISIÓN DE CACHÉ EN LA NUBE (Excluido para cuentos efímeros) ──
+    if (!isStory) {
+      const audioDocRef = db.collection("global_audio_pronunciations").doc(audioId);
+      const docSnap = await audioDocRef.get();
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        if (data && data.audioUrl && !data.audioUrl.includes("gcf-v2-sources") && !data.audioUrl.includes("gcf-v2-uploads")) {
+          console.log(`[TTS Cache Hit] Audio válido encontrado en Firestore [${audioId}]`);
+          return {
+            success: true,
+            audioUrl: data.audioUrl,
+            audioId: audioId,
+            fromCloudCache: true,
+            provider: "cloud-cache"
+          };
+        }
+        console.log(`[TTS Cache Purge] URL corrupta o interna detectada para [${audioId}], regenerando...`);
       }
-      console.log(`[TTS Cache Purge] URL corrupta o interna detectada para [${audioId}], regenerando en bucket oficial...`);
     }
 
-    // ─────────────────────────────────────────────────────────────
-    // PASO 2: GENERACIÓN CON GEMINI 3.8 FLASH TTS
-    // ─────────────────────────────────────────────────────────────
+    // ── INFERENCIA: GOOGLE DIRECTO -> FALLBACK FAL.AI ──
+    let audioResult = null;
+    const paidKey = (geminiPaidKey && typeof geminiPaidKey.value === "function" ? geminiPaidKey.value() : "") || process.env.GEMINI_PAID_KEY || "";
+    const falKeyValue = (falKey && typeof falKey.value === "function" ? falKey.value() : "") || process.env.FAL_KEY || process.env.VITE_FAL_KEY || "";
+
     try {
-      fal.config({ credentials: falKey.value() });
-
-      console.log(`[TTS Engine] Generando voz (${voice}) para [${cleanText.substring(0, 40)}]...`);
-      const result = await fal.subscribe("google/gemini-3.8-flash-tts", {
-        input: {
-          prompt: cleanText,
-          voice: voice, // Voces recomendadas: "Charon" (pedagógica masculina) o "Kore" (femenina)
-          style_instructions: "Speak in clear, natural, standard German (Hochdeutsch) with precise A1 pedagogical pronunciation and natural pacing."
-        }
-      });
-
-      if (!result.data || !result.data.audio || !result.data.audio.url) {
-        throw new Error("No se recibió una URL válida del motor TTS.");
+      if (!paidKey) {
+        throw new Error("No hay GEMINI_PAID_KEY disponible para invocación directa.");
       }
-
-      const tempAudioUrl = result.data.audio.url;
-
-      // ─────────────────────────────────────────────────────────────
-      // PASO 3: DESCARGAR BUFFER Y PERSISTIR EN FIREBASE STORAGE
-      // ─────────────────────────────────────────────────────────────
-      const audioFetch = await fetch(tempAudioUrl);
-      if (!audioFetch.ok) {
-        throw new Error(`Fallo al descargar audio temporal: HTTP ${audioFetch.status}`);
-      }
-      const audioBuffer = Buffer.from(await audioFetch.arrayBuffer());
-
-      const downloadToken = crypto.randomUUID();
-      const filePath = `pronunciations/${type}/${audioId}.wav`;
-      const file = bucket.file(filePath);
-
-      let permanentAudioUrl;
+      audioResult = await synthesizeWithGoogleDirect(cleanText, voice, paidKey);
+      console.log(`[TTS Engine] Generado exitosamente vía Google AI Studio Direct (${cleanText.substring(0, 30)}...)`);
+    } catch (googleError) {
+      console.warn("[TTS Warning] Falló Google Direct API. Conmutando a contingencia Fal.ai:", googleError.message);
       try {
-        await file.save(audioBuffer, {
-          metadata: {
-            contentType: "audio/wav",
-            metadata: {
-              firebaseStorageDownloadTokens: downloadToken
-            }
-          }
-        });
-
-        // URL oficial de Firebase Storage garantizada
-        permanentAudioUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(filePath)}?alt=media&token=${downloadToken}`;
-      } catch (storageErr) {
-        console.warn(`[TTS Storage] Aviso: Bucket oficial '${bucket.name}' no accesible (${storageErr.message}). Utilizando bucket resiliente de audio...`);
-        const vaultBucket = admin.storage().bucket("deutschmeister-audio-vault");
-        const vaultFile = vaultBucket.file(filePath);
-        await vaultFile.save(audioBuffer, {
-          metadata: {
-            contentType: "audio/wav",
-            metadata: {
-              firebaseStorageDownloadTokens: downloadToken,
-              text: cleanText,
-              voice: voice
-            }
-          }
-        });
-        try { await vaultFile.makePublic(); } catch (_) {}
-        permanentAudioUrl = `https://storage.googleapis.com/deutschmeister-audio-vault/${filePath}`;
+        if (!falKeyValue) {
+          throw new Error("No hay FAL_KEY disponible para invocación de contingencia.");
+        }
+        audioResult = await synthesizeWithFalFallback(cleanText, voice, falKeyValue);
+        console.log(`[TTS Engine] Generado exitosamente vía Fal.ai Contingencia (${cleanText.substring(0, 30)}...)`);
+      } catch (falError) {
+        console.error("[TTS Critical Error] Fallaron ambos proveedores:", falError);
+        throw new HttpsError("internal", "No se pudo sintetizar el audio con ningún proveedor disponible: " + falError.message);
       }
+    }
 
-      // ─────────────────────────────────────────────────────────────
-      // PASO 4: REGISTRAR EN FIRESTORE EN LA COLECCIÓN GLOBAL
-      // ─────────────────────────────────────────────────────────────
-      await audioDocRef.set({
-        audioId: audioId,
-        text: cleanText,
-        audioUrl: permanentAudioUrl,
-        storagePath: filePath,
-        voice: voice,
-        type: type,
-        createdAt: admin.firestore.FieldValue.serverTimestamp()
-      }, { merge: true });
-
-      console.log(`[TTS Engine Success] Audio persistido exitosamente: ${audioId}`);
+    // ── CASO CUENTOS IA: RETORNAR DIRECTAMENTE SIN PERSISTIR EN STORAGE NI FIRESTORE ──
+    if (isStory) {
+      const base64DataUri = `data:${audioResult.mimeType};base64,${audioResult.buffer.toString("base64")}`;
       return {
         success: true,
-        audioUrl: permanentAudioUrl,
+        audioUrl: base64DataUri,
         audioId: audioId,
-        fromCloudCache: false
+        fromCloudCache: false,
+        provider: audioResult.provider,
+        persisted: false
       };
-    } catch (error) {
-      console.error("[TTS Server Error] Fallo al sintetizar audio:", error);
-      throw new HttpsError("internal", error.message || "Error procesando síntesis de audio.");
     }
+
+    // ── PERSISTENCIA GLOBAL (Solo para vocabulario, oraciones, lecturas y diálogos) ──
+    const STORAGE_BUCKET_NAME = process.env.STORAGE_BUCKET || "deutschmeister-audio-vault";
+    const bucket = admin.storage().bucket(STORAGE_BUCKET_NAME);
+    const ext = audioResult.mimeType.includes("mp3") ? "mp3" : "wav";
+    const filePath = `pronunciations/${type}/${audioId}.${ext}`;
+    const file = bucket.file(filePath);
+
+    await file.save(audioResult.buffer, {
+      metadata: {
+        contentType: audioResult.mimeType,
+        cacheControl: "public, max-age=31536000",
+        metadata: {
+          text: cleanText,
+          voice: voice,
+          type: type,
+          provider: audioResult.provider,
+          createdAt: new Date().toISOString()
+        }
+      }
+    });
+
+    try { await file.makePublic(); } catch (_) {}
+
+    const permanentAudioUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+
+    await db.collection("global_audio_pronunciations").doc(audioId).set({
+      audioId: audioId,
+      text: cleanText,
+      audioUrl: permanentAudioUrl,
+      storagePath: filePath,
+      voice: voice,
+      type: type,
+      provider: audioResult.provider,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+
+    return {
+      success: true,
+      audioUrl: permanentAudioUrl,
+      audioId: audioId,
+      fromCloudCache: false,
+      provider: audioResult.provider,
+      persisted: true
+    };
   }
 );

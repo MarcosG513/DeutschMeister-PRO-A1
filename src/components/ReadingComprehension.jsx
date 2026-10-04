@@ -1,10 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BookOpen, Sparkles, X, Volume2, HelpCircle, Lightbulb, AlertTriangle, RefreshCw, Loader2, Play, Pause, CheckCircle } from 'lucide-react';
-import { Capacitor } from '@capacitor/core';
-import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { functions } from '../App';
 import { httpsCallable } from 'firebase/functions';
-import { nativeSpeak } from '../utils/helpers';
+import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 
 const ReadingComprehension = ({ onExit }) => {
   const [tema, setTema] = useState("");
@@ -14,34 +12,14 @@ const ReadingComprehension = ({ onExit }) => {
   const [selectedAnswers, setSelectedAnswers] = useState({}); // { [questionIdx]: selectedOption }
   const [error, setError] = useState("");
 
-  // Estados para lectura sincronizada (Karaoke)
+  // Estados para reproducción de audio
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const [isAudioPaused, setIsAudioPaused] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
-
-  // Referencias para el motor de audio
-  const utteranceRef = useRef(null);
-  const wordsOnlyRef = useRef([]);
-  const isPausedRef = useRef(false);
-  const adaptiveTimerRef = useRef(null);
 
   // Limpieza del motor de audio al desmontar o cambiar de lectura
   useEffect(() => {
     return () => {
-      if (window.activeReadingTimeout) {
-        clearTimeout(window.activeReadingTimeout);
-        window.activeReadingTimeout = null;
-      }
-      if (window.activeReadingInterval) {
-        clearInterval(window.activeReadingInterval);
-        window.activeReadingInterval = null;
-      }
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-      try {
-        TextToSpeech.stop();
-      } catch (e) {}
+      stopCurrentAudio();
     };
   }, []);
 
@@ -126,209 +104,22 @@ const ReadingComprehension = ({ onExit }) => {
     return tokens;
   };
 
-  // Motor de Reproducción, Pausa y Reanudación Sincronizada
+  // Reproducción de audio con Gemini 3.8 Flash TTS
   const speakText = (text) => {
     if (!text) return;
-    const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
-
     if (isPlayingAudio) {
-      if (Capacitor.isNativePlatform()) {
-        if (isAudioPaused) {
-          const remainingWords = wordsOnlyRef.current.slice(currentWordIndex).map(w => w.text).join(' ');
-          const remainingClean = remainingWords.replace(/\*\*/g, '');
-          TextToSpeech.speak({
-            text: remainingClean,
-            lang: 'de-DE',
-            rate: 0.70,
-            volume: 1.0
-          }).then(() => {
-            if (!isPausedRef.current) {
-              setIsPlayingAudio(false);
-              setIsAudioPaused(false);
-              setCurrentWordIndex(-1);
-            }
-          }).catch(e => console.error("Error Native Speak", e));
-          setIsAudioPaused(false);
-          isPausedRef.current = false;
-          if (adaptiveTimerRef.current) {
-            adaptiveTimerRef.current(currentWordIndex);
-          }
-        } else {
-          TextToSpeech.stop();
-          setIsAudioPaused(true);
-          isPausedRef.current = true;
-          if (window.activeReadingTimeout) {
-            clearTimeout(window.activeReadingTimeout);
-            window.activeReadingTimeout = null;
-          }
-        }
-      } else if ('speechSynthesis' in window) {
-        if (isAudioPaused) {
-          window.speechSynthesis.resume();
-          setIsAudioPaused(false);
-          isPausedRef.current = false;
-          if (adaptiveTimerRef.current) {
-            adaptiveTimerRef.current(currentWordIndex);
-          }
-        } else {
-          window.speechSynthesis.pause();
-          setIsAudioPaused(true);
-          isPausedRef.current = true;
-          if (window.activeReadingTimeout) {
-            clearTimeout(window.activeReadingTimeout);
-            window.activeReadingTimeout = null;
-          }
-        }
-      } else {
-        if (isAudioPaused) {
-          window.isReadingPausedPlaceholder = false;
-          setIsAudioPaused(false);
-          isPausedRef.current = false;
-        } else {
-          window.isReadingPausedPlaceholder = true;
-          setIsAudioPaused(true);
-          isPausedRef.current = true;
-        }
-      }
+      stopCurrentAudio();
+      setIsPlayingAudio(false);
       return;
     }
 
-    setIsPlayingAudio(true);
-    setIsAudioPaused(false);
-    isPausedRef.current = false;
-    setCurrentWordIndex(0);
-
-    const tokens = parseTextToTokens(cleanedText);
-    const wordsOnly = tokens.filter(t => t.isWord);
-    wordsOnlyRef.current = wordsOnly;
-
-    const cleanText = cleanedText.replace(/\*\*/g, '');
-    let hasNativeBoundary = false;
-
-    const runAdaptiveTimer = (startIndex) => {
-      if (startIndex >= wordsOnly.length) return;
-      let localIdx = startIndex;
-
-      const tick = () => {
-        if (hasNativeBoundary) return;
-        if (localIdx >= wordsOnly.length) return;
-
-        setCurrentWordIndex(localIdx);
-        const currentWord = wordsOnly[localIdx];
-        const wordLen = currentWord ? currentWord.text.length : 5;
-        const rate = 0.70;
-        const baseMs = 85;
-        const minMs = 350;
-        const duration = Math.max(minMs, wordLen * baseMs) / rate;
-
-        localIdx++;
-        if (localIdx < wordsOnly.length) {
-          window.activeReadingTimeout = setTimeout(tick, duration);
-        } else {
-          setTimeout(() => {
-            if (!hasNativeBoundary) {
-              setIsPlayingAudio(false);
-              setIsAudioPaused(false);
-              setCurrentWordIndex(-1);
-            }
-          }, duration);
-        }
-      };
-
-      if (window.activeReadingTimeout) clearTimeout(window.activeReadingTimeout);
-      window.activeReadingTimeout = setTimeout(tick, 0);
-    };
-
-    adaptiveTimerRef.current = runAdaptiveTimer;
-
-    if (Capacitor.isNativePlatform()) {
-      TextToSpeech.stop();
-      TextToSpeech.speak({
-        text: cleanText,
-        lang: 'de-DE',
-        rate: 0.70,
-        volume: 1.0
-      }).then(() => {
-        if (!isPausedRef.current) {
-          setIsPlayingAudio(false);
-          setIsAudioPaused(false);
-          setCurrentWordIndex(-1);
-        }
-      }).catch(e => console.error("Error Speak Native", e));
-      runAdaptiveTimer(0);
-    } else if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.getVoices();
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'de-DE';
-      utterance.rate = 0.70;
-      utterance.volume = 1.0;
-      utteranceRef.current = utterance;
-
-      utterance.onboundary = (event) => {
-        if (event.name === 'word') {
-          if (event.charIndex > 0) {
-            hasNativeBoundary = true;
-            if (window.activeReadingTimeout) {
-              clearTimeout(window.activeReadingTimeout);
-              window.activeReadingTimeout = null;
-            }
-          }
-          const charIndex = event.charIndex;
-          const currentToken = wordsOnlyRef.current.find(
-            w => charIndex >= w.charStart && charIndex < w.charEnd
-          );
-          if (currentToken) {
-            setCurrentWordIndex(currentToken.wordIndex);
-          }
-        }
-      };
-
-      utterance.onend = () => {
-        if (window.activeReadingTimeout) {
-          clearTimeout(window.activeReadingTimeout);
-          window.activeReadingTimeout = null;
-        }
-        setIsPlayingAudio(false);
-        setIsAudioPaused(false);
-        setCurrentWordIndex(-1);
-        utteranceRef.current = null;
-      };
-
-      utterance.onerror = () => {
-        if (window.activeReadingTimeout) {
-          clearTimeout(window.activeReadingTimeout);
-          window.activeReadingTimeout = null;
-        }
-        setIsPlayingAudio(false);
-        setIsAudioPaused(false);
-        setCurrentWordIndex(-1);
-        utteranceRef.current = null;
-      };
-
-      runAdaptiveTimer(0);
-      window.speechSynthesis.speak(utterance);
-    } else {
-      let wordIdx = 0;
-      setCurrentWordIndex(0);
-      
-      const runInterval = () => {
-        if (window.activeReadingInterval) clearInterval(window.activeReadingInterval);
-        window.activeReadingInterval = setInterval(() => {
-          if (window.isReadingPausedPlaceholder) return;
-          wordIdx++;
-          if (wordIdx < wordsOnly.length) {
-            setCurrentWordIndex(wordIdx);
-          } else {
-            clearInterval(window.activeReadingInterval);
-            setIsPlayingAudio(false);
-            setIsAudioPaused(false);
-            setCurrentWordIndex(-1);
-          }
-        }, 450);
-      };
-      runInterval();
-    }
+    playGermanAudio(text, {
+      type: "reading",
+      voice: "Charon",
+      onStart: () => setIsPlayingAudio(true),
+      onEnd: () => setIsPlayingAudio(false),
+      onError: () => setIsPlayingAudio(false)
+    });
   };
 
   const handleGenerate = async () => {
@@ -487,20 +278,16 @@ const ReadingComprehension = ({ onExit }) => {
                 <button
                   onClick={() => speakText(readingTest.texto_aleman)}
                   className={`bg-white text-emerald-700 p-2.5 rounded-full border border-slate-200 transition shadow-md hover:bg-emerald-50 ${
-                    isPlayingAudio && !isAudioPaused ? 'scale-110 ring-2 ring-emerald-500/20' : ''
+                    isPlayingAudio ? 'scale-110 ring-2 ring-emerald-500/20' : ''
                   }`}
-                  title={isPlayingAudio ? (isAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación") : "Escuchar pronunciación"}
-                  aria-label={isPlayingAudio ? (isAudioPaused ? "Reanudar pronunciación" : "Pausar pronunciación") : "Escuchar pronunciación"}
+                  title={isPlayingAudio ? "Detener pronunciación" : "Escuchar pronunciación"}
+                  aria-label={isPlayingAudio ? "Detener pronunciación" : "Escuchar pronunciación"}
                 >
                   {isPlayingAudio ? (
-                    isAudioPaused ? (
-                      <Play size={16} className="text-amber-500 animate-pulse" />
-                    ) : (
-                      <div className="relative w-4 h-4 flex items-center justify-center">
-                        <span className="absolute w-full h-full bg-emerald-400 rounded-full animate-ping opacity-75"></span>
-                        <Pause size={16} className="text-emerald-700 z-10" />
-                      </div>
-                    )
+                    <div className="relative w-4 h-4 flex items-center justify-center">
+                      <span className="absolute w-full h-full bg-emerald-400 rounded-full animate-ping opacity-75"></span>
+                      <Pause size={16} className="text-emerald-700 z-10" />
+                    </div>
                   ) : (
                     <Play size={16} />
                   )}

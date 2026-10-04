@@ -14,7 +14,7 @@ import GrammarAccordion from './components/GrammarAccordion';
 import AudioSim from './components/AudioSim';
 import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
-import { fetchWithRetry, compressImageBase64 as compressImage, nativeSpeak, getSafeId } from './utils/helpers';
+import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId } from './utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from './services/aiAudioService';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 
@@ -846,7 +846,7 @@ export default function App() {
   const speakText = async (word, e) => {
     if (e) e.stopPropagation();
     const textToSpeak = typeof word === 'string' ? word : word.de;
-    nativeSpeak(textToSpeak);
+    playGermanAudio(textToSpeak, { type: "vocab", voice: "Charon" });
   };
   return <Suspense fallback={
     <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-6 gap-3">
@@ -1238,7 +1238,7 @@ export default function App() {
                                 <span className="font-bold text-slate-800">{word.de}</span>
                                 <button onClick={e => {
                               e.stopPropagation();
-                              nativeSpeak(word.de);
+                              playGermanAudio(word.de, { type: "vocab", voice: "Charon" });
                             }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110">
                                   <Volume2 size={16} />
                                 </button>

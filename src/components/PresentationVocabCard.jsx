@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check } from 'lucide-react';
-import { getSafeId, nativeSpeak, awardCoins } from '../utils/helpers';
+import { getSafeId, awardCoins } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
@@ -143,8 +143,15 @@ const SVGClock = ({ deWord }) => {
 const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generateCardImage, isImageLoading, openAiTutor: passedOpenAiTutor, setFullscreenImage, unlockedCards, isRevealed, speakText: passedSpeakText, lazyLoadImage }) => {
   const speakText = passedSpeakText || ((word, e) => {
     if (e) e.stopPropagation();
-    const textToSpeak = typeof word === 'string' ? word : word.de;
-    nativeSpeak(textToSpeak);
+    const textToSpeak = typeof word === 'string' ? word : (word?.de || word?.plural || '');
+    if (!textToSpeak) return;
+    setIsPlayingAudio(true);
+    playGermanAudio(textToSpeak, {
+      type: "vocab",
+      voice: "Charon",
+      onEnd: () => setIsPlayingAudio(false),
+      onError: () => setIsPlayingAudio(false)
+    });
   });
   const openAiTutor = passedOpenAiTutor || (() => {});
 
@@ -391,7 +398,23 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                 )}
                 
                 {wordObj.plural && wordObj.plural !== "-" && (
-                  <div className="mt-1 flex flex-col items-center bg-slate-50/80 px-4 py-2 rounded-xl border border-slate-200 w-[95%] max-w-[240px] md:max-w-[280px] shadow-sm shrink-0">
+                  <div 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      awardCoins(1);
+                      setIsPlayingAudio(true);
+                      playGermanAudio(wordObj.plural, {
+                        type: "vocab",
+                        voice: "Charon",
+                        onEnd: () => setIsPlayingAudio(false),
+                        onError: () => setIsPlayingAudio(false)
+                      });
+                    }}
+                    className="mt-1 flex flex-col items-center bg-slate-50/80 hover:bg-slate-100/90 active:scale-95 cursor-pointer px-4 py-2 rounded-xl border border-slate-200 w-[95%] max-w-[240px] md:max-w-[280px] shadow-sm shrink-0 transition"
+                    title="Escuchar plural en alemán"
+                    role="button"
+                    tabIndex={0}
+                  >
                     <div className="flex items-center justify-center gap-1 min-w-0 w-full">
                       <span className={`text-sm md:text-base font-semibold leading-tight text-center break-words transition-colors truncate ${
                         pronunciationStatus === 'success-plural' ? 'text-emerald-600 font-bold' : 'text-slate-700'
