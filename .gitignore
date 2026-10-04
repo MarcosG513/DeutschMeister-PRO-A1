@@ -25,6 +25,8 @@ dist-ssr
 
 # Environment Variables
 .env
+.env.*
+**/.env
 serviceAccountKey.json
 
 # Temp & Scratchpad files
