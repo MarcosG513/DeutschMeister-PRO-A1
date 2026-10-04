@@ -156,11 +156,11 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
 
   const isLongText = wordObj.de.length > 20;
   const safeId = getSafeId(wordObj.de).substring(0, 150);
-  const isUnlocked = unlockedCards && unlockedCards[safeId]?.unlocked;
-  const imgData = (cardImages && isUnlocked) ? cardImages[safeId] : null;
+  const isUnlocked = true;
+  const imgData = cardImages ? cardImages[safeId] : null;
   const existsGlobally = cardImages && !!cardImages[safeId];
   const isGenLoading = isImageLoading === safeId;
-  const isRegenerated = unlockedCards && unlockedCards[safeId]?.regenerated;
+  const isRegenerated = true;
 
   useEffect(() => {
     setFlipped(!!isRevealed);
@@ -199,15 +199,76 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
 
     startListening((transcript) => {
       // Normalización de cadenas (minúsculas y sin puntuación)
-      const cleanSpoken = transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+      let cleanSpoken = transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
       const cleanSingular = wordObj.de.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
       const cleanPlural = (wordObj.plural && wordObj.plural !== "-") 
         ? wordObj.plural.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim() 
         : "";
 
-      if (cleanSpoken === cleanSingular) {
+      // Mapa para convertir números devueltos por Google a sus palabras en alemán
+      const numMap = {
+        "0": "null", "1": "eins", "2": "zwei", "3": "drei", "4": "vier", 
+        "5": "fünf", "6": "sechs", "7": "sieben", "8": "acht", "9": "neun", 
+        "10": "zehn", "11": "elf", "12": "zwölf", "13": "dreizehn", "14": "vierzehn",
+        "15": "fünfzehn", "16": "sechzehn", "17": "siebzehn", "18": "achtzehn", "19": "neunzehn",
+        "20": "zwanzig", "21": "einundzwanzig", "22": "zweiundzwanzig", "23": "dreiundzwanzig",
+        "24": "vierundzwanzig", "25": "fünfundzwanzig", "30": "dreißig", "40": "vierzig",
+        "50": "fünfzig", "60": "sechzig", "70": "siebzig", "80": "achtzig", "90": "neunzig",
+        "100": "hundert", "1000": "tausend"
+      };
+
+      if (numMap[cleanSpoken]) {
+        cleanSpoken = numMap[cleanSpoken];
+      }
+
+      let isSuccessSingular = (cleanSpoken === cleanSingular);
+      let isSuccessPlural = (cleanPlural && cleanSpoken === cleanPlural);
+
+      // Lógica especial para letras del alfabeto (longitud 1)
+      if (!isSuccessSingular && cleanSingular.length === 1) {
+         const letterPhonetics = {
+            "a": ["aa", "ah"],
+            "b": ["bb", "be"],
+            "c": ["cc", "ce"],
+            "d": ["dd", "de"],
+            "e": ["ee", "eh"],
+            "f": ["ff", "ef"],
+            "g": ["gg", "ge"],
+            "h": ["hh", "ha"],
+            "i": ["ii", "ih"],
+            "j": ["jj", "jot"],
+            "k": ["kk", "ka"],
+            "l": ["ll", "el"],
+            "m": ["mm", "em"],
+            "n": ["nn", "en"],
+            "o": ["oo", "oh"],
+            "p": ["pp", "pe"],
+            "q": ["qq", "ku"],
+            "r": ["rr", "er"],
+            "s": ["ss", "es"],
+            "t": ["tt", "te"],
+            "u": ["uu", "uh"],
+            "v": ["vv", "fau"],
+            "w": ["ww", "we"],
+            "x": ["xx", "iks"],
+            "y": ["yy", "ypsilon"],
+            "z": ["zz", "zett"],
+            "ä": ["ää", "äh"],
+            "ö": ["öö", "öh"],
+            "ü": ["üü", "üh"],
+            "ß": ["ss", "esszett", "scharfes s"]
+         };
+         
+         if (cleanSpoken === cleanSingular.repeat(2) || 
+             cleanSpoken === cleanSingular.repeat(3) || 
+             (letterPhonetics[cleanSingular] && letterPhonetics[cleanSingular].includes(cleanSpoken))) {
+            isSuccessSingular = true;
+         }
+      }
+
+      if (isSuccessSingular) {
         setPronunciationStatus('success-singular');
-      } else if (cleanPlural && cleanSpoken === cleanPlural) {
+      } else if (isSuccessPlural) {
         setPronunciationStatus('success-plural');
       } else {
         setPronunciationStatus('error');
@@ -233,11 +294,6 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
           ) : imgData ? (
             <div className="w-full flex-1 min-h-0 bg-slate-50 border-b border-slate-100 relative group/regen flex items-center justify-center">
                <img src={(typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:'))) ? imgData : (typeof imgData === 'string' ? `data:image/png;base64,${imgData}` : '')} alt={wordObj.de} className="object-contain max-h-full max-w-full p-2 shrink-0 rounded-lg mix-blend-multiply cursor-zoom-in hover:scale-105 transition-transform" onClick={(e) => { e.stopPropagation(); if (typeof setFullscreenImage === 'function') setFullscreenImage(imgData); }} />
-               {!isRegenerated && (
-                 <button onClick={(e) => { e.stopPropagation(); generateCardImage(wordObj, e, true); }} className="absolute top-1 right-1 bg-white/90 hover:bg-white text-blue-600 p-1.5 rounded-md shadow transition-opacity" title="Regenerar (Consume 1 crédito)" aria-label="Regenerar imagen de tarjeta">
-                   <RefreshCw size={14} className={isGenLoading ? "animate-spin" : ""} />
-                 </button>
-               )}
             </div>
           ) : (
             <div className="w-full flex-1 min-h-0 bg-slate-50 flex flex-col items-center justify-center relative border-b border-slate-100 group/imgbtn z-10">
@@ -246,10 +302,10 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                  <button 
                    onClick={(e) => { e.stopPropagation(); generateCardImage(wordObj, e); }} 
                    className="relative z-30 bg-white hover:bg-blue-50 text-blue-600 px-3 py-1.5 rounded shadow-sm border border-blue-200 transition-all flex items-center gap-1.5 text-xs font-bold"
-                   title={existsGlobally ? "Revelar Imagen Existente" : "Generar Imagen Representativa"}
+                   title="Revelar Imagen"
                  >
                    {isGenLoading ? <Loader2 size={14} className="animate-spin text-blue-500" /> : <Sparkles size={14} className="text-blue-500" />}
-                   {isGenLoading ? '...' : (existsGlobally ? 'Revelar Imagen' : 'Generar Imagen')}
+                   {isGenLoading ? 'Cargando...' : 'Revelar Imagen'}
                  </button>
                )}
             </div>
@@ -446,14 +502,6 @@ export default React.memo(PresentationVocabCard, (prevProps, nextProps) => {
   const prevImage = prevProps.cardImages?.[safeId];
   const nextImage = nextProps.cardImages?.[safeId];
   if (prevImage !== nextImage) return false;
-
-  const prevUnlocked = prevProps.unlockedCards?.[safeId]?.unlocked;
-  const nextUnlocked = nextProps.unlockedCards?.[safeId]?.unlocked;
-  if (prevUnlocked !== nextUnlocked) return false;
-
-  const prevRegenerated = prevProps.unlockedCards?.[safeId]?.regenerated;
-  const nextRegenerated = nextProps.unlockedCards?.[safeId]?.regenerated;
-  if (prevRegenerated !== nextRegenerated) return false;
 
   return true;
 });

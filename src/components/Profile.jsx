@@ -426,6 +426,7 @@ const Profile = ({ onExit, user, auth, unlockedCardsCount = 45, totalCardsCount 
                 <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
                   <Crown className="text-amber-300" size={28} />
                   <h3 className="text-2xl font-bold text-white tracking-wide">DeutschMeister PRO</h3>
+                  <span className="bg-amber-400 text-slate-950 font-black text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wider">Activo</span>
                 </div>
                 <ul className="space-y-2 font-medium text-sm text-indigo-100">
                   <li className="flex items-center justify-center sm:justify-start gap-2">
@@ -434,7 +435,7 @@ const Profile = ({ onExit, user, auth, unlockedCardsCount = 45, totalCardsCount 
                   </li>
                   <li className="flex items-center justify-center sm:justify-start gap-2">
                     <CheckCircle2 size={16} className="text-amber-300 shrink-0" />
-                    <span>Cero Anuncios & Experiencia Fluida</span>
+                    <span>Cero Anuncios & Experiencia 100% Fluida</span>
                   </li>
                   <li className="flex items-center justify-center sm:justify-start gap-2">
                     <CheckCircle2 size={16} className="text-amber-300 shrink-0" />
@@ -444,18 +445,12 @@ const Profile = ({ onExit, user, auth, unlockedCardsCount = 45, totalCardsCount 
               </div>
 
               <div className="z-10 flex flex-col items-center gap-3 w-full sm:w-auto">
-                <button 
-                  onClick={() => alert('Próximamente suscripciones RevenueCat PRO')}
-                  className="w-full sm:w-auto bg-white text-indigo-900 font-bold px-8 py-3.5 rounded-xl shadow-lg hover:bg-slate-50 active:scale-[0.98] transition whitespace-nowrap cursor-pointer text-sm"
-                >
-                  Actualizar a PRO
-                </button>
-                <button 
-                  onClick={() => alert('Restaurando compras de la tienda...')}
-                  className="text-indigo-200 text-xs font-semibold hover:text-white transition underline-offset-4 hover:underline cursor-pointer"
-                >
-                  Restaurar compras
-                </button>
+                <div className="w-full sm:w-auto bg-amber-400 text-slate-950 font-extrabold px-6 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 whitespace-nowrap text-sm">
+                  ✨ Cuenta PRO Activada
+                </div>
+                <span className="text-indigo-200 text-xs font-semibold">
+                  Acceso Total e Ilimitado
+                </span>
               </div>
             </section>
           </div>

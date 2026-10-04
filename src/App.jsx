@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
-import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown } from 'lucide-react';
+import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
@@ -8,17 +8,14 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 import { Capacitor } from '@capacitor/core';
 import { App as CapacitorApp } from '@capacitor/app';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
-import { initializeAdMob, showRewardVideo, showInterstitial } from './services/AdService';
 import localforage from 'localforage';
-import BannerAd from './components/BannerAd';
 import PresentationVocabCard from './components/PresentationVocabCard';
 import GrammarAccordion from './components/GrammarAccordion';
 import AudioSim from './components/AudioSim';
-// import InteractiveQA from './components/InteractiveQA';
-import TutorChat from './components/TutorChat';
 import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, nativeSpeak, getSafeId } from './utils/helpers';
+import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 
 
 import Profile from './components/Profile';
@@ -130,9 +127,6 @@ const loadingPhrases = [
 ];
 
 export default function App() {
-  useEffect(() => {
-    initializeAdMob();
-  }, []);
   const [activeChapterId, setActiveChapterId] = useState(chapters[0].id);
   const [activePresentationId, setActivePresentationId] = useState(null);
   const [activeStudyPlanId, setActiveStudyPlanId] = useState(null);
@@ -192,6 +186,7 @@ export default function App() {
   const lazyLoadImage = async wordObj => {
     if (!wordObj || !wordObj.de) return;
     const safeId = getSafeId(wordObj.de).substring(0, 150);
+    const slugId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
     if (cardImages[safeId] !== undefined || loadingImages[safeId]) return;
     setLoadingImages(prev => ({
       ...prev,
@@ -207,8 +202,14 @@ export default function App() {
         return;
       }
       if (!db) return;
-      const imageDocRef = doc(db, 'global_flashcards', safeId);
+      
+      let imageDocRef = doc(db, 'global_flashcards', slugId);
       let docSnap = await getDoc(imageDocRef);
+      if (!docSnap.exists()) {
+        imageDocRef = doc(db, 'global_flashcards', safeId);
+        docSnap = await getDoc(imageDocRef);
+      }
+
       let imageUrl = "";
       if (docSnap.exists()) {
         imageUrl = docSnap.data().imageUrl || docSnap.data().imageBase64;
@@ -272,6 +273,19 @@ export default function App() {
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
   const chatEndRef = useRef(null);
+  const { isListening: isChatListening, startListening: startChatListening, stopListening: stopChatListening } = useSpeechRecognition('de-DE');
+
+  const handleChatMicClick = () => {
+    if (isChatListening) {
+      stopChatListening();
+    } else {
+      startChatListening((text) => {
+        if (text) {
+          setChatInput(prev => prev ? `${prev} ${text}` : text);
+        }
+      });
+    }
+  };
   useEffect(() => {
     if (!auth) return;
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -406,8 +420,6 @@ export default function App() {
       });
       return;
     }
-    const granted = await showRewardVideo();
-    if (!granted) return;
     setStoryState({
       isOpen: true,
       loading: true,
@@ -787,15 +799,19 @@ export default function App() {
     setChatInput("");
     setIsChatLoading(true);
     try {
+      const idToken = user ? await user.getIdToken().catch(() => '') : '';
       const response = await fetch(`https://sendtutorchatmessage-44keyii6gq-uc.a.run.app`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(idToken ? { 'Authorization': `Bearer ${idToken}` } : {})
         },
         body: JSON.stringify({
-          historialConversacion: newMessages
+          historialConversacion: newMessages,
+          uid: user?.uid
         })
       });
+
       if (!response.ok) throw new Error("Failed to connect to tutor");
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
@@ -873,155 +889,81 @@ export default function App() {
     const prompt = `Hola tutor, estoy repasando la palabra "${wordDe}"${wordEs ? ` (${wordEs})` : ''}. ¿Me das un solo ejemplo súper corto de nivel A1 y me haces una pregunta rápida para poner a prueba si sé cómo usarla?`;
     setChatInput(prompt);
   };
-  const generateCardImage = async (wordObj, e, forceRegenerate = false) => {
+  const generateCardImage = async (wordObj, e) => {
     if (e) e.stopPropagation();
+    if (!wordObj || !wordObj.de) return;
     const safeId = getSafeId(wordObj.de).substring(0, 150);
+    const slugId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
     const userDocRef = user && db ? doc(db, 'artifacts', appId, 'users', user.uid, 'unlockedCards', safeId) : null;
-    if (!forceRegenerate) {
-      const existingImage = cardImages[safeId];
-      if (existingImage) {
-        const granted = await showRewardVideo();
-        if (!granted) return;
-        setUnlockedCards(prev => ({
-          ...prev,
-          [safeId]: {
-            unlocked: true,
-            regenerated: false
-          }
-        }));
-        if (userDocRef) {
-          try {
-            await setDoc(userDocRef, {
-              unlocked: true,
-              regenerated: false
-            }, {
-              merge: true
-            });
-          } catch (error) {
-            console.warn(error);
-          }
-        }
-        return;
-      }
-    } else {
-      const currentCount = unlockedCards && unlockedCards[safeId]?.regenerateCount !== undefined ? unlockedCards[safeId].regenerateCount : unlockedCards && unlockedCards[safeId]?.regenerated ? 1 : 0;
-      if (currentCount >= 10) {
-        alert('Ya has regenerado esta imagen el máximo de veces permitido (10 veces).');
-        return;
-      }
-    }
-    const granted = await showRewardVideo();
-    if (!granted) return;
+
     setIsImageLoading(safeId);
     try {
-      if (!functions) throw new Error("Firebase functions not initialized");
-      const currentCount = unlockedCards && unlockedCards[safeId]?.regenerateCount !== undefined ? unlockedCards[safeId].regenerateCount : unlockedCards && unlockedCards[safeId]?.regenerated ? 1 : 0;
-      const newCount = forceRegenerate ? currentCount + 1 : currentCount;
-      let conceptoAEnviar = wordObj.en || wordObj.concepto_ingles || "";
+      // 1. Verificar si ya se encuentra en el estado de React
+      let imageUrl = cardImages[safeId];
 
-      // Paso intermedio de validación: Read-Through Cache
-      if (!forceRegenerate && db) {
+      // 2. Si no está en estado, intentar obtener de caché localforage
+      if (!imageUrl) {
         try {
-          const globalCacheRef = doc(db, 'global_flashcards', safeId);
-          const globalCacheSnap = await getDoc(globalCacheRef);
+          const cached = await localforage.getItem(`img_${safeId}`);
+          if (cached) imageUrl = cached;
+        } catch (lfErr) {
+          console.warn("Error leyendo localforage:", lfErr);
+        }
+      }
+
+      // 3. Si no está en caché local, consultar base de datos global de Firestore (global_flashcards)
+      if (!imageUrl && db) {
+        try {
+          // Primero probar con slugId (formato de ID con el que se generaron el lote de 1000+ imágenes)
+          let globalCacheRef = doc(db, 'global_flashcards', slugId);
+          let globalCacheSnap = await getDoc(globalCacheRef);
+          
+          // Si no existe con slugId, intentar con el safeId (Base64)
+          if (!globalCacheSnap.exists()) {
+            globalCacheRef = doc(db, 'global_flashcards', safeId);
+            globalCacheSnap = await getDoc(globalCacheRef);
+          }
+
           if (globalCacheSnap.exists()) {
             const cachedData = globalCacheSnap.data();
-            const cachedImage = cachedData.imageUrl || cachedData.imageBase64;
-            if (cachedImage) {
-              console.log("CACHE HIT (Read-Through Cache): Imagen encontrada en global_flashcards para", safeId);
-              const compressedImage = await compressImageBase64(cachedImage, 1024, 0.9);
-              setCardImages(prev => {
-                const nextImages = {
-                  ...prev,
-                  [safeId]: compressedImage
-                };
-                localforage.setItem(`img_${safeId}`, compressedImage).catch(e => console.warn(e));
-                return nextImages;
-              });
-              setUnlockedCards(prev => ({
-                ...prev,
-                [safeId]: {
-                  unlocked: true,
-                  regenerateCount: currentCount,
-                  imageUrl: compressedImage
-                }
-              }));
-              if (userDocRef) {
-                await setDoc(userDocRef, {
-                  unlocked: true,
-                  regenerateCount: currentCount,
-                  imageUrl: compressedImage
-                }, {
-                  merge: true
-                }).catch(e => console.warn(e));
-              }
-              return;
+            imageUrl = cachedData.imageUrl || cachedData.imageBase64;
+            if (imageUrl) {
+              imageUrl = await compressImageBase64(imageUrl, 1024, 0.9);
+              await localforage.setItem(`img_${safeId}`, imageUrl).catch(e => console.warn(e));
             }
+          } else {
+            console.warn(`No se encontró imagen en global_flashcards ni con slugId: [${slugId}] ni safeId: [${safeId}]`);
           }
         } catch (cacheErr) {
-          console.warn("Advertencia en Read-Through Cache:", cacheErr);
+          console.warn("Error al consultar global_flashcards en Firestore:", cacheErr);
         }
       }
-      let dataUri = "";
-      console.log("CACHE MISS o FORCE REGENERATE: Llamando a Cloud Function...");
-      const generateCardImageFn = httpsCallable(functions, 'generateCardImage');
-      const result = await generateCardImageFn({
-        wordObj: wordObj,
-        conceptoIngles: conceptoAEnviar,
-        word: wordObj.de,
-        category: activeChapter ? activeChapter.title : ''
-      });
-      dataUri = result.data?.imageUrl;
-      if (!dataUri) throw new Error('No image data returned from FAL API');
-      dataUri = await compressImageBase64(dataUri, 1024, 0.9);
-      setCardImages(prev => {
-        const nextImages = {
+
+      // 4. Actualizar estado de imágenes cargadas si se obtuvo una imagen
+      if (imageUrl) {
+        setCardImages(prev => ({
           ...prev,
-          [safeId]: dataUri
-        };
-        localforage.setItem(`img_${safeId}`, dataUri).catch(e => console.warn(e));
-        return nextImages;
-      });
-      if (db) {
-        try {
-          const docRef = doc(db, 'global_flashcards', safeId);
-          await setDoc(docRef, {
-            imageUrl: dataUri,
-            word: wordObj.de,
-            regenerateCount: newCount
-          }, {
-            merge: true
-          });
-          const strictDocRef = doc(db, 'public_content', 'data', 'flashcardImages', safeId);
-          await setDoc(strictDocRef, {
-            imageUrl: dataUri,
-            word: wordObj.de,
-            regenerateCount: newCount
-          }, {
-            merge: true
-          });
-        } catch (e) {
-          console.warn(e);
-        }
+          [safeId]: imageUrl
+        }));
       }
+
+      // 5. Desbloquear la tarjeta para el usuario
       setUnlockedCards(prev => ({
         ...prev,
         [safeId]: {
           unlocked: true,
-          regenerateCount: newCount
+          imageUrl: imageUrl || null
         }
       }));
+
       if (userDocRef) {
         await setDoc(userDocRef, {
           unlocked: true,
-          regenerateCount: newCount
-        }, {
-          merge: true
-        }).catch(e => console.warn(e));
+          imageUrl: imageUrl || null
+        }, { merge: true }).catch(e => console.warn(e));
       }
     } catch (error) {
-      console.error('Error generating image:', error);
-      alert('Error técnico: ' + error.message);
+      console.error('Error al revelar imagen:', error);
     } finally {
       setIsImageLoading(null);
     }
@@ -1060,7 +1002,7 @@ export default function App() {
         auth={auth}
         unlockedCardsCount={Object.keys(unlockedCards || {}).length}
         totalCardsCount={1089}
-      /> : viewMode === "quiz" ? <DynamicQuiz onExit={() => { setViewMode('flashcards'); showInterstitial(); }} /> : <>
+      /> : viewMode === "quiz" ? <DynamicQuiz onExit={() => setViewMode('flashcards')} /> : <>
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
             <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
@@ -1377,11 +1319,11 @@ export default function App() {
                   const isRevealed = revealedCards[index];
                   const isLongText = word.de.length > 25;
                   const safeId = getSafeId(word.de).substring(0, 150);
-                  const isUnlocked = unlockedCards && unlockedCards[safeId]?.unlocked;
-                  const imgBase64 = isUnlocked ? cardImages[safeId] : null;
+                  const isUnlocked = true;
+                  const imgBase64 = cardImages[safeId];
                   const existsGlobally = !!cardImages[safeId];
                   const isGenLoading = isImageLoading === safeId;
-                  const isRegenerated = unlockedCards && unlockedCards[safeId]?.regenerated;
+                  const isRegenerated = true;
                   return <PresentationVocabCard key={index} wordObj={{
                     ...word,
                     chapter: searchTerm ? word.chapter : undefined
@@ -1544,8 +1486,7 @@ export default function App() {
   }
 
   {/* --- PANEL LATERAL: TUTOR IA --- */}
-    {isTutorOpen && <aside className={`fixed ${isTutorFullscreen ? 'inset-0 w-full z-[100]' : 'inset-y-0 right-0 w-full md:w-[450px] z-50 border-l'} bg-white shadow-2xl border-slate-200 flex flex-col animate-in slide-in-from-right duration-300`}>
-        
+    {isTutorOpen && <aside className={`fixed ${isTutorFullscreen ? 'inset-0 w-full z-[100]' : 'top-0 right-0 bottom-0 w-full md:w-[450px] z-[100] border-l'} bg-white shadow-2xl border-slate-200 flex flex-col h-[100dvh] overflow-hidden animate-in slide-in-from-right duration-300`}>
         <div className="bg-slate-900 text-white p-4 flex justify-between items-center flex-shrink-0">
           <div className="flex items-center gap-2">
             <Bot className="text-yellow-400" />
@@ -1577,11 +1518,21 @@ export default function App() {
         </div>
 
         <div className="p-4 bg-white border-t border-slate-200 flex-shrink-0">
-          <div className="relative">
-            <input type="text" className="w-full bg-slate-100 border border-slate-200 rounded-full py-3.5 pl-5 pr-14 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition shadow-inner" placeholder="Pregúntame algo en alemán o español..." value={chatInput} onChange={e => setChatInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendChatMessage()} />
-            <button onClick={sendChatMessage} disabled={!chatInput.trim() || isChatLoading} className="absolute right-2 top-2 p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:bg-slate-400 transition shadow">
-              <Send size={18} />
-            </button>
+          <div className="relative flex items-center">
+            <input type="text" className="w-full bg-slate-100 border border-slate-200 rounded-full py-3.5 pl-5 pr-24 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition shadow-inner" placeholder={isChatListening ? "Escuchando tu voz..." : "Pregúntame algo en alemán o español..."} value={chatInput} onChange={e => setChatInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendChatMessage()} />
+            <div className="absolute right-2 top-2 flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleChatMicClick}
+                className={`p-2 rounded-full transition shadow ${isChatListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                title={isChatListening ? "Escuchando... Haz clic para detener" : "Dictar con micrófono"}
+              >
+                <Mic size={18} />
+              </button>
+              <button onClick={sendChatMessage} disabled={!chatInput.trim() || isChatLoading} className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:bg-slate-400 transition shadow">
+                <Send size={18} />
+              </button>
+            </div>
           </div>
         </div>
       </aside>}

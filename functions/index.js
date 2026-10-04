@@ -12,8 +12,7 @@ const db = admin.firestore();
 // Define los secretos que se tomarán de Secret Manager (FASE 1)
 const falKey = defineSecret("FAL_KEY");
 const geminiFreeKey = defineSecret("GEMINI_FREE_KEY");
-const geminiFreeKey2 = defineSecret("GEMINI_API_KEY_FREE_2");
-const geminiApiKey = defineSecret("GEMINI_API_KEY");
+const geminiFreeKey2 = defineSecret("GEMINI_FREE_KEY_2");
 
 // Variable de estado global para balanceo de carga Round-Robin
 let useFirstKey = true;
@@ -206,9 +205,9 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
       }
       promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
 
-      const falStream = await fal.stream("openrouter/router/enterprise", {
+      const falStream = await fal.stream("openrouter/router", {
         input: {
-          model: "anthropic/claude-haiku-4.5",
+          model: "deepseek/deepseek-chat",
           prompt: promptBuilder,
           system_prompt: promptSystem,
           temperature: options.temperature || 0.7
@@ -246,7 +245,7 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
 // Modelo: gemini-3.5-flash-lite (primario) / Claude Haiku 4.5 via enterprise (fallback)
 // =========================================================================
 export const runRoleplaySimulator = onRequest({
-  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, falKey],
   cors: true
 }, async (req, res) => {
   if (req.method !== "POST" && req.method !== "OPTIONS") {
@@ -379,7 +378,7 @@ export const runRoleplaySimulator = onRequest({
 // 2. EVALUADOR DE CORREOS (EmailSimulator) - Migrado a Gemini 3.5 Flash-Lite
 // =========================================================================
 export const evaluateEmail = onCall(
-  { secrets: [geminiApiKey], maxInstances: 6 },
+  { secrets: [geminiFreeKey, geminiFreeKey2, falKey], maxInstances: 6 },
   async (request) => {
     const { textoCorreo, consignaExamen } = request.data;
 
@@ -401,23 +400,13 @@ Devuelve tu respuesta estructurada en español usando Markdown con el formato de
     const userPrompt = `Consigna del examen: "${consignaExamen}"\nTexto del estudiante: "${textoCorreo}"`;
 
     try {
-      const genAI = new GoogleGenerativeAI(geminiApiKey.value());
-      const model = genAI.getGenerativeModel({ 
-        model: "gemini-3.5-flash-lite",
-        systemInstruction: systemPrompt
+      return await invokeWithDeepSeekFallback(systemPrompt, userPrompt, { 
+        model: "gemini-3.5-flash-lite", 
+        temperature: 0.3 
       });
-
-      const result = await model.generateContent({
-        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-        generationConfig: {
-          temperature: 0.3, // Temperatura baja para garantizar precisión sintáctica estricta sin alucinaciones
-        }
-      });
-      
-      return result.response.text();
     } catch (error) {
-      console.error("❌ Error en la Evaluación de Correo (Gemini 3.5 Flash-Lite):", error);
-      throw new Error("Error procesando la evaluación.");
+      console.error("❌ Error en la Evaluación de Correo:", error);
+      throw new HttpsError("internal", "Error procesando la evaluación.");
     }
   }
 );
@@ -426,7 +415,7 @@ Devuelve tu respuesta estructurada en español usando Markdown con el formato de
 // 3. GENERADOR DE CUENTOS (generateStory)
 // =========================================================================
 export const generateStory = onRequest({
-  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, falKey],
   cors: true,
   timeoutSeconds: 120
 }, async (req, res) => {
@@ -553,72 +542,7 @@ export const generateStory = onRequest({
   }
 });
 
-async function clasificarInputAlumno(lastMessage) {
-  const systemPrompt = `Analiza el siguiente input del alumno en un chat de aprendizaje de alemán.
-Devuelve STRICTAMENTE un objeto JSON simple con este formato:
-{
-  "estadoEmocional": "frustrado" | "panico" | "errores_ortograficos" | "normal",
-  "inputLimpio": "el mensaje del usuario con correcciones ortográficas en español"
-}
-Reglas de clasificación:
-- "frustrado": Si el alumno dice 'no sé', se rinde, expresa que no puede, quiere morir o pide la respuesta directamente.
-- "panico": Si expresa ansiedad extrema, miedo, pánico por un examen cercano (Goethe A1, etc.) o siente que va a reprobar.
-- "errores_ortograficos": Si escribe con errores ortográficos graves en español (ej. 'ce usa', 'acusatibo', 'entinedo', 'cemana', 'amsiedad').
-- "normal": Si hace una pregunta ordinaria sin pánico, frustración ni errores graves.`;
-
-  const cleanInput = lastMessage.toLowerCase().trim();
-  if (cleanInput.includes("no se") || cleanInput.includes("no sé") || cleanInput.includes("dime la respuesta") || cleanInput.includes("no puedo") || cleanInput.includes("dime las conjugaciones") || cleanInput.includes("no la se") || cleanInput.includes("no la sé") || cleanInput.includes("kiero morir") || cleanInput.includes("quiero morir")) {
-    return { estadoEmocional: 'frustrado', inputLimpio: lastMessage };
-  }
-  if (cleanInput.includes("examen") || cleanInput.includes("goete") || cleanInput.includes("pánico") || cleanInput.includes("panico") || cleanInput.includes("ansiedad") || cleanInput.includes("amsiedad")) {
-    return { estadoEmocional: 'panico', inputLimpio: lastMessage };
-  }
-
-  const tryClasificar = async (key) => {
-    const genAI = new GoogleGenerativeAI(key);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-3.5-flash-lite",
-      systemInstruction: systemPrompt,
-      generationConfig: { responseMimeType: "application/json", thinkingConfig: { thinkingLevel: "MINIMAL" } }
-    });
-    const result = await model.generateContent(lastMessage);
-    return JSON.parse(result.response.text().trim());
-  };
-
-  const primaryKey = useFirstKey ? geminiFreeKey.value() : geminiFreeKey2.value();
-  const secondaryKey = useFirstKey ? geminiFreeKey2.value() : geminiFreeKey.value();
-  useFirstKey = !useFirstKey; // Invertir valor para la próxima petición
-
-  try {
-    return await tryClasificar(primaryKey);
-  } catch (error) {
-    console.warn("Triage Primary Key falló, intentando Secondary Key. Error:", error.message);
-    try {
-      return await tryClasificar(secondaryKey);
-    } catch (error2) {
-      console.warn("Triage (Free Tier) falló en ambas llaves. Usando clasificación normal por defecto.");
-      return { estadoEmocional: 'normal', inputLimpio: lastMessage };
-    }
-  }
-}
-
-export const sendTutorChatMessage = onRequest({
-  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
-  cors: true
-}, async (req, res) => {
-  if (req.method !== "POST" && req.method !== "OPTIONS") {
-    res.status(405).send("Method Not Allowed");
-    return;
-  }
-  let data;
-  try {
-    data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    if (data && data.data) data = data.data;
-  } catch (e) {
-    res.status(400).send("Invalid JSON body");
-    return;
-  }
-  const promptSistema = `=== 1. IDENTIDAD Y ROL ===
+const TUTOR_STATIC_SYSTEM_PROMPT = `=== 1. IDENTIDAD Y ROL ===
 Eres 'DeutschMeister Tutor', un profesor de alemán nativo, carismático y experto en pedagogía para adultos hispanohablantes (Nivel A1 - Goethe-Zertifikat). 
 Tu esencia es conversacional, cálida y paciente. Tu objetivo no es ser un diccionario ni un solucionador de tareas, sino un guía experto que utiliza el método socrático para ayudar al estudiante a deducir la lógica del idioma por sí mismo.
 
@@ -631,13 +555,82 @@ Tu esencia es conversacional, cálida y paciente. Tu objetivo no es ser un dicci
 - Artículos Obligatorios: ¡Regla de Oro! Todo sustantivo en alemán que menciones debe presentarse SIEMPRE con su artículo definido y su marca de plural si aplica. Ejemplo: **der Tisch (-e)**. Jamás enseñes sustantivos "desnudos".
 - Traducción Inmediata en Prosa: Siempre que uses una palabra o frase en alemán dentro de tu explicación, escríbela en **negrita** seguida inmediatamente de su traducción al español entre paréntesis para no romper el hilo cognitivo de lectura. Ejemplo: "Recuerda que con el verbo **haben** (tener) siempre usamos el caso acusativo".
 
-=== 4. ESTRUCTURA DE LA SESIÓN (CÓMO RESPONDER AL ALUMNO) ===
-- Flujo Orgánico y Empático: Olvida las estructuras robóticas de párrafos obligatorios. Integra tu validación, tu empatía y tus ánimos de forma natural en el saludo o durante la explicación, fluyendo como un diálogo humano real (usa 1 o 2 emojis para dar calidez).
-- Brevedad: Mantén tu respuesta concentrada en un máximo de 2 párrafos cortos (entre 6 y 8 oraciones en total). Esto te dará aire para respirar en la explicación y aplicar el triage emocional adecuadamente.
-- El Reto Final: Cierra SIEMPRE tu mensaje con UNA ÚNICA pregunta o reto sencillo para que el alumno aplique lo que acaba de aprender (usando el andamiaje previo) sobre su duda original. Nunca le des opciones cerradas A/B. Déjalo razonar y armar su propia respuesta. Condiciona la dificultad del reto final según el estado emocional detectado en el Triage: Si el alumno está clasificado como 🔴 FRUSTRADO, el reto final debe ser extremadamente fácil (casi guiado) para devolverle la confianza inmediatamente. Si está en estado 🟢 NORMAL, exige que el alumno piense a fondo.
+=== 4. ESTRUCTURA DE LA SESIÓN Y TRIAGE EMOCIONAL (ZERO-SHOT) ===
+- Detección Emocional en Cero Disparos: Evalúa orgánicamente el mensaje actual del estudiante. Si expresa frustración, desánimo o ganas de rendirse, o si manifiesta pánico/ansiedad por su examen cercano (ej. Goethe A1), o si comete errores ortográficos graves en español, valida cálidamente su estado emocional con empatía y apoyo en el primer párrafo (usando 1 o 2 emojis) antes de pasar a la lección. Si el mensaje es normal, inicia validando su duda de manera empática e inspiradora.
+- Brevedad: Mantén tu respuesta concentrada en un máximo de 2 párrafos cortos (entre 6 y 8 oraciones en total).
+- El Reto Final: Cierra SIEMPRE tu mensaje con UNA ÚNICA pregunta o reto sencillo para que el alumno aplique lo que acaba de aprender sobre su duda original. Si el alumno demuestra frustración, el reto final debe ser muy fácil y guiado; si su estado es normal, exige que piense a fondo.`;
 
-=== 5. LÓGICA DE TRIAGE EMOCIONAL (INYECCIONES DINÁMICAS) ===
-[NOTA PARA EL SISTEMA: El siguiente bloque definirá el estado emocional del estudiante detectado por el Triage. Si se inyecta una alerta, adapta orgánicamente el tono de tu respuesta inicial para validar su emoción con empatía antes de pasar a la lección.]`;
+export const sendTutorChatMessage = onRequest({
+  secrets: [geminiFreeKey, geminiFreeKey2, falKey],
+  cors: true
+}, async (req, res) => {
+  if (req.method !== "POST" && req.method !== "OPTIONS") {
+    res.status(405).send("Method Not Allowed");
+    return;
+  }
+  if (req.method === "OPTIONS") {
+    res.status(204).send("");
+    return;
+  }
+
+  let data;
+  try {
+    data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    if (data && data.data) data = data.data;
+  } catch (e) {
+    res.status(400).send("Invalid JSON body");
+    return;
+  }
+
+  // Verificación de Custom Claims de Firebase Auth
+  let isPro = false;
+  let uid = data?.uid || null;
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const idToken = authHeader.split("Bearer ")[1];
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      uid = decodedToken.uid;
+      isPro = decodedToken.stripeRole === "premium" || decodedToken.pro === true;
+    } catch (authErr) {
+      console.warn("FinOps Tutor: Token no válido, usando UID de body:", authErr.message);
+    }
+  }
+
+  // Protección de Cuota (10 msgs/día para usuarios Free)
+  if (!isPro && uid) {
+    const todayStr = new Date().toISOString().split("T")[0];
+    const usageDocRef = db.collection("artifacts").doc("deutschmeister-pro").collection("users").doc(uid).collection("usage").doc("today");
+    
+    try {
+      const usageSnap = await usageDocRef.get();
+      let currentCount = 0;
+      if (usageSnap.exists) {
+        const usageData = usageSnap.data();
+        if (usageData.date === todayStr) {
+          currentCount = usageData.messageCount || 0;
+        }
+      }
+
+      if (currentCount >= 10) {
+        res.status(429).json({
+          error: "Límite diario alcanzado. Actualiza a PRO para mensajes ilimitados.",
+          limitReached: true,
+          isPro: false
+        });
+        return;
+      }
+
+      await usageDocRef.set({
+        date: todayStr,
+        messageCount: currentCount + 1,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (dbErr) {
+      console.error("FinOps Tutor: Error consultando Firestore:", dbErr);
+    }
+  }
+
   const historialConversacion = data?.historialConversacion;
   if (!historialConversacion || !Array.isArray(historialConversacion)) {
     res.status(400).send("Faltan parámetros requeridos: historialConversacion");
@@ -647,26 +640,10 @@ Tu esencia es conversacional, cálida y paciente. Tu objetivo no es ser un dicci
   const history = historialConversacion.slice(0, -1);
   const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
 
-  const triage = await clasificarInputAlumno(lastMessage);
-
-  let instruccionEmocional = "";
-  if (triage.estadoEmocional === "frustrado") {
-    instruccionEmocional = `\n\n[ALERTA DE TRIAGE: El alumno está frustrado o quiere rendirse. En el PÁRRAFO 1 de tu respuesta, valida cálidamente su frustración, anímalo a seguir intentándolo y recuérdale que cometer errores es parte de aprender, usando emojis de soporte.]\n`;
-  } else if (triage.estadoEmocional === "panico") {
-    instruccionEmocional = `\n\n[ALERTA DE TRIAGE: El alumno tiene pánico, ansiedad o miedo por su examen cercano (como Goethe A1). En el PÁRRAFO 1, valida calurosamente su ansiedad, transmítele calma absoluta y dile que estás seguro de que le irá genial con práctica, usando emojis de apoyo.]\n`;
-  } else if (triage.estadoEmocional === "errores_ortograficos") {
-    instruccionEmocional = `\n\n[ALERTA DE TRIAGE: El alumno escribió con errores ortográficos graves en español. En el PÁRRAFO 1, valida su duda sobre el input corregido: "${triage.inputLimpio}" de manera empática y amigable, sin corregirlo de forma ruda o explícita.]\n`;
-  } else {
-    instruccionEmocional = `\n\n[ALERTA DE TRIAGE: El alumno realiza una pregunta en estado normal. Comienza en el PÁRRAFO 1 validando su duda de manera empática e inspiradora.]\n`;
-  }
-
-  const basePrompt = await getSystemPrompt("tutor_chat_system", promptSistema);
-  const activeSystemPrompt = basePrompt + instruccionEmocional;
-
-  await streamWithDeepSeekFallback(res, activeSystemPrompt, history, lastMessage, {
+  await streamWithDeepSeekFallback(res, TUTOR_STATIC_SYSTEM_PROMPT, history, lastMessage, {
     model: "gemini-3.5-flash-lite",
     cleanBold: false,
-    thinking_level: "medium"
+    thinking_level: "MINIMAL"
   });
 });
 
@@ -1383,7 +1360,7 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
   return JSON.stringify(promptObj);
 }
 export const generateCardImage = onCall({
-  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey]
+  secrets: [geminiFreeKey, geminiFreeKey2, falKey]
 }, async request => {
   const {
     wordObj,
@@ -1485,7 +1462,7 @@ export const generateCardImage = onCall({
 // 6. GENERADOR DE COMPRENSIÓN LECTORA (generateReadingTest)
 // =========================================================================
 export const generateReadingTest = onCall({
-  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, falKey],
   timeoutSeconds: 120
 }, async request => {
   const {
@@ -1650,7 +1627,7 @@ export const generateReadingTest = onCall({
 export const generateDynamicQuiz = onCall({
   timeoutSeconds: 120,
   memory: "512MiB",
-  secrets: [geminiFreeKey, geminiFreeKey2, geminiApiKey, falKey],
+  secrets: [geminiFreeKey, geminiFreeKey2, falKey],
 }, async (request) => {
   const { tema } = request.data || {};
   if (!tema) {

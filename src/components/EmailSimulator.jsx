@@ -39,11 +39,11 @@ const EmailSimulator = ({ initialText }) => {
 
       stepInterval = setInterval(() => {
         setCurrentStep((prev) => (prev < EVALUATION_STEPS.length - 1 ? prev + 1 : prev));
-      }, 1200);
+      }, 2500);
 
       progressInterval = setInterval(() => {
         setProgress((prev) => (prev < 95 ? prev + 5 : prev));
-      }, 150);
+      }, 400);
     }
 
     return () => {

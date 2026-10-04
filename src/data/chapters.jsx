@@ -21,9 +21,7 @@ import OfficialFormExam from '../components/OfficialFormExam';
 import VoiceExaminer from '../components/VoiceExaminer';
 import ClockSVG from '../components/ClockSVG';
 import { nativeSpeak } from '../utils/helpers';
-export
-// --- DATA: EL VOCABULARIO COMPLETO ---
-const chapters = [
+const rawChapters = [
 {
   id: 0,
   title: "Kapitel 1: Alphabet & Zahlen",
@@ -9673,6 +9671,9 @@ const chapters = [
   }]
 }
 ];
+
+
+export const chapters = [...rawChapters].sort((a, b) => a.id - b.id);
 
 // --- NUEVOS MÓDULOS DE ESTUDIO GOETHE ---
 export const goetheModules = [{

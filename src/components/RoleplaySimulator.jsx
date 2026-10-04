@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader2, Send, X, Volume2, Sparkles } from 'lucide-react';
-import { showRewardVideo } from '../services/AdService';
 import { nativeSpeak, awardCoins } from '../utils/helpers';
 
 const RoleplaySimulator = ({
@@ -144,16 +143,7 @@ const RoleplaySimulator = ({
   };
   const sendMessage = async () => {
     if (!input.trim()) return;
-    if (tutorMessageCount >= 3) {
-      const granted = await showRewardVideo();
-      if (granted) {
-        setTutorMessageCount(0);
-      } else {
-        return;
-      }
-    } else {
-      setTutorMessageCount(prev => prev + 1);
-    }
+    setTutorMessageCount(prev => prev + 1);
     const newMsgs = [...messages, {
       role: 'user',
       parts: [{

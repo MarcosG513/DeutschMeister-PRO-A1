@@ -1,6 +1,7 @@
 import React from 'react';
-import { Bot, Minimize, Maximize, X, Loader2, Send } from 'lucide-react';
+import { Bot, Minimize, Maximize, X, Loader2, Send, Mic } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 const TutorChat = ({ 
   isOpen, 
@@ -12,13 +13,27 @@ const TutorChat = ({
   setChatInput, 
   sendChatMessage, 
   isChatLoading, 
-  chatEndRef 
+  chatEndRef
 }) => {
+  const { isListening, startListening, stopListening } = useSpeechRecognition('de-DE');
+
   if (!isOpen) return null;
+
+  const handleMicClick = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening((text) => {
+        if (text) {
+          setChatInput(prev => prev ? `${prev} ${text}` : text);
+        }
+      });
+    }
+  };
 
   return (
     <aside 
-      className={`fixed ${isFullscreen ? 'inset-0 w-full z-[100]' : 'inset-y-0 right-0 w-full md:w-[450px] z-50 border-l'} bg-white shadow-2xl border-slate-200 flex flex-col animate-in slide-in-from-right duration-300`}
+      className={`fixed ${isFullscreen ? 'inset-0 w-full z-[100]' : 'top-0 right-0 bottom-0 w-full md:w-[450px] z-[100] border-l'} bg-white shadow-2xl border-slate-200 flex flex-col h-[100dvh] overflow-hidden animate-in slide-in-from-right duration-300`}
     >
       <div className="bg-slate-900 text-white p-4 flex justify-between items-center flex-shrink-0">
         <div className="flex items-center gap-2">
@@ -54,22 +69,32 @@ const TutorChat = ({
       </div>
 
       <div className="p-4 bg-white border-t border-slate-200 flex-shrink-0">
-        <div className="relative">
+        <div className="relative flex items-center">
           <input 
             type="text" 
-            className="w-full bg-slate-100 border border-slate-200 rounded-full py-3.5 pl-5 pr-14 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition shadow-inner"
-            placeholder="Pregúntame algo en alemán o español..."
+            className="w-full bg-slate-100 border border-slate-200 rounded-full py-3.5 pl-5 pr-24 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition shadow-inner"
+            placeholder={isListening ? "Escuchando tu voz..." : "Pregúntame algo en alemán o español..."}
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && sendChatMessage()}
           />
-          <button 
-            onClick={sendChatMessage}
-            disabled={!chatInput.trim() || isChatLoading}
-            className="absolute right-2 top-2 p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:bg-slate-400 transition shadow"
-          >
-            <Send size={18} />
-          </button>
+          <div className="absolute right-2 top-2 flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handleMicClick}
+              className={`p-2 rounded-full transition shadow ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+              title={isListening ? "Escuchando... Haz clic para detener" : "Dictar con micrófono"}
+            >
+              <Mic size={18} />
+            </button>
+            <button 
+              onClick={sendChatMessage}
+              disabled={!chatInput.trim() || isChatLoading}
+              className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:bg-slate-400 transition shadow"
+            >
+              <Send size={18} />
+            </button>
+          </div>
         </div>
       </div>
     </aside>
