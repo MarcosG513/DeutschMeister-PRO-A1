@@ -58,13 +58,13 @@ export async function playGermanAudio(text, options = {}) {
 
   stopCurrentAudio();
   const cacheKey = getSafeAudioKey(cleanText);
-  const isStory = type === "story";
+  const isEphemeral = type === "story" || type === "reading";
 
   try {
     if (onStart) onStart();
 
-    // 1. Si no es cuento, buscar primero en IndexedDB (0 ms, offline)
-    if (!isStory) {
+    // 1. Si no es efímero (cuento o lectura), buscar primero en IndexedDB (0 ms, offline)
+    if (!isEphemeral) {
       const cachedBlob = await audioStore.getItem(cacheKey);
       if (cachedBlob) {
         const localBlobUrl = URL.createObjectURL(cachedBlob);
@@ -109,8 +109,8 @@ export async function playGermanAudio(text, options = {}) {
 
     await audio.play();
 
-    // 4. Si es vocabulario, oración o lectura y no es Data URI, guardar en localforage en segundo plano
-    if (!isStory && !audioSource.startsWith("data:")) {
+    // 4. Si es vocabulario u oración persistente y no es Data URI, guardar en localforage en segundo plano
+    if (!isEphemeral && !audioSource.startsWith("data:")) {
       try {
         const audioFetch = await fetch(audioSource);
         if (audioFetch.ok) {

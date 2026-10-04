@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { BookOpen, Sparkles, X, Volume2, HelpCircle, Lightbulb, AlertTriangle, RefreshCw, Loader2, Play, Pause, CheckCircle } from 'lucide-react';
+import { BookOpen, Sparkles, X, Volume2, HelpCircle, Lightbulb, AlertTriangle, RefreshCw, Loader2, Play, Pause, CheckCircle, RotateCcw } from 'lucide-react';
 import { functions } from '../App';
 import { httpsCallable } from 'firebase/functions';
-import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
+import { getGermanSpeechUrl, stopCurrentAudio } from '../services/aiAudioService';
 
 const ReadingComprehension = ({ onExit }) => {
   const [tema, setTema] = useState("");
@@ -12,15 +12,44 @@ const ReadingComprehension = ({ onExit }) => {
   const [selectedAnswers, setSelectedAnswers] = useState({}); // { [questionIdx]: selectedOption }
   const [error, setError] = useState("");
 
-  // Estados para reproducción de audio
+  // Estados y Referencias de Audio de Sesión
+  const [isReadingAudioLoading, setIsReadingAudioLoading] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
 
-  // Limpieza del motor de audio al desmontar o cambiar de lectura
+  const readingAudioInstanceRef = useRef(null);
+  const readingAudioUrlRef = useRef(null);
+
+  // Cálculo de Sincronización Ponderada (Karaoke Exacto)
+  const calculateWordTimings = (tokens) => {
+    const words = tokens.filter(t => t.isWord);
+    const totalChars = words.reduce((sum, w) => sum + w.text.length, 0);
+    let accumulated = 0;
+
+    return words.map((w, idx) => {
+      const startRatio = accumulated / (totalChars || 1);
+      accumulated += w.text.length;
+      const endRatio = accumulated / (totalChars || 1);
+      return { wordIndex: idx, startRatio, endRatio };
+    });
+  };
+
+  // Función de Limpieza de Audio (cleanupReadingAudio)
+  const cleanupReadingAudio = () => {
+    if (readingAudioInstanceRef.current) {
+      readingAudioInstanceRef.current.pause();
+      readingAudioInstanceRef.current.src = "";
+      readingAudioInstanceRef.current = null;
+    }
+    readingAudioUrlRef.current = null;
+    setIsPlayingAudio(false);
+    setIsReadingAudioLoading(false);
+    setCurrentWordIndex(-1);
+  };
+
+  // Limpieza al desmontar el componente
   useEffect(() => {
-    return () => {
-      stopCurrentAudio();
-    };
+    return () => cleanupReadingAudio();
   }, []);
 
   // Analizador Léxico A1
@@ -104,26 +133,88 @@ const ReadingComprehension = ({ onExit }) => {
     return tokens;
   };
 
-  // Reproducción de audio con Gemini 3.8 Flash TTS
-  const speakText = (text) => {
-    if (!text) return;
-    if (isPlayingAudio) {
-      stopCurrentAudio();
+  // Manejador de Reproducción (handleToggleReadingAudio)
+  const handleToggleReadingAudio = async () => {
+    const textToPlay = readingTest?.texto_aleman;
+    if (!textToPlay) return;
+
+    // A. Si se está reproduciendo, pausar
+    if (isPlayingAudio && readingAudioInstanceRef.current) {
+      readingAudioInstanceRef.current.pause();
       setIsPlayingAudio(false);
       return;
     }
 
-    playGermanAudio(text, {
-      type: "reading",
-      voice: "Charon",
-      onStart: () => setIsPlayingAudio(true),
-      onEnd: () => setIsPlayingAudio(false),
-      onError: () => setIsPlayingAudio(false)
-    });
+    // B. Si ya existe en memoria (pausado o reinicio), reanudar a 0 ms (0 llamadas API)
+    if (readingAudioInstanceRef.current && readingAudioUrlRef.current) {
+      if (readingAudioInstanceRef.current.ended) {
+        readingAudioInstanceRef.current.currentTime = 0;
+        setCurrentWordIndex(0);
+      }
+      readingAudioInstanceRef.current.play();
+      setIsPlayingAudio(true);
+      return;
+    }
+
+    // C. Primera reproducción: Inferencia con IA y almacenamiento en memoria
+    try {
+      setIsReadingAudioLoading(true);
+      stopCurrentAudio(); // Detener cualquier otro audio en la app
+
+      const audioSource = await getGermanSpeechUrl(textToPlay, {
+        voice: "Charon",
+        type: "reading"
+      });
+
+      readingAudioUrlRef.current = audioSource;
+
+      const audio = new Audio(audioSource);
+      readingAudioInstanceRef.current = audio;
+
+      const tokens = parseTextToTokens(textToPlay);
+      const wordTimings = calculateWordTimings(tokens);
+
+      audio.onplay = () => {
+        setIsReadingAudioLoading(false);
+        setIsPlayingAudio(true);
+      };
+
+      audio.ontimeupdate = () => {
+        if (!audio.duration || audio.duration === 0) return;
+        const currentProgress = audio.currentTime / audio.duration;
+        const active = wordTimings.find(
+          w => currentProgress >= w.startRatio && currentProgress < w.endRatio
+        );
+        if (active && active.wordIndex !== currentWordIndex) {
+          setCurrentWordIndex(active.wordIndex);
+        }
+      };
+
+      audio.onended = () => {
+        setIsPlayingAudio(false);
+        setCurrentWordIndex(-1);
+      };
+
+      audio.onerror = (e) => {
+        console.warn("[Reading Audio Error] Fallo al reproducir:", e);
+        setIsPlayingAudio(false);
+        setIsReadingAudioLoading(false);
+        setCurrentWordIndex(-1);
+      };
+
+      await audio.play();
+    } catch (err) {
+      console.error("Error al obtener audio de la lectura:", err);
+      setIsReadingAudioLoading(false);
+      setIsPlayingAudio(false);
+    }
   };
+
+  const speakText = handleToggleReadingAudio;
 
   const handleGenerate = async () => {
     if (!tema.trim()) return;
+    cleanupReadingAudio();
     setLoading(true);
     setError("");
     setReadingTest(null);
@@ -178,6 +269,7 @@ const ReadingComprehension = ({ onExit }) => {
   };
 
   const handleReset = () => {
+    cleanupReadingAudio();
     setTema("");
     setReadingTest(null);
     setSelectedAnswers({});
@@ -196,7 +288,10 @@ const ReadingComprehension = ({ onExit }) => {
           </div>
         </div>
         <button 
-          onClick={onExit} 
+          onClick={() => {
+            cleanupReadingAudio();
+            if (onExit) onExit();
+          }} 
           className="text-emerald-100 hover:text-white hover:bg-emerald-700 px-3 py-1.5 rounded-lg transition text-sm font-bold flex items-center gap-2"
         >
           <X size={16} /> Salir
@@ -276,25 +371,38 @@ const ReadingComprehension = ({ onExit }) => {
                   <BookOpen size={18} /> {readingTest.titulo_aleman}
                 </h4>
                 <button
-                  onClick={() => speakText(readingTest.texto_aleman)}
-                  className={`bg-white text-emerald-700 p-2.5 rounded-full border border-slate-200 transition shadow-md hover:bg-emerald-50 ${
-                    isPlayingAudio ? 'scale-110 ring-2 ring-emerald-500/20' : ''
+                  onClick={handleToggleReadingAudio}
+                  disabled={isReadingAudioLoading}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all shadow-sm ${
+                    isPlayingAudio
+                      ? "bg-amber-100 text-amber-800 border border-amber-300"
+                      : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
                   }`}
-                  title={isPlayingAudio ? "Detener pronunciación" : "Escuchar pronunciación"}
-                  aria-label={isPlayingAudio ? "Detener pronunciación" : "Escuchar pronunciación"}
+                  title={isReadingAudioLoading ? "Preparando audio..." : isPlayingAudio ? "Pausar lectura" : "Escuchar lectura"}
+                  aria-label={isReadingAudioLoading ? "Preparando audio..." : isPlayingAudio ? "Pausar lectura" : "Escuchar lectura"}
                 >
-                  {isPlayingAudio ? (
-                    <div className="relative w-4 h-4 flex items-center justify-center">
-                      <span className="absolute w-full h-full bg-emerald-400 rounded-full animate-ping opacity-75"></span>
-                      <Pause size={16} className="text-emerald-700 z-10" />
-                    </div>
+                  {isReadingAudioLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin text-amber-600"/>
+                      <span className="text-sm">Preparando audio...</span>
+                    </>
+                  ) : isPlayingAudio ? (
+                    <>
+                      <Pause className="w-5 h-5 text-amber-700 fill-current"/>
+                      <span className="text-sm">Pausar</span>
+                    </>
                   ) : (
-                    <Play size={16} />
+                    <>
+                      <Play className="w-5 h-5 text-amber-600 fill-current"/>
+                      <span className="text-sm">
+                        {readingAudioUrlRef.current ? "Reanudar" : "Escuchar lectura"}
+                      </span>
+                    </>
                   )}
                 </button>
               </div>
               <div className="p-6">
-                <p translate="no" className="notranslate text-slate-800 text-lg leading-relaxed font-serif whitespace-pre-line select-none cursor-pointer" onClick={() => speakText(readingTest.texto_aleman)}>
+                <p translate="no" className="notranslate text-slate-800 text-lg leading-relaxed font-serif whitespace-pre-line select-none cursor-pointer" onClick={handleToggleReadingAudio}>
                   {parseTextToTokens(readingTest.texto_aleman).map((token, idx) => {
                     if (token.isWord) {
                       const isHighlighted = token.wordIndex === currentWordIndex;

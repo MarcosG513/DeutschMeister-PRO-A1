@@ -1647,12 +1647,12 @@ export const synthesizeGermanSpeech = onCall(
       throw new HttpsError("invalid-argument", "El texto proporcionado está vacío.");
     }
 
-    const isStory = type === "story";
+    const isEphemeral = type === "story" || type === "reading";
     const audioId = getSafeAudioId(cleanText);
     const db = admin.firestore();
 
-    // ── NIVEL 2: REVISIÓN DE CACHÉ EN LA NUBE (Excluido para cuentos efímeros) ──
-    if (!isStory) {
+    // ── NIVEL 2: REVISIÓN DE CACHÉ EN LA NUBE (Excluido para cuentos y lecturas efímeras) ──
+    if (!isEphemeral) {
       const audioDocRef = db.collection("global_audio_pronunciations").doc(audioId);
       const docSnap = await audioDocRef.get();
       if (docSnap.exists) {
@@ -1696,8 +1696,8 @@ export const synthesizeGermanSpeech = onCall(
       }
     }
 
-    // ── CASO CUENTOS IA: RETORNAR DIRECTAMENTE SIN PERSISTIR EN STORAGE NI FIRESTORE ──
-    if (isStory) {
+    // ── CASO EFÍMERO (Cuentos y Comprensión Lectora): RETORNAR DIRECTAMENTE SIN PERSISTIR EN STORAGE NI FIRESTORE ──
+    if (isEphemeral) {
       const base64DataUri = `data:${audioResult.mimeType};base64,${audioResult.buffer.toString("base64")}`;
       return {
         success: true,
