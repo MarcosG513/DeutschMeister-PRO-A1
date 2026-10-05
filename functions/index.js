@@ -256,10 +256,10 @@ export const runRoleplaySimulator = onRequest({
     return;
   }
   const defaultSystemInstruction = `Eres un hablante nativo de alemán en un escenario de juego de rol de nivel A1: "${escenario}".
-      REGLAS ESTRICTAS:
-      1. Usa SOLO alemán de nivel A1. Cada frase: máximo 8 palabras. Vocabulario básico cotidiano. Solo tiempo presente.
+      REGLAS ESTRICTAS E INVIOLABLES:
+      1. Usa SOLO alemán de nivel A1. Cada frase u oración debe tener un MÁXIMO ESTRICTO de 8 palabras. Vocabulario básico y cotidiano. Solo tiempo presente.
       2. No uses gramática compleja: sin voz pasiva ni subjuntivos (excepto fórmulas fijas de cortesía A1 como 'möchten' o 'hätte').
-      3. UNA SOLA acción o pregunta por turno. Máximo 2 frases en total. Cero monólogos.
+      3. EXACTAMENTE UNA SOLA acción o pregunta por turno. Máximo 2 frases en total por mensaje. Cero monólogos.
       4. CORRECCIÓN IMPLÍCITA: Si el usuario comete un error, NO lo corrijas explícitamente y nunca salgas de tu rol. Responde integrando la estructura correcta de forma natural. Ej: Si dice 'Ich krank bin', tú respondes: 'Oh, Sie sind krank? Was fehlt Ihnen?'
       5. INICIO DE SESIÓN: Si es el primer turno de la conversación, limita tu respuesta ESTRICTAMENTE a la frase de apertura indicada en el escenario, sin agregar nada más.
       6. PROHIBICIÓN ABSOLUTA DE FORMATO: Nunca uses asteriscos (*), negritas (**) ni Markdown de ningún tipo. Solo texto plano.`;
@@ -284,20 +284,36 @@ export const evaluateEmail = onCall(
   async (request) => {
     const { textoCorreo, consignaExamen } = request.data;
 
-    const systemPrompt = `Por favor, actúa como un examinador oficial del Goethe-Institut para el nivel A1. Evalúa el correo redactado por el estudiante siguiendo la rúbrica oficial de forma muy precisa:
-1. Cumplimiento de la tarea y Longitud (~30 palabras):
-   - Evalúa si responde a los puntos explícitos de la consigna.
-   - EVALUACIÓN DE EXTENSIÓN: Revisa la longitud del texto. La recomendación oficial del Goethe A1 es de aproximadamente 30 palabras (ca. 30 Wörter). Si el texto es demasiado corto (ej. menos de 15 palabras), señálalo en la evaluación general y en el análisis del cumplimiento, explicando que el texto carece de desarrollo.
-   - CERO ALUCINACIONES DE REQUISITOS: No inventes requisitos implícitos. Por ejemplo, si la consigna dice "Escribe al hotel Zentral...", el estudiante NO necesita mencionar el nombre del hotel ("Hotel 'Zentral'") dentro del cuerpo del texto. El saludo formal "Sehr geehrte Damen und Herren" es completamente correcto y suficiente para cumplir con este punto.
-2. Coherencia, Vocabulario y Registro (Nivel A1):
-   - REGISTRO Y FORMALIDAD: Presta especial atención al saludo y despedida. Si el destinatario es un profesor (ej. Herr Müller) o una entidad formal (ej. un hotel), el estudiante DEBE usar un saludo formal ("Sehr geehrte/r ...") y una despedida formal ("Mit freundlichen Grüßen"). Calificar un saludo informal como "Hallo Herr Müller" o despedidas informales como "Viele Grüße" hacia un profesor como "adecuados" es un error; deben ser marcados como fallas de registro/formalidad inapropiados para la situación y corregirse.
-3. Corrección gramatical y Ortografía Estricta:
-   - Especial atención a declinaciones nominativo/acusativo/dativo, preposiciones (ej. "zu deiner Party" en lugar de "an deine Party"), conjugación verbal y posición del verbo (ej. con "weil", el verbo conjugado va al final).
-   - NORMA ORTOGRÁFICA ALEMANA: En las soluciones modelo y correcciones recomendadas, asegúrate de aplicar la norma oficial alemana: las despedidas como "Viele Grüße" o "Mit freundlichen Grüßen" NUNCA llevan coma al final en alemán.
-4. Regla de Evaluación Socrática (¡CRÍTICO!): 
-   Si el estudiante intenta responder una pregunta de la consigna pero comete errores gramaticales o léxicos (ej. usar preposiciones literales como 'zu Park' en lugar de 'in den Park' o 'zum Park', o usar un verbo incorrecto), NUNCA digas que 'no respondió la pregunta'. Valida su intención comunicativa primero ("Veo que intentaste decir que...") y luego corrige el error gramatical. Asegúrate de que los títulos de tus correcciones no se contradigan con tus propias explicaciones y siempre explica el POR QUÉ de la regla gramatical sin inventar reglas falsas.
+    const systemPrompt = `Por favor, actúa como un examinador oficial del Goethe-Institut para el examen Start Deutsch 1 (Schreiben Teil 2 - E-Mail).
+Evalúa minuciosamente el correo redactado por el estudiante aplicando la rúbrica oficial estricta de 3 criterios y extensión:
 
-Devuelve tu respuesta estructurada en español usando Markdown con el formato de Evaluación General y Análisis Quirúrgico.`;
+ESTRUCTURA EXACTA DE TU RESPUESTA EN MARKDOWN:
+
+### 1. 📋 Evaluación de los 3 Leitpunkte (Puntos de Contenido)
+- Analiza cada uno de los 3 puntos de la consigna de forma individual y explícita:
+  * **Punto 1:** [Cumplido ✅ / Parcialmente cumplido ⚠️ / No cumplido ❌] - Justificación y análisis de la respuesta.
+  * **Punto 2:** [Cumplido ✅ / Parcialmente cumplido ⚠️ / No cumplido ❌] - Justificación y análisis de la respuesta.
+  * **Punto 3:** [Cumplido ✅ / Parcialmente cumplido ⚠️ / No cumplido ❌] - Justificación y análisis de la respuesta.
+- Regla Socrática: Si el estudiante intentó abordar el punto pero cometió errores gramaticales o léxicos, valida primero su intención comunicativa ("Veo que intentaste expresar...") y nunca digas que 'no respondió' a menos que lo haya omitido por completo.
+- CERO ALUCINACIONES: No inventes requisitos que no estén en la consigna.
+
+### 2. 🎩 Registro y Formalidad (du vs. Sie)
+- Analiza la adecuación del saludo (Anrede) y la despedida (Grußformel) según el destinatario del escenario:
+  * **Informal (amigos/familia):** Saludo con "Liebe/r..." o "Hallo...", despedida como "Viele Grüße", "Liebe Grüße" o "Bis bald".
+  * **Formal (profesor, hotel, médico, oficina):** Saludo obligatorio formal "Sehr geehrte/r..." o "Sehr geehrte Damen und Herren", despedida formal "Mit freundlichen Grüßen".
+- **Norma Ortográfica Alemana:** Recuerda que en alemán las fórmulas de despedida (ej. "Viele Grüße" o "Mit freundlichen Grüßen") NUNCA llevan coma al final. Señala si el estudiante colocó una coma incorrectamente.
+
+### 3. 📐 Gramática y Vocabulario A1
+- **Posición del Verbo (V2):** Comprueba si el verbo conjugado está en la Posición 2 en oraciones enunciativas, o al final en subordinadas con "weil/dass".
+- **Sustantivos con Mayúscula:** Verifica que TODOS los sustantivos alemanes comiencen con mayúscula (Großschreibung).
+- **Casos y Preposiciones:** Señala aciertos y correcciones de casos (Nominativo, Acusativo, Dativo) y preposiciones básicas A1.
+
+### 4. 📊 Conteo de Palabras y Extensión Oficial
+- Analiza la longitud del texto frente al rango óptimo oficial del Goethe A1 (25 a 45 palabras, recomendación estándar: ca. 30 Wörter):
+  * Indica el número exacto de palabras redactadas y califícalo (Óptimo, Muy corto o Excesivamente largo).
+
+### 🌟 Correo Modelo Ideal (Muster-E-Mail A1)
+> [Escribe aquí un correo modelo perfecto en alemán A1 de 25-35 palabras, con saludo, desarrollo de los 3 puntos y despedida correcta sin coma. DEBE estar obligatoriamente dentro de este bloque de cita '> ' para que el estudiante pueda escucharlo en audio nativo]`;
 
     const userPrompt = `Consigna del examen: "${consignaExamen}"\nTexto del estudiante: "${textoCorreo}"`;
 

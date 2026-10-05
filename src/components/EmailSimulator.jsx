@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { httpsCallable } from 'firebase/functions';
-import { Loader2, CheckCircle, Edit as Edit3 } from 'lucide-react';
+import { Loader2, CheckCircle, Edit as Edit3, Volume2, Square } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
 import { functions } from '../App';
+import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 
 const consignasGoethe = [
   { de: "Ihre Freundin Anna hat Geburtstag. Schreiben Sie eine E-Mail: Gratulation? Wann besuchen? Geschenk? (Schreiben Sie ca. 30 Wörter)", es: "Tu amiga Anna cumple años. Escribe un correo: ¿Felicitación? ¿Cuándo la visitas? ¿Regalo? (Escribe aprox. 30 palabras)" },
@@ -11,16 +12,32 @@ const consignasGoethe = [
 ];
 
 const EVALUATION_STEPS = [
-  { icon: "🔍", text: "Analizando fórmula de saludo y despedida..." },
-  { icon: "📐", text: "Auditando la regla del verbo en Posición 2 (V2)..." },
-  { icon: "📊", text: "Verificando longitud de texto (~30 palabras)..." },
-  { icon: "🎯", text: "Calculando puntaje final oficial Goethe A1..." }
+  { icon: "📋", text: "Auditando el cumplimiento de los 3 Leitpunkte..." },
+  { icon: "🎩", text: "Verificando registro y formalidad (du vs. Sie, Anrede y Gruß)..." },
+  { icon: "📐", text: "Revisando gramática A1 (V2, sustantivos con mayúscula, casos)..." },
+  { icon: "📊", text: "Comprobando extensión oficial Goethe (25-45 palabras)..." }
 ];
+
+const extractModelEmail = (evalText) => {
+  if (!evalText || typeof evalText !== "string") return null;
+  const match = evalText.match(/###\s*[^\n]*(?:Correo Modelo|Muster-E-Mail)[^\n]*\n+([\s\S]*?)(?:\n###|$)/i);
+  if (!match || !match[1]) return null;
+
+  const rawContent = match[1].trim();
+  const cleanedLines = rawContent
+    .split("\n")
+    .map(line => line.replace(/^\s*>\s?/, "").trim())
+    .filter(line => line.length > 0 && !line.startsWith("[") && !line.startsWith("(") && !line.toLowerCase().includes("escribe aquí"));
+
+  const modelText = cleanedLines.join("\n").trim();
+  return modelText.length > 10 ? modelText : null;
+};
 
 const EmailSimulator = ({ initialText }) => {
   const [text, setText] = useState(initialText || "");
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isPlayingModelAudio, setIsPlayingModelAudio] = useState(false);
   const [consigna, setConsigna] = useState(() => {
     const randomIndex = Math.floor(Math.random() * consignasGoethe.length);
     return consignasGoethe[randomIndex];
@@ -28,6 +45,12 @@ const EmailSimulator = ({ initialText }) => {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    return () => {
+      stopCurrentAudio();
+    };
+  }, []);
 
   useEffect(() => {
     let stepInterval;
@@ -54,7 +77,40 @@ const EmailSimulator = ({ initialText }) => {
 
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
+  const getWordCountStatus = (count) => {
+    if (count === 0) {
+      return {
+        badgeClass: "bg-slate-100 text-slate-600 border-slate-300",
+        label: "0 / 25-45 palabras",
+        hint: "Meta oficial: 25-45 palabras (ideal ~30)"
+      };
+    }
+    if (count < 25) {
+      const missing = 25 - count;
+      return {
+        badgeClass: "bg-amber-100 text-amber-800 border-amber-300",
+        label: `${count} / 25-45 palabras (faltan ${missing})`,
+        hint: "⚠️ Texto corto para Start Deutsch 1"
+      };
+    }
+    if (count <= 45) {
+      return {
+        badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-300",
+        label: `${count} palabras ✅ Rango Óptimo Goethe (25-45)`,
+        hint: "🎯 Longitud ideal para el examen oficial"
+      };
+    }
+    const extra = count - 45;
+    return {
+      badgeClass: "bg-rose-100 text-rose-800 border-rose-300",
+      label: `${count} palabras ⚠️ (+${extra} sobre máx. 45)`,
+      hint: "⚠️ Demasiado largo para A1 (sé más conciso)"
+    };
+  };
+
   const cambiarTema = () => {
+    stopCurrentAudio();
+    setIsPlayingModelAudio(false);
     let nextIndex;
     do {
       nextIndex = Math.floor(Math.random() * consignasGoethe.length);
@@ -64,8 +120,25 @@ const EmailSimulator = ({ initialText }) => {
     setEvaluation(null);
   };
 
+  const handlePlayModelAudio = (modelText) => {
+    if (isPlayingModelAudio) {
+      stopCurrentAudio();
+      setIsPlayingModelAudio(false);
+      return;
+    }
+    setIsPlayingModelAudio(true);
+    playGermanAudio(modelText, {
+      type: "sentence",
+      voice: "Charon",
+      onEnd: () => setIsPlayingModelAudio(false),
+      onError: () => setIsPlayingModelAudio(false)
+    });
+  };
+
   const evaluateEmail = async () => {
     if (!text.trim()) return;
+    stopCurrentAudio();
+    setIsPlayingModelAudio(false);
     setLoading(true);
     setEvaluation(null);
     try {
@@ -90,30 +163,46 @@ const EmailSimulator = ({ initialText }) => {
       const currentCount = words.length;
       const hasSalutation = /hallo|liebe|lieber|sehr geehrte|guten/i.test(text);
       const hasClosing = /grüße|gruß|tschüss|bis bald/i.test(text);
-      let feedback = "### 📊 Evaluación de tu correo (Offline)\n\n";
-      feedback += "**1. Estructura (Saludo y Despedida):**\n";
+      let feedback = "### 1. 📋 Evaluación de los 3 Leitpunkte (Puntos de Contenido)\n";
       if (hasSalutation && hasClosing) {
-        feedback += "✅ ¡Excelente! Tienes un saludo y una despedida reconocibles.\n";
+        feedback += "- **Punto 1:** Cumplido ✅ (Saludo y apertura comunicativa claros).\n";
+        feedback += "- **Punto 2:** Parcialmente cumplido ⚠️ (Revisa responder detalladamente a los temas pedidos).\n";
+        feedback += "- **Punto 3:** Cumplido ✅ (Cierre y despedida incluidos).\n";
       } else {
-        feedback += "❌ **Atención:** Te falta un saludo adecuado (ej. *Liebe/Lieber...*) o una despedida (ej. *Viele Grüße*).\n";
+        feedback += "- **Punto 1:** Parcialmente cumplido ⚠️ (Falta saludo inicial adecuado al destinatario).\n";
+        feedback += "- **Punto 2:** Parcialmente cumplido ⚠️ (Asegúrate de cubrir los 3 temas requeridos).\n";
+        feedback += "- **Punto 3:** No cumplido ❌ (Falta fórmula de despedida).\n";
       }
-      feedback += "\n**2. Longitud del texto:**\n";
-      if (currentCount >= 25 && currentCount <= 40) {
-        feedback += `✅ Excelente extensión. Has escrito ${currentCount} palabras (la meta oficial es ca. 30 Wörter).\n`;
+      feedback += "\n### 2. 🎩 Registro y Formalidad (du vs. Sie)\n";
+      if (hasSalutation && hasClosing) {
+        feedback += "- ✅ Registro coherente con el destinatario del ejercicio.\n";
+      } else {
+        feedback += "- ❌ **Atención:** Falta un saludo adecuado (ej. *Liebe/Lieber...* o *Sehr geehrte/r...*) o una despedida.\n";
+      }
+      feedback += "- **Regla ortográfica:** En alemán las fórmulas de despedida (*Viele Grüße*) **NUNCA llevan coma** al final.\n";
+      feedback += "\n### 3. 📐 Gramática y Vocabulario A1\n";
+      feedback += "- **Posición del Verbo (V2):** Comprueba que el verbo conjugado esté en la segunda posición en oraciones enunciativas.\n";
+      feedback += "- **Sustantivos con Mayúscula (Großschreibung):** Escribe siempre todos los sustantivos con mayúscula inicial.\n";
+      feedback += "\n### 4. 📊 Conteo de Palabras y Extensión Oficial\n";
+      if (currentCount >= 25 && currentCount <= 45) {
+        feedback += `✅ Excelente extensión. Has escrito **${currentCount} palabras** (rango óptimo oficial Goethe: 25-45 palabras, meta: ca. 30 Wörter).\n`;
       } else if (currentCount < 25) {
-        feedback += `⚠️ Tu texto es un poco corto (${currentCount} palabras). Intenta desarrollar más los puntos para alcanzar las ~30 palabras recomendadas.\n`;
+        feedback += `⚠️ Tu texto es un poco corto (**${currentCount} palabras**). La meta recomendada es entre 25 y 45 palabras (faltan ${25 - currentCount} para el mínimo).\n`;
       } else {
-        feedback += `⚠️ Tu texto es un poco extenso (${currentCount} palabras). En el nivel A1 se busca concisión (ca. 30 Wörter).\n`;
+        feedback += `⚠️ Tu texto es un poco extenso (**${currentCount} palabras**). En el nivel A1 se busca concisión (máximo recomendado: 45 palabras).\n`;
       }
-      feedback += "\n**3. Consejos clave:**\n";
-      feedback += "* Revisa siempre que los verbos conjugados estén en la **posición 2**.\n";
-      feedback += "* Escribe todos los sustantivos con **Mayúscula** inicial.\n";
-      feedback += "* Recuerda que en alemán las despedidas (*Viele Grüße*) **NO llevan coma** al final.\n";
+      feedback += "\n### 🌟 Correo Modelo Ideal (Muster-E-Mail A1)\n";
+      feedback += "> Hallo Anna,\n";
+      feedback += "> herzlichen Glückwunsch zum Geburtstag! Ich besuche dich am Samstag um 15 Uhr. Ich bringe einen Kuchen mit.\n";
+      feedback += "> Viele Grüße\n";
+      feedback += "> Markus\n";
       setEvaluation(feedback);
     } finally {
       setLoading(false);
     }
   };
+
+  const wordStatus = getWordCountStatus(wordCount);
 
   return (
     <div className="bg-white border-2 border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col mb-4 text-left">
@@ -144,22 +233,21 @@ const EmailSimulator = ({ initialText }) => {
         value={text} 
         onChange={e => setText(e.target.value)}
       ></textarea>
-      <div className="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-xs font-semibold">
+      <div className="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
           <span className="text-slate-500">Wortanzahl (Longitud):</span>
-          <span className={`px-2.5 py-0.5 rounded-full font-mono font-bold transition-all ${
-            wordCount >= 25 && wordCount <= 40 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' :
-            wordCount >= 15 ? 'bg-amber-100 text-amber-800 border border-amber-300' :
-            'bg-rose-100 text-rose-800 border border-rose-300'
-          }`}>
-            {wordCount} / ~30 Wörter
+          <span className={`px-2.5 py-0.5 rounded-full font-mono font-bold transition-all border ${wordStatus.badgeClass}`}>
+            {wordStatus.label}
+          </span>
+          <span className="text-[11px] text-slate-400 italic">
+            {wordStatus.hint}
           </span>
         </div>
 
         <button 
           onClick={evaluateEmail} 
           disabled={loading || !text.trim()} 
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-2 transition-all disabled:opacity-50 shrink-0"
         >
           {loading ? (
             <>
@@ -217,7 +305,51 @@ const EmailSimulator = ({ initialText }) => {
       )}
 
       {evaluation && (
-        <div className="p-4 bg-blue-50 border-t-2 border-blue-200 animate-in slide-in-from-top-2">
+        <div className="p-4 bg-blue-50/70 border-t-2 border-blue-200 animate-in slide-in-from-top-2 space-y-4">
+          {(() => {
+            const modelEmail = extractModelEmail(evaluation);
+            if (!modelEmail) return null;
+            return (
+              <div className="p-4 bg-white border-2 border-purple-200 rounded-xl shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <div className="p-2.5 bg-purple-600 text-white rounded-lg shadow-sm shrink-0 mt-0.5">
+                    <Volume2 size={20} className={isPlayingModelAudio ? "animate-pulse" : ""} />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-slate-800 text-sm">🌟 Correo Modelo Ideal</span>
+                      <span className="text-[10px] font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        Audio Nativo A1
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-1 italic line-clamp-2 leading-relaxed">
+                      "{modelEmail.replace(/\n+/g, ' ')}"
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handlePlayModelAudio(modelEmail)}
+                  className={`px-4 py-2.5 rounded-lg font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-all shrink-0 ${
+                    isPlayingModelAudio
+                      ? 'bg-rose-600 hover:bg-rose-700 text-white animate-pulse'
+                      : 'bg-purple-600 hover:bg-purple-700 text-white'
+                  }`}
+                  title={isPlayingModelAudio ? "Detener pronunciación" : "Escuchar Correo Modelo (Charon)"}
+                >
+                  {isPlayingModelAudio ? (
+                    <>
+                      <Square size={14} fill="currentColor" /> Detener Audio
+                    </>
+                  ) : (
+                    <>
+                      <Volume2 size={14} /> Escuchar Correo Modelo
+                    </>
+                  )}
+                </button>
+              </div>
+            );
+          })()}
+
           <MarkdownMessage text={evaluation} />
         </div>
       )}

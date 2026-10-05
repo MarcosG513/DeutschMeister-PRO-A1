@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Loader2, Send, X, Volume2, Sparkles } from 'lucide-react';
+import { Loader2, Send, X, Volume2, Sparkles, Square } from 'lucide-react';
 import { awardCoins } from '../utils/helpers';
-import { playGermanAudio } from '../services/aiAudioService';
+import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 
 const RoleplaySimulator = ({
   onExit
@@ -13,7 +13,29 @@ const RoleplaySimulator = ({
   const [loading, setLoading] = useState(false);
   const [isBlurting, setIsBlurting] = useState(false);
   const [blurtInput, setBlurtInput] = useState("");
+  const [playingMsgIndex, setPlayingMsgIndex] = useState(null);
   const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      stopCurrentAudio();
+    };
+  }, []);
+
+  const handlePlayAudio = (text, idx) => {
+    if (playingMsgIndex === idx) {
+      stopCurrentAudio();
+      setPlayingMsgIndex(null);
+      return;
+    }
+    setPlayingMsgIndex(idx);
+    playGermanAudio(text, {
+      type: 'dialogue',
+      voice: 'Charon',
+      onEnd: () => setPlayingMsgIndex(null),
+      onError: () => setPlayingMsgIndex(null)
+    });
+  };
   const scenarios = [{
     id: 'restaurant',
     title: 'En el Restaurante',
@@ -57,6 +79,8 @@ const RoleplaySimulator = ({
     });
   }, [messages]);
   const handleSelectScenario = scen => {
+    stopCurrentAudio();
+    setPlayingMsgIndex(null);
     setScenario(scen);
     setIsBlurting(true);
     setBlurtInput("");
@@ -69,6 +93,8 @@ const RoleplaySimulator = ({
   };
 
   const startScenario = async scen => {
+    stopCurrentAudio();
+    setPlayingMsgIndex(null);
     setScenario(scen);
     setLoading(true);
     const initialMsgs = [{
@@ -144,6 +170,8 @@ const RoleplaySimulator = ({
   };
   const sendMessage = async () => {
     if (!input.trim()) return;
+    stopCurrentAudio();
+    setPlayingMsgIndex(null);
     setTutorMessageCount(prev => prev + 1);
     const newMsgs = [...messages, {
       role: 'user',
@@ -223,7 +251,7 @@ const RoleplaySimulator = ({
   };
   if (!scenario) {
     return <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-3xl mx-auto mt-10 animate-in fade-in zoom-in duration-300 relative">
-        <button onClick={onExit} className="absolute top-4 right-4 flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm"><X size={18} /> Salir</button>
+        <button onClick={() => { stopCurrentAudio(); onExit(); }} className="absolute top-4 right-4 flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm"><X size={18} /> Salir</button>
         <div className="text-center mb-8 mt-4">
           <div className="inline-flex bg-purple-100 text-purple-600 p-3 rounded-full mb-4 shadow-sm"><Sparkles size={32} /></div>
           <h2 className="text-3xl font-black text-slate-800">Simulador de Rol A1</h2>
@@ -244,7 +272,7 @@ const RoleplaySimulator = ({
     return (
       <div className="relative bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-xl mx-auto mt-10 animate-in fade-in zoom-in duration-300 text-center">
         <button
-          onClick={() => { setScenario(null); setIsBlurting(false); }}
+          onClick={() => { stopCurrentAudio(); setScenario(null); setIsBlurting(false); }}
           className="absolute top-4 right-4 flex items-center gap-2 text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg transition font-bold shadow-sm">
           <X size={18} /> Salir
         </button>
@@ -281,8 +309,8 @@ const RoleplaySimulator = ({
     );
   }
 
-  return <div className="bg-white rounded-2xl shadow-lg border border-slate-200 flex flex-col h-[70svh] max-w-3xl mx-auto mt-6 overflow-hidden animate-in slide-in-from-bottom-4">
-      <div className="bg-purple-600 text-white p-4 flex justify-between items-center shadow-md z-10">
+  return <div className="bg-white rounded-2xl shadow-lg border border-slate-200 flex flex-col h-[100dvh] sm:h-[720px] sm:max-h-[85vh] max-w-3xl mx-auto sm:mt-6 overflow-hidden animate-in slide-in-from-bottom-4">
+      <div className="bg-purple-600 text-white p-4 flex justify-between items-center shadow-md z-10 flex-shrink-0">
         <div className="flex items-center gap-3">
           <span className="text-2xl">{scenario.icon}</span>
           <div>
@@ -290,14 +318,27 @@ const RoleplaySimulator = ({
             <p className="text-purple-200 text-xs">Simulador de Conversación IA</p>
           </div>
         </div>
-        <button onClick={() => setScenario(null)} className="text-purple-200 hover:text-white hover:bg-purple-700 px-3 py-1.5 rounded-lg transition text-sm font-bold flex items-center gap-2"><X size={16} /> Cambiar</button>
+        <button onClick={() => { stopCurrentAudio(); setPlayingMsgIndex(null); setScenario(null); }} className="text-purple-200 hover:text-white hover:bg-purple-700 px-3 py-1.5 rounded-lg transition text-sm font-bold flex items-center gap-2"><X size={16} /> Cambiar</button>
       </div>
       
-      <div className="flex-1 overflow-y-auto p-6 bg-slate-50 flex flex-col gap-4 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50 flex flex-col gap-4 custom-scrollbar">
         {messages.filter(m => m.role !== 'user' || m.parts[0].text !== "Hola, inicia la simulación según las instrucciones.").map((msg, i) => <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[80%] rounded-2xl px-5 py-3 shadow-sm flex items-start gap-3 ${msg.role === 'user' ? 'bg-purple-600 text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'}`}>
-              {msg.role === 'model' && <button onClick={() => playGermanAudio(msg.parts[0].text, { type: "dialogue", voice: "Charon" })} className="mt-1 text-slate-400 hover:text-purple-600 transition shrink-0"><Volume2 size={16} /></button>}
-              <span className="leading-relaxed text-[15px]">{msg.parts[0].text}</span>
+            <div className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 sm:px-5 py-3 shadow-sm flex items-start gap-2.5 sm:gap-3 ${msg.role === 'user' ? 'bg-purple-600 text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'}`}>
+              {msg.role === 'model' && (
+                <button
+                  onClick={() => handlePlayAudio(msg.parts[0].text, i)}
+                  className={`mt-0.5 p-1.5 rounded-lg transition shrink-0 ${
+                    playingMsgIndex === i
+                      ? 'text-purple-700 bg-purple-100 ring-2 ring-purple-400 animate-pulse'
+                      : 'text-slate-400 hover:text-purple-600 hover:bg-slate-100'
+                  }`}
+                  title={playingMsgIndex === i ? "Detener pronunciación" : "Escuchar pronunciación (Charon)"}
+                  aria-label="Escuchar pronunciación"
+                >
+                  {playingMsgIndex === i ? <Square size={16} fill="currentColor" /> : <Volume2 size={16} />}
+                </button>
+              )}
+              <span className="leading-relaxed text-[14px] sm:text-[15px] select-text">{msg.parts[0].text}</span>
             </div>
           </div>)}
         {loading && <div className="flex justify-start">
@@ -306,8 +347,7 @@ const RoleplaySimulator = ({
         <div ref={chatEndRef} />
       </div>
 
-
-      <div className="p-4 bg-white border-t border-slate-200">
+      <div className="p-3 sm:p-4 bg-white border-t border-slate-200 flex-shrink-0">
         <div className="relative">
           <input type="text" className="w-full bg-slate-100 border border-slate-200 rounded-full py-3.5 pl-5 pr-14 text-sm focus:outline-none focus:border-purple-500 focus:bg-white transition shadow-inner" placeholder="Escribe tu respuesta en alemán..." value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendMessage()} disabled={loading} />
           <button onClick={sendMessage} disabled={!input.trim() || loading} className="absolute right-2 top-2 p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:opacity-50 transition shadow"><Send size={18} /></button>
