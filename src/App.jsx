@@ -16,7 +16,6 @@ import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId } from './utils/helpers';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
-import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 
 
 import Profile from './components/Profile';
@@ -27,6 +26,7 @@ const PresentationViewer = lazy(() => import('./components/PresentationViewer'))
 const DynamicQuiz = lazy(() => import('./components/DynamicQuiz'));
 const RoleplaySimulator = lazy(() => import('./components/RoleplaySimulator'));
 const InteractiveQA = lazy(() => import('./components/InteractiveQA'));
+const TutorChat = lazy(() => import('./components/TutorChat'));
 
 // --- CONFIGURACIÓN API & FIREBASE ---
 // Se removió el apiKey local, ahora se usan Firebase Functions.
@@ -289,19 +289,6 @@ export default function App() {
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
   const chatEndRef = useRef(null);
-  const { isListening: isChatListening, startListening: startChatListening, stopListening: stopChatListening } = useSpeechRecognition('de-DE');
-
-  const handleChatMicClick = () => {
-    if (isChatListening) {
-      stopChatListening();
-    } else {
-      startChatListening((text) => {
-        if (text) {
-          setChatInput(prev => prev ? `${prev} ${text}` : text);
-        }
-      });
-    }
-  };
   useEffect(() => {
     if (!auth) return;
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -1418,57 +1405,20 @@ export default function App() {
   </>
   }
 
-  {/* --- PANEL LATERAL: TUTOR IA --- */}
-    {isTutorOpen && <aside className={`fixed ${isTutorFullscreen ? 'inset-0 w-full z-[100]' : 'top-0 right-0 bottom-0 w-full md:w-[450px] z-[100] border-l'} bg-white shadow-2xl border-slate-200 flex flex-col h-[100dvh] overflow-hidden animate-in slide-in-from-right duration-300`}>
-        <div className="bg-slate-900 text-white p-4 flex justify-between items-center flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <Bot className="text-yellow-400" />
-            <h3 className="font-bold text-lg">Tutor Alemán</h3>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setIsTutorFullscreen(!isTutorFullscreen)} className="text-slate-400 hover:text-white transition bg-slate-800 hover:bg-slate-700 rounded-lg p-1.5" title={isTutorFullscreen ? "Minimizar" : "Pantalla Completa"}>
-              {isTutorFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-            </button>
-            <button onClick={() => setIsTutorOpen(false)} className="text-slate-400 hover:text-white transition bg-slate-800 hover:bg-slate-700 rounded-lg p-1.5" title="Cerrar Tutor">
-              <X size={18} />
-            </button>
-          </div>
-        </div>
-        
-        <div className="flex-1 overflow-y-auto p-4 bg-slate-50 flex flex-col gap-4 custom-scrollbar">
-          {chatMessages.map((msg, i) => <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] rounded-2xl px-5 py-4 shadow-sm ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'}`}>
-                {msg.role === 'user' ? msg.parts[0].text : <MarkdownMessage text={msg.parts[0].text} />}
-              </div>
-            </div>)}
-          {isChatLoading && <div className="flex justify-start">
-              <div className="bg-white border border-slate-200 text-slate-500 px-4 py-3 rounded-2xl rounded-bl-none flex gap-2 items-center text-sm shadow-sm">
-                <Loader2 size={16} className="animate-spin text-blue-500" /> Escribiendo...
-              </div>
-            </div>
-          }
-          <div ref={chatEndRef} />
-        </div>
-
-        <div className="p-4 bg-white border-t border-slate-200 flex-shrink-0">
-          <div className="relative flex items-center">
-            <input type="text" className="w-full bg-slate-100 border border-slate-200 rounded-full py-3.5 pl-5 pr-24 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition shadow-inner" placeholder={isChatListening ? "Escuchando tu voz..." : "Pregúntame algo en alemán o español..."} value={chatInput} onChange={e => setChatInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendChatMessage()} />
-            <div className="absolute right-2 top-2 flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={handleChatMicClick}
-                className={`p-2 rounded-full transition shadow ${isChatListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
-                title={isChatListening ? "Escuchando... Haz clic para detener" : "Dictar con micrófono"}
-              >
-                <Mic size={18} />
-              </button>
-              <button onClick={sendChatMessage} disabled={!chatInput.trim() || isChatLoading} className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:bg-slate-400 transition shadow">
-                <Send size={18} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </aside>}
+    {/* --- PANEL LATERAL: TUTOR IA --- */}
+    <TutorChat
+      isOpen={isTutorOpen}
+      onClose={() => setIsTutorOpen(false)}
+      isFullscreen={isTutorFullscreen}
+      setIsFullscreen={setIsTutorFullscreen}
+      chatMessages={chatMessages}
+      chatInput={chatInput}
+      setChatInput={setChatInput}
+      sendChatMessage={sendChatMessage}
+      isChatLoading={isChatLoading}
+      chatEndRef={chatEndRef}
+      user={user}
+    />
 
     {fullscreenImage && <div className="fixed inset-0 z-[100] bg-slate-900/95 flex items-center justify-center p-4" onClick={() => setFullscreenImage(null)}>
         <div className="relative max-w-5xl max-h-[100svh] w-full h-full flex flex-col items-center justify-center">
