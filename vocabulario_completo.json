@@ -4234,5 +4234,605 @@
     "word": "welcher?",
     "exampleSentenceDe": "Welcher Bus ist das?",
     "exampleSentenceEs": "¿Cuál es ese autobús?"
+  },
+  {
+    "id": "ZGFzJTIwQiVDMyVCQ3JnZXJhbXQ_",
+    "word": "das Bürgeramt",
+    "exampleSentenceDe": "Ich muss zum Bürgeramt für meine Anmeldung gehen.",
+    "exampleSentenceEs": "Tengo que ir a la oficina de atención ciudadana para mi empadronamiento."
+  },
+  {
+    "id": "ZGllJTIwTWVsZGViZXNjaGVpbmlndW5n",
+    "word": "die Meldebescheinigung",
+    "exampleSentenceDe": "Die Bank verlangt eine aktuelle Meldebescheinigung.",
+    "exampleSentenceEs": "El banco exige un certificado de empadronamiento actual."
+  },
+  {
+    "id": "ZGVyJTIwQXVmZW50aGFsdHN0aXRlbA__",
+    "word": "der Aufenthaltstitel",
+    "exampleSentenceDe": "Mein Aufenthaltstitel ist für zwei Jahre gültig.",
+    "exampleSentenceEs": "Mi permiso de residencia es válido por dos años."
+  },
+  {
+    "id": "ZGVyJTIwQW50cmFn",
+    "word": "der Antrag",
+    "exampleSentenceDe": "Ich habe den Antrag auf Kindergeld gestellt.",
+    "exampleSentenceEs": "He presentado la solicitud del subsidio familiar."
+  },
+  {
+    "id": "YmVhbnRyYWdlbg__",
+    "word": "beantragen",
+    "exampleSentenceDe": "Ich möchte einen neuen Pass beantragen.",
+    "exampleSentenceEs": "Quisiera solicitar un nuevo pasaporte."
+  },
+  {
+    "id": "ZGllJTIwQmVoJUMzJUI2cmRl",
+    "word": "die Behörde",
+    "exampleSentenceDe": "Der Brief kommt direkt von der Behörde.",
+    "exampleSentenceEs": "La carta proviene directamente del organismo público."
+  },
+  {
+    "id": "ZGllJTIwU3RldWVyLUlE",
+    "word": "die Steuer-ID",
+    "exampleSentenceDe": "Der Arbeitgeber braucht Ihre Steuer-ID.",
+    "exampleSentenceEs": "El empleador necesita su número de identificación fiscal."
+  },
+  {
+    "id": "ZGllJTIwRnJpc3Q_",
+    "word": "die Frist",
+    "exampleSentenceDe": "Bitte beachten Sie die Frist von zwei Wochen.",
+    "exampleSentenceEs": "Por favor, tenga en cuenta el plazo de dos semanas."
+  },
+  {
+    "id": "enVzdCVDMyVBNG5kaWc_",
+    "word": "zuständig",
+    "exampleSentenceDe": "Welcher Sachbearbeiter ist für mich zuständig?",
+    "exampleSentenceEs": "¿Qué funcionario es el encargado de mi caso?"
+  },
+  {
+    "id": "ZXJsZWRpZ2Vu",
+    "word": "erledigen",
+    "exampleSentenceDe": "Ich muss heute wichtige Papiere erledigen.",
+    "exampleSentenceEs": "Hoy tengo que tramitar documentos importantes."
+  },
+  {
+    "id": "QmVzY2hlaWQlMjBzYWdlbg__",
+    "word": "Bescheid sagen",
+    "exampleSentenceDe": "Sag mir bitte Bescheid, wenn du Zeit hast.",
+    "exampleSentenceEs": "Avísame por favor cuando tengas tiempo."
+  },
+  {
+    "id": "ZHJpbmdlbmQ_",
+    "word": "dringend",
+    "exampleSentenceDe": "Das ist ein dringender Fall, rufen Sie bitte Hilfe!",
+    "exampleSentenceEs": "Es un caso urgente, ¡por favor llame a emergencias!"
+  },
+  {
+    "id": "enVmcmllZGVu",
+    "word": "zufrieden",
+    "exampleSentenceDe": "Ich bin sehr zufrieden mit meinem neuen Job.",
+    "exampleSentenceEs": "Estoy muy satisfecho con mi nuevo empleo."
+  },
+  {
+    "id": "Zm9sZ2Vu",
+    "word": "folgen",
+    "exampleSentenceDe": "Folgen Sie bitte den Schildern zum Ausgang.",
+    "exampleSentenceEs": "Siga por favor los letreros hacia la salida."
+  },
+  {
+    "id": "dmVydHJhdWVu",
+    "word": "vertrauen",
+    "exampleSentenceDe": "Ich vertraue meinem Arzt vollkommen.",
+    "exampleSentenceEs": "Confío plenamente en mi médico."
+  },
+  {
+    "id": "enVzdGltbWVu",
+    "word": "zustimmen",
+    "exampleSentenceDe": "Ich stimme diesem Vorschlag vollkommen zu.",
+    "exampleSentenceEs": "Estoy completamente de acuerdo con esta propuesta."
+  },
+  {
+    "id": "d2lkZXJzcHJlY2hlbg__",
+    "word": "widersprechen",
+    "exampleSentenceDe": "Niemand hat dem Chef widersprochen.",
+    "exampleSentenceEs": "Nadie le llevó la contraria al jefe."
+  },
+  {
+    "id": "bGVpZHR1bg__",
+    "word": "leidtun",
+    "exampleSentenceDe": "Es tut mir sehr leid, dass ich spät komme.",
+    "exampleSentenceEs": "Lamento mucho llegar tarde."
+  },
+  {
+    "id": "c2ljaCUyMGF1c3J1aGVu",
+    "word": "sich ausruhen",
+    "exampleSentenceDe": "Am Wochenende muss ich mich unbedingt ausruhen.",
+    "exampleSentenceEs": "El fin de semana tengo que descansar sin falta."
+  },
+  {
+    "id": "c2ljaCUyMGJlZWlsZW4_",
+    "word": "sich beeilen",
+    "exampleSentenceDe": "Wir müssen uns beeilen, der Bus fährt gleich ab.",
+    "exampleSentenceEs": "Tenemos que darnos prisa, el autobús sale enseguida."
+  },
+  {
+    "id": "c2ljaCUyMGJlc2Nod2VyZW4_",
+    "word": "sich beschweren",
+    "exampleSentenceDe": "Der Nachbar beschwert sich über die laute Musik.",
+    "exampleSentenceEs": "El vecino se queja de la música alta."
+  },
+  {
+    "id": "c2ljaCUyMGluZm9ybWllcmVu",
+    "word": "sich informieren",
+    "exampleSentenceDe": "Ich möchte mich über die Öffnungszeiten informieren.",
+    "exampleSentenceEs": "Quisiera informarme sobre los horarios de apertura."
+  },
+  {
+    "id": "c2ljaCUyMGslQzMlQkNtbWVybg__",
+    "word": "sich kümmern",
+    "exampleSentenceDe": "Ich kümmere mich gern um deine Katze.",
+    "exampleSentenceEs": "Me ocupo con gusto de tu gato."
+  },
+  {
+    "id": "c2ljaCUyMGludGVyZXNzaWVyZW4_",
+    "word": "sich interessieren",
+    "exampleSentenceDe": "Ich interessiere mich sehr für diesen Deutschkurs.",
+    "exampleSentenceEs": "Me intereso mucho por este curso de alemán."
+  },
+  {
+    "id": "YmVzY2hyZWliZW4_",
+    "word": "beschreiben",
+    "exampleSentenceDe": "Bitte beschreiben Sie den Weg zum Bahnhof.",
+    "exampleSentenceEs": "Por favor, describa el camino a la estación."
+  },
+  {
+    "id": "dmVyZ2xlaWNoZW4_",
+    "word": "vergleichen",
+    "exampleSentenceDe": "Vor dem Kauf sollten wir die Preise vergleichen.",
+    "exampleSentenceEs": "Antes de comprar deberíamos comparar los precios."
+  },
+  {
+    "id": "ZW1wZmVobGVu",
+    "word": "empfehlen",
+    "exampleSentenceDe": "Welchen Arzt können Sie mir empfehlen?",
+    "exampleSentenceEs": "¿Qué médico me puede recomendar?"
+  },
+  {
+    "id": "d2FocnNjaGVpbmxpY2g_",
+    "word": "wahrscheinlich",
+    "exampleSentenceDe": "Das Paket kommt wahrscheinlich morgen an.",
+    "exampleSentenceEs": "El paquete llegará probablemente mañana."
+  },
+  {
+    "id": "dW5iZWRpbmd0",
+    "word": "unbedingt",
+    "exampleSentenceDe": "Sie müssen diesen Brief heute unbedingt abschicken.",
+    "exampleSentenceEs": "Debe enviar esta carta hoy sin falta."
+  },
+  {
+    "id": "bWluZGVzdGVucw__",
+    "word": "mindestens",
+    "exampleSentenceDe": "Die Fahrt dauert mindestens dreißig Minuten.",
+    "exampleSentenceEs": "El viaje dura como mínimo treinta minutos."
+  },
+  {
+    "id": "aCVDMyVCNmNoc3RlbnM_",
+    "word": "höchstens",
+    "exampleSentenceDe": "Die Reparatur kostet höchstens fünfzig Euro.",
+    "exampleSentenceEs": "La reparación cuesta como máximo cincuenta euros."
+  },
+  {
+    "id": "d2VpbA__",
+    "word": "weil",
+    "exampleSentenceDe": "Ich lerne Deutsch, weil ich in Deutschland lebe.",
+    "exampleSentenceEs": "Aprendo alemán porque vivo en Alemania."
+  },
+  {
+    "id": "ZGFzcw__",
+    "word": "dass",
+    "exampleSentenceDe": "Ich weiß, dass der Unterricht um 9 Uhr beginnt.",
+    "exampleSentenceEs": "Sé que la clase comienza a las 9:00."
+  },
+  {
+    "id": "dW0lMjAuLi4lMjB6dQ__",
+    "word": "um ... zu",
+    "exampleSentenceDe": "Ich gehe zur Bank, um Geld abzuheben.",
+    "exampleSentenceEs": "Voy al banco para retirar dinero."
+  },
+  {
+    "id": "dHJvdHo_",
+    "word": "trotz",
+    "exampleSentenceDe": "Trotz des Regens fahre ich mit dem Fahrrad.",
+    "exampleSentenceEs": "A pesar de la lluvia voy en bicicleta."
+  },
+  {
+    "id": "YXUlQzMlOUZlcg__",
+    "word": "außer",
+    "exampleSentenceDe": "Außer mir ist niemand im Büro.",
+    "exampleSentenceEs": "Excepto yo, no hay nadie en la oficina."
+  },
+  {
+    "id": "Z2VnZW4lQzMlQkNiZXI_",
+    "word": "gegenüber",
+    "exampleSentenceDe": "Die Post liegt direkt gegenüber dem Bahnhof.",
+    "exampleSentenceEs": "La oficina postal queda justo enfrente de la estación de tren."
+  },
+  {
+    "id": "Ymlz",
+    "word": "bis",
+    "exampleSentenceDe": "Der Zug fährt nur bis München.",
+    "exampleSentenceEs": "El tren solo viaja hasta Múnich."
+  },
+  {
+    "id": "ZW50bGFuZw__",
+    "word": "entlang",
+    "exampleSentenceDe": "Gehen Sie diesen Fluss entlang.",
+    "exampleSentenceEs": "Vaya a lo largo de este río."
+  },
+  {
+    "id": "d2VnZW4_",
+    "word": "wegen",
+    "exampleSentenceDe": "Wegen des Sturms fällt der Zug heute aus.",
+    "exampleSentenceEs": "Debido a la tormenta, el tren se cancela hoy."
+  },
+  {
+    "id": "dyVDMyVBNGhyZW5k",
+    "word": "während",
+    "exampleSentenceDe": "Während der Arbeitszeit darf man nicht privat telefonieren.",
+    "exampleSentenceEs": "Durante el horario de trabajo no se permite hablar por teléfono en privado."
+  },
+  {
+    "id": "ZGFuaw__",
+    "word": "dank",
+    "exampleSentenceDe": "Dank deiner Hilfe habe ich die Wohnung gefunden.",
+    "exampleSentenceEs": "Gracias a tu ayuda he encontrado el apartamento."
+  },
+  {
+    "id": "c3RhdHQlMjAlMkYlMjBhbnN0YXR0",
+    "word": "statt / anstatt",
+    "exampleSentenceDe": "Ich nehme lieber Wasser statt Cola.",
+    "exampleSentenceEs": "Prefiero tomar agua en lugar de refresco."
+  },
+  {
+    "id": "YWI_",
+    "word": "ab",
+    "exampleSentenceDe": "Ab dem ersten Mai arbeite ich in Hamburg.",
+    "exampleSentenceEs": "A partir del primero de mayo trabajo en Hamburgo."
+  },
+  {
+    "id": "aW5rbHVzaXZl",
+    "word": "inklusive",
+    "exampleSentenceDe": "Die Miete ist inklusive aller Nebenkosten.",
+    "exampleSentenceEs": "El alquiler incluye todos los gastos adicionales."
+  },
+  {
+    "id": "ZGllJTIwS2F1dGlvbg__",
+    "word": "die Kaution",
+    "exampleSentenceDe": "Die Kaution beträgt drei Monatskaltmieten.",
+    "exampleSentenceEs": "La fianza equivale a tres meses de renta fría."
+  },
+  {
+    "id": "ZGllJTIwS2FsdG1pZXRl",
+    "word": "die Kaltmiete",
+    "exampleSentenceDe": "Die Kaltmiete kostet 650 Euro im Monat.",
+    "exampleSentenceEs": "La renta fría cuesta 650 euros al mes."
+  },
+  {
+    "id": "ZGllJTIwV2FybW1pZXRl",
+    "word": "die Warmmiete",
+    "exampleSentenceDe": "Die Warmmiete beträgt 850 Euro inklusive Heizung.",
+    "exampleSentenceEs": "La renta caliente es de 850 euros con calefacción incluida."
+  },
+  {
+    "id": "ZGllJTIwSGF1c29yZG51bmc_",
+    "word": "die Hausordnung",
+    "exampleSentenceDe": "Die Hausordnung verbietet laute Musik ab 22 Uhr.",
+    "exampleSentenceEs": "Las normas del edificio prohíben música alta a partir de las 22:00."
+  },
+  {
+    "id": "ZGllJTIwUnVoZXplaXQ_",
+    "word": "die Ruhezeit",
+    "exampleSentenceDe": "Am Sonntag gilt in Deutschland die gesetzliche Ruhezeit.",
+    "exampleSentenceEs": "El domingo rige en Alemania el horario legal de descanso."
+  },
+  {
+    "id": "ZGVyJTIwSGF1c21laXN0ZXI_",
+    "word": "der Hausmeister",
+    "exampleSentenceDe": "Der Hausmeister repariert die Heizung im Keller.",
+    "exampleSentenceEs": "El encargado repara la calefacción en el sótano."
+  },
+  {
+    "id": "ZGVyJTIwTmFjaGJhciUyMCUyRiUyMGRpZSUyME5hY2hiYXJpbg__",
+    "word": "der Nachbar / die Nachbarin",
+    "exampleSentenceDe": "Mein Nachbar nimmt freundlicherweise mein Paket an.",
+    "exampleSentenceEs": "Mi vecino recibe amablemente mi paquete."
+  },
+  {
+    "id": "ZGllJTIwTSVDMyVCQ2xsdHJlbm51bmc_",
+    "word": "die Mülltrennung",
+    "exampleSentenceDe": "Die Mülltrennung ist in diesem Haus sehr wichtig.",
+    "exampleSentenceEs": "La separación de residuos es muy importante en esta casa."
+  },
+  {
+    "id": "YWIlN0NnZWJlbg__",
+    "word": "ab|geben",
+    "exampleSentenceDe": "Sie müssen den Schlüssel beim Hausmeister abgeben.",
+    "exampleSentenceEs": "Debe entregar la llave al conserje."
+  },
+  {
+    "id": "ZGVyJTIwUGZhbmQ_",
+    "word": "der Pfand",
+    "exampleSentenceDe": "Vergiss nicht, die Flaschen mit Pfand abzugeben.",
+    "exampleSentenceEs": "No olvides devolver las botellas con depósito."
+  },
+  {
+    "id": "ZGVyJTIwS2Fzc2VuemV0dGVs",
+    "word": "der Kassenzettel",
+    "exampleSentenceDe": "Brauchen Sie den Kassenzettel für die Garantie?",
+    "exampleSentenceEs": "¿Necesita el tique de compra para la garantía?"
+  },
+  {
+    "id": "ZGllJTIwUXVpdHR1bmc_",
+    "word": "die Quittung",
+    "exampleSentenceDe": "Bitte geben Sie mir eine Quittung über den Betrag.",
+    "exampleSentenceEs": "Por favor, entrégueme un comprobante de pago por el importe."
+  },
+  {
+    "id": "ZGVyJTIwRWlua2F1ZnN3YWdlbg__",
+    "word": "der Einkaufswagen",
+    "exampleSentenceDe": "Für den Einkaufswagen brauche ich eine Ein-Euro-Münze.",
+    "exampleSentenceEs": "Para el carrito de compras necesito una moneda de un euro."
+  },
+  {
+    "id": "a29zdGVubG9zJTIwJTJGJTIwZ3JhdGlz",
+    "word": "kostenlos / gratis",
+    "exampleSentenceDe": "Der WLAN-Zugang am Bahnhof ist kostenlos.",
+    "exampleSentenceEs": "El acceso a internet wifi en la estación es gratuito."
+  },
+  {
+    "id": "c3BhcmVu",
+    "word": "sparen",
+    "exampleSentenceDe": "Ich möchte Geld für einen Urlaub sparen.",
+    "exampleSentenceEs": "Quiero ahorrar dinero para unas vacaciones."
+  },
+  {
+    "id": "YXVzJTdDZ2ViZW4_",
+    "word": "aus|geben",
+    "exampleSentenceDe": "Er gibt zu viel Geld für Kleidung aus.",
+    "exampleSentenceEs": "Él gasta demasiado dinero en ropa."
+  },
+  {
+    "id": "ZWluJTdDcGFja2Vu",
+    "word": "ein|packen",
+    "exampleSentenceDe": "Ich packe meinen Koffer für die Reise ein.",
+    "exampleSentenceEs": "Empaco mi maleta para el viaje."
+  },
+  {
+    "id": "YXVzJTdDbGVpaGVu",
+    "word": "aus|leihen",
+    "exampleSentenceDe": "In der Bibliothek kann man Bücher ausleihen.",
+    "exampleSentenceEs": "En la biblioteca se pueden tomar libros prestados."
+  },
+  {
+    "id": "bWl0JTdDbWFjaGVu",
+    "word": "mit|machen",
+    "exampleSentenceDe": "Wer möchte bei dem Spiel mitmachen?",
+    "exampleSentenceEs": "¿Quién quiere sumarse al juego?"
+  },
+  {
+    "id": "YXVzJTdDcGFja2Vu",
+    "word": "aus|packen",
+    "exampleSentenceDe": "Nach der Ankunft packe ich meine Sachen aus.",
+    "exampleSentenceEs": "Tras la llegada desempaco mis cosas."
+  },
+  {
+    "id": "dGVpbCU3Q25laG1lbg__",
+    "word": "teil|nehmen",
+    "exampleSentenceDe": "Ich möchte an dem Deutschkurs teilnehmen.",
+    "exampleSentenceEs": "Quisiera participar en el curso de alemán."
+  },
+  {
+    "id": "ZGllJTIwSGFsdGVzdGVsbGU_",
+    "word": "die Haltestelle",
+    "exampleSentenceDe": "Wir steigen an der nächsten Haltestelle aus.",
+    "exampleSentenceEs": "Nos bajamos en la próxima parada."
+  },
+  {
+    "id": "ZGVyJTIwQmFobnN0ZWln",
+    "word": "der Bahnsteig",
+    "exampleSentenceDe": "Der Zug nach Berlin fährt am Bahnsteig 4 ein.",
+    "exampleSentenceEs": "El tren a Berlín entra por el andén 4."
+  },
+  {
+    "id": "ZGFzJTIwR2xlaXM_",
+    "word": "das Gleis",
+    "exampleSentenceDe": "Vorsicht an Gleis 2, der Zug fährt durch!",
+    "exampleSentenceEs": "¡Atención en la vía 2, el tren pasa de largo!"
+  },
+  {
+    "id": "ZGVyJTIwRmFocnBsYW4_",
+    "word": "der Fahrplan",
+    "exampleSentenceDe": "Laut Fahrplan kommt der Bus alle zehn Minuten.",
+    "exampleSentenceEs": "Según el horario, el autobús pasa cada diez minutos."
+  },
+  {
+    "id": "ZW50d2VydGVu",
+    "word": "entwerten",
+    "exampleSentenceDe": "Bitte entwerten Sie Ihr Ticket vor dem Einsteigen.",
+    "exampleSentenceEs": "Por favor, valide su billete antes de subir."
+  },
+  {
+    "id": "YXVzJTdDZmFsbGVu",
+    "word": "aus|fallen",
+    "exampleSentenceDe": "Mein Zug nach Köln fällt heute leider aus.",
+    "exampleSentenceEs": "Lamentablemente mi tren a Colonia se cancela hoy."
+  },
+  {
+    "id": "ZGllJTIwRHVyY2hzYWdl",
+    "word": "die Durchsage",
+    "exampleSentenceDe": "Bitte achten Sie auf die Durchsage am Bahnsteig.",
+    "exampleSentenceEs": "Por favor, preste atención al aviso por megafonía en el andén."
+  },
+  {
+    "id": "ZGllJTIwVmVyYmluZHVuZw__",
+    "word": "die Verbindung",
+    "exampleSentenceDe": "Ich habe eine gute Verbindung mit nur einem Umstieg.",
+    "exampleSentenceEs": "Tengo una buena conexión con solo un transbordo."
+  },
+  {
+    "id": "dmVyYm90ZW4_",
+    "word": "verboten",
+    "exampleSentenceDe": "Rauchen ist hier streng verboten.",
+    "exampleSentenceEs": "Fumar está estrictamente prohibido aquí."
+  },
+  {
+    "id": "ZXJsYXVidA__",
+    "word": "erlaubt",
+    "exampleSentenceDe": "Parken ist hier nur für zwei Stunden erlaubt.",
+    "exampleSentenceEs": "Aparcar aquí está permitido solo por dos horas."
+  },
+  {
+    "id": "YnVjaGVu",
+    "word": "buchen",
+    "exampleSentenceDe": "Wir müssen das Hotelzimmer rechtzeitig buchen.",
+    "exampleSentenceEs": "Tenemos que reservar la habitación de hotel a tiempo."
+  },
+  {
+    "id": "c3Rvcm5pZXJlbg__",
+    "word": "stornieren",
+    "exampleSentenceDe": "Kann ich die Reise kostenlos stornieren?",
+    "exampleSentenceEs": "¿Puedo cancelar el viaje gratis?"
+  },
+  {
+    "id": "bWl0JTdDbmVobWVu",
+    "word": "mit|nehmen",
+    "exampleSentenceDe": "Kannst du bitte einen Regenschirm mitnehmen?",
+    "exampleSentenceEs": "¿Puedes llevarte un paraguas por favor?"
+  },
+  {
+    "id": "bWl0JTdDa29tbWVu",
+    "word": "mit|kommen",
+    "exampleSentenceDe": "Kommst du mit zum Supermarkt?",
+    "exampleSentenceEs": "¿Vienes conmigo al supermercado?"
+  },
+  {
+    "id": "YWIlN0NzY2hsaWUlQzMlOUZlbg__",
+    "word": "ab|schließen",
+    "exampleSentenceDe": "Bitte die Haustür nachts immer abschließen.",
+    "exampleSentenceEs": "Por favor, cierre siempre con llave la puerta de la casa de noche."
+  },
+  {
+    "id": "enVyJUMzJUJDY2slN0NydWZlbg__",
+    "word": "zurück|rufen",
+    "exampleSentenceDe": "Ich rufe Sie in zehn Minuten zurück.",
+    "exampleSentenceEs": "Le devuelvo la llamada en diez minutos."
+  },
+  {
+    "id": "ZXJyZWljaGVu",
+    "word": "erreichen",
+    "exampleSentenceDe": "Sie können mich unter dieser Telefonnummer erreichen.",
+    "exampleSentenceEs": "Puede localizarme en este número de teléfono."
+  },
+  {
+    "id": "YXVzJTdDZHJ1Y2tlbg__",
+    "word": "aus|drucken",
+    "exampleSentenceDe": "Ich muss meine Fahrkarte noch ausdrucken.",
+    "exampleSentenceEs": "Todavía tengo que imprimir mi billete de viaje."
+  },
+  {
+    "id": "ZGllJTIwS3Jhbmtlbmthc3Nl",
+    "word": "die Krankenkasse",
+    "exampleSentenceDe": "Sind Sie bei einer gesetzlichen Krankenkasse versichert?",
+    "exampleSentenceEs": "¿Está asegurado en una caja de salud pública?"
+  },
+  {
+    "id": "ZGllJTIwVmVyc2ljaGVydGVua2FydGU_",
+    "word": "die Versichertenkarte",
+    "exampleSentenceDe": "Bitte zeigen Sie Ihre Versichertenkarte in der Praxis.",
+    "exampleSentenceEs": "Por favor, muestre su tarjeta sanitaria en el consultorio."
+  },
+  {
+    "id": "ZGllJTIwS3JhbmtzY2hyZWlidW5n",
+    "word": "die Krankschreibung",
+    "exampleSentenceDe": "Ich brauche eine Krankschreibung für meinen Chef.",
+    "exampleSentenceEs": "Necesito un parte de baja médica para mi jefe."
+  },
+  {
+    "id": "ZGFzJTIwQXR0ZXN0",
+    "word": "das Attest",
+    "exampleSentenceDe": "Die Schule verlangt ab Tag drei ein ärztliches Attest.",
+    "exampleSentenceEs": "La escuela exige un certificado médico a partir del tercer día."
+  },
+  {
+    "id": "ZGllJTIwTm90YXVmbmFobWU_",
+    "word": "die Notaufnahme",
+    "exampleSentenceDe": "Bei starken Schmerzen gehe ich in die Notaufnahme.",
+    "exampleSentenceEs": "En caso de dolores agudos voy al servicio de urgencias."
+  },
+  {
+    "id": "ZGFzJTIwU2NobWVyem1pdHRlbA__",
+    "word": "das Schmerzmittel",
+    "exampleSentenceDe": "Haben Sie ein Schmerzmittel gegen Kopfschmerzen?",
+    "exampleSentenceEs": "¿Tiene un analgésico contra el dolor de cabeza?"
+  },
+  {
+    "id": "ZGVyJTIwVmVydHJhZw__",
+    "word": "der Vertrag",
+    "exampleSentenceDe": "Ich muss den Arbeitsvertrag genau durchlesen.",
+    "exampleSentenceEs": "Tengo que leer detenidamente el contrato de trabajo."
+  },
+  {
+    "id": "ZGFzJTIwR2VoYWx0",
+    "word": "das Gehalt",
+    "exampleSentenceDe": "Das Gehalt wird immer am Monatsende bezahlt.",
+    "exampleSentenceEs": "El sueldo se paga siempre a final de mes."
+  },
+  {
+    "id": "ZGllJTIwQmV3ZXJidW5n",
+    "word": "die Bewerbung",
+    "exampleSentenceDe": "Ich habe meine Bewerbung per E-Mail geschickt.",
+    "exampleSentenceEs": "Envié mi candidatura por correo electrónico."
+  },
+  {
+    "id": "c2ljaCUyMGJld2VyYmVu",
+    "word": "sich bewerben",
+    "exampleSentenceDe": "Er bewirbt sich um eine Stelle als Techniker.",
+    "exampleSentenceEs": "Él se postula a un puesto como técnico."
+  },
+  {
+    "id": "ZGllJTIwUHJvYmV6ZWl0",
+    "word": "die Probezeit",
+    "exampleSentenceDe": "In den ersten sechs Monaten habe ich Probezeit.",
+    "exampleSentenceEs": "Durante los primeros seis meses tengo periodo de prueba."
+  },
+  {
+    "id": "ZGllJTIwJUMzJTlDYmVyc3R1bmRlbg__",
+    "word": "die Überstunden",
+    "exampleSentenceDe": "Diese Woche habe ich fünf Überstunden gemacht.",
+    "exampleSentenceEs": "Esta semana hice cinco horas extraordinarias."
+  },
+  {
+    "id": "ZGllJTIwVGVpbHplaXQlMjAlMkYlMjBWb2xsemVpdA__",
+    "word": "die Teilzeit / Vollzeit",
+    "exampleSentenceDe": "Sie arbeitet in Teilzeit mit 25 Stunden pro Woche.",
+    "exampleSentenceEs": "Ella trabaja a tiempo parcial con 25 horas a la semana."
+  },
+  {
+    "id": "dmVyZWluYmFyZW4_",
+    "word": "vereinbaren",
+    "exampleSentenceDe": "Ich möchte einen Termin beim Arzt vereinbaren.",
+    "exampleSentenceEs": "Quisiera concertar una cita en el médico."
+  },
+  {
+    "id": "dmVyc2NoaWViZW4_",
+    "word": "verschieben",
+    "exampleSentenceDe": "Können wir unseren Termin auf Freitag verschieben?",
+    "exampleSentenceEs": "¿Podemos aplazar nuestra cita para el viernes?"
+  },
+  {
+    "id": "YWJzYWdlbg__",
+    "word": "absagen",
+    "exampleSentenceDe": "Leider muss ich meinen Termin heute absagen.",
+    "exampleSentenceEs": "Lamentablemente tengo que cancelar mi cita de hoy."
   }
 ]
