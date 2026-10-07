@@ -4834,5 +4834,293 @@
     "word": "absagen",
     "exampleSentenceDe": "Leider muss ich meinen Termin heute absagen.",
     "exampleSentenceEs": "Lamentablemente tengo que cancelar mi cita de hoy."
+  },
+  {
+    "id": "bWljaA__",
+    "word": "mich",
+    "exampleSentenceDe": "Er sieht mich im Park.",
+    "exampleSentenceEs": "Él me ve en el parque."
+  },
+  {
+    "id": "bWly",
+    "word": "mir",
+    "exampleSentenceDe": "Kannst du mir bitte helfen?",
+    "exampleSentenceEs": "¿Puedes ayudarme por favor?"
+  },
+  {
+    "id": "ZGljaA__",
+    "word": "dich",
+    "exampleSentenceDe": "Ich rufe dich morgen an.",
+    "exampleSentenceEs": "Te llamo mañana."
+  },
+  {
+    "id": "ZGly",
+    "word": "dir",
+    "exampleSentenceDe": "Das Kleid steht dir sehr gut.",
+    "exampleSentenceEs": "El vestido te queda muy bien."
+  },
+  {
+    "id": "aWhu",
+    "word": "ihn",
+    "exampleSentenceDe": "Kennst du den Mann? – Ja, ich kenne ihn.",
+    "exampleSentenceEs": "¿Conoces al hombre? – Sí, lo conozco."
+  },
+  {
+    "id": "aWht",
+    "word": "ihm",
+    "exampleSentenceDe": "Ich gebe ihm den Autoschlüssel.",
+    "exampleSentenceEs": "Le doy la llave del coche a él."
+  },
+  {
+    "id": "c2llJTIwKEFrayk_",
+    "word": "sie (Akk)",
+    "exampleSentenceDe": "Ich besuche meine Tante, ich besuche sie oft.",
+    "exampleSentenceEs": "Visito a mi tía, la visito a menudo."
+  },
+  {
+    "id": "aWhyJTIwKERhdCk_",
+    "word": "ihr (Dat)",
+    "exampleSentenceDe": "Ich antworte ihr auf die Nachricht.",
+    "exampleSentenceEs": "Le respondo a ella el mensaje."
+  },
+  {
+    "id": "ZXM_",
+    "word": "es",
+    "exampleSentenceDe": "Wo ist das Buch? – Ich habe es hier.",
+    "exampleSentenceEs": "¿Dónde está el libro? – Lo tengo aquí."
+  },
+  {
+    "id": "dW5z",
+    "word": "uns",
+    "exampleSentenceDe": "Der Lehrer erklärt uns die Grammatik.",
+    "exampleSentenceEs": "El profesor nos explica la gramática."
+  },
+  {
+    "id": "ZXVjaA__",
+    "word": "euch",
+    "exampleSentenceDe": "Ich lade euch alle zur Party ein.",
+    "exampleSentenceEs": "Os invito a todos a la fiesta."
+  },
+  {
+    "id": "aWhuZW4_",
+    "word": "ihnen",
+    "exampleSentenceDe": "Das Haus gehört ihnen.",
+    "exampleSentenceEs": "La casa les pertenece a ellos."
+  },
+  {
+    "id": "bWVpbiUyMCUyRiUyMG1laW5l",
+    "word": "mein / meine",
+    "exampleSentenceDe": "Das ist mein Pass und meine Fahrkarte.",
+    "exampleSentenceEs": "Este es mi pasaporte y mi billete."
+  },
+  {
+    "id": "ZGVpbiUyMCUyRiUyMGRlaW5l",
+    "word": "dein / deine",
+    "exampleSentenceDe": "Ist das dein Schlüssel?",
+    "exampleSentenceEs": "¿Es esta tu llave?"
+  },
+  {
+    "id": "c2VpbiUyMCUyRiUyMHNlaW5l",
+    "word": "sein / seine",
+    "exampleSentenceDe": "Er sucht seine Reisetasche.",
+    "exampleSentenceEs": "Él busca su maleta de viaje."
+  },
+  {
+    "id": "aWhyJTIwJTJGJTIwaWhyZSUyMChQb3NzKQ__",
+    "word": "ihr / ihre (Poss)",
+    "exampleSentenceDe": "Sie liebt ihre Katze sehr.",
+    "exampleSentenceEs": "Ella adora mucho a su gata."
+  },
+  {
+    "id": "dW5zZXIlMjAlMkYlMjB1bnNlcmU_",
+    "word": "unser / unsere",
+    "exampleSentenceDe": "Das ist unser neues Auto.",
+    "exampleSentenceEs": "Este es nuestro coche nuevo."
+  },
+  {
+    "id": "ZXVlciUyMCUyRiUyMGV1cmU_",
+    "word": "euer / eure",
+    "exampleSentenceDe": "Wo ist eure Schule?",
+    "exampleSentenceEs": "¿Dónde está vuestra escuela?"
+  },
+  {
+    "id": "SWhyJTIwJTJGJTIwSWhyZSUyMChGb3JtYWwp",
+    "word": "Ihr / Ihre (Formal)",
+    "exampleSentenceDe": "Wie ist Ihre Telefonnummer?",
+    "exampleSentenceEs": "¿Cuál es su número de teléfono?"
+  },
+  {
+    "id": "bWVpbmVu",
+    "word": "meinen",
+    "exampleSentenceDe": "Ich suche meinen Koffer.",
+    "exampleSentenceEs": "Busco mi maleta."
+  },
+  {
+    "id": "bWVpbmVt",
+    "word": "meinem",
+    "exampleSentenceDe": "Ich fahre mit meinem Fahrrad zur Arbeit.",
+    "exampleSentenceEs": "Voy en mi bicicleta al trabajo."
+  },
+  {
+    "id": "bWVpbmVy",
+    "word": "meiner",
+    "exampleSentenceDe": "Ich wohne bei meiner Familie.",
+    "exampleSentenceEs": "Vivo con mi familia."
+  },
+  {
+    "id": "ZGVpbmVu",
+    "word": "deinen",
+    "exampleSentenceDe": "Hast du deinen Pass dabei?",
+    "exampleSentenceEs": "¿Llevas contigo tu pasaporte?"
+  },
+  {
+    "id": "c2ljaA__",
+    "word": "sich",
+    "exampleSentenceDe": "Er zieht sich schnell an.",
+    "exampleSentenceEs": "Él se viste rápidamente."
+  },
+  {
+    "id": "ZWluYW5kZXI_",
+    "word": "einander",
+    "exampleSentenceDe": "Wir helfen einander immer.",
+    "exampleSentenceEs": "Nos ayudamos mutuamente siempre."
+  },
+  {
+    "id": "c2VsYnN0JTIwJTJGJTIwc2VsYmVy",
+    "word": "selbst / selber",
+    "exampleSentenceDe": "Ich habe das Essen selbst gekocht.",
+    "exampleSentenceEs": "Yo mismo preparé la comida."
+  },
+  {
+    "id": "ZGllc2VyJTIwJTJGJTIwZGllc2UlMjAlMkYlMjBkaWVzZXM_",
+    "word": "dieser / diese / dieses",
+    "exampleSentenceDe": "Dieses Buch ist sehr spannend.",
+    "exampleSentenceEs": "Este libro es muy emocionante."
+  },
+  {
+    "id": "ZGllc2Vu",
+    "word": "diesen",
+    "exampleSentenceDe": "Ich nehme diesen Pullover.",
+    "exampleSentenceEs": "Me llevo este jersey."
+  },
+  {
+    "id": "ZGllc2Vt",
+    "word": "diesem",
+    "exampleSentenceDe": "In diesem Haus wohne ich.",
+    "exampleSentenceEs": "Vivo en esta casa."
+  },
+  {
+    "id": "ZGllc2VyJTIwKERhdCk_",
+    "word": "dieser (Dat)",
+    "exampleSentenceDe": "An dieser Haltestelle halten viele Busse.",
+    "exampleSentenceEs": "En esta parada se detienen muchos autobuses."
+  },
+  {
+    "id": "ZGFzJTIwKERlbW9uc3RyYXRpdik_",
+    "word": "das (Demonstrativ)",
+    "exampleSentenceDe": "Das ist aber sehr nett!",
+    "exampleSentenceEs": "¡Eso sí que es muy amable!"
+  },
+  {
+    "id": "bWFu",
+    "word": "man",
+    "exampleSentenceDe": "Hier darf man nicht rauchen.",
+    "exampleSentenceEs": "Aquí no se puede fumar."
+  },
+  {
+    "id": "amVtYW5k",
+    "word": "jemand",
+    "exampleSentenceDe": "Ist jemand an der Tür?",
+    "exampleSentenceEs": "¿Hay alguien en la puerta?"
+  },
+  {
+    "id": "bmllbWFuZA__",
+    "word": "niemand",
+    "exampleSentenceDe": "Niemand ist heute im Büro.",
+    "exampleSentenceEs": "Nadie está hoy en la oficina."
+  },
+  {
+    "id": "ZXR3YXM_",
+    "word": "etwas",
+    "exampleSentenceDe": "Möchtest du etwas trinken?",
+    "exampleSentenceEs": "¿Te gustaría tomar algo?"
+  },
+  {
+    "id": "bmljaHRz",
+    "word": "nichts",
+    "exampleSentenceDe": "Ich habe heute noch nichts gegessen.",
+    "exampleSentenceEs": "Hoy todavía no he comido nada."
+  },
+  {
+    "id": "YWxsZXM_",
+    "word": "alles",
+    "exampleSentenceDe": "Alles ist fertig und vorbereitet.",
+    "exampleSentenceEs": "Todo está listo y preparado."
+  },
+  {
+    "id": "YWxsZQ__",
+    "word": "alle",
+    "exampleSentenceDe": "Alle Schüler sind heute da.",
+    "exampleSentenceEs": "Todos los alumnos están presentes hoy."
+  },
+  {
+    "id": "amVkZXIlMjAlMkYlMjBqZWRlJTIwJTJGJTIwamVkZXM_",
+    "word": "jeder / jede / jedes",
+    "exampleSentenceDe": "Jeder Teilnehmer bekommt ein Zertifikat.",
+    "exampleSentenceEs": "Cada participante recibe un certificado."
+  },
+  {
+    "id": "amVkZW0_",
+    "word": "jedem",
+    "exampleSentenceDe": "Das gefällt nicht jedem Menschen.",
+    "exampleSentenceEs": "Eso no le agrada a todo el mundo."
+  },
+  {
+    "id": "amVkZW4_",
+    "word": "jeden",
+    "exampleSentenceDe": "Ich lerne jeden Tag Deutsch.",
+    "exampleSentenceEs": "Aprendo alemán todos los días."
+  },
+  {
+    "id": "ZWluaWdl",
+    "word": "einige",
+    "exampleSentenceDe": "Ich habe noch einige Fragen.",
+    "exampleSentenceEs": "Todavía tengo algunas preguntas."
+  },
+  {
+    "id": "d2Vy",
+    "word": "wer",
+    "exampleSentenceDe": "Wer kommt heute zum Treffen?",
+    "exampleSentenceEs": "¿Quién viene hoy a la reunión?"
+  },
+  {
+    "id": "d2Vu",
+    "word": "wen",
+    "exampleSentenceDe": "Wen hast du am Bahnhof getroffen?",
+    "exampleSentenceEs": "¿A quién te encontraste en la estación?"
+  },
+  {
+    "id": "d2Vt",
+    "word": "wem",
+    "exampleSentenceDe": "Wem gehört diese Tasche?",
+    "exampleSentenceEs": "¿A quién le pertenece este bolso?"
+  },
+  {
+    "id": "d2Vzc2Vu",
+    "word": "wessen",
+    "exampleSentenceDe": "Wessen Auto steht vor der Garage?",
+    "exampleSentenceEs": "¿De quién es el coche frente al garaje?"
+  },
+  {
+    "id": "d2VsY2hlciUyMCUyRiUyMHdlbGNoZSUyMCUyRiUyMHdlbGNoZXM_",
+    "word": "welcher / welche / welches",
+    "exampleSentenceDe": "Welches Ticket möchten Sie kaufen?",
+    "exampleSentenceEs": "¿Qué billete quisiera comprar usted?"
+  },
+  {
+    "id": "SWhuZW4_",
+    "word": "Ihnen",
+    "exampleSentenceDe": "Wie kann ich Ihnen helfen?",
+    "exampleSentenceEs": "¿Cómo le puedo ayudar a usted?"
   }
 ]

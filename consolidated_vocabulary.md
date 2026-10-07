@@ -1,7 +1,7 @@
 # 📚 Diccionario Consolidado de Vocabulario — DeutschMeister PRO A1
 
-> **Total de Capítulos:** 18  
-> **Total de Términos Lexicales:** 1147 palabras y expresiones  
+> **Total de Capítulos:** 19  
+> **Total de Términos Lexicales:** 1195 palabras y expresiones  
 > **Nivel:** Marco Común Europeo de Referencia (MCER) A1/A2  
 
 
@@ -29,6 +29,7 @@
 | 16 | [Kapitel 16: Schule & Beruf](#kapitel-16-schule-beruf) | 💼 | **81** | Bildung, Personen, Aktionen |
 | 17 | [Kapitel 17: Digitale Welt & IT](#kapitel-17-digitale-welt-it) | 💻 | **50** | Hardware, Sicherheit, Software |
 | 18 | [Kapitel 18: Elektrotechnik & Solar](#kapitel-18-elektrotechnik-solar) | ⚡ | **50** | Elektrizität, Komponenten, Energie |
+| 19 | [Kapitel 19: Pronomen & Deklinationen](#kapitel-19-pronomen-deklinationen) | 🧭 | **48** | Personalpronomen (Akk), Personalpronomen (Dat), Possessivartikel |
 
 ---
 
@@ -2046,6 +2047,100 @@
 | 11 | **austauschen** | *áus-tau-shen* | reemplazar / cambiar | `Verbo` | **Rég:** Separable (aus-) / + Akkusativ | - | - |
 | 12 | **einspeisen** | *áin-shpai-zen* | inyectar (a la red) | `Verbo` | **Rég:** Separable (ein-) / + Akkusativ | - | - |
 | 13 | **funktionieren** | *funk-tsio-ní-ren* | funcionar | `Verbo` | **Rég:** Intransitivo | - | - |
+
+[⬆️ Volver al índice](#índice-de-capítulos)
+
+
+---
+
+
+## 🧭 Kapitel 19: Pronomen & Deklinationen {#kapitel-19-pronomen-deklinationen}
+
+*Total en este capítulo: **48 términos**.*
+
+
+### 🏷️ Categoría: Personalpronomen (Akk) (7 palabras)
+
+| # | Alemán | Fonética | Español | Tipo / Gramática | Régimen / Plural | Ejemplo en Alemán | Ejemplo en Español |
+|---|---|---|---|---|---|---|---|
+| 1 | **mich** | *mij* | me / a mí | `Personalpronomen (Akk)` | **Rég:** Objeto directo (+ Akk) | Er sieht mich im Park. | Él me ve en el parque. |
+| 2 | **dich** | *dij* | te / a ti | `Personalpronomen (Akk)` | **Rég:** Objeto directo (+ Akk) | Ich rufe dich morgen an. | Te llamo mañana. |
+| 3 | **ihn** | *in* | lo / a él | `Personalpronomen (Akk)` | **Rég:** Acusativo masc. (+ Akk) | Kennst du den Mann? – Ja, ich kenne ihn. | ¿Conoces al hombre? – Sí, lo conozco. |
+| 4 | **sie (Akk)** | *zi* | la / las / a ella | `Personalpronomen (Akk)` | **Rég:** Acusativo fem./pl. (+ Akk) | Ich besuche meine Tante, ich besuche sie oft. | Visito a mi tía, la visito a menudo. |
+| 5 | **es** | *es* | lo / a ello | `Personalpronomen (Akk)` | **Rég:** Acusativo neutro (+ Akk) | Wo ist das Buch? – Ich habe es hier. | ¿Dónde está el libro? – Lo tengo aquí. |
+| 6 | **uns** | *uns* | nos / a nosotros | `Personalpronomen (Akk/Dat)` | **Rég:** Caso Akk o Dat según verbo | Der Lehrer erklärt uns die Grammatik. | El profesor nos explica la gramática. |
+| 7 | **euch** | *óij* | os / a vosotros | `Personalpronomen (Akk/Dat)` | **Rég:** Caso Akk o Dat según verbo | Ich lade euch alle zur Party ein. | Os invito a todos a la fiesta. |
+
+### 🏷️ Categoría: Personalpronomen (Dat) (6 palabras)
+
+| # | Alemán | Fonética | Español | Tipo / Gramática | Régimen / Plural | Ejemplo en Alemán | Ejemplo en Español |
+|---|---|---|---|---|---|---|---|
+| 1 | **mir** | *mia* | me / a mí | `Personalpronomen (Dat)` | **Rég:** Objeto indirecto (+ Dat) | Kannst du mir bitte helfen? | ¿Puedes ayudarme por favor? |
+| 2 | **dir** | *dia* | te / a ti | `Personalpronomen (Dat)` | **Rég:** Objeto indirecto (+ Dat) | Das Kleid steht dir sehr gut. | El vestido te queda muy bien. |
+| 3 | **ihm** | *im* | le / a él / a ello | `Personalpronomen (Dat)` | **Rég:** Dativo masc./neut. (+ Dat) | Ich gebe ihm den Autoschlüssel. | Le doy la llave del coche a él. |
+| 4 | **ihr (Dat)** | *ia* | le / a ella | `Personalpronomen (Dat)` | **Rég:** Dativo fem. (+ Dat) | Ich antworte ihr auf die Nachricht. | Le respondo a ella el mensaje. |
+| 5 | **ihnen** | *í-nen* | les / a ellos / ellas | `Personalpronomen (Dat)` | **Rég:** Dativo plural (+ Dat) | Das Haus gehört ihnen. | La casa les pertenece a ellos. |
+| 6 | **Ihnen** | *í-nen* | le / les / a usted(es) | `Personalpronomen (Dat)` | **Rég:** Dativo formal cortesía | Wie kann ich Ihnen helfen? | ¿Cómo le puedo ayudar a usted? |
+
+### 🏷️ Categoría: Possessivartikel (11 palabras)
+
+| # | Alemán | Fonética | Español | Tipo / Gramática | Régimen / Plural | Ejemplo en Alemán | Ejemplo en Español |
+|---|---|---|---|---|---|---|---|
+| 1 | **mein / meine** | *main / mái-ne* | mi / mis | `Possessivartikel` | **Rég:** Nom: mein (m/n), meine (f/pl) | Das ist mein Pass und meine Fahrkarte. | Este es mi pasaporte y mi billete. |
+| 2 | **dein / deine** | *dain / dái-ne* | tu / tus | `Possessivartikel` | **Rég:** Nom: dein (m/n), deine (f/pl) | Ist das dein Schlüssel? | ¿Es esta tu llave? |
+| 3 | **sein / seine** | *zain / zái-ne* | su / sus (de él / ello) | `Possessivartikel` | **Rég:** Nom: sein (m/n), seine (f/pl) | Er sucht seine Reisetasche. | Él busca su maleta de viaje. |
+| 4 | **ihr / ihre (Poss)** | *ia / í-re* | su / sus (de ella) | `Possessivartikel` | **Rég:** Nom: ihr (m/n), ihre (f/pl) | Sie liebt ihre Katze sehr. | Ella adora mucho a su gata. |
+| 5 | **unser / unsere** | *ún-zea / ún-ze-re* | nuestro / nuestra | `Possessivartikel` | **Rég:** Nom: unser (m/n), unsere (f/pl) | Das ist unser neues Auto. | Este es nuestro coche nuevo. |
+| 6 | **euer / eure** | *ói-a / ói-re* | vuestro / vuestra | `Possessivartikel` | **Rég:** Pierde 'e': eure (f/pl/Akk-m) | Wo ist eure Schule? | ¿Dónde está vuestra escuela? |
+| 7 | **Ihr / Ihre (Formal)** | *ia / í-re* | su / sus (de usted/es) | `Possessivartikel` | **Rég:** Mayúscula obligatoria | Wie ist Ihre Telefonnummer? | ¿Cuál es su número de teléfono? |
+| 8 | **meinen** | *mái-nen* | a mi (Acusativo masc.) | `Possessivartikel (Akk)` | **Rég:** Acusativo masculino (-en) | Ich suche meinen Koffer. | Busco mi maleta. |
+| 9 | **meinem** | *mái-nem* | a mi (Dativo masc./n.) | `Possessivartikel (Dat)` | **Rég:** Dativo masc./neutro (-em) | Ich fahre mit meinem Fahrrad zur Arbeit. | Voy en mi bicicleta al trabajo. |
+| 10 | **meiner** | *mái-nea* | a mi (Dativo fem.) | `Possessivartikel (Dat)` | **Rég:** Dativo femenino (-er) | Ich wohne bei meiner Familie. | Vivo con mi familia. |
+| 11 | **deinen** | *dái-nen* | a tu (Acusativo masc.) | `Possessivartikel (Akk)` | **Rég:** Acusativo masculino (-en) | Hast du deinen Pass dabei? | ¿Llevas contigo tu pasaporte? |
+
+### 🏷️ Categoría: Reflexivpronomen (3 palabras)
+
+| # | Alemán | Fonética | Español | Tipo / Gramática | Régimen / Plural | Ejemplo en Alemán | Ejemplo en Español |
+|---|---|---|---|---|---|---|---|
+| 1 | **sich** | *zij* | se (reflexivo 3ª pers.) | `Reflexivpronomen` | **Rég:** 3ª pers. sing./pl. (Akk/Dat) | Er zieht sich schnell an. | Él se viste rápidamente. |
+| 2 | **einander** | *áin-án-da* | el uno al otro / mutuamente | `Reziprokpronomen` | **Rég:** Invariable (recíproco) | Wir helfen einander immer. | Nos ayudamos mutuamente siempre. |
+| 3 | **selbst / selber** | *zelpst / zél-ba* | mismo / por sí mismo | `Pronomen / Partikel` | **Rég:** Invariable (intensificador) | Ich habe das Essen selbst gekocht. | Yo mismo preparé la comida. |
+
+### 🏷️ Categoría: Demonstrativpronomen (5 palabras)
+
+| # | Alemán | Fonética | Español | Tipo / Gramática | Régimen / Plural | Ejemplo en Alemán | Ejemplo en Español |
+|---|---|---|---|---|---|---|---|
+| 1 | **dieser / diese / dieses** | *dí-za / dí-ze / dí-zes* | este / esta / esto | `Demonstrativpronomen` | **Rég:** Declina como der/die/das | Dieses Buch ist sehr spannend. | Este libro es muy emocionante. |
+| 2 | **diesen** | *dí-zen* | a este (Acusativo masc.) | `Demonstrativpronomen (Akk)` | **Rég:** Acusativo masculino | Ich nehme diesen Pullover. | Me llevo este jersey. |
+| 3 | **diesem** | *dí-zem* | a este (Dativo masc./n.) | `Demonstrativpronomen (Dat)` | **Rég:** Dativo masc./neutro | In diesem Haus wohne ich. | Vivo en esta casa. |
+| 4 | **dieser (Dat)** | *dí-za* | a esta (Dativo fem.) | `Demonstrativpronomen (Dat)` | **Rég:** Dativo femenino | An dieser Haltestelle halten viele Busse. | En esta parada se detienen muchos autobuses. |
+| 5 | **das (Demonstrativ)** | *das* | eso / aquello | `Demonstrativpronomen` | **Rég:** Invariable para señalar | Das ist aber sehr nett! | ¡Eso sí que es muy amable! |
+
+### 🏷️ Categoría: Indefinitpronomen (11 palabras)
+
+| # | Alemán | Fonética | Español | Tipo / Gramática | Régimen / Plural | Ejemplo en Alemán | Ejemplo en Español |
+|---|---|---|---|---|---|---|---|
+| 1 | **man** | *man* | uno / la gente (impersonal) | `Indefinitpronomen` | **Rég:** Verbo en 3ª persona sing. | Hier darf man nicht rauchen. | Aquí no se puede fumar. |
+| 2 | **jemand** | *yé-mant* | alguien | `Indefinitpronomen` | **Rég:** Persona indeterminada | Ist jemand an der Tür? | ¿Hay alguien en la puerta? |
+| 3 | **niemand** | *ní-mant* | nadie | `Indefinitpronomen` | **Rég:** Negación de jemand | Niemand ist heute im Büro. | Nadie está hoy en la oficina. |
+| 4 | **etwas** | *ét-vas* | algo | `Indefinitpronomen` | **Rég:** Invariable | Möchtest du etwas trinken? | ¿Te gustaría tomar algo? |
+| 5 | **nichts** | *nijts* | nada | `Indefinitpronomen` | **Rég:** Invariable (negación absoluta) | Ich habe heute noch nichts gegessen. | Hoy todavía no he comido nada. |
+| 6 | **alles** | *á-les* | todo | `Indefinitpronomen` | **Rég:** Totalidad neutra singular | Alles ist fertig und vorbereitet. | Todo está listo y preparado. |
+| 7 | **alle** | *á-le* | todos / todas | `Indefinitpronomen (Pl)` | **Rég:** Plural de totalidad | Alle Schüler sind heute da. | Todos los alumnos están presentes hoy. |
+| 8 | **jeder / jede / jedes** | *yé-da / yé-de / yé-des* | cada / cada uno(a) | `Indefinitpronomen` | **Rég:** Declina como der/die/das | Jeder Teilnehmer bekommt ein Zertifikat. | Cada participante recibe un certificado. |
+| 9 | **jedem** | *yé-dem* | a cada (Dativo masc./n.) | `Indefinitpronomen (Dat)` | **Rég:** Dativo masc./neutro | Das gefällt nicht jedem Menschen. | Eso no le agrada a todo el mundo. |
+| 10 | **jeden** | *yé-den* | cada (Acusativo masc.) | `Indefinitpronomen (Akk)` | **Rég:** Acusativo masc. temporal | Ich lerne jeden Tag Deutsch. | Aprendo alemán todos los días. |
+| 11 | **einige** | *ái-ni-gue* | algunos / algunas | `Indefinitpronomen (Pl)` | **Rég:** Plural indeterminado | Ich habe noch einige Fragen. | Todavía tengo algunas preguntas. |
+
+### 🏷️ Categoría: Fragepronomen (5 palabras)
+
+| # | Alemán | Fonética | Español | Tipo / Gramática | Régimen / Plural | Ejemplo en Alemán | Ejemplo en Español |
+|---|---|---|---|---|---|---|---|
+| 1 | **wer** | *vea* | ¿quién? (Nominativo) | `Interrogativpronomen` | **Rég:** Pregunta por sujeto | Wer kommt heute zum Treffen? | ¿Quién viene hoy a la reunión? |
+| 2 | **wen** | *ven* | ¿a quién? (Acusativo) | `Interrogativpronomen (Akk)` | **Rég:** Pregunta por objeto directo | Wen hast du am Bahnhof getroffen? | ¿A quién te encontraste en la estación? |
+| 3 | **wem** | *vem* | ¿a quién? (Dativo) | `Interrogativpronomen (Dat)` | **Rég:** Pregunta por objeto indirecto | Wem gehört diese Tasche? | ¿A quién le pertenece este bolso? |
+| 4 | **wessen** | *vé-sen* | ¿de quién? (Genitivo) | `Interrogativpronomen (Gen)` | **Rég:** Pregunta por posesión | Wessen Auto steht vor der Garage? | ¿De quién es el coche frente al garaje? |
+| 5 | **welcher / welche / welches** | *vél-ja / vél-je / vél-jes* | ¿cuál? / ¿qué? | `Interrogativpronomen` | **Rég:** Declina como artículo determinado | Welches Ticket möchten Sie kaufen? | ¿Qué billete quisiera comprar usted? |
 
 [⬆️ Volver al índice](#índice-de-capítulos)
 
