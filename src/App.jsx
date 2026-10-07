@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
-import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause } from 'lucide-react';
+import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause, Filter } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
@@ -136,12 +136,17 @@ export default function App() {
     setCurrentStudyPlanSlide(0);
   }, [activeStudyPlanId]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [revealedCards, setRevealedCards] = useState({});
   const [viewMode, setViewMode] = useState("flashcards");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isTablasOpen, setIsTablasOpen] = useState(false);
   const [isPlanOpen, setIsPlanOpen] = useState(false);
   const [isGoetheOpen, setIsGoetheOpen] = useState(false);
+
+  useEffect(() => {
+    setSelectedCategory("Todas");
+  }, [activeChapterId]);
 
 
   // Se ha removido el useEffect de migración, ya que se hará síncronamente arriba.
@@ -228,7 +233,8 @@ export default function App() {
 
       let imageUrl = "";
       if (docSnap.exists()) {
-        imageUrl = docSnap.data().imageUrl || docSnap.data().imageBase64;
+        const d = docSnap.data();
+        imageUrl = d.videoUrl || d.imageUrl || d.imageBase64;
       }
       if (imageUrl) {
         setCardImages(prev => ({
@@ -377,13 +383,20 @@ export default function App() {
     fullscreenImage, isTutorOpen, storyState, 
     activePresentationId, activeStudyPlanId, viewMode
   ]);
-  const activeChapter = useMemo(() => chapters.find(c => c.id === activeChapterId), [activeChapterId]);
+  const activeChapter = useMemo(() => chapters.find(c => c.id === Number(activeChapterId)) || chapters[0], [activeChapterId]);
   const activePresentation = useMemo(() => goetheModules.find(p => p.id === activePresentationId), [activePresentationId]);
+  
+  const categories = useMemo(() => {
+    if (!activeChapter?.words) return ['Todas'];
+    return ['Todas', ...new Set(activeChapter.words.map(w => w.category).filter(Boolean))];
+  }, [activeChapter]);
+
   useEffect(() => {
     if (activeChapter?.isRedemittel && viewMode === "flashcards") {
       setViewMode("table");
     }
   }, [activeChapterId, viewMode, activeChapter]);
+
   const displayedWords = useMemo(() => {
     if (searchTerm.trim() !== "") {
       const normalizeStr = str => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
@@ -393,14 +406,19 @@ export default function App() {
         chapter: c.title,
         emoji: c.emoji,
         isRedemittel: c.isRedemittel
-      }))).filter(w => normalizeStr(w.de).includes(normTerm) || normalizeStr(w.es).includes(normTerm) || normalizeStr(w.pron).includes(normTerm) || normalizeStr(w.type).includes(normTerm) || w.category && normalizeStr(w.category).includes(normTerm));
+      }))).filter(w => normalizeStr(w.de).includes(normTerm) || normalizeStr(w.es).includes(normTerm) || normalizeStr(w.pron).includes(normTerm) || normalizeStr(w.type).includes(normTerm) || (w.category && normalizeStr(w.category).includes(normTerm)));
     }
-    return activeChapter ? activeChapter.words.map(w => ({
+    if (!activeChapter) return [];
+    let words = activeChapter.words.map(w => ({
       ...w,
       chapter: activeChapter.title,
       emoji: activeChapter.emoji
-    })) : [];
-  }, [activeChapterId, searchTerm, activeChapter]);
+    }));
+    if (selectedCategory && selectedCategory !== "Todas") {
+      words = words.filter(w => w.category === selectedCategory);
+    }
+    return words;
+  }, [activeChapterId, searchTerm, activeChapter, selectedCategory]);
   const toggleCard = index => setRevealedCards(prev => ({
     ...prev,
     [index]: !prev[index]
@@ -842,9 +860,11 @@ export default function App() {
 
           if (globalCacheSnap.exists()) {
             const cachedData = globalCacheSnap.data();
-            imageUrl = cachedData.imageUrl || cachedData.imageBase64;
+            imageUrl = cachedData.videoUrl || cachedData.imageUrl || cachedData.imageBase64;
             if (imageUrl) {
-              imageUrl = await compressImageBase64(imageUrl, 1024, 0.9);
+              if (!imageUrl.endsWith('.mp4') && !imageUrl.includes('.mp4')) {
+                imageUrl = await compressImageBase64(imageUrl, 1024, 0.9);
+              }
               await localforage.setItem(`img_${safeId}`, imageUrl).catch(e => console.warn(e));
             }
           } else {
@@ -1021,38 +1041,39 @@ export default function App() {
                       <span>📘 Tablas Maestras</span>
                       <ChevronRight size={16} className={`transform transition-transform ${isTablasOpen ? 'rotate-90' : ''}`} />
                     </button>
-                    {isTablasOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20 p-1.5 space-y-1">
-                        {chapters.map(chap => {
-                          const isActive = activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table');
+                    {isTablasOpen && (
+                      <div className="space-y-1 py-1 border-t border-slate-800/50 bg-slate-950/20 p-1.5">
+                        {chapters.map((chap) => {
+                          const isSelected = activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table');
                           return (
                             <button
                               key={chap.id}
-                              onClick={async () => {
+                              onClick={() => {
                                 setActiveChapterId(chap.id);
-                                if (viewMode !== 'flashcards' && viewMode !== 'table') setViewMode('flashcards');
+                                setSelectedCategory("Todas");
+                                setViewMode('table');
                                 setIsMenuOpen(false);
                               }}
-                              className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all text-left ${
-                                isActive
-                                  ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
-                                  : 'hover:bg-slate-800/60 text-slate-300 border border-transparent'
+                              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
+                                isSelected
+                                  ? 'bg-indigo-600 text-white font-semibold shadow-sm'
+                                  : 'text-slate-300 hover:bg-slate-800/60 hover:text-white'
                               }`}
                             >
-                              <span className="mt-0.5 text-amber-400 shrink-0 text-base">
-                                {chap.emoji || <BookOpen size={16} />}
-                              </span>
-                              <div className="flex flex-col min-w-0 flex-1 space-y-0.5">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">
-                                  {typeof chap.id === 'number' ? `Capítulo ${chap.id}` : String(chap.id).replace(/(sp_|g_|kap_)/i, 'Módulo ')}
+                              <span className="text-lg shrink-0">{chap.emoji || '📚'}</span>
+                              <div className="flex flex-col min-w-0">
+                                <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? 'text-indigo-200' : 'text-indigo-400'}`}>
+                                  CAPÍTULO {chap.id}
                                 </span>
-                                <span className="text-xs font-medium text-slate-100 leading-snug whitespace-normal break-words">
+                                <span className="text-xs truncate font-medium">
                                   {chap.title.replace(/^(Capítulo|Kapitel)\s+\d+:\s*/i, '')}
                                 </span>
                               </div>
                             </button>
                           );
                         })}
-                      </div>}
+                      </div>
+                    )}
                   </div>
 
                   {/* ACORDEÓN 2: Plan de Estudio */}
@@ -1200,28 +1221,69 @@ export default function App() {
           
           {/* VISTAS: FLASHCARDS Y TABLA */}
           {(viewMode === "flashcards" || viewMode === "table") && <>
-              <div className="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                    {searchTerm ? `Búsqueda: "${searchTerm}"` : activeChapter?.title}
-                  </h2>
-                  <p className="text-slate-500 text-sm mt-1">{displayedWords.length} términos encontrados.</p>
-                </div>
-                
-                {/* BOTÓN CUENTO IA (GEMINI API) ✨ */}
-                <button onClick={typeof generateStory === 'function' ? generateStory : () => {}} disabled={storyState?.loading} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:opacity-90 transition flex items-center gap-2 shadow-sm whitespace-nowrap self-start sm:self-auto">
-                  {storyState?.loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
-                  Cuento IA ✨
-                </button>
+              <div className="mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                      {searchTerm ? `Búsqueda: "${searchTerm}"` : activeChapter?.title}
+                    </h2>
+                    <p className="text-slate-500 text-sm mt-1">
+                      {selectedCategory !== 'Todas' && !searchTerm
+                        ? `${displayedWords.length} términos en "${selectedCategory}" (${activeChapter?.words?.length || 0} en el capítulo).`
+                        : `${displayedWords.length} términos encontrados.`}
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-center gap-3 self-start sm:self-auto flex-wrap">
+                    {/* BOTÓN CUENTO IA (GEMINI API) ✨ */}
+                    <button onClick={typeof generateStory === 'function' ? generateStory : () => {}} disabled={storyState?.loading} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:opacity-90 transition flex items-center gap-2 shadow-sm whitespace-nowrap">
+                      {storyState?.loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+                      Cuento IA ✨
+                    </button>
 
-                {(!activeChapter?.isRedemittel || searchTerm) && <div className="flex bg-slate-100 p-1 rounded-lg self-start sm:self-auto border border-slate-200">
-                    <button onClick={() => setViewMode("flashcards")} className={`px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition ${viewMode === "flashcards" ? 'bg-white shadow text-blue-700' : 'text-slate-500 hover:text-slate-800'}`}>
-                      <LayoutGrid size={16} /> Flashcards
-                    </button>
-                    <button onClick={() => setViewMode("table")} className={`px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition ${viewMode === "table" ? 'bg-white shadow text-blue-700' : 'text-slate-500 hover:text-slate-800'}`}>
-                      <List size={16} /> Tabla
-                    </button>
-                  </div>}
+                    {(!activeChapter?.isRedemittel || searchTerm) && <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                        <button onClick={() => setViewMode("flashcards")} className={`px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition cursor-pointer ${viewMode === "flashcards" ? 'bg-white shadow text-blue-700 font-semibold' : 'text-slate-500 hover:text-slate-800'}`}>
+                          <LayoutGrid size={16} /> Flashcards
+                        </button>
+                        <button onClick={() => setViewMode("table")} className={`px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition cursor-pointer ${viewMode === "table" ? 'bg-white shadow text-blue-700 font-semibold' : 'text-slate-500 hover:text-slate-800'}`}>
+                          <List size={16} /> Tabla
+                        </button>
+                      </div>}
+                  </div>
+                </div>
+
+                {/* FILTRO POR CATEGORÍA EN PÍLDORAS */}
+                {!searchTerm && categories.length > 2 && (
+                  <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-3 border-t border-slate-100 mt-3 scrollbar-thin">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1 flex items-center gap-1">
+                      <Filter size={12} /> Categoría:
+                    </span>
+                    {categories.map(cat => {
+                      const isCatActive = selectedCategory === cat;
+                      const count = cat === 'Todas'
+                        ? (activeChapter?.words?.length || 0)
+                        : (activeChapter?.words?.filter(w => w.category === cat).length || 0);
+                      return (
+                        <button
+                          key={cat}
+                          onClick={() => setSelectedCategory(cat)}
+                          className={`px-3 py-1 rounded-full text-xs transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                            isCatActive
+                              ? 'bg-indigo-600 text-white shadow-sm font-semibold'
+                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-800'
+                          }`}
+                        >
+                          <span>{cat}</span>
+                          <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                            isCatActive ? 'bg-indigo-700 text-white' : 'bg-slate-200 text-slate-600'
+                          }`}>
+                            {count}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* RENDER FLASHCARDS */}

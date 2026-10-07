@@ -22,7 +22,7 @@ import VoiceExaminer from '../components/VoiceExaminer';
 import ClockSVG from '../components/ClockSVG';
 const rawChapters = [
 {
-  id: 0,
+  id: 1,
   title: "Kapitel 1: Alphabet & Zahlen",
   icon: <List size={20} />,
   emoji: "🔤",
@@ -620,7 +620,7 @@ const rawChapters = [
   }]
 },
 {
-  id: 1,
+  id: 2,
   title: "Kapitel 2: Zeit & Datum",
   icon: <Clock size={20} />,
   emoji: "⏰",
@@ -1233,7 +1233,7 @@ const rawChapters = [
   }]
 },
 {
-  id: 2,
+  id: 3,
   title: "Kapitel 3: Personen & Kontakte",
   icon: <BookOpen size={20} />,
   emoji: "👤",
@@ -2023,7 +2023,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 14,
+  id: 4,
   title: "Kapitel 4: Basisverben & Adjektive",
   icon: <Sparkles size={20} />,
   emoji: "✨",
@@ -3278,7 +3278,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 15,
+  id: 5,
   title: "Kapitel 5: Adverbien & Fragewörter",
   icon: <Search size={20} />,
   emoji: "❓",
@@ -3595,7 +3595,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 13,
+  id: 6,
   title: "Kapitel 6: Grammatik: Konnektoren",
   icon: <Link2 size={20} />,
   emoji: "🔗",
@@ -4094,7 +4094,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 3,
+  id: 7,
   title: "Kapitel 7: Wohnen",
   icon: <Home size={20} />,
   emoji: "🏠",
@@ -4840,7 +4840,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 5,
+  id: 8,
   title: "Kapitel 8: Essen & Trinken",
   icon: <Coffee size={20} />,
   emoji: "🍽️",
@@ -5644,7 +5644,7 @@ const rawChapters = [
   }]
 },
 {
-  id: 10,
+  id: 9,
   title: "Kapitel 9: Kleidung",
   icon: <ShoppingCart size={20} />,
   emoji: "👕",
@@ -5940,7 +5940,7 @@ const rawChapters = [
   }]
 },
 {
-  id: 6,
+  id: 10,
   title: "Kapitel 10: Einkaufen",
   icon: <ShoppingCart size={20} />,
   emoji: "🛒",
@@ -6269,7 +6269,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 4,
+  id: 11,
   title: "Kapitel 11: Freizeit",
   icon: <Activity size={20} />,
   emoji: "⚛",
@@ -6860,7 +6860,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 7,
+  id: 12,
   title: "Kapitel 12: Reisen & Verkehr",
   icon: <Car size={20} />,
   emoji: "✈️",
@@ -7475,7 +7475,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 12,
+  id: 13,
   title: "Kapitel 13: Fahrschuldeutsch: Auto",
   icon: <Car size={20} />,
   emoji: "🚗",
@@ -8112,7 +8112,7 @@ const rawChapters = [
   }]
 },
 {
-  id: 8,
+  id: 14,
   title: "Kapitel 14: Post & Bank",
   icon: <Mail size={20} />,
   emoji: "📮",
@@ -8533,7 +8533,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 9,
+  id: 15,
   title: "Kapitel 15: Gesundheit",
   icon: <Heart size={20} />,
   emoji: "🏥",
@@ -9181,7 +9181,7 @@ const rawChapters = [
     }]
 },
 {
-  id: 11,
+  id: 16,
   title: "Kapitel 16: Schule & Beruf",
   icon: <Briefcase size={20} />,
   emoji: "💼",
@@ -10464,7 +10464,7 @@ const rawChapters = [
   }]
 },
 {
-  id: 16,
+  id: 18,
   title: "Kapitel 18: Elektrotechnik & Solar",
   icon: <Zap size={20} />,
   emoji: "⚡",
