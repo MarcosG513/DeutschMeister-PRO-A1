@@ -7,6 +7,7 @@ import { functions } from '../App';
 import { httpsCallable } from 'firebase/functions';
 import localforage from 'localforage';
 import { Capacitor } from '@capacitor/core';
+import { isMotionVideoEligible } from '../utils/motionVerbs';
 
 const SVGClock = ({ deWord }) => {
   const cleanWord = deWord.trim().toLowerCase();
@@ -269,6 +270,9 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   // Solo el entorno local y la APK tienen privilegios de generación multimedia
   const canGenerateMedia = isDev || isNative;
 
+  // Condición estricta: sólo si el entorno permite generar medios Y el verbo es kinestésico/de movimiento
+  const canShowVideoButton = canGenerateMedia && isMotionVideoEligible(wordObj);
+
   const hasExistingVideo = Boolean(
     localMediaType === 'video' ||
     wordObj.videoUrl || 
@@ -284,6 +288,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   const handleRegenerateMedia = async (targetWord, desiredMediaType, e) => {
     if (e) e.stopPropagation();
     if (isRegenerating || !canGenerateMedia) return;
+    if (desiredMediaType === "video" && !isMotionVideoEligible(targetWord)) return;
 
     try {
       setIsRegenerating(true);
@@ -474,12 +479,12 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                 <Sparkles className={isRegenerating && regenType === 'image' ? "animate-spin text-indigo-600" : ""} size={16}/>
               </button>
 
-              {/* Botón Video con Gemini Omni Flash (Exclusivo Verbos) */}
-              {isVerb && (
+              {/* Botón Video con Gemini Omni Flash (Exclusivo Verbos de Movimiento/Kinestésicos) */}
+              {canShowVideoButton && (
                 <button
                   onClick={(e) => handleRegenerateMedia(wordObj, "video", e)}
                   disabled={isRegenerating}
-                  title={isDev ? "Regenerar video (Modo Dev)" : "Generar/Regenerar video de acción"}
+                  title={isDev ? "Regenerar video cinético (Modo Dev)" : "Generar/Regenerar video cinético"}
                   className="p-1.5 rounded-lg bg-amber-500 text-white shadow hover:bg-amber-600 transition flex items-center gap-1 text-[11px] font-bold px-2 disabled:opacity-50"
                 >
                   <Film className={isRegenerating && regenType === 'video' ? "animate-pulse" : ""} size={14}/>

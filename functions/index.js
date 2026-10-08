@@ -2115,9 +2115,31 @@ export const regenerateCardMedia = onCall(
       const db = admin.firestore();
       const safeId = wordObj.de.toLowerCase().replace(/[^a-z0-9]/gi, "_").substring(0, 100);
       const isVerb = isVerbItem(wordObj);
-      const wantVideo = mediaType === "video" || (mediaType === "auto" && isVerb);
 
-      // 1. Candado para Web Producción: Prohibición total de generar videos
+      // 1. Salvaguarda Kinestésica: Restricción estricta de video a verbos de locomoción y mecánica física
+      const ALLOWED_MOTION = new Set([
+        "gehen", "laufen", "rennen", "springen", "steigen", "fallen",
+        "fliegen", "schwimmen", "wandern", "fahren", "abbiegen",
+        "aufstehen", "umsteigen", "einsteigen", "aussteigen", "mitkommen",
+        "ziehen", "drücken", "schieben", "werfen", "fangen",
+        "bremsen", "beschleunigen", "gas geben", "blinken", "abschleppen",
+        "einpacken", "auspacken", "abtrocknen", "abgeben"
+      ]);
+
+      const rawTerm = wordObj.de || request.data?.word || "";
+      const cleanTerm = rawTerm.replace(/\|/g, "").replace(/^sich\s+/i, "").trim().toLowerCase();
+      const isMotionVerb = isVerb && (ALLOWED_MOTION.has(cleanTerm) || ((wordObj.category || "").toLowerCase() === "bewegung"));
+
+      if (mediaType === "video" && !isMotionVerb) {
+        return {
+          success: false,
+          error: "El término no es un verbo de movimiento o cinemática crítica apto para video."
+        };
+      }
+
+      const wantVideo = (mediaType === "video" || (mediaType === "auto" && isVerb)) && isMotionVerb;
+
+      // 2. Candado para Web Producción: Prohibición total de generar videos
       if (wantVideo && !isAuthorizedClient) {
         return {
           success: false,
