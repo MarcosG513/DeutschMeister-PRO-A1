@@ -17,14 +17,11 @@
     "@capacitor/core": "^8.4.1",
     "@capacitor/keyboard": "^8.0.5",
     "@capacitor/status-bar": "^8.0.2",
-    "@fal-ai/client": "^1.10.1",
-    "@fal-ai/serverless-client": "^0.15.0",
     "@google/generative-ai": "^0.24.1",
     "@tailwindcss/vite": "^4.3.1",
     "autoprefixer": "^10.5.0",
     "dotenv": "^17.4.2",
     "firebase": "^12.15.0",
-    "firebase-admin": "^14.1.0",
     "localforage": "^1.10.0",
     "lucide-react": "^1.21.0",
     "postcss": "^8.5.15",
@@ -32,7 +29,6 @@
     "react-dom": "^19.2.6",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
-    "sqlite3": "^6.0.1",
     "tailwindcss": "^4.3.1"
   },
   "devDependencies": {
@@ -49,7 +45,6 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
-    "jimp": "^0.16.13",
     "vite": "^8.1.4"
   }
 }

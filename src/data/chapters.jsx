@@ -33,7 +33,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Der Buchstabe A ist groß.",
-    exampleSentenceEs: "La letra A es grande."
+    exampleSentenceEs: "La letra A es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Buchstabe A", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ]
   }, {
     de: "B, b",
     pron: "be",
@@ -41,7 +46,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das Wort 'Brot' beginnt mit B.",
-    exampleSentenceEs: "La palabra 'pan' comienza con B."
+    exampleSentenceEs: "La palabra 'pan' comienza con B.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wort 'Brot'", role: "subject", order: 1 },
+      { text: "beginnt", role: "verb_p1", order: 2 },
+      { text: "mit B", role: "complement", order: 3 }
+    ]
   }, {
     de: "C, c",
     pron: "tse",
@@ -49,7 +59,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Der Buchstabe C ist groß.",
-    exampleSentenceEs: "La letra C es grande."
+    exampleSentenceEs: "La letra C es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Buchstabe C", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ]
   }, {
     de: "D, d",
     pron: "de",
@@ -57,7 +72,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das ist der Buchstabe D.",
-    exampleSentenceEs: "Esa es la letra D."
+    exampleSentenceEs: "Esa es la letra D.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Buchstabe D", role: "complement", order: 3 }
+    ]
   }, {
     de: "E, e",
     pron: "e",
@@ -65,7 +85,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Ich schreibe das Wort mit 'E'.",
-    exampleSentenceEs: "Yo escribo la palabra con 'E'."
+    exampleSentenceEs: "Yo escribo la palabra con 'E'.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schreibe", role: "verb_p1", order: 2 },
+      { text: "das Wort mit 'E'", role: "complement", order: 3 }
+    ]
   }, {
     de: "F, f",
     pron: "ef",
@@ -73,7 +98,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das 'F' in 'Familie' ist groß.",
-    exampleSentenceEs: "La 'F' en 'Familie' es mayúscula."
+    exampleSentenceEs: "La 'F' en 'Familie' es mayúscula.",
+    exampleSentenceDeBlocks: [
+      { text: "Das 'F' in 'Familie'", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ]
   }, {
     de: "G, g",
     pron: "gue",
@@ -81,7 +111,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Der Buchstabe G ist im Wort 'Gitarre'.",
-    exampleSentenceEs: "La letra G está en la palabra 'guitarra'."
+    exampleSentenceEs: "La letra G está en la palabra 'guitarra'.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Buchstabe G", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "im Wort 'Gitarre'", role: "complement", order: 3 }
+    ]
   }, {
     de: "H, h",
     pron: "ja",
@@ -89,7 +124,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Mein Name hat ein H.",
-    exampleSentenceEs: "Mi nombre tiene una H."
+    exampleSentenceEs: "Mi nombre tiene una H.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Name", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "ein H", role: "complement", order: 3 }
+    ]
   }, {
     de: "I, i",
     pron: "i",
@@ -97,7 +137,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das 'I' ist ein Buchstabe.",
-    exampleSentenceEs: "La 'I' es una letra."
+    exampleSentenceEs: "La 'I' es una letra.",
+    exampleSentenceDeBlocks: [
+      { text: "Das 'I'", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Buchstabe", role: "complement", order: 3 }
+    ]
   }, {
     de: "J, j",
     pron: "yot",
@@ -105,7 +150,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Der Buchstabe J ist im Wort 'Ja'.",
-    exampleSentenceEs: "La letra J está en la palabra 'Ja' (sí)."
+    exampleSentenceEs: "La letra J está en la palabra 'Ja' (sí).",
+    exampleSentenceDeBlocks: [
+      { text: "Der Buchstabe J", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "im Wort 'Ja'", role: "complement", order: 3 }
+    ]
   }, {
     de: "K, k",
     pron: "ka",
@@ -113,7 +163,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Ich schreibe das Wort 'Katze' mit K.",
-    exampleSentenceEs: "Escribo la palabra 'Katze' con K."
+    exampleSentenceEs: "Escribo la palabra 'Katze' con K.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schreibe", role: "verb_p1", order: 2 },
+      { text: "das Wort 'Katze' mit K", role: "complement", order: 3 }
+    ]
   }, {
     de: "L, l",
     pron: "el",
@@ -121,7 +176,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das Wort 'Land' beginnt mit 'L'.",
-    exampleSentenceEs: "La palabra 'Land' comienza con 'L'."
+    exampleSentenceEs: "La palabra 'Land' comienza con 'L'.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wort 'Land'", role: "subject", order: 1 },
+      { text: "beginnt", role: "verb_p1", order: 2 },
+      { text: "mit 'L'", role: "complement", order: 3 }
+    ]
   }, {
     de: "M, m",
     pron: "em",
@@ -129,7 +189,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das M ist ein Buchstabe.",
-    exampleSentenceEs: "La M es una letra."
+    exampleSentenceEs: "La M es una letra.",
+    exampleSentenceDeBlocks: [
+      { text: "Das M", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Buchstabe", role: "complement", order: 3 }
+    ]
   }, {
     de: "N, n",
     pron: "en",
@@ -137,7 +202,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Der Name beginnt mit N.",
-    exampleSentenceEs: "El nombre comienza con N."
+    exampleSentenceEs: "El nombre comienza con N.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Name", role: "subject", order: 1 },
+      { text: "beginnt", role: "verb_p1", order: 2 },
+      { text: "mit N", role: "complement", order: 3 }
+    ]
   }, {
     de: "O, o",
     pron: "o",
@@ -145,7 +215,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das O ist groß.",
-    exampleSentenceEs: "La O es grande."
+    exampleSentenceEs: "La O es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das O", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ]
   }, {
     de: "P, p",
     pron: "pe",
@@ -153,7 +228,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das Wort 'Post' beginnt mit P.",
-    exampleSentenceEs: "La palabra 'Post' comienza con P."
+    exampleSentenceEs: "La palabra 'Post' comienza con P.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wort 'Post'", role: "subject", order: 1 },
+      { text: "beginnt", role: "verb_p1", order: 2 },
+      { text: "mit P", role: "complement", order: 3 }
+    ]
   }, {
     de: "Q, q",
     pron: "ku",
@@ -161,7 +241,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das Q ist ein Buchstabe im Alphabet.",
-    exampleSentenceEs: "La Q es una letra del abecedario."
+    exampleSentenceEs: "La Q es una letra del abecedario.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Q", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Buchstabe im Alphabet", role: "complement", order: 3 }
+    ]
   }, {
     de: "R, r",
     pron: "er",
@@ -169,7 +254,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Der Buchstabe R ist schwer.",
-    exampleSentenceEs: "La letra R es difícil."
+    exampleSentenceEs: "La letra R es difícil.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Buchstabe R", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schwer", role: "complement", order: 3 }
+    ]
   }, {
     de: "S, s",
     pron: "es",
@@ -177,7 +267,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Der Buchstabe 'S' ist in meinem Namen.",
-    exampleSentenceEs: "La letra 'S' está en mi nombre."
+    exampleSentenceEs: "La letra 'S' está en mi nombre.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Buchstabe 'S'", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "in meinem Namen", role: "complement", order: 3 }
+    ]
   }, {
     de: "T, t",
     pron: "te",
@@ -185,7 +280,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das ist der Buchstabe T.",
-    exampleSentenceEs: "Esta es la letra T."
+    exampleSentenceEs: "Esta es la letra T.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Buchstabe T", role: "complement", order: 3 }
+    ]
   }, {
     de: "U, u",
     pron: "u",
@@ -193,7 +293,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das 'U' ist ein Vokal.",
-    exampleSentenceEs: "La 'U' es una vocal."
+    exampleSentenceEs: "La 'U' es una vocal.",
+    exampleSentenceDeBlocks: [
+      { text: "Das 'U'", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Vokal", role: "complement", order: 3 }
+    ]
   }, {
     de: "V, v",
     pron: "fau",
@@ -201,7 +306,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das ist der Buchstabe V.",
-    exampleSentenceEs: "Esta es la letra V."
+    exampleSentenceEs: "Esta es la letra V.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Buchstabe V", role: "complement", order: 3 }
+    ]
   }, {
     de: "W, w",
     pron: "ve",
@@ -209,7 +319,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das ist der Buchstabe W.",
-    exampleSentenceEs: "Esta es la letra W."
+    exampleSentenceEs: "Esta es la letra W.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Buchstabe W", role: "complement", order: 3 }
+    ]
   }, {
     de: "X, x",
     pron: "iks",
@@ -217,7 +332,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das ist der Buchstabe X.",
-    exampleSentenceEs: "Esta es la letra X."
+    exampleSentenceEs: "Esta es la letra X.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Buchstabe X", role: "complement", order: 3 }
+    ]
   }, {
     de: "Y, y",
     pron: "úp-si-lon",
@@ -225,7 +345,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Ich bin Thomas und das ist Anna.",
-    exampleSentenceEs: "Yo soy Thomas y esta es Anna."
+    exampleSentenceEs: "Yo soy Thomas y esta es Anna.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "Thomas und das ist Anna", role: "complement", order: 3 }
+    ]
   }, {
     de: "Z, z",
     pron: "tset",
@@ -233,7 +358,12 @@ const rawChapters = [
     type: "Letra",
     category: "Alphabet",
     exampleSentenceDe: "Das ist der Buchstabe Z.",
-    exampleSentenceEs: "Esta es la letra Z."
+    exampleSentenceEs: "Esta es la letra Z.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Buchstabe Z", role: "complement", order: 3 }
+    ]
   }, {
     de: "Ä, ä",
     pron: "e abierta",
@@ -241,7 +371,12 @@ const rawChapters = [
     type: "Especial",
     category: "Alphabet",
     exampleSentenceDe: "Das Wort 'Äpfel' hat ein Ä.",
-    exampleSentenceEs: "La palabra 'Äpfel' tiene una A con diéresis."
+    exampleSentenceEs: "La palabra 'Äpfel' tiene una A con diéresis.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wort 'Äpfel'", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "ein Ä", role: "complement", order: 3 }
+    ]
   }, {
     de: "Ö, ö",
     pron: "e con labios de o",
@@ -249,7 +384,12 @@ const rawChapters = [
     type: "Especial",
     category: "Alphabet",
     exampleSentenceDe: "Der Buchstabe Ö ist in meinem Namen.",
-    exampleSentenceEs: "La letra Ö está en mi nombre."
+    exampleSentenceEs: "La letra Ö está en mi nombre.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Buchstabe Ö", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "in meinem Namen", role: "complement", order: 3 }
+    ]
   }, {
     de: "Ü, ü",
     pron: "i con labios de u",
@@ -257,7 +397,12 @@ const rawChapters = [
     type: "Especial",
     category: "Alphabet",
     exampleSentenceDe: "Die Übung ist sehr einfach.",
-    exampleSentenceEs: "El ejercicio es muy fácil."
+    exampleSentenceEs: "El ejercicio es muy fácil.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Übung", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr einfach", role: "complement", order: 3 }
+    ]
   }, {
     de: "ß",
     pron: "es-tset",
@@ -265,7 +410,12 @@ const rawChapters = [
     type: "Especial",
     category: "Alphabet",
     exampleSentenceDe: "Der Tee ist heiß.",
-    exampleSentenceEs: "El té está caliente."
+    exampleSentenceEs: "El té está caliente.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Tee", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "heiß", role: "complement", order: 3 }
+    ]
   }, {
     de: "null",
     pron: "nul",
@@ -274,6 +424,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe null Euro.",
     exampleSentenceEs: "Tengo cero euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "null Euro", role: "complement", order: 3 }
+    ],
     regimen: "Cardinal, sin ordinal"
   }, {
     de: "eins",
@@ -283,6 +438,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe eins.",
     exampleSentenceEs: "Tengo uno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eins", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: erste"
   }, {
     de: "zwei",
@@ -292,6 +452,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe zwei Katzen.",
     exampleSentenceEs: "Tengo dos gatos.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "zwei Katzen", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: zweite"
   }, {
     de: "drei",
@@ -301,6 +466,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe drei Äpfel.",
     exampleSentenceEs: "Tengo tres manzanas.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "drei Äpfel", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: dritte"
   }, {
     de: "vier",
@@ -310,6 +480,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe vier Äpfel.",
     exampleSentenceEs: "Tengo cuatro manzanas.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "vier Äpfel", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: vierte"
   }, {
     de: "fünf",
@@ -319,6 +494,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Das Brot kostet fünf Euro.",
     exampleSentenceEs: "El pan cuesta cinco euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Brot", role: "subject", order: 1 },
+      { text: "kostet", role: "verb_p1", order: 2 },
+      { text: "fünf Euro", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: fünfte"
   }, {
     de: "sechs",
@@ -328,6 +508,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Das Ticket kostet sechs Euro.",
     exampleSentenceEs: "El billete cuesta seis euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Ticket", role: "subject", order: 1 },
+      { text: "kostet", role: "verb_p1", order: 2 },
+      { text: "sechs Euro", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: sechste"
   }, {
     de: "sieben",
@@ -337,6 +522,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe sieben Äpfel.",
     exampleSentenceEs: "Tengo siete manzanas.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "sieben Äpfel", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: siebte"
   }, {
     de: "acht",
@@ -346,6 +536,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe acht Euro.",
     exampleSentenceEs: "Tengo ocho euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "acht Euro", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: achte"
   }, {
     de: "neun",
@@ -355,6 +550,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe neun Äpfel.",
     exampleSentenceEs: "Tengo nueve manzanas.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "neun Äpfel", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: neunte"
   }, {
     de: "zehn",
@@ -364,6 +564,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe zehn Finger.",
     exampleSentenceEs: "Tengo diez dedos.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "zehn Finger", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: zehnte"
   }, {
     de: "elf",
@@ -373,6 +578,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich bin elf Jahre alt.",
     exampleSentenceEs: "Tengo once años.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "elf Jahre alt", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: elfte"
   }, {
     de: "zwölf",
@@ -382,6 +592,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe zwölf Euro.",
     exampleSentenceEs: "Tengo doce euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "zwölf Euro", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: zwölfte"
   }, {
     de: "dreizehn",
@@ -391,6 +606,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe dreizehn Euro.",
     exampleSentenceEs: "Tengo trece euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "dreizehn Euro", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: dreizehnte"
   }, {
     de: "sechzehn",
@@ -400,6 +620,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich bin sechzehn Jahre alt.",
     exampleSentenceEs: "Tengo dieciséis años.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "sechzehn Jahre alt", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: sechzehnte"
   }, {
     de: "siebzehn",
@@ -409,6 +634,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich bin siebzehn Jahre alt.",
     exampleSentenceEs: "Tengo diecisiete años.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "siebzehn Jahre alt", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: siebzehnte"
   }, {
     de: "zwanzig",
@@ -418,6 +648,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich bin zwanzig Jahre alt.",
     exampleSentenceEs: "Tengo veinte años.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "zwanzig Jahre alt", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: zwanzigste"
   }, {
     de: "einundzwanzig",
@@ -427,6 +662,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich bin einundzwanzig Jahre alt.",
     exampleSentenceEs: "Tengo veintiuno años.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "einundzwanzig Jahre alt", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: einundzwanzigste"
   }, {
     de: "dreißig",
@@ -436,6 +676,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich bin dreißig Jahre alt.",
     exampleSentenceEs: "Tengo treinta años.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "dreißig Jahre alt", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: dreißigste"
   }, {
     de: "vierzig",
@@ -445,6 +690,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich bin vierzig Jahre alt.",
     exampleSentenceEs: "Tengo cuarenta años.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "vierzig Jahre alt", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: vierzigste"
   }, {
     de: "hundert",
@@ -454,6 +704,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe hundert Euro.",
     exampleSentenceEs: "Tengo cien euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "hundert Euro", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: hundertste"
   }, {
     de: "tausend",
@@ -463,6 +718,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich habe tausend Euro.",
     exampleSentenceEs: "Tengo mil euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "tausend Euro", role: "complement", order: 3 }
+    ],
     regimen: "Ordinal: tausendste"
   }, {
     de: "der erste",
@@ -472,6 +732,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Ich bin der erste.",
     exampleSentenceEs: "Yo soy el primero.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "der erste", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adj."
   }, {
     de: "der zweite",
@@ -481,6 +746,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Das ist der zweite Stock.",
     exampleSentenceEs: "Este es el segundo piso.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der zweite Stock", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adj."
   }, {
     de: "der dritte",
@@ -490,6 +760,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Ich wohne in der dritten Straße.",
     exampleSentenceEs: "Yo vivo en la tercera calle.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wohne", role: "verb_p1", order: 2 },
+      { text: "in der dritten Straße", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adj."
   }, {
     de: "der vierte",
@@ -499,6 +774,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Ich wohne in der vierten Etage.",
     exampleSentenceEs: "Yo vivo en el cuarto piso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wohne", role: "verb_p1", order: 2 },
+      { text: "in der vierten Etage", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adjetivo"
   }, {
     de: "der fünfte",
@@ -508,6 +788,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der fünfte Mai.",
     exampleSentenceEs: "Hoy es el quinto de mayo.",
+    exampleSentenceDeBlocks: [
+      { text: "Heute", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der fünfte Mai", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adj."
   }, {
     de: "der sechste",
@@ -517,6 +802,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der sechste Mai.",
     exampleSentenceEs: "Hoy es el sexto de mayo.",
+    exampleSentenceDeBlocks: [
+      { text: "Heute", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der sechste Mai", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adj."
   }, {
     de: "der siebte",
@@ -526,6 +816,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Sonntag ist der siebte Tag.",
     exampleSentenceEs: "El domingo es el séptimo día.",
+    exampleSentenceDeBlocks: [
+      { text: "Sonntag", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der siebte Tag", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adj."
   }, {
     de: "der achte",
@@ -535,6 +830,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Das ist die achte Stunde.",
     exampleSentenceEs: "Esta es la octava hora.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die achte Stunde", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adj."
   }, {
     de: "der neunte",
@@ -544,6 +844,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der neunte Mai.",
     exampleSentenceEs: "Hoy es el noveno de mayo.",
+    exampleSentenceDeBlocks: [
+      { text: "Heute", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der neunte Mai", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adjetivo"
   }, {
     de: "der zehnte",
@@ -553,6 +858,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Der zehnte Tag ist heute.",
     exampleSentenceEs: "El décimo día es hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Der", role: "subject", order: 1 },
+      { text: "zehnte", role: "verb_p1", order: 2 },
+      { text: "Tag ist heute", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adjetivo"
   }, {
     de: "der zwanzigste",
@@ -562,6 +872,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der zwanzigste Tag im Monat.",
     exampleSentenceEs: "Hoy es el vigésimo día del mes.",
+    exampleSentenceDeBlocks: [
+      { text: "Heute", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der zwanzigste Tag im Monat", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adj."
   }, {
     de: "der einundzwanzigste",
@@ -571,6 +886,11 @@ const rawChapters = [
     category: "Ordnungszahlen",
     exampleSentenceDe: "Heute ist der einundzwanzigste Januar.",
     exampleSentenceEs: "Hoy es el veintiuno de enero.",
+    exampleSentenceDeBlocks: [
+      { text: "Heute", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der einundzwanzigste Januar", role: "complement", order: 3 }
+    ],
     regimen: "Declina como adj."
   }, {
     de: "die Hälfte",
@@ -580,6 +900,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Ich nehme die Hälfte von dem Kuchen.",
     exampleSentenceEs: "Yo tomo la mitad del pastel.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "nehme", role: "verb_p1", order: 2 },
+      { text: "die Hälfte von dem Kuchen", role: "complement", order: 3 }
+    ],
     plural: "die Hälften"
   }, {
     de: "das Viertel",
@@ -589,6 +914,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Das ist ein Viertel von dem Kuchen.",
     exampleSentenceEs: "Este es un cuarto del pastel.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Viertel von dem Kuchen", role: "complement", order: 3 }
+    ],
     plural: "die Viertel"
   }, {
     de: "plus / minus",
@@ -598,6 +928,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Fünf plus fünf ist zehn.",
     exampleSentenceEs: "Cinco más cinco son diez.",
+    exampleSentenceDeBlocks: [
+      { text: "Fünf plus fünf", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "zehn", role: "complement", order: 3 }
+    ],
     regimen: "Operaciones matemáticas"
   }, {
     de: "mal / durch",
@@ -607,6 +942,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Wir gehen durch den Park.",
     exampleSentenceEs: "Vamos por el parque.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "gehen", role: "verb_p1", order: 2 },
+      { text: "durch den Park", role: "complement", order: 3 }
+    ],
     regimen: "Operaciones matemáticas"
   }, {
     de: "das Prozent",
@@ -616,6 +956,11 @@ const rawChapters = [
     category: "Zahlen",
     exampleSentenceDe: "Das Prozent ist nicht hoch.",
     exampleSentenceEs: "El por ciento no es alto.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Prozent", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "nicht hoch", role: "complement", order: 3 }
+    ],
     plural: "die Prozent"
   }]
 },
@@ -632,6 +977,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Diese Woche ist kurz.",
     exampleSentenceEs: "Esta semana es corta.",
+    exampleSentenceDeBlocks: [
+      { text: "Diese Woche", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "kurz", role: "complement", order: 3 }
+    ],
     plural: "die Wochen"
   }, {
     de: "Montag",
@@ -641,6 +991,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Am Montag habe ich Deutsch.",
     exampleSentenceEs: "El lunes tengo alemán.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Montag", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ich Deutsch", role: "complement", order: 3 }
+    ],
     plural: "die Montage"
   }, {
     de: "Dienstag",
@@ -650,6 +1005,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Am Dienstag trinke ich Kaffee.",
     exampleSentenceEs: "El martes bebo café.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Dienstag", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "ich Kaffee", role: "complement", order: 3 }
+    ],
     plural: "die Dienstage"
   }, {
     de: "Mittwoch",
@@ -659,6 +1019,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Am Mittwoch ist ein Treffen.",
     exampleSentenceEs: "El miércoles hay una reunión.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Mittwoch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Treffen", role: "complement", order: 3 }
+    ],
     plural: "die Mittwoche"
   }, {
     de: "Donnerstag",
@@ -668,6 +1033,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Am Donnerstag trinke ich Kaffee.",
     exampleSentenceEs: "El jueves bebo café.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Donnerstag", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "ich Kaffee", role: "complement", order: 3 }
+    ],
     plural: "die Donnerstage"
   }, {
     de: "Freitag",
@@ -677,6 +1047,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Am Freitag ist meine Party.",
     exampleSentenceEs: "El viernes es mi fiesta.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Freitag", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "meine Party", role: "complement", order: 3 }
+    ],
     plural: "die Freitage"
   }, {
     de: "Samstag",
@@ -686,6 +1061,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Am Samstag trinke ich Kaffee.",
     exampleSentenceEs: "El sábado bebo café.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Samstag", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "ich Kaffee", role: "complement", order: 3 }
+    ],
     plural: "die Samstage"
   }, {
     de: "Sonntag",
@@ -695,6 +1075,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Der Sonntag ist ein Tag.",
     exampleSentenceEs: "El domingo es un día.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Sonntag", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Tag", role: "complement", order: 3 }
+    ],
     plural: "die Sonntage"
   }, {
     de: "am + Tag",
@@ -704,6 +1089,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Am Montag habe ich frei.",
     exampleSentenceEs: "El lunes tengo libre.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Montag", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ich frei", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "das Wochenende",
@@ -713,6 +1103,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Das Wochenende ist am Samstag und am Sonntag.",
     exampleSentenceEs: "El fin de semana es el sábado y el domingo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wochenende", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "am Samstag und am Sonntag", role: "complement", order: 3 }
+    ],
     plural: "die Wochenenden"
   }, {
     de: "am Wochenende",
@@ -722,6 +1117,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Am Wochenende treffe ich Freunde.",
     exampleSentenceEs: "El fin de semana me encuentro con amigos.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Wochenende", role: "subject", order: 1 },
+      { text: "treffe", role: "verb_p1", order: 2 },
+      { text: "ich Freunde", role: "complement", order: 3 }
+    ],
     regimen: "am + dativo, fijo"
   }, {
     de: "der Feiertag",
@@ -731,6 +1131,11 @@ const rawChapters = [
     category: "Tage",
     exampleSentenceDe: "Heute ist ein Feiertag.",
     exampleSentenceEs: "Hoy es un día festivo.",
+    exampleSentenceDeBlocks: [
+      { text: "Heute", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Feiertag", role: "complement", order: 3 }
+    ],
     plural: "die Feiertage"
   }, {
     de: "das Jahr",
@@ -740,6 +1145,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Das Jahr ist neu.",
     exampleSentenceEs: "El año es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Jahr", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Jahre"
   }, {
     de: "der Monat",
@@ -749,6 +1159,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Dieser Monat ist lang.",
     exampleSentenceEs: "Este mes es largo.",
+    exampleSentenceDeBlocks: [
+      { text: "Dieser Monat", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "lang", role: "complement", order: 3 }
+    ],
     plural: "die Monate"
   }, {
     de: "Januar",
@@ -758,6 +1173,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der Januar ist der erste Monat.",
     exampleSentenceEs: "Enero es el primer mes.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Januar", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der erste Monat", role: "complement", order: 3 }
+    ],
     plural: "die Januare"
   }, {
     de: "Februar",
@@ -767,6 +1187,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der Februar ist ein Monat.",
     exampleSentenceEs: "Febrero es un mes.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Februar", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Monat", role: "complement", order: 3 }
+    ],
     plural: "die Februare"
   }, {
     de: "März",
@@ -776,6 +1201,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der dritte Monat ist März.",
     exampleSentenceEs: "El tercer mes es marzo.",
+    exampleSentenceDeBlocks: [
+      { text: "Der", role: "subject", order: 1 },
+      { text: "dritte", role: "verb_p1", order: 2 },
+      { text: "Monat ist März", role: "complement", order: 3 }
+    ],
     plural: "die Märze"
   }, {
     de: "April",
@@ -785,6 +1215,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der April ist ein Monat.",
     exampleSentenceEs: "Abril es un mes.",
+    exampleSentenceDeBlocks: [
+      { text: "Der April", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Monat", role: "complement", order: 3 }
+    ],
     plural: "die Aprile"
   }, {
     de: "Mai",
@@ -794,6 +1229,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der Mai ist ein schöner Monat.",
     exampleSentenceEs: "Mayo es un mes bonito.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Mai", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein schöner Monat", role: "complement", order: 3 }
+    ],
     plural: "die Maie"
   }, {
     de: "Juni",
@@ -803,6 +1243,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der Juni ist ein schöner Monat.",
     exampleSentenceEs: "Junio es un mes bonito.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Juni", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein schöner Monat", role: "complement", order: 3 }
+    ],
     plural: "die Junis"
   }, {
     de: "Juli",
@@ -812,6 +1257,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der Juli ist ein schöner Monat.",
     exampleSentenceEs: "Julio es un mes bonito.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Juli", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein schöner Monat", role: "complement", order: 3 }
+    ],
     plural: "die Julis"
   }, {
     de: "August",
@@ -821,6 +1271,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der Monat August ist der achte Monat.",
     exampleSentenceEs: "El mes de agosto es el octavo mes.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Monat August", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der achte Monat", role: "complement", order: 3 }
+    ],
     plural: "die Auguste"
   }, {
     de: "September",
@@ -830,6 +1285,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der September ist ein schöner Monat.",
     exampleSentenceEs: "Septiembre es un mes bonito.",
+    exampleSentenceDeBlocks: [
+      { text: "Der September", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein schöner Monat", role: "complement", order: 3 }
+    ],
     plural: "die Septembers"
   }, {
     de: "Oktober",
@@ -839,6 +1299,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Der Oktober ist ein Monat.",
     exampleSentenceEs: "Octubre es un mes.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Oktober", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Monat", role: "complement", order: 3 }
+    ],
     plural: "die Oktober"
   }, {
     de: "November",
@@ -848,6 +1313,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Im November ist es kalt.",
     exampleSentenceEs: "En noviembre hace frío.",
+    exampleSentenceDeBlocks: [
+      { text: "Im November", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "es kalt", role: "complement", order: 3 }
+    ],
     plural: "die November"
   }, {
     de: "Dezember",
@@ -857,6 +1327,11 @@ const rawChapters = [
     category: "Monate",
     exampleSentenceDe: "Wir haben im Dezember Geburtstag.",
     exampleSentenceEs: "Tenemos cumpleaños en diciembre.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "haben", role: "verb_p1", order: 2 },
+      { text: "im Dezember Geburtstag", role: "complement", order: 3 }
+    ],
     plural: "die Dezember"
   }, {
     de: "der Frühling",
@@ -866,6 +1341,11 @@ const rawChapters = [
     category: "Jahreszeiten",
     exampleSentenceDe: "Der Frühling ist schön.",
     exampleSentenceEs: "La primavera es bonita.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Frühling", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ],
     plural: "die Frühlinge"
   }, {
     de: "der Sommer",
@@ -875,6 +1355,11 @@ const rawChapters = [
     category: "Jahreszeiten",
     exampleSentenceDe: "Ich mag den Sommer. Der Sommer ist heiß.",
     exampleSentenceEs: "Me gusta el verano. El verano es caluroso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mag", role: "verb_p1", order: 2 },
+      { text: "den Sommer", role: "complement", order: 3 }
+    ],
     plural: "die Sommer"
   }, {
     de: "der Herbst",
@@ -884,6 +1369,11 @@ const rawChapters = [
     category: "Jahreszeiten",
     exampleSentenceDe: "Der Herbst ist schön.",
     exampleSentenceEs: "El otoño es bonito.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Herbst", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ],
     plural: "die Herbste"
   }, {
     de: "der Winter",
@@ -893,6 +1383,11 @@ const rawChapters = [
     category: "Jahreszeiten",
     exampleSentenceDe: "Der Winter ist kalt.",
     exampleSentenceEs: "El invierno es frío.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Winter", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "kalt", role: "complement", order: 3 }
+    ],
     plural: "die Winter"
   }, {
     de: "der Tag",
@@ -902,6 +1397,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Der Tag ist schön.",
     exampleSentenceEs: "El día es bonito.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Tag", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ],
     plural: "die Tage"
   }, {
     de: "der Morgen",
@@ -912,6 +1412,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Der Morgen ist schön.",
     exampleSentenceEs: "La mañana es bonita.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Morgen", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ],
     plural: "die Morgen"
   }, {
     de: "der Vormittag",
@@ -922,6 +1427,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Am Vormittag trinke ich Kaffee.",
     exampleSentenceEs: "Por la mañana, bebo café.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Vormittag", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "ich Kaffee", role: "complement", order: 3 }
+    ],
     plural: "die Vormittage"
   }, {
     de: "der Mittag",
@@ -932,6 +1442,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Wir essen um 12 Uhr zu Mittag.",
     exampleSentenceEs: "Comemos al mediodía a las 12.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "essen", role: "verb_p1", order: 2 },
+      { text: "um 12 Uhr zu Mittag", role: "complement", order: 3 }
+    ],
     plural: "die Mittage"
   }, {
     de: "der Nachmittag",
@@ -942,6 +1457,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Am Nachmittag trinke ich Kaffee.",
     exampleSentenceEs: "Por la tarde tomo café.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Nachmittag", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "ich Kaffee", role: "complement", order: 3 }
+    ],
     plural: "die Nachmittage"
   }, {
     de: "der Abend",
@@ -952,6 +1472,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Der Abend ist schön.",
     exampleSentenceEs: "La noche es bonita.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Abend", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ],
     plural: "die Abende"
   }, {
     de: "die Nacht",
@@ -962,6 +1487,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Die Nacht ist lang.",
     exampleSentenceEs: "La noche es larga.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Nacht", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "lang", role: "complement", order: 3 }
+    ],
     plural: "die Nächte"
   }, {
     de: "am Morgen",
@@ -972,6 +1502,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Ich trinke Kaffee am Morgen.",
     exampleSentenceEs: "Bebo café por la mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "Kaffee am Morgen", role: "complement", order: 3 }
+    ],
     regimen: "Fijo: am + Dativ"
   }, {
     de: "am Vormittag",
@@ -982,6 +1517,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Ich esse am Vormittag.",
     exampleSentenceEs: "Yo como por la mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "am Vormittag", role: "complement", order: 3 }
+    ],
     regimen: "am + Dativo"
   }, {
     de: "am Mittag",
@@ -992,6 +1532,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Ich esse am Mittag.",
     exampleSentenceEs: "Yo como al mediodía.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "am Mittag", role: "complement", order: 3 }
+    ],
     regimen: "am + Tageszeit"
   }, {
     de: "am Nachmittag",
@@ -1002,6 +1547,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Am Nachmittag trinke ich Kaffee.",
     exampleSentenceEs: "Por la tarde bebo café.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Nachmittag", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "ich Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "am + Tageszeit"
   }, {
     de: "am Abend",
@@ -1012,6 +1562,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Am Abend esse ich.",
     exampleSentenceEs: "Por la tarde como.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Abend", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "ich", role: "complement", order: 3 }
+    ],
     regimen: "Fijo: am + Tageszeit"
   }, {
     de: "in der Nacht",
@@ -1022,6 +1577,11 @@ const rawChapters = [
     category: "Tageszeiten",
     exampleSentenceDe: "Ich schlafe in der Nacht.",
     exampleSentenceEs: "Yo duermo en la noche.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schlafe", role: "verb_p1", order: 2 },
+      { text: "in der Nacht", role: "complement", order: 3 }
+    ],
     regimen: "Dat. + in/an/bei"
   }, {
     de: "die Uhrzeit",
@@ -1031,6 +1591,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Ich habe die Uhrzeit nicht.",
     exampleSentenceEs: "No tengo la hora.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Uhrzeit nicht", role: "complement", order: 3 }
+    ],
     plural: "die Uhrzeiten"
   }, {
     de: "Wann?",
@@ -1040,6 +1605,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Wann kommst du?",
     exampleSentenceEs: "¿Cuándo vienes?",
+    exampleSentenceDeBlocks: [
+      { text: "Wann", role: "subject", order: 1 },
+      { text: "kommst", role: "verb_p1", order: 2 },
+      { text: "du", role: "complement", order: 3 }
+    ],
     regimen: "Pron. interrogativo tiempo"
   }, {
     de: "Wie spät ist es?",
@@ -1049,6 +1619,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist zehn Uhr.",
     exampleSentenceEs: "Son las diez en punto.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "zehn Uhr", role: "complement", order: 3 }
+    ],
     regimen: "Fijo"
   }, {
     de: "Wie viel Uhr ist es?",
@@ -1058,6 +1633,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Ich habe eine Frage. Wie viel Uhr ist es?",
     exampleSentenceEs: "Tengo una pregunta. ¿Qué hora es?",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eine Frage", role: "complement", order: 3 }
+    ],
     regimen: "Fijo, hora"
   }, {
     de: "ein Uhr",
@@ -1067,6 +1647,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist ein Uhr.",
     exampleSentenceEs: "Es la una en punto.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Uhr", role: "complement", order: 3 }
+    ],
     regimen: "Es ist ein Uhr"
   }, {
     de: "halb zwei",
@@ -1076,6 +1661,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Der Zug fährt um halb zwei.",
     exampleSentenceEs: "El tren sale a la una y media.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Zug", role: "subject", order: 1 },
+      { text: "fährt", role: "verb_p1", order: 2 },
+      { text: "um halb zwei", role: "complement", order: 3 }
+    ],
     regimen: "Media hora antes"
   }, {
     de: "Viertel vor drei",
@@ -1085,6 +1675,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist Viertel vor drei.",
     exampleSentenceEs: "Son las tres menos cuarto.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "Viertel vor drei", role: "complement", order: 3 }
+    ],
     regimen: "Formal, hora exacta"
   }, {
     de: "kurz vor 4",
@@ -1094,6 +1689,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Wir treffen uns kurz vor 4.",
     exampleSentenceEs: "Nos encontramos poco antes de las 4.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "treffen", role: "verb_p1", order: 2 },
+      { text: "uns kurz vor 4", role: "complement", order: 3 }
+    ],
     regimen: "Fijo: hora"
   }, {
     de: "gleich 4",
@@ -1103,6 +1703,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist gleich vier Uhr.",
     exampleSentenceEs: "Son casi las cuatro.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gleich vier Uhr", role: "complement", order: 3 }
+    ],
     regimen: "Fijo"
   }, {
     de: "genau 4 Uhr",
@@ -1112,6 +1717,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Wir treffen uns um genau 4 Uhr.",
     exampleSentenceEs: "Nos vemos exactamente a las 4.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "treffen", role: "verb_p1", order: 2 },
+      { text: "uns um genau 4 Uhr", role: "complement", order: 3 }
+    ],
     regimen: "Uhrzeit fija"
   }, {
     de: "fünf nach 4",
@@ -1121,6 +1731,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Es ist fünf nach vier.",
     exampleSentenceEs: "Son las cuatro y cinco.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "fünf nach vier", role: "complement", order: 3 }
+    ],
     regimen: "nach + dat."
   }, {
     de: "um 3 Uhr",
@@ -1130,6 +1745,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Ich komme um 3 Uhr.",
     exampleSentenceEs: "Vengo a las 3.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "komme", role: "verb_p1", order: 2 },
+      { text: "um 3 Uhr", role: "complement", order: 3 }
+    ],
     regimen: "um + hora"
   }, {
     de: "von 2 bis 3 Uhr",
@@ -1139,6 +1759,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Der Kurs ist von 2 bis 3 Uhr.",
     exampleSentenceEs: "El curso es de 2 a 3.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Kurs", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "von 2 bis 3 Uhr", role: "complement", order: 3 }
+    ],
     regimen: "von + dat."
   }, {
     de: "ab 3 Uhr",
@@ -1148,6 +1773,11 @@ const rawChapters = [
     category: "Uhrzeit",
     exampleSentenceDe: "Wir essen ab 3 Uhr.",
     exampleSentenceEs: "Comemos a partir de las 3.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "essen", role: "verb_p1", order: 2 },
+      { text: "ab 3 Uhr", role: "complement", order: 3 }
+    ],
     regimen: "ab + dativo"
   }, {
     de: "anfangen",
@@ -1157,6 +1787,12 @@ const rawChapters = [
     category: "Alltag",
     exampleSentenceDe: "Wir fangen jetzt an.",
     exampleSentenceEs: "Empezamos ahora.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "fangen", role: "verb_p1", order: 2 },
+      { text: "jetzt", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (an-)"
   }, {
     de: "der Anfang",
@@ -1166,6 +1802,11 @@ const rawChapters = [
     category: "Alltag",
     exampleSentenceDe: "Der Anfang ist gut.",
     exampleSentenceEs: "El comienzo es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Anfang", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     plural: "die Anfänge"
   }, {
     de: "aufhören",
@@ -1175,6 +1816,12 @@ const rawChapters = [
     category: "Alltag",
     exampleSentenceDe: "Bitte, hören Sie auf. Ich möchte schlafen.",
     exampleSentenceEs: "Por favor, para. Quiero dormir.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte,", role: "subject", order: 1 },
+      { text: "hören", role: "verb_p1", order: 2 },
+      { text: "Sie", role: "complement", order: 3 },
+      { text: "auf", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (auf-)"
   }, {
     de: "das Ende",
@@ -1184,6 +1831,11 @@ const rawChapters = [
     category: "Alltag",
     exampleSentenceDe: "Der Film ist zu Ende.",
     exampleSentenceEs: "La película ha terminado.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Film", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "zu Ende", role: "complement", order: 3 }
+    ],
     plural: "die Enden"
   }, {
     de: "dauern",
@@ -1193,6 +1845,11 @@ const rawChapters = [
     category: "Alltag",
     exampleSentenceDe: "Die Reise dauert zwei Stunden.",
     exampleSentenceEs: "El viaje dura dos horas.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Reise", role: "subject", order: 1 },
+      { text: "dauert", role: "verb_p1", order: 2 },
+      { text: "zwei Stunden", role: "complement", order: 3 }
+    ],
     regimen: "Duración"
   }, {
     de: "der Alltag",
@@ -1202,6 +1859,11 @@ const rawChapters = [
     category: "Alltag",
     exampleSentenceDe: "Der Alltag ist normal.",
     exampleSentenceEs: "El día a día es normal.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Alltag", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "normal", role: "complement", order: 3 }
+    ],
     plural: "die Alltage"
   }, {
     de: "pünktlich",
@@ -1211,6 +1873,11 @@ const rawChapters = [
     category: "Alltag",
     exampleSentenceDe: "Der Zug ist pünktlich.",
     exampleSentenceEs: "El tren es puntual.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Zug", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "pünktlich", role: "complement", order: 3 }
+    ],
     regimen: "≠ unpünktlich"
   }, {
     de: "die Verspätung",
@@ -1220,6 +1887,11 @@ const rawChapters = [
     category: "Alltag",
     exampleSentenceDe: "Ich habe die Verspätung.",
     exampleSentenceEs: "Tengo el retraso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Verspätung", role: "complement", order: 3 }
+    ],
     plural: "die Verspätungen"
   }, {
     de: "regelmäßig",
@@ -1229,6 +1901,11 @@ const rawChapters = [
     category: "Alltag",
     exampleSentenceDe: "Ich trinke Wasser regelmäßig.",
     exampleSentenceEs: "Bebo agua regularmente.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "Wasser regelmäßig", role: "complement", order: 3 }
+    ],
     regimen: "Frecuencia"
   }]
 },
@@ -1245,6 +1922,11 @@ const rawChapters = [
     category: "Identität",
     exampleSentenceDe: "Wie ist Ihr Vorname?",
     exampleSentenceEs: "¿Cuál es su primer nombre?",
+    exampleSentenceDeBlocks: [
+      { text: "Wie", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "Ihr Vorname", role: "complement", order: 3 }
+    ],
     plural: "die Vornamen"
   }, {
     de: "der Nachname",
@@ -1254,6 +1936,11 @@ const rawChapters = [
     category: "Identität",
     exampleSentenceDe: "Mein Nachname ist Müller.",
     exampleSentenceEs: "Mi apellido es Müller.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Nachname", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "Müller", role: "complement", order: 3 }
+    ],
     plural: "die Nachnamen"
   }, {
     de: "heißen",
@@ -1263,6 +1950,11 @@ const rawChapters = [
     category: "Identität",
     exampleSentenceDe: "Ich heiße Maria.",
     exampleSentenceEs: "Yo me llamo María.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "heiße", role: "verb_p1", order: 2 },
+      { text: "Maria", role: "complement", order: 3 }
+    ],
     regimen: "+ Nominativo"
   }, {
     de: "buchstabieren",
@@ -1272,6 +1964,12 @@ const rawChapters = [
     category: "Identität",
     exampleSentenceDe: "Können Sie das bitte buchstabieren?",
     exampleSentenceEs: "¿Puede deletrear eso, por favor?",
+    exampleSentenceDeBlocks: [
+      { text: "Können", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "das bitte", role: "complement", order: 3 },
+      { text: "buchstabieren", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "die Frau",
@@ -1281,6 +1979,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Die Frau ist nett.",
     exampleSentenceEs: "La mujer es simpática.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Frau", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "nett", role: "complement", order: 3 }
+    ],
     plural: "die Frauen"
   }, {
     de: "der Mann",
@@ -1290,6 +1993,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Der Mann ist nett.",
     exampleSentenceEs: "El hombre es simpático.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Mann", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "nett", role: "complement", order: 3 }
+    ],
     plural: "die Männer"
   }, {
     de: "die Dame",
@@ -1299,6 +2007,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Hier ist die Dame. Die Dame ist nett.",
     exampleSentenceEs: "Aquí está la dama. La dama es simpática.",
+    exampleSentenceDeBlocks: [
+      { text: "Hier", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die Dame", role: "complement", order: 3 }
+    ],
     plural: "die Damen"
   }, {
     de: "der Herr",
@@ -1308,6 +2021,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Guten Tag, Herr Müller.",
     exampleSentenceEs: "Buenos días, señor Müller.",
+    exampleSentenceDeBlocks: [
+      { text: "Guten", role: "subject", order: 1 },
+      { text: "Tag,", role: "verb_p1", order: 2 },
+      { text: "Herr Müller", role: "complement", order: 3 }
+    ],
     plural: "die Herren"
   }, {
     de: "männlich / weiblich",
@@ -1317,6 +2035,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Ich bin männlich.",
     exampleSentenceEs: "Yo soy masculino.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "männlich", role: "complement", order: 3 }
+    ],
     regimen: "≠ weiblich / männlich"
   }, {
     de: "das Mädchen",
@@ -1326,6 +2049,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Das Mädchen ist klein.",
     exampleSentenceEs: "La niña es pequeña.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Mädchen", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "klein", role: "complement", order: 3 }
+    ],
     plural: "die Mädchen"
   }, {
     de: "der Junge",
@@ -1336,6 +2064,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Der Junge ist klein.",
     exampleSentenceEs: "El niño es pequeño.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Junge", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "klein", role: "complement", order: 3 }
+    ],
     plural: "die Jungen"
   }, {
     de: "die Adresse",
@@ -1345,6 +2078,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Das ist die Adresse.",
     exampleSentenceEs: "Esta es la dirección.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die Adresse", role: "complement", order: 3 }
+    ],
     plural: "die Adressen"
   }, {
     de: "der Wohnort",
@@ -1354,6 +2092,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Mein Wohnort ist Berlin.",
     exampleSentenceEs: "Mi lugar de residencia es Berlín.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Wohnort", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "Berlin", role: "complement", order: 3 }
+    ],
     plural: "die Wohnorte"
   }, {
     de: "wohnen / leben",
@@ -1363,6 +2106,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich wohne in Berlin.",
     exampleSentenceEs: "Yo vivo en Berlín.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wohne", role: "verb_p1", order: 2 },
+      { text: "in Berlin", role: "complement", order: 3 }
+    ],
     regimen: "wohnen+in/Dat"
   }, {
     de: "die Straße",
@@ -1372,6 +2120,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Die Straße ist lang.",
     exampleSentenceEs: "La calle es larga.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Straße", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "lang", role: "complement", order: 3 }
+    ],
     plural: "die Straßen"
   }, {
     de: "der Platz",
@@ -1381,6 +2134,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich sitze auf dem Platz.",
     exampleSentenceEs: "Yo estoy sentado en la plaza.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sitze", role: "verb_p1", order: 2 },
+      { text: "auf dem Platz", role: "complement", order: 3 }
+    ],
     plural: "die Plätze"
   }, {
     de: "die Nummer",
@@ -1390,6 +2148,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich habe die Nummer. Die Nummer ist eins.",
     exampleSentenceEs: "Tengo el número. El número es uno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Nummer", role: "complement", order: 3 }
+    ],
     plural: "die Nummern"
   }, {
     de: "die Stadt",
@@ -1399,6 +2162,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Das ist die Stadt. Die Stadt ist groß.",
     exampleSentenceEs: "Esta es la ciudad. La ciudad es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die Stadt", role: "complement", order: 3 }
+    ],
     plural: "die Städte"
   }, {
     de: "die Postleitzahl",
@@ -1408,6 +2176,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich brauche die Postleitzahl von Berlin.",
     exampleSentenceEs: "Necesito el código postal de Berlín.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "die Postleitzahl von Berlin", role: "complement", order: 3 }
+    ],
     plural: "die Postleitzahlen"
   }, {
     de: "das Dorf / das Land",
@@ -1417,6 +2190,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich wohne in einem Dorf. Das Dorf ist klein.",
     exampleSentenceEs: "Yo vivo en un pueblo. El pueblo es pequeño.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wohne", role: "verb_p1", order: 2 },
+      { text: "in einem Dorf", role: "complement", order: 3 }
+    ],
     plural: "die Dörfer / die Länder"
   }, {
     de: "das Telefon",
@@ -1426,6 +2204,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Das ist mein Telefon.",
     exampleSentenceEs: "Este es mi teléfono.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Telefon", role: "complement", order: 3 }
+    ],
     plural: "die Telefone"
   }, {
     de: "telefonieren / anrufen",
@@ -1435,6 +2218,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich telefoniere mit meiner Mutter.",
     exampleSentenceEs: "Yo hablo por teléfono con mi madre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "telefoniere", role: "verb_p1", order: 2 },
+      { text: "mit meiner Mutter", role: "complement", order: 3 }
+    ],
     regimen: "anrufen: separable, +Akk"
   }, {
     de: "die E-Mail",
@@ -1444,6 +2232,11 @@ const rawChapters = [
     category: "Kontaktdaten",
     exampleSentenceDe: "Ich habe die E-Mail. Die E-Mail ist neu.",
     exampleSentenceEs: "Tengo el correo electrónico. El correo electrónico es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die E-Mail", role: "complement", order: 3 }
+    ],
     plural: "die E-Mails"
   }, {
     de: "Ich bin geboren am...",
@@ -1453,6 +2246,11 @@ const rawChapters = [
     category: "Lebenslauf",
     exampleSentenceDe: "Ich bin geboren am fünften Mai.",
     exampleSentenceEs: "Nací el cinco de mayo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "geboren am fünften Mai", role: "complement", order: 3 }
+    ],
     regimen: "+ fecha (am)"
   }, {
     de: "das Geburtsdatum",
@@ -1462,6 +2260,11 @@ const rawChapters = [
     category: "Lebenslauf",
     exampleSentenceDe: "Mein Geburtsdatum ist der zehnte Mai.",
     exampleSentenceEs: "Mi fecha de nacimiento es el diez de mayo.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Geburtsdatum", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der zehnte Mai", role: "complement", order: 3 }
+    ],
     plural: "die Geburtsdaten"
   }, {
     de: "der Geburtstag",
@@ -1471,6 +2274,11 @@ const rawChapters = [
     category: "Lebenslauf",
     exampleSentenceDe: "Heute ist mein Geburtstag.",
     exampleSentenceEs: "Hoy es mi cumpleaños.",
+    exampleSentenceDeBlocks: [
+      { text: "Heute", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Geburtstag", role: "complement", order: 3 }
+    ],
     plural: "die Geburtstage"
   }, {
     de: "geboren in",
@@ -1480,6 +2288,11 @@ const rawChapters = [
     category: "Lebenslauf",
     exampleSentenceDe: "Ich bin geboren in Spanien.",
     exampleSentenceEs: "Yo nací en España.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "geboren in Spanien", role: "complement", order: 3 }
+    ],
     regimen: "+ Dat."
   }, {
     de: "Jahre alt sein",
@@ -1489,6 +2302,11 @@ const rawChapters = [
     category: "Lebenslauf",
     exampleSentenceDe: "Ich bin 30 Jahre alt.",
     exampleSentenceEs: "Tengo 30 años.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "30 Jahre alt", role: "complement", order: 3 }
+    ],
     regimen: "Número + Jahre alt"
   }, {
     de: "die Familie",
@@ -1498,6 +2316,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Das ist meine Familie.",
     exampleSentenceEs: "Esta es mi familia.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "meine Familie", role: "complement", order: 3 }
+    ],
     plural: "die Familien"
   }, {
     de: "der Familienstand",
@@ -1507,6 +2330,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Mein Familienstand ist ledig.",
     exampleSentenceEs: "Mi estado civil es soltero.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Familienstand", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ledig", role: "complement", order: 3 }
+    ],
     plural: "die Familienstände"
   }, {
     de: "verheiratet / ledig",
@@ -1517,6 +2345,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Ich bin ledig.",
     exampleSentenceEs: "Yo soy soltero/a.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "ledig", role: "complement", order: 3 }
+    ],
     regimen: "≠ ledig / verheiratet"
   }, {
     de: "heiraten",
@@ -1527,6 +2360,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Ich möchte heiraten.",
     exampleSentenceEs: "Quiero casarme.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "heiraten", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "die Ehefrau / der Ehemann",
@@ -1537,6 +2375,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Das ist meine Ehefrau.",
     exampleSentenceEs: "Ella es mi esposa.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "meine Ehefrau", role: "complement", order: 3 }
+    ],
     plural: "die Ehefrauen / die Ehemänner"
   }, {
     de: "die Hochzeit",
@@ -1547,6 +2390,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Die Hochzeit ist morgen.",
     exampleSentenceEs: "La boda es mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Hochzeit", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "morgen", role: "complement", order: 3 }
+    ],
     plural: "die Hochzeiten"
   }, {
     de: "der Vater / die Mutter",
@@ -1557,6 +2405,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Das ist mein Vater.",
     exampleSentenceEs: "Este es mi padre.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Vater", role: "complement", order: 3 }
+    ],
     plural: "die Väter / die Mütter"
   }, {
     de: "die Eltern",
@@ -1567,6 +2420,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Meine Eltern sind nett.",
     exampleSentenceEs: "Mis padres son amables.",
+    exampleSentenceDeBlocks: [
+      { text: "Meine Eltern", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "nett", role: "complement", order: 3 }
+    ],
     plural: "die Eltern"
   }, {
     de: "das Kind / Baby",
@@ -1577,6 +2435,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Das Kind ist klein.",
     exampleSentenceEs: "El niño es pequeño.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Kind", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "klein", role: "complement", order: 3 }
+    ],
     plural: "die Kinder / Babys"
   }, {
     de: "der Sohn / die Tochter",
@@ -1587,6 +2450,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Ich habe einen Sohn. Mein Sohn ist klein.",
     exampleSentenceEs: "Tengo un hijo. Mi hijo es pequeño.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Sohn", role: "complement", order: 3 }
+    ],
     plural: "die Söhne / die Töchter"
   }, {
     de: "der Bruder / Schwester",
@@ -1597,6 +2465,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Ich habe einen Bruder. Mein Bruder ist nett.",
     exampleSentenceEs: "Tengo un hermano. Mi hermano es simpático.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Bruder", role: "complement", order: 3 }
+    ],
     plural: "die Brüder / Schwestern"
   }, {
     de: "die Geschwister",
@@ -1607,6 +2480,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Ich habe zwei Geschwister.",
     exampleSentenceEs: "Yo tengo dos hermanos.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "zwei Geschwister", role: "complement", order: 3 }
+    ],
     plural: "die Geschwister"
   }, {
     de: "die Oma / der Opa",
@@ -1617,6 +2495,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Das ist die Oma. Die Oma ist nett.",
     exampleSentenceEs: "Esta es la abuela. La abuela es simpática.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die Oma", role: "complement", order: 3 }
+    ],
     plural: "die Omas / die Opas"
   }, {
     de: "die Großeltern",
@@ -1627,6 +2510,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Meine Großeltern sind alt.",
     exampleSentenceEs: "Mis abuelos son mayores.",
+    exampleSentenceDeBlocks: [
+      { text: "Meine Großeltern", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "alt", role: "complement", order: 3 }
+    ],
     plural: "die Großeltern"
   }, {
     de: "die Verwandten",
@@ -1637,6 +2525,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Ich habe Verwandte. Meine Verwandten sind nett.",
     exampleSentenceEs: "Tengo parientes. Mis parientes son amables.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Verwandte", role: "complement", order: 3 }
+    ],
     plural: "die Verwandten"
   }, {
     de: "der Freund / Freundin",
@@ -1647,6 +2540,11 @@ const rawChapters = [
     category: "Soziales",
     exampleSentenceDe: "Das ist mein Freund.",
     exampleSentenceEs: "Este es mi amigo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Freund", role: "complement", order: 3 }
+    ],
     plural: "die Freunde / Freundinnen"
   }, {
     de: "der/die Bekannte",
@@ -1657,6 +2555,11 @@ const rawChapters = [
     category: "Soziales",
     exampleSentenceDe: "Das ist mein Bekannter.",
     exampleSentenceEs: "Este es mi conocido.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Bekannter", role: "complement", order: 3 }
+    ],
     plural: "die Bekannten"
   }, {
     de: "der/die Erwachsene",
@@ -1667,6 +2570,11 @@ const rawChapters = [
     category: "Soziales",
     exampleSentenceDe: "Ich bin ein Erwachsener.",
     exampleSentenceEs: "Yo soy un adulto.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "ein Erwachsener", role: "complement", order: 3 }
+    ],
     plural: "die Erwachsenen"
   }, {
     de: "der Jugendliche",
@@ -1676,6 +2584,11 @@ const rawChapters = [
     category: "Soziales",
     exampleSentenceDe: "Der Jugendliche ist hier.",
     exampleSentenceEs: "El joven está aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Jugendliche", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 }
+    ],
     plural: "die Jugendlichen"
   }, {
     de: "der Pass / Reisepass",
@@ -1685,6 +2598,11 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich habe den Reisepass.",
     exampleSentenceEs: "Yo tengo el pasaporte.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "den Reisepass", role: "complement", order: 3 }
+    ],
     plural: "die Pässe / Reisepässe"
   }, {
     de: "der Ausweis",
@@ -1694,6 +2612,11 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich brauche den Ausweis, bitte.",
     exampleSentenceEs: "Necesito el documento de identidad, por favor.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "den Ausweis, bitte", role: "complement", order: 3 }
+    ],
     plural: "die Ausweise"
   }, {
     de: "die Papiere",
@@ -1703,6 +2626,11 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich habe die Papiere. Die Papiere sind wichtig.",
     exampleSentenceEs: "Tengo los papeles. Los papeles son importantes.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Papiere", role: "complement", order: 3 }
+    ],
     plural: "die Papiere"
   }, {
     de: "das Formular",
@@ -1712,6 +2640,11 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich habe das Formular. Das Formular ist neu.",
     exampleSentenceEs: "Tengo el formulario. El formulario es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Formular", role: "complement", order: 3 }
+    ],
     plural: "die Formulare"
   }, {
     de: "ausfüllen",
@@ -1721,6 +2654,12 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich muss das Formular ausfüllen.",
     exampleSentenceEs: "Yo debo rellenar el formulario.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "das Formular", role: "complement", order: 3 },
+      { text: "ausfüllen", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (aus-)"
   }, {
     de: "die Staatsangehörigkeit",
@@ -1730,6 +2669,11 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich habe eine Frage zur Staatsangehörigkeit.",
     exampleSentenceEs: "Tengo una pregunta sobre la nacionalidad.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eine Frage zur Staatsangehörigkeit", role: "complement", order: 3 }
+    ],
     plural: "die Staatsangehörigkeiten"
   }, {
     de: "der Führerschein",
@@ -1739,6 +2683,11 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich brauche den Führerschein.",
     exampleSentenceEs: "Yo necesito la licencia de conducir.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "den Führerschein", role: "complement", order: 3 }
+    ],
     plural: "die Führerscheine"
   }, {
     de: "unterschreiben",
@@ -1748,6 +2697,12 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich muss den Vertrag unterschreiben.",
     exampleSentenceEs: "Yo debo firmar el contrato.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "den Vertrag", role: "complement", order: 3 },
+      { text: "unterschreiben", role: "verb_p2", order: 4 }
+    ],
     regimen: "No separable, + Akkusativ"
   }, {
     de: "die Unterschrift",
@@ -1757,6 +2712,11 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich brauche die Unterschrift hier.",
     exampleSentenceEs: "Necesito la firma aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "die Unterschrift hier", role: "complement", order: 3 }
+    ],
     plural: "die Unterschriften"
   }, {
     de: "das Alter",
@@ -1766,6 +2726,11 @@ const rawChapters = [
     category: "Lebenslauf",
     exampleSentenceDe: "Mein Alter ist zwanzig.",
     exampleSentenceEs: "Mi edad es veinte.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Alter", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "zwanzig", role: "complement", order: 3 }
+    ],
     plural: "die Alter"
   }, {
     de: "der Geburtsort",
@@ -1775,6 +2740,11 @@ const rawChapters = [
     category: "Lebenslauf",
     exampleSentenceDe: "Mein Geburtsort ist Berlin.",
     exampleSentenceEs: "Mi lugar de nacimiento es Berlín.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Geburtsort", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "Berlin", role: "complement", order: 3 }
+    ],
     plural: "die Geburtsorte"
   }, {
     de: "geschieden",
@@ -1784,6 +2754,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Er ist geschieden.",
     exampleSentenceEs: "Él está divorciado.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "geschieden", role: "complement", order: 3 }
+    ],
     regimen: "≠ verheiratet"
   }, {
     de: "verwitwet",
@@ -1793,6 +2768,11 @@ const rawChapters = [
     category: "Familie",
     exampleSentenceDe: "Mein Großvater ist verwitwet.",
     exampleSentenceEs: "Mi abuelo es viudo.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Großvater", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "verwitwet", role: "complement", order: 3 }
+    ],
     regimen: "≠ verheiratet"
   }, {
     de: "der Ausländer",
@@ -1802,6 +2782,11 @@ const rawChapters = [
     category: "Gesellschaft",
     exampleSentenceDe: "Ich bin ein Ausländer.",
     exampleSentenceEs: "Yo soy un extranjero.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "ein Ausländer", role: "complement", order: 3 }
+    ],
     plural: "die Ausländer"
   }, {
     de: "die Gesellschaft",
@@ -1811,6 +2796,11 @@ const rawChapters = [
     category: "Gesellschaft",
     exampleSentenceDe: "Die Gesellschaft ist groß.",
     exampleSentenceEs: "La sociedad es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Gesellschaft", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Gesellschaften"
   }, {
     de: "der Rentner",
@@ -1820,6 +2810,11 @@ const rawChapters = [
     category: "Gesellschaft",
     exampleSentenceDe: "Der Rentner ist alt.",
     exampleSentenceEs: "El jubilado es viejo.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Rentner", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "alt", role: "complement", order: 3 }
+    ],
     plural: "die Rentner"
   }, {
     de: "sich freuen",
@@ -1829,6 +2824,11 @@ const rawChapters = [
     category: "Gefühle",
     exampleSentenceDe: "Ich freue mich auf den Urlaub.",
     exampleSentenceEs: "Yo me alegro de las vacaciones.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "freue", role: "verb_p1", order: 2 },
+      { text: "mich auf den Urlaub", role: "complement", order: 3 }
+    ],
     regimen: "Reflexivo + auf/über+Akk"
   }, {
     de: "das Gefühl",
@@ -1838,6 +2838,11 @@ const rawChapters = [
     category: "Gefühle",
     exampleSentenceDe: "Ich habe das Gefühl.",
     exampleSentenceEs: "Tengo el sentimiento.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Gefühl", role: "complement", order: 3 }
+    ],
     plural: "die Gefühle"
   },
   {
@@ -1847,8 +2852,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Soziales",
     regimen: "Separable (mit-) / + Dativo + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich bringe einen Kuchen mit.",
+    exampleSentenceEs: "Traigo un pastel.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bringe", role: "verb_p1", order: 2 },
+      { text: "einen Kuchen", role: "complement", order: 3 },
+      { text: "mit", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "kennenlernen",
     pron: "ké-nen-lea-nen",
@@ -1856,8 +2867,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Soziales",
     regimen: "Separable (kennen-) / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich lerne meine Nachbarn kennen.",
+    exampleSentenceEs: "Conozco a mis vecinos.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lerne", role: "verb_p1", order: 2 },
+      { text: "meine Nachbarn", role: "complement", order: 3 },
+      { text: "kennen", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "einladen",
     pron: "áin-la-den",
@@ -1865,8 +2882,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Soziales",
     regimen: "Separable (ein-) / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Wir laden viele Freunde ein.",
+    exampleSentenceEs: "Invitamos a muchos amigos.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "laden", role: "verb_p1", order: 2 },
+      { text: "viele Freunde", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "feiern",
     pron: "fái-ean",
@@ -1874,8 +2897,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Soziales",
     regimen: "+ Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Wir feiern heute eine Party.",
+    exampleSentenceEs: "Celebramos una fiesta hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir feiern", role: "subject", order: 1 },
+      { text: "heute", role: "verb_p1", order: 2 },
+      { text: "eine Party", role: "complement", order: 3 }
+    ]
   }, {
         de: "schenken",
     pron: "shén-ken",
@@ -1883,8 +2911,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Soziales",
     regimen: "Dativo (a quién) + Akkusativ (qué)",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich schenke meiner Mutter Blumen.",
+    exampleSentenceEs: "Le regalo flores a mi madre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schenke", role: "verb_p1", order: 2 },
+      { text: "meiner Mutter Blumen", role: "complement", order: 3 }
+    ]
   }, {
         de: "gratulieren",
     pron: "gra-tu-lí-ren",
@@ -1892,8 +2925,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Soziales",
     regimen: "⚠️ Exige Dativo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich gratuliere dir zum Geburtstag.",
+    exampleSentenceEs: "Te felicito por tu cumpleaños.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gratuliere", role: "verb_p1", order: 2 },
+      { text: "dir zum Geburtstag", role: "complement", order: 3 }
+    ]
   }, {
         de: "danken",
     pron: "dán-ken",
@@ -1901,8 +2939,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Soziales",
     regimen: "⚠️ Exige Dativo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich danke dir für alles.",
+    exampleSentenceEs: "Te agradezco por todo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "danke", role: "verb_p1", order: 2 },
+      { text: "dir für alles", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Feuerwehr",
     pron: "di fói-ea-vea",
@@ -1910,8 +2953,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Gesellschaft",
     plural: "die Feuerwehren",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Feuerwehr kommt sehr schnell.",
+    exampleSentenceEs: "Los bomberos vienen muy rápido.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Feuerwehr", role: "subject", order: 1 },
+      { text: "kommt", role: "verb_p1", order: 2 },
+      { text: "sehr schnell", role: "complement", order: 3 }
+    ]
   },
     {
       de: "das Bürgeramt",
@@ -1923,6 +2971,12 @@ const rawChapters = [
       plural: "die Bürgerämter",
       exampleSentenceDe: "Ich muss zum Bürgeramt für meine Anmeldung gehen.",
       exampleSentenceEs: "Tengo que ir a la oficina de atención ciudadana para mi empadronamiento.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "zum Bürgeramt für meine Anmeldung", role: "complement", order: 3 },
+      { text: "gehen", role: "verb_p2", order: 4 }
+    ],
       en: "a cute 3D municipal citizen city hall office building"
     },
     {
@@ -1935,6 +2989,11 @@ const rawChapters = [
       plural: "die Meldebescheinigungen",
       exampleSentenceDe: "Die Bank verlangt eine aktuelle Meldebescheinigung.",
       exampleSentenceEs: "El banco exige un certificado de empadronamiento actual.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Bank", role: "subject", order: 1 },
+      { text: "verlangt", role: "verb_p1", order: 2 },
+      { text: "eine aktuelle Meldebescheinigung", role: "complement", order: 3 }
+    ],
       en: "official paper registration certificate document with seal stamp"
     },
     {
@@ -1947,6 +3006,11 @@ const rawChapters = [
       plural: "die Aufenthaltstitel",
       exampleSentenceDe: "Mein Aufenthaltstitel ist für zwei Jahre gültig.",
       exampleSentenceEs: "Mi permiso de residencia es válido por dos años.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Aufenthaltstitel", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "für zwei Jahre gültig", role: "complement", order: 3 }
+    ],
       en: "plastic biometric residence permit card"
     },
     {
@@ -1959,6 +3023,11 @@ const rawChapters = [
       plural: "die Anträge",
       exampleSentenceDe: "Ich habe den Antrag auf Kindergeld gestellt.",
       exampleSentenceEs: "He presentado la solicitud del subsidio familiar.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "den Antrag auf Kindergeld gestellt", role: "complement", order: 3 }
+    ],
       en: "official application form document paper"
     },
     {
@@ -1971,6 +3040,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich möchte einen neuen Pass beantragen.",
       exampleSentenceEs: "Quisiera solicitar un nuevo pasaporte.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "einen neuen Pass", role: "complement", order: 3 },
+      { text: "beantragen", role: "verb_p2", order: 4 }
+    ],
       en: "filling out and applying for official application"
     },
     {
@@ -1983,6 +3058,11 @@ const rawChapters = [
       plural: "die Behörden",
       exampleSentenceDe: "Der Brief kommt direkt von der Behörde.",
       exampleSentenceEs: "La carta proviene directamente del organismo público.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Brief", role: "subject", order: 1 },
+      { text: "kommt", role: "verb_p1", order: 2 },
+      { text: "direkt von der Behörde", role: "complement", order: 3 }
+    ],
       en: "government authority administration building"
     },
     {
@@ -1995,6 +3075,11 @@ const rawChapters = [
       plural: "die Steuer-IDs",
       exampleSentenceDe: "Der Arbeitgeber braucht Ihre Steuer-ID.",
       exampleSentenceEs: "El empleador necesita su número de identificación fiscal.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Arbeitgeber", role: "subject", order: 1 },
+      { text: "braucht", role: "verb_p1", order: 2 },
+      { text: "Ihre Steuer-ID", role: "complement", order: 3 }
+    ],
       en: "tax identification number card with digits"
     },
     {
@@ -2007,6 +3092,11 @@ const rawChapters = [
       plural: "die Fristen",
       exampleSentenceDe: "Bitte beachten Sie die Frist von zwei Wochen.",
       exampleSentenceEs: "Por favor, tenga en cuenta el plazo de dos semanas.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "beachten", role: "verb_p1", order: 2 },
+      { text: "Sie die Frist von zwei Wochen", role: "complement", order: 3 }
+    ],
       en: "calendar with a strict circled deadline date"
     },
     {
@@ -2019,6 +3109,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Welcher Sachbearbeiter ist für mich zuständig?",
       exampleSentenceEs: "¿Qué funcionario es el encargado de mi caso?",
+    exampleSentenceDeBlocks: [
+      { text: "Welcher Sachbearbeiter", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "für mich zuständig", role: "complement", order: 3 }
+    ],
       en: "helpful officer at customer service desk"
     }]
 },
@@ -2035,6 +3130,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich bin hier.",
     exampleSentenceEs: "Yo estoy aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 }
+    ],
     regimen: "+ Nominativ"
   }, {
     de: "haben",
@@ -2044,6 +3144,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich habe Hunger.",
     exampleSentenceEs: "Yo tengo hambre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Hunger", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "werden",
@@ -2053,6 +3158,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich werde Arzt.",
     exampleSentenceEs: "Yo seré médico.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "werde", role: "verb_p1", order: 2 },
+      { text: "Arzt", role: "complement", order: 3 }
+    ],
     regimen: "+ Nominativ (predicado)"
   }, {
     de: "machen",
@@ -2062,6 +3172,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich mache einen Kaffee.",
     exampleSentenceEs: "Yo hago un café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "einen Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "tun",
@@ -2071,6 +3186,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Was tust du heute?",
     exampleSentenceEs: "¿Qué haces hoy?",
+    exampleSentenceDeBlocks: [
+      { text: "Was", role: "subject", order: 1 },
+      { text: "tust", role: "verb_p1", order: 2 },
+      { text: "du heute", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "sagen",
@@ -2080,6 +3200,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich sage \"Hallo\".",
     exampleSentenceEs: "Yo digo \"Hola\".",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sage", role: "verb_p1", order: 2 },
+      { text: "\"Hallo\"", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativ + Akkusativ"
   }, {
     de: "gehen",
@@ -2089,6 +3214,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich gehe nach Hause.",
     exampleSentenceEs: "Yo voy a casa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "nach Hause", role: "complement", order: 3 }
+    ],
     regimen: "+ Nominativ"
   }, {
     de: "kommen",
@@ -2098,6 +3228,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich komme aus Spanien.",
     exampleSentenceEs: "Yo vengo de España.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "komme", role: "verb_p1", order: 2 },
+      { text: "aus Spanien", role: "complement", order: 3 }
+    ],
     regimen: "aus/von + Dativo"
   }, {
     de: "sehen",
@@ -2107,6 +3242,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich sehe den Mann.",
     exampleSentenceEs: "Yo veo al hombre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "den Mann", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "wissen",
@@ -2116,6 +3256,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich weiß die Antwort.",
     exampleSentenceEs: "Yo sé la respuesta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "weiß", role: "verb_p1", order: 2 },
+      { text: "die Antwort", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ; ich weiß"
   }, {
     de: "kennen",
@@ -2125,6 +3270,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich kenne den Mann.",
     exampleSentenceEs: "Yo conozco al hombre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kenne", role: "verb_p1", order: 2 },
+      { text: "den Mann", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "finden",
@@ -2134,6 +3284,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich finde das Buch gut.",
     exampleSentenceEs: "Yo encuentro el libro bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "finde", role: "verb_p1", order: 2 },
+      { text: "das Buch gut", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "bleiben",
@@ -2143,6 +3298,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich bleibe hier.",
     exampleSentenceEs: "Yo me quedo aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bleibe", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 }
+    ],
     regimen: "+ sein, irr. (blieb)"
   }, {
     de: "lassen",
@@ -2152,6 +3312,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich lasse das Fenster offen.",
     exampleSentenceEs: "Yo dejo la ventana abierta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lasse", role: "verb_p1", order: 2 },
+      { text: "das Fenster offen", role: "complement", order: 3 }
+    ],
     regimen: "+ Akk. (er lässt)"
   }, {
     de: "denken",
@@ -2161,6 +3326,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich denke an dich.",
     exampleSentenceEs: "Pienso en ti.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "denke", role: "verb_p1", order: 2 },
+      { text: "an dich", role: "complement", order: 3 }
+    ],
     regimen: "an/über + Akkusativ"
   }, {
     de: "groß / klein",
@@ -2170,6 +3340,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Das Haus ist groß. Das Haus ist nicht klein.",
     exampleSentenceEs: "La casa es grande. La casa no es pequeña.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Haus", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     regimen: "≠ klein"
   }, {
     de: "gut / schlecht",
@@ -2179,6 +3354,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Das Essen ist gut.",
     exampleSentenceEs: "La comida está buena.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "Essen", role: "verb_p1", order: 2 },
+      { text: "ist gut", role: "complement", order: 3 }
+    ],
     regimen: "≠ schlecht / gut"
   }, {
     de: "neu / alt",
@@ -2188,6 +3368,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Mein Haus ist alt. Aber mein Auto ist neu.",
     exampleSentenceEs: "Mi casa es vieja. Pero mi coche es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Haus", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "alt", role: "complement", order: 3 }
+    ],
     regimen: "≠ alt / neu"
   }, {
     de: "schön / hässlich",
@@ -2197,6 +3382,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Das Haus ist schön.",
     exampleSentenceEs: "La casa es bonita.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Haus", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ],
     regimen: "≠ hässlich"
   }, {
     de: "schwer / leicht",
@@ -2206,6 +3396,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Der Koffer ist schwer.",
     exampleSentenceEs: "La maleta es pesada.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Koffer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schwer", role: "complement", order: 3 }
+    ],
     regimen: "≠ leicht / schwer"
   }, {
     de: "richtig / falsch",
@@ -2215,6 +3410,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Das ist richtig.",
     exampleSentenceEs: "Eso es correcto.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "richtig", role: "complement", order: 3 }
+    ],
     regimen: "≠ falsch"
   }, {
     de: "wichtig",
@@ -2224,6 +3424,11 @@ const rawChapters = [
     category: "Adjektive",
     exampleSentenceDe: "Das ist wichtig.",
     exampleSentenceEs: "Esto es importante.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "wichtig", role: "complement", order: 3 }
+    ],
     regimen: "≠ unwichtig"
   }, {
     de: "einfach / schwierig",
@@ -2233,6 +3438,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Die Aufgabe ist einfach.",
     exampleSentenceEs: "La tarea es fácil.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Aufgabe", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "einfach", role: "complement", order: 3 }
+    ],
     regimen: "≠ schwierig / einfach"
   }, {
     de: "schnell / langsam",
@@ -2242,6 +3452,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Das Auto ist schnell.",
     exampleSentenceEs: "El coche es rápido.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schnell", role: "complement", order: 3 }
+    ],
     regimen: "≠ langsam / schnell"
   }, {
     de: "laut / leise",
@@ -2251,6 +3466,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Das Radio ist laut. Ich mache das Radio leise.",
     exampleSentenceEs: "La radio está alta. Yo pongo la radio silenciosa.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Radio", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "laut", role: "complement", order: 3 }
+    ],
     regimen: "≠ leise / laut"
   }, {
     de: "hell / dunkel",
@@ -2260,6 +3480,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Das Licht ist hell.",
     exampleSentenceEs: "La luz es clara.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Licht", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hell", role: "complement", order: 3 }
+    ],
     regimen: "hell ≠ dunkel"
   }, {
     de: "heiß / kalt",
@@ -2269,6 +3494,11 @@ const rawChapters = [
     category: "Gegensätze",
     exampleSentenceDe: "Das Wasser ist heiß.",
     exampleSentenceEs: "El agua está caliente.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wasser", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "heiß", role: "complement", order: 3 }
+    ],
     regimen: "≠ kalt / heiß"
   }, {
     de: "können",
@@ -2278,6 +3508,12 @@ const rawChapters = [
     category: "Modalverben",
     exampleSentenceDe: "Ich kann Deutsch sprechen.",
     exampleSentenceEs: "Yo puedo hablar alemán.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kann", role: "verb_p1", order: 2 },
+      { text: "Deutsch", role: "complement", order: 3 },
+      { text: "sprechen", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Infinitiv (sin zu)"
   }, {
     de: "müssen",
@@ -2287,6 +3523,12 @@ const rawChapters = [
     category: "Modalverben",
     exampleSentenceDe: "Ich muss jetzt nach Hause gehen.",
     exampleSentenceEs: "Yo tengo que ir a casa ahora.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "jetzt nach Hause", role: "complement", order: 3 },
+      { text: "gehen", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Infinitiv (sin zu)"
   }, {
     de: "dürfen",
@@ -2296,6 +3538,12 @@ const rawChapters = [
     category: "Modalverben",
     exampleSentenceDe: "Hier dürfen Sie parken.",
     exampleSentenceEs: "Aquí puede aparcar.",
+    exampleSentenceDeBlocks: [
+      { text: "Hier", role: "subject", order: 1 },
+      { text: "dürfen", role: "verb_p1", order: 2 },
+      { text: "Sie", role: "complement", order: 3 },
+      { text: "parken", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Infinitiv sin zu"
   }, {
     de: "sollen",
@@ -2305,6 +3553,12 @@ const rawChapters = [
     category: "Modalverben",
     exampleSentenceDe: "Du sollst Wasser trinken.",
     exampleSentenceEs: "Tú deberías beber agua.",
+    exampleSentenceDeBlocks: [
+      { text: "Du", role: "subject", order: 1 },
+      { text: "sollst", role: "verb_p1", order: 2 },
+      { text: "Wasser", role: "complement", order: 3 },
+      { text: "trinken", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Infinitiv (ohne zu)"
   }, {
     de: "wollen",
@@ -2314,6 +3568,11 @@ const rawChapters = [
     category: "Modalverben",
     exampleSentenceDe: "Ich will einen Kaffee.",
     exampleSentenceEs: "Yo quiero un café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "will", role: "verb_p1", order: 2 },
+      { text: "einen Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "+ Infinitiv (sin zu)"
   }, {
     de: "mögen",
@@ -2323,6 +3582,11 @@ const rawChapters = [
     category: "Modalverben",
     exampleSentenceDe: "Ich mag Kaffee.",
     exampleSentenceEs: "Me gusta el café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mag", role: "verb_p1", order: 2 },
+      { text: "Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "möchten",
@@ -2332,6 +3596,11 @@ const rawChapters = [
     category: "Modalverben",
     exampleSentenceDe: "Ich möchte einen Kaffee.",
     exampleSentenceEs: "Yo quisiera un café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "einen Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ / + Infinitiv"
   }, {
     de: "geben",
@@ -2341,6 +3610,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich gebe dir mein Buch.",
     exampleSentenceEs: "Yo te doy mi libro.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gebe", role: "verb_p1", order: 2 },
+      { text: "dir mein Buch", role: "complement", order: 3 }
+    ],
     regimen: "Dativo (a quién) + Akkusativ (qué)"
   }, {
     de: "nehmen",
@@ -2350,6 +3624,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich nehme einen Kaffee.",
     exampleSentenceEs: "Yo tomo un café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "nehme", role: "verb_p1", order: 2 },
+      { text: "einen Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "Irregular (nimmt) / + Akkusativ"
   }, {
     de: "brauchen",
@@ -2359,6 +3638,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich brauche Wasser.",
     exampleSentenceEs: "Yo necesito agua.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "Wasser", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "helfen",
@@ -2368,6 +3652,12 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Kannst du mir helfen?",
     exampleSentenceEs: "¿Puedes ayudarme?",
+    exampleSentenceDeBlocks: [
+      { text: "Kannst", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "mir", role: "complement", order: 3 },
+      { text: "helfen", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "bringen",
@@ -2377,6 +3667,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich bringe dir das Buch.",
     exampleSentenceEs: "Yo te traigo el libro.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bringe", role: "verb_p1", order: 2 },
+      { text: "dir das Buch", role: "complement", order: 3 }
+    ],
     regimen: "+ Akk./Dat."
   }, {
     de: "schreiben",
@@ -2386,6 +3681,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich schreibe eine E-Mail.",
     exampleSentenceEs: "Yo escribo un correo electrónico.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schreibe", role: "verb_p1", order: 2 },
+      { text: "eine E-Mail", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "lesen",
@@ -2395,6 +3695,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich lese ein Buch.",
     exampleSentenceEs: "Yo leo un libro.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lese", role: "verb_p1", order: 2 },
+      { text: "ein Buch", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "sprechen",
@@ -2404,6 +3709,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich spreche Deutsch.",
     exampleSentenceEs: "Yo hablo alemán.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "spreche", role: "verb_p1", order: 2 },
+      { text: "Deutsch", role: "complement", order: 3 }
+    ],
     regimen: "+ Akk./mit + Dat."
   }, {
     de: "versuchen",
@@ -2413,6 +3723,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich versuche, Deutsch zu lernen.",
     exampleSentenceEs: "Intento aprender alemán.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "versuche,", role: "verb_p1", order: 2 },
+      { text: "Deutsch zu lernen", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "entscheiden",
@@ -2422,6 +3737,12 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich kann nicht entscheiden.",
     exampleSentenceEs: "Yo no puedo decidir.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kann", role: "verb_p1", order: 2 },
+      { text: "nicht", role: "complement", order: 3 },
+      { text: "entscheiden", role: "verb_p2", order: 4 }
+    ],
     regimen: "sich + für/Akk"
   }, {
     de: "vergessen",
@@ -2431,6 +3752,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich vergesse meinen Schlüssel nicht.",
     exampleSentenceEs: "No olvido mi llave.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "vergesse", role: "verb_p1", order: 2 },
+      { text: "meinen Schlüssel nicht", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ, irr. (vergisst)"
   }, {
     de: "sich erinnern",
@@ -2440,6 +3766,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich erinnere mich an dich.",
     exampleSentenceEs: "Yo te recuerdo a ti.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "erinnere", role: "verb_p1", order: 2 },
+      { text: "mich an dich", role: "complement", order: 3 }
+    ],
     regimen: "Reflexivo + an+Akk"
   }, {
     de: "passieren",
@@ -2449,6 +3780,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Was passiert heute?",
     exampleSentenceEs: "¿Qué sucede hoy?",
+    exampleSentenceDeBlocks: [
+      { text: "Was", role: "subject", order: 1 },
+      { text: "passiert", role: "verb_p1", order: 2 },
+      { text: "heute", role: "complement", order: 3 }
+    ],
     regimen: "⚠️ Exige Dativo"
   }, {
     de: "erzählen",
@@ -2458,6 +3794,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Ich erzähle eine Geschichte.",
     exampleSentenceEs: "Yo narro una historia.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "erzähle", role: "verb_p1", order: 2 },
+      { text: "eine Geschichte", role: "complement", order: 3 }
+    ],
     regimen: "+Dat./Akk."
   }, {
     de: "bedeuten",
@@ -2467,6 +3808,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Was bedeutet das?",
     exampleSentenceEs: "¿Qué significa eso?",
+    exampleSentenceDeBlocks: [
+      { text: "Was", role: "subject", order: 1 },
+      { text: "bedeutet", role: "verb_p1", order: 2 },
+      { text: "das", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "beginnen",
@@ -2476,6 +3822,11 @@ const rawChapters = [
     category: "Basisverben",
     exampleSentenceDe: "Der Kurs beginnt heute.",
     exampleSentenceEs: "El curso comienza hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Kurs", role: "subject", order: 1 },
+      { text: "beginnt", role: "verb_p1", order: 2 },
+      { text: "heute", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ/mit+Dat"
   }, {
     de: "stehen",
@@ -2485,6 +3836,11 @@ const rawChapters = [
     category: "Positionsverben",
     exampleSentenceDe: "Der Tisch steht hier.",
     exampleSentenceEs: "La mesa está aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Tisch", role: "subject", order: 1 },
+      { text: "steht", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativ/Akkusativ (Wo/Wohin)"
   }, {
     de: "stellen",
@@ -2494,6 +3850,11 @@ const rawChapters = [
     category: "Positionsverben",
     exampleSentenceDe: "Ich stelle die Flasche auf den Tisch.",
     exampleSentenceEs: "Yo coloco la botella sobre la mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "stelle", role: "verb_p1", order: 2 },
+      { text: "die Flasche auf den Tisch", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ (wo? Dativ)"
   }, {
     de: "liegen",
@@ -2503,6 +3864,11 @@ const rawChapters = [
     category: "Positionsverben",
     exampleSentenceDe: "Ich liege auf dem Bett.",
     exampleSentenceEs: "Yo estoy acostado en la cama.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "liege", role: "verb_p1", order: 2 },
+      { text: "auf dem Bett", role: "complement", order: 3 }
+    ],
     regimen: "⚠️ Wo? + Dativ"
   }, {
     de: "legen",
@@ -2512,6 +3878,11 @@ const rawChapters = [
     category: "Positionsverben",
     exampleSentenceDe: "Ich lege das Buch auf den Tisch.",
     exampleSentenceEs: "Yo coloco el libro sobre la mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lege", role: "verb_p1", order: 2 },
+      { text: "das Buch auf den Tisch", role: "complement", order: 3 }
+    ],
     regimen: "Akk.+Wohin? (legen/liegen)"
   },
   {
@@ -2521,8 +3892,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Alltag",
     regimen: "Separable (auf-) / + Nominativo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich stehe um sieben auf.",
+    exampleSentenceEs: "Me levanto a las siete.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "stehe", role: "verb_p1", order: 2 },
+      { text: "um sieben", role: "complement", order: 3 },
+      { text: "auf", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "aufwachen",
     pron: "áuf-va-jen",
@@ -2530,8 +3907,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Alltag",
     regimen: "Separable (auf-) / + Nominativo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich wache morgens früh auf.",
+    exampleSentenceEs: "Me despierto temprano por la mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wache", role: "verb_p1", order: 2 },
+      { text: "morgens früh", role: "complement", order: 3 },
+      { text: "auf", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "einschlafen",
     pron: "áin-shla-fen",
@@ -2539,8 +3922,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Alltag",
     regimen: "Separable (ein-) / + Nominativo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Kind schläft schnell ein.",
+    exampleSentenceEs: "El niño se duerme rápido.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Kind", role: "subject", order: 1 },
+      { text: "schläft", role: "verb_p1", order: 2 },
+      { text: "schnell", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "waschen",
     pron: "vá-shen",
@@ -2548,8 +3937,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Alltag",
     regimen: "+ Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich wasche mein Auto gern.",
+    exampleSentenceEs: "Lavo mi coche con gusto.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wasche", role: "verb_p1", order: 2 },
+      { text: "mein Auto gern", role: "complement", order: 3 }
+    ]
   }, {
         de: "duschen",
     pron: "dú-shen",
@@ -2557,8 +3951,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Alltag",
     regimen: "Reflexivo (+ Akkusativ)",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Er duscht jeden Morgen warm.",
+    exampleSentenceEs: "Él se ducha con agua caliente cada mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "duscht", role: "verb_p1", order: 2 },
+      { text: "jeden Morgen warm", role: "complement", order: 3 }
+    ]
   }, {
         de: "abtrocknen",
     pron: "áp-trok-nen",
@@ -2566,8 +3965,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Alltag",
     regimen: "Separable (ab-) / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich trockne das Geschirr ab.",
+    exampleSentenceEs: "Seco la vajilla.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trockne", role: "verb_p1", order: 2 },
+      { text: "das Geschirr", role: "complement", order: 3 },
+      { text: "ab", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "gehören",
     pron: "gue-hö-ren",
@@ -2575,8 +3980,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Basisverben",
     regimen: "⚠️ Exige Dativo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Buch gehört meinem Bruder.",
+    exampleSentenceEs: "El libro pertenece a mi hermano.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Buch", role: "subject", order: 1 },
+      { text: "gehört", role: "verb_p1", order: 2 },
+      { text: "meinem Bruder", role: "complement", order: 3 }
+    ]
   }, {
         de: "glauben",
     pron: "gláu-ben",
@@ -2584,8 +3994,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Basisverben",
     regimen: "⚠️ Exige Dativo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich glaube deinen Worten nicht.",
+    exampleSentenceEs: "No creo en tus palabras.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "glaube", role: "verb_p1", order: 2 },
+      { text: "deinen Worten nicht", role: "complement", order: 3 }
+    ]
   }, {
         de: "zuhören",
     pron: "tsú-hö-ren",
@@ -2593,8 +4008,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Basisverben",
     regimen: "Separable (zu-) / ⚠️ Exige Dativo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Kinder hören aufmerksam zu.",
+    exampleSentenceEs: "Los niños escuchan con atención.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kinder", role: "subject", order: 1 },
+      { text: "hören", role: "verb_p1", order: 2 },
+      { text: "aufmerksam", role: "complement", order: 3 },
+      { text: "zu", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "verlieren",
     pron: "fea-lí-ren",
@@ -2602,8 +4023,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Basisverben",
     regimen: "Irregular / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Er verliert oft seinen Schlüssel.",
+    exampleSentenceEs: "Él pierde a menudo su llave.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "verliert", role: "verb_p1", order: 2 },
+      { text: "oft seinen Schlüssel", role: "complement", order: 3 }
+    ]
   }, {
         de: "stehlen",
     pron: "shté-len",
@@ -2611,8 +4037,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Haushalt",
     regimen: "Irregular / Dativo + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Dieb stiehlt ein Fahrrad.",
+    exampleSentenceEs: "El ladrón roba una bicicleta.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Dieb", role: "subject", order: 1 },
+      { text: "stiehlt", role: "verb_p1", order: 2 },
+      { text: "ein Fahrrad", role: "complement", order: 3 }
+    ]
   }, {
         de: "suchen",
     pron: "zú-jen",
@@ -2620,8 +4051,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Basisverben",
     regimen: "+ Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich suche meine Brille überall.",
+    exampleSentenceEs: "Busco mis gafas por todas partes.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "suche", role: "verb_p1", order: 2 },
+      { text: "meine Brille überall", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Regenschirm",
     pron: "dea ré-guen-shirm",
@@ -2629,8 +4065,14 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Alltag",
     plural: "die Regenschirme",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich nehme einen Regenschirm mit.",
+    exampleSentenceEs: "Llevo un paraguas conmigo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "nehme", role: "verb_p1", order: 2 },
+      { text: "einen Regenschirm", role: "complement", order: 3 },
+      { text: "mit", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "die Brille",
     pron: "di brí-le",
@@ -2638,8 +4080,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Alltag",
     plural: "die Brillen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Meine neue Brille ist modern.",
+    exampleSentenceEs: "Mis gafas nuevas son modernas.",
+    exampleSentenceDeBlocks: [
+      { text: "Meine", role: "subject", order: 1 },
+      { text: "neue", role: "verb_p1", order: 2 },
+      { text: "Brille ist modern", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Tasche",
     pron: "di tá-she",
@@ -2647,8 +4094,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Alltag",
     plural: "die Taschen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Tasche steht auf dem Boden.",
+    exampleSentenceEs: "El bolso está en el suelo.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Tasche", role: "subject", order: 1 },
+      { text: "steht", role: "verb_p1", order: 2 },
+      { text: "auf dem Boden", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Uhr",
     pron: "di ur",
@@ -2656,8 +4108,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Alltag",
     plural: "die Uhren",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Uhr zeigt zwei Uhr.",
+    exampleSentenceEs: "El reloj marca las dos.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Uhr", role: "subject", order: 1 },
+      { text: "zeigt", role: "verb_p1", order: 2 },
+      { text: "zwei Uhr", role: "complement", order: 3 }
+    ]
   }, {
         de: "fliegen",
     pron: "flí-guen",
@@ -2665,8 +4122,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Bewegung",
     regimen: "Irregular / + sein (Perfekt)",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Wir fliegen morgen nach Berlin.",
+    exampleSentenceEs: "Volamos mañana a Berlín.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "fliegen", role: "verb_p1", order: 2 },
+      { text: "morgen nach Berlin", role: "complement", order: 3 }
+    ]
   }, {
         de: "rennen",
     pron: "ré-nen",
@@ -2674,8 +4136,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Bewegung",
     regimen: "Irregular / + sein (Perfekt)",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Kinder rennen sehr schnell.",
+    exampleSentenceEs: "Los niños corren muy rápido.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kinder", role: "subject", order: 1 },
+      { text: "rennen", role: "verb_p1", order: 2 },
+      { text: "sehr schnell", role: "complement", order: 3 }
+    ]
   }, {
         de: "springen",
     pron: "shprín-guen",
@@ -2683,8 +4150,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Bewegung",
     regimen: "Irregular / + sein (Perfekt)",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Kinder springen vor Freude.",
+    exampleSentenceEs: "Los niños saltan de alegría.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kinder", role: "subject", order: 1 },
+      { text: "springen", role: "verb_p1", order: 2 },
+      { text: "vor Freude", role: "complement", order: 3 }
+    ]
   }, {
         de: "singen",
     pron: "zín-guen",
@@ -2692,8 +4164,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Aktivitäten",
     regimen: "Irregular / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Sie singt ein schönes Lied.",
+    exampleSentenceEs: "Ella canta una bonita canción.",
+    exampleSentenceDeBlocks: [
+      { text: "Sie", role: "subject", order: 1 },
+      { text: "singt", role: "verb_p1", order: 2 },
+      { text: "ein schönes Lied", role: "complement", order: 3 }
+    ]
   }, {
         de: "weinen",
     pron: "vái-nen",
@@ -2701,8 +4178,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Gefühle",
     regimen: "Intransitivo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das kleine Kind weint laut.",
+    exampleSentenceEs: "El niño pequeño llora fuerte.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "kleine", role: "verb_p1", order: 2 },
+      { text: "Kind weint laut", role: "complement", order: 3 }
+    ]
   }, {
         de: "lachen",
     pron: "lá-jen",
@@ -2710,8 +4192,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Gefühle",
     regimen: "Intransitivo",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Wir lachen oft zusammen laut.",
+    exampleSentenceEs: "Reímos a menudo juntos en voz alta.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "lachen", role: "verb_p1", order: 2 },
+      { text: "oft zusammen laut", role: "complement", order: 3 }
+    ]
   }, {
         de: "ziehen",
     pron: "tsí-en",
@@ -2719,8 +4206,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Aktionen",
     regimen: "Irregular / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Er zieht fest an der Tür.",
+    exampleSentenceEs: "Él tira fuerte de la puerta.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "zieht", role: "verb_p1", order: 2 },
+      { text: "fest an der Tür", role: "complement", order: 3 }
+    ]
   }, {
         de: "drücken",
     pron: "drü-ken",
@@ -2728,8 +4220,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Aktionen",
     regimen: "+ Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Bitte drücken Sie die Taste.",
+    exampleSentenceEs: "Por favor presione la tecla.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "drücken", role: "verb_p1", order: 2 },
+      { text: "Sie die Taste", role: "complement", order: 3 }
+    ]
   }, {
         de: "werfen",
     pron: "véa-fen",
@@ -2737,8 +4234,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Aktionen",
     regimen: "Irregular (wirft) / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Er wirft den Ball weit.",
+    exampleSentenceEs: "Él lanza la pelota lejos.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "wirft", role: "verb_p1", order: 2 },
+      { text: "den Ball weit", role: "complement", order: 3 }
+    ]
   }, {
         de: "fangen",
     pron: "fán-guen",
@@ -2746,8 +4248,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Aktionen",
     regimen: "Irregular (fängt) / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Hund fängt den Ball.",
+    exampleSentenceEs: "El perro atrapa la pelota.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Hund", role: "subject", order: 1 },
+      { text: "fängt", role: "verb_p1", order: 2 },
+      { text: "den Ball", role: "complement", order: 3 }
+    ]
   }, {
         de: "steigen",
     pron: "shtái-guen",
@@ -2755,8 +4262,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Bewegung",
     regimen: "Irregular / + sein (Perfekt)",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Wir steigen in den Bus ein.",
+    exampleSentenceEs: "Subimos al autobús.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "steigen", role: "verb_p1", order: 2 },
+      { text: "in den Bus", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "fallen",
     pron: "fá-len",
@@ -2764,8 +4277,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Bewegung",
     regimen: "Irregular (fällt) / + sein (Perfekt)",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Blätter fallen im Herbst.",
+    exampleSentenceEs: "Las hojas caen en otoño.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Blätter", role: "subject", order: 1 },
+      { text: "fallen", role: "verb_p1", order: 2 },
+      { text: "im Herbst", role: "complement", order: 3 }
+    ]
   }, {
         de: "reich",
     pron: "raij",
@@ -2774,7 +4292,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "bag full of gold coins",
     exampleSentenceDe: "Der Mann ist sehr reich.",
-    exampleSentenceEs: "El hombre es muy rico."
+    exampleSentenceEs: "El hombre es muy rico.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Mann", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr reich", role: "complement", order: 3 }
+    ]
   }, {
         de: "arm",
     pron: "arm",
@@ -2783,7 +4306,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "empty broken wallet",
     exampleSentenceDe: "Die Familie ist arm.",
-    exampleSentenceEs: "La familia es pobre."
+    exampleSentenceEs: "La familia es pobre.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Familie", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "arm", role: "complement", order: 3 }
+    ]
   }, {
         de: "wach",
     pron: "vaj",
@@ -2792,7 +4320,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "wide open eye",
     exampleSentenceDe: "Das Baby ist schon wach.",
-    exampleSentenceEs: "El bebé ya está despierto."
+    exampleSentenceEs: "El bebé ya está despierto.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Baby", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schon wach", role: "complement", order: 3 }
+    ]
   }, {
         de: "klug",
     pron: "kluk",
@@ -2801,7 +4334,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "glowing lightbulb",
     exampleSentenceDe: "Meine Schwester ist sehr klug.",
-    exampleSentenceEs: "Mi hermana es muy inteligente."
+    exampleSentenceEs: "Mi hermana es muy inteligente.",
+    exampleSentenceDeBlocks: [
+      { text: "Meine Schwester", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr klug", role: "complement", order: 3 }
+    ]
   }, {
         de: "dumm",
     pron: "dum",
@@ -2810,7 +4348,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "dunce cap",
     exampleSentenceDe: "Das war ein dummer Fehler.",
-    exampleSentenceEs: "Ese fue un error tonto."
+    exampleSentenceEs: "Ese fue un error tonto.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "war", role: "verb_p1", order: 2 },
+      { text: "ein dummer Fehler", role: "complement", order: 3 }
+    ]
   }, {
         de: "fleißig",
     pron: "flái-sij",
@@ -2819,7 +4362,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "busy bee",
     exampleSentenceDe: "Der Schüler ist sehr fleißig.",
-    exampleSentenceEs: "El alumno es muy trabajador."
+    exampleSentenceEs: "El alumno es muy trabajador.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Schüler", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr fleißig", role: "complement", order: 3 }
+    ]
   }, {
         de: "faul",
     pron: "faul",
@@ -2828,7 +4376,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "sleeping sloth",
     exampleSentenceDe: "Am Sonntag bin ich faul.",
-    exampleSentenceEs: "El domingo soy perezoso."
+    exampleSentenceEs: "El domingo soy perezoso.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Sonntag", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "ich faul", role: "complement", order: 3 }
+    ]
   }, {
         de: "mutig",
     pron: "mú-tij",
@@ -2837,7 +4390,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "brave lion",
     exampleSentenceDe: "Der Polizist ist mutig.",
-    exampleSentenceEs: "El policía es valiente."
+    exampleSentenceEs: "El policía es valiente.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Polizist", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mutig", role: "complement", order: 3 }
+    ]
   }, {
         de: "feige",
     pron: "fái-gue",
@@ -2846,7 +4404,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "hiding person",
     exampleSentenceDe: "Sei nicht feige!",
-    exampleSentenceEs: "¡No seas cobarde!"
+    exampleSentenceEs: "¡No seas cobarde!",
+    exampleSentenceDeBlocks: [
+      { text: "Sei", role: "subject", order: 1 },
+      { text: "nicht", role: "verb_p1", order: 2 },
+      { text: "feige", role: "complement", order: 3 }
+    ]
   }, {
         de: "höflich",
     pron: "höf-lij",
@@ -2855,7 +4418,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "person bowing politely",
     exampleSentenceDe: "Der Kellner ist muy cortés.",
-    exampleSentenceEs: "El camarero es muy cortés."
+    exampleSentenceEs: "El camarero es muy cortés.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Kellner", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "muy cortés", role: "complement", order: 3 }
+    ]
   }, {
         de: "freundlich",
     pron: "fróind-lij",
@@ -2864,7 +4432,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "friendly waving hand",
     exampleSentenceDe: "Die Leute hier sind freundlich.",
-    exampleSentenceEs: "La gente aquí es amable."
+    exampleSentenceEs: "La gente aquí es amable.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Leute hier", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "freundlich", role: "complement", order: 3 }
+    ]
   }, {
         de: "streng",
     pron: "shtreng",
@@ -2873,7 +4446,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "strict teacher pointing",
     exampleSentenceDe: "Der Lehrer ist streng.",
-    exampleSentenceEs: "El profesor es estricto."
+    exampleSentenceEs: "El profesor es estricto.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Lehrer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "streng", role: "complement", order: 3 }
+    ]
   }, {
         de: "lustig",
     pron: "lús-tij",
@@ -2882,7 +4460,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "laughing face",
     exampleSentenceDe: "Der Witz ist sehr lustig.",
-    exampleSentenceEs: "El chiste es muy divertido."
+    exampleSentenceEs: "El chiste es muy divertido.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Witz", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr lustig", role: "complement", order: 3 }
+    ]
   }, {
         de: "langweilig",
     pron: "láng-vai-lij",
@@ -2891,7 +4474,12 @@ const rawChapters = [
     category: "Gegensätze",
     en: "yawning face",
     exampleSentenceDe: "Das Buch ist langweilig.",
-    exampleSentenceEs: "El libro es aburrido."
+    exampleSentenceEs: "El libro es aburrido.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Buch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "langweilig", role: "complement", order: 3 }
+    ]
   }, {
         de: "spannend",
     pron: "shpá-nent",
@@ -2900,7 +4488,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "exciting roller coaster",
     exampleSentenceDe: "Der Film ist spannend.",
-    exampleSentenceEs: "La película es emocionante."
+    exampleSentenceEs: "La película es emocionante.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Film", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "spannend", role: "complement", order: 3 }
+    ]
   }, {
         de: "ruhig",
     pron: "rú-ij",
@@ -2909,7 +4502,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "calm zen stones",
     exampleSentenceDe: "Das Meer ist heute ruhig.",
-    exampleSentenceEs: "El mar está tranquilo hoy."
+    exampleSentenceEs: "El mar está tranquilo hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Meer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "heute ruhig", role: "complement", order: 3 }
+    ]
   }, {
         de: "nervös",
     pron: "ner-vös",
@@ -2918,7 +4516,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "sweating nervous face",
     exampleSentenceDe: "Vor der Prüfung bin ich nervös.",
-    exampleSentenceEs: "Antes del examen estoy nervioso."
+    exampleSentenceEs: "Antes del examen estoy nervioso.",
+    exampleSentenceDeBlocks: [
+      { text: "Vor der Prüfung", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "ich nervös", role: "complement", order: 3 }
+    ]
   }, {
         de: "gewinnen",
     pron: "gue-ví-nen",
@@ -2928,7 +4531,13 @@ const rawChapters = [
     regimen: "Irregular / + Akkusativ",
     en: "person holding a gold trophy",
     exampleSentenceDe: "Wir werden das Spiel gewinnen.",
-    exampleSentenceEs: "Ganaremos el juego."
+    exampleSentenceEs: "Ganaremos el juego.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "werden", role: "verb_p1", order: 2 },
+      { text: "das Spiel", role: "complement", order: 3 },
+      { text: "gewinnen", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "schieben",
     pron: "shí-ben",
@@ -2938,7 +4547,12 @@ const rawChapters = [
     regimen: "Irregular / + Akkusativ",
     en: "person pushing a heavy box",
     exampleSentenceDe: "Ich schiebe das Auto.",
-    exampleSentenceEs: "Yo empujo el coche."
+    exampleSentenceEs: "Yo empujo el coche.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schiebe", role: "verb_p1", order: 2 },
+      { text: "das Auto", role: "complement", order: 3 }
+    ]
   }, {
         de: "stören",
     pron: "shtö-ren",
@@ -2948,7 +4562,12 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "person covering their ears",
     exampleSentenceDe: "Bitte stören Sie mich nicht.",
-    exampleSentenceEs: "Por favor, no me moleste."
+    exampleSentenceEs: "Por favor, no me moleste.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "stören", role: "verb_p1", order: 2 },
+      { text: "Sie mich nicht", role: "complement", order: 3 }
+    ]
   }, {
         de: "hoffen",
     pron: "jó-fen",
@@ -2958,7 +4577,12 @@ const rawChapters = [
     regimen: "auf + Akkusativ",
     en: "person crossing fingers hoping",
     exampleSentenceDe: "Ich hoffe auf gutes Wetter.",
-    exampleSentenceEs: "Espero buen tiempo."
+    exampleSentenceEs: "Espero buen tiempo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "hoffe", role: "verb_p1", order: 2 },
+      { text: "auf gutes Wetter", role: "complement", order: 3 }
+    ]
   }, {
         de: "träumen",
     pron: "trói-men",
@@ -2968,7 +4592,12 @@ const rawChapters = [
     regimen: "von + Dativ",
     en: "sleeping person with a thought bubble",
     exampleSentenceDe: "Ich träume von dir.",
-    exampleSentenceEs: "Sueño contigo."
+    exampleSentenceEs: "Sueño contigo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "träume", role: "verb_p1", order: 2 },
+      { text: "von dir", role: "complement", order: 3 }
+    ]
   }, {
         de: "lieben",
     pron: "lí-ben",
@@ -2978,7 +4607,12 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "person hugging a large heart",
     exampleSentenceDe: "Ich liebe meine Familie.",
-    exampleSentenceEs: "Amo a mi familia."
+    exampleSentenceEs: "Amo a mi familia.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "liebe", role: "verb_p1", order: 2 },
+      { text: "meine Familie", role: "complement", order: 3 }
+    ]
   }, {
         de: "hassen",
     pron: "já-sen",
@@ -2988,7 +4622,12 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "angry person crossing arms",
     exampleSentenceDe: "Ich hasse den Winter.",
-    exampleSentenceEs: "Odio el invierno."
+    exampleSentenceEs: "Odio el invierno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "hasse", role: "verb_p1", order: 2 },
+      { text: "den Winter", role: "complement", order: 3 }
+    ]
   }, {
         de: "lächeln",
     pron: "lé-cheln",
@@ -2998,7 +4637,11 @@ const rawChapters = [
     regimen: "Intransitivo",
     en: "smiling happy person",
     exampleSentenceDe: "Das Kid lächelt.",
-    exampleSentenceEs: "El niño sonríe."
+    exampleSentenceEs: "El niño sonríe.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Kid", role: "subject", order: 1 },
+      { text: "lächelt", role: "verb_p1", order: 2 }
+    ]
   }, {
         de: "schreien",
     pron: "shrái-en",
@@ -3008,7 +4651,12 @@ const rawChapters = [
     regimen: "Irregular / Intransitivo",
     en: "person shouting loud",
     exampleSentenceDe: "Warum schreist du?",
-    exampleSentenceEs: "¿Por qué gritas?"
+    exampleSentenceEs: "¿Por qué gritas?",
+    exampleSentenceDeBlocks: [
+      { text: "Warum", role: "subject", order: 1 },
+      { text: "schreist", role: "verb_p1", order: 2 },
+      { text: "du", role: "complement", order: 3 }
+    ]
   }, {
         de: "flüstern",
     pron: "flüs-tern",
@@ -3018,7 +4666,13 @@ const rawChapters = [
     regimen: "Intransitivo",
     en: "person whispering a secret",
     exampleSentenceDe: "Wir müssen hier flüstern.",
-    exampleSentenceEs: "Tenemos que susurrar aquí."
+    exampleSentenceEs: "Tenemos que susurrar aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "müssen", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 },
+      { text: "flüstern", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "diskutieren",
     pron: "dis-ku-tí-ren",
@@ -3028,7 +4682,12 @@ const rawChapters = [
     regimen: "über + Akkusativ",
     en: "two people debating",
     exampleSentenceDe: "Wir diskutieren über Politik.",
-    exampleSentenceEs: "Discutimos sobre política."
+    exampleSentenceEs: "Discutimos sobre política.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "diskutieren", role: "verb_p1", order: 2 },
+      { text: "über Politik", role: "complement", order: 3 }
+    ]
   }, {
         de: "versprechen",
     pron: "fea-shpré-jen",
@@ -3038,7 +4697,12 @@ const rawChapters = [
     regimen: "Irregular / + Dativo",
     en: "person making a pinky promise",
     exampleSentenceDe: "Ich verspreche es dir.",
-    exampleSentenceEs: "Te lo prometo."
+    exampleSentenceEs: "Te lo prometo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "verspreche", role: "verb_p1", order: 2 },
+      { text: "es dir", role: "complement", order: 3 }
+    ]
   }, {
         de: "zweifeln",
     pron: "tsvái-feln",
@@ -3048,7 +4712,12 @@ const rawChapters = [
     regimen: "an + Dativo",
     en: "person scratching head confused",
     exampleSentenceDe: "Ich zweifle an seiner Geschichte.",
-    exampleSentenceEs: "Dudo de su historia."
+    exampleSentenceEs: "Dudo de su historia.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "zweifle", role: "verb_p1", order: 2 },
+      { text: "an seiner Geschichte", role: "complement", order: 3 }
+    ]
   }, {
         de: "verzeihen",
     pron: "fea-tsái-en",
@@ -3058,7 +4727,12 @@ const rawChapters = [
     regimen: "Irregular / + Dativo",
     en: "two people shaking hands apologizing",
     exampleSentenceDe: "Bitte verzeih mir.",
-    exampleSentenceEs: "Por favor, perdóname."
+    exampleSentenceEs: "Por favor, perdóname.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "verzeih", role: "verb_p1", order: 2 },
+      { text: "mir", role: "complement", order: 3 }
+    ]
   },
     {
       de: "erledigen",
@@ -3070,6 +4744,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich muss heute wichtige Papiere erledigen.",
       exampleSentenceEs: "Hoy tengo que tramitar documentos importantes.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "heute wichtige Papiere", role: "complement", order: 3 },
+      { text: "erledigen", role: "verb_p2", order: 4 }
+    ],
       en: "checking off completed tasks on a checklist"
     },
     {
@@ -3082,6 +4762,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Sag mir bitte Bescheid, wenn du Zeit hast.",
       exampleSentenceEs: "Avísame por favor cuando tengas tiempo.",
+    exampleSentenceDeBlocks: [
+      { text: "Sag mir", role: "subject", order: 1 },
+      { text: "bitte", role: "verb_p1", order: 2 },
+      { text: "Bescheid, wenn du Zeit hast", role: "complement", order: 3 }
+    ],
       en: "giving notice message on mobile phone"
     },
     {
@@ -3094,6 +4779,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Das ist ein dringender Fall, rufen Sie bitte Hilfe!",
       exampleSentenceEs: "Es un caso urgente, ¡por favor llame a emergencias!",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein dringender Fall, rufen Sie bitte Hilfe", role: "complement", order: 3 }
+    ],
       en: "flashing red warning urgent siren light"
     },
     {
@@ -3106,6 +4796,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich bin sehr zufrieden mit meinem neuen Job.",
       exampleSentenceEs: "Estoy muy satisfecho con mi nuevo empleo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "sehr zufrieden mit meinem neuen Job", role: "complement", order: 3 }
+    ],
       en: "smiling happy face rating stars"
     },
     {
@@ -3118,6 +4813,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Folgen Sie bitte den Schildern zum Ausgang.",
       exampleSentenceEs: "Siga por favor los letreros hacia la salida.",
+    exampleSentenceDeBlocks: [
+      { text: "Folgen", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "bitte den Schildern zum Ausgang", role: "complement", order: 3 }
+    ],
       en: "following footprints leading to destination"
     },
     {
@@ -3130,6 +4830,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich vertraue meinem Arzt vollkommen.",
       exampleSentenceEs: "Confío plenamente en mi médico.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "vertraue", role: "verb_p1", order: 2 },
+      { text: "meinem Arzt vollkommen", role: "complement", order: 3 }
+    ],
       en: "firm trusting handshake between partners"
     },
     {
@@ -3142,6 +4847,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich stimme diesem Vorschlag vollkommen zu.",
       exampleSentenceEs: "Estoy completamente de acuerdo con esta propuesta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "stimme", role: "verb_p1", order: 2 },
+      { text: "diesem Vorschlag vollkommen", role: "complement", order: 3 },
+      { text: "zu", role: "verb_p2", order: 4 }
+    ],
       en: "giving a clear green thumbs up approval"
     },
     {
@@ -3154,6 +4865,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Niemand hat dem Chef widersprochen.",
       exampleSentenceEs: "Nadie le llevó la contraria al jefe.",
+    exampleSentenceDeBlocks: [
+      { text: "Niemand", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "dem Chef widersprochen", role: "complement", order: 3 }
+    ],
       en: "two disagreeing talking heads facing opposite"
     },
     {
@@ -3166,6 +4882,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Es tut mir sehr leid, dass ich spät komme.",
       exampleSentenceEs: "Lamento mucho llegar tarde.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "tut", role: "verb_p1", order: 2 },
+      { text: "mir sehr leid, dass ich spät", role: "complement", order: 3 },
+      { text: "komme", role: "verb_p2", order: 4 }
+    ],
       en: "apologetic polite bowing posture"
     },
     {
@@ -3178,6 +4900,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Am Wochenende muss ich mich unbedingt ausruhen.",
       exampleSentenceEs: "El fin de semana tengo que descansar sin falta.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Wochenende", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "ich mich unbedingt", role: "complement", order: 3 },
+      { text: "ausruhen", role: "verb_p2", order: 4 }
+    ],
       en: "relaxing comfortably in a soft armchair with closed eyes"
     },
     {
@@ -3190,6 +4918,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wir müssen uns beeilen, der Bus fährt gleich ab.",
       exampleSentenceEs: "Tenemos que darnos prisa, el autobús sale enseguida.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "müssen", role: "verb_p1", order: 2 },
+      { text: "uns beeilen, der Bus fährt gleich", role: "complement", order: 3 },
+      { text: "ab", role: "verb_p2", order: 4 }
+    ],
       en: "running fast checking a ticking wrist watch"
     },
     {
@@ -3202,6 +4936,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Der Nachbar beschwert sich über die laute Musik.",
       exampleSentenceEs: "El vecino se queja de la música alta.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Nachbar", role: "subject", order: 1 },
+      { text: "beschwert", role: "verb_p1", order: 2 },
+      { text: "sich über die laute Musik", role: "complement", order: 3 }
+    ],
       en: "writing a formal complaint letter with exclamation mark"
     },
     {
@@ -3214,6 +4953,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich möchte mich über die Öffnungszeiten informieren.",
       exampleSentenceEs: "Quisiera informarme sobre los horarios de apertura.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "mich über die Öffnungszeiten", role: "complement", order: 3 },
+      { text: "informieren", role: "verb_p2", order: 4 }
+    ],
       en: "reading an information brochure at info desk"
     },
     {
@@ -3226,6 +4971,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich kümmere mich gern um deine Katze.",
       exampleSentenceEs: "Me ocupo con gusto de tu gato.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kümmere", role: "verb_p1", order: 2 },
+      { text: "mich gern um deine Katze", role: "complement", order: 3 }
+    ],
       en: "tenderly caring and tending to a house plant"
     },
     {
@@ -3238,6 +4988,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich interessiere mich sehr für diesen Deutschkurs.",
       exampleSentenceEs: "Me intereso mucho por este curso de alemán.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "interessiere", role: "verb_p1", order: 2 },
+      { text: "mich sehr für diesen Deutschkurs", role: "complement", order: 3 }
+    ],
       en: "person with curious shining eyes looking at book"
     },
     {
@@ -3250,6 +5005,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Bitte beschreiben Sie den Weg zum Bahnhof.",
       exampleSentenceEs: "Por favor, describa el camino a la estación.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "beschreiben", role: "verb_p1", order: 2 },
+      { text: "Sie den Weg zum Bahnhof", role: "complement", order: 3 }
+    ],
       en: "drawing and explaining details on a whiteboard"
     },
     {
@@ -3262,6 +5022,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Vor dem Kauf sollten wir die Preise vergleichen.",
       exampleSentenceEs: "Antes de comprar deberíamos comparar los precios.",
+    exampleSentenceDeBlocks: [
+      { text: "Vor dem Kauf", role: "subject", order: 1 },
+      { text: "sollten", role: "verb_p1", order: 2 },
+      { text: "wir die Preise vergleichen", role: "complement", order: 3 }
+    ],
       en: "balancing scale comparing two objects"
     },
     {
@@ -3274,6 +5039,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Welchen Arzt können Sie mir empfehlen?",
       exampleSentenceEs: "¿Qué médico me puede recomendar?",
+    exampleSentenceDeBlocks: [
+      { text: "Welchen Arzt", role: "subject", order: 1 },
+      { text: "können", role: "verb_p1", order: 2 },
+      { text: "Sie mir", role: "complement", order: 3 },
+      { text: "empfehlen", role: "verb_p2", order: 4 }
+    ],
       en: "giving a warm star review recommendation card"
     }]
 },
@@ -3290,6 +5061,11 @@ const rawChapters = [
     category: "Zeitadverbien",
     exampleSentenceDe: "Heute ist Montag.",
     exampleSentenceEs: "Hoy es lunes.",
+    exampleSentenceDeBlocks: [
+      { text: "Heute", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "Montag", role: "complement", order: 3 }
+    ],
     regimen: "Temporal"
   }, {
     de: "morgen",
@@ -3299,6 +5075,11 @@ const rawChapters = [
     category: "Zeitadverbien",
     exampleSentenceDe: "Ich gehe morgen ins Kino.",
     exampleSentenceEs: "Mañana voy al cine.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "morgen ins Kino", role: "complement", order: 3 }
+    ],
     regimen: "Temporal"
   }, {
     de: "gestern",
@@ -3308,6 +5089,11 @@ const rawChapters = [
     category: "Zeitadverbien",
     exampleSentenceDe: "Gestern war ich im Park.",
     exampleSentenceEs: "Ayer estuve en el parque.",
+    exampleSentenceDeBlocks: [
+      { text: "Gestern", role: "subject", order: 1 },
+      { text: "war", role: "verb_p1", order: 2 },
+      { text: "ich im Park", role: "complement", order: 3 }
+    ],
     regimen: "Temporal"
   }, {
     de: "jetzt",
@@ -3317,6 +5103,11 @@ const rawChapters = [
     category: "Zeitadverbien",
     exampleSentenceDe: "Ich lerne Deutsch jetzt.",
     exampleSentenceEs: "Yo aprendo alemán ahora.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lerne", role: "verb_p1", order: 2 },
+      { text: "Deutsch jetzt", role: "complement", order: 3 }
+    ],
     regimen: "Temporal"
   }, {
     de: "bald",
@@ -3326,6 +5117,11 @@ const rawChapters = [
     category: "Zeitadverbien",
     exampleSentenceDe: "Wir sehen uns bald.",
     exampleSentenceEs: "Nos vemos pronto.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "sehen", role: "verb_p1", order: 2 },
+      { text: "uns bald", role: "complement", order: 3 }
+    ],
     regimen: "Temporal"
   }, {
     de: "immer",
@@ -3335,6 +5131,11 @@ const rawChapters = [
     category: "Häufigkeit",
     exampleSentenceDe: "Ich trinke Kaffee immer.",
     exampleSentenceEs: "Yo bebo café siempre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "Kaffee immer", role: "complement", order: 3 }
+    ],
     regimen: "Frecuencia"
   }, {
     de: "oft",
@@ -3344,6 +5145,11 @@ const rawChapters = [
     category: "Häufigkeit",
     exampleSentenceDe: "Ich trinke oft Kaffee.",
     exampleSentenceEs: "A menudo bebo café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "oft Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "Frecuencia"
   }, {
     de: "manchmal",
@@ -3353,6 +5159,11 @@ const rawChapters = [
     category: "Häufigkeit",
     exampleSentenceDe: "Manchmal trinke ich Kaffee.",
     exampleSentenceEs: "A veces bebo café.",
+    exampleSentenceDeBlocks: [
+      { text: "Manchmal", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "ich Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "Frecuencia"
   }, {
     de: "nie",
@@ -3362,6 +5173,11 @@ const rawChapters = [
     category: "Häufigkeit",
     exampleSentenceDe: "Ich sehe dich nie.",
     exampleSentenceEs: "Yo te veo nunca.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "dich nie", role: "complement", order: 3 }
+    ],
     regimen: "Frecuencia"
   }, {
     de: "schon",
@@ -3371,6 +5187,11 @@ const rawChapters = [
     category: "Zeitadverbien",
     exampleSentenceDe: "Ich bin schon zu Hause.",
     exampleSentenceEs: "Yo ya estoy en casa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "schon zu Hause", role: "complement", order: 3 }
+    ],
     regimen: "Temporal: ya, ya sea"
   }, {
     de: "noch",
@@ -3380,6 +5201,11 @@ const rawChapters = [
     category: "Zeitadverbien",
     exampleSentenceDe: "Ich bin noch zu Hause.",
     exampleSentenceEs: "Yo estoy todavía en casa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "noch zu Hause", role: "complement", order: 3 }
+    ],
     regimen: "Temporal: continuidad"
   }, {
     de: "hier",
@@ -3389,6 +5215,11 @@ const rawChapters = [
     category: "Ortsadverbien",
     exampleSentenceDe: "Ich bin hier.",
     exampleSentenceEs: "Yo estoy aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 }
+    ],
     regimen: "Lugar"
   }, {
     de: "dort",
@@ -3398,6 +5229,11 @@ const rawChapters = [
     category: "Ortsadverbien",
     exampleSentenceDe: "Ich bin dort.",
     exampleSentenceEs: "Yo estoy allí.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "dort", role: "complement", order: 3 }
+    ],
     regimen: "Lugar"
   }, {
     de: "oben / unten",
@@ -3407,6 +5243,11 @@ const rawChapters = [
     category: "Ortsadverbien",
     exampleSentenceDe: "Das Buch ist oben. Die Katze ist unten.",
     exampleSentenceEs: "El libro está arriba. El gato está abajo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Buch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "oben", role: "complement", order: 3 }
+    ],
     regimen: "Local"
   }, {
     de: "vorn / hinten",
@@ -3416,6 +5257,11 @@ const rawChapters = [
     category: "Ortsadverbien",
     exampleSentenceDe: "Ich sitze vorn.",
     exampleSentenceEs: "Yo me siento adelante.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sitze", role: "verb_p1", order: 2 },
+      { text: "vorn", role: "complement", order: 3 }
+    ],
     regimen: "Local"
   }, {
     de: "draußen / drinnen",
@@ -3425,6 +5271,11 @@ const rawChapters = [
     category: "Ortsadverbien",
     exampleSentenceDe: "Das Wetter ist schön. Wir sind draußen.",
     exampleSentenceEs: "El tiempo es bueno. Estamos afuera.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wetter", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ],
     regimen: "Lugar"
   }, {
     de: "sehr",
@@ -3434,6 +5285,11 @@ const rawChapters = [
     category: "Gradadverbien",
     exampleSentenceDe: "Das Wetter ist sehr gut.",
     exampleSentenceEs: "El tiempo está muy bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wetter", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr gut", role: "complement", order: 3 }
+    ],
     regimen: "Intensificador"
   }, {
     de: "viel / wenig",
@@ -3443,6 +5299,11 @@ const rawChapters = [
     category: "Gradadverbien",
     exampleSentenceDe: "Ich trinke viel Wasser.",
     exampleSentenceEs: "Bebo mucha agua.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "viel Wasser", role: "complement", order: 3 }
+    ],
     regimen: "Cantidad"
   }, {
     de: "wer?",
@@ -3452,6 +5313,11 @@ const rawChapters = [
     category: "W-Fragen",
     exampleSentenceDe: "Wer ist das?",
     exampleSentenceEs: "¿Quién es ese/esa?",
+    exampleSentenceDeBlocks: [
+      { text: "Wer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "das", role: "complement", order: 3 }
+    ],
     regimen: "Solo personas, nom."
   }, {
     de: "was?",
@@ -3461,6 +5327,11 @@ const rawChapters = [
     category: "W-Fragen",
     exampleSentenceDe: "Was ist das?",
     exampleSentenceEs: "¿Qué es eso?",
+    exampleSentenceDeBlocks: [
+      { text: "Was", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "das", role: "complement", order: 3 }
+    ],
     regimen: "Invariable"
   }, {
     de: "wo?",
@@ -3470,6 +5341,11 @@ const rawChapters = [
     category: "W-Fragen",
     exampleSentenceDe: "Wo ist die Toilette?",
     exampleSentenceEs: "¿Dónde está el baño?",
+    exampleSentenceDeBlocks: [
+      { text: "Wo", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die Toilette", role: "complement", order: 3 }
+    ],
     regimen: "Lugar, sin movimiento"
   }, {
     de: "wann?",
@@ -3479,6 +5355,11 @@ const rawChapters = [
     category: "W-Fragen",
     exampleSentenceDe: "Wann kommst du?",
     exampleSentenceEs: "¿Cuándo vienes?",
+    exampleSentenceDeBlocks: [
+      { text: "Wann", role: "subject", order: 1 },
+      { text: "kommst", role: "verb_p1", order: 2 },
+      { text: "du", role: "complement", order: 3 }
+    ],
     regimen: "V al final"
   }, {
     de: "warum?",
@@ -3488,6 +5369,11 @@ const rawChapters = [
     category: "W-Fragen",
     exampleSentenceDe: "Warum bist du hier?",
     exampleSentenceEs: "¿Por qué estás aquí?",
+    exampleSentenceDeBlocks: [
+      { text: "Warum", role: "subject", order: 1 },
+      { text: "bist", role: "verb_p1", order: 2 },
+      { text: "du hier", role: "complement", order: 3 }
+    ],
     regimen: "Invariable, posición 1"
   }, {
     de: "wie?",
@@ -3497,6 +5383,11 @@ const rawChapters = [
     category: "W-Fragen",
     exampleSentenceDe: "Wie geht es Ihnen?",
     exampleSentenceEs: "¿Cómo está usted?",
+    exampleSentenceDeBlocks: [
+      { text: "Wie", role: "subject", order: 1 },
+      { text: "geht", role: "verb_p1", order: 2 },
+      { text: "es Ihnen", role: "complement", order: 3 }
+    ],
     regimen: "Posición 1"
   }, {
     de: "woher?",
@@ -3506,6 +5397,11 @@ const rawChapters = [
     category: "W-Fragen",
     exampleSentenceDe: "Woher kommst du?",
     exampleSentenceEs: "¿De dónde vienes?",
+    exampleSentenceDeBlocks: [
+      { text: "Woher", role: "subject", order: 1 },
+      { text: "kommst", role: "verb_p1", order: 2 },
+      { text: "du", role: "complement", order: 3 }
+    ],
     regimen: "+ kommen aus"
   }, {
     de: "wohin?",
@@ -3515,6 +5411,11 @@ const rawChapters = [
     category: "W-Fragen",
     exampleSentenceDe: "Wohin gehst du?",
     exampleSentenceEs: "¿A dónde vas?",
+    exampleSentenceDeBlocks: [
+      { text: "Wohin", role: "subject", order: 1 },
+      { text: "gehst", role: "verb_p1", order: 2 },
+      { text: "du", role: "complement", order: 3 }
+    ],
     regimen: "Con verbos de movimiento"
   }, {
     de: "welcher?",
@@ -3524,6 +5425,11 @@ const rawChapters = [
     category: "W-Fragen",
     exampleSentenceDe: "Welcher Bus ist das?",
     exampleSentenceEs: "¿Cuál es ese autobús?",
+    exampleSentenceDeBlocks: [
+      { text: "Welcher Bus", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "das", role: "complement", order: 3 }
+    ],
     regimen: "Concuerda en género/caso"
   },
   {
@@ -3534,7 +5440,12 @@ const rawChapters = [
     category: "Häufigkeit",
     en: "a bright morning sun",
     exampleSentenceDe: "Morgens trinke ich immer Tee.",
-    exampleSentenceEs: "Por las mañanas siempre bebo té."
+    exampleSentenceEs: "Por las mañanas siempre bebo té.",
+    exampleSentenceDeBlocks: [
+      { text: "Morgens", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "ich immer Tee", role: "complement", order: 3 }
+    ]
   }, {
         de: "abends",
     pron: "a-bents",
@@ -3543,7 +5454,12 @@ const rawChapters = [
     category: "Häufigkeit",
     en: "a crescent moon with stars",
     exampleSentenceDe: "Abends lese ich ein Buch.",
-    exampleSentenceEs: "Por las noches leo un libro."
+    exampleSentenceEs: "Por las noches leo un libro.",
+    exampleSentenceDeBlocks: [
+      { text: "Abends", role: "subject", order: 1 },
+      { text: "lese", role: "verb_p1", order: 2 },
+      { text: "ich ein Buch", role: "complement", order: 3 }
+    ]
   },
     {
       de: "wahrscheinlich",
@@ -3555,6 +5471,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Das Paket kommt wahrscheinlich morgen an.",
       exampleSentenceEs: "El paquete llegará probablemente mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Paket", role: "subject", order: 1 },
+      { text: "kommt", role: "verb_p1", order: 2 },
+      { text: "wahrscheinlich morgen", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
       en: "weather forecast icon showing partial sun and rain clouds"
     },
     {
@@ -3567,6 +5489,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Sie müssen diesen Brief heute unbedingt abschicken.",
       exampleSentenceEs: "Debe enviar esta carta hoy sin falta.",
+    exampleSentenceDeBlocks: [
+      { text: "Sie", role: "subject", order: 1 },
+      { text: "müssen", role: "verb_p1", order: 2 },
+      { text: "diesen Brief heute unbedingt", role: "complement", order: 3 },
+      { text: "abschicken", role: "verb_p2", order: 4 }
+    ],
       en: "urgent red exclamation exclamation badge"
     },
     {
@@ -3579,6 +5507,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Die Fahrt dauert mindestens dreißig Minuten.",
       exampleSentenceEs: "El viaje dura como mínimo treinta minutos.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Fahrt", role: "subject", order: 1 },
+      { text: "dauert", role: "verb_p1", order: 2 },
+      { text: "mindestens dreißig Minuten", role: "complement", order: 3 }
+    ],
       en: "minimum value threshold mark on a meter"
     },
     {
@@ -3591,6 +5524,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Die Reparatur kostet höchstens fünfzig Euro.",
       exampleSentenceEs: "La reparación cuesta como máximo cincuenta euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Reparatur", role: "subject", order: 1 },
+      { text: "kostet", role: "verb_p1", order: 2 },
+      { text: "höchstens fünfzig Euro", role: "complement", order: 3 }
+    ],
       en: "maximum ceiling value limit indicator"
     }]
 },
@@ -3607,6 +5545,11 @@ const rawChapters = [
     category: "Konnektoren",
     exampleSentenceDe: "Ich habe Kaffee und Kuchen.",
     exampleSentenceEs: "Yo tengo café y pastel.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Kaffee und Kuchen", role: "complement", order: 3 }
+    ],
     regimen: "No afecta orden"
   }, {
     de: "oder",
@@ -3616,6 +5559,11 @@ const rawChapters = [
     category: "Konnektoren",
     exampleSentenceDe: "Möchtest du Tee oder Kaffee?",
     exampleSentenceEs: "¿Quieres té o café?",
+    exampleSentenceDeBlocks: [
+      { text: "Möchtest", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "Tee oder Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "No cuenta posición"
   }, {
     de: "aber",
@@ -3625,6 +5573,11 @@ const rawChapters = [
     category: "Konnektoren",
     exampleSentenceDe: "Ich habe Hunger, aber ich habe keine Zeit.",
     exampleSentenceEs: "Tengo hambre, pero no tengo tiempo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Hunger, aber ich habe keine Zeit", role: "complement", order: 3 }
+    ],
     regimen: "No cuenta posición"
   }, {
     de: "denn",
@@ -3634,6 +5587,11 @@ const rawChapters = [
     category: "Konnektoren",
     exampleSentenceDe: "Ich habe Hunger, denn ich esse gern.",
     exampleSentenceEs: "Tengo hambre, pues me gusta comer.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Hunger, denn ich esse gern", role: "complement", order: 3 }
+    ],
     regimen: "No cambia el orden"
   }, {
     de: "sondern",
@@ -3643,6 +5601,11 @@ const rawChapters = [
     category: "Konnektoren",
     exampleSentenceDe: "Ich bin nicht müde, sondern ich bin hungrig.",
     exampleSentenceEs: "No estoy cansado, sino que tengo hambre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "nicht müde, sondern ich bin hungrig", role: "complement", order: 3 }
+    ],
     regimen: "Tras negación (nicht...)"
   }, {
     de: "für",
@@ -3652,6 +5615,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Das Geschenk ist für dich.",
     exampleSentenceEs: "El regalo es para ti.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Geschenk", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "für dich", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "ohne",
@@ -3661,6 +5629,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Ich trinke Kaffee ohne Zucker.",
     exampleSentenceEs: "Bebo café sin azúcar.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "Kaffee ohne Zucker", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "durch",
@@ -3670,6 +5643,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Wir gehen durch den Park.",
     exampleSentenceEs: "Nosotros vamos por el parque.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "gehen", role: "verb_p1", order: 2 },
+      { text: "durch den Park", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "gegen",
@@ -3679,6 +5657,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Es ist gegen 10 Uhr.",
     exampleSentenceEs: "Son las 10 en punto.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gegen 10 Uhr", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "um",
@@ -3688,6 +5671,12 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Der Zug kommt um acht Uhr an.",
     exampleSentenceEs: "El tren llega a las ocho en punto.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Zug", role: "subject", order: 1 },
+      { text: "kommt", role: "verb_p1", order: 2 },
+      { text: "um acht Uhr", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "mit",
@@ -3697,6 +5686,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Ich gehe mit meinem Freund.",
     exampleSentenceEs: "Voy con mi amigo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "mit meinem Freund", role: "complement", order: 3 }
+    ],
     regimen: "⚠️ Obliga Dativo"
   }, {
     de: "nach",
@@ -3706,6 +5700,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Nach dem Essen gehe ich nach Hause.",
     exampleSentenceEs: "Después de la comida, voy a casa.",
+    exampleSentenceDeBlocks: [
+      { text: "Nach dem", role: "subject", order: 1 },
+      { text: "Essen", role: "verb_p1", order: 2 },
+      { text: "gehe ich nach Hause", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "aus",
@@ -3715,6 +5714,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Ich komme aus Spanien.",
     exampleSentenceEs: "Yo vengo de España.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "komme", role: "verb_p1", order: 2 },
+      { text: "aus Spanien", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "bei",
@@ -3724,6 +5728,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Ich bin bei meiner Freundin.",
     exampleSentenceEs: "Yo estoy en casa de mi amiga.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "bei meiner Freundin", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "von",
@@ -3733,6 +5742,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Das Buch ist von Anna.",
     exampleSentenceEs: "El libro es de Anna.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Buch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "von Anna", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "zu",
@@ -3742,6 +5756,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Ich gehe zu meiner Mutter.",
     exampleSentenceEs: "Voy hacia mi madre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "zu meiner Mutter", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "seit",
@@ -3751,6 +5770,11 @@ const rawChapters = [
     category: "Präpositionen",
     exampleSentenceDe: "Ich wohne seit einem Jahr in Berlin.",
     exampleSentenceEs: "Vivo desde hace un año en Berlín.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wohne", role: "verb_p1", order: 2 },
+      { text: "seit einem Jahr in Berlin", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "in",
@@ -3760,6 +5784,11 @@ const rawChapters = [
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Ich bin in der Schule.",
     exampleSentenceEs: "Yo estoy en la escuela.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "in der Schule", role: "complement", order: 3 }
+    ],
     regimen: "Wo=Dat, Wohin=Akk"
   }, {
     de: "an",
@@ -3769,6 +5798,11 @@ const rawChapters = [
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Ich bin am Montag in Berlin.",
     exampleSentenceEs: "Yo estoy el lunes en Berlín.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "am Montag in Berlin", role: "complement", order: 3 }
+    ],
     regimen: "Wo?=Dat, Wohin?=Akk"
   }, {
     de: "auf",
@@ -3778,6 +5812,11 @@ const rawChapters = [
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Das Buch ist auf dem Tisch.",
     exampleSentenceEs: "El libro está sobre la mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Buch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "auf dem Tisch", role: "complement", order: 3 }
+    ],
     regimen: "Wo:Dat/Wohin:Akk"
   }, {
     de: "unter",
@@ -3787,6 +5826,11 @@ const rawChapters = [
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Das Buch ist unter dem Tisch.",
     exampleSentenceEs: "El libro está debajo de la mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Buch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "unter dem Tisch", role: "complement", order: 3 }
+    ],
     regimen: "Wo=Dat, Wohin=Akk"
   }, {
     de: "über",
@@ -3796,6 +5840,11 @@ const rawChapters = [
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Der Mann spricht über die Familie.",
     exampleSentenceEs: "El hombre habla sobre la familia.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Mann", role: "subject", order: 1 },
+      { text: "spricht", role: "verb_p1", order: 2 },
+      { text: "über die Familie", role: "complement", order: 3 }
+    ],
     regimen: "Akk=movim./Dat=lugar"
   }, {
     de: "neben",
@@ -3805,6 +5854,11 @@ const rawChapters = [
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Der Stuhl ist neben dem Tisch.",
     exampleSentenceEs: "La silla está al lado de la mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Stuhl", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neben dem Tisch", role: "complement", order: 3 }
+    ],
     regimen: "Wo?=Dat, Wohin?=Akk"
   }, {
     de: "zwischen",
@@ -3814,6 +5868,11 @@ const rawChapters = [
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Das Buch ist zwischen dem Tisch und dem Stuhl.",
     exampleSentenceEs: "El libro está entre la mesa y la silla.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Buch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "zwischen dem Tisch und dem Stuhl", role: "complement", order: 3 }
+    ],
     regimen: "Akk:movim./Dat:lugar"
   }, {
     de: "vor",
@@ -3823,6 +5882,11 @@ const rawChapters = [
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Vor dem Haus ist ein Baum.",
     exampleSentenceEs: "Delante de la casa hay un árbol.",
+    exampleSentenceDeBlocks: [
+      { text: "Vor dem Haus", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Baum", role: "complement", order: 3 }
+    ],
     regimen: "Wo?=Dat, Wohin?=Akk"
   }, {
     de: "hinter",
@@ -3832,6 +5896,11 @@ const rawChapters = [
     category: "Wechselpräpositionen",
     exampleSentenceDe: "Das Buch ist hinter dem Tisch.",
     exampleSentenceEs: "El libro está detrás de la mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Buch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hinter dem Tisch", role: "complement", order: 3 }
+    ],
     regimen: "Wo?+Dat, Wohin?+Akk"
   }, {
     de: "obwohl",
@@ -3841,6 +5910,11 @@ const rawChapters = [
     category: "Nebensätze",
     exampleSentenceDe: "Ich gehe spazieren, obwohl es regnet.",
     exampleSentenceEs: "Salgo a pasear, aunque llueve.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "spazieren, obwohl es regnet", role: "complement", order: 3 }
+    ],
     regimen: "Verbo al final"
   }, {
     de: "wenn",
@@ -3850,6 +5924,11 @@ const rawChapters = [
     category: "Nebensätze",
     exampleSentenceDe: "Wenn ich Zeit habe, lerne ich Deutsch.",
     exampleSentenceEs: "Si tengo tiempo, aprendo alemán.",
+    exampleSentenceDeBlocks: [
+      { text: "Wenn ich Zeit", role: "subject", order: 1 },
+      { text: "habe,", role: "verb_p1", order: 2 },
+      { text: "lerne ich Deutsch", role: "complement", order: 3 }
+    ],
     regimen: "Verbo al final"
   }, {
     de: "als",
@@ -3859,6 +5938,11 @@ const rawChapters = [
     category: "Nebensätze",
     exampleSentenceDe: "Ich bin klein, als ich Kind war.",
     exampleSentenceEs: "Soy bajo, cuando era niño.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "klein, als ich Kind war", role: "complement", order: 3 }
+    ],
     regimen: "Verbo al final"
   }, {
     de: "deshalb",
@@ -3868,6 +5952,11 @@ const rawChapters = [
     category: "Konnektoren",
     exampleSentenceDe: "Ich habe Hunger. Deshalb esse ich Pizza.",
     exampleSentenceEs: "Tengo hambre. Por eso como pizza.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Hunger", role: "complement", order: 3 }
+    ],
     regimen: "Verbo en pos.2 tras él"
   }, {
     de: "trotzdem",
@@ -3877,6 +5966,10 @@ const rawChapters = [
     category: "Konnektoren",
     exampleSentenceDe: "Es regnet. Trotzdem gehe ich spazieren.",
     exampleSentenceEs: "Está lloviendo. Sin embargo, voy a pasear.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "regnet", role: "verb_p1", order: 2 }
+    ],
     regimen: "Ocupa posición 1, verbo pos.2"
   }, {
     de: "außerdem",
@@ -3886,6 +5979,11 @@ const rawChapters = [
     category: "Konnektoren",
     exampleSentenceDe: "Ich trinke Kaffee. Außerdem trinke ich Tee.",
     exampleSentenceEs: "Bebo café. Además, bebo té.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "Verbo en posición 1"
   }, {
     de: "nämlich",
@@ -3895,6 +5993,11 @@ const rawChapters = [
     category: "Partikeln",
     exampleSentenceDe: "Ich habe ein Problem, nämlich: Ich habe keinen Hunger.",
     exampleSentenceEs: "Tengo un problema, es decir: No tengo hambre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ein Problem, nämlich: Ich habe keinen Hunger", role: "complement", order: 3 }
+    ],
     regimen: "Explica motivo"
   }, {
     de: "doch",
@@ -3904,6 +6007,11 @@ const rawChapters = [
     category: "Partikeln",
     exampleSentenceDe: "Du bist müde. Nein! Ich bin doch nicht müde.",
     exampleSentenceEs: "Estás cansado. ¡No! Sí que no estoy cansado.",
+    exampleSentenceDeBlocks: [
+      { text: "Du", role: "subject", order: 1 },
+      { text: "bist", role: "verb_p1", order: 2 },
+      { text: "müde", role: "complement", order: 3 }
+    ],
     regimen: "Contradice negación"
   }, {
     de: "mal",
@@ -3913,6 +6021,11 @@ const rawChapters = [
     category: "Partikeln",
     exampleSentenceDe: "Das ist mal gut.",
     exampleSentenceEs: "Esto está bien, ¡eh! / Esto sí que está bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mal gut", role: "complement", order: 3 }
+    ],
     regimen: "Suaviza imperativo"
   }, {
     de: "ja",
@@ -3922,6 +6035,11 @@ const rawChapters = [
     category: "Partikeln",
     exampleSentenceDe: "Ja, das ist gut.",
     exampleSentenceEs: "Sí, eso está bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Ja, das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     regimen: "Énfasis, sin traducción literal"
   },
     {
@@ -3934,6 +6052,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich lerne Deutsch, weil ich in Deutschland lebe.",
       exampleSentenceEs: "Aprendo alemán porque vivo en Alemania.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lerne", role: "verb_p1", order: 2 },
+      { text: "Deutsch, weil ich in Deutschland lebe", role: "complement", order: 3 }
+    ],
       en: "cause and effect connecting logic arrow link"
     },
     {
@@ -3946,6 +6069,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich weiß, dass der Unterricht um 9 Uhr beginnt.",
       exampleSentenceEs: "Sé que la clase comienza a las 9:00.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "weiß,", role: "verb_p1", order: 2 },
+      { text: "dass der Unterricht um 9 Uhr beginnt", role: "complement", order: 3 }
+    ],
       en: "statement speech bubble within a larger bubble"
     },
     {
@@ -3958,6 +6086,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich gehe zur Bank, um Geld abzuheben.",
       exampleSentenceEs: "Voy al banco para retirar dinero.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "zur Bank, um Geld abzuheben", role: "complement", order: 3 }
+    ],
       en: "target bulls eye purpose arrow hitting center"
     },
     {
@@ -3970,6 +6103,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Trotz des Regens fahre ich mit dem Fahrrad.",
       exampleSentenceEs: "A pesar de la lluvia voy en bicicleta.",
+    exampleSentenceDeBlocks: [
+      { text: "Trotz des Regens", role: "subject", order: 1 },
+      { text: "fahre", role: "verb_p1", order: 2 },
+      { text: "ich mit dem Fahrrad", role: "complement", order: 3 }
+    ],
       en: "person walking with yellow umbrella in pouring rain"
     },
     {
@@ -3982,6 +6120,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Außer mir ist niemand im Büro.",
       exampleSentenceEs: "Excepto yo, no hay nadie en la oficina.",
+    exampleSentenceDeBlocks: [
+      { text: "Außer mir", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "niemand im Büro", role: "complement", order: 3 }
+    ],
       en: "one colored marble standing apart from grey marbles"
     },
     {
@@ -3994,6 +6137,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Die Post liegt direkt gegenüber dem Bahnhof.",
       exampleSentenceEs: "La oficina postal queda justo enfrente de la estación de tren.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Post", role: "subject", order: 1 },
+      { text: "liegt", role: "verb_p1", order: 2 },
+      { text: "direkt gegenüber dem Bahnhof", role: "complement", order: 3 }
+    ],
       en: "two buildings facing each other across a clean street"
     },
     {
@@ -4006,6 +6154,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Der Zug fährt nur bis München.",
       exampleSentenceEs: "El tren solo viaja hasta Múnich.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Zug", role: "subject", order: 1 },
+      { text: "fährt", role: "verb_p1", order: 2 },
+      { text: "nur bis München", role: "complement", order: 3 }
+    ],
       en: "railroad track reaching a terminal finish line buffer"
     },
     {
@@ -4018,6 +6171,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Gehen Sie diesen Fluss entlang.",
       exampleSentenceEs: "Vaya a lo largo de este río.",
+    exampleSentenceDeBlocks: [
+      { text: "Gehen", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "diesen Fluss entlang", role: "complement", order: 3 }
+    ],
       en: "walking path winding alongside a blue river"
     },
     {
@@ -4030,6 +6188,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wegen des Sturms fällt der Zug heute aus.",
       exampleSentenceEs: "Debido a la tormenta, el tren se cancela hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Wegen", role: "verb_p1", order: 1 },
+      { text: "des Sturms", role: "subject", order: 2 },
+      { text: "fällt der Zug heute", role: "complement", order: 3 },
+      { text: "aus", role: "verb_p2", order: 4 }
+    ],
       en: "storm cloud knocking tree branches onto road"
     },
     {
@@ -4042,6 +6206,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Während der Arbeitszeit darf man nicht privat telefonieren.",
       exampleSentenceEs: "Durante el horario de trabajo no se permite hablar por teléfono en privado.",
+    exampleSentenceDeBlocks: [
+      { text: "Während der Arbeitszeit", role: "subject", order: 1 },
+      { text: "darf", role: "verb_p1", order: 2 },
+      { text: "man nicht privat", role: "complement", order: 3 },
+      { text: "telefonieren", role: "verb_p2", order: 4 }
+    ],
       en: "hourglass showing sand flowing in time duration"
     },
     {
@@ -4054,6 +6224,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Dank deiner Hilfe habe ich die Wohnung gefunden.",
       exampleSentenceEs: "Gracias a tu ayuda he encontrado el apartamento.",
+    exampleSentenceDeBlocks: [
+      { text: "Dank deiner Hilfe", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ich die Wohnung gefunden", role: "complement", order: 3 }
+    ],
       en: "sparkling gift box with helping hand"
     },
     {
@@ -4066,6 +6241,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich nehme lieber Wasser statt Cola.",
       exampleSentenceEs: "Prefiero tomar agua en lugar de refresco.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "nehme", role: "verb_p1", order: 2 },
+      { text: "lieber Wasser statt Cola", role: "complement", order: 3 }
+    ],
       en: "swapping glass of water replacing soda can"
     },
     {
@@ -4078,6 +6258,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ab dem ersten Mai arbeite ich in Hamburg.",
       exampleSentenceEs: "A partir del primero de mayo trabajo en Hamburgo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ab dem", role: "subject", order: 1 },
+      { text: "ersten", role: "verb_p1", order: 2 },
+      { text: "Mai arbeite ich in Hamburg", role: "complement", order: 3 }
+    ],
       en: "starting point flag marker on a road route"
     },
     {
@@ -4090,6 +6275,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Die Miete ist inklusive aller Nebenkosten.",
       exampleSentenceEs: "El alquiler incluye todos los gastos adicionales.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Miete", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "inklusive aller Nebenkosten", role: "complement", order: 3 }
+    ],
       en: "all inclusive bundle box with checkmark"
     }]
 },
@@ -4106,6 +6296,11 @@ const rawChapters = [
     category: "Gebäude",
     exampleSentenceDe: "Das Haus ist groß.",
     exampleSentenceEs: "La casa es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Haus", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Häuser"
   }, {
     de: "die Wohnung",
@@ -4115,6 +6310,11 @@ const rawChapters = [
     category: "Gebäude",
     exampleSentenceDe: "Ich habe eine Wohnung. Die Wohnung ist groß.",
     exampleSentenceEs: "Tengo un apartamento. El apartamento es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eine Wohnung", role: "complement", order: 3 }
+    ],
     plural: "die Wohnungen"
   }, {
     de: "das Hochhaus",
@@ -4124,6 +6324,11 @@ const rawChapters = [
     category: "Gebäude",
     exampleSentenceDe: "Das Hochhaus ist groß.",
     exampleSentenceEs: "El edificio de gran altura es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Hochhaus", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Hochhäuser"
   }, {
     de: "die Treppe",
@@ -4133,6 +6338,11 @@ const rawChapters = [
     category: "Gebäude",
     exampleSentenceDe: "Die Treppe ist hoch.",
     exampleSentenceEs: "La escalera es alta.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Treppe", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hoch", role: "complement", order: 3 }
+    ],
     plural: "die Treppen"
   }, {
     de: "der Aufzug / Lift",
@@ -4142,6 +6352,11 @@ const rawChapters = [
     category: "Gebäude",
     exampleSentenceDe: "Der Aufzug ist neu.",
     exampleSentenceEs: "El ascensor es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Aufzug", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Aufzüge"
   }, {
     de: "der Stock",
@@ -4151,6 +6366,11 @@ const rawChapters = [
     category: "Gebäude",
     exampleSentenceDe: "Ich wohne in dem ersten Stock.",
     exampleSentenceEs: "Vivo en el primer piso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wohne", role: "verb_p1", order: 2 },
+      { text: "in dem ersten Stock", role: "complement", order: 3 }
+    ],
     plural: "die Stockwerke"
   }, {
     de: "das Erdgeschoss",
@@ -4160,6 +6380,11 @@ const rawChapters = [
     category: "Gebäude",
     exampleSentenceDe: "Die Wohnung ist im Erdgeschoss.",
     exampleSentenceEs: "El apartamento está en la planta baja.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Wohnung", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "im Erdgeschoss", role: "complement", order: 3 }
+    ],
     plural: "die Erdgeschosse"
   }, {
     de: "die Miete",
@@ -4169,6 +6394,11 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Die Miete ist teuer.",
     exampleSentenceEs: "El alquiler es caro.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Miete", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "teuer", role: "complement", order: 3 }
+    ],
     plural: "die Mieten"
   }, {
     de: "die Nebenkosten",
@@ -4178,6 +6408,11 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Ich zahle die Nebenkosten im Monat.",
     exampleSentenceEs: "Yo pago los gastos adicionales al mes.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "zahle", role: "verb_p1", order: 2 },
+      { text: "die Nebenkosten im Monat", role: "complement", order: 3 }
+    ],
     plural: "die Nebenkosten"
   }, {
     de: "die Heizkosten",
@@ -4187,6 +6422,11 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Die Heizkosten sind hoch.",
     exampleSentenceEs: "Los gastos de calefacción son altos.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Heizkosten", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "hoch", role: "complement", order: 3 }
+    ],
     plural: "die Heizkosten"
   }, {
     de: "der Mieter / Vermieter",
@@ -4196,6 +6436,11 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Ich bin der Mieter. Mein Vermieter wohnt in Berlin.",
     exampleSentenceEs: "Yo soy el inquilino. Mi arrendador vive en Berlín.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "der Mieter", role: "complement", order: 3 }
+    ],
     plural: "die Mieter / Vermieter"
   }, {
     de: "mieten / vermieten",
@@ -4205,6 +6450,11 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Ich miete eine Wohnung.",
     exampleSentenceEs: "Yo alquilo un apartamento.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "miete", role: "verb_p1", order: 2 },
+      { text: "eine Wohnung", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ; ver- insep."
   }, {
     de: "umziehen",
@@ -4214,6 +6464,12 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Ich ziehe in eine neue Wohnung um.",
     exampleSentenceEs: "Me mudo a un apartamento nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "ziehe", role: "verb_p1", order: 2 },
+      { text: "in eine neue Wohnung", role: "complement", order: 3 },
+      { text: "um", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (um-), sein"
   }, {
     de: "einziehen / ausziehen",
@@ -4223,6 +6479,12 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Ich ziehe in eine neue Wohnung ein.",
     exampleSentenceEs: "Me mudo a un apartamento nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "ziehe", role: "verb_p1", order: 2 },
+      { text: "in eine neue Wohnung", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separables (ein-/aus-)"
   }, {
     de: "der Umzug",
@@ -4232,6 +6494,11 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Der Umzug ist morgen.",
     exampleSentenceEs: "La mudanza es mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Umzug", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "morgen", role: "complement", order: 3 }
+    ],
     plural: "die Umzüge"
   }, {
     de: "die Anzeige",
@@ -4241,6 +6508,11 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Ich sehe die Anzeige.",
     exampleSentenceEs: "Yo veo el anuncio.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "die Anzeige", role: "complement", order: 3 }
+    ],
     plural: "die Anzeigen"
   }, {
     de: "besichtigen",
@@ -4250,6 +6522,11 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Wir besichtigen das Schloss am Samstag.",
     exampleSentenceEs: "Visitamos el castillo el sábado.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "besichtigen", role: "verb_p1", order: 2 },
+      { text: "das Schloss am Samstag", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "der Schlüssel",
@@ -4259,6 +6536,11 @@ const rawChapters = [
     category: "Mieten",
     exampleSentenceDe: "Ich habe den Schlüssel. Der Schlüssel ist hier.",
     exampleSentenceEs: "Tengo la llave. La llave está aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "den Schlüssel", role: "complement", order: 3 }
+    ],
     plural: "die Schlüssel"
   }, {
     de: "das Zimmer",
@@ -4268,6 +6550,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Das Zimmer ist groß.",
     exampleSentenceEs: "La habitación es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Zimmer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Zimmer"
   }, {
     de: "die Küche",
@@ -4277,6 +6564,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Ich bin in der Küche.",
     exampleSentenceEs: "Yo estoy en la cocina.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "in der Küche", role: "complement", order: 3 }
+    ],
     plural: "die Küchen"
   }, {
     de: "das Bad",
@@ -4286,6 +6578,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Das Bad ist sauber.",
     exampleSentenceEs: "El baño está limpio.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Bad", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sauber", role: "complement", order: 3 }
+    ],
     plural: "die Bäder"
   }, {
     de: "das Schlafzimmer",
@@ -4295,6 +6592,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Das Schlafzimmer ist groß.",
     exampleSentenceEs: "El dormitorio es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Schlafzimmer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Schlafzimmer"
   }, {
     de: "das Wohnzimmer",
@@ -4304,6 +6606,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Das ist das Wohnzimmer. Das Wohnzimmer ist groß.",
     exampleSentenceEs: "Esta es la sala de estar. La sala de estar es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "das Wohnzimmer", role: "complement", order: 3 }
+    ],
     plural: "die Wohnzimmer"
   }, {
     de: "das Kinderzimmer",
@@ -4313,6 +6620,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Das ist das Kinderzimmer.",
     exampleSentenceEs: "Este es el cuarto de niños.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "das Kinderzimmer", role: "complement", order: 3 }
+    ],
     plural: "die Kinderzimmer"
   }, {
     de: "der Flur",
@@ -4322,6 +6634,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Ich bin im Flur.",
     exampleSentenceEs: "Yo estoy en el pasillo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "im Flur", role: "complement", order: 3 }
+    ],
     plural: "die Flure"
   }, {
     de: "der Balkon",
@@ -4331,6 +6648,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Ich habe einen Balkon. Der Balkon ist groß.",
     exampleSentenceEs: "Tengo un balcón. El balcón es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Balkon", role: "complement", order: 3 }
+    ],
     plural: "die Balkone"
   }, {
     de: "die Terrasse",
@@ -4340,6 +6662,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Die Terrasse ist groß.",
     exampleSentenceEs: "La terraza es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Terrasse", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Terrassen"
   }, {
     de: "der Garten",
@@ -4349,6 +6676,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Ich habe einen Garten. Der Garten ist schön.",
     exampleSentenceEs: "Tengo un jardín. El jardín es bonito.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Garten", role: "complement", order: 3 }
+    ],
     plural: "die Gärten"
   }, {
     de: "die Garage",
@@ -4358,6 +6690,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Ich habe eine Garage. Die Garage ist groß.",
     exampleSentenceEs: "Tengo un garaje. El garaje es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eine Garage", role: "complement", order: 3 }
+    ],
     plural: "die Garagen"
   }, {
     de: "der Keller",
@@ -4367,6 +6704,11 @@ const rawChapters = [
     category: "Räume",
     exampleSentenceDe: "Der Keller ist unter dem Haus.",
     exampleSentenceEs: "El sótano está debajo de la casa.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Keller", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "unter dem Haus", role: "complement", order: 3 }
+    ],
     plural: "die Keller"
   }, {
     de: "das Licht",
@@ -4376,6 +6718,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Das Licht ist an.",
     exampleSentenceEs: "La luz está encendida.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Licht", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "an", role: "verb_p2", order: 3 }
+    ],
     plural: "die Lichter"
   }, {
     de: "anmachen / ausmachen",
@@ -4385,6 +6732,12 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich mache das Licht an.",
     exampleSentenceEs: "Yo enciendo la luz.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "das Licht", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable, +Akkusativ"
   }, {
     de: "öffnen / schließen",
@@ -4394,6 +6747,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich öffne die Tür.",
     exampleSentenceEs: "Yo abro la puerta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "öffne", role: "verb_p1", order: 2 },
+      { text: "die Tür", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "aufmachen / zumachen",
@@ -4403,6 +6761,12 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich mache die Tür auf.",
     exampleSentenceEs: "Yo abro la puerta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "die Tür", role: "complement", order: 3 },
+      { text: "auf", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (auf-/zu-) +Akk"
   }, {
     de: "putzen / reinigen",
@@ -4412,6 +6776,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich putze das Zimmer.",
     exampleSentenceEs: "Yo limpio la habitación.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "putze", role: "verb_p1", order: 2 },
+      { text: "das Zimmer", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "kaputt",
@@ -4421,6 +6790,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Mein Handy ist kaputt.",
     exampleSentenceEs: "Mi teléfono está roto.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Handy", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "kaputt", role: "complement", order: 3 }
+    ],
     regimen: "≠ ganz"
   }, {
     de: "reparieren",
@@ -4430,6 +6804,12 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich kann das Fahrrad reparieren.",
     exampleSentenceEs: "Yo puedo reparar la bicicleta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kann", role: "verb_p1", order: 2 },
+      { text: "das Fahrrad", role: "complement", order: 3 },
+      { text: "reparieren", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "das Möbelstück",
@@ -4439,6 +6819,11 @@ const rawChapters = [
     category: "Möbel",
     exampleSentenceDe: "Das Möbelstück ist neu.",
     exampleSentenceEs: "El mueble es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Möbelstück", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Möbelstücke"
   }, {
     de: "der Tisch",
@@ -4448,6 +6833,11 @@ const rawChapters = [
     category: "Möbel",
     exampleSentenceDe: "Das ist der Tisch.",
     exampleSentenceEs: "Esta es la mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Tisch", role: "complement", order: 3 }
+    ],
     plural: "die Tische"
   }, {
     de: "der Stuhl",
@@ -4457,6 +6847,11 @@ const rawChapters = [
     category: "Möbel",
     exampleSentenceDe: "Der Stuhl ist neu.",
     exampleSentenceEs: "La silla es nueva.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Stuhl", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Stühle"
   }, {
     de: "der Schrank",
@@ -4466,6 +6861,11 @@ const rawChapters = [
     category: "Möbel",
     exampleSentenceDe: "Das ist der Schrank. Der Schrank ist groß.",
     exampleSentenceEs: "Este es el armario. El armario es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Schrank", role: "complement", order: 3 }
+    ],
     plural: "die Schränke"
   }, {
     de: "das Bett",
@@ -4475,6 +6875,11 @@ const rawChapters = [
     category: "Möbel",
     exampleSentenceDe: "Das Bett ist groß.",
     exampleSentenceEs: "La cama es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Bett", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Betten"
   }, {
     de: "der Spiegel",
@@ -4484,6 +6889,11 @@ const rawChapters = [
     category: "Möbel",
     exampleSentenceDe: "Ich sehe mich im Spiegel.",
     exampleSentenceEs: "Me veo en el espejo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "mich im Spiegel", role: "complement", order: 3 }
+    ],
     plural: "die Spiegel"
   }, {
     de: "der Teppich",
@@ -4493,6 +6903,11 @@ const rawChapters = [
     category: "Möbel",
     exampleSentenceDe: "Der Teppich ist groß.",
     exampleSentenceEs: "La alfombra es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Teppich", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Teppiche"
   }, {
     de: "gemütlich",
@@ -4502,6 +6917,11 @@ const rawChapters = [
     category: "Adjektive",
     exampleSentenceDe: "Das Zimmer ist gemütlich.",
     exampleSentenceEs: "La habitación es acogedora.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Zimmer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gemütlich", role: "verb_p2", order: 3 }
+    ],
     regimen: "≠ unbehaglich"
   },
   {
@@ -4511,8 +6931,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Wohnen",
     regimen: "Separable (auf-) / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich räume die Wohnung auf.",
+    exampleSentenceEs: "Ordeno el apartamento.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "räume", role: "verb_p1", order: 2 },
+      { text: "die Wohnung", role: "complement", order: 3 },
+      { text: "auf", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "der Müll",
     pron: "dea mül",
@@ -4520,8 +6946,14 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Haushalt",
     plural: "-",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich bringe den Müll weg.",
+    exampleSentenceEs: "Llevo la basura fuera.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bringe", role: "verb_p1", order: 2 },
+      { text: "den Müll", role: "complement", order: 3 },
+      { text: "weg", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "der Eimer",
     pron: "dea ái-ma",
@@ -4529,8 +6961,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Haushalt",
     plural: "die Eimer",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Eimer steht im Garten.",
+    exampleSentenceEs: "El cubo está en el jardín.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Eimer", role: "subject", order: 1 },
+      { text: "steht", role: "verb_p1", order: 2 },
+      { text: "im Garten", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Staubsauger",
     pron: "dea shtáup-zau-ga",
@@ -4538,8 +6975,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Haushalt",
     plural: "die Staubsauger",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Staubsauger ist neu und leise.",
+    exampleSentenceEs: "La aspiradora es nueva y silenciosa.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Staubsauger", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu und leise", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Waschmaschine",
     pron: "di vásh-ma-shi-ne",
@@ -4547,8 +6989,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Haushalt",
     plural: "die Waschmaschinen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Waschmaschine wäscht sehr gut.",
+    exampleSentenceEs: "La lavadora lava muy bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Waschmaschine", role: "subject", order: 1 },
+      { text: "wäscht", role: "verb_p1", order: 2 },
+      { text: "sehr gut", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Spülmaschine",
     pron: "di shpül-ma-shi-ne",
@@ -4556,8 +7003,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Haushalt",
     plural: "die Spülmaschinen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Spülmaschine ist jetzt voll.",
+    exampleSentenceEs: "El lavavajillas está lleno ahora.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Spülmaschine", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "jetzt voll", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Waschbecken",
     pron: "das vásh-be-ken",
@@ -4565,8 +7017,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Haushalt",
     plural: "die Waschbecken",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Waschbecken ist ganz sauber.",
+    exampleSentenceEs: "El lavamanos está completamente limpio.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Waschbecken", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ganz sauber", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Fernseher",
     pron: "dea férn-ze-ea",
@@ -4574,8 +7031,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Wohnen",
     plural: "die Fernseher",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Fernseher steht im Wohnzimmer.",
+    exampleSentenceEs: "El televisor está en el salón.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Fernseher", role: "subject", order: 1 },
+      { text: "steht", role: "verb_p1", order: 2 },
+      { text: "im Wohnzimmer", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Kühlschrank",
     pron: "dea kül-shrank",
@@ -4583,8 +7045,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Küche",
     plural: "die Kühlschränke",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Milch steht im Kühlschrank drin.",
+    exampleSentenceEs: "La leche está dentro del refrigerador.",
+    exampleSentenceDeBlocks: [
+      { text: "Milch", role: "subject", order: 1 },
+      { text: "steht", role: "verb_p1", order: 2 },
+      { text: "im Kühlschrank drin", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Sofa",
     pron: "das zó-fa",
@@ -4592,8 +7059,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Wohnen",
     plural: "die Sofas",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Sofa ist sehr bequem.",
+    exampleSentenceEs: "El sofá es muy cómodo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Sofa", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr bequem", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Sessel",
     pron: "dea zé-sel",
@@ -4601,8 +7073,14 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Wohnen",
     plural: "die Sessel",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Sessel ist alt aber gemütlich.",
+    exampleSentenceEs: "El sillón es viejo pero acogedor.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Sessel", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "alt aber", role: "complement", order: 3 },
+      { text: "gemütlich", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "die Lampe",
     pron: "di lám-pe",
@@ -4610,8 +7088,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Wohnen",
     plural: "die Lampen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Lampe gibt warmes Licht.",
+    exampleSentenceEs: "La lámpara da luz cálida.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Lampe", role: "subject", order: 1 },
+      { text: "gibt", role: "verb_p1", order: 2 },
+      { text: "warmes Licht", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Radio",
     pron: "das rá-dio",
@@ -4619,8 +7102,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Wohnen",
     plural: "die Radios",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich höre gern laut Radio.",
+    exampleSentenceEs: "Me gusta escuchar la radio alto.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "höre", role: "verb_p1", order: 2 },
+      { text: "gern laut Radio", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Herd",
     pron: "dea jeat",
@@ -4628,8 +7116,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Küche",
     plural: "die Herde",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Suppe kocht auf dem Herd.",
+    exampleSentenceEs: "La sopa hierve en la estufa.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Suppe", role: "subject", order: 1 },
+      { text: "kocht", role: "verb_p1", order: 2 },
+      { text: "auf dem Herd", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Ofen",
     pron: "dea ó-fen",
@@ -4637,8 +7130,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Küche",
     plural: "die Öfen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Pizza backt im Ofen.",
+    exampleSentenceEs: "La pizza se hornea en el horno.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Pizza", role: "subject", order: 1 },
+      { text: "backt", role: "verb_p1", order: 2 },
+      { text: "im Ofen", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Mikrowelle",
     pron: "di mi-kro-vé-le",
@@ -4646,8 +7144,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Küche",
     plural: "die Mikrowellen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Mikrowelle wärmt das Essen.",
+    exampleSentenceEs: "El microondas calienta la comida.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Mikrowelle", role: "subject", order: 1 },
+      { text: "wärmt", role: "verb_p1", order: 2 },
+      { text: "das Essen", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Kaffeemaschine",
     pron: "di ka-fé-ma-shi-ne",
@@ -4655,8 +7158,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Küche",
     plural: "die Kaffeemaschinen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Kaffeemaschine macht frischen Kaffee.",
+    exampleSentenceEs: "La cafetera hace café fresco.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kaffeemaschine", role: "subject", order: 1 },
+      { text: "macht", role: "verb_p1", order: 2 },
+      { text: "frischen Kaffee", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Topf",
     pron: "dea topf",
@@ -4664,8 +7172,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Küche",
     plural: "die Töpfe",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Topf ist noch heiß.",
+    exampleSentenceEs: "La olla todavía está caliente.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Topf", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "noch heiß", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Pfanne",
     pron: "di pfá-ne",
@@ -4673,8 +7186,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Küche",
     plural: "die Pfannen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Fleisch brät in der Pfanne.",
+    exampleSentenceEs: "La carne se fríe en la sartén.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Fleisch", role: "subject", order: 1 },
+      { text: "brät", role: "verb_p1", order: 2 },
+      { text: "in der Pfanne", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Tür",
     pron: "di tür",
@@ -4682,8 +7200,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Gebäude",
     plural: "die Türen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Er schließt die Tür leise.",
+    exampleSentenceEs: "Él cierra la puerta en silencio.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "schließt", role: "verb_p1", order: 2 },
+      { text: "die Tür leise", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Fenster",
     pron: "das féns-tea",
@@ -4691,8 +7214,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Gebäude",
     plural: "die Fenster",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich öffne das Fenster kurz.",
+    exampleSentenceEs: "Abro la ventana brevemente.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "öffne", role: "verb_p1", order: 2 },
+      { text: "das Fenster kurz", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Wand",
     pron: "di vant",
@@ -4700,8 +7228,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Gebäude",
     plural: "die Wände",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ein Bild hängt an der Wand.",
+    exampleSentenceEs: "Un cuadro cuelga de la pared.",
+    exampleSentenceDeBlocks: [
+      { text: "Ein Bild", role: "subject", order: 1 },
+      { text: "hängt", role: "verb_p1", order: 2 },
+      { text: "an der Wand", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Dach",
     pron: "das daj",
@@ -4709,8 +7242,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Gebäude",
     plural: "die Dächer",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Katze schläft auf dem Dach.",
+    exampleSentenceEs: "El gato duerme en el tejado.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Katze", role: "subject", order: 1 },
+      { text: "schläft", role: "verb_p1", order: 2 },
+      { text: "auf dem Dach", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Kissen",
     pron: "das kí-sen",
@@ -4718,8 +7256,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Wohnen",
     plural: "die Kissen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Kissen ist sehr weich.",
+    exampleSentenceEs: "La almohada es muy suave.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Kissen", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr weich", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Decke",
     pron: "di dé-ke",
@@ -4727,8 +7270,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Wohnen",
     plural: "die Decken",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Decke hält mich warm.",
+    exampleSentenceEs: "La manta me mantiene caliente.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Decke", role: "subject", order: 1 },
+      { text: "hält", role: "verb_p1", order: 2 },
+      { text: "mich warm", role: "complement", order: 3 }
+    ]
   },
     {
       de: "die Kaution",
@@ -4740,6 +7288,11 @@ const rawChapters = [
       plural: "die Kautionen",
       exampleSentenceDe: "Die Kaution beträgt drei Monatskaltmieten.",
       exampleSentenceEs: "La fianza equivale a tres meses de renta fría.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kaution", role: "subject", order: 1 },
+      { text: "beträgt", role: "verb_p1", order: 2 },
+      { text: "drei Monatskaltmieten", role: "complement", order: 3 }
+    ],
       en: "safety deposit vault money box with key"
     },
     {
@@ -4752,6 +7305,11 @@ const rawChapters = [
       plural: "die Kaltmieten",
       exampleSentenceDe: "Die Kaltmiete kostet 650 Euro im Monat.",
       exampleSentenceEs: "La renta fría cuesta 650 euros al mes.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kaltmiete", role: "subject", order: 1 },
+      { text: "kostet", role: "verb_p1", order: 2 },
+      { text: "650 Euro im Monat", role: "complement", order: 3 }
+    ],
       en: "house icon with blue cool outline price tag"
     },
     {
@@ -4764,6 +7322,11 @@ const rawChapters = [
       plural: "die Warmmieten",
       exampleSentenceDe: "Die Warmmiete beträgt 850 Euro inklusive Heizung.",
       exampleSentenceEs: "La renta caliente es de 850 euros con calefacción incluida.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Warmmiete", role: "subject", order: 1 },
+      { text: "beträgt", role: "verb_p1", order: 2 },
+      { text: "850 Euro inklusive Heizung", role: "complement", order: 3 }
+    ],
       en: "cozy house icon with orange warm radiator glow"
     },
     {
@@ -4776,6 +7339,11 @@ const rawChapters = [
       plural: "die Hausordnungen",
       exampleSentenceDe: "Die Hausordnung verbietet laute Musik ab 22 Uhr.",
       exampleSentenceEs: "Las normas del edificio prohíben música alta a partir de las 22:00.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Hausordnung", role: "subject", order: 1 },
+      { text: "verbietet", role: "verb_p1", order: 2 },
+      { text: "laute Musik ab 22 Uhr", role: "complement", order: 3 }
+    ],
       en: "bulleted framed rules notice board hanging on wall"
     },
     {
@@ -4788,6 +7356,11 @@ const rawChapters = [
       plural: "die Ruhezeiten",
       exampleSentenceDe: "Am Sonntag gilt in Deutschland die gesetzliche Ruhezeit.",
       exampleSentenceEs: "El domingo rige en Alemania el horario legal de descanso.",
+    exampleSentenceDeBlocks: [
+      { text: "Am Sonntag", role: "subject", order: 1 },
+      { text: "gilt", role: "verb_p1", order: 2 },
+      { text: "in Deutschland die gesetzliche Ruhezeit", role: "complement", order: 3 }
+    ],
       en: "silent clock with finger on lips sleeping moon"
     },
     {
@@ -4800,6 +7373,11 @@ const rawChapters = [
       plural: "die Hausmeister",
       exampleSentenceDe: "Der Hausmeister repariert die Heizung im Keller.",
       exampleSentenceEs: "El encargado repara la calefacción en el sótano.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Hausmeister", role: "subject", order: 1 },
+      { text: "repariert", role: "verb_p1", order: 2 },
+      { text: "die Heizung im Keller", role: "complement", order: 3 }
+    ],
       en: "friendly building facility manager with toolbelt"
     },
     {
@@ -4812,6 +7390,12 @@ const rawChapters = [
       plural: "die Nachbarn / die Nachbarinnen",
       exampleSentenceDe: "Mein Nachbar nimmt freundlicherweise mein Paket an.",
       exampleSentenceEs: "Mi vecino recibe amablemente mi paquete.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Nachbar", role: "subject", order: 1 },
+      { text: "nimmt", role: "verb_p1", order: 2 },
+      { text: "freundlicherweise mein Paket", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
       en: "friendly neighbor waving from adjacent apartment door"
     },
     {
@@ -4824,6 +7408,11 @@ const rawChapters = [
       plural: "die Mülltrennungen",
       exampleSentenceDe: "Die Mülltrennung ist in diesem Haus sehr wichtig.",
       exampleSentenceEs: "La separación de residuos es muy importante en esta casa.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Mülltrennung", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "in diesem Haus sehr wichtig", role: "complement", order: 3 }
+    ],
       en: "colored recycling bins blue green yellow brown in row"
     },
     {
@@ -4836,6 +7425,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Sie müssen den Schlüssel beim Hausmeister abgeben.",
       exampleSentenceEs: "Debe entregar la llave al conserje.",
+    exampleSentenceDeBlocks: [
+      { text: "Sie", role: "subject", order: 1 },
+      { text: "müssen", role: "verb_p1", order: 2 },
+      { text: "den Schlüssel beim Hausmeister", role: "complement", order: 3 },
+      { text: "abgeben", role: "verb_p2", order: 4 }
+    ],
       en: "hand handing over a key to reception desk"
     }]
 },
@@ -4852,6 +7447,11 @@ const rawChapters = [
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse das Essen.",
     exampleSentenceEs: "Yo como la comida.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "das Essen", role: "complement", order: 3 }
+    ],
     plural: "die Essen"
   }, {
     de: "das Frühstück",
@@ -4861,6 +7461,11 @@ const rawChapters = [
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse das Frühstück.",
     exampleSentenceEs: "Yo como el desayuno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "das Frühstück", role: "complement", order: 3 }
+    ],
     plural: "die Frühstücke"
   }, {
     de: "das Mittagessen",
@@ -4870,6 +7475,11 @@ const rawChapters = [
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse das Mittagessen um 13 Uhr.",
     exampleSentenceEs: "Yo como el almuerzo a las 13:00.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "das Mittagessen um 13 Uhr", role: "complement", order: 3 }
+    ],
     plural: "die Mittagessen"
   }, {
     de: "zu Mittag essen",
@@ -4879,6 +7489,11 @@ const rawChapters = [
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse zu Mittag.",
     exampleSentenceEs: "Yo almuerzo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "zu Mittag", role: "complement", order: 3 }
+    ],
     regimen: "Verbo separable"
   }, {
     de: "das Abendessen",
@@ -4888,6 +7503,11 @@ const rawChapters = [
     category: "Mahlzeiten",
     exampleSentenceDe: "Das Abendessen ist um 19 Uhr.",
     exampleSentenceEs: "La cena es a las 19:00.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Abendessen", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "um 19 Uhr", role: "complement", order: 3 }
+    ],
     plural: "die Abendessen"
   }, {
     de: "zu Abend essen",
@@ -4897,6 +7517,11 @@ const rawChapters = [
     category: "Mahlzeiten",
     exampleSentenceDe: "Ich esse zu Abend.",
     exampleSentenceEs: "Yo ceno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "zu Abend", role: "complement", order: 3 }
+    ],
     regimen: "Verbo al final"
   }, {
     de: "der Hunger",
@@ -4906,6 +7531,11 @@ const rawChapters = [
     category: "Gefühle",
     exampleSentenceDe: "Ich habe Hunger.",
     exampleSentenceEs: "Tengo hambre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Hunger", role: "complement", order: 3 }
+    ],
     plural: "kein Plural"
   }, {
     de: "der Durst",
@@ -4915,6 +7545,11 @@ const rawChapters = [
     category: "Gefühle",
     exampleSentenceDe: "Ich habe der Durst.",
     exampleSentenceEs: "Tengo sed.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "der Durst", role: "complement", order: 3 }
+    ],
     plural: "die Durste"
   }, {
     de: "das Lebensmittel",
@@ -4924,6 +7559,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Das Lebensmittel ist gut.",
     exampleSentenceEs: "El alimento es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Lebensmittel", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     plural: "die Lebensmittel"
   }, {
     de: "das Brot",
@@ -4933,6 +7573,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Das Brot ist gut.",
     exampleSentenceEs: "El pan está bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Brot", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     plural: "die Brote"
   }, {
     de: "die Butter",
@@ -4942,6 +7587,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Ich brauche die Butter.",
     exampleSentenceEs: "Yo necesito la mantequilla.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "die Butter", role: "complement", order: 3 }
+    ],
     plural: "die Buttersorten"
   }, {
     de: "der Käse",
@@ -4951,6 +7601,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Das ist der Käse. Der Käse ist gut.",
     exampleSentenceEs: "Este es el queso. El queso es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Käse", role: "complement", order: 3 }
+    ],
     plural: "die Käse"
   }, {
     de: "das Fleisch",
@@ -4960,6 +7615,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse das Fleisch.",
     exampleSentenceEs: "Yo como la carne.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "das Fleisch", role: "complement", order: 3 }
+    ],
     plural: "die Fleischsorten"
   }, {
     de: "der Fisch",
@@ -4969,6 +7629,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Der Fisch ist gut.",
     exampleSentenceEs: "El pescado está bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Fisch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     plural: "die Fische"
   }, {
     de: "die Kartoffel",
@@ -4978,6 +7643,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse die Kartoffel.",
     exampleSentenceEs: "Yo como la papa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "die Kartoffel", role: "complement", order: 3 }
+    ],
     plural: "die Kartoffeln"
   }, {
     de: "der Reis",
@@ -4987,6 +7657,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Der Reis ist gut.",
     exampleSentenceEs: "El arroz está bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Reis", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     plural: "die Reis"
   }, {
     de: "die Suppe",
@@ -4996,6 +7671,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse die Suppe.",
     exampleSentenceEs: "Yo como la sopa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "die Suppe", role: "complement", order: 3 }
+    ],
     plural: "die Suppen"
   }, {
     de: "das Gemüse",
@@ -5005,6 +7685,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Das Gemüse ist gut.",
     exampleSentenceEs: "La verdura es buena.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Gemüse", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     plural: "die Gemüse"
   }, {
     de: "das Obst",
@@ -5014,6 +7699,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse das Obst. Das Obst ist gut.",
     exampleSentenceEs: "Yo como la fruta. La fruta es buena.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "das Obst", role: "complement", order: 3 }
+    ],
     plural: "kein Plural"
   }, {
     de: "die Tomate",
@@ -5023,6 +7713,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Die Tomate ist rot.",
     exampleSentenceEs: "El tomate es rojo.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Tomate", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "rot", role: "complement", order: 3 }
+    ],
     plural: "die Tomaten"
   }, {
     de: "der Apfel",
@@ -5032,6 +7727,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Ich esse den Apfel.",
     exampleSentenceEs: "Yo como la manzana.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "den Apfel", role: "complement", order: 3 }
+    ],
     plural: "die Äpfel"
   }, {
     de: "die Orange",
@@ -5041,6 +7741,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Das ist eine Orange. Die Orange ist rot.",
     exampleSentenceEs: "Esto es una naranja. La naranja es roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "eine Orange", role: "complement", order: 3 }
+    ],
     plural: "die Orangen"
   }, {
     de: "der Kuchen",
@@ -5050,6 +7755,11 @@ const rawChapters = [
     category: "Lebensmittel",
     exampleSentenceDe: "Ich mag der Kuchen.",
     exampleSentenceEs: "Me gusta el pastel.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mag", role: "verb_p1", order: 2 },
+      { text: "der Kuchen", role: "complement", order: 3 }
+    ],
     plural: "die Kuchen"
   }, {
     de: "das Getränk",
@@ -5059,6 +7769,11 @@ const rawChapters = [
     category: "Getränke",
     exampleSentenceDe: "Ich möchte das Getränk.",
     exampleSentenceEs: "Yo quiero la bebida.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "das Getränk", role: "complement", order: 3 }
+    ],
     plural: "die Getränke"
   }, {
     de: "das Wasser",
@@ -5068,6 +7783,11 @@ const rawChapters = [
     category: "Getränke",
     exampleSentenceDe: "Das Wasser ist kalt.",
     exampleSentenceEs: "El agua está fría.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wasser", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "kalt", role: "complement", order: 3 }
+    ],
     plural: "die Wasser"
   }, {
     de: "der Kaffee",
@@ -5077,6 +7797,11 @@ const rawChapters = [
     category: "Getränke",
     exampleSentenceDe: "Ich trinke gern den Kaffee.",
     exampleSentenceEs: "Me gusta beber el café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "gern den Kaffee", role: "complement", order: 3 }
+    ],
     plural: "die Kaffees"
   }, {
     de: "der Tee",
@@ -5086,6 +7811,11 @@ const rawChapters = [
     category: "Getränke",
     exampleSentenceDe: "Ich trinke den Tee am Morgen.",
     exampleSentenceEs: "Bebo el té por la mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "den Tee am Morgen", role: "complement", order: 3 }
+    ],
     plural: "die Tees"
   }, {
     de: "die Milch",
@@ -5095,6 +7825,11 @@ const rawChapters = [
     category: "Getränke",
     exampleSentenceDe: "Ich habe die Milch. Die Milch ist kalt.",
     exampleSentenceEs: "Tengo la leche. La leche está fría.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Milch", role: "complement", order: 3 }
+    ],
     plural: "die Milch"
   }, {
     de: "das Bier",
@@ -5104,6 +7839,11 @@ const rawChapters = [
     category: "Getränke",
     exampleSentenceDe: "Ich mag das Bier.",
     exampleSentenceEs: "Me gusta la cerveza.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mag", role: "verb_p1", order: 2 },
+      { text: "das Bier", role: "complement", order: 3 }
+    ],
     plural: "die Biere"
   }, {
     de: "der Wein",
@@ -5113,6 +7853,11 @@ const rawChapters = [
     category: "Getränke",
     exampleSentenceDe: "Der Wein ist rot.",
     exampleSentenceEs: "El vino es tinto.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Wein", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "rot", role: "complement", order: 3 }
+    ],
     plural: "die Weine"
   }, {
     de: "der Teller",
@@ -5122,6 +7867,11 @@ const rawChapters = [
     category: "Geschirr",
     exampleSentenceDe: "Der Teller ist groß.",
     exampleSentenceEs: "El plato es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Teller", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Teller"
   }, {
     de: "die Tasse",
@@ -5131,6 +7881,11 @@ const rawChapters = [
     category: "Geschirr",
     exampleSentenceDe: "Ich habe eine Tasse. Die Tasse ist klein.",
     exampleSentenceEs: "Tengo una taza. La taza es pequeña.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eine Tasse", role: "complement", order: 3 }
+    ],
     plural: "die Tassen"
   }, {
     de: "das Messer",
@@ -5140,6 +7895,11 @@ const rawChapters = [
     category: "Geschirr",
     exampleSentenceDe: "Das Messer ist neu.",
     exampleSentenceEs: "El cuchillo es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Messer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Messer"
   }, {
     de: "die Gabel",
@@ -5149,6 +7909,11 @@ const rawChapters = [
     category: "Geschirr",
     exampleSentenceDe: "Ich habe die Gabel. Die Gabel ist auf dem Tisch.",
     exampleSentenceEs: "Tengo el tenedor. El tenedor está sobre la mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Gabel", role: "complement", order: 3 }
+    ],
     plural: "die Gabeln"
   }, {
     de: "der Löffel",
@@ -5158,6 +7923,11 @@ const rawChapters = [
     category: "Geschirr",
     exampleSentenceDe: "Ich habe einen Löffel. Der Löffel ist klein.",
     exampleSentenceEs: "Tengo una cuchara. La cuchara es pequeña.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Löffel", role: "complement", order: 3 }
+    ],
     plural: "die Löffel"
   }, {
     de: "die Flasche",
@@ -5167,6 +7937,11 @@ const rawChapters = [
     category: "Geschirr",
     exampleSentenceDe: "Ich habe eine Flasche Wasser.",
     exampleSentenceEs: "Tengo una botella de agua.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eine Flasche Wasser", role: "complement", order: 3 }
+    ],
     plural: "die Flaschen"
   }, {
     de: "trinken / kochen",
@@ -5176,6 +7951,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich trinke Kaffee am Morgen.",
     exampleSentenceEs: "Yo bebo café por la mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "Kaffee am Morgen", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "schmecken",
@@ -5185,6 +7965,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Das Essen schmeckt gut.",
     exampleSentenceEs: "La comida sabe bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "Essen", role: "verb_p1", order: 2 },
+      { text: "schmeckt gut", role: "complement", order: 3 }
+    ],
     regimen: "⚠️ Exige Dativo"
   }, {
     de: "mögen",
@@ -5194,6 +7979,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich mag Kaffee.",
     exampleSentenceEs: "Me gusta el café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mag", role: "verb_p1", order: 2 },
+      { text: "Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "Ich möchte",
@@ -5203,6 +7993,11 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Ich möchte Wasser.",
     exampleSentenceEs: "Me gustaría agua.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "Wasser", role: "complement", order: 3 }
+    ],
     regimen: "+ Infinitivo final"
   }, {
     de: "Was möchten Sie?",
@@ -5212,6 +8007,11 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Hallo! Was möchten Sie?",
     exampleSentenceEs: "¡Hola! ¿Qué le gustaría?",
+    exampleSentenceDeBlocks: [
+      { text: "Hallo! Was", role: "subject", order: 1 },
+      { text: "möchten", role: "verb_p1", order: 2 },
+      { text: "Sie", role: "complement", order: 3 }
+    ],
     regimen: "Formal, Verb final"
   }, {
     de: "Ich hätte gern",
@@ -5221,6 +8021,11 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Ich hätte gern einen Kaffee.",
     exampleSentenceEs: "Quisiera un café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "hätte", role: "verb_p1", order: 2 },
+      { text: "gern einen Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "nehmen",
@@ -5230,6 +8035,11 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Ich nehme einen Kaffee.",
     exampleSentenceEs: "Yo tomo un café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "nehme", role: "verb_p1", order: 2 },
+      { text: "einen Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "Irregular (nimmt) / + Akkusativ"
   }, {
     de: "das Restaurant",
@@ -5239,6 +8049,11 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Das Restaurant ist neu.",
     exampleSentenceEs: "El restaurante es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Restaurant", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Restaurants"
   }, {
     de: "die Speisekarte",
@@ -5248,6 +8063,10 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Entschuldigung, die Speisekarte, bitte.",
     exampleSentenceEs: "Disculpe, el menú, por favor.",
+    exampleSentenceDeBlocks: [
+      { text: "Entschuldigung, die Speisekarte,", role: "subject", order: 1 },
+      { text: "bitte", role: "verb_p1", order: 2 }
+    ],
     plural: "die Speisekarten"
   }, {
     de: "bestellen",
@@ -5257,6 +8076,11 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Ich bestelle Pizza.",
     exampleSentenceEs: "Yo pido pizza.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bestelle", role: "verb_p1", order: 2 },
+      { text: "Pizza", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "Guten Appetit",
@@ -5266,6 +8090,10 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Guten Appetit!",
     exampleSentenceEs: "¡Buen provecho!",
+    exampleSentenceDeBlocks: [
+      { text: "Guten", role: "subject", order: 1 },
+      { text: "Appetit", role: "verb_p1", order: 2 }
+    ],
     regimen: "Fijo, antes de comer"
   }, {
     de: "die Rechnung",
@@ -5275,6 +8103,11 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Ich brauche die Rechnung bitte.",
     exampleSentenceEs: "Necesito la cuenta por favor.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "die Rechnung bitte", role: "complement", order: 3 }
+    ],
     plural: "die Rechnungen"
   }, {
     de: "bezahlen",
@@ -5284,6 +8117,11 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Ich bezahle die Rechnung.",
     exampleSentenceEs: "Yo pago la cuenta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bezahle", role: "verb_p1", order: 2 },
+      { text: "die Rechnung", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "getrennt / zusammen",
@@ -5293,6 +8131,11 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Wir wohnen zusammen.",
     exampleSentenceEs: "Vivimos juntos.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "wohnen", role: "verb_p1", order: 2 },
+      { text: "zusammen", role: "verb_p2", order: 3 }
+    ],
     regimen: "≠ zusammen / getrennt"
   }, {
     de: "Stimmt so",
@@ -5302,6 +8145,10 @@ const rawChapters = [
     category: "Im Restaurant",
     exampleSentenceDe: "Stimmt so, danke.",
     exampleSentenceEs: "Así está bien, gracias.",
+    exampleSentenceDeBlocks: [
+      { text: "Stimmt so,", role: "subject", order: 1 },
+      { text: "danke", role: "verb_p1", order: 2 }
+    ],
     regimen: "Fijo, al pagar"
   }, {
     de: "das Gericht",
@@ -5311,6 +8158,11 @@ const rawChapters = [
     category: "Kochen",
     exampleSentenceDe: "Das Gericht ist lecker.",
     exampleSentenceEs: "El plato preparado está rico.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Gericht", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "lecker", role: "complement", order: 3 }
+    ],
     plural: "die Gerichte"
   }, {
     de: "der Topf / die Pfanne",
@@ -5320,6 +8172,11 @@ const rawChapters = [
     category: "Kochen",
     exampleSentenceDe: "Ich habe einen Topf. Der Topf ist neu.",
     exampleSentenceEs: "Tengo una olla. La olla es nueva.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Topf", role: "complement", order: 3 }
+    ],
     plural: "die Töpfe / die Pfannen"
   }, {
     de: "probieren",
@@ -5329,6 +8186,12 @@ const rawChapters = [
     category: "Kochen",
     exampleSentenceDe: "Ich möchte das Brot probieren.",
     exampleSentenceEs: "Quiero probar el pan.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "das Brot", role: "complement", order: 3 },
+      { text: "probieren", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "scharf / süß",
@@ -5338,6 +8201,11 @@ const rawChapters = [
     category: "Geschmack",
     exampleSentenceDe: "Das Essen ist scharf. Die Süßigkeit ist süß.",
     exampleSentenceEs: "La comida es picante. El dulce es dulce.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "Essen", role: "verb_p1", order: 2 },
+      { text: "ist scharf", role: "complement", order: 3 }
+    ],
     regimen: "≠ süß / scharf"
   }, {
     de: "satt sein",
@@ -5347,6 +8215,11 @@ const rawChapters = [
     category: "Gefühle",
     exampleSentenceDe: "Ich bin satt.",
     exampleSentenceEs: "Yo estoy lleno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "satt", role: "complement", order: 3 }
+    ],
     regimen: "sein + adj"
   },
   {
@@ -5356,8 +8229,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Essen & Trinken",
     regimen: "+ Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Wir backen heute frisches Brot.",
+    exampleSentenceEs: "Horneamos hoy pan fresco.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "backen", role: "verb_p1", order: 2 },
+      { text: "heute frisches Brot", role: "complement", order: 3 }
+    ]
   }, {
         de: "braten",
     pron: "brá-ten",
@@ -5365,8 +8243,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Essen & Trinken",
     regimen: "+ Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Er brät leckere Kartoffeln an.",
+    exampleSentenceEs: "Él fríe patatas deliciosas.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "brät", role: "verb_p1", order: 2 },
+      { text: "leckere Kartoffeln", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "grillen",
     pron: "grí-len",
@@ -5374,8 +8258,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Essen & Trinken",
     regimen: "+ Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Wir grillen Fleisch im Garten.",
+    exampleSentenceEs: "Asamos carne en el jardín.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "grillen", role: "verb_p1", order: 2 },
+      { text: "Fleisch im Garten", role: "complement", order: 3 }
+    ]
   }, {
         de: "schneiden",
     pron: "shnái-den",
@@ -5383,8 +8272,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Essen & Trinken",
     regimen: "+ Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich schneide den Apfel klein.",
+    exampleSentenceEs: "Corto la manzana en trozos pequeños.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schneide", role: "verb_p1", order: 2 },
+      { text: "den Apfel klein", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Besteck",
     pron: "das be-shték",
@@ -5392,8 +8286,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Haushalt",
     plural: "die Bestecke",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Besteck liegt auf dem Tisch.",
+    exampleSentenceEs: "Los cubiertos están sobre la mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Besteck", role: "subject", order: 1 },
+      { text: "liegt", role: "verb_p1", order: 2 },
+      { text: "auf dem Tisch", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Schüssel",
     pron: "di shü-sel",
@@ -5401,8 +8300,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Haushalt",
     plural: "die Schüsseln",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Salat ist in der Schüssel.",
+    exampleSentenceEs: "La ensalada está en el bol.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Salat", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "in der Schüssel", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Glas",
     pron: "das glas",
@@ -5410,8 +8314,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Haushalt",
     plural: "die Gläser",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Glas ist mit Wasser voll.",
+    exampleSentenceEs: "El vaso está lleno de agua.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Glas", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mit Wasser voll", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Becher",
     pron: "dea bé-jea",
@@ -5419,8 +8328,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Haushalt",
     plural: "die Becher",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Er nimmt einen Becher Kaffee.",
+    exampleSentenceEs: "Él toma un vaso de café.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "nimmt", role: "verb_p1", order: 2 },
+      { text: "einen Becher Kaffee", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Serviette",
     pron: "di sea-vié-te",
@@ -5428,8 +8342,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Haushalt",
     plural: "die Servietten",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Serviette liegt neben dem Teller.",
+    exampleSentenceEs: "La servilleta está al lado del plato.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Serviette", role: "subject", order: 1 },
+      { text: "liegt", role: "verb_p1", order: 2 },
+      { text: "neben dem Teller", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Pilz",
     pron: "dea pilts",
@@ -5439,7 +8358,12 @@ const rawChapters = [
     plural: "die Pilze",
     en: "brown mushroom",
     exampleSentenceDe: "Ich esse gern Pilze.",
-    exampleSentenceEs: "Me gusta comer champiñones."
+    exampleSentenceEs: "Me gusta comer champiñones.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "gern Pilze", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Nuss",
     pron: "di nus",
@@ -5449,7 +8373,12 @@ const rawChapters = [
     plural: "die Nüsse",
     en: "brown walnut",
     exampleSentenceDe: "Der Kuchen hat Nüsse.",
-    exampleSentenceEs: "El pastel tiene nueces."
+    exampleSentenceEs: "El pastel tiene nueces.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Kuchen", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "Nüsse", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Keks",
     pron: "dea keks",
@@ -5459,7 +8388,12 @@ const rawChapters = [
     plural: "die Kekse",
     en: "chocolate chip cookie",
     exampleSentenceDe: "Möchtest du einen Keks?",
-    exampleSentenceEs: "¿Quieres una galleta?"
+    exampleSentenceEs: "¿Quieres una galleta?",
+    exampleSentenceDeBlocks: [
+      { text: "Möchtest", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "einen Keks", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Bonbon",
     pron: "das bong-bóng",
@@ -5469,7 +8403,12 @@ const rawChapters = [
     plural: "die Bonbons",
     en: "wrapped sweet candy",
     exampleSentenceDe: "Das Kind isst ein Bonbon.",
-    exampleSentenceEs: "El niño come un caramelo."
+    exampleSentenceEs: "El niño come un caramelo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Kind", role: "subject", order: 1 },
+      { text: "isst", role: "verb_p1", order: 2 },
+      { text: "ein Bonbon", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Schokolade",
     pron: "di sho-ko-lá-de",
@@ -5479,7 +8418,12 @@ const rawChapters = [
     plural: "die Schokoladen",
     en: "brown chocolate bar",
     exampleSentenceDe: "Ich liebe Schokolade.",
-    exampleSentenceEs: "Amo el chocolate."
+    exampleSentenceEs: "Amo el chocolate.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "liebe", role: "verb_p1", order: 2 },
+      { text: "Schokolade", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Sahne",
     pron: "di zá-ne",
@@ -5489,7 +8433,12 @@ const rawChapters = [
     plural: "die Sahnen",
     en: "bowl of whipped cream",
     exampleSentenceDe: "Ich trinke Kaffee mit Sahne.",
-    exampleSentenceEs: "Bebo café con nata."
+    exampleSentenceEs: "Bebo café con nata.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "trinke", role: "verb_p1", order: 2 },
+      { text: "Kaffee mit Sahne", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Pfirsich",
     pron: "dea pfír-sij",
@@ -5499,7 +8448,12 @@ const rawChapters = [
     plural: "die Pfirsiche",
     en: "fresh peach fruit",
     exampleSentenceDe: "Der Pfirsich ist muy dulce.",
-    exampleSentenceEs: "El durazno es muy dulce."
+    exampleSentenceEs: "El durazno es muy dulce.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Pfirsich", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "muy dulce", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Melone",
     pron: "di me-ló-ne",
@@ -5509,7 +8463,12 @@ const rawChapters = [
     plural: "die Melonen",
     en: "slice of watermelon",
     exampleSentenceDe: "Im Sommer esse ich Melone.",
-    exampleSentenceEs: "En verano como melón."
+    exampleSentenceEs: "En verano como melón.",
+    exampleSentenceDeBlocks: [
+      { text: "Im Sommer", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "ich Melone", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Mehl",
     pron: "das mel",
@@ -5519,7 +8478,12 @@ const rawChapters = [
     plural: "die Mehle",
     en: "paper bag of white flour",
     exampleSentenceDe: "Wir brauchen Mehl für das Brot.",
-    exampleSentenceEs: "Necesitamos harina para el pan."
+    exampleSentenceEs: "Necesitamos harina para el pan.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "brauchen", role: "verb_p1", order: 2 },
+      { text: "Mehl für das Brot", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Gewürz",
     pron: "das gue-vürts",
@@ -5529,7 +8493,12 @@ const rawChapters = [
     plural: "die Gewürze",
     en: "small bowl of red spice powder",
     exampleSentenceDe: "Das Essen braucht mehr Gewürz.",
-    exampleSentenceEs: "La comida necesita más especias."
+    exampleSentenceEs: "La comida necesita más especias.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "Essen", role: "verb_p1", order: 2 },
+      { text: "braucht mehr Gewürz", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Kirsche",
     pron: "di kír-she",
@@ -5539,7 +8508,12 @@ const rawChapters = [
     plural: "die Kirschen",
     en: "two red cherries",
     exampleSentenceDe: "Die Kirsche ist rot.",
-    exampleSentenceEs: "La cereza es roja."
+    exampleSentenceEs: "La cereza es roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kirsche", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "rot", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Pflaume",
     pron: "di pfláu-me",
@@ -5549,7 +8523,12 @@ const rawChapters = [
     plural: "die Pflaumen",
     en: "purple plum",
     exampleSentenceDe: "Diese Pflaume ist lecker.",
-    exampleSentenceEs: "Esta ciruela es delicosa."
+    exampleSentenceEs: "Esta ciruela es delicosa.",
+    exampleSentenceDeBlocks: [
+      { text: "Diese Pflaume", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "lecker", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Senf",
     pron: "dea senf",
@@ -5559,7 +8538,12 @@ const rawChapters = [
     plural: "die Senfe",
     en: "yellow mustard bottle",
     exampleSentenceDe: "Ich esse Wurst mit Senf.",
-    exampleSentenceEs: "Como embutido con mostaza."
+    exampleSentenceEs: "Como embutido con mostaza.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "Wurst mit Senf", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Mayonnaise",
     pron: "di ma-yo-né-ze",
@@ -5569,7 +8553,11 @@ const rawChapters = [
     plural: "die Mayonnaisen",
     en: "jar of white mayonnaise",
     exampleSentenceDe: "Pommes frites mit Mayonnaise, bitte.",
-    exampleSentenceEs: "Papas fritas con mayonesa, por favor."
+    exampleSentenceEs: "Papas fritas con mayonesa, por favor.",
+    exampleSentenceDeBlocks: [
+      { text: "Pommes frites mit Mayonnaise,", role: "subject", order: 1 },
+      { text: "bitte", role: "verb_p1", order: 2 }
+    ]
   }, {
         de: "der Ketchup",
     pron: "dea két-chup",
@@ -5579,7 +8567,12 @@ const rawChapters = [
     plural: "die Ketchups",
     en: "red ketchup bottle",
     exampleSentenceDe: "Das Kind mag Ketchup.",
-    exampleSentenceEs: "Al niño le gusta el kétchup."
+    exampleSentenceEs: "Al niño le gusta el kétchup.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Kind", role: "subject", order: 1 },
+      { text: "mag", role: "verb_p1", order: 2 },
+      { text: "Ketchup", role: "complement", order: 3 }
+    ]
   },
   {
     de: "das Ei",
@@ -5590,7 +8583,12 @@ const rawChapters = [
     plural: "die Eier",
     en: "a white egg",
     exampleSentenceDe: "Ich esse ein gekochtes Ei zum Frühstück.",
-    exampleSentenceEs: "Yo como un huevo cocido de desayuno."
+    exampleSentenceEs: "Yo como un huevo cocido de desayuno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "esse", role: "verb_p1", order: 2 },
+      { text: "ein gekochtes Ei zum Frühstück", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Salz",
     pron: "das salts",
@@ -5600,7 +8598,12 @@ const rawChapters = [
     plural: "die Salze",
     en: "a salt shaker",
     exampleSentenceDe: "Die Suppe braucht mehr Salz.",
-    exampleSentenceEs: "La sopa necesita más sal."
+    exampleSentenceEs: "La sopa necesita más sal.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Suppe", role: "subject", order: 1 },
+      { text: "braucht", role: "verb_p1", order: 2 },
+      { text: "mehr Salz", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Pfeffer",
     pron: "dea pfe-fa",
@@ -5610,7 +8613,12 @@ const rawChapters = [
     plural: "-",
     en: "a black pepper shaker",
     exampleSentenceDe: "Ich brauche Salz und Pfeffer.",
-    exampleSentenceEs: "Necesito sal y pimienta."
+    exampleSentenceEs: "Necesito sal y pimienta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "Salz und Pfeffer", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Zucker",
     pron: "dea tsu-ka",
@@ -5620,7 +8628,12 @@ const rawChapters = [
     plural: "-",
     en: "a few white sugar cubes",
     exampleSentenceDe: "Trinkst du den Kaffee mit Zucker?",
-    exampleSentenceEs: "¿Bebes el café con azúcar?"
+    exampleSentenceEs: "¿Bebes el café con azúcar?",
+    exampleSentenceDeBlocks: [
+      { text: "Trinkst", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "den Kaffee mit Zucker", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Nudeln",
     pron: "di nu-deln",
@@ -5630,7 +8643,12 @@ const rawChapters = [
     plural: "die Nudeln",
     en: "a bowl of cooked pasta",
     exampleSentenceDe: "Wir kochen heute Abend Nudeln.",
-    exampleSentenceEs: "Cocinamos pasta esta noche."
+    exampleSentenceEs: "Cocinamos pasta esta noche.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "kochen", role: "verb_p1", order: 2 },
+      { text: "heute Abend Nudeln", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Wurst",
     pron: "di vurst",
@@ -5640,7 +8658,12 @@ const rawChapters = [
     plural: "die Würste",
     en: "a traditional german sausage",
     exampleSentenceDe: "Ich möchte ein Brötchen mit Wurst.",
-    exampleSentenceEs: "Quisiera un panecillo con embutido."
+    exampleSentenceEs: "Quisiera un panecillo con embutido.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "ein Brötchen mit Wurst", role: "complement", order: 3 }
+    ]
   }]
 },
 {
@@ -5656,6 +8679,11 @@ const rawChapters = [
     category: "Allgemein",
     exampleSentenceDe: "Ich habe Kleidung. Die Kleidung ist neu.",
     exampleSentenceEs: "Tengo ropa. La ropa es nueva.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Kleidung", role: "complement", order: 3 }
+    ],
     plural: "die Kleidungen"
   }, {
     de: "der Pullover",
@@ -5665,6 +8693,11 @@ const rawChapters = [
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe einen Pullover. Der Pullover ist blau.",
     exampleSentenceEs: "Tengo un suéter. El suéter es azul.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Pullover", role: "complement", order: 3 }
+    ],
     plural: "die Pullover"
   }, {
     de: "der Rock",
@@ -5674,6 +8707,11 @@ const rawChapters = [
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe einen Rock. Der Rock ist rot.",
     exampleSentenceEs: "Tengo una falda. La falda es roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Rock", role: "complement", order: 3 }
+    ],
     plural: "die Röcke"
   }, {
     de: "die Hose",
@@ -5683,6 +8721,11 @@ const rawChapters = [
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe die Hose. Die Hose ist blau.",
     exampleSentenceEs: "Tengo el pantalón. El pantalón es azul.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Hose", role: "complement", order: 3 }
+    ],
     plural: "die Hosen"
   }, {
     de: "das Hemd",
@@ -5692,6 +8735,11 @@ const rawChapters = [
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe das Hemd. Das Hemd ist weiß.",
     exampleSentenceEs: "Tengo la camisa. La camisa es blanca.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Hemd", role: "complement", order: 3 }
+    ],
     plural: "die Hemden"
   }, {
     de: "die Schuhe",
@@ -5701,6 +8749,11 @@ const rawChapters = [
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe die Schuhe. Die Schuhe sind neu.",
     exampleSentenceEs: "Tengo los zapatos. Los zapatos son nuevos.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Schuhe", role: "complement", order: 3 }
+    ],
     plural: "die Schuhe"
   }, {
     de: "die Jacke",
@@ -5710,6 +8763,11 @@ const rawChapters = [
     category: "Kleidungsstücke",
     exampleSentenceDe: "Die Jacke ist neu.",
     exampleSentenceEs: "La chaqueta es nueva.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Jacke", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Jacken"
   }, {
     de: "der Mantel",
@@ -5719,6 +8777,11 @@ const rawChapters = [
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe einen Mantel. Der Mantel ist warm.",
     exampleSentenceEs: "Tengo un abrigo. El abrigo es cálido.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Mantel", role: "complement", order: 3 }
+    ],
     plural: "die Mäntel"
   }, {
     de: "die Jeans",
@@ -5728,6 +8791,11 @@ const rawChapters = [
     category: "Kleidungsstücke",
     exampleSentenceDe: "Ich habe die Jeans. Die Jeans ist blau.",
     exampleSentenceEs: "Tengo los jeans. Los jeans son azules.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Jeans", role: "complement", order: 3 }
+    ],
     plural: "die Jeans"
   }, {
     de: "die Größe",
@@ -5737,6 +8805,11 @@ const rawChapters = [
     category: "Eigenschaften",
     exampleSentenceDe: "Ich brauche die Größe.",
     exampleSentenceEs: "Necesito la talla.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "die Größe", role: "complement", order: 3 }
+    ],
     plural: "die Größen"
   }, {
     de: "die Farbe",
@@ -5746,6 +8819,11 @@ const rawChapters = [
     category: "Eigenschaften",
     exampleSentenceDe: "Das ist die Farbe.",
     exampleSentenceEs: "Ese es el color.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die Farbe", role: "complement", order: 3 }
+    ],
     plural: "die Farben"
   }, {
     de: "schwarz",
@@ -5755,6 +8833,11 @@ const rawChapters = [
     category: "Farben",
     exampleSentenceDe: "Das Auto ist schwarz.",
     exampleSentenceEs: "El coche es negro.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schwarz", role: "complement", order: 3 }
+    ],
     regimen: "≠ weiß"
   }, {
     de: "weiß",
@@ -5764,6 +8847,11 @@ const rawChapters = [
     category: "Farben",
     exampleSentenceDe: "Die Wand ist weiß.",
     exampleSentenceEs: "La pared es blanca.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Wand", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "weiß", role: "complement", order: 3 }
+    ],
     regimen: "≠ schwarz"
   }, {
     de: "grau",
@@ -5773,6 +8861,11 @@ const rawChapters = [
     category: "Farben",
     exampleSentenceDe: "Der Himmel ist grau.",
     exampleSentenceEs: "El cielo es gris.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Himmel", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "grau", role: "complement", order: 3 }
+    ],
     regimen: "≠ bunt"
   }, {
     de: "rot",
@@ -5782,6 +8875,11 @@ const rawChapters = [
     category: "Farben",
     exampleSentenceDe: "Das Auto ist rot.",
     exampleSentenceEs: "El coche es rojo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "rot", role: "complement", order: 3 }
+    ],
     regimen: "≠ grün"
   }, {
     de: "blau",
@@ -5791,6 +8889,11 @@ const rawChapters = [
     category: "Farben",
     exampleSentenceDe: "Das Auto ist blau.",
     exampleSentenceEs: "El coche es azul.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "blau", role: "complement", order: 3 }
+    ],
     regimen: "≠ bunt"
   }, {
     de: "gelb",
@@ -5800,6 +8903,11 @@ const rawChapters = [
     category: "Farben",
     exampleSentenceDe: "Die Sonne ist gelb.",
     exampleSentenceEs: "El sol es amarillo.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Sonne", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gelb", role: "verb_p2", order: 3 }
+    ],
     regimen: "≠ keine feste Gegenfarbe"
   }, {
     de: "grün",
@@ -5809,6 +8917,11 @@ const rawChapters = [
     category: "Farben",
     exampleSentenceDe: "Das Auto ist grün.",
     exampleSentenceEs: "El coche es verde.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "grün", role: "complement", order: 3 }
+    ],
     regimen: "≠ rot"
   }, {
     de: "braun",
@@ -5818,6 +8931,11 @@ const rawChapters = [
     category: "Farben",
     exampleSentenceDe: "Der Tisch ist braun.",
     exampleSentenceEs: "La mesa es marrón.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Tisch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "braun", role: "complement", order: 3 }
+    ],
     regimen: "≠ bunt"
   }, {
     de: "anziehen",
@@ -5827,6 +8945,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich ziehe die Jacke an.",
     exampleSentenceEs: "Me pongo la chaqueta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "ziehe", role: "verb_p1", order: 2 },
+      { text: "die Jacke", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
     regimen: "Sep./refl. + Akkusativ"
   }, {
     de: "ausziehen",
@@ -5836,6 +8960,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich ziehe den Pullover aus.",
     exampleSentenceEs: "Me quito el jersey.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "ziehe", role: "verb_p1", order: 2 },
+      { text: "den Pullover", role: "complement", order: 3 },
+      { text: "aus", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable, +Akk, reflex."
   }, {
     de: "anprobieren",
@@ -5845,6 +8975,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich möchte die Schuhe anprobieren.",
     exampleSentenceEs: "Quiero probarme los zapatos.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "die Schuhe", role: "complement", order: 3 },
+      { text: "anprobieren", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (an-), +Akk"
   }, {
     de: "passen",
@@ -5854,6 +8990,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Die Hose passt mir gut.",
     exampleSentenceEs: "Los pantalones me quedan bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Hose", role: "subject", order: 1 },
+      { text: "passt", role: "verb_p1", order: 2 },
+      { text: "mir gut", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "anhaben",
@@ -5863,6 +9004,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich habe heute einen blauen Pullover an.",
     exampleSentenceEs: "Yo llevo puesto un jersey azul hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "heute einen blauen Pullover", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Akk., Separable (an-)"
   }, {
     de: "eng",
@@ -5872,6 +9019,11 @@ const rawChapters = [
     category: "Eigenschaften",
     exampleSentenceDe: "Der Rock ist eng.",
     exampleSentenceEs: "La falda es ajustada.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Rock", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "eng", role: "complement", order: 3 }
+    ],
     regimen: "≠ weit"
   }, {
     de: "weit",
@@ -5881,6 +9033,11 @@ const rawChapters = [
     category: "Eigenschaften",
     exampleSentenceDe: "Die Hose ist weit.",
     exampleSentenceEs: "Los pantalones son holgados.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Hose", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "weit", role: "complement", order: 3 }
+    ],
     regimen: "≠ eng"
   }, {
     de: "bequem",
@@ -5890,6 +9047,11 @@ const rawChapters = [
     category: "Eigenschaften",
     exampleSentenceDe: "Der Stuhl ist bequem.",
     exampleSentenceEs: "La silla es cómoda.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Stuhl", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "bequem", role: "complement", order: 3 }
+    ],
     regimen: "≠ unbequem"
   }, {
     de: "der Schal",
@@ -5899,6 +9061,11 @@ const rawChapters = [
     category: "Accessoires",
     exampleSentenceDe: "Ich habe einen Schal. Der Schal ist rot.",
     exampleSentenceEs: "Tengo una bufanda. La bufanda es roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Schal", role: "complement", order: 3 }
+    ],
     plural: "die Schals"
   }, {
     de: "der Gürtel",
@@ -5908,6 +9075,11 @@ const rawChapters = [
     category: "Accessoires",
     exampleSentenceDe: "Ich habe einen Gürtel. Der Gürtel ist braun.",
     exampleSentenceEs: "Tengo un cinturón. El cinturón es marrón.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Gürtel", role: "complement", order: 3 }
+    ],
     plural: "die Gürtel"
   },
   {
@@ -5918,7 +9090,12 @@ const rawChapters = [
     category: "Farben",
     en: "a vibrant splash of orange paint",
     exampleSentenceDe: "Meine neue Jacke ist orange.",
-    exampleSentenceEs: "Mi nueva chaqueta es naranja."
+    exampleSentenceEs: "Mi nueva chaqueta es naranja.",
+    exampleSentenceDeBlocks: [
+      { text: "Meine", role: "subject", order: 1 },
+      { text: "neue", role: "verb_p1", order: 2 },
+      { text: "Jacke ist orange", role: "complement", order: 3 }
+    ]
   }, {
         de: "rosa",
     pron: "ro-sa",
@@ -5927,7 +9104,12 @@ const rawChapters = [
     category: "Farben",
     en: "a vibrant splash of pink paint",
     exampleSentenceDe: "Das Mädchen trägt ein rosa Kleid.",
-    exampleSentenceEs: "La niña lleva un vestido rosa."
+    exampleSentenceEs: "La niña lleva un vestido rosa.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Mädchen", role: "subject", order: 1 },
+      { text: "trägt", role: "verb_p1", order: 2 },
+      { text: "ein rosa Kleid", role: "complement", order: 3 }
+    ]
   }, {
         de: "lila",
     pron: "li-la",
@@ -5936,7 +9118,12 @@ const rawChapters = [
     category: "Farben",
     en: "a vibrant splash of purple paint",
     exampleSentenceDe: "Die Blumen im Garten sind lila.",
-    exampleSentenceEs: "Las flores en el jardín son moradas."
+    exampleSentenceEs: "Las flores en el jardín son moradas.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Blumen im Garten", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "lila", role: "complement", order: 3 }
+    ]
   }]
 },
 {
@@ -5952,6 +9139,11 @@ const rawChapters = [
     category: "Orte",
     exampleSentenceDe: "Das Geschäft ist klein.",
     exampleSentenceEs: "La tienda es pequeña.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Geschäft", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "klein", role: "complement", order: 3 }
+    ],
     plural: "die Geschäfte"
   }, {
     de: "der Laden",
@@ -5961,6 +9153,11 @@ const rawChapters = [
     category: "Orte",
     exampleSentenceDe: "Ich gehe in den Laden.",
     exampleSentenceEs: "Voy a la tienda.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "in den Laden", role: "complement", order: 3 }
+    ],
     plural: "die Läden"
   }, {
     de: "die Bäckerei",
@@ -5970,6 +9167,11 @@ const rawChapters = [
     category: "Orte",
     exampleSentenceDe: "Ich gehe zur Bäckerei.",
     exampleSentenceEs: "Voy a la panadería.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "zur Bäckerei", role: "complement", order: 3 }
+    ],
     plural: "die Bäckereien"
   }, {
     de: "der Supermarkt",
@@ -5979,6 +9181,11 @@ const rawChapters = [
     category: "Orte",
     exampleSentenceDe: "Ich gehe in den Supermarkt.",
     exampleSentenceEs: "Voy al supermercado.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "in den Supermarkt", role: "complement", order: 3 }
+    ],
     plural: "die Supermärkte"
   }, {
     de: "geöffnet",
@@ -5988,6 +9195,11 @@ const rawChapters = [
     category: "Status",
     exampleSentenceDe: "Das Geschäft ist geöffnet.",
     exampleSentenceEs: "La tienda está abierta.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Geschäft", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "geöffnet", role: "verb_p2", order: 3 }
+    ],
     regimen: "≠ geschlossen"
   }, {
     de: "das Angebot",
@@ -5997,6 +9209,11 @@ const rawChapters = [
     category: "Preis",
     exampleSentenceDe: "Das ist ein gutes Angebot.",
     exampleSentenceEs: "Esta es una buena oferta.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein gutes Angebot", role: "complement", order: 3 }
+    ],
     plural: "die Angebote"
   }, {
     de: "günstig",
@@ -6006,6 +9223,11 @@ const rawChapters = [
     category: "Preis",
     exampleSentenceDe: "Das Hotel ist günstig.",
     exampleSentenceEs: "El hotel es económico.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Hotel", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "günstig", role: "complement", order: 3 }
+    ],
     regimen: "≠ teuer"
   }, {
     de: "billig",
@@ -6015,6 +9237,11 @@ const rawChapters = [
     category: "Preis",
     exampleSentenceDe: "Das Brot ist billig.",
     exampleSentenceEs: "El pan es barato.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Brot", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "billig", role: "complement", order: 3 }
+    ],
     regimen: "≠ teuer"
   }, {
     de: "teuer",
@@ -6024,6 +9251,11 @@ const rawChapters = [
     category: "Preis",
     exampleSentenceDe: "Das ist teuer.",
     exampleSentenceEs: "Esto es caro.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "teuer", role: "complement", order: 3 }
+    ],
     regimen: "≠ billig"
   }, {
     de: "brauchen",
@@ -6033,6 +9265,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich brauche Wasser.",
     exampleSentenceEs: "Yo necesito agua.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "Wasser", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "das Kilo",
@@ -6042,6 +9279,11 @@ const rawChapters = [
     category: "Menge",
     exampleSentenceDe: "Ich kaufe ein Kilo Äpfel.",
     exampleSentenceEs: "Compro un kilo de manzanas.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kaufe", role: "verb_p1", order: 2 },
+      { text: "ein Kilo Äpfel", role: "complement", order: 3 }
+    ],
     plural: "die Kilo"
   }, {
     de: "das Pfund",
@@ -6051,6 +9293,11 @@ const rawChapters = [
     category: "Menge",
     exampleSentenceDe: "Ich kaufe ein Pfund Brot.",
     exampleSentenceEs: "Compro una libra de pan.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kaufe", role: "verb_p1", order: 2 },
+      { text: "ein Pfund Brot", role: "complement", order: 3 }
+    ],
     plural: "die Pfund"
   }, {
     de: "das Gramm",
@@ -6060,6 +9307,11 @@ const rawChapters = [
     category: "Menge",
     exampleSentenceDe: "Ich brauche das Gramm Zucker.",
     exampleSentenceEs: "Necesito el gramo de azúcar.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "das Gramm Zucker", role: "complement", order: 3 }
+    ],
     plural: "die Gramm"
   }, {
     de: "kosten",
@@ -6069,6 +9321,11 @@ const rawChapters = [
     category: "Preis",
     exampleSentenceDe: "Was kostet das Brot?",
     exampleSentenceEs: "¿Cuánto cuesta el pan?",
+    exampleSentenceDeBlocks: [
+      { text: "Was", role: "subject", order: 1 },
+      { text: "kostet", role: "verb_p1", order: 2 },
+      { text: "das Brot", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "der Preis",
@@ -6078,6 +9335,11 @@ const rawChapters = [
     category: "Preis",
     exampleSentenceDe: "Der Preis ist hoch.",
     exampleSentenceEs: "El precio es alto.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Preis", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hoch", role: "complement", order: 3 }
+    ],
     plural: "die Preise"
   }, {
     de: "die Kasse",
@@ -6087,6 +9349,11 @@ const rawChapters = [
     category: "Bezahlen",
     exampleSentenceDe: "Wo ist die Kasse, bitte?",
     exampleSentenceEs: "¿Dónde está la caja, por favor?",
+    exampleSentenceDeBlocks: [
+      { text: "Wo", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die Kasse, bitte", role: "complement", order: 3 }
+    ],
     plural: "die Kassen"
   }, {
     de: "das Geld",
@@ -6096,6 +9363,11 @@ const rawChapters = [
     category: "Bezahlen",
     exampleSentenceDe: "Das ist das Geld.",
     exampleSentenceEs: "Este es el dinero.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "das Geld", role: "complement", order: 3 }
+    ],
     plural: "die Gelder"
   }, {
     de: "der Verkäufer",
@@ -6105,6 +9377,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Der Verkäufer ist nett.",
     exampleSentenceEs: "El vendedor es simpático.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Verkäufer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "nett", role: "complement", order: 3 }
+    ],
     plural: "die Verkäufer"
   }, {
     de: "bestellen",
@@ -6114,6 +9391,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich bestelle Pizza.",
     exampleSentenceEs: "Yo pido pizza.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bestelle", role: "verb_p1", order: 2 },
+      { text: "Pizza", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "die Überweisung",
@@ -6123,6 +9405,11 @@ const rawChapters = [
     category: "Bezahlen",
     exampleSentenceDe: "Ich mache die Überweisung.",
     exampleSentenceEs: "Hago la transferencia.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "die Überweisung", role: "complement", order: 3 }
+    ],
     plural: "die Überweisungen"
   }, {
     de: "das Wechselgeld",
@@ -6132,6 +9419,11 @@ const rawChapters = [
     category: "Bezahlen",
     exampleSentenceDe: "Ich brauche das Wechselgeld nicht.",
     exampleSentenceEs: "No necesito el cambio.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "das Wechselgeld nicht", role: "complement", order: 3 }
+    ],
     plural: "die Wechselgelder"
   }, {
     de: "umtauschen",
@@ -6141,6 +9433,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich möchte das T-Shirt umtauschen.",
     exampleSentenceEs: "Yo quisiera cambiar la camiseta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "das T-Shirt", role: "complement", order: 3 },
+      { text: "umtauschen", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (um-) + Akk."
   }, {
     de: "der Rabatt",
@@ -6150,6 +9448,11 @@ const rawChapters = [
     category: "Preis",
     exampleSentenceDe: "Ich sehe der Rabatt. Der Rabatt ist gut.",
     exampleSentenceEs: "Veo el descuento. El descuento es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "der Rabatt", role: "complement", order: 3 }
+    ],
     plural: "die Rabatte"
   },
   {
@@ -6159,8 +9462,14 @@ const rawChapters = [
     type: "Verbo",
     category: "Einkaufen",
     regimen: "Separable (ein-) / + Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich kaufe im Supermarkt ein.",
+    exampleSentenceEs: "Compro en el supermercado.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kaufe", role: "verb_p1", order: 2 },
+      { text: "im Supermarkt", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "verkaufen",
     pron: "fea-káo-fen",
@@ -6168,8 +9477,13 @@ const rawChapters = [
     type: "Verbo",
     category: "Einkaufen",
     regimen: "+ Akkusativ",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Er verkauft sein altes Auto.",
+    exampleSentenceEs: "Él vende su coche viejo.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "verkauft", role: "verb_p1", order: 2 },
+      { text: "sein altes Auto", role: "complement", order: 3 }
+    ]
   },
     {
       de: "der Pfand",
@@ -6181,6 +9495,11 @@ const rawChapters = [
       plural: "die Pfänder",
       exampleSentenceDe: "Vergiss nicht, die Flaschen mit Pfand abzugeben.",
       exampleSentenceEs: "No olvides devolver las botellas con depósito.",
+    exampleSentenceDeBlocks: [
+      { text: "Vergiss", role: "subject", order: 1 },
+      { text: "nicht,", role: "verb_p1", order: 2 },
+      { text: "die Flaschen mit Pfand abzugeben", role: "complement", order: 3 }
+    ],
       en: "reverse vending bottle return machine with recycle logo"
     },
     {
@@ -6193,6 +9512,11 @@ const rawChapters = [
       plural: "die Kassenzettel",
       exampleSentenceDe: "Brauchen Sie den Kassenzettel für die Garantie?",
       exampleSentenceEs: "¿Necesita el tique de compra para la garantía?",
+    exampleSentenceDeBlocks: [
+      { text: "Brauchen", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "den Kassenzettel für die Garantie", role: "complement", order: 3 }
+    ],
       en: "printed supermarket paper cash register receipt"
     },
     {
@@ -6205,6 +9529,11 @@ const rawChapters = [
       plural: "die Quittungen",
       exampleSentenceDe: "Bitte geben Sie mir eine Quittung über den Betrag.",
       exampleSentenceEs: "Por favor, entrégueme un comprobante de pago por el importe.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "geben", role: "verb_p1", order: 2 },
+      { text: "Sie mir eine Quittung über den Betrag", role: "complement", order: 3 }
+    ],
       en: "signed formal payment receipt slip with stamp"
     },
     {
@@ -6217,6 +9546,11 @@ const rawChapters = [
       plural: "die Einkaufswagen",
       exampleSentenceDe: "Für den Einkaufswagen brauche ich eine Ein-Euro-Münze.",
       exampleSentenceEs: "Para el carrito de compras necesito una moneda de un euro.",
+    exampleSentenceDeBlocks: [
+      { text: "Für den Einkaufswagen", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "ich eine Ein-Euro-Münze", role: "complement", order: 3 }
+    ],
       en: "metal supermarket grocery shopping cart trolley"
     },
     {
@@ -6229,6 +9563,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Der WLAN-Zugang am Bahnhof ist kostenlos.",
       exampleSentenceEs: "El acceso a internet wifi en la estación es gratuito.",
+    exampleSentenceDeBlocks: [
+      { text: "Der WLAN-Zugang am Bahnhof", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "kostenlos", role: "complement", order: 3 }
+    ],
       en: "green badge tag with zero euro free gift sign"
     },
     {
@@ -6241,6 +9580,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich möchte Geld für einen Urlaub sparen.",
       exampleSentenceEs: "Quiero ahorrar dinero para unas vacaciones.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "Geld für einen Urlaub", role: "complement", order: 3 },
+      { text: "sparen", role: "verb_p2", order: 4 }
+    ],
       en: "putting gold euro coin into cute pink piggy bank"
     },
     {
@@ -6253,6 +9598,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Er gibt zu viel Geld für Kleidung aus.",
       exampleSentenceEs: "Él gasta demasiado dinero en ropa.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "gibt", role: "verb_p1", order: 2 },
+      { text: "zu viel Geld für Kleidung", role: "complement", order: 3 },
+      { text: "aus", role: "verb_p2", order: 4 }
+    ],
       en: "spending euro paper banknotes at shopping counter"
     },
     {
@@ -6265,6 +9616,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich packe meinen Koffer für die Reise ein.",
       exampleSentenceEs: "Empaco mi maleta para el viaje.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "packe", role: "verb_p1", order: 2 },
+      { text: "meinen Koffer für die Reise", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ],
       en: "folding clothes neatly packing into travel suitcase"
     }]
 },
@@ -6281,6 +9638,11 @@ const rawChapters = [
     category: "Allgemein",
     exampleSentenceDe: "Ich habe Freizeit am Wochenende.",
     exampleSentenceEs: "Tengo tiempo libre el fin de semana.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Freizeit am Wochenende", role: "complement", order: 3 }
+    ],
     plural: "die Freizeiten"
   }, {
     de: "das Hobby",
@@ -6290,6 +9652,11 @@ const rawChapters = [
     category: "Allgemein",
     exampleSentenceDe: "Mein Hobby ist lesen.",
     exampleSentenceEs: "Mi pasatiempo es leer.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Hobby", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "lesen", role: "complement", order: 3 }
+    ],
     plural: "die Hobbys"
   }, {
     de: "spielen",
@@ -6299,6 +9666,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich spiele gern.",
     exampleSentenceEs: "Me gusta jugar.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "spiele", role: "verb_p1", order: 2 },
+      { text: "gern", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "Fußball spielen",
@@ -6308,6 +9680,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich spiele gern Fußball.",
     exampleSentenceEs: "Me gusta jugar al fútbol.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "spiele", role: "verb_p1", order: 2 },
+      { text: "gern Fußball", role: "complement", order: 3 }
+    ],
     regimen: "Verbo+objeto"
   }, {
     de: "der Ball",
@@ -6317,6 +9694,11 @@ const rawChapters = [
     category: "Gegenstände",
     exampleSentenceDe: "Ich habe einen Ball. Der Ball ist rot.",
     exampleSentenceEs: "Tengo un balón. El balón es rojo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Ball", role: "complement", order: 3 }
+    ],
     plural: "die Bälle"
   }, {
     de: "Karten spielen",
@@ -6326,6 +9708,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Wir spielen Karten am Abend.",
     exampleSentenceEs: "Jugamos a las cartas por la noche.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "spielen", role: "verb_p1", order: 2 },
+      { text: "Karten am Abend", role: "complement", order: 3 }
+    ],
     regimen: "Verbo+objeto"
   }, {
     de: "Musik hören",
@@ -6335,6 +9722,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich höre gern Musik.",
     exampleSentenceEs: "Me gusta escuchar música.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "höre", role: "verb_p1", order: 2 },
+      { text: "gern Musik", role: "complement", order: 3 }
+    ],
     regimen: "Verbo + Akkusativ"
   }, {
     de: "die CD",
@@ -6344,6 +9736,11 @@ const rawChapters = [
     category: "Gegenstände",
     exampleSentenceDe: "Ich habe die CD. Die CD ist neu.",
     exampleSentenceEs: "Tengo el CD. El CD es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die CD", role: "complement", order: 3 }
+    ],
     plural: "die CDs"
   }, {
     de: "wandern",
@@ -6353,6 +9750,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich gehe im Park wandern.",
     exampleSentenceEs: "Yo voy a hacer senderismo en el parque.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "im Park wandern", role: "complement", order: 3 }
+    ],
     regimen: "sein (intransitivo)"
   }, {
     de: "schwimmen",
@@ -6362,6 +9764,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich kann schwimmen.",
     exampleSentenceEs: "Yo puedo nadar.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kann", role: "verb_p1", order: 2 },
+      { text: "schwimmen", role: "complement", order: 3 }
+    ],
     regimen: "sein (movimiento)"
   }, {
     de: "lesen",
@@ -6371,6 +9778,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich lese ein Buch.",
     exampleSentenceEs: "Yo leo un libro.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lese", role: "verb_p1", order: 2 },
+      { text: "ein Buch", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "das Buch",
@@ -6380,6 +9792,11 @@ const rawChapters = [
     category: "Gegenstände",
     exampleSentenceDe: "Das ist ein Buch. Das Buch ist neu.",
     exampleSentenceEs: "Este es un libro. El libro es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Buch", role: "complement", order: 3 }
+    ],
     plural: "die Bücher"
   }, {
     de: "die Zeitung",
@@ -6389,6 +9806,11 @@ const rawChapters = [
     category: "Gegenstände",
     exampleSentenceDe: "Ich lese die Zeitung.",
     exampleSentenceEs: "Yo leo el periódico.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lese", role: "verb_p1", order: 2 },
+      { text: "die Zeitung", role: "complement", order: 3 }
+    ],
     plural: "die Zeitungen"
   }, {
     de: "fernsehen",
@@ -6398,6 +9820,12 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich sehe am Abend fern.",
     exampleSentenceEs: "Yo veo la televisión por la noche.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "am Abend", role: "complement", order: 3 },
+      { text: "fern", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (fern-)"
   }, {
     de: "tanzen",
@@ -6407,6 +9835,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich tanze gern.",
     exampleSentenceEs: "Me gusta bailar.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "tanze", role: "verb_p1", order: 2 },
+      { text: "gern", role: "complement", order: 3 }
+    ],
     regimen: "Intransitivo"
   }, {
     de: "der Computer",
@@ -6416,6 +9849,11 @@ const rawChapters = [
     category: "Gegenstände",
     exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
     exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Computer", role: "complement", order: 3 }
+    ],
     plural: "die Computer"
   }, {
     de: "der Sport",
@@ -6425,6 +9863,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich mag der Sport.",
     exampleSentenceEs: "Me gusta el deporte.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mag", role: "verb_p1", order: 2 },
+      { text: "der Sport", role: "complement", order: 3 }
+    ],
     plural: "die Sportarten"
   }, {
     de: "ins Kino gehen",
@@ -6434,6 +9877,11 @@ const rawChapters = [
     category: "Ausgehen",
     exampleSentenceDe: "Ich gehe ins Kino.",
     exampleSentenceEs: "Yo voy al cine.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "ins Kino", role: "complement", order: 3 }
+    ],
     regimen: "in + Akk."
   }, {
     de: "einen Film sehen",
@@ -6443,6 +9891,11 @@ const rawChapters = [
     category: "Ausgehen",
     exampleSentenceDe: "Ich sehe einen Film.",
     exampleSentenceEs: "Yo veo una película.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "einen Film", role: "complement", order: 3 }
+    ],
     regimen: "Akkusativ: einen Film"
   }, {
     de: "Rad fahren",
@@ -6452,6 +9905,12 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Ich kann Rad fahren.",
     exampleSentenceEs: "Yo sé montar bicicleta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kann", role: "verb_p1", order: 2 },
+      { text: "Rad", role: "complement", order: 3 },
+      { text: "fahren", role: "verb_p2", order: 4 }
+    ],
     regimen: "Verbo separable"
   }, {
     de: "spazieren gehen",
@@ -6461,6 +9920,11 @@ const rawChapters = [
     category: "Aktivitäten",
     exampleSentenceDe: "Wir gehen spazieren im Park.",
     exampleSentenceEs: "Paseamos en el parque.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "gehen", role: "verb_p1", order: 2 },
+      { text: "spazieren im Park", role: "complement", order: 3 }
+    ],
     regimen: "Verbo separable"
   }, {
     de: "in die Disco gehen",
@@ -6470,6 +9934,11 @@ const rawChapters = [
     category: "Ausgehen",
     exampleSentenceDe: "Ich gehe in die Disco.",
     exampleSentenceEs: "Yo voy a la discoteca.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "in die Disco", role: "complement", order: 3 }
+    ],
     regimen: "in + Akkusativ"
   }, {
     de: "das Museum",
@@ -6479,6 +9948,11 @@ const rawChapters = [
     category: "Orte",
     exampleSentenceDe: "Das Museum ist groß.",
     exampleSentenceEs: "El museo es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Museum", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Museen"
   }, {
     de: "der Verein",
@@ -6488,6 +9962,11 @@ const rawChapters = [
     category: "Orte",
     exampleSentenceDe: "Ich bin in dem Verein.",
     exampleSentenceEs: "Yo estoy en el club.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "in dem Verein", role: "complement", order: 3 }
+    ],
     plural: "die Vereine"
   }, {
     de: "das Schwimmbad",
@@ -6497,6 +9976,11 @@ const rawChapters = [
     category: "Orte",
     exampleSentenceDe: "Wir gehen in das Schwimmbad.",
     exampleSentenceEs: "Vamos a la piscina.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "gehen", role: "verb_p1", order: 2 },
+      { text: "in das Schwimmbad", role: "complement", order: 3 }
+    ],
     plural: "die Schwimmbäder"
   }, {
     de: "gefallen",
@@ -6506,6 +9990,11 @@ const rawChapters = [
     category: "Adjektive & Gefühle",
     exampleSentenceDe: "Das Kleid gefällt mir.",
     exampleSentenceEs: "El vestido me gusta.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Kleid", role: "subject", order: 1 },
+      { text: "gefällt", role: "verb_p1", order: 2 },
+      { text: "mir", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "schön",
@@ -6515,6 +10004,11 @@ const rawChapters = [
     category: "Adjektive & Gefühle",
     exampleSentenceDe: "Das Wetter ist schön.",
     exampleSentenceEs: "El tiempo es bonito.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wetter", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ],
     regimen: "≠ hässlich"
   }, {
     de: "mögen",
@@ -6524,6 +10018,11 @@ const rawChapters = [
     category: "Adjektive & Gefühle",
     exampleSentenceDe: "Ich mag Kaffee.",
     exampleSentenceEs: "Me gusta el café.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mag", role: "verb_p1", order: 2 },
+      { text: "Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ, irregular"
   }, {
     de: "sich treffen",
@@ -6533,6 +10032,11 @@ const rawChapters = [
     category: "Soziales",
     exampleSentenceDe: "Wir treffen uns heute Abend.",
     exampleSentenceEs: "Nos encontramos esta noche.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "treffen", role: "verb_p1", order: 2 },
+      { text: "uns heute Abend", role: "complement", order: 3 }
+    ],
     regimen: "Reflexivo + mit/Dativ"
   },
   {
@@ -6542,8 +10046,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Tiere",
     plural: "die Hunde",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Hund läuft durch den Garten.",
+    exampleSentenceEs: "El perro corre por el jardín.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Hund", role: "subject", order: 1 },
+      { text: "läuft", role: "verb_p1", order: 2 },
+      { text: "durch den Garten", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Katze",
     pron: "di ká-tse",
@@ -6551,8 +10060,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Tiere",
     plural: "die Katzen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Katze schläft auf dem Stuhl.",
+    exampleSentenceEs: "El gato duerme en la silla.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Katze", role: "subject", order: 1 },
+      { text: "schläft", role: "verb_p1", order: 2 },
+      { text: "auf dem Stuhl", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Vogel",
     pron: "dea fó-guel",
@@ -6560,8 +10074,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Tiere",
     plural: "die Vögel",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Vogel singt am Morgen.",
+    exampleSentenceEs: "El pájaro canta por la mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Vogel", role: "subject", order: 1 },
+      { text: "singt", role: "verb_p1", order: 2 },
+      { text: "am Morgen", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Pferd",
     pron: "das pfeat",
@@ -6569,8 +10088,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Tiere",
     plural: "die Pferde",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Pferd frisst frisches Gras.",
+    exampleSentenceEs: "El caballo come hierba fresca.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Pferd", role: "subject", order: 1 },
+      { text: "frisst", role: "verb_p1", order: 2 },
+      { text: "frisches Gras", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Maus",
     pron: "di maus",
@@ -6578,8 +10102,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Tiere",
     plural: "die Mäuse",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die kleine Maus sucht Käse.",
+    exampleSentenceEs: "El ratoncito busca queso.",
+    exampleSentenceDeBlocks: [
+      { text: "Die", role: "subject", order: 1 },
+      { text: "kleine", role: "verb_p1", order: 2 },
+      { text: "Maus sucht Käse", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Kuh",
     pron: "di ku",
@@ -6587,8 +10116,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Tiere",
     plural: "die Kühe",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Kuh steht auf der Wiese.",
+    exampleSentenceEs: "La vaca está en el prado.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kuh", role: "subject", order: 1 },
+      { text: "steht", role: "verb_p1", order: 2 },
+      { text: "auf der Wiese", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Schaf",
     pron: "das shaf",
@@ -6598,7 +10132,12 @@ const rawChapters = [
     plural: "die Schafe",
     en: "white fluffy sheep",
     exampleSentenceDe: "Das Schaf isst Gras.",
-    exampleSentenceEs: "La oveja come hierba."
+    exampleSentenceEs: "La oveja come hierba.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Schaf", role: "subject", order: 1 },
+      { text: "isst", role: "verb_p1", order: 2 },
+      { text: "Gras", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Ziege",
     pron: "di tsí-gue",
@@ -6608,7 +10147,12 @@ const rawChapters = [
     plural: "die Ziegen",
     en: "brown goat",
     exampleSentenceDe: "Die Ziege ist auf dem Berg.",
-    exampleSentenceEs: "La cabra está en la montaña."
+    exampleSentenceEs: "La cabra está en la montaña.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Ziege", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "auf dem Berg", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Huhn",
     pron: "das jun",
@@ -6618,7 +10162,12 @@ const rawChapters = [
     plural: "die Hühner",
     en: "white chicken",
     exampleSentenceDe: "Das Huhn legt ein Ei.",
-    exampleSentenceEs: "La gallina pone un huevo."
+    exampleSentenceEs: "La gallina pone un huevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Huhn", role: "subject", order: 1 },
+      { text: "legt", role: "verb_p1", order: 2 },
+      { text: "ein Ei", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Bär",
     pron: "dea ber",
@@ -6628,7 +10177,12 @@ const rawChapters = [
     plural: "die Bären",
     en: "brown bear",
     exampleSentenceDe: "Der Bär ist groß.",
-    exampleSentenceEs: "El oso es grande."
+    exampleSentenceEs: "El oso es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Bär", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Löwe",
     pron: "dea lö-ve",
@@ -6638,7 +10192,12 @@ const rawChapters = [
     plural: "die Löwen",
     en: "male lion with a mane",
     exampleSentenceDe: "Der Löwe ist stark.",
-    exampleSentenceEs: "El león es fuerte."
+    exampleSentenceEs: "El león es fuerte.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Löwe", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "stark", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Elefant",
     pron: "dea e-le-fánt",
@@ -6648,7 +10207,12 @@ const rawChapters = [
     plural: "die Elefanten",
     en: "gray elephant with a trunk",
     exampleSentenceDe: "Der Elefant hat große Ohren.",
-    exampleSentenceEs: "El elefante tiene orejas grandes."
+    exampleSentenceEs: "El elefante tiene orejas grandes.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Elefant", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "große Ohren", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Affe",
     pron: "dea á-fe",
@@ -6658,7 +10222,12 @@ const rawChapters = [
     plural: "die Affen",
     en: "monkey eating a banana",
     exampleSentenceDe: "Der Affe isst eine Banane.",
-    exampleSentenceEs: "El mono come un banano."
+    exampleSentenceEs: "El mono come un banano.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Affe", role: "subject", order: 1 },
+      { text: "isst", role: "verb_p1", order: 2 },
+      { text: "eine Banane", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Schlange",
     pron: "di shláng-e",
@@ -6668,7 +10237,12 @@ const rawChapters = [
     plural: "die Schlangen",
     en: "green snake",
     exampleSentenceDe: "Die Schlange ist lang.",
-    exampleSentenceEs: "La serpiente es larga."
+    exampleSentenceEs: "La serpiente es larga.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Schlange", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "lang", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Frosch",
     pron: "dea frosh",
@@ -6678,7 +10252,11 @@ const rawChapters = [
     plural: "die Frösche",
     en: "green frog",
     exampleSentenceDe: "Der Frosch springt.",
-    exampleSentenceEs: "La rana salta."
+    exampleSentenceEs: "La rana salta.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Frosch", role: "subject", order: 1 },
+      { text: "springt", role: "verb_p1", order: 2 }
+    ]
   }, {
         de: "die Spinne",
     pron: "di shpí-ne",
@@ -6688,7 +10266,12 @@ const rawChapters = [
     plural: "die Spinnen",
     en: "black spider",
     exampleSentenceDe: "Ich mag keine Spinnen.",
-    exampleSentenceEs: "No me gustan las arañas."
+    exampleSentenceEs: "No me gustan las arañas.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mag", role: "verb_p1", order: 2 },
+      { text: "keine Spinnen", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Biene",
     pron: "di bí-ne",
@@ -6698,7 +10281,12 @@ const rawChapters = [
     plural: "die Bienen",
     en: "yellow and black bee",
     exampleSentenceDe: "Die Biene macht Honig.",
-    exampleSentenceEs: "La abeja hace miel."
+    exampleSentenceEs: "La abeja hace miel.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Biene", role: "subject", order: 1 },
+      { text: "macht", role: "verb_p1", order: 2 },
+      { text: "Honig", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Schmetterling",
     pron: "dea shmé-ter-ling",
@@ -6708,7 +10296,12 @@ const rawChapters = [
     plural: "die Schmetterlinge",
     en: "colorful butterfly",
     exampleSentenceDe: "Der Schmetterling ist schön.",
-    exampleSentenceEs: "La mariposa es bonita."
+    exampleSentenceEs: "La mariposa es bonita.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Schmetterling", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Kirche",
     pron: "di kír-je",
@@ -6718,7 +10311,12 @@ const rawChapters = [
     plural: "die Kirchen",
     en: "old stone church",
     exampleSentenceDe: "Die Kirche ist sehr alt.",
-    exampleSentenceEs: "La iglesia es muy antigua."
+    exampleSentenceEs: "La iglesia es muy antigua.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kirche", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr alt", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Brücke",
     pron: "di brü-ke",
@@ -6728,7 +10326,12 @@ const rawChapters = [
     plural: "die Brücken",
     en: "stone bridge over a river",
     exampleSentenceDe: "Wir gehen über die Brücke.",
-    exampleSentenceEs: "Vamos por el puente."
+    exampleSentenceEs: "Vamos por el puente.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "gehen", role: "verb_p1", order: 2 },
+      { text: "über die Brücke", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Turm",
     pron: "dea turm",
@@ -6738,7 +10341,12 @@ const rawChapters = [
     plural: "die Türme",
     en: "tall medieval tower",
     exampleSentenceDe: "Der Turm ist sehr hoch.",
-    exampleSentenceEs: "La torre es muy alta."
+    exampleSentenceEs: "La torre es muy alta.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Turm", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr hoch", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Park",
     pron: "dea park",
@@ -6748,7 +10356,12 @@ const rawChapters = [
     plural: "die Parks",
     en: "green park with trees",
     exampleSentenceDe: "Ich laufe im Park.",
-    exampleSentenceEs: "Yo corro en el parque."
+    exampleSentenceEs: "Yo corro en el parque.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "laufe", role: "verb_p1", order: 2 },
+      { text: "im Park", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Rathaus",
     pron: "das rát-haus",
@@ -6758,7 +10371,12 @@ const rawChapters = [
     plural: "die Rathäuser",
     en: "historic city hall building",
     exampleSentenceDe: "Das Rathaus ist im Zentrum.",
-    exampleSentenceEs: "El ayuntamiento está en el centro."
+    exampleSentenceEs: "El ayuntamiento está en el centro.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Rathaus", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "im Zentrum", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Bibliothek",
     pron: "di bi-blio-ték",
@@ -6768,7 +10386,12 @@ const rawChapters = [
     plural: "die Bibliotheken",
     en: "building full of books",
     exampleSentenceDe: "Ich lerne in der Bibliothek.",
-    exampleSentenceEs: "Estudio en la biblioteca."
+    exampleSentenceEs: "Estudio en la biblioteca.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lerne", role: "verb_p1", order: 2 },
+      { text: "in der Bibliothek", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Stadion",
     pron: "das shtá-dion",
@@ -6778,7 +10401,12 @@ const rawChapters = [
     plural: "die Stadien",
     en: "large sports stadium",
     exampleSentenceDe: "Das Fußballspiel ist im Stadion.",
-    exampleSentenceEs: "El partido de fútbol es en el estadio."
+    exampleSentenceEs: "El partido de fútbol es en el estadio.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Fußballspiel", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "im Stadion", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Theater",
     pron: "das te-á-ter",
@@ -6788,7 +10416,12 @@ const rawChapters = [
     plural: "die Theater",
     en: "classic theater stage",
     exampleSentenceDe: "Wir gehen heute ins Theater.",
-    exampleSentenceEs: "Hoy vamos al teatro."
+    exampleSentenceEs: "Hoy vamos al teatro.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "gehen", role: "verb_p1", order: 2 },
+      { text: "heute ins Theater", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Zentrum",
     pron: "das tsén-trum",
@@ -6798,7 +10431,12 @@ const rawChapters = [
     plural: "die Zentren",
     en: "busy city center square",
     exampleSentenceDe: "Die Bank ist im Zentrum.",
-    exampleSentenceEs: "El banco está en el centro."
+    exampleSentenceEs: "El banco está en el centro.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Bank", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "im Zentrum", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Markt",
     pron: "dea markt",
@@ -6808,7 +10446,12 @@ const rawChapters = [
     plural: "die Märkte",
     en: "fruit market stall",
     exampleSentenceDe: "Ich kaufe Obst auf dem Markt.",
-    exampleSentenceEs: "Compro fruta en el mercado."
+    exampleSentenceEs: "Compro fruta en el mercado.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kaufe", role: "verb_p1", order: 2 },
+      { text: "Obst auf dem Markt", role: "complement", order: 3 }
+    ]
   },
     {
       de: "aus|leihen",
@@ -6820,6 +10463,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "In der Bibliothek kann man Bücher ausleihen.",
       exampleSentenceEs: "En la biblioteca se pueden tomar libros prestados.",
+    exampleSentenceDeBlocks: [
+      { text: "In der Bibliothek", role: "subject", order: 1 },
+      { text: "kann", role: "verb_p1", order: 2 },
+      { text: "man Bücher", role: "complement", order: 3 },
+      { text: "ausleihen", role: "verb_p2", order: 4 }
+    ],
       en: "borrowing a stack of books from public library"
     },
     {
@@ -6832,6 +10481,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wer möchte bei dem Spiel mitmachen?",
       exampleSentenceEs: "¿Quién quiere sumarse al juego?",
+    exampleSentenceDeBlocks: [
+      { text: "Wer", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "bei dem Spiel", role: "complement", order: 3 },
+      { text: "mitmachen", role: "verb_p2", order: 4 }
+    ],
       en: "group of friends cheerfully joining hands together in circle"
     },
     {
@@ -6844,6 +10499,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Nach der Ankunft packe ich meine Sachen aus.",
       exampleSentenceEs: "Tras la llegada desempaco mis cosas.",
+    exampleSentenceDeBlocks: [
+      { text: "Nach der Ankunft", role: "subject", order: 1 },
+      { text: "packe", role: "verb_p1", order: 2 },
+      { text: "ich meine Sachen", role: "complement", order: 3 },
+      { text: "aus", role: "verb_p2", order: 4 }
+    ],
       en: "unpacking items and placing clothes neatly into wardrobe"
     },
     {
@@ -6856,6 +10517,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich möchte an dem Deutschkurs teilnehmen.",
       exampleSentenceEs: "Quisiera participar en el curso de alemán.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "an dem Deutschkurs", role: "complement", order: 3 },
+      { text: "teilnehmen", role: "verb_p2", order: 4 }
+    ],
       en: "student raising hand actively participating in classroom"
     }]
 },
@@ -6872,6 +10539,11 @@ const rawChapters = [
     category: "Reise",
     exampleSentenceDe: "Die Ferien sind schön.",
     exampleSentenceEs: "Las vacaciones son bonitas.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Ferien", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "schön", role: "complement", order: 3 }
+    ],
     plural: "die Ferien"
   }, {
     de: "der Urlaub",
@@ -6881,6 +10553,11 @@ const rawChapters = [
     category: "Reise",
     exampleSentenceDe: "Ich habe Urlaub.",
     exampleSentenceEs: "Tengo vacaciones.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Urlaub", role: "complement", order: 3 }
+    ],
     plural: "die Urlaube"
   }, {
     de: "Urlaub machen",
@@ -6890,6 +10567,11 @@ const rawChapters = [
     category: "Reise",
     exampleSentenceDe: "Ich mache Urlaub in Spanien.",
     exampleSentenceEs: "Yo voy de vacaciones a España.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "Urlaub in Spanien", role: "complement", order: 3 }
+    ],
     regimen: "Verbo+Akk. fijo"
   }, {
     de: "es gibt",
@@ -6899,6 +10581,11 @@ const rawChapters = [
     category: "Allgemein",
     exampleSentenceDe: "Es gibt Kaffee.",
     exampleSentenceEs: "Hay café.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "gibt", role: "verb_p1", order: 2 },
+      { text: "Kaffee", role: "complement", order: 3 }
+    ],
     regimen: "⚠️ + Akkusativ"
   }, {
     de: "geöffnet",
@@ -6908,6 +10595,11 @@ const rawChapters = [
     category: "Status",
     exampleSentenceDe: "Das Geschäft ist geöffnet.",
     exampleSentenceEs: "La tienda está abierta.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Geschäft", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "geöffnet", role: "verb_p2", order: 3 }
+    ],
     regimen: "≠ geschlossen"
   }, {
     de: "geschlossen",
@@ -6917,6 +10609,11 @@ const rawChapters = [
     category: "Status",
     exampleSentenceDe: "Das Geschäft ist geschlossen.",
     exampleSentenceEs: "La tienda está cerrada.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Geschäft", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "geschlossen", role: "verb_p2", order: 3 }
+    ],
     regimen: "≠ offen"
   }, {
     de: "von - bis",
@@ -6926,6 +10623,11 @@ const rawChapters = [
     category: "Zeit",
     exampleSentenceDe: "Ich arbeite von neun Uhr bis fünf Uhr.",
     exampleSentenceEs: "Yo trabajo de nueve en punto hasta las cinco en punto.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "arbeite", role: "verb_p1", order: 2 },
+      { text: "von neun Uhr bis fünf Uhr", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo"
   }, {
     de: "die Karte",
@@ -6935,6 +10637,11 @@ const rawChapters = [
     category: "Tickets",
     exampleSentenceDe: "Ich habe die Karte. Die Karte ist groß.",
     exampleSentenceEs: "Tengo la tarjeta. La tarjeta es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Karte", role: "complement", order: 3 }
+    ],
     plural: "die Karten"
   }, {
     de: "die Eintrittskarte",
@@ -6944,6 +10651,11 @@ const rawChapters = [
     category: "Tickets",
     exampleSentenceDe: "Ich brauche die Eintrittskarte.",
     exampleSentenceEs: "Necesito el boleto de entrada.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "die Eintrittskarte", role: "complement", order: 3 }
+    ],
     plural: "die Eintrittskarten"
   }, {
     de: "das Ticket",
@@ -6953,6 +10665,11 @@ const rawChapters = [
     category: "Tickets",
     exampleSentenceDe: "Ich brauche das Ticket.",
     exampleSentenceEs: "Necesito el ticket.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "das Ticket", role: "complement", order: 3 }
+    ],
     plural: "die Tickets"
   }, {
     de: "kaufen",
@@ -6962,6 +10679,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich kaufe ein Brot.",
     exampleSentenceEs: "Yo compro un pan.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kaufe", role: "verb_p1", order: 2 },
+      { text: "ein Brot", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "reservieren",
@@ -6971,6 +10693,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich möchte einen Tisch reservieren.",
     exampleSentenceEs: "Me gustaría reservar una mesa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "einen Tisch", role: "complement", order: 3 },
+      { text: "reservieren", role: "verb_p2", order: 4 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "der Weg",
@@ -6980,6 +10708,11 @@ const rawChapters = [
     category: "Orientierung",
     exampleSentenceDe: "Der Weg ist frei.",
     exampleSentenceEs: "El camino está libre.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Weg", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "frei", role: "complement", order: 3 }
+    ],
     plural: "die Wege"
   }, {
     de: "geradeaus",
@@ -6989,6 +10722,11 @@ const rawChapters = [
     category: "Orientierung",
     exampleSentenceDe: "Gehen Sie geradeaus, bitte.",
     exampleSentenceEs: "Vaya recto, por favor.",
+    exampleSentenceDeBlocks: [
+      { text: "Gehen", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "geradeaus, bitte", role: "complement", order: 3 }
+    ],
     regimen: "Direccional"
   }, {
     de: "links / rechts",
@@ -6998,6 +10736,11 @@ const rawChapters = [
     category: "Orientierung",
     exampleSentenceDe: "Gehen Sie links.",
     exampleSentenceEs: "Vaya a la izquierda.",
+    exampleSentenceDeBlocks: [
+      { text: "Gehen", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "links", role: "complement", order: 3 }
+    ],
     regimen: "Direccional/lugar"
   }, {
     de: "der Unfall",
@@ -7007,6 +10750,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Ich sehe einen Unfall. Der Unfall ist groß.",
     exampleSentenceEs: "Yo veo un accidente. El accidente es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "einen Unfall", role: "complement", order: 3 }
+    ],
     plural: "die Unfälle"
   }, {
     de: "die Polizei",
@@ -7016,6 +10764,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Die Polizei ist hier.",
     exampleSentenceEs: "La policía está aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Polizei", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 }
+    ],
     plural: "die Polizeien"
   }, {
     de: "umsteigen",
@@ -7025,6 +10778,12 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Ich steige in den Bus um.",
     exampleSentenceEs: "Yo hago transbordo al autobús.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "steige", role: "verb_p1", order: 2 },
+      { text: "in den Bus", role: "complement", order: 3 },
+      { text: "um", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (um-)"
   }, {
     de: "das Zelt",
@@ -7034,6 +10793,11 @@ const rawChapters = [
     category: "Reise",
     exampleSentenceDe: "Ich habe ein Zelt. Das Zelt ist groß.",
     exampleSentenceEs: "Tengo una tienda de campaña. La tienda de campaña es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ein Zelt", role: "complement", order: 3 }
+    ],
     plural: "die Zelte"
   }, {
     de: "zelten",
@@ -7043,6 +10807,11 @@ const rawChapters = [
     category: "Reise",
     exampleSentenceDe: "Wir zelten im Sommer.",
     exampleSentenceEs: "Acampamos en verano.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "zelten", role: "verb_p1", order: 2 },
+      { text: "im Sommer", role: "complement", order: 3 }
+    ],
     regimen: "Intransitivo, sin caso"
   },
   {
@@ -7052,8 +10821,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Wetter",
     plural: "die Sonnen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Sonne scheint heute hell.",
+    exampleSentenceEs: "El sol brilla hoy con fuerza.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Sonne", role: "subject", order: 1 },
+      { text: "scheint", role: "verb_p1", order: 2 },
+      { text: "heute hell", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Mond",
     pron: "dea mont",
@@ -7061,8 +10835,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Wetter",
     plural: "die Monde",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Mond leuchtet am Nachthimmel.",
+    exampleSentenceEs: "La luna brilla en el cielo nocturno.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Mond", role: "subject", order: 1 },
+      { text: "leuchtet", role: "verb_p1", order: 2 },
+      { text: "am Nachthimmel", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Stern",
     pron: "dea shtern",
@@ -7070,8 +10849,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Wetter",
     plural: "die Sterne",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ein Stern leuchtet sehr hell.",
+    exampleSentenceEs: "Una estrella brilla muy claro.",
+    exampleSentenceDeBlocks: [
+      { text: "Ein Stern", role: "subject", order: 1 },
+      { text: "leuchtet", role: "verb_p1", order: 2 },
+      { text: "sehr hell", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Regen",
     pron: "dea ré-guen",
@@ -7079,8 +10863,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Wetter",
     plural: "-",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Regen fällt vom Himmel.",
+    exampleSentenceEs: "La lluvia cae del cielo.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Regen", role: "subject", order: 1 },
+      { text: "fällt", role: "verb_p1", order: 2 },
+      { text: "vom Himmel", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Schnee",
     pron: "dea shné",
@@ -7088,8 +10877,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Wetter",
     plural: "-",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Schnee liegt auf den Bergen.",
+    exampleSentenceEs: "La nieve cubre las montañas.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Schnee", role: "subject", order: 1 },
+      { text: "liegt", role: "verb_p1", order: 2 },
+      { text: "auf den Bergen", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Wind",
     pron: "dea vint",
@@ -7097,8 +10891,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Wetter",
     plural: "die Winde",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Wind weht heute stark.",
+    exampleSentenceEs: "El viento sopla fuerte hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Wind", role: "subject", order: 1 },
+      { text: "weht", role: "verb_p1", order: 2 },
+      { text: "heute stark", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Baum",
     pron: "dea baum",
@@ -7106,8 +10905,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Natur",
     plural: "die Bäume",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Baum hat viele grüne Blätter.",
+    exampleSentenceEs: "El árbol tiene muchas hojas verdes.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Baum", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "viele grüne Blätter", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Blume",
     pron: "di blú-me",
@@ -7115,8 +10919,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Natur",
     plural: "die Blumen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Blume riecht sehr gut.",
+    exampleSentenceEs: "La flor huele muy bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Blume", role: "subject", order: 1 },
+      { text: "riecht", role: "verb_p1", order: 2 },
+      { text: "sehr gut", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Wald",
     pron: "dea valt",
@@ -7124,8 +10933,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Natur",
     plural: "die Wälder",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Wir wandern gern im Wald.",
+    exampleSentenceEs: "Nos gusta hacer senderismo en el bosque.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "wandern", role: "verb_p1", order: 2 },
+      { text: "gern im Wald", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Meer",
     pron: "das mea",
@@ -7133,8 +10947,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Natur",
     plural: "die Meere",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Meer ist heute ruhig.",
+    exampleSentenceEs: "El mar está tranquilo hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Meer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "heute ruhig", role: "complement", order: 3 }
+    ]
   }, {
         de: "regnen",
     pron: "rég-nen",
@@ -7144,7 +10963,12 @@ const rawChapters = [
     regimen: "Impersonal",
     en: "dark storm cloud dropping rain",
     exampleSentenceDe: "Morgen wird es regnen.",
-    exampleSentenceEs: "Mañana lloverá."
+    exampleSentenceEs: "Mañana lloverá.",
+    exampleSentenceDeBlocks: [
+      { text: "Morgen", role: "subject", order: 1 },
+      { text: "wird", role: "verb_p1", order: 2 },
+      { text: "es regnen", role: "complement", order: 3 }
+    ]
   }, {
         de: "schneien",
     pron: "shnái-en",
@@ -7154,7 +10978,12 @@ const rawChapters = [
     regimen: "Impersonal",
     en: "fluffy cloud dropping snowflakes",
     exampleSentenceDe: "Im Winter schneit es oft.",
-    exampleSentenceEs: "En invierno nieva a menudo."
+    exampleSentenceEs: "En invierno nieva a menudo.",
+    exampleSentenceDeBlocks: [
+      { text: "Im Winter", role: "subject", order: 1 },
+      { text: "schneit", role: "verb_p1", order: 2 },
+      { text: "es oft", role: "complement", order: 3 }
+    ]
   }, {
         de: "scheinen",
     pron: "shái-nen",
@@ -7164,7 +10993,12 @@ const rawChapters = [
     regimen: "Intransitivo",
     en: "bright yellow sun shining",
     exampleSentenceDe: "Die Sonne scheint heute.",
-    exampleSentenceEs: "El sol brilla hoy."
+    exampleSentenceEs: "El sol brilla hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Sonne", role: "subject", order: 1 },
+      { text: "scheint", role: "verb_p1", order: 2 },
+      { text: "heute", role: "complement", order: 3 }
+    ]
   }, {
         de: "frieren",
     pron: "frí-ren",
@@ -7174,7 +11008,12 @@ const rawChapters = [
     regimen: "Irregular (friert)",
     en: "frozen ice block",
     exampleSentenceDe: "Ich friere sehr.",
-    exampleSentenceEs: "Tengo mucho frío."
+    exampleSentenceEs: "Tengo mucho frío.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "friere", role: "verb_p1", order: 2 },
+      { text: "sehr", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Nebel",
     pron: "dea né-bel",
@@ -7184,7 +11023,12 @@ const rawChapters = [
     plural: "die Nebel",
     en: "thick gray fog",
     exampleSentenceDe: "Der Nebel is sehr dicht.",
-    exampleSentenceEs: "La niebla es muy densa."
+    exampleSentenceEs: "La niebla es muy densa.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Nebel", role: "subject", order: 1 },
+      { text: "is", role: "verb_p1", order: 2 },
+      { text: "sehr dicht", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Sturm",
     pron: "dea shturm",
@@ -7194,7 +11038,11 @@ const rawChapters = [
     plural: "die Stürme",
     en: "strong wind blowing trees",
     exampleSentenceDe: "Ein Sturm kommt.",
-    exampleSentenceEs: "Viene una tormenta."
+    exampleSentenceEs: "Viene una tormenta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ein Sturm", role: "subject", order: 1 },
+      { text: "kommt", role: "verb_p1", order: 2 }
+    ]
   }, {
         de: "kühl",
     pron: "kül",
@@ -7203,7 +11051,12 @@ const rawChapters = [
     category: "Wetter",
     en: "cool autumn breeze",
     exampleSentenceDe: "Es ist heute kühl.",
-    exampleSentenceEs: "Hoy hace fresco."
+    exampleSentenceEs: "Hoy hace fresco.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "heute kühl", role: "complement", order: 3 }
+    ]
   }, {
         de: "warm",
     pron: "varm",
@@ -7212,7 +11065,12 @@ const rawChapters = [
     category: "Wetter",
     en: "warm glowing sun",
     exampleSentenceDe: "Das Wasser ist warm.",
-    exampleSentenceEs: "El agua está cálida."
+    exampleSentenceEs: "El agua está cálida.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Wasser", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "warm", role: "complement", order: 3 }
+    ]
   }, {
         de: "nass",
     pron: "nas",
@@ -7221,7 +11079,12 @@ const rawChapters = [
     category: "Wetter",
     en: "water drops",
     exampleSentenceDe: "Der Boden ist nass.",
-    exampleSentenceEs: "El suelo está mojado."
+    exampleSentenceEs: "El suelo está mojado.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Boden", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "nass", role: "complement", order: 3 }
+    ]
   }, {
         de: "trocken",
     pron: "tró-ken",
@@ -7230,7 +11093,12 @@ const rawChapters = [
     category: "Wetter",
     en: "dry cracked earth",
     exampleSentenceDe: "Die Kleidung ist trocken.",
-    exampleSentenceEs: "La ropa está seca."
+    exampleSentenceEs: "La ropa está seca.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kleidung", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "trocken", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Blitz",
     pron: "dea blits",
@@ -7240,7 +11108,12 @@ const rawChapters = [
     plural: "die Blitze",
     en: "yellow lightning bolt",
     exampleSentenceDe: "Ich sehe den Blitz.",
-    exampleSentenceEs: "Veo el relámpago."
+    exampleSentenceEs: "Veo el relámpago.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "den Blitz", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Donner",
     pron: "dea dó-ner",
@@ -7250,7 +11123,12 @@ const rawChapters = [
     plural: "die Donner",
     en: "dark thundercloud",
     exampleSentenceDe: "Ich höre den Donner.",
-    exampleSentenceEs: "Escucho el trueno."
+    exampleSentenceEs: "Escucho el trueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "höre", role: "verb_p1", order: 2 },
+      { text: "den Donner", role: "complement", order: 3 }
+    ]
   },
   {
     de: "der Strand",
@@ -7261,7 +11139,12 @@ const rawChapters = [
     plural: "die Strände",
     en: "a sandy beach with a colorful sun umbrella",
     exampleSentenceDe: "Wir machen Urlaub am Strand.",
-    exampleSentenceEs: "Nosotros pasamos las vacaciones en la playa."
+    exampleSentenceEs: "Nosotros pasamos las vacaciones en la playa.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "machen", role: "verb_p1", order: 2 },
+      { text: "Urlaub am Strand", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Berg",
     pron: "dea beark",
@@ -7271,7 +11154,12 @@ const rawChapters = [
     plural: "die Berge",
     en: "a high mountain with a snowy peak",
     exampleSentenceDe: "Wir wandern oft in den Bergen.",
-    exampleSentenceEs: "Hacemos senderismo a menudo en las montañas."
+    exampleSentenceEs: "Hacemos senderismo a menudo en las montañas.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir wandern", role: "subject", order: 1 },
+      { text: "oft", role: "verb_p1", order: 2 },
+      { text: "in den Bergen", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Wolke",
     pron: "di vol-ke",
@@ -7281,7 +11169,12 @@ const rawChapters = [
     plural: "die Wolken",
     en: "a fluffy white cloud",
     exampleSentenceDe: "Es gibt heute viele Wolken am Himmel.",
-    exampleSentenceEs: "Hoy hay muchas nubes en el cielo."
+    exampleSentenceEs: "Hoy hay muchas nubes en el cielo.",
+    exampleSentenceDeBlocks: [
+      { text: "Es", role: "subject", order: 1 },
+      { text: "gibt", role: "verb_p1", order: 2 },
+      { text: "heute viele Wolken am Himmel", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Gewitter",
     pron: "das gue-vi-ta",
@@ -7291,7 +11184,12 @@ const rawChapters = [
     plural: "die Gewitter",
     en: "a dark storm cloud with a yellow lightning bolt",
     exampleSentenceDe: "Heute Abend gibt es ein Gewitter.",
-    exampleSentenceEs: "Esta noche habrá una tormenta."
+    exampleSentenceEs: "Esta noche habrá una tormenta.",
+    exampleSentenceDeBlocks: [
+      { text: "Heute Abend", role: "subject", order: 1 },
+      { text: "gibt", role: "verb_p1", order: 2 },
+      { text: "es ein Gewitter", role: "complement", order: 3 }
+    ]
   },
     {
       de: "die Haltestelle",
@@ -7303,6 +11201,12 @@ const rawChapters = [
       plural: "die Haltestellen",
       exampleSentenceDe: "Wir steigen an der nächsten Haltestelle aus.",
       exampleSentenceEs: "Nos bajamos en la próxima parada.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "steigen", role: "verb_p1", order: 2 },
+      { text: "an der nächsten Haltestelle", role: "complement", order: 3 },
+      { text: "aus", role: "verb_p2", order: 4 }
+    ],
       en: "round bus stop sign shelter on sidewalk"
     },
     {
@@ -7315,6 +11219,12 @@ const rawChapters = [
       plural: "die Bahnsteige",
       exampleSentenceDe: "Der Zug nach Berlin fährt am Bahnsteig 4 ein.",
       exampleSentenceEs: "El tren a Berlín entra por el andén 4.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Zug nach Berlin", role: "subject", order: 1 },
+      { text: "fährt", role: "verb_p1", order: 2 },
+      { text: "am Bahnsteig 4", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ],
       en: "train station concrete platform with waiting passengers"
     },
     {
@@ -7327,6 +11237,11 @@ const rawChapters = [
       plural: "die Gleise",
       exampleSentenceDe: "Vorsicht an Gleis 2, der Zug fährt durch!",
       exampleSentenceEs: "¡Atención en la vía 2, el tren pasa de largo!",
+    exampleSentenceDeBlocks: [
+      { text: "Vorsicht an Gleis 2, der Zug", role: "subject", order: 1 },
+      { text: "fährt", role: "verb_p1", order: 2 },
+      { text: "durch", role: "complement", order: 3 }
+    ],
       en: "parallel train railroad steel tracks"
     },
     {
@@ -7339,6 +11254,11 @@ const rawChapters = [
       plural: "die Fahrpläne",
       exampleSentenceDe: "Laut Fahrplan kommt der Bus alle zehn Minuten.",
       exampleSentenceEs: "Según el horario, el autobús pasa cada diez minutos.",
+    exampleSentenceDeBlocks: [
+      { text: "Laut Fahrplan", role: "subject", order: 1 },
+      { text: "kommt", role: "verb_p1", order: 2 },
+      { text: "der Bus alle zehn Minuten", role: "complement", order: 3 }
+    ],
       en: "printed timetable board with departure arrival times"
     },
     {
@@ -7351,6 +11271,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Bitte entwerten Sie Ihr Ticket vor dem Einsteigen.",
       exampleSentenceEs: "Por favor, valide su billete antes de subir.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "entwerten", role: "verb_p1", order: 2 },
+      { text: "Sie Ihr Ticket vor dem Einsteigen", role: "complement", order: 3 }
+    ],
       en: "inserting paper transit ticket into small red validator box"
     },
     {
@@ -7363,6 +11288,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Mein Zug nach Köln fällt heute leider aus.",
       exampleSentenceEs: "Lamentablemente mi tren a Colonia se cancela hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Zug nach Köln", role: "subject", order: 1 },
+      { text: "fällt", role: "verb_p1", order: 2 },
+      { text: "heute leider", role: "complement", order: 3 },
+      { text: "aus", role: "verb_p2", order: 4 }
+    ],
       en: "digital departure screen showing flashing red CANCELLED"
     },
     {
@@ -7375,6 +11306,11 @@ const rawChapters = [
       plural: "die Durchsagen",
       exampleSentenceDe: "Bitte achten Sie auf die Durchsage am Bahnsteig.",
       exampleSentenceEs: "Por favor, preste atención al aviso por megafonía en el andén.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "achten", role: "verb_p1", order: 2 },
+      { text: "Sie auf die Durchsage am Bahnsteig", role: "complement", order: 3 }
+    ],
       en: "public address station speaker horn emitting audio soundwaves"
     },
     {
@@ -7387,6 +11323,11 @@ const rawChapters = [
       plural: "die Verbindungen",
       exampleSentenceDe: "Ich habe eine gute Verbindung mit nur einem Umstieg.",
       exampleSentenceEs: "Tengo una buena conexión con solo un transbordo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eine gute Verbindung mit nur einem Umstieg", role: "complement", order: 3 }
+    ],
       en: "metro subway map connection lines interlocking"
     },
     {
@@ -7399,6 +11340,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Rauchen ist hier streng verboten.",
       exampleSentenceEs: "Fumar está estrictamente prohibido aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Rauchen", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hier streng verboten", role: "complement", order: 3 }
+    ],
       en: "red circular prohibition sign with diagonal slash"
     },
     {
@@ -7411,6 +11357,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Parken ist hier nur für zwei Stunden erlaubt.",
       exampleSentenceEs: "Aparcar aquí está permitido solo por dos horas.",
+    exampleSentenceDeBlocks: [
+      { text: "Parken", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hier nur für zwei Stunden erlaubt", role: "complement", order: 3 }
+    ],
       en: "green circular permission sign with white checkmark"
     },
     {
@@ -7423,6 +11374,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wir müssen das Hotelzimmer rechtzeitig buchen.",
       exampleSentenceEs: "Tenemos que reservar la habitación de hotel a tiempo.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "müssen", role: "verb_p1", order: 2 },
+      { text: "das Hotelzimmer rechtzeitig", role: "complement", order: 3 },
+      { text: "buchen", role: "verb_p2", order: 4 }
+    ],
       en: "booking hotel room on smartphone screen"
     },
     {
@@ -7435,6 +11392,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Kann ich die Reise kostenlos stornieren?",
       exampleSentenceEs: "¿Puedo cancelar el viaje gratis?",
+    exampleSentenceDeBlocks: [
+      { text: "Kann", role: "verb_p1", order: 1 },
+      { text: "ich", role: "subject", order: 2 },
+      { text: "die Reise kostenlos", role: "complement", order: 3 },
+      { text: "stornieren", role: "verb_p2", order: 4 }
+    ],
       en: "cancelling flight booking with red cancel stamp"
     },
     {
@@ -7447,6 +11410,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Kannst du bitte einen Regenschirm mitnehmen?",
       exampleSentenceEs: "¿Puedes llevarte un paraguas por favor?",
+    exampleSentenceDeBlocks: [
+      { text: "Kannst", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "bitte einen Regenschirm", role: "complement", order: 3 },
+      { text: "mitnehmen", role: "verb_p2", order: 4 }
+    ],
       en: "person taking folded umbrella leaving house"
     },
     {
@@ -7459,6 +11428,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Kommst du mit zum Supermarkt?",
       exampleSentenceEs: "¿Vienes conmigo al supermercado?",
+    exampleSentenceDeBlocks: [
+      { text: "Kommst", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "mit zum Supermarkt", role: "complement", order: 3 }
+    ],
       en: "two happy walking buddies walking side by side"
     },
     {
@@ -7471,6 +11445,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Bitte die Haustür nachts immer abschließen.",
       exampleSentenceEs: "Por favor, cierre siempre con llave la puerta de la casa de noche.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "verb_p1", order: 1 },
+      { text: "die Haustür", role: "subject", order: 2 },
+      { text: "nachts immer abschließen", role: "complement", order: 3 }
+    ],
       en: "turning shiny metal key locking heavy front entrance door"
     }]
 },
@@ -7487,6 +11466,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Das Auto ist voll. Ich brauche das Benzin für den Tank.",
     exampleSentenceEs: "El coche está lleno. Necesito la gasolina para el tanque.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "voll", role: "complement", order: 3 }
+    ],
     plural: "die Tanks"
   }, {
     de: "der Blinker / blinken",
@@ -7496,6 +11480,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich bin im Auto. Ich blinke nach rechts.",
     exampleSentenceEs: "Estoy en el coche. Pongo el intermitente a la derecha.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "im Auto", role: "complement", order: 3 }
+    ],
     regimen: "Intransitivo"
   }, {
     de: "die Bremse / bremsen",
@@ -7505,6 +11494,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich sehe die Bremse. Ich bremse.",
     exampleSentenceEs: "Veo el freno. Yo freno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "die Bremse", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "das Bremspedal",
@@ -7514,6 +11508,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Das Bremspedal ist wichtig.",
     exampleSentenceEs: "El pedal de freno es importante.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Bremspedal", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "wichtig", role: "complement", order: 3 }
+    ],
     plural: "die Bremspedale"
   }, {
     de: "die Gangschaltung",
@@ -7523,6 +11522,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich habe ein Problem mit der Gangschaltung.",
     exampleSentenceEs: "Tengo un problema con la caja de cambios.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ein Problem mit der Gangschaltung", role: "complement", order: 3 }
+    ],
     plural: "die Gangschaltungen"
   }, {
     de: "das Gaspedal",
@@ -7532,6 +11536,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich sehe das Gaspedal im Auto.",
     exampleSentenceEs: "Yo veo el acelerador en el coche.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "das Gaspedal im Auto", role: "complement", order: 3 }
+    ],
     plural: "die Gaspedale"
   }, {
     de: "Gas geben",
@@ -7541,6 +11550,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Bitte gib Gas auf der Autobahn.",
     exampleSentenceEs: "Por favor, acelera en la autopista.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "gib", role: "verb_p1", order: 2 },
+      { text: "Gas auf der Autobahn", role: "complement", order: 3 }
+    ],
     regimen: "geben+Akk., verbo separable"
   }, {
     de: "der Fahrer / fahren",
@@ -7550,6 +11564,11 @@ const rawChapters = [
     category: "Allgemein",
     exampleSentenceDe: "Ich sehe den Fahrer. Der Fahrer fährt das Auto.",
     exampleSentenceEs: "Veo al conductor. El conductor conduce el coche.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "den Fahrer", role: "complement", order: 3 }
+    ],
     regimen: "Irregular (fährt)"
   }, {
     de: "die Hupe / hupen",
@@ -7559,6 +11578,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Die Hupe ist laut.",
     exampleSentenceEs: "La bocina es ruidosa.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Hupe", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "laut", role: "verb_p2", order: 3 }
+    ],
     regimen: "No separable, sin caso"
   }, {
     de: "der Kraftstoff",
@@ -7568,6 +11592,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich brauche den Kraftstoff für das Auto.",
     exampleSentenceEs: "Necesito el combustible para el coche.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "den Kraftstoff für das Auto", role: "complement", order: 3 }
+    ],
     plural: "die Kraftstoffe"
   }, {
     de: "das Lenkrad / lenken",
@@ -7577,6 +11606,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich habe das Lenkrad. Ich kann das Lenkrad lenken.",
     exampleSentenceEs: "Tengo el volante. Puedo girar el volante.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Lenkrad", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "der Motor",
@@ -7586,6 +11620,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich sehe den Motor. Der Motor ist neu.",
     exampleSentenceEs: "Yo veo el motor. El motor es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "den Motor", role: "complement", order: 3 }
+    ],
     plural: "die Motoren"
   }, {
     de: "der Rückspiegel",
@@ -7595,6 +11634,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich sehe den Rückspiegel. Der Rückspiegel ist klein.",
     exampleSentenceEs: "Veo el espejo retrovisor. El espejo retrovisor es pequeño.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "den Rückspiegel", role: "complement", order: 3 }
+    ],
     plural: "die Rückspiegel"
   }, {
     de: "der Sicherheitsgurt",
@@ -7604,6 +11648,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Der Sicherheitsgurt ist wichtig.",
     exampleSentenceEs: "El cinturón de seguridad es importante.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Sicherheitsgurt", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "wichtig", role: "complement", order: 3 }
+    ],
     plural: "die Sicherheitsgurte"
   }, {
     de: "die Kupplung",
@@ -7613,6 +11662,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich brauche die Kupplung.",
     exampleSentenceEs: "Yo necesito el embrague.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "die Kupplung", role: "complement", order: 3 }
+    ],
     plural: "die Kupplungen"
   }, {
     de: "die Felge",
@@ -7622,6 +11676,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Das Auto hat vier Felgen.",
     exampleSentenceEs: "El coche tiene cuatro rines.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "vier Felgen", role: "complement", order: 3 }
+    ],
     plural: "die Felgen"
   }, {
     de: "die Handbremse",
@@ -7631,6 +11690,12 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich ziehe die Handbremse an.",
     exampleSentenceEs: "Tiro del freno de mano.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "ziehe", role: "verb_p1", order: 2 },
+      { text: "die Handbremse", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
     plural: "die Handbremsen"
   }, {
     de: "der Schalthebel",
@@ -7640,6 +11705,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Der Schalthebel ist hier.",
     exampleSentenceEs: "La palanca de cambios está aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Schalthebel", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 }
+    ],
     plural: "die Schalthebel"
   }, {
     de: "der Scheibenwischer",
@@ -7649,6 +11719,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich sehe den Scheibenwischer.",
     exampleSentenceEs: "Yo veo el limpiaparabrisas.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "den Scheibenwischer", role: "complement", order: 3 }
+    ],
     plural: "die Scheibenwischer"
   }, {
     de: "der Lichtschalter",
@@ -7658,6 +11733,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Wo ist der Lichtschalter?",
     exampleSentenceEs: "¿Dónde está el interruptor de luces?",
+    exampleSentenceDeBlocks: [
+      { text: "Wo", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Lichtschalter", role: "complement", order: 3 }
+    ],
     plural: "die Lichtschalter"
   }, {
     de: "die Heizung",
@@ -7667,6 +11747,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Die Heizung ist an.",
     exampleSentenceEs: "La calefacción está encendida.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Heizung", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "an", role: "verb_p2", order: 3 }
+    ],
     plural: "die Heizungen"
   }, {
     de: "das Abblendlicht",
@@ -7676,6 +11761,11 @@ const rawChapters = [
     category: "Lichter",
     exampleSentenceDe: "Das Auto hat das Abblendlicht.",
     exampleSentenceEs: "El coche tiene la luz corta.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "das Abblendlicht", role: "complement", order: 3 }
+    ],
     plural: "die Abblendlichter"
   }, {
     de: "das Fernlicht",
@@ -7685,6 +11775,11 @@ const rawChapters = [
     category: "Lichter",
     exampleSentenceDe: "Das Fernlicht ist an.",
     exampleSentenceEs: "La luz larga está encendida.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Fernlicht", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "an", role: "verb_p2", order: 3 }
+    ],
     plural: "die Fernlichter"
   }, {
     de: "die Bremsleuchte",
@@ -7694,6 +11789,11 @@ const rawChapters = [
     category: "Lichter",
     exampleSentenceDe: "Die Bremsleuchte ist rot.",
     exampleSentenceEs: "La luz de freno es roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Bremsleuchte", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "rot", role: "complement", order: 3 }
+    ],
     plural: "die Bremsleuchten"
   }, {
     de: "die Warnblinkanlage",
@@ -7703,6 +11803,11 @@ const rawChapters = [
     category: "Lichter",
     exampleSentenceDe: "Ich drücke die Warnblinkanlage.",
     exampleSentenceEs: "Yo pulso las luces de emergencia.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "drücke", role: "verb_p1", order: 2 },
+      { text: "die Warnblinkanlage", role: "complement", order: 3 }
+    ],
     plural: "die Warnblinkanlagen"
   }, {
     de: "die Nebelschlussleuchte",
@@ -7712,6 +11817,11 @@ const rawChapters = [
     category: "Lichter",
     exampleSentenceDe: "Der Wagen hat die Nebelschlussleuchte.",
     exampleSentenceEs: "El coche tiene la luz antiniebla trasera.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Wagen", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "die Nebelschlussleuchte", role: "complement", order: 3 }
+    ],
     plural: "die Nebelschlussleuchten"
   }, {
     de: "das Tagfahrlicht",
@@ -7721,6 +11831,11 @@ const rawChapters = [
     category: "Lichter",
     exampleSentenceDe: "Das Tagfahrlicht ist neu.",
     exampleSentenceEs: "La luz diurna es nueva.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Tagfahrlicht", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Tagfahrlichter"
   }, {
     de: "betanken",
@@ -7730,6 +11845,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich muss das Auto betanken.",
     exampleSentenceEs: "Tengo que repostar gasolina el coche.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "das Auto", role: "complement", order: 3 },
+      { text: "betanken", role: "verb_p2", order: 4 }
+    ],
     regimen: "Inseparable / + Akkusativ"
   }, {
     de: "überholen",
@@ -7739,6 +11860,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Der Bus überholt das Auto.",
     exampleSentenceEs: "El autobús adelanta al coche.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Bus", role: "subject", order: 1 },
+      { text: "überholt", role: "verb_p1", order: 2 },
+      { text: "das Auto", role: "complement", order: 3 }
+    ],
     regimen: "No separable, + Akk."
   }, {
     de: "einsteigen / aussteigen",
@@ -7748,6 +11874,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Wir steigen in das Auto ein.",
     exampleSentenceEs: "Nosotros subimos al coche.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "steigen", role: "verb_p1", order: 2 },
+      { text: "in das Auto", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ],
     regimen: "Sep. (ein-/aus-) + in/aus Akk"
   }, {
     de: "aufschließen",
@@ -7757,6 +11889,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich schließe die Tür auf.",
     exampleSentenceEs: "Yo abro la puerta con llave.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schließe", role: "verb_p1", order: 2 },
+      { text: "die Tür", role: "complement", order: 3 },
+      { text: "auf", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (auf-), +Akk"
   }, {
     de: "anhalten / halten / parken",
@@ -7766,6 +11904,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Hier halten wir.",
     exampleSentenceEs: "Aquí paramos.",
+    exampleSentenceDeBlocks: [
+      { text: "Hier", role: "subject", order: 1 },
+      { text: "halten", role: "verb_p1", order: 2 },
+      { text: "wir", role: "verb_p2", order: 3 }
+    ],
     regimen: "anhalten separable, +Akk"
   }, {
     de: "die Vorfahrt",
@@ -7775,6 +11918,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Ich habe die Vorfahrt.",
     exampleSentenceEs: "Yo tengo la prioridad.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Vorfahrt", role: "complement", order: 3 }
+    ],
     plural: "die Vorfahrten"
   }, {
     de: "aufpassen",
@@ -7784,6 +11932,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Pass auf, bitte!",
     exampleSentenceEs: "¡Presta atención, por favor!",
+    exampleSentenceDeBlocks: [
+      { text: "Pass", role: "subject", order: 1 },
+      { text: "auf,", role: "verb_p1", order: 2 },
+      { text: "bitte", role: "verb_p2", order: 3 }
+    ],
     regimen: "Separable (auf-), + auf+Akk"
   }, {
     de: "Motor starten",
@@ -7793,6 +11946,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich starte den Motor.",
     exampleSentenceEs: "Yo prendo el motor.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "starte", role: "verb_p1", order: 2 },
+      { text: "den Motor", role: "complement", order: 3 }
+    ],
     regimen: "Verbo + objeto"
   }, {
     de: "sich anschnallen",
@@ -7802,6 +11960,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich muss mich im Auto anschnallen.",
     exampleSentenceEs: "Tengo que ponerme el cinturón en el coche.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "mich im Auto", role: "complement", order: 3 },
+      { text: "anschnallen", role: "verb_p2", order: 4 }
+    ],
     regimen: "Reflexivo, separable (an-)"
   }, {
     de: "beschleunigen",
@@ -7811,6 +11975,10 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Das Auto beschleunigt.",
     exampleSentenceEs: "El coche acelera.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "beschleunigt", role: "verb_p1", order: 2 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "abschleppen",
@@ -7820,6 +11988,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich lasse das Auto abschleppen.",
     exampleSentenceEs: "Yo dejo remolcar el coche.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lasse", role: "verb_p1", order: 2 },
+      { text: "das Auto abschleppen", role: "complement", order: 3 }
+    ],
     regimen: "Separable, +Akkusativ"
   }, {
     de: "zusammenstoßen",
@@ -7829,6 +12002,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Wir stoßen zusammen.",
     exampleSentenceEs: "Nos chocamos.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "stoßen", role: "verb_p1", order: 2 },
+      { text: "zusammen", role: "verb_p2", order: 3 }
+    ],
     regimen: "Separable (zusammen-)"
   }, {
     de: "der Schaden",
@@ -7838,6 +12016,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Der Schaden ist groß.",
     exampleSentenceEs: "El daño es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Schaden", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Schäden"
   }, {
     de: "das Motoröl",
@@ -7847,6 +12030,11 @@ const rawChapters = [
     category: "Flüssigkeiten",
     exampleSentenceDe: "Das ist das Motoröl.",
     exampleSentenceEs: "Este es el aceite de motor.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "das Motoröl", role: "complement", order: 3 }
+    ],
     plural: "die Motoröle"
   }, {
     de: "der Reifendruck",
@@ -7856,6 +12044,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Der Reifendruck ist gut.",
     exampleSentenceEs: "La presión de los neumáticos es buena.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Reifendruck", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     plural: "die Reifendrücke"
   }, {
     de: "der Reifen",
@@ -7865,6 +12058,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Der Reifen ist neu.",
     exampleSentenceEs: "La llanta es nueva.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Reifen", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Reifen"
   }, {
     de: "der Pkw / der Lkw",
@@ -7874,6 +12072,11 @@ const rawChapters = [
     category: "Fahrzeuge",
     exampleSentenceDe: "Das ist ein Pkw. Der Pkw ist neu.",
     exampleSentenceEs: "Este es un coche. El coche es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Pkw", role: "complement", order: 3 }
+    ],
     plural: "die Pkws / die Lkws"
   }, {
     de: "der Fußgänger",
@@ -7883,6 +12086,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Der Fußgänger ist hier.",
     exampleSentenceEs: "El peatón está aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Fußgänger", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 }
+    ],
     plural: "die Fußgänger"
   }, {
     de: "die Ampel / Kreuzung",
@@ -7892,6 +12100,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Die Ampel ist grün.",
     exampleSentenceEs: "El semáforo está en verde.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Ampel", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "grün", role: "complement", order: 3 }
+    ],
     plural: "die Ampeln / Kreuzungen"
   }, {
     de: "das Fahrzeug",
@@ -7901,6 +12114,11 @@ const rawChapters = [
     category: "Fahrzeuge",
     exampleSentenceDe: "Das Fahrzeug ist neu.",
     exampleSentenceEs: "El vehículo es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Fahrzeug", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Fahrzeuge"
   }, {
     de: "der Verkehr / Stau",
@@ -7910,6 +12128,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Der Verkehr ist heute nicht gut.",
     exampleSentenceEs: "El tráfico no está bueno hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Verkehr", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "heute nicht gut", role: "complement", order: 3 }
+    ],
     plural: "die Staus"
   }, {
     de: "das Verkehrsschild",
@@ -7919,6 +12142,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Das Verkehrsschild ist rot.",
     exampleSentenceEs: "La señal de tráfico es roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Verkehrsschild", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "rot", role: "complement", order: 3 }
+    ],
     plural: "die Verkehrsschilder"
   }, {
     de: "die Geschwindigkeit",
@@ -7928,6 +12156,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Die Geschwindigkeit ist hoch.",
     exampleSentenceEs: "La velocidad es alta.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Geschwindigkeit", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hoch", role: "complement", order: 3 }
+    ],
     plural: "die Geschwindigkeiten"
   }, {
     de: "die Spur",
@@ -7937,6 +12170,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Das Auto ist auf der Spur.",
     exampleSentenceEs: "El coche está en el carril.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "auf der Spur", role: "complement", order: 3 }
+    ],
     plural: "die Spuren"
   }, {
     de: "die Warnleuchten",
@@ -7946,6 +12184,11 @@ const rawChapters = [
     category: "Lichter",
     exampleSentenceDe: "Die Warnleuchten sind an.",
     exampleSentenceEs: "Las luces de advertencia están encendidas.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Warnleuchten", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "an", role: "verb_p2", order: 3 }
+    ],
     plural: "die Warnleuchten"
   }, {
     de: "die Baustelle",
@@ -7955,6 +12198,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Die Baustelle ist groß.",
     exampleSentenceEs: "La obra es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Baustelle", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Baustellen"
   }, {
     de: "die Sicherheit",
@@ -7964,6 +12212,11 @@ const rawChapters = [
     category: "Allgemein",
     exampleSentenceDe: "Die Sicherheit ist wichtig.",
     exampleSentenceEs: "La seguridad es importante.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Sicherheit", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "wichtig", role: "complement", order: 3 }
+    ],
     plural: "die Sicherheiten"
   }, {
     de: "Toter Winkel",
@@ -7973,6 +12226,12 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Der tote Winkel ist gefährlich.",
     exampleSentenceEs: "El ángulo muerto es peligroso.",
+    exampleSentenceDeBlocks: [
+      { text: "Der", role: "subject", order: 1 },
+      { text: "tote", role: "verb_p1", order: 2 },
+      { text: "Winkel ist", role: "complement", order: 3 },
+      { text: "gefährlich", role: "verb_p2", order: 4 }
+    ],
     regimen: "der tote Winkel"
   }, {
     de: "Schulterblick",
@@ -7982,6 +12241,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Ich mache einen Schulterblick.",
     exampleSentenceEs: "Yo hago una mirada sobre hombro.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "einen Schulterblick", role: "complement", order: 3 }
+    ],
     regimen: "Sustantivo compuesto"
   }, {
     de: "Rechts vor links",
@@ -7991,6 +12255,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "An der Kreuzung gilt: Rechts vor links.",
     exampleSentenceEs: "En el cruce se aplica: la derecha tiene preferencia.",
+    exampleSentenceDeBlocks: [
+      { text: "An der Kreuzung", role: "subject", order: 1 },
+      { text: "gilt:", role: "verb_p1", order: 2 },
+      { text: "Rechts vor links", role: "complement", order: 3 }
+    ],
     regimen: "Regla de tráfico"
   }, {
     de: "Motoröldruck",
@@ -8000,6 +12269,11 @@ const rawChapters = [
     category: "Anzeigen",
     exampleSentenceDe: "Der Motoröldruck ist gut.",
     exampleSentenceEs: "La presión del aceite del motor está bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Motoröldruck", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     plural: "die Motoröldrücke"
   }, {
     de: "Kühlmitteltemperatur",
@@ -8009,6 +12283,11 @@ const rawChapters = [
     category: "Anzeigen",
     exampleSentenceDe: "Ich sehe die Kühlmitteltemperatur. Die Kühlmitteltemperatur ist rot.",
     exampleSentenceEs: "Veo la temperatura del refrigerante. La temperatura del refrigerante es roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "die Kühlmitteltemperatur", role: "complement", order: 3 }
+    ],
     plural: "die Kühlmitteltemperaturen"
   }, {
     de: "das Schiebedach",
@@ -8018,6 +12297,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich habe ein Auto. Das Auto hat ein Schiebedach.",
     exampleSentenceEs: "Yo tengo un coche. El coche tiene un techo corredizo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ein Auto", role: "complement", order: 3 }
+    ],
     plural: "die Schiebedächer"
   }, {
     de: "der Auspuff",
@@ -8027,6 +12311,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Der Auspuff ist neu.",
     exampleSentenceEs: "El escape es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Auspuff", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Auspuffe"
   }, {
     de: "das Nummernschild",
@@ -8036,6 +12325,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich sehe das Nummernschild.",
     exampleSentenceEs: "Veo la matrícula.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "das Nummernschild", role: "complement", order: 3 }
+    ],
     plural: "die Nummernschilder"
   }, {
     de: "die Windschutzscheibe",
@@ -8045,6 +12339,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Ich brauche einen neuen Scheibenwischer für die Windschutzscheibe.",
     exampleSentenceEs: "Necesito un limpiaparabrisas nuevo para el parabrisas.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "einen neuen Scheibenwischer für die Windschutzscheibe", role: "complement", order: 3 }
+    ],
     plural: "die Windschutzscheiben"
   }, {
     de: "die Motorhaube",
@@ -8054,6 +12353,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Das Auto ist hier. Die Motorhaube ist offen.",
     exampleSentenceEs: "El coche está aquí. El capó está abierto.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Auto", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "hier", role: "complement", order: 3 }
+    ],
     plural: "die Motorhauben"
   }, {
     de: "die Stoßstange",
@@ -8063,6 +12367,11 @@ const rawChapters = [
     category: "Teile",
     exampleSentenceDe: "Das ist die Stoßstange. Die Stoßstange ist neu.",
     exampleSentenceEs: "Este es el parachoques. El parachoques es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die Stoßstange", role: "complement", order: 3 }
+    ],
     plural: "die Stoßstangen"
   }, {
     de: "der Kreisverkehr",
@@ -8072,6 +12381,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Ich fahre in den Kreisverkehr.",
     exampleSentenceEs: "Yo entro en la rotonda.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "fahre", role: "verb_p1", order: 2 },
+      { text: "in den Kreisverkehr", role: "complement", order: 3 }
+    ],
     plural: "die Kreisverkehre"
   }, {
     de: "die Einbahnstraße",
@@ -8081,6 +12395,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Die Straße ist eine Einbahnstraße.",
     exampleSentenceEs: "La calle es una calle de sentido único.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Straße", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "eine Einbahnstraße", role: "complement", order: 3 }
+    ],
     plural: "die Einbahnstraßen"
   }, {
     de: "abbiegen",
@@ -8090,6 +12409,12 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Ich biege hier links ab.",
     exampleSentenceEs: "Yo giro aquí a la izquierda.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "biege", role: "verb_p1", order: 2 },
+      { text: "hier links", role: "complement", order: 3 },
+      { text: "ab", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (ab-)"
   }, {
     de: "der Strafzettel",
@@ -8099,6 +12424,11 @@ const rawChapters = [
     category: "Verkehr",
     exampleSentenceDe: "Ich habe einen Strafzettel bekommen. Der Strafzettel ist teuer.",
     exampleSentenceEs: "Recibí una multa de tráfico. La multa de tráfico es cara.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Strafzettel bekommen", role: "complement", order: 3 }
+    ],
     plural: "die Strafzettel"
   }, {
     de: "die Versicherung",
@@ -8108,6 +12438,11 @@ const rawChapters = [
     category: "Allgemein",
     exampleSentenceDe: "Ich habe die Versicherung.",
     exampleSentenceEs: "Tengo el seguro.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Versicherung", role: "complement", order: 3 }
+    ],
     plural: "die Versicherungen"
   }]
 },
@@ -8124,6 +12459,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Ich brauche die Post.",
     exampleSentenceEs: "Yo necesito el correo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "die Post", role: "complement", order: 3 }
+    ],
     plural: "die Post"
   }, {
     de: "der Brief",
@@ -8133,6 +12473,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Ich habe den Brief. Der Brief ist hier.",
     exampleSentenceEs: "Tengo la carta. La carta está aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "den Brief", role: "complement", order: 3 }
+    ],
     plural: "die Briefe"
   }, {
     de: "die Postkarte",
@@ -8142,6 +12487,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Ich kaufe die Postkarte im Supermarkt.",
     exampleSentenceEs: "Yo compro la postal en el supermercado.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kaufe", role: "verb_p1", order: 2 },
+      { text: "die Postkarte im Supermarkt", role: "complement", order: 3 }
+    ],
     plural: "die Postkarten"
   }, {
     de: "schicken",
@@ -8151,6 +12501,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Ich schicke die E-Mail morgen.",
     exampleSentenceEs: "Yo envío el correo mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schicke", role: "verb_p1", order: 2 },
+      { text: "die E-Mail morgen", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativo (a quién) / + Akkusativ (qué)"
   }, {
     de: "bekommen",
@@ -8160,6 +12515,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Ich bekomme ein Geschenk.",
     exampleSentenceEs: "Yo recibo un regalo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bekomme", role: "verb_p1", order: 2 },
+      { text: "ein Geschenk", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "abholen",
@@ -8169,6 +12529,12 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Ich hole dich am Bahnhof ab.",
     exampleSentenceEs: "Te recojo en la estación de tren.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "hole", role: "verb_p1", order: 2 },
+      { text: "dich am Bahnhof", role: "complement", order: 3 },
+      { text: "ab", role: "verb_p2", order: 4 }
+    ],
     regimen: "+Akk, separable (ab-)"
   }, {
     de: "die Briefmarke",
@@ -8178,6 +12544,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Ich brauche die Briefmarke.",
     exampleSentenceEs: "Yo necesito la estampilla.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "die Briefmarke", role: "complement", order: 3 }
+    ],
     plural: "die Briefmarken"
   }, {
     de: "der Absender",
@@ -8187,6 +12558,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Wer ist der Absender?",
     exampleSentenceEs: "¿Quién es el remitente?",
+    exampleSentenceDeBlocks: [
+      { text: "Wer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Absender", role: "complement", order: 3 }
+    ],
     plural: "die Absender"
   }, {
     de: "der Empfänger",
@@ -8196,6 +12572,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Wer ist der Empfänger?",
     exampleSentenceEs: "¿Quién es el destinatario?",
+    exampleSentenceDeBlocks: [
+      { text: "Wer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Empfänger", role: "complement", order: 3 }
+    ],
     plural: "die Empfänger"
   }, {
     de: "die Adresse",
@@ -8205,6 +12586,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Das ist die Adresse.",
     exampleSentenceEs: "Esta es la dirección.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "die Adresse", role: "complement", order: 3 }
+    ],
     plural: "die Adressen"
   }, {
     de: "das Telefon",
@@ -8214,6 +12600,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Das ist mein Telefon.",
     exampleSentenceEs: "Este es mi teléfono.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Telefon", role: "complement", order: 3 }
+    ],
     plural: "die Telefone"
   }, {
     de: "das Handy",
@@ -8223,6 +12614,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe ein Handy. Das Handy ist neu.",
     exampleSentenceEs: "Tengo un celular. El celular es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ein Handy", role: "complement", order: 3 }
+    ],
     plural: "die Handys"
   }, {
     de: "das Fax",
@@ -8232,6 +12628,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe ein Fax. Das Fax ist neu.",
     exampleSentenceEs: "Tengo un fax. El fax es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ein Fax", role: "complement", order: 3 }
+    ],
     plural: "die Faxe"
   }, {
     de: "die Telefonnummer",
@@ -8241,6 +12642,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe die Telefonnummer. Die Telefonnummer ist neu.",
     exampleSentenceEs: "Tengo el número de teléfono. El número de teléfono es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Telefonnummer", role: "complement", order: 3 }
+    ],
     plural: "die Telefonnummern"
   }, {
     de: "das Telefonbuch",
@@ -8250,6 +12656,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich suche das Telefonbuch.",
     exampleSentenceEs: "Yo busco la guía telefónica.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "suche", role: "verb_p1", order: 2 },
+      { text: "das Telefonbuch", role: "complement", order: 3 }
+    ],
     plural: "die Telefonbücher"
   }, {
     de: "telefonieren",
@@ -8259,6 +12670,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich telefoniere mit meiner Mutter.",
     exampleSentenceEs: "Yo hablo por teléfono con mi madre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "telefoniere", role: "verb_p1", order: 2 },
+      { text: "mit meiner Mutter", role: "complement", order: 3 }
+    ],
     regimen: "+ mit + Dativ"
   }, {
     de: "anrufen",
@@ -8268,6 +12684,12 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich rufe meine Mutter an.",
     exampleSentenceEs: "Yo llamo a mi madre.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "rufe", role: "verb_p1", order: 2 },
+      { text: "meine Mutter", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (an-) / + Akkusativ"
   }, {
     de: "sprechen (mit)",
@@ -8277,6 +12699,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich spreche mit meinem Freund.",
     exampleSentenceEs: "Yo hablo con mi amigo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "spreche", role: "verb_p1", order: 2 },
+      { text: "mit meinem Freund", role: "complement", order: 3 }
+    ],
     regimen: "mit + Dativ"
   }, {
     de: "besetzt",
@@ -8286,6 +12713,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Die Telefonleitung ist besetzt.",
     exampleSentenceEs: "La línea telefónica está ocupada.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Telefonleitung", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "besetzt", role: "complement", order: 3 }
+    ],
     regimen: "≠ frei"
   }, {
     de: "die Bank",
@@ -8295,6 +12727,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich sitze auf der Bank.",
     exampleSentenceEs: "Yo me siento en el banco.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sitze", role: "verb_p1", order: 2 },
+      { text: "auf der Bank", role: "complement", order: 3 }
+    ],
     plural: "die Bänke"
   }, {
     de: "der Schalter",
@@ -8304,6 +12741,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich gehe zum Schalter.",
     exampleSentenceEs: "Voy a la ventanilla.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "zum Schalter", role: "complement", order: 3 }
+    ],
     plural: "die Schalter"
   }, {
     de: "das Geld",
@@ -8313,6 +12755,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Das ist das Geld.",
     exampleSentenceEs: "Este es el dinero.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "das Geld", role: "complement", order: 3 }
+    ],
     plural: "kein Plural"
   }, {
     de: "bar zahlen",
@@ -8322,6 +12769,12 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich möchte bar zahlen.",
     exampleSentenceEs: "Quiero pagar en efectivo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "bar", role: "complement", order: 3 },
+      { text: "zahlen", role: "verb_p2", order: 4 }
+    ],
     regimen: "Verbo al final"
   }, {
     de: "die Kreditkarte",
@@ -8331,6 +12784,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich habe die Kreditkarte. Die Kreditkarte ist rot.",
     exampleSentenceEs: "Tengo la tarjeta de crédito. La tarjeta de crédito es roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Kreditkarte", role: "complement", order: 3 }
+    ],
     plural: "die Kreditkarten"
   }, {
     de: "das Konto",
@@ -8340,6 +12798,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich habe das Konto.",
     exampleSentenceEs: "Tengo la cuenta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Konto", role: "complement", order: 3 }
+    ],
     plural: "die Konten"
   }, {
     de: "überweisen",
@@ -8349,6 +12812,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich überweise Geld auf das Konto.",
     exampleSentenceEs: "Yo transfiero dinero a la cuenta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "überweise", role: "verb_p1", order: 2 },
+      { text: "Geld auf das Konto", role: "complement", order: 3 }
+    ],
     regimen: "Inseparable / + Akkusativ"
   }, {
     de: "das Formular",
@@ -8358,6 +12826,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich habe das Formular. Das Formular ist neu.",
     exampleSentenceEs: "Tengo el formulario. El formulario es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Formular", role: "complement", order: 3 }
+    ],
     plural: "die Formulare"
   }, {
     de: "ausfüllen",
@@ -8367,6 +12840,12 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich muss das Formular ausfüllen.",
     exampleSentenceEs: "Yo debo rellenar el formulario.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "das Formular", role: "complement", order: 3 },
+      { text: "ausfüllen", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (aus-)"
   }, {
     de: "ankreuzen",
@@ -8376,6 +12855,12 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich muss das Feld ankreuzen.",
     exampleSentenceEs: "Tengo que marcar el campo con una cruz.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "das Feld", role: "complement", order: 3 },
+      { text: "ankreuzen", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (an-)"
   }, {
     de: "unterschreiben",
@@ -8385,6 +12870,12 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich muss den Vertrag unterschreiben.",
     exampleSentenceEs: "Yo debo firmar el contrato.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "den Vertrag", role: "complement", order: 3 },
+      { text: "unterschreiben", role: "verb_p2", order: 4 }
+    ],
     regimen: "No separable + Akk"
   }, {
     de: "der Geldautomat",
@@ -8394,6 +12885,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Wo ist der Geldautomat?",
     exampleSentenceEs: "¿Dónde está el cajero automático?",
+    exampleSentenceDeBlocks: [
+      { text: "Wo", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "der Geldautomat", role: "complement", order: 3 }
+    ],
     plural: "die Geldautomaten"
   }, {
     de: "das Internet",
@@ -8403,6 +12899,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe das Internet. Das Internet ist gut.",
     exampleSentenceEs: "Tengo internet. Internet es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Internet", role: "complement", order: 3 }
+    ],
     plural: "die Internets"
   }, {
     de: "der Computer",
@@ -8412,6 +12913,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
     exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Computer", role: "complement", order: 3 }
+    ],
     plural: "die Computer"
   }, {
     de: "der Pass / Ausweis",
@@ -8421,6 +12927,11 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Ich brauche den Pass.",
     exampleSentenceEs: "Necesito el pasaporte.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "den Pass", role: "complement", order: 3 }
+    ],
     plural: "die Pässe / Ausweise"
   }, {
     de: "gültig",
@@ -8430,6 +12941,11 @@ const rawChapters = [
     category: "Dokumente",
     exampleSentenceDe: "Mein Pass ist gültig.",
     exampleSentenceEs: "Mi pasaporte es válido.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Pass", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gültig", role: "complement", order: 3 }
+    ],
     regimen: "≠ ungültig"
   }, {
     de: "das Paket",
@@ -8439,6 +12955,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Ich habe das Paket. Das Paket ist groß.",
     exampleSentenceEs: "Tengo el paquete. El paquete es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Paket", role: "complement", order: 3 }
+    ],
     plural: "die Pakete"
   }, {
     de: "der Briefkasten",
@@ -8448,6 +12969,11 @@ const rawChapters = [
     category: "Post",
     exampleSentenceDe: "Ich habe einen Briefkasten.",
     exampleSentenceEs: "Tengo un buzón de correo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Briefkasten", role: "complement", order: 3 }
+    ],
     plural: "die Briefkästen"
   }, {
     de: "die Gebühr",
@@ -8457,6 +12983,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Die Gebühr ist zehn Euro.",
     exampleSentenceEs: "La tarifa es de diez euros.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Gebühr", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "zehn Euro", role: "complement", order: 3 }
+    ],
     plural: "die Gebühren"
   }, {
     de: "der Kredit",
@@ -8466,6 +12997,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich habe den Kredit. Der Kredit ist gut.",
     exampleSentenceEs: "Tengo el crédito. El crédito es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "den Kredit", role: "complement", order: 3 }
+    ],
     plural: "die Kredite"
   }, {
     de: "abheben",
@@ -8475,6 +13011,12 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich möchte Geld abheben.",
     exampleSentenceEs: "Quiero retirar dinero.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "Geld", role: "complement", order: 3 },
+      { text: "abheben", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (ab-), +Akk"
   }, {
     de: "einzahlen",
@@ -8484,6 +13026,12 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich zahle Geld auf die Bank ein.",
     exampleSentenceEs: "Yo deposito dinero en el banco.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "zahle", role: "verb_p1", order: 2 },
+      { text: "Geld auf die Bank", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (ein-), +Akk"
   }, {
     de: "die Geheimzahl",
@@ -8493,6 +13041,11 @@ const rawChapters = [
     category: "Bank",
     exampleSentenceDe: "Ich habe die Geheimzahl vergessen.",
     exampleSentenceEs: "Olvidé el PIN.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Geheimzahl vergessen", role: "complement", order: 3 }
+    ],
     plural: "die Geheimzahlen"
   },
     {
@@ -8505,6 +13058,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich rufe Sie in zehn Minuten zurück.",
       exampleSentenceEs: "Le devuelvo la llamada en diez minutos.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "rufe", role: "verb_p1", order: 2 },
+      { text: "Sie in zehn Minuten", role: "complement", order: 3 },
+      { text: "zurück", role: "verb_p2", order: 4 }
+    ],
       en: "mobile smartphone screen showing incoming return call arrow"
     },
     {
@@ -8517,6 +13076,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Sie können mich unter dieser Telefonnummer erreichen.",
       exampleSentenceEs: "Puede localizarme en este número de teléfono.",
+    exampleSentenceDeBlocks: [
+      { text: "Sie", role: "subject", order: 1 },
+      { text: "können", role: "verb_p1", order: 2 },
+      { text: "mich unter dieser Telefonnummer", role: "complement", order: 3 },
+      { text: "erreichen", role: "verb_p2", order: 4 }
+    ],
       en: "dialing phone picking up friendly connected call"
     },
     {
@@ -8529,6 +13094,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich muss meine Fahrkarte noch ausdrucken.",
       exampleSentenceEs: "Todavía tengo que imprimir mi billete de viaje.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "meine Fahrkarte noch", role: "complement", order: 3 },
+      { text: "ausdrucken", role: "verb_p2", order: 4 }
+    ],
       en: "printer output tray producing fresh printed paper ticket"
     }]
 },
@@ -8545,6 +13116,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe ein Auge. Das Auge ist braun.",
     exampleSentenceEs: "Tengo un ojo. El ojo es marrón.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ein Auge", role: "complement", order: 3 }
+    ],
     plural: "die Augen"
   }, {
     de: "die Hand",
@@ -8554,6 +13130,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe eine Hand. Die Hand ist klein.",
     exampleSentenceEs: "Tengo una mano. La mano es pequeña.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eine Hand", role: "complement", order: 3 }
+    ],
     plural: "die Hände"
   }, {
     de: "der Arm",
@@ -8563,6 +13144,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe einen Arm.",
     exampleSentenceEs: "Tengo un brazo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Arm", role: "complement", order: 3 }
+    ],
     plural: "die Arme"
   }, {
     de: "das Bein",
@@ -8572,6 +13158,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe ein Bein.",
     exampleSentenceEs: "Yo tengo una pierna.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ein Bein", role: "complement", order: 3 }
+    ],
     plural: "die Beine"
   }, {
     de: "der Kopf",
@@ -8581,6 +13172,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe Kopfschmerzen.",
     exampleSentenceEs: "Tengo dolor de cabeza.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Kopfschmerzen", role: "complement", order: 3 }
+    ],
     plural: "die Köpfe"
   }, {
     de: "der Fuß",
@@ -8590,6 +13186,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Mein Fuß ist groß.",
     exampleSentenceEs: "Mi pie es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Fuß", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Füße"
   }, {
     de: "der Mund",
@@ -8599,6 +13200,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe einen Mund.",
     exampleSentenceEs: "Tengo una boca.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Mund", role: "complement", order: 3 }
+    ],
     plural: "die Münder"
   }, {
     de: "der Zahn",
@@ -8608,6 +13214,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Mein Zahn ist schlecht.",
     exampleSentenceEs: "Mi diente está mal.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Zahn", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schlecht", role: "complement", order: 3 }
+    ],
     plural: "die Zähne"
   }, {
     de: "die Nase",
@@ -8617,6 +13228,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Die Nase ist rot.",
     exampleSentenceEs: "La nariz es roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Nase", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "rot", role: "complement", order: 3 }
+    ],
     plural: "die Nasen"
   }, {
     de: "das Ohr",
@@ -8626,6 +13242,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe ein Ohr. Das Ohr ist rot.",
     exampleSentenceEs: "Tengo una oreja. La oreja está roja.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ein Ohr", role: "complement", order: 3 }
+    ],
     plural: "die Ohren"
   }, {
     de: "das Haar",
@@ -8635,6 +13256,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Das Haar ist rot.",
     exampleSentenceEs: "El pelo es rojo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Haar", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "rot", role: "complement", order: 3 }
+    ],
     plural: "die Haare"
   }, {
     de: "der Bauch",
@@ -8644,6 +13270,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe Hunger. Mein Bauch ist leer.",
     exampleSentenceEs: "Tengo hambre. Mi barriga está vacía.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Hunger", role: "complement", order: 3 }
+    ],
     plural: "die Bäuche"
   }, {
     de: "der Finger",
@@ -8653,6 +13284,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Das ist mein Finger.",
     exampleSentenceEs: "Este es mi dedo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Finger", role: "complement", order: 3 }
+    ],
     plural: "die Finger"
   }, {
     de: "der Rücken",
@@ -8662,6 +13298,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe Schmerzen im Rücken.",
     exampleSentenceEs: "Tengo dolor en la espalda.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Schmerzen im Rücken", role: "complement", order: 3 }
+    ],
     plural: "die Rücken"
   }, {
     de: "der Hals",
@@ -8671,6 +13312,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Ich habe Schmerzen am Hals.",
     exampleSentenceEs: "Tengo dolor en el cuello.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Schmerzen am Hals", role: "complement", order: 3 }
+    ],
     plural: "die Hälse"
   }, {
     de: "wehtun",
@@ -8680,6 +13326,11 @@ const rawChapters = [
     category: "Krankheit",
     exampleSentenceDe: "Mein Kopf tut weh.",
     exampleSentenceEs: "Mi cabeza duele.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Kopf", role: "subject", order: 1 },
+      { text: "tut", role: "verb_p1", order: 2 },
+      { text: "weh", role: "verb_p2", order: 3 }
+    ],
     regimen: "+ Dativo (a quién duele)"
   }, {
     de: "Wie geht es Ihnen?",
@@ -8689,6 +13340,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Hallo, wie geht es Ihnen?",
     exampleSentenceEs: "Hola, ¿cómo está usted?",
+    exampleSentenceDeBlocks: [
+      { text: "Hallo, wie", role: "subject", order: 1 },
+      { text: "geht", role: "verb_p1", order: 2 },
+      { text: "es Ihnen", role: "complement", order: 3 }
+    ],
     regimen: "Formal"
   }, {
     de: "Es geht mir gut",
@@ -8698,6 +13354,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Hallo! Mir geht es gut, danke.",
     exampleSentenceEs: "¡Hola! Me va bien, gracias.",
+    exampleSentenceDeBlocks: [
+      { text: "Hallo! Mir", role: "subject", order: 1 },
+      { text: "geht", role: "verb_p1", order: 2 },
+      { text: "es gut, danke", role: "complement", order: 3 }
+    ],
     regimen: "Dat: mir"
   }, {
     de: "schlafen",
@@ -8707,6 +13368,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich schlafe heute.",
     exampleSentenceEs: "Yo duermo hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schlafe", role: "verb_p1", order: 2 },
+      { text: "heute", role: "complement", order: 3 }
+    ],
     regimen: "Irregular (schläft)"
   }, {
     de: "ins Bett gehen",
@@ -8716,6 +13382,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich gehe jetzt ins Bett.",
     exampleSentenceEs: "Yo voy a la cama ahora.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "jetzt ins Bett", role: "complement", order: 3 }
+    ],
     regimen: "ins + Akkusativ"
   }, {
     de: "im Bett liegen",
@@ -8725,6 +13396,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich liege im Bett.",
     exampleSentenceEs: "Yo estoy en la cama.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "liege", role: "verb_p1", order: 2 },
+      { text: "im Bett", role: "complement", order: 3 }
+    ],
     regimen: "in+Dat=fijo"
   }, {
     de: "krank",
@@ -8734,6 +13410,11 @@ const rawChapters = [
     category: "Krankheit",
     exampleSentenceDe: "Ich bin krank.",
     exampleSentenceEs: "Yo estoy enfermo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "krank", role: "complement", order: 3 }
+    ],
     regimen: "≠ gesund"
   }, {
     de: "das Fieber",
@@ -8743,6 +13424,11 @@ const rawChapters = [
     category: "Krankheit",
     exampleSentenceDe: "Ich habe Fieber. Das Fieber ist hoch.",
     exampleSentenceEs: "Tengo fiebre. La fiebre es alta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Fieber", role: "complement", order: 3 }
+    ],
     plural: "die Fieber"
   }, {
     de: "der Arzt",
@@ -8752,6 +13438,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Ich bin krank. Ich gehe zum Arzt.",
     exampleSentenceEs: "Estoy enfermo. Voy al médico.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "krank", role: "complement", order: 3 }
+    ],
     plural: "die Ärzte"
   }, {
     de: "der Doktor",
@@ -8761,6 +13452,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Der Doktor ist nett.",
     exampleSentenceEs: "El doctor es amable.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Doktor", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "nett", role: "complement", order: 3 }
+    ],
     plural: "die Doktoren"
   }, {
     de: "die Apotheke",
@@ -8770,6 +13466,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Ich gehe zur Apotheke.",
     exampleSentenceEs: "Voy a la farmacia.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "zur Apotheke", role: "complement", order: 3 }
+    ],
     plural: "die Apotheken"
   }, {
     de: "das Medikament",
@@ -8779,6 +13480,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Das Medikament ist neu.",
     exampleSentenceEs: "El medicamento es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Medikament", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Medikamente"
   }, {
     de: "das Rezept",
@@ -8788,6 +13494,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Ich brauche das Rezept von dem Arzt.",
     exampleSentenceEs: "Necesito la receta del médico.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "das Rezept von dem Arzt", role: "complement", order: 3 }
+    ],
     plural: "die Rezepte"
   }, {
     de: "die Praxis",
@@ -8797,6 +13508,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Ich gehe in die Praxis von dem Arzt.",
     exampleSentenceEs: "Voy al consultorio del doctor.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "in die Praxis von dem Arzt", role: "complement", order: 3 }
+    ],
     plural: "die Praxen"
   }, {
     de: "das Krankenhaus",
@@ -8806,6 +13522,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Ich bin im Krankenhaus.",
     exampleSentenceEs: "Estoy en el hospital.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "im Krankenhaus", role: "complement", order: 3 }
+    ],
     plural: "die Krankenhäuser"
   }, {
     de: "der Termin",
@@ -8815,6 +13536,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Ich habe einen Termin am Montag.",
     exampleSentenceEs: "Tengo una cita el lunes.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Termin am Montag", role: "complement", order: 3 }
+    ],
     plural: "die Termine"
   }, {
     de: "Gute Besserung",
@@ -8824,6 +13550,11 @@ const rawChapters = [
     category: "Kommunikation",
     exampleSentenceDe: "Ich wünsche dir gute Besserung.",
     exampleSentenceEs: "Te deseo que te mejores.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wünsche", role: "verb_p1", order: 2 },
+      { text: "dir gute Besserung", role: "complement", order: 3 }
+    ],
     regimen: "Fórmula fija"
   }, {
     de: "das Pflaster",
@@ -8833,6 +13564,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Ich habe das Pflaster. Das Pflaster ist klein.",
     exampleSentenceEs: "Tengo la tirita. La tirita es pequeña.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Pflaster", role: "complement", order: 3 }
+    ],
     plural: "die Pflaster"
   }, {
     de: "die Salbe",
@@ -8842,6 +13578,11 @@ const rawChapters = [
     category: "Medizin",
     exampleSentenceDe: "Ich habe die Salbe.",
     exampleSentenceEs: "Tengo la pomada.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Salbe", role: "complement", order: 3 }
+    ],
     plural: "die Salben"
   }, {
     de: "die Erkältung",
@@ -8851,6 +13592,11 @@ const rawChapters = [
     category: "Krankheit",
     exampleSentenceDe: "Ich habe die Erkältung.",
     exampleSentenceEs: "Tengo el resfriado.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "die Erkältung", role: "complement", order: 3 }
+    ],
     plural: "die Erkältungen"
   }, {
     de: "husten",
@@ -8860,6 +13606,10 @@ const rawChapters = [
     category: "Krankheit",
     exampleSentenceDe: "Ich huste.",
     exampleSentenceEs: "Yo toso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "huste", role: "verb_p1", order: 2 }
+    ],
     regimen: "Intransitivo"
   }, {
     de: "bluten",
@@ -8869,6 +13619,11 @@ const rawChapters = [
     category: "Krankheit",
     exampleSentenceDe: "Ich blute nicht.",
     exampleSentenceEs: "Yo no sangro.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "blute", role: "verb_p1", order: 2 },
+      { text: "nicht", role: "complement", order: 3 }
+    ],
     regimen: "Intransitivo"
   }, {
     de: "sich verletzen",
@@ -8878,6 +13633,11 @@ const rawChapters = [
     category: "Krankheit",
     exampleSentenceDe: "Ich verletze mich nicht.",
     exampleSentenceEs: "No me lastimo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "verletze", role: "verb_p1", order: 2 },
+      { text: "mich nicht", role: "complement", order: 3 }
+    ],
     regimen: "Reflexivo + Akkusativ"
   }, {
     de: "der Schmerz",
@@ -8887,6 +13647,11 @@ const rawChapters = [
     category: "Krankheit",
     exampleSentenceDe: "Ich habe Schmerz. Der Schmerz ist stark.",
     exampleSentenceEs: "Tengo dolor. El dolor es fuerte.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Schmerz", role: "complement", order: 3 }
+    ],
     plural: "die Schmerzen"
   }, {
     de: "schwanger",
@@ -8896,6 +13661,11 @@ const rawChapters = [
     category: "Körper",
     exampleSentenceDe: "Sie ist schwanger.",
     exampleSentenceEs: "Ella está embarazada.",
+    exampleSentenceDeBlocks: [
+      { text: "Sie", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schwanger", role: "complement", order: 3 }
+    ],
     regimen: "≠ nicht schwanger"
   },
   {
@@ -8905,8 +13675,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Körperpflege",
     plural: "die Seifen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Ich wasche mich mit Seife.",
+    exampleSentenceEs: "Me lavo con jabón.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wasche", role: "verb_p1", order: 2 },
+      { text: "mich mit Seife", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Shampoo",
     pron: "das shám-pu",
@@ -8914,8 +13689,13 @@ const rawChapters = [
     type: "Sustantivo (Neutro)",
     category: "Körperpflege",
     plural: "die Shampoos",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Das Shampoo riecht nach Kokosnuss.",
+    exampleSentenceEs: "El champú huele a coco.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Shampoo", role: "subject", order: 1 },
+      { text: "riecht", role: "verb_p1", order: 2 },
+      { text: "nach Kokosnuss", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Zahnbürste",
     pron: "di tsán-büa-ste",
@@ -8923,8 +13703,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Körperpflege",
     plural: "die Zahnbürsten",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Meine Zahnbürste ist ganz neu.",
+    exampleSentenceEs: "Mi cepillo de dientes es totalmente nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Meine Zahnbürste", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ganz neu", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Zahnpasta",
     pron: "di tsán-pas-ta",
@@ -8932,8 +13717,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Körperpflege",
     plural: "die Zahnpasten",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Zahnpasta schmeckt nach Minze.",
+    exampleSentenceEs: "La pasta de dientes sabe a menta.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Zahnpasta", role: "subject", order: 1 },
+      { text: "schmeckt", role: "verb_p1", order: 2 },
+      { text: "nach Minze", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Kamm",
     pron: "dea kam",
@@ -8941,8 +13731,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Körperpflege",
     plural: "die Kämme",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Kamm liegt im Badezimmer.",
+    exampleSentenceEs: "El peine está en el baño.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Kamm", role: "subject", order: 1 },
+      { text: "liegt", role: "verb_p1", order: 2 },
+      { text: "im Badezimmer", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Föhn",
     pron: "dea fön",
@@ -8950,8 +13745,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Körperpflege",
     plural: "die Föhne",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Föhn trocknet meine Haare.",
+    exampleSentenceEs: "El secador seca mi pelo.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Föhn", role: "subject", order: 1 },
+      { text: "trocknet", role: "verb_p1", order: 2 },
+      { text: "meine Haare", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Rasierer",
     pron: "dea ra-zí-ra",
@@ -8959,8 +13759,13 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Körperpflege",
     plural: "die Rasierer",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Rasierer funktioniert sehr gut.",
+    exampleSentenceEs: "La afeitadora funciona muy bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Rasierer", role: "subject", order: 1 },
+      { text: "funktioniert", role: "verb_p1", order: 2 },
+      { text: "sehr gut", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Tablette",
     pron: "di ta-blé-te",
@@ -8968,8 +13773,14 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Gesundheit",
     plural: "die Tabletten",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Er nimmt eine Tablette ein.",
+    exampleSentenceEs: "Él se toma una pastilla.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "nimmt", role: "verb_p1", order: 2 },
+      { text: "eine Tablette", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "die Krankheit",
     pron: "di kránk-hait",
@@ -8977,8 +13788,14 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Gesundheit",
     plural: "die Krankheiten",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Die Krankheit ist nicht gefährlich.",
+    exampleSentenceEs: "La enfermedad no es peligrosa.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Krankheit", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "nicht", role: "complement", order: 3 },
+      { text: "gefährlich", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "die Gesundheit",
     pron: "di gue-zúnt-hait",
@@ -8986,8 +13803,13 @@ const rawChapters = [
     type: "Sustantivo (Fem)",
     category: "Gesundheit",
     plural: "-",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Gute Gesundheit ist sehr wichtig.",
+    exampleSentenceEs: "Una buena salud es muy importante.",
+    exampleSentenceDeBlocks: [
+      { text: "Gute Gesundheit", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr wichtig", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Notfall",
     pron: "dea nót-fal",
@@ -8995,8 +13817,14 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Gesundheit",
     plural: "die Notfälle",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Bei einem Notfall rufen wir an.",
+    exampleSentenceEs: "En caso de emergencia llamamos.",
+    exampleSentenceDeBlocks: [
+      { text: "Bei einem Notfall", role: "subject", order: 1 },
+      { text: "rufen", role: "verb_p1", order: 2 },
+      { text: "wir", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "der Krankenwagen",
     pron: "dea krán-ken-va-guen",
@@ -9004,8 +13832,14 @@ const rawChapters = [
     type: "Sustantivo (Masc)",
     category: "Gesundheit",
     plural: "die Krankenwagen",
-    exampleSentenceDe: "undefined",
-    exampleSentenceEs: "undefined"
+    exampleSentenceDe: "Der Krankenwagen fährt schnell vorbei.",
+    exampleSentenceEs: "La ambulancia pasa rápido.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Krankenwagen", role: "subject", order: 1 },
+      { text: "fährt", role: "verb_p1", order: 2 },
+      { text: "schnell", role: "complement", order: 3 },
+      { text: "vorbei", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "der Muskel",
     pron: "dea mús-kel",
@@ -9015,7 +13849,12 @@ const rawChapters = [
     plural: "die Muskeln",
     en: "strong flexing bicep muscle",
     exampleSentenceDe: "Der Muskel tut weh.",
-    exampleSentenceEs: "El músculo duele."
+    exampleSentenceEs: "El músculo duele.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Muskel", role: "subject", order: 1 },
+      { text: "tut", role: "verb_p1", order: 2 },
+      { text: "weh", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Knochen",
     pron: "dea knó-jen",
@@ -9025,7 +13864,12 @@ const rawChapters = [
     plural: "die Knochen",
     en: "white skeleton bone",
     exampleSentenceDe: "Der Hund hat einen Knochen.",
-    exampleSentenceEs: "El perro tiene un hueso."
+    exampleSentenceEs: "El perro tiene un hueso.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Hund", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "einen Knochen", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Haut",
     pron: "di jaut",
@@ -9035,7 +13879,12 @@ const rawChapters = [
     plural: "die Häute",
     en: "smooth human skin texture",
     exampleSentenceDe: "Meine Haut ist trocken.",
-    exampleSentenceEs: "Mi piel está seca."
+    exampleSentenceEs: "Mi piel está seca.",
+    exampleSentenceDeBlocks: [
+      { text: "Meine Haut", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "trocken", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Gehirn",
     pron: "das gue-jírn",
@@ -9045,7 +13894,12 @@ const rawChapters = [
     plural: "die Gehirne",
     en: "pink anatomical human brain",
     exampleSentenceDe: "Das Gehirn ist wichtig.",
-    exampleSentenceEs: "El cerebro es importante."
+    exampleSentenceEs: "El cerebro es importante.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Gehirn", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "wichtig", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Herz",
     pron: "das jerts",
@@ -9055,7 +13909,12 @@ const rawChapters = [
     plural: "die Herzen",
     en: "red anatomical human heart",
     exampleSentenceDe: "Mein Herz schlägt schnell.",
-    exampleSentenceEs: "Mi corazón late rápido."
+    exampleSentenceEs: "Mi corazón late rápido.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Herz", role: "subject", order: 1 },
+      { text: "schlägt", role: "verb_p1", order: 2 },
+      { text: "schnell", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Lunge",
     pron: "di lúng-e",
@@ -9065,7 +13924,12 @@ const rawChapters = [
     plural: "die Lungen",
     en: "pink anatomical human lungs",
     exampleSentenceDe: "Rauchen ist schlecht für die Lunge.",
-    exampleSentenceEs: "Fumar es malo para el pulmón."
+    exampleSentenceEs: "Fumar es malo para el pulmón.",
+    exampleSentenceDeBlocks: [
+      { text: "Rauchen", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schlecht für die Lunge", role: "complement", order: 3 }
+    ]
   }, {
         de: "die Leber",
     pron: "di lé-ber",
@@ -9075,7 +13939,12 @@ const rawChapters = [
     plural: "die Lebern",
     en: "dark red anatomical human liver",
     exampleSentenceDe: "Alkohol schadet der Leber.",
-    exampleSentenceEs: "El alcohol daña el hígado."
+    exampleSentenceEs: "El alcohol daña el hígado.",
+    exampleSentenceDeBlocks: [
+      { text: "Alkohol", role: "subject", order: 1 },
+      { text: "schadet", role: "verb_p1", order: 2 },
+      { text: "der Leber", role: "complement", order: 3 }
+    ]
   }, {
         de: "atmen",
     pron: "át-men",
@@ -9085,7 +13954,13 @@ const rawChapters = [
     regimen: "Intransitivo",
     en: "person taking a deep breath",
     exampleSentenceDe: "Er kann nicht gut atmen.",
-    exampleSentenceEs: "Él no puede respirar bien."
+    exampleSentenceEs: "Él no puede respirar bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "kann", role: "verb_p1", order: 2 },
+      { text: "nicht gut", role: "complement", order: 3 },
+      { text: "atmen", role: "verb_p2", order: 4 }
+    ]
   }, {
         de: "schwitzen",
     pron: "shví-tsen",
@@ -9095,7 +13970,12 @@ const rawChapters = [
     regimen: "Intransitivo",
     en: "sweating tired person",
     exampleSentenceDe: "Ich schwitze beim Sport.",
-    exampleSentenceEs: "Sudo durante el deporte."
+    exampleSentenceEs: "Sudo durante el deporte.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schwitze", role: "verb_p1", order: 2 },
+      { text: "beim Sport", role: "complement", order: 3 }
+    ]
   }, {
         de: "zittern",
     pron: "tsí-tern",
@@ -9105,7 +13985,12 @@ const rawChapters = [
     regimen: "Intransitivo",
     en: "shivering freezing person",
     exampleSentenceDe: "Ich zittere vor Kälte.",
-    exampleSentenceEs: "Tiemblo de frío."
+    exampleSentenceEs: "Tiemblo de frío.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "zittere", role: "verb_p1", order: 2 },
+      { text: "vor Kälte", role: "complement", order: 3 }
+    ]
   },
     {
       de: "die Krankenkasse",
@@ -9117,6 +14002,11 @@ const rawChapters = [
       plural: "die Krankenkassen",
       exampleSentenceDe: "Sind Sie bei einer gesetzlichen Krankenkasse versichert?",
       exampleSentenceEs: "¿Está asegurado en una caja de salud pública?",
+    exampleSentenceDeBlocks: [
+      { text: "Sind", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "bei einer gesetzlichen Krankenkasse versichert", role: "complement", order: 3 }
+    ],
       en: "health insurance cross shield with medical caduceus emblem"
     },
     {
@@ -9129,6 +14019,11 @@ const rawChapters = [
       plural: "die Versichertenkarten",
       exampleSentenceDe: "Bitte zeigen Sie Ihre Versichertenkarte in der Praxis.",
       exampleSentenceEs: "Por favor, muestre su tarjeta sanitaria en el consultorio.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "zeigen", role: "verb_p1", order: 2 },
+      { text: "Sie Ihre Versichertenkarte in der Praxis", role: "complement", order: 3 }
+    ],
       en: "electronic plastic health insurance chip card"
     },
     {
@@ -9141,6 +14036,11 @@ const rawChapters = [
       plural: "die Krankschreibungen",
       exampleSentenceDe: "Ich brauche eine Krankschreibung für meinen Chef.",
       exampleSentenceEs: "Necesito un parte de baja médica para mi jefe.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "eine Krankschreibung für meinen Chef", role: "complement", order: 3 }
+    ],
       en: "official yellow doctor sick leave certificate slip"
     },
     {
@@ -9153,6 +14053,11 @@ const rawChapters = [
       plural: "die Atteste",
       exampleSentenceDe: "Die Schule verlangt ab Tag drei ein ärztliches Attest.",
       exampleSentenceEs: "La escuela exige un certificado médico a partir del tercer día.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Schule", role: "subject", order: 1 },
+      { text: "verlangt", role: "verb_p1", order: 2 },
+      { text: "ab Tag drei ein ärztliches Attest", role: "complement", order: 3 }
+    ],
       en: "official medical certificate note signed with stethoscope"
     },
     {
@@ -9165,6 +14070,11 @@ const rawChapters = [
       plural: "die Notaufnahmen",
       exampleSentenceDe: "Bei starken Schmerzen gehe ich in die Notaufnahme.",
       exampleSentenceEs: "En caso de dolores agudos voy al servicio de urgencias.",
+    exampleSentenceDeBlocks: [
+      { text: "Bei", role: "subject", order: 1 },
+      { text: "starken", role: "verb_p1", order: 2 },
+      { text: "Schmerzen gehe ich in die Notaufnahme", role: "complement", order: 3 }
+    ],
       en: "hospital emergency room ER glowing red entrance sign"
     },
     {
@@ -9177,6 +14087,11 @@ const rawChapters = [
       plural: "die Schmerzmittel",
       exampleSentenceDe: "Haben Sie ein Schmerzmittel gegen Kopfschmerzen?",
       exampleSentenceEs: "¿Tiene un analgésico contra el dolor de cabeza?",
+    exampleSentenceDeBlocks: [
+      { text: "Haben", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "ein Schmerzmittel gegen Kopfschmerzen", role: "complement", order: 3 }
+    ],
       en: "blister pack of white pain relief medicine pills"
     }]
 },
@@ -9193,6 +14108,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich bin in der Schule.",
     exampleSentenceEs: "Yo estoy en la escuela.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "in der Schule", role: "complement", order: 3 }
+    ],
     plural: "die Schulen"
   }, {
     de: "die Klasse",
@@ -9202,6 +14122,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich bin in der Klasse.",
     exampleSentenceEs: "Yo estoy en la clase.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "in der Klasse", role: "complement", order: 3 }
+    ],
     plural: "die Klassen"
   }, {
     de: "der Lehrer / die Lehrerin",
@@ -9211,6 +14136,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Das ist mein Lehrer. Mein Lehrer ist nett.",
     exampleSentenceEs: "Este es mi profesor. Mi profesor es simpático.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Lehrer", role: "complement", order: 3 }
+    ],
     plural: "die Lehrer / die Lehrerinnen"
   }, {
     de: "der Schüler / die Schülerin",
@@ -9220,6 +14150,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Der Schüler ist neu. Er ist in der Klasse.",
     exampleSentenceEs: "El alumno es nuevo. Él está en la clase.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Schüler", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "neu", role: "complement", order: 3 }
+    ],
     plural: "die Schüler / die Schülerinnen"
   }, {
     de: "der Student",
@@ -9229,6 +14164,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Ich bin ein Student. Der Student ist neu.",
     exampleSentenceEs: "Soy un estudiante. El estudiante es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "ein Student", role: "complement", order: 3 }
+    ],
     plural: "die Studenten"
   }, {
     de: "lernen",
@@ -9238,6 +14178,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich lerne Deutsch.",
     exampleSentenceEs: "Yo aprendo alemán.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lerne", role: "verb_p1", order: 2 },
+      { text: "Deutsch", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "der Unterricht",
@@ -9247,6 +14192,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Der Unterricht beginnt jetzt.",
     exampleSentenceEs: "La clase empieza ahora.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Unterricht", role: "subject", order: 1 },
+      { text: "beginnt", role: "verb_p1", order: 2 },
+      { text: "jetzt", role: "complement", order: 3 }
+    ],
     plural: "die Unterrichte"
   }, {
     de: "der Kurs",
@@ -9256,6 +14206,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Der Deutschkurs ist gut.",
     exampleSentenceEs: "El curso de alemán es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Deutschkurs", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "gut", role: "complement", order: 3 }
+    ],
     plural: "die Kurse"
   }, {
     de: "die Pause",
@@ -9265,6 +14220,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Wir machen jetzt eine Pause.",
     exampleSentenceEs: "Ahora hacemos un descanso.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "machen", role: "verb_p1", order: 2 },
+      { text: "jetzt eine Pause", role: "complement", order: 3 }
+    ],
     plural: "die Pausen"
   }, {
     de: "die Hausaufgabe",
@@ -9274,6 +14234,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich mache die Hausaufgabe.",
     exampleSentenceEs: "Yo hago la tarea.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "die Hausaufgabe", role: "complement", order: 3 }
+    ],
     plural: "die Hausaufgaben"
   }, {
     de: "die Prüfung",
@@ -9283,6 +14248,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Die Prüfung ist schwer.",
     exampleSentenceEs: "El examen es difícil.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Prüfung", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schwer", role: "complement", order: 3 }
+    ],
     plural: "die Prüfungen"
   }, {
     de: "die Lösung",
@@ -9292,6 +14262,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich habe eine Lösung. Die Lösung ist einfach.",
     exampleSentenceEs: "Tengo una solución. La solución es simple.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "eine Lösung", role: "complement", order: 3 }
+    ],
     plural: "die Lösungen"
   }, {
     de: "der Fehler",
@@ -9301,6 +14276,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich mache einen Fehler. Der Fehler ist groß.",
     exampleSentenceEs: "Yo cometo un error. El error es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "einen Fehler", role: "complement", order: 3 }
+    ],
     plural: "die Fehler"
   }, {
     de: "die Arbeit",
@@ -9310,6 +14290,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Die Arbeit ist interessant.",
     exampleSentenceEs: "El trabajo es interesante.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Arbeit", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "interessant", role: "complement", order: 3 }
+    ],
     plural: "die Arbeiten"
   }, {
     de: "der Beruf",
@@ -9319,6 +14304,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Was ist dein Beruf?",
     exampleSentenceEs: "¿Cuál es tu profesión?",
+    exampleSentenceDeBlocks: [
+      { text: "Was", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "dein Beruf", role: "complement", order: 3 }
+    ],
     plural: "die Berufe"
   }, {
     de: "Mechaniker von Beruf",
@@ -9328,6 +14318,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich bin Mechaniker von Beruf.",
     exampleSentenceEs: "Soy mecánico de profesión.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "Mechaniker von Beruf", role: "complement", order: 3 }
+    ],
     regimen: "von + dat., sin artículo"
   }, {
     de: "der Arbeitsplatz / Job",
@@ -9337,6 +14332,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich habe einen Arbeitsplatz. Der Arbeitsplatz ist gut.",
     exampleSentenceEs: "Tengo un puesto de trabajo. El puesto de trabajo es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Arbeitsplatz", role: "complement", order: 3 }
+    ],
     plural: "die Arbeitsplätze"
   }, {
     de: "arbeiten",
@@ -9346,6 +14346,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich arbeite heute.",
     exampleSentenceEs: "Yo trabajo hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "arbeite", role: "verb_p1", order: 2 },
+      { text: "heute", role: "complement", order: 3 }
+    ],
     regimen: "+ an/bei + Dat"
   }, {
     de: "der Chef / die Chefin",
@@ -9355,6 +14360,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Der Chef ist nett.",
     exampleSentenceEs: "El jefe es simpático.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Chef", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "nett", role: "complement", order: 3 }
+    ],
     plural: "die Chefs / die Chefinnen"
   }, {
     de: "der Kollege / die Kollegin",
@@ -9364,6 +14374,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Ich habe einen Kollegen. Mein Kollege ist nett.",
     exampleSentenceEs: "Tengo un colega. Mi colega es simpático.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Kollegen", role: "complement", order: 3 }
+    ],
     plural: "die Kollegen / Kolleginnen"
   }, {
     de: "die Firma / das Büro",
@@ -9373,6 +14388,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich arbeite in der Firma.",
     exampleSentenceEs: "Yo trabajo en la empresa.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "arbeite", role: "verb_p1", order: 2 },
+      { text: "in der Firma", role: "complement", order: 3 }
+    ],
     plural: "die Firmen / die Büros"
   }, {
     de: "arbeitslos",
@@ -9382,6 +14402,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich bin arbeitslos.",
     exampleSentenceEs: "Yo estoy desempleado.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "arbeitslos", role: "complement", order: 3 }
+    ],
     regimen: "≠ berufstätig"
   }, {
     de: "der Arbeiter",
@@ -9391,6 +14416,11 @@ const rawChapters = [
     category: "Personen",
     exampleSentenceDe: "Ich sehe der Arbeiter.",
     exampleSentenceEs: "Yo veo al obrero.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sehe", role: "verb_p1", order: 2 },
+      { text: "der Arbeiter", role: "complement", order: 3 }
+    ],
     plural: "die Arbeiter"
   }, {
     de: "das Praktikum",
@@ -9400,6 +14430,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich mache ein Praktikum in Deutschland.",
     exampleSentenceEs: "Hago una pasantía en Alemania.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "ein Praktikum in Deutschland", role: "complement", order: 3 }
+    ],
     plural: "die Praktika"
   }, {
     de: "die Ausbildung",
@@ -9409,6 +14444,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Die Ausbildung ist wichtig.",
     exampleSentenceEs: "La formación es importante.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Ausbildung", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "wichtig", role: "complement", order: 3 }
+    ],
     plural: "die Ausbildungen"
   }, {
     de: "der Urlaub",
@@ -9418,6 +14458,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich habe Urlaub.",
     exampleSentenceEs: "Tengo vacaciones.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "Urlaub", role: "complement", order: 3 }
+    ],
     plural: "die Urlaube"
   }, {
     de: "selbstständig",
@@ -9427,6 +14472,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich bin selbstständig.",
     exampleSentenceEs: "Soy independiente.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "selbstständig", role: "complement", order: 3 }
+    ],
     regimen: "≠ abhängig"
   }, {
     de: "die Stelle",
@@ -9436,6 +14486,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich suche die Stelle.",
     exampleSentenceEs: "Yo busco la plaza.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "suche", role: "verb_p1", order: 2 },
+      { text: "die Stelle", role: "complement", order: 3 }
+    ],
     plural: "die Stellen"
   }, {
     de: "Geld verdienen",
@@ -9445,6 +14500,12 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich möchte Geld verdienen.",
     exampleSentenceEs: "Yo quiero ganar dinero.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "Geld", role: "complement", order: 3 },
+      { text: "verdienen", role: "verb_p2", order: 4 }
+    ],
     regimen: "Verbo + Akkusativ"
   }, {
     de: "schwere / leichte Arbeit",
@@ -9454,6 +14515,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Die Arbeit ist schwer.",
     exampleSentenceEs: "El trabajo es pesado.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Arbeit", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schwer", role: "complement", order: 3 }
+    ],
     regimen: "Adj. + sustantivo neutro"
   }, {
     de: "das Internet",
@@ -9463,6 +14529,11 @@ const rawChapters = [
     category: "Büro",
     exampleSentenceDe: "Ich habe das Internet. Das Internet ist gut.",
     exampleSentenceEs: "Tengo internet. Internet es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Internet", role: "complement", order: 3 }
+    ],
     plural: "die Internets"
   }, {
     de: "der Computer",
@@ -9472,6 +14543,11 @@ const rawChapters = [
     category: "Büro",
     exampleSentenceDe: "Ich habe einen Computer. Der Computer ist neu.",
     exampleSentenceEs: "Tengo un computador. El computador es nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Computer", role: "complement", order: 3 }
+    ],
     plural: "die Computer"
   }, {
     de: "der Drucker",
@@ -9481,6 +14557,11 @@ const rawChapters = [
     category: "Büro",
     exampleSentenceDe: "Das ist mein Drucker. Der Drucker ist neu.",
     exampleSentenceEs: "Esta es mi impresora. La impresora es nueva.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Drucker", role: "complement", order: 3 }
+    ],
     plural: "die Drucker"
   }, {
     de: "der Bleistift",
@@ -9490,6 +14571,11 @@ const rawChapters = [
     category: "Büro",
     exampleSentenceDe: "Das ist ein Bleistift. Der Bleistift ist blau.",
     exampleSentenceEs: "Esto es un lápiz. El lápiz es azul.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein Bleistift", role: "complement", order: 3 }
+    ],
     plural: "die Bleistifte"
   }, {
     de: "der Kugelschreiber",
@@ -9499,6 +14585,11 @@ const rawChapters = [
     category: "Büro",
     exampleSentenceDe: "Ich habe einen Kugelschreiber. Der Kugelschreiber ist blau.",
     exampleSentenceEs: "Tengo un bolígrafo. El bolígrafo es azul.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "einen Kugelschreiber", role: "complement", order: 3 }
+    ],
     plural: "die Kugelschreiber"
   }, {
     de: "der Schreibtisch",
@@ -9508,6 +14599,11 @@ const rawChapters = [
     category: "Büro",
     exampleSentenceDe: "Der Schreibtisch ist groß.",
     exampleSentenceEs: "El escritorio es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Schreibtisch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "groß", role: "complement", order: 3 }
+    ],
     plural: "die Schreibtische"
   }, {
     de: "das Zeugnis",
@@ -9517,6 +14613,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich habe das Zeugnis. Das Zeugnis ist gut.",
     exampleSentenceEs: "Tengo el boletín de notas. El boletín de notas es bueno.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Zeugnis", role: "complement", order: 3 }
+    ],
     plural: "die Zeugnisse"
   }, {
     de: "der Stundenplan",
@@ -9526,6 +14627,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich habe der Stundenplan.",
     exampleSentenceEs: "Tengo el horario de clases.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "der Stundenplan", role: "complement", order: 3 }
+    ],
     plural: "die Stundenpläne"
   }, {
     de: "fehlen",
@@ -9535,6 +14641,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Mir fehlen die Zähne.",
     exampleSentenceEs: "Me faltan los dientes.",
+    exampleSentenceDeBlocks: [
+      { text: "Mir", role: "subject", order: 1 },
+      { text: "fehlen", role: "verb_p1", order: 2 },
+      { text: "die Zähne", role: "complement", order: 3 }
+    ],
     regimen: "⚠️ Exige Dativo"
   }, {
     de: "bestehen",
@@ -9544,6 +14655,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Die Prüfung besteht aus zehn Fragen.",
     exampleSentenceEs: "El examen consta de diez preguntas.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Prüfung", role: "subject", order: 1 },
+      { text: "besteht", role: "verb_p1", order: 2 },
+      { text: "aus zehn Fragen", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ, no separable"
   }, {
     de: "durchfallen",
@@ -9553,6 +14669,12 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich falle bei der Prüfung durch.",
     exampleSentenceEs: "Reprobo en el examen.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "falle", role: "verb_p1", order: 2 },
+      { text: "bei der Prüfung", role: "complement", order: 3 },
+      { text: "durch", role: "verb_p2", order: 4 }
+    ],
     regimen: "Separable (durch-)"
   }, {
     de: "die Besprechung",
@@ -9562,6 +14684,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Die Besprechung ist um neun Uhr.",
     exampleSentenceEs: "La reunión es a las nueve.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Besprechung", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "um neun Uhr", role: "complement", order: 3 }
+    ],
     plural: "die Besprechungen"
   }, {
     de: "kündigen",
@@ -9571,6 +14698,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich kündige meinen Job.",
     exampleSentenceEs: "Yo renuncio a mi trabajo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kündige", role: "verb_p1", order: 2 },
+      { text: "meinen Job", role: "complement", order: 3 }
+    ],
     regimen: "+ Dativ"
   }, {
     de: "befördern",
@@ -9580,6 +14712,11 @@ const rawChapters = [
     category: "Beruf",
     exampleSentenceDe: "Ich befördere meine Tasche.",
     exampleSentenceEs: "Yo transporte mi bolso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "befördere", role: "verb_p1", order: 2 },
+      { text: "meine Tasche", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "die Universität",
@@ -9589,6 +14726,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich bin an der Universität. Die Universität ist groß.",
     exampleSentenceEs: "Yo estoy en la universidad. La universidad es grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "an der Universität", role: "complement", order: 3 }
+    ],
     plural: "die Universitäten"
   }, {
     de: "anmelden",
@@ -9598,6 +14740,12 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich melde mich für den Kurs an.",
     exampleSentenceEs: "Me inscribo para el curso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "melde", role: "verb_p1", order: 2 },
+      { text: "mich für den Kurs", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
     regimen: "Sep./refl. + Akkusativ"
   }, {
     de: "die Anmeldung",
@@ -9607,6 +14755,11 @@ const rawChapters = [
     category: "Bildung",
     exampleSentenceDe: "Ich mache die Anmeldung für den Kurs.",
     exampleSentenceEs: "Yo hago la inscripción para el curso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "die Anmeldung für den Kurs", role: "complement", order: 3 }
+    ],
     plural: "die Anmeldungen"
   }, {
     de: "sprechen",
@@ -9616,6 +14769,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich spreche Deutsch.",
     exampleSentenceEs: "Yo hablo alemán.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "spreche", role: "verb_p1", order: 2 },
+      { text: "Deutsch", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ, irr. (spricht)"
   }, {
     de: "verstehen",
@@ -9625,6 +14783,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich verstehe das.",
     exampleSentenceEs: "Yo entiendo eso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "verstehe", role: "verb_p1", order: 2 },
+      { text: "das", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ"
   }, {
     de: "fragen",
@@ -9634,6 +14797,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich frage dich.",
     exampleSentenceEs: "Yo te pregunto.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "frage", role: "verb_p1", order: 2 },
+      { text: "dich", role: "complement", order: 3 }
+    ],
     regimen: "+ Akkusativ (jdn.)"
   }, {
     de: "antworten",
@@ -9643,6 +14811,11 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich antworte auf deine Frage.",
     exampleSentenceEs: "Yo respondo a tu pregunta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "antworte", role: "verb_p1", order: 2 },
+      { text: "auf deine Frage", role: "complement", order: 3 }
+    ],
     regimen: "⚠️ Exige Dativo"
   }, {
     de: "erklären",
@@ -9652,6 +14825,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Ich kann das nicht erklären.",
     exampleSentenceEs: "Yo no puedo explicar eso.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kann", role: "verb_p1", order: 2 },
+      { text: "das nicht", role: "complement", order: 3 },
+      { text: "erklären", role: "verb_p2", order: 4 }
+    ],
     regimen: "jdm. + Akk."
   }, {
     de: "wiederholen",
@@ -9661,6 +14840,12 @@ const rawChapters = [
     category: "Aktionen",
     exampleSentenceDe: "Bitte wiederholen Sie das.",
     exampleSentenceEs: "Por favor, repita eso.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "wiederholen", role: "verb_p1", order: 2 },
+      { text: "Sie", role: "complement", order: 3 },
+      { text: "das", role: "verb_p2", order: 4 }
+    ],
     regimen: "No separable, + Akk."
   },
   {
@@ -9672,7 +14857,12 @@ const rawChapters = [
     plural: "die Architekten",
     en: "architect with blueprints",
     exampleSentenceDe: "Der Architekt plant das Haus.",
-    exampleSentenceEs: "El arquitecto planea la casa."
+    exampleSentenceEs: "El arquitecto planea la casa.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Architekt", role: "subject", order: 1 },
+      { text: "plant", role: "verb_p1", order: 2 },
+      { text: "das Haus", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Anwalt / die Anwältin",
     pron: "dea án-valt",
@@ -9682,7 +14872,12 @@ const rawChapters = [
     plural: "die Anwälte",
     en: "lawyer in a suit with a briefcase",
     exampleSentenceDe: "Ich brauche einen Anwalt.",
-    exampleSentenceEs: "Necesito un abogado."
+    exampleSentenceEs: "Necesito un abogado.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "einen Anwalt", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Richter / die Richterin",
     pron: "dea ríj-ter",
@@ -9692,7 +14887,12 @@ const rawChapters = [
     plural: "die Richter",
     en: "judge holding a wooden gavel",
     exampleSentenceDe: "Der Richter ist sehr streng.",
-    exampleSentenceEs: "El juez es muy estricto."
+    exampleSentenceEs: "El juez es muy estricto.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Richter", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr streng", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Schauspieler",
     pron: "dea sháu-shpi-ler",
@@ -9702,7 +14902,12 @@ const rawChapters = [
     plural: "die Schauspieler",
     en: "actor holding a theater mask",
     exampleSentenceDe: "Er ist ein bekannter actor.",
-    exampleSentenceEs: "Él es un actor conocido."
+    exampleSentenceEs: "Él es un actor conocido.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein bekannter actor", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Bäcker / die Bäckerin",
     pron: "dea bé-ker",
@@ -9712,7 +14917,12 @@ const rawChapters = [
     plural: "die Bäcker",
     en: "baker holding fresh bread",
     exampleSentenceDe: "Der Bäcker arbeitet in der Nacht.",
-    exampleSentenceEs: "El panadero trabaja en la noche."
+    exampleSentenceEs: "El panadero trabaja en la noche.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Bäcker", role: "subject", order: 1 },
+      { text: "arbeitet", role: "verb_p1", order: 2 },
+      { text: "in der Nacht", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Metzger / die Metzgerin",
     pron: "dea méts-guer",
@@ -9722,7 +14932,12 @@ const rawChapters = [
     plural: "die Metzger",
     en: "butcher cutting meat",
     exampleSentenceDe: "Ich kaufe Fleisch beim Metzger.",
-    exampleSentenceEs: "Compro carne en el carnicero."
+    exampleSentenceEs: "Compro carne en el carnicero.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "kaufe", role: "verb_p1", order: 2 },
+      { text: "Fleisch beim Metzger", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Friseur / die Friseurin",
     pron: "dea fri-zöa",
@@ -9732,7 +14947,12 @@ const rawChapters = [
     plural: "die Friseure",
     en: "hairdresser with scissors",
     exampleSentenceDe: "Ich gehe morgen zum Friseur.",
-    exampleSentenceEs: "Mañana voy al peluquero."
+    exampleSentenceEs: "Mañana voy al peluquero.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gehe", role: "verb_p1", order: 2 },
+      { text: "morgen zum Friseur", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Soldat / die Soldatin",
     pron: "dea zol-dát",
@@ -9742,7 +14962,12 @@ const rawChapters = [
     plural: "die Soldaten",
     en: "soldier in uniform",
     exampleSentenceDe: "Mein Bruder ist Soldat.",
-    exampleSentenceEs: "Mi hermano es soldado."
+    exampleSentenceEs: "Mi hermano es soldado.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Bruder", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "Soldat", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Künstler / die Künstlerin",
     pron: "dea küns-tler",
@@ -9752,7 +14977,12 @@ const rawChapters = [
     plural: "die Künstler",
     en: "artist holding a paint palette",
     exampleSentenceDe: "Sie ist eine freie Künstlerin.",
-    exampleSentenceEs: "Ella es una artista independiente."
+    exampleSentenceEs: "Ella es una artista independiente.",
+    exampleSentenceDeBlocks: [
+      { text: "Sie", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "eine freie Künstlerin", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Bauer / die Bäuerin",
     pron: "dea báu-er",
@@ -9762,7 +14992,12 @@ const rawChapters = [
     plural: "die Bauern",
     en: "farmer holding a pitchfork",
     exampleSentenceDe: "Der Bauer hat viele Kühe.",
-    exampleSentenceEs: "El granjero tiene muchas vacas."
+    exampleSentenceEs: "El granjero tiene muchas vacas.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Bauer", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "viele Kühe", role: "complement", order: 3 }
+    ]
   },
   {
     de: "der Kellner / die Kellnerin",
@@ -9773,7 +15008,12 @@ const rawChapters = [
     plural: "die Kellner / die Kellnerinnen",
     en: "a silver serving tray",
     exampleSentenceDe: "Der Kellner bringt das Essen.",
-    exampleSentenceEs: "Camarero trae la comida."
+    exampleSentenceEs: "Camarero trae la comida.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Kellner", role: "subject", order: 1 },
+      { text: "bringt", role: "verb_p1", order: 2 },
+      { text: "das Essen", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Koch / die Köchin",
     pron: "dea koj / di ko-jin",
@@ -9783,7 +15023,12 @@ const rawChapters = [
     plural: "die Köche / die Köchinnen",
     en: "a white chef hat and a spatula",
     exampleSentenceDe: "Der Koch kocht sehr gut.",
-    exampleSentenceEs: "El cocinero cocina muy bien."
+    exampleSentenceEs: "El cocinero cocina muy bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Koch", role: "subject", order: 1 },
+      { text: "kocht", role: "verb_p1", order: 2 },
+      { text: "sehr gut", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Polizist / die Polizistin",
     pron: "dea po-li-tsist / di po-li-tsis-tin",
@@ -9793,7 +15038,12 @@ const rawChapters = [
     plural: "die Polizisten / die Polizistinnen",
     en: "a silver police badge",
     exampleSentenceDe: "Die Polizei hilft den Menschen.",
-    exampleSentenceEs: "La policía ayuda a las personas."
+    exampleSentenceEs: "La policía ayuda a las personas.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Polizei", role: "subject", order: 1 },
+      { text: "hilft", role: "verb_p1", order: 2 },
+      { text: "den Menschen", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Ingenieur / die Ingenieurin",
     pron: "dea in-ye-niur / di in-ye-niu-rin",
@@ -9803,7 +15053,12 @@ const rawChapters = [
     plural: "die Ingenieure / die Ingenieurinnen",
     en: "a yellow safety helmet over blueprints",
     exampleSentenceDe: "Sie arbeitet als Ingenieurin bei BMW.",
-    exampleSentenceEs: "Ella trabaja como ingeniera en BMW."
+    exampleSentenceEs: "Ella trabaja como ingeniera en BMW.",
+    exampleSentenceDeBlocks: [
+      { text: "Sie", role: "subject", order: 1 },
+      { text: "arbeitet", role: "verb_p1", order: 2 },
+      { text: "als Ingenieurin bei BMW", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Heft",
     pron: "das jeft",
@@ -9813,7 +15068,12 @@ const rawChapters = [
     plural: "die Hefte",
     en: "a simple spiral notebook",
     exampleSentenceDe: "Schreiben Sie das bitte in Ihr Heft.",
-    exampleSentenceEs: "Escriba eso en su cuaderno, por favor."
+    exampleSentenceEs: "Escriba eso en su cuaderno, por favor.",
+    exampleSentenceDeBlocks: [
+      { text: "Schreiben", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "das bitte in Ihr Heft", role: "complement", order: 3 }
+    ]
   }, {
         de: "das Papier",
     pron: "das pa-pia",
@@ -9823,7 +15083,12 @@ const rawChapters = [
     plural: "die Papiere",
     en: "a stack of blank white paper sheets",
     exampleSentenceDe: "Der Drucker braucht neues Papier.",
-    exampleSentenceEs: "La impresora necesita papel nuevo."
+    exampleSentenceEs: "La impresora necesita papel nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Drucker", role: "subject", order: 1 },
+      { text: "braucht", role: "verb_p1", order: 2 },
+      { text: "neues Papier", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Radiergummi",
     pron: "dea ra-dia-gu-mi",
@@ -9833,7 +15098,12 @@ const rawChapters = [
     plural: "die Radiergummis",
     en: "a classic pink and blue eraser",
     exampleSentenceDe: "Hast du einen Radiergummi für mich?",
-    exampleSentenceEs: "¿Tienes un borrador para mí?"
+    exampleSentenceEs: "¿Tienes un borrador para mí?",
+    exampleSentenceDeBlocks: [
+      { text: "Hast", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "einen Radiergummi für mich", role: "complement", order: 3 }
+    ]
   }, {
         de: "der Rucksack",
     pron: "dea ruk-sak",
@@ -9843,7 +15113,12 @@ const rawChapters = [
     plural: "die Rucksäcke",
     en: "a colorful school backpack",
     exampleSentenceDe: "Mein Rucksack ist sehr schwer.",
-    exampleSentenceEs: "Mi mochila es muy pesada."
+    exampleSentenceEs: "Mi mochila es muy pesada.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Rucksack", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr schwer", role: "complement", order: 3 }
+    ]
   },
     {
       de: "der Vertrag",
@@ -9855,6 +15130,12 @@ const rawChapters = [
       plural: "die Verträge",
       exampleSentenceDe: "Ich muss den Arbeitsvertrag genau durchlesen.",
       exampleSentenceEs: "Tengo que leer detenidamente el contrato de trabajo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "den Arbeitsvertrag genau", role: "complement", order: 3 },
+      { text: "durchlesen", role: "verb_p2", order: 4 }
+    ],
       en: "multi page paper contract with fountain pen signature"
     },
     {
@@ -9867,6 +15148,11 @@ const rawChapters = [
       plural: "die Gehälter",
       exampleSentenceDe: "Das Gehalt wird immer am Monatsende bezahlt.",
       exampleSentenceEs: "El sueldo se paga siempre a final de mes.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Gehalt", role: "subject", order: 1 },
+      { text: "wird", role: "verb_p1", order: 2 },
+      { text: "immer am Monatsende bezahlt", role: "complement", order: 3 }
+    ],
       en: "money bag with euro coin symbol on salary payslip"
     },
     {
@@ -9879,6 +15165,11 @@ const rawChapters = [
       plural: "die Bewerbungen",
       exampleSentenceDe: "Ich habe meine Bewerbung per E-Mail geschickt.",
       exampleSentenceEs: "Envié mi candidatura por correo electrónico.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "meine Bewerbung per E-Mail geschickt", role: "complement", order: 3 }
+    ],
       en: "clean job application dossier folder with photo resume"
     },
     {
@@ -9891,6 +15182,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Er bewirbt sich um eine Stelle als Techniker.",
       exampleSentenceEs: "Él se postula a un puesto como técnico.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "bewirbt", role: "verb_p1", order: 2 },
+      { text: "sich um eine Stelle als Techniker", role: "complement", order: 3 }
+    ],
       en: "candidate having confident job interview at office table"
     },
     {
@@ -9903,6 +15199,11 @@ const rawChapters = [
       plural: "die Probezeiten",
       exampleSentenceDe: "In den ersten sechs Monaten habe ich Probezeit.",
       exampleSentenceEs: "Durante los primeros seis meses tengo periodo de prueba.",
+    exampleSentenceDeBlocks: [
+      { text: "In den", role: "subject", order: 1 },
+      { text: "ersten", role: "verb_p1", order: 2 },
+      { text: "sechs Monaten habe ich Probezeit", role: "complement", order: 3 }
+    ],
       en: "calendar showing initial trial months highlighted"
     },
     {
@@ -9915,6 +15216,11 @@ const rawChapters = [
       plural: "die Überstunden",
       exampleSentenceDe: "Diese Woche habe ich fünf Überstunden gemacht.",
       exampleSentenceEs: "Esta semana hice cinco horas extraordinarias.",
+    exampleSentenceDeBlocks: [
+      { text: "Diese Woche", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "ich fünf Überstunden gemacht", role: "complement", order: 3 }
+    ],
       en: "office desk clock showing late evening overtime hours"
     },
     {
@@ -9927,6 +15233,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Sie arbeitet in Teilzeit mit 25 Stunden pro Woche.",
       exampleSentenceEs: "Ella trabaja a tiempo parcial con 25 horas a la semana.",
+    exampleSentenceDeBlocks: [
+      { text: "Sie", role: "subject", order: 1 },
+      { text: "arbeitet", role: "verb_p1", order: 2 },
+      { text: "in Teilzeit mit 25 Stunden pro Woche", role: "complement", order: 3 }
+    ],
       en: "pie chart showing half time versus full time work shift"
     },
     {
@@ -9939,6 +15250,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich möchte einen Termin beim Arzt vereinbaren.",
       exampleSentenceEs: "Quisiera concertar una cita en el médico.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "einen Termin beim Arzt", role: "complement", order: 3 },
+      { text: "vereinbaren", role: "verb_p2", order: 4 }
+    ],
       en: "marking scheduled appointment slot on desk calendar"
     },
     {
@@ -9951,6 +15268,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Können wir unseren Termin auf Freitag verschieben?",
       exampleSentenceEs: "¿Podemos aplazar nuestra cita para el viernes?",
+    exampleSentenceDeBlocks: [
+      { text: "Können", role: "verb_p1", order: 1 },
+      { text: "wir", role: "subject", order: 2 },
+      { text: "unseren Termin auf Freitag", role: "complement", order: 3 },
+      { text: "verschieben", role: "verb_p2", order: 4 }
+    ],
       en: "calendar arrow moving meeting date to another day"
     },
     {
@@ -9963,6 +15286,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Leider muss ich meinen Termin heute absagen.",
       exampleSentenceEs: "Lamentablemente tengo que cancelar mi cita de hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Leider", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "ich meinen Termin heute", role: "complement", order: 3 },
+      { text: "absagen", role: "verb_p2", order: 4 }
+    ],
       en: "red cross cancellation mark over calendar date box"
     }]
 },
@@ -9980,7 +15309,12 @@ const rawChapters = [
     plural: "die Laptops",
     en: "a cute 3D isometric UI icon of a silver laptop computer",
     exampleSentenceDe: "Ich brauche einen neuen Laptop.",
-    exampleSentenceEs: "Necesito un portátil nuevo."
+    exampleSentenceEs: "Necesito un portátil nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "brauche", role: "verb_p1", order: 2 },
+      { text: "einen neuen Laptop", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Bildschirm",
     pron: "dea bilt-shirm",
@@ -9990,7 +15324,12 @@ const rawChapters = [
     plural: "die Bildschirme",
     en: "a cute 3D isometric UI icon of a glowing computer monitor",
     exampleSentenceDe: "Der Bildschirm ist sehr groß.",
-    exampleSentenceEs: "La pantalla es muy grande."
+    exampleSentenceEs: "La pantalla es muy grande.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Bildschirm", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr groß", role: "complement", order: 3 }
+    ]
   }, {
     de: "die Tastatur",
     pron: "di tas-ta-túr",
@@ -10000,7 +15339,12 @@ const rawChapters = [
     plural: "die Tastaturen",
     en: "a cute 3D isometric UI icon of a mechanical computer keyboard",
     exampleSentenceDe: "Meine Tastatur ist leider kaputt.",
-    exampleSentenceEs: "Mi teclado lamentablemente está roto."
+    exampleSentenceEs: "Mi teclado lamentablemente está roto.",
+    exampleSentenceDeBlocks: [
+      { text: "Meine Tastatur", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "leider kaputt", role: "complement", order: 3 }
+    ]
   }, {
     de: "die Maus",
     pron: "di maus",
@@ -10010,7 +15354,12 @@ const rawChapters = [
     plural: "die Mäuse",
     en: "a cute 3D isometric UI icon of a computer mouse emitting wireless signal waves",
     exampleSentenceDe: "Meine neue Maus ist kabellos.",
-    exampleSentenceEs: "Mi ratón nuevo es inalámbrico."
+    exampleSentenceEs: "Mi ratón nuevo es inalámbrico.",
+    exampleSentenceDeBlocks: [
+      { text: "Meine", role: "subject", order: 1 },
+      { text: "neue", role: "verb_p1", order: 2 },
+      { text: "Maus ist kabellos", role: "complement", order: 3 }
+    ]
   }, {
     de: "das Passwort",
     pron: "das pás-vort",
@@ -10020,7 +15369,12 @@ const rawChapters = [
     plural: "die Passwörter",
     en: "a cute 3D isometric UI icon of a golden key over a metallic padlock",
     exampleSentenceDe: "Mein Passwort ist sehr sicher.",
-    exampleSentenceEs: "Mi contraseña es muy segura."
+    exampleSentenceEs: "Mi contraseña es muy segura.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Passwort", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr sicher", role: "complement", order: 3 }
+    ]
   }, {
     de: "die Datei",
     pron: "di da-tái",
@@ -10030,7 +15384,12 @@ const rawChapters = [
     plural: "die Dateien",
     en: "a cute 3D isometric UI icon of a digital document sheet with a folded corner",
     exampleSentenceDe: "Ich lösche diese Datei.",
-    exampleSentenceEs: "Borro este archivo."
+    exampleSentenceEs: "Borro este archivo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lösche", role: "verb_p1", order: 2 },
+      { text: "diese Datei", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Ordner",
     pron: "dea ór-dner",
@@ -10040,7 +15399,12 @@ const rawChapters = [
     plural: "die Ordner",
     en: "a cute 3D isometric UI icon of a yellow folder organizer",
     exampleSentenceDe: "Der Ordner ist auf dem Desktop.",
-    exampleSentenceEs: "La carpeta está en el escritorio."
+    exampleSentenceEs: "La carpeta está en el escritorio.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Ordner", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "auf dem Desktop", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Kopfhörer",
     pron: "dea kopf-jö-rer",
@@ -10050,7 +15414,12 @@ const rawChapters = [
     plural: "die Kopfhörer",
     en: "a cute 3D isometric UI icon of modern wireless headphones",
     exampleSentenceDe: "Ich höre Musik mit dem Kopfhörer.",
-    exampleSentenceEs: "Escucho música con los auriculares."
+    exampleSentenceEs: "Escucho música con los auriculares.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "höre", role: "verb_p1", order: 2 },
+      { text: "Musik mit dem Kopfhörer", role: "complement", order: 3 }
+    ]
   }, {
     de: "die App",
     pron: "di ep",
@@ -10060,7 +15429,12 @@ const rawChapters = [
     plural: "die Apps",
     en: "a cute 3D isometric UI icon of a smartphone showing colorful utility widgets",
     exampleSentenceDe: "Diese App ist sehr nützlich.",
-    exampleSentenceEs: "Esta aplicación es muy útil."
+    exampleSentenceEs: "Esta aplicación es muy útil.",
+    exampleSentenceDeBlocks: [
+      { text: "Diese App", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr nützlich", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Drucker",
     pron: "dea drú-ker",
@@ -10070,7 +15444,12 @@ const rawChapters = [
     plural: "die Drucker",
     en: "a cute 3D isometric UI icon of a modern office printer ejecting a paper page",
     exampleSentenceDe: "Der Drucker hat kein Papier mehr.",
-    exampleSentenceEs: "La impresora ya no tiene papel."
+    exampleSentenceEs: "La impresora ya no tiene papel.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Drucker", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "kein Papier mehr", role: "complement", order: 3 }
+    ]
   }, {
     de: "das Netzwerk",
     pron: "das néts-verk",
@@ -10080,7 +15459,12 @@ const rawChapters = [
     plural: "die Netzwerke",
     en: "a cute 3D isometric UI icon of interconnected digital nodes glowing blue",
     exampleSentenceDe: "Das Netzwerk im Büro ist schnell.",
-    exampleSentenceEs: "La red en la oficina es rápida."
+    exampleSentenceEs: "La red en la oficina es rápida.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Netzwerk im Büro", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "schnell", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Link",
     pron: "dea link",
@@ -10090,7 +15474,12 @@ const rawChapters = [
     plural: "die Links",
     en: "a cute 3D isometric UI icon of a chain link connection symbol",
     exampleSentenceDe: "Bitte klicke auf diesen Link.",
-    exampleSentenceEs: "Por favor, haz clic en este enlace."
+    exampleSentenceEs: "Por favor, haz clic en este enlace.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "klicke", role: "verb_p1", order: 2 },
+      { text: "auf diesen Link", role: "complement", order: 3 }
+    ]
   }, {
     de: "das Internet",
     pron: "das ín-ter-net",
@@ -10100,7 +15489,12 @@ const rawChapters = [
     plural: "die Internetanschlüsse",
     en: "a cute 3D isometric UI icon of a digital globe spinning in a cloud",
     exampleSentenceDe: "Das Internet ist heute langsam.",
-    exampleSentenceEs: "El internet hoy está lento."
+    exampleSentenceEs: "El internet hoy está lento.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Internet", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "heute langsam", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Computer",
     pron: "dea kom-piú-ter",
@@ -10110,7 +15504,12 @@ const rawChapters = [
     plural: "die Computer",
     en: "a cute 3D isometric UI icon of a desktop computer setup with a keyboard and mouse",
     exampleSentenceDe: "Mein Computer ist sehr alt.",
-    exampleSentenceEs: "Mi ordenador es muy viejo."
+    exampleSentenceEs: "Mi ordenador es muy viejo.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Computer", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr alt", role: "complement", order: 3 }
+    ]
   }, {
     de: "das WLAN",
     pron: "das ve-lan",
@@ -10120,7 +15519,12 @@ const rawChapters = [
     plural: "die WLAN-Netze",
     en: "a cute 3D isometric UI icon of a router emitting glowing wireless signal waves",
     exampleSentenceDe: "Haben Sie das WLAN-Passwort?",
-    exampleSentenceEs: "¿Tiene la contraseña del wifi?"
+    exampleSentenceEs: "¿Tiene la contraseña del wifi?",
+    exampleSentenceDeBlocks: [
+      { text: "Haben", role: "verb_p1", order: 1 },
+      { text: "Sie", role: "subject", order: 2 },
+      { text: "das WLAN-Passwort", role: "complement", order: 3 }
+    ]
   }, {
     de: "die Cloud",
     pron: "di klaud",
@@ -10130,7 +15534,12 @@ const rawChapters = [
     plural: "die Clouds",
     en: "a cute 3D isometric UI icon of a glowing blue cloud storage icon",
     exampleSentenceDe: "Ich speichere die Fotos in der Cloud.",
-    exampleSentenceEs: "Guardo las fotos en la nube."
+    exampleSentenceEs: "Guardo las fotos en la nube.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "speichere", role: "verb_p1", order: 2 },
+      { text: "die Fotos in der Cloud", role: "complement", order: 3 }
+    ]
   }, {
     de: "die Webseite",
     pron: "di vép-zai-te",
@@ -10140,7 +15549,12 @@ const rawChapters = [
     plural: "die Webseiten",
     en: "a cute 3D isometric UI icon of a web browser interface page showing layouts",
     exampleSentenceDe: "Diese Webseite gefällt mir gut.",
-    exampleSentenceEs: "Esta página web me gusta mucho."
+    exampleSentenceEs: "Esta página web me gusta mucho.",
+    exampleSentenceDeBlocks: [
+      { text: "Diese Webseite", role: "subject", order: 1 },
+      { text: "gefällt", role: "verb_p1", order: 2 },
+      { text: "mir gut", role: "complement", order: 3 }
+    ]
   }, {
     de: "die E-Mail-Adresse",
     pron: "di í-meil-a-dré-se",
@@ -10150,7 +15564,12 @@ const rawChapters = [
     plural: "die E-Mail-Adressen",
     en: "a cute 3D isometric UI icon of a digital technical mail envelope with an @ symbol",
     exampleSentenceDe: "Wie ist deine E-Mail-Adresse?",
-    exampleSentenceEs: "¿Cuál es tu dirección de correo electrónico?"
+    exampleSentenceEs: "¿Cuál es tu dirección de correo electrónico?",
+    exampleSentenceDeBlocks: [
+      { text: "Wie", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "deine E-Mail-Adresse", role: "complement", order: 3 }
+    ]
   }, {
     de: "die E-Mail",
     pron: "di í-meil",
@@ -10160,7 +15579,12 @@ const rawChapters = [
     plural: "die E-Mails",
     en: "a cute 3D isometric UI icon of an open envelope containing a glowing message paper",
     exampleSentenceDe: "Ich schreibe eine wichtige E-Mail.",
-    exampleSentenceEs: "Escribo un correo electrónico importante."
+    exampleSentenceEs: "Escribo un correo electrónico importante.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "schreibe", role: "verb_p1", order: 2 },
+      { text: "eine wichtige E-Mail", role: "complement", order: 3 }
+    ]
   }, {
     de: "das System",
     pron: "das zys-tém",
@@ -10170,7 +15594,12 @@ const rawChapters = [
     plural: "die Systeme",
     en: "a cute 3D isometric UI icon of interlocking technical gears under a circuit board panel",
     exampleSentenceDe: "Das System läuft sehr stabil.",
-    exampleSentenceEs: "El sistema funciona muy stable."
+    exampleSentenceEs: "El sistema funciona muy stable.",
+    exampleSentenceDeBlocks: [
+      { text: "Das System", role: "subject", order: 1 },
+      { text: "läuft", role: "verb_p1", order: 2 },
+      { text: "sehr stabil", role: "complement", order: 3 }
+    ]
   }, {
     de: "das Update",
     pron: "das áp-deit",
@@ -10180,7 +15609,12 @@ const rawChapters = [
     plural: "die Updates",
     en: "a cute 3D isometric UI icon of a circle arrow download progress symbol",
     exampleSentenceDe: "Das Update ist fertig.",
-    exampleSentenceEs: "La actualización está lista."
+    exampleSentenceEs: "La actualización está lista.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Update", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "fertig", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Code",
     pron: "der kout",
@@ -10190,7 +15624,12 @@ const rawChapters = [
     plural: "die Codes",
     en: "a cute 3D isometric UI icon of code lines on a dark monitor",
     exampleSentenceDe: "Der Code hat keine Fehler.",
-    exampleSentenceEs: "El código no tiene errores."
+    exampleSentenceEs: "El código no tiene errores.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Code", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "keine Fehler", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Benutzer",
     pron: "dea be-nút-tser",
@@ -10200,7 +15639,12 @@ const rawChapters = [
     plural: "die Benutzer",
     en: "a cute 3D isometric UI icon of a glowing blue user profile silhouette tag",
     exampleSentenceDe: "Er ist ein neuer Benutzer.",
-    exampleSentenceEs: "Él es un usuario nuevo."
+    exampleSentenceEs: "Él es un usuario nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "ein neuer Benutzer", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Screenshot",
     pron: "dea scrín-shot",
@@ -10210,7 +15654,12 @@ const rawChapters = [
     plural: "die Screenshots",
     en: "a cute 3D isometric UI icon of a scissor cutting a digital screen area",
     exampleSentenceDe: "Ich mache einen Screenshot vom Bild.",
-    exampleSentenceEs: "Hago una captura de pantalla de la imagen."
+    exampleSentenceEs: "Hago una captura de pantalla de la imagen.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "einen Screenshot vom Bild", role: "complement", order: 3 }
+    ]
   }, {
     de: "der Virus",
     pron: "dea ví-rus",
@@ -10220,7 +15669,12 @@ const rawChapters = [
     plural: "die Viren",
     en: "a cute 3D isometric UI icon of a red virus bug with sharp legs",
     exampleSentenceDe: "Mein Laptop hat einen Virus.",
-    exampleSentenceEs: "Mi portátil tiene un virus."
+    exampleSentenceEs: "Mi portátil tiene un virus.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Laptop", role: "subject", order: 1 },
+      { text: "hat", role: "verb_p1", order: 2 },
+      { text: "einen Virus", role: "complement", order: 3 }
+    ]
   }, {
     de: "die Taste",
     pron: "di tás-te",
@@ -10230,7 +15684,11 @@ const rawChapters = [
     plural: "die Tasten",
     en: "a cute 3D isometric UI icon of a single keyboard key button",
     exampleSentenceDe: "Drücke die Enter-Taste.",
-    exampleSentenceEs: "Pulsa la tecla Enter."
+    exampleSentenceEs: "Pulsa la tecla Enter.",
+    exampleSentenceDeBlocks: [
+      { text: "Drücke", role: "verb_p1", order: 1 },
+      { text: "die Enter-Taste", role: "subject", order: 2 }
+    ]
   }, {
     de: "digital",
     pron: "di-gui-tál",
@@ -10239,7 +15697,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "a cute 3D isometric UI icon of binary numbers zero and one glowing blue",
     exampleSentenceDe: "Wir leben in einer digitalen Welt.",
-    exampleSentenceEs: "Vivimos en un mundo digital."
+    exampleSentenceEs: "Vivimos en un mundo digital.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "leben", role: "verb_p1", order: 2 },
+      { text: "in einer digitalen Welt", role: "complement", order: 3 }
+    ]
   }, {
     de: "online",
     pron: "ón-lain",
@@ -10248,7 +15711,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "a cute 3D isometric UI icon of a green glowing active connection indicator light",
     exampleSentenceDe: "Bist du heute Abend online?",
-    exampleSentenceEs: "¿Estarás en línea esta noche?"
+    exampleSentenceEs: "¿Estarás en línea esta noche?",
+    exampleSentenceDeBlocks: [
+      { text: "Bist", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "heute Abend online", role: "complement", order: 3 }
+    ]
   }, {
     de: "offline",
     pron: "óf-lain",
@@ -10257,7 +15725,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "a cute 3D isometric UI icon of a red offline disconnected plug symbol",
     exampleSentenceDe: "Ich bin im Urlaub offline.",
-    exampleSentenceEs: "Estoy desconectado durante las vacaciones."
+    exampleSentenceEs: "Estoy desconectado durante las vacaciones.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "bin", role: "verb_p1", order: 2 },
+      { text: "im Urlaub offline", role: "complement", order: 3 }
+    ]
   }, {
     de: "kabellos",
     pron: "ká-bel-los",
@@ -10266,7 +15739,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "a cute 3D isometric UI icon of headphones emitting wireless radio waves with no cables",
     exampleSentenceDe: "Die Kopfhörer sind kabellos.",
-    exampleSentenceEs: "Los auriculares son inalámbricos."
+    exampleSentenceEs: "Los auriculares son inalámbricos.",
+    exampleSentenceDeBlocks: [
+      { text: "Die Kopfhörer", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "kabellos", role: "complement", order: 3 }
+    ]
   }, {
     de: "automatisch",
     pron: "au-to-má-tish",
@@ -10275,7 +15753,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "a cute 3D isometric UI icon of moving metallic gears",
     exampleSentenceDe: "Das System funktioniert automatisch.",
-    exampleSentenceEs: "El sistema funciona automáticamente."
+    exampleSentenceEs: "El sistema funciona automáticamente.",
+    exampleSentenceDeBlocks: [
+      { text: "Das System", role: "subject", order: 1 },
+      { text: "funktioniert", role: "verb_p1", order: 2 },
+      { text: "automatisch", role: "complement", order: 3 }
+    ]
   }, {
     de: "manuell",
     pron: "ma-nu-él",
@@ -10284,7 +15767,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "a cute 3D isometric UI icon of a hand turning a dial",
     exampleSentenceDe: "Ich mache das lieber manuell.",
-    exampleSentenceEs: "Hago eso mejor manualmente."
+    exampleSentenceEs: "Hago eso mejor manualmente.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "mache", role: "verb_p1", order: 2 },
+      { text: "das lieber manuell", role: "complement", order: 3 }
+    ]
   }, {
     de: "sicher",
     pron: "zí-jer",
@@ -10293,7 +15781,12 @@ const rawChapters = [
     category: "Sicherheit",
     en: "a cute 3D isometric UI icon of a glowing green cyber security shield",
     exampleSentenceDe: "Mein neues Passwort ist sehr sicher.",
-    exampleSentenceEs: "Mi nueva contraseña es muy segura."
+    exampleSentenceEs: "Mi nueva contraseña es muy segura.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein neues Passwort", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr sicher", role: "complement", order: 3 }
+    ]
   }, {
     de: "vernetzt",
     pron: "fer-nétst",
@@ -10302,7 +15795,12 @@ const rawChapters = [
     category: "Internet",
     en: "a cute 3D isometric UI icon of two connected digital glowing globes",
     exampleSentenceDe: "Wir sind alle gut vernetzt.",
-    exampleSentenceEs: "Estamos todos bien conectados."
+    exampleSentenceEs: "Estamos todos bien conectados.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "alle gut vernetzt", role: "complement", order: 3 }
+    ]
   }, {
     de: "virtuell",
     pron: "vir-tu-él",
@@ -10311,7 +15809,12 @@ const rawChapters = [
     category: "Eigenschaften",
     en: "a cute 3D isometric UI icon of VR virtual reality goggles glowing purple",
     exampleSentenceDe: "Wir machen ein virtuelles Treffen.",
-    exampleSentenceEs: "Hacemos una reunión virtual."
+    exampleSentenceEs: "Hacemos una reunión virtual.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "machen", role: "verb_p1", order: 2 },
+      { text: "ein virtuelles Treffen", role: "complement", order: 3 }
+    ]
   }, {
     de: "gesperrt",
     pron: "gue-shpért",
@@ -10320,7 +15823,13 @@ const rawChapters = [
     category: "Sicherheit",
     en: "a cute 3D isometric UI icon of a red digital lock",
     exampleSentenceDe: "Mein Handy ist leider gesperrt.",
-    exampleSentenceEs: "Mi móvil está bloqueado lamentablemente."
+    exampleSentenceEs: "Mi móvil está bloqueado lamentablemente.",
+    exampleSentenceDeBlocks: [
+      { text: "Mein Handy", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "leider", role: "complement", order: 3 },
+      { text: "gesperrt", role: "verb_p2", order: 4 }
+    ]
   }, {
     de: "programmieren",
     pron: "pro-gram-mí-ren",
@@ -10330,7 +15839,12 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "a cute 3D isometric UI icon of a laptop screen with program code",
     exampleSentenceDe: "Ich lerne programmieren.",
-    exampleSentenceEs: "Aprendo a programar."
+    exampleSentenceEs: "Aprendo a programar.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lerne", role: "verb_p1", order: 2 },
+      { text: "programmieren", role: "complement", order: 3 }
+    ]
   }, {
     de: "herunterladen",
     pron: "je-rún-ter-la-den",
@@ -10340,7 +15854,12 @@ const rawChapters = [
     regimen: "Separable (herunter-) / + Akkusativ",
     en: "a cute 3D isometric UI icon of a down arrow pointing to a hard drive disk",
     exampleSentenceDe: "Ich lade das Lied herunter.",
-    exampleSentenceEs: "Descargo la canción."
+    exampleSentenceEs: "Descargo la canción.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lade", role: "verb_p1", order: 2 },
+      { text: "das Lied herunter", role: "complement", order: 3 }
+    ]
   }, {
     de: "hochladen",
     pron: "jój-la-den",
@@ -10350,7 +15869,13 @@ const rawChapters = [
     regimen: "Separable (hoch-) / + Akkusativ",
     en: "a cute 3D isometric UI icon of an up arrow pointing to a digital cloud",
     exampleSentenceDe: "Er lädt das Video hoch.",
-    exampleSentenceEs: "Él sube el video."
+    exampleSentenceEs: "Él sube el video.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "lädt", role: "verb_p1", order: 2 },
+      { text: "das Video", role: "complement", order: 3 },
+      { text: "hoch", role: "verb_p2", order: 4 }
+    ]
   }, {
     de: "speichern",
     pron: "shpái-jern",
@@ -10360,7 +15885,12 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "a cute 3D isometric UI icon of a classic 3.5 inch blue floppy disk storage",
     exampleSentenceDe: "Bitte speichern Sie die Datei.",
-    exampleSentenceEs: "Por favor, guarde el archivo."
+    exampleSentenceEs: "Por favor, guarde el archivo.",
+    exampleSentenceDeBlocks: [
+      { text: "Bitte", role: "subject", order: 1 },
+      { text: "speichern", role: "verb_p1", order: 2 },
+      { text: "Sie die Datei", role: "complement", order: 3 }
+    ]
   }, {
     de: "löschen",
     pron: "lö-shen",
@@ -10370,7 +15900,13 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "a cute 3D isometric UI icon of a red trash can bin overflowing with paper crumbs",
     exampleSentenceDe: "Ich möchte den Text löschen.",
-    exampleSentenceEs: "Quiero borrar el texto."
+    exampleSentenceEs: "Quiero borrar el texto.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "möchte", role: "verb_p1", order: 2 },
+      { text: "den Text", role: "complement", order: 3 },
+      { text: "löschen", role: "verb_p2", order: 4 }
+    ]
   }, {
     de: "klicken",
     pron: "klí-ken",
@@ -10380,7 +15916,12 @@ const rawChapters = [
     regimen: "intransitivo",
     en: "a cute 3D isometric UI icon of a glowing blue cursor clicking a button",
     exampleSentenceDe: "Klicke auf den Button.",
-    exampleSentenceEs: "Haz clic en el botón."
+    exampleSentenceEs: "Haz clic en el botón.",
+    exampleSentenceDeBlocks: [
+      { text: "Klicke", role: "subject", order: 1 },
+      { text: "auf", role: "verb_p1", order: 2 },
+      { text: "den Button", role: "complement", order: 3 }
+    ]
   }, {
     de: "tippen",
     pron: "tí-pen",
@@ -10390,7 +15931,12 @@ const rawChapters = [
     regimen: "intransitivo",
     en: "a cute 3D isometric UI icon of hands typing on a glowing laptop keyboard",
     exampleSentenceDe: "Ich tippe sehr schnell.",
-    exampleSentenceEs: "Escribo a máquina muy rápido."
+    exampleSentenceEs: "Escribo a máquina muy rápido.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "tippe", role: "verb_p1", order: 2 },
+      { text: "sehr schnell", role: "complement", order: 3 }
+    ]
   }, {
     de: "senden",
     pron: "zén-den",
@@ -10400,7 +15946,12 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "a cute 3D isometric UI icon of a paper plane flying out of a digital envelope",
     exampleSentenceDe: "Ich sende das Dokument heute.",
-    exampleSentenceEs: "Envío el documento hoy."
+    exampleSentenceEs: "Envío el documento hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "sende", role: "verb_p1", order: 2 },
+      { text: "das Dokument heute", role: "complement", order: 3 }
+    ]
   }, {
     de: "empfangen",
     pron: "emp-fáng-en",
@@ -10410,7 +15961,12 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "a cute 3D isometric UI icon of a digital tray box receiving incoming letter envelopes",
     exampleSentenceDe: "Ich empfange ein Paket.",
-    exampleSentenceEs: "Recibo un paquete."
+    exampleSentenceEs: "Recibo un paquete.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "empfange", role: "verb_p1", order: 2 },
+      { text: "ein Paket", role: "complement", order: 3 }
+    ]
   }, {
     de: "teilen",
     pron: "tái-len",
@@ -10420,7 +15976,12 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "a cute 3D isometric UI icon of three connected dots sharing network lines",
     exampleSentenceDe: "Wir teilen die Datei.",
-    exampleSentenceEs: "Compartimos el archivo."
+    exampleSentenceEs: "Compartimos el archivo.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "teilen", role: "verb_p1", order: 2 },
+      { text: "die Datei", role: "complement", order: 3 }
+    ]
   }, {
     de: "kopieren",
     pron: "ko-pí-ren",
@@ -10430,7 +15991,13 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "a cute 3D isometric UI icon of two identical overlapping document sheets",
     exampleSentenceDe: "Kannst du den Text kopieren?",
-    exampleSentenceEs: "¿Puedes copiar el texto?"
+    exampleSentenceEs: "¿Puedes copiar el texto?",
+    exampleSentenceDeBlocks: [
+      { text: "Kannst", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "den Text", role: "complement", order: 3 },
+      { text: "kopieren", role: "verb_p2", order: 4 }
+    ]
   }, {
     de: "einfügen",
     pron: "áin-fü-guen",
@@ -10440,7 +16007,13 @@ const rawChapters = [
     regimen: "Separable (ein-) / + Akkusativ",
     en: "a cute 3D isometric UI icon of a clipboard pasting text onto a page document",
     exampleSentenceDe: "Füge das Bild hier ein.",
-    exampleSentenceEs: "Pega la imagen aquí."
+    exampleSentenceEs: "Pega la imagen aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Füge", role: "verb_p1", order: 1 },
+      { text: "das Bild", role: "subject", order: 2 },
+      { text: "hier", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ]
   }, {
     de: "aktualisieren",
     pron: "ak-tua-li-zí-ren",
@@ -10450,7 +16023,13 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "a cute 3D isometric UI icon of two circular green arrows turning",
     exampleSentenceDe: "Ich muss die Seite aktualisieren.",
-    exampleSentenceEs: "Tengo que actualizar la página."
+    exampleSentenceEs: "Tengo que actualizar la página.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "muss", role: "verb_p1", order: 2 },
+      { text: "die Seite", role: "complement", order: 3 },
+      { text: "aktualisieren", role: "verb_p2", order: 4 }
+    ]
   }, {
     de: "drucken",
     pron: "drú-ken",
@@ -10460,7 +16039,12 @@ const rawChapters = [
     regimen: "+ Akkusativ",
     en: "a cute 3D isometric UI icon of a paper sheet rolling out of a metal print head roller",
     exampleSentenceDe: "Ich drucke den Brief.",
-    exampleSentenceEs: "Imprimo la carta."
+    exampleSentenceEs: "Imprimo la carta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "drucke", role: "verb_p1", order: 2 },
+      { text: "den Brief", role: "complement", order: 3 }
+    ]
   }]
 },
 {
@@ -10885,6 +16469,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Er sieht mich im Park.",
       exampleSentenceEs: "Él me ve en el parque.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "sieht", role: "verb_p1", order: 2 },
+      { text: "mich im Park", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay character smiling and pointing index finger at their own chest"
     },
     {
@@ -10897,6 +16486,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Kannst du mir bitte helfen?",
       exampleSentenceEs: "¿Puedes ayudarme por favor?",
+    exampleSentenceDeBlocks: [
+      { text: "Kannst", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "mir bitte", role: "complement", order: 3 },
+      { text: "helfen", role: "verb_p2", order: 4 }
+    ],
       en: "A cute 3D clay character receiving a helping hand from another figure"
     },
     {
@@ -10909,6 +16504,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich rufe dich morgen an.",
       exampleSentenceEs: "Te llamo mañana.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "rufe", role: "verb_p1", order: 2 },
+      { text: "dich morgen", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
       en: "A cute 3D clay character talking cheerfully on smartphone looking at viewer"
     },
     {
@@ -10921,6 +16522,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Das Kleid steht dir sehr gut.",
       exampleSentenceEs: "El vestido te queda muy bien.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Kleid", role: "subject", order: 1 },
+      { text: "steht", role: "verb_p1", order: 2 },
+      { text: "dir sehr gut", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay hand offering a nicely wrapped gift box to viewer"
     },
     {
@@ -10933,6 +16539,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Kennst du den Mann? – Ja, ich kenne ihn.",
       exampleSentenceEs: "¿Conoces al hombre? – Sí, lo conozco.",
+    exampleSentenceDeBlocks: [
+      { text: "Kennst", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "den Mann? – Ja, ich kenne ihn", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay figure greeting a male clay character wearing glasses"
     },
     {
@@ -10945,6 +16556,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich gebe ihm den Autoschlüssel.",
       exampleSentenceEs: "Le doy la llave del coche a él.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "gebe", role: "verb_p1", order: 2 },
+      { text: "ihm den Autoschlüssel", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay hand handing shiny metallic car keys to a male character"
     },
     {
@@ -10957,6 +16573,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich besuche meine Tante, ich besuche sie oft.",
       exampleSentenceEs: "Visito a mi tía, la visito a menudo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "besuche", role: "verb_p1", order: 2 },
+      { text: "meine Tante, ich besuche sie oft", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay character ringing the doorbell of a female friend"
     },
     {
@@ -10969,6 +16590,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich antworte ihr auf die Nachricht.",
       exampleSentenceEs: "Le respondo a ella el mensaje.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "antworte", role: "verb_p1", order: 2 },
+      { text: "ihr auf die Nachricht", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay figure typing a reply message on a computer screen"
     },
     {
@@ -10981,6 +16607,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wo ist das Buch? – Ich habe es hier.",
       exampleSentenceEs: "¿Dónde está el libro? – Lo tengo aquí.",
+    exampleSentenceDeBlocks: [
+      { text: "Wo", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "das Buch? – Ich habe es hier", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay character happily holding an open hardcover book"
     },
     {
@@ -10993,6 +16624,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Der Lehrer erklärt uns die Grammatik.",
       exampleSentenceEs: "El profesor nos explica la gramática.",
+    exampleSentenceDeBlocks: [
+      { text: "Der Lehrer", role: "subject", order: 1 },
+      { text: "erklärt", role: "verb_p1", order: 2 },
+      { text: "uns die Grammatik", role: "complement", order: 3 }
+    ],
       en: "A small group of two cheerful 3D clay students studying together"
     },
     {
@@ -11005,6 +16641,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich lade euch alle zur Party ein.",
       exampleSentenceEs: "Os invito a todos a la fiesta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lade", role: "verb_p1", order: 2 },
+      { text: "euch alle zur Party", role: "complement", order: 3 },
+      { text: "ein", role: "verb_p2", order: 4 }
+    ],
       en: "A cute 3D clay party host waving welcoming arms to two arriving friends"
     },
     {
@@ -11017,6 +16659,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Das Haus gehört ihnen.",
       exampleSentenceEs: "La casa les pertenece a ellos.",
+    exampleSentenceDeBlocks: [
+      { text: "Das Haus", role: "subject", order: 1 },
+      { text: "gehört", role: "verb_p1", order: 2 },
+      { text: "ihnen", role: "complement", order: 3 }
+    ],
       en: "Two cute 3D clay characters standing proudly outside their new house"
     },
     {
@@ -11029,6 +16676,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wie kann ich Ihnen helfen?",
       exampleSentenceEs: "¿Cómo le puedo ayudar a usted?",
+    exampleSentenceDeBlocks: [
+      { text: "Wie", role: "subject", order: 1 },
+      { text: "kann", role: "verb_p1", order: 2 },
+      { text: "ich Ihnen", role: "complement", order: 3 },
+      { text: "helfen", role: "verb_p2", order: 4 }
+    ],
       en: "A polite customer support desk agent clay character smiling welcomingly"
     },
     {
@@ -11041,6 +16694,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Das ist mein Pass und meine Fahrkarte.",
       exampleSentenceEs: "Este es mi pasaporte y mi billete.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "mein Pass und meine Fahrkarte", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay character holding passport booklet and transit card"
     },
     {
@@ -11053,6 +16711,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ist das dein Schlüssel?",
       exampleSentenceEs: "¿Es esta tu llave?",
+    exampleSentenceDeBlocks: [
+      { text: "Ist", role: "verb_p1", order: 1 },
+      { text: "das dein", role: "subject", order: 2 },
+      { text: "Schlüssel", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay character pointing at a metal key on a clean desk"
     },
     {
@@ -11065,6 +16728,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Er sucht seine Reisetasche.",
       exampleSentenceEs: "Él busca su maleta de viaje.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "sucht", role: "verb_p1", order: 2 },
+      { text: "seine Reisetasche", role: "complement", order: 3 }
+    ],
       en: "A male 3D clay character searching around with a travel duffle bag"
     },
     {
@@ -11077,6 +16745,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Sie liebt ihre Katze sehr.",
       exampleSentenceEs: "Ella adora mucho a su gata.",
+    exampleSentenceDeBlocks: [
+      { text: "Sie", role: "subject", order: 1 },
+      { text: "liebt", role: "verb_p1", order: 2 },
+      { text: "ihre Katze sehr", role: "complement", order: 3 }
+    ],
       en: "A female 3D clay character cuddling a cute small orange clay cat"
     },
     {
@@ -11089,6 +16762,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Das ist unser neues Auto.",
       exampleSentenceEs: "Este es nuestro coche nuevo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "unser neues Auto", role: "complement", order: 3 }
+    ],
       en: "Two cute 3D clay people standing happily beside a compact blue car"
     },
     {
@@ -11101,6 +16779,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wo ist eure Schule?",
       exampleSentenceEs: "¿Dónde está vuestra escuela?",
+    exampleSentenceDeBlocks: [
+      { text: "Wo", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "eure Schule", role: "complement", order: 3 }
+    ],
       en: "Two cute clay children wearing colorful school backpacks"
     },
     {
@@ -11113,6 +16796,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wie ist Ihre Telefonnummer?",
       exampleSentenceEs: "¿Cuál es su número de teléfono?",
+    exampleSentenceDeBlocks: [
+      { text: "Wie", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "Ihre Telefonnummer", role: "complement", order: 3 }
+    ],
       en: "An official business ID card showing a formal silhouette profile"
     },
     {
@@ -11125,6 +16813,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich suche meinen Koffer.",
       exampleSentenceEs: "Busco mi maleta.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "suche", role: "verb_p1", order: 2 },
+      { text: "meinen Koffer", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay character looking for a lost rolling suitcase"
     },
     {
@@ -11137,6 +16830,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich fahre mit meinem Fahrrad zur Arbeit.",
       exampleSentenceEs: "Voy en mi bicicleta al trabajo.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "fahre", role: "verb_p1", order: 2 },
+      { text: "mit meinem Fahrrad zur Arbeit", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay character riding a stylish bicycle to an office"
     },
     {
@@ -11149,6 +16847,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich wohne bei meiner Familie.",
       exampleSentenceEs: "Vivo con mi familia.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "wohne", role: "verb_p1", order: 2 },
+      { text: "bei meiner Familie", role: "complement", order: 3 }
+    ],
       en: "A cozy stylized 3D clay home with happy family silhouettes"
     },
     {
@@ -11161,6 +16864,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Hast du deinen Pass dabei?",
       exampleSentenceEs: "¿Llevas contigo tu pasaporte?",
+    exampleSentenceDeBlocks: [
+      { text: "Hast", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "deinen Pass dabei", role: "complement", order: 3 }
+    ],
       en: "A traveler checking an open passport with a clear checklist mark"
     },
     {
@@ -11173,6 +16881,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Er zieht sich schnell an.",
       exampleSentenceEs: "Él se viste rápidamente.",
+    exampleSentenceDeBlocks: [
+      { text: "Er", role: "subject", order: 1 },
+      { text: "zieht", role: "verb_p1", order: 2 },
+      { text: "sich schnell", role: "complement", order: 3 },
+      { text: "an", role: "verb_p2", order: 4 }
+    ],
       en: "A 3D clay character smoothly slipping into a warm cozy winter sweater"
     },
     {
@@ -11185,6 +16899,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wir helfen einander immer.",
       exampleSentenceEs: "Nos ayudamos mutuamente siempre.",
+    exampleSentenceDeBlocks: [
+      { text: "Wir", role: "subject", order: 1 },
+      { text: "helfen", role: "verb_p1", order: 2 },
+      { text: "einander immer", role: "complement", order: 3 }
+    ],
       en: "Two 3D clay characters holding hands supporting each other"
     },
     {
@@ -11197,6 +16916,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich habe das Essen selbst gekocht.",
       exampleSentenceEs: "Yo mismo preparé la comida.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "das Essen selbst gekocht", role: "complement", order: 3 }
+    ],
       en: "A proud 3D clay chef character showing a delicious finished dish"
     },
     {
@@ -11209,6 +16933,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Dieses Buch ist sehr spannend.",
       exampleSentenceEs: "Este libro es muy emocionante.",
+    exampleSentenceDeBlocks: [
+      { text: "Dieses Buch", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "sehr spannend", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay hand pointing an index finger directly at a book"
     },
     {
@@ -11221,6 +16950,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich nehme diesen Pullover.",
       exampleSentenceEs: "Me llevo este jersey.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "nehme", role: "verb_p1", order: 2 },
+      { text: "diesen Pullover", role: "complement", order: 3 }
+    ],
       en: "A 3D clay shopper picking a warm blue knitted wool sweater from rack"
     },
     {
@@ -11233,6 +16967,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "In diesem Haus wohne ich.",
       exampleSentenceEs: "Vivo en esta casa.",
+    exampleSentenceDeBlocks: [
+      { text: "In diesem Haus", role: "subject", order: 1 },
+      { text: "wohne", role: "verb_p1", order: 2 },
+      { text: "ich", role: "complement", order: 3 }
+    ],
       en: "A cute stylized 3D clay apartment house with highlighted entrance"
     },
     {
@@ -11245,6 +16984,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "An dieser Haltestelle halten viele Busse.",
       exampleSentenceEs: "En esta parada se detienen muchos autobuses.",
+    exampleSentenceDeBlocks: [
+      { text: "An dieser Haltestelle", role: "subject", order: 1 },
+      { text: "halten", role: "verb_p1", order: 2 },
+      { text: "viele Busse", role: "complement", order: 3 }
+    ],
       en: "A cute 3D clay bus stop station signpost on sidewalk"
     },
     {
@@ -11257,6 +17001,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Das ist aber sehr nett!",
       exampleSentenceEs: "¡Eso sí que es muy amable!",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "aber sehr nett", role: "complement", order: 3 }
+    ],
       en: "A glowing friendly star badge resting on a small pedestal"
     },
     {
@@ -11269,6 +17018,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Hier darf man nicht rauchen.",
       exampleSentenceEs: "Aquí no se puede fumar.",
+    exampleSentenceDeBlocks: [
+      { text: "Hier", role: "subject", order: 1 },
+      { text: "darf", role: "verb_p1", order: 2 },
+      { text: "man nicht", role: "complement", order: 3 },
+      { text: "rauchen", role: "verb_p2", order: 4 }
+    ],
       en: "A 3D clay character observing a clear circular prohibition sign"
     },
     {
@@ -11281,6 +17036,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ist jemand an der Tür?",
       exampleSentenceEs: "¿Hay alguien en la puerta?",
+    exampleSentenceDeBlocks: [
+      { text: "Ist", role: "subject", order: 1 },
+      { text: "jemand", role: "verb_p1", order: 2 },
+      { text: "an der Tür", role: "complement", order: 3 }
+    ],
       en: "A silhouette figure gently knocking on a front door"
     },
     {
@@ -11293,6 +17053,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Niemand ist heute im Büro.",
       exampleSentenceEs: "Nadie está hoy en la oficina.",
+    exampleSentenceDeBlocks: [
+      { text: "Niemand", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "heute im Büro", role: "complement", order: 3 }
+    ],
       en: "A peaceful empty office room with an unoccupied desk chair"
     },
     {
@@ -11305,6 +17070,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Möchtest du etwas trinken?",
       exampleSentenceEs: "¿Te gustaría tomar algo?",
+    exampleSentenceDeBlocks: [
+      { text: "Möchtest", role: "verb_p1", order: 1 },
+      { text: "du", role: "subject", order: 2 },
+      { text: "etwas", role: "complement", order: 3 },
+      { text: "trinken", role: "verb_p2", order: 4 }
+    ],
       en: "A cute small clay mug with gentle steam rising upwards"
     },
     {
@@ -11317,6 +17088,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich habe heute noch nichts gegessen.",
       exampleSentenceEs: "Hoy todavía no he comido nada.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "heute noch nichts gegessen", role: "complement", order: 3 }
+    ],
       en: "A clean empty porcelain plate with a small fork and spoon beside"
     },
     {
@@ -11329,6 +17105,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Alles ist fertig und vorbereitet.",
       exampleSentenceEs: "Todo está listo y preparado.",
+    exampleSentenceDeBlocks: [
+      { text: "Alles", role: "subject", order: 1 },
+      { text: "ist", role: "verb_p1", order: 2 },
+      { text: "fertig und vorbereitet", role: "complement", order: 3 }
+    ],
       en: "A tidy organized desktop with green checkmarks on all items"
     },
     {
@@ -11341,6 +17122,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Alle Schüler sind heute da.",
       exampleSentenceEs: "Todos los alumnos están presentes hoy.",
+    exampleSentenceDeBlocks: [
+      { text: "Alle Schüler", role: "subject", order: 1 },
+      { text: "sind", role: "verb_p1", order: 2 },
+      { text: "heute da", role: "complement", order: 3 }
+    ],
       en: "A cheerful group of diverse stylized 3D clay avatars gathered together"
     },
     {
@@ -11353,6 +17139,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Jeder Teilnehmer bekommt ein Zertifikat.",
       exampleSentenceEs: "Cada participante recibe un certificado.",
+    exampleSentenceDeBlocks: [
+      { text: "Jeder Teilnehmer", role: "subject", order: 1 },
+      { text: "bekommt", role: "verb_p1", order: 2 },
+      { text: "ein Zertifikat", role: "complement", order: 3 }
+    ],
       en: "A row of graduation certificate scrolls with red ribbons"
     },
     {
@@ -11365,6 +17156,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Das gefällt nicht jedem Menschen.",
       exampleSentenceEs: "Eso no le agrada a todo el mundo.",
+    exampleSentenceDeBlocks: [
+      { text: "Das", role: "subject", order: 1 },
+      { text: "gefällt", role: "verb_p1", order: 2 },
+      { text: "nicht jedem Menschen", role: "complement", order: 3 }
+    ],
       en: "Two clay faces displaying different thoughtful expressions"
     },
     {
@@ -11377,6 +17173,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich lerne jeden Tag Deutsch.",
       exampleSentenceEs: "Aprendo alemán todos los días.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "lerne", role: "verb_p1", order: 2 },
+      { text: "jeden Tag Deutsch", role: "complement", order: 3 }
+    ],
       en: "A calendar page with bold checkmarks across each day of the week"
     },
     {
@@ -11389,6 +17190,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Ich habe noch einige Fragen.",
       exampleSentenceEs: "Todavía tengo algunas preguntas.",
+    exampleSentenceDeBlocks: [
+      { text: "Ich", role: "subject", order: 1 },
+      { text: "habe", role: "verb_p1", order: 2 },
+      { text: "noch einige Fragen", role: "complement", order: 3 }
+    ],
       en: "Three floating question mark symbols of different pastel colors"
     },
     {
@@ -11401,6 +17207,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wer kommt heute zum Treffen?",
       exampleSentenceEs: "¿Quién viene hoy a la reunión?",
+    exampleSentenceDeBlocks: [
+      { text: "Wer", role: "subject", order: 1 },
+      { text: "kommt", role: "verb_p1", order: 2 },
+      { text: "heute zum Treffen", role: "complement", order: 3 }
+    ],
       en: "A question mark silhouette badge standing over a podium"
     },
     {
@@ -11413,6 +17224,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wen hast du am Bahnhof getroffen?",
       exampleSentenceEs: "¿A quién te encontraste en la estación?",
+    exampleSentenceDeBlocks: [
+      { text: "Wen", role: "subject", order: 1 },
+      { text: "hast", role: "verb_p1", order: 2 },
+      { text: "du am Bahnhof", role: "complement", order: 3 },
+      { text: "getroffen", role: "verb_p2", order: 4 }
+    ],
       en: "A searching magnifying glass focusing on a silhouette character"
     },
     {
@@ -11425,6 +17242,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wem gehört diese Tasche?",
       exampleSentenceEs: "¿A quién le pertenece este bolso?",
+    exampleSentenceDeBlocks: [
+      { text: "Wem", role: "subject", order: 1 },
+      { text: "gehört", role: "verb_p1", order: 2 },
+      { text: "diese Tasche", role: "complement", order: 3 }
+    ],
       en: "An open gift box with a tag displaying a prominent question mark"
     },
     {
@@ -11437,6 +17259,11 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Wessen Auto steht vor der Garage?",
       exampleSentenceEs: "¿De quién es el coche frente al garaje?",
+    exampleSentenceDeBlocks: [
+      { text: "Wessen Auto", role: "subject", order: 1 },
+      { text: "steht", role: "verb_p1", order: 2 },
+      { text: "vor der Garage", role: "complement", order: 3 }
+    ],
       en: "A car keychain tag inscribed with a clean question mark symbol"
     },
     {
@@ -11449,6 +17276,12 @@ const rawChapters = [
       plural: "-",
       exampleSentenceDe: "Welches Ticket möchten Sie kaufen?",
       exampleSentenceEs: "¿Qué billete quisiera comprar usted?",
+    exampleSentenceDeBlocks: [
+      { text: "Welches Ticket", role: "subject", order: 1 },
+      { text: "möchten", role: "verb_p1", order: 2 },
+      { text: "Sie", role: "complement", order: 3 },
+      { text: "kaufen", role: "verb_p2", order: 4 }
+    ],
       en: "Two transit tickets displayed side by side with a selection cursor"
     }
   ]

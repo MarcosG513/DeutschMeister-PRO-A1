@@ -16,7 +16,7 @@ import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId } from './utils/helpers';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
-
+import { API_ENDPOINTS } from './config/apiEndpoints';
 
 import Profile from './components/Profile';
 
@@ -458,7 +458,7 @@ export default function App() {
       es: ""
     });
     const attemptFetch = async () => {
-      const response = await fetch(`https://generatestory-44keyii6gq-uc.a.run.app`, {
+      const response = await fetch(API_ENDPOINTS.STORY_GEN, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -734,7 +734,7 @@ export default function App() {
     setIsChatLoading(true);
     try {
       const idToken = user ? await user.getIdToken().catch(() => '') : '';
-      const response = await fetch(`https://sendtutorchatmessage-44keyii6gq-uc.a.run.app`, {
+      const response = await fetch(API_ENDPOINTS.TUTOR_CHAT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -937,7 +937,7 @@ export default function App() {
         user={user}
         auth={auth}
         unlockedCardsCount={Object.keys(unlockedCards || {}).length}
-        totalCardsCount={1089}
+        totalCardsCount={chapters.reduce((acc, c) => acc + (c.words?.length || 0), 0)}
       /> : viewMode === "quiz" ? <DynamicQuiz onExit={() => setViewMode('flashcards')} /> : <>
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
