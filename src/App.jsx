@@ -14,7 +14,7 @@ import GrammarAccordion from './components/GrammarAccordion';
 import AudioSim from './components/AudioSim';
 import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
-import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId } from './utils/helpers';
+import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount } from './utils/helpers';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
 import { API_ENDPOINTS } from './config/apiEndpoints';
 
@@ -283,6 +283,23 @@ export default function App() {
       localStorage.setItem('deutschmeister_unlocked', JSON.stringify(unlockedCards));
     }
   }, [unlockedCards]);
+  const [studiedCardsCount, setStudiedCardsCount] = useState(0);
+
+  useEffect(() => {
+    recordDailyStudyActivity();
+    getStudiedCardsCount().then(c => setStudiedCardsCount(c));
+    const handleStudied = (e) => {
+      if (e.detail?.count) setStudiedCardsCount(e.detail.count);
+      else getStudiedCardsCount().then(c => setStudiedCardsCount(c));
+    };
+    window.addEventListener('cardStudiedUpdated', handleStudied);
+    return () => window.removeEventListener('cardStudiedUpdated', handleStudied);
+  }, []);
+
+  useEffect(() => {
+    recordDailyStudyActivity();
+  }, [activeStudyPlanId, activePresentationId, activeChapterId, viewMode]);
+
   const [isImageLoading, setIsImageLoading] = useState(null);
   const [isTutorOpen, setIsTutorOpen] = useState(false);
   const [isTutorFullscreen, setIsTutorFullscreen] = useState(false);
@@ -419,13 +436,28 @@ export default function App() {
     }
     return words;
   }, [activeChapterId, searchTerm, activeChapter, selectedCategory]);
-  const toggleCard = index => setRevealedCards(prev => ({
-    ...prev,
-    [index]: !prev[index]
-  }));
+  const toggleCard = index => {
+    const word = displayedWords[index];
+    if (word && word.de) {
+      const safeId = getSafeId(word.de).substring(0, 150);
+      recordCardStudied(safeId);
+    }
+    recordDailyStudyActivity();
+    setRevealedCards(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
   const revealAll = () => {
+    recordDailyStudyActivity();
     const all = {};
-    displayedWords.forEach((_, i) => all[i] = true);
+    displayedWords.forEach((word, i) => {
+      all[i] = true;
+      if (word && word.de) {
+        const safeId = getSafeId(word.de).substring(0, 150);
+        recordCardStudied(safeId);
+      }
+    });
     setRevealedCards(all);
   };
   const hideAll = () => setRevealedCards({});
@@ -648,6 +680,9 @@ export default function App() {
         storyAudioInstanceRef.current.currentTime = 0;
         setCurrentWordIndex(0);
       }
+      const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
+      storyAudioInstanceRef.current.playbackRate = savedSpeed;
+      storyAudioInstanceRef.current.preservesPitch = true;
       storyAudioInstanceRef.current.play();
       setIsPlayingStoryAudio(true);
       return;
@@ -666,6 +701,13 @@ export default function App() {
       storyAudioUrlRef.current = audioSource;
 
       const audio = new Audio(audioSource);
+      const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
+      audio.playbackRate = savedSpeed;
+      audio.preservesPitch = true;
+      audio.onloadedmetadata = () => {
+        audio.playbackRate = savedSpeed;
+        audio.preservesPitch = true;
+      };
       storyAudioInstanceRef.current = audio;
 
       const tokens = parseTextToTokens(storyState.de);
@@ -722,6 +764,7 @@ export default function App() {
   };
   const sendChatMessage = async () => {
     if (!chatInput.trim()) return;
+    recordDailyStudyActivity();
     const newUserMessage = {
       role: "user",
       parts: [{
@@ -907,6 +950,11 @@ export default function App() {
   const speakText = async (word, e) => {
     if (e) e.stopPropagation();
     const textToSpeak = typeof word === 'string' ? word : word.de;
+    recordDailyStudyActivity();
+    if (typeof word === 'object' && word?.de) {
+      const safeId = getSafeId(word.de).substring(0, 150);
+      recordCardStudied(safeId);
+    }
     playGermanAudio(textToSpeak, { type: "vocab", voice: "Charon" });
   };
   return <Suspense fallback={
@@ -936,9 +984,14 @@ export default function App() {
         onExit={() => setViewMode('flashcards')}
         user={user}
         auth={auth}
+        studiedCardsCount={studiedCardsCount}
         unlockedCardsCount={Object.keys(unlockedCards || {}).length}
-        totalCardsCount={chapters.reduce((acc, c) => acc + (c.words?.length || 0), 0)}
-      /> : viewMode === "quiz" ? <DynamicQuiz onExit={() => setViewMode('flashcards')} /> : <>
+      /> : viewMode === "quiz" ? <DynamicQuiz 
+        onExit={() => setViewMode('flashcards')} 
+        chapters={chapters}
+        activeChapterId={activeChapterId}
+        activeChapterTitle={activeChapter?.title}
+      /> : <>
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
             <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">

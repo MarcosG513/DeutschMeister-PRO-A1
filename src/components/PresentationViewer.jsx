@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Presentation, Link2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { goetheModules, studyPlanModules } from '../data/chapters';
+import { recordDailyStudyActivity, recordModuleCompleted, recordCardStudied, getSafeId } from '../utils/helpers';
 
 const PresentationViewer = ({
   presentation,
@@ -20,10 +21,27 @@ const PresentationViewer = ({
   useEffect(() => {
     if (presentation) {
       setCurrentSlide(0);
+      recordDailyStudyActivity();
     }
   }, [presentation?.id]);
 
+  useEffect(() => {
+    const curSlide = presentation?.slides?.[currentSlide];
+    if (curSlide) {
+      if (curSlide.word && curSlide.word.de) {
+        recordCardStudied(getSafeId(curSlide.word.de).substring(0, 150));
+      } else if (Array.isArray(curSlide.words)) {
+        curSlide.words.forEach(w => {
+          if (w?.de) recordCardStudied(getSafeId(w.de).substring(0, 150));
+        });
+      } else if (curSlide.de) {
+        recordCardStudied(getSafeId(curSlide.de).substring(0, 150));
+      }
+    }
+  }, [currentSlide, presentation?.id]);
+
   const nextSlide = () => {
+    recordDailyStudyActivity();
     if (presentation && currentSlide < presentation.slides.length - 1) setCurrentSlide(prev => prev + 1);
   };
 
@@ -58,7 +76,7 @@ const PresentationViewer = ({
 
   let containerClass = "flex-1 flex flex-col overflow-hidden ";
   let headerClass = "flex flex-col p-4 border-b shrink-0 ";
-  let bodyClass = "flex-1 overflow-y-auto p-6 md:p-12 flex flex-col justify-start ";
+  let bodyClass = "flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6 md:p-10 flex flex-col justify-start ";
 
   if (isBlueprint) {
     containerClass += "bg-blue-950 text-blue-50 font-sans";
@@ -239,7 +257,7 @@ const PresentationViewer = ({
   };
 
   return (
-    <div className="flex flex-col min-h-[100svh] w-full bg-white animate-in fade-in zoom-in-95 duration-200">
+    <div className="flex flex-col min-h-[100dvh] h-[100dvh] max-h-[100dvh] w-full bg-white animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
       <div className={containerClass}>
         <div className={headerClass}>
           {/* BLOQUE 1: TÍTULO PRINCIPAL Y BOTÓN DE CERRAR */}
@@ -353,7 +371,10 @@ const PresentationViewer = ({
 
           {isLastSlide && nextModule && nextModule.id ? (
             <button 
-              onClick={() => onNextModule(nextModule.id)} 
+              onClick={() => {
+                if (presentation?.id) recordModuleCompleted(presentation.id);
+                onNextModule(nextModule.id);
+              }} 
               className="flex flex-col items-center justify-center px-4 py-1.5 rounded-lg font-bold transition bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-500/30 animate-pulse animate-duration-1000 text-center"
             >
               <div className="flex items-center gap-1 text-sm font-bold">
@@ -365,7 +386,14 @@ const PresentationViewer = ({
             </button>
           ) : (
             <button 
-              onClick={isLastSlide ? onClose : nextSlide} 
+              onClick={() => {
+                if (isLastSlide) {
+                  if (presentation?.id) recordModuleCompleted(presentation.id);
+                  onClose();
+                } else {
+                  nextSlide();
+                }
+              }} 
               className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition ${isBlueprint ? 'bg-blue-500 text-blue-950 hover:bg-blue-400' : isMedical ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-amber-600 text-white hover:bg-amber-700'}`}
             >
               {isLastSlide ? 'Finalizar' : 'Siguiente'} <ChevronRight size={20} />

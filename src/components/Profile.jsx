@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import localforage from 'localforage';
 import { 
-  User, Mail, Lock, RefreshCw, Crown, CheckCircle2, Flame, Coins, 
+  User, Mail, Lock, RefreshCw, Crown, CheckCircle2, Flame, 
   Layers, Trophy, Volume2, ShieldCheck, FileText, ChevronRight, 
   ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle 
 } from 'lucide-react';
+import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
+import { getDailyStudyStreak, getStudiedCardsCount, getCompletedModulesCount } from '../utils/helpers';
 import { EmailAuthProvider, GoogleAuthProvider, linkWithCredential, linkWithPopup, signInWithEmailAndPassword, signInWithPopup, signOut, deleteUser } from 'firebase/auth';
 
 const AVATARS = ['🦊', '🦉', '🐼', '🦁', '🐯', '🐸', '🦄', '🦖', '🚀', '👑', '⚡', '🎓'];
 
-const Profile = ({ onExit, user, auth, unlockedCardsCount = 45, totalCardsCount = 1089 }) => {
+const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount = 1195 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginMode, setIsLoginMode] = useState(false);
@@ -24,32 +26,78 @@ const Profile = ({ onExit, user, auth, unlockedCardsCount = 45, totalCardsCount 
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [streak, setStreak] = useState(0);
-  const [coins, setCoins] = useState(0);
+  const [studiedCount, setStudiedCount] = useState(studiedCardsCount || unlockedCardsCount || 0);
+  const [completedModulesCount, setCompletedModulesCount] = useState(0);
+  const [isPlayingTest, setIsPlayingTest] = useState(false);
 
   const isRegistered = user && user.isAnonymous === false;
+
+  const effectiveStudiedCount = Math.max(studiedCount, studiedCardsCount || 0);
+  const progressPercent = totalCardsCount > 0 
+    ? Math.min(100, Math.round((effectiveStudiedCount / totalCardsCount) * 100)) 
+    : 0;
+
+  const totalGoetheModules = 16;
+  const goethePercent = Math.min(100, Math.round((completedModulesCount / totalGoetheModules) * 100));
+
+  useEffect(() => {
+    if (studiedCardsCount !== undefined) {
+      setStudiedCount(studiedCardsCount);
+    }
+  }, [studiedCardsCount]);
 
   useEffect(() => {
     const loadGamificationData = async () => {
       try {
-        const savedStreak = await localforage.getItem('dm_user_streak');
-        const savedCoins = await localforage.getItem('dm_user_coins');
-        const fallbackStreak = parseInt(localStorage.getItem('dm_quiz_streak') || '0', 10);
-        setStreak(savedStreak !== null && savedStreak !== undefined ? savedStreak : fallbackStreak);
-        setCoins(savedCoins !== null && savedCoins !== undefined ? savedCoins : 0);
+        const curStreak = await getDailyStudyStreak();
+        setStreak(curStreak);
+
+        const curStudied = await getStudiedCardsCount();
+        setStudiedCount(Math.max(curStudied, studiedCardsCount || 0));
+
+        const curModules = await getCompletedModulesCount();
+        setCompletedModulesCount(curModules);
       } catch (error) {
         console.error("Error cargando datos de gamificación:", error);
       }
     };
+
     loadGamificationData();
-    window.addEventListener('coinsUpdated', loadGamificationData);
+
+    window.addEventListener('studyActivityUpdated', loadGamificationData);
+    window.addEventListener('cardStudiedUpdated', loadGamificationData);
+    window.addEventListener('moduleCompletedUpdated', loadGamificationData);
+
     return () => {
-      window.removeEventListener('coinsUpdated', loadGamificationData);
+      window.removeEventListener('studyActivityUpdated', loadGamificationData);
+      window.removeEventListener('cardStudiedUpdated', loadGamificationData);
+      window.removeEventListener('moduleCompletedUpdated', loadGamificationData);
     };
-  }, []);
+  }, [studiedCardsCount]);
 
   useEffect(() => {
     localStorage.setItem('dm_voice_speed', voiceSpeed);
   }, [voiceSpeed]);
+
+  const handlePlayAudioTest = async () => {
+    if (isPlayingTest) {
+      stopCurrentAudio();
+      setIsPlayingTest(false);
+      return;
+    }
+    localStorage.setItem('dm_voice_speed', voiceSpeed);
+    setIsPlayingTest(true);
+    try {
+      await playGermanAudio("Hallo! Ich lerne Deutsch mit DeutschMeister.", {
+        type: "vocab",
+        voice: "Charon",
+        onEnd: () => setIsPlayingTest(false),
+        onError: () => setIsPlayingTest(false)
+      });
+    } catch (_) {
+      setIsPlayingTest(false);
+    }
+  };
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
@@ -458,30 +506,72 @@ const Profile = ({ onExit, user, auth, unlockedCardsCount = 45, totalCardsCount 
           {/* Right Column: Stats & Settings */}
           <div className="col-span-1 lg:col-span-5 space-y-6">
             
-            {/* Gamification Grid (2x2) */}
-            <section className="grid grid-cols-2 gap-4">
-              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center">
-                <span className="text-3xl mb-2">🔥</span>
-                <p className="text-lg font-bold text-slate-900">{streak} {streak === 1 ? 'Día' : 'Días'}</p>
-                <p className="text-xs font-medium text-slate-500">Racha Actual</p>
+            {/* Gamification Grid (3 balanced cards) */}
+            <section className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center justify-between min-h-[145px]">
+                <span className="text-3xl mb-1">🔥</span>
+                <div>
+                  <p className="text-lg font-bold text-slate-900">{streak} {streak === 1 ? 'Día' : 'Días'}</p>
+                  <p className="text-xs font-medium text-slate-500">Racha Diaria</p>
+                </div>
+                <div className="w-full mt-2">
+                  <div className="flex justify-between items-center text-[10px] text-slate-400 font-semibold mb-1">
+                    <span>Estado</span>
+                    <span className={streak > 0 ? "text-amber-600 font-bold" : "text-slate-400"}>
+                      {streak > 0 ? "¡Activa!" : "Comienza hoy"}
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-500 ${streak > 0 ? 'bg-gradient-to-r from-orange-400 to-amber-500 w-full' : 'w-0'}`}
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center">
-                <span className="text-3xl mb-2">🪙</span>
-                <p className="text-lg font-bold text-slate-900">{coins}</p>
-                <p className="text-xs font-medium text-slate-500">Monedas</p>
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center justify-between min-h-[145px]">
+                <span className="text-3xl mb-1">🗂️</span>
+                <div>
+                  <p className="text-lg font-bold text-slate-900">{effectiveStudiedCount}/{totalCardsCount}</p>
+                  <p className="text-xs font-medium text-slate-500">Vocabulario Estudiado</p>
+                </div>
+                <div className="w-full mt-2">
+                  <div className="flex justify-between items-center text-[10px] text-slate-400 font-semibold mb-1">
+                    <span>Progreso</span>
+                    <span>{progressPercent}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-indigo-500 to-blue-600 rounded-full transition-all duration-500"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center">
-                <span className="text-3xl mb-2">🗂️</span>
-                <p className="text-lg font-bold text-slate-900">{unlockedCardsCount}/{totalCardsCount}</p>
-                <p className="text-xs font-medium text-slate-500">Cartas Desbloqueadas</p>
-              </div>
-
-              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center">
-                <span className="text-3xl mb-2">🏆</span>
-                <p className="text-lg font-bold text-slate-900">A1</p>
-                <p className="text-xs font-medium text-slate-500">Nivel Goethe</p>
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center justify-between min-h-[145px]">
+                <span className="text-3xl mb-1">🏆</span>
+                <div>
+                  <div className="flex items-center justify-center gap-1.5">
+                    <p className="text-lg font-bold text-slate-900">A1</p>
+                    <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-md">
+                      {completedModulesCount}/16
+                    </span>
+                  </div>
+                  <p className="text-xs font-medium text-slate-500">Preparación Goethe</p>
+                </div>
+                <div className="w-full mt-2">
+                  <div className="flex justify-between items-center text-[10px] text-slate-400 font-semibold mb-1">
+                    <span>Nivel</span>
+                    <span>{goethePercent}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full transition-all duration-500"
+                      style={{ width: `${goethePercent}%` }}
+                    />
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -489,25 +579,44 @@ const Profile = ({ onExit, user, auth, unlockedCardsCount = 45, totalCardsCount 
             <section className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] overflow-hidden">
               
               {/* Speed Segment Control */}
-              <div className="p-4 border-b border-slate-100 flex items-center justify-between gap-4">
+              <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <Volume2 className="text-blue-600" size={20} />
                   <span className="font-semibold text-slate-800 text-sm">Velocidad de Pronunciación</span>
                 </div>
-                <div className="flex bg-slate-100 p-1 rounded-xl gap-1 border border-slate-200/60">
-                  {['1.0x', '0.7x', '0.5x'].map((speed) => (
-                    <button
-                      key={speed}
-                      onClick={() => setVoiceSpeed(speed)}
-                      className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                        voiceSpeed === speed
-                          ? 'bg-white text-blue-700 shadow-sm'
-                          : 'text-slate-500 hover:text-slate-800'
-                      }`}
-                    >
-                      {speed}
-                    </button>
-                  ))}
+                <div className="flex items-center gap-2 self-end sm:self-auto">
+                  <div className="flex bg-slate-100 p-1 rounded-xl gap-1 border border-slate-200/60">
+                    {['1.0x', '0.7x', '0.5x'].map((speed) => (
+                      <button
+                        key={speed}
+                        type="button"
+                        onClick={() => {
+                          setVoiceSpeed(speed);
+                          localStorage.setItem('dm_voice_speed', speed);
+                        }}
+                        className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                          voiceSpeed === speed
+                            ? 'bg-white text-blue-700 shadow-sm'
+                            : 'text-slate-500 hover:text-slate-800'
+                        }`}
+                      >
+                        {speed}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handlePlayAudioTest}
+                    className={`p-2 ml-2 rounded-lg transition flex items-center gap-1.5 text-xs font-semibold cursor-pointer active:scale-95 ${
+                      isPlayingTest 
+                        ? 'bg-amber-100 text-amber-700 animate-pulse'
+                        : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
+                    }`}
+                    title="Escuchar prueba de voz"
+                  >
+                    <Volume2 size={16} />
+                    <span>{isPlayingTest ? 'Detener' : 'Probar'}</span>
+                  </button>
                 </div>
               </div>
 

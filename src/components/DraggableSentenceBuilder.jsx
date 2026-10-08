@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
-import { spendCoins } from '../utils/helpers';
 import { playGermanAudio } from '../services/aiAudioService';
 
 const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePool }) => {
@@ -41,19 +40,14 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
     setHintUsed(false);
   }, [currentSentence]);
 
-  const buyHint = async () => {
+  const buyHint = () => {
     if (hintUsed || isValid !== null) return;
-    const success = await spendCoins(10);
-    if (success) {
-      setHintUsed(true);
-      if (activeSubject && (pool.includes(activeSubject) || slots.includes(activeSubject))) {
-        // Auto-colocar la primera palabra (activeSubject) en la Posición 1
-        const newSlots = [activeSubject, slots[1], slots[2]];
-        setSlots(newSlots);
-        setPool(prev => prev.filter(w => w !== activeSubject));
-      }
-    } else {
-      alert("¡Monedas insuficientes! Necesitas al menos 🪙 10 para comprar una pista.");
+    setHintUsed(true);
+    if (activeSubject && (pool.includes(activeSubject) || slots.includes(activeSubject))) {
+      // Auto-colocar la primera palabra (activeSubject) en la Posición 1
+      const newSlots = [activeSubject, slots[1], slots[2]];
+      setSlots(newSlots);
+      setPool(prev => prev.filter(w => w !== activeSubject));
     }
   };
 
@@ -140,9 +134,10 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
               onClick={buyHint}
               disabled={hintUsed}
               className="flex items-center gap-1 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold px-2.5 py-1 rounded-lg text-xs shadow-sm transition active:scale-95 cursor-pointer disabled:opacity-50"
+              title="Colocar el sujeto en la posición 1 (Pista libre)"
             >
               <Sparkles size={13} className="text-amber-500" />
-              <span>{hintUsed ? 'Pista Usada' : 'Pista (🪙 10)'}</span>
+              <span>{hintUsed ? 'Pista Usada' : 'Pista'}</span>
             </button>
           )}
           {isValid === true && (

@@ -3,6 +3,7 @@ import { BookOpen, Sparkles, X, Volume2, HelpCircle, Lightbulb, AlertTriangle, R
 import { functions } from '../App';
 import { httpsCallable } from 'firebase/functions';
 import { getGermanSpeechUrl, stopCurrentAudio } from '../services/aiAudioService';
+import { recordDailyStudyActivity } from '../utils/helpers';
 
 const ReadingComprehension = ({ onExit }) => {
   const [tema, setTema] = useState("");
@@ -151,6 +152,9 @@ const ReadingComprehension = ({ onExit }) => {
         readingAudioInstanceRef.current.currentTime = 0;
         setCurrentWordIndex(0);
       }
+      const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
+      readingAudioInstanceRef.current.playbackRate = savedSpeed;
+      readingAudioInstanceRef.current.preservesPitch = true;
       readingAudioInstanceRef.current.play();
       setIsPlayingAudio(true);
       return;
@@ -169,6 +173,13 @@ const ReadingComprehension = ({ onExit }) => {
       readingAudioUrlRef.current = audioSource;
 
       const audio = new Audio(audioSource);
+      const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
+      audio.playbackRate = savedSpeed;
+      audio.preservesPitch = true;
+      audio.onloadedmetadata = () => {
+        audio.playbackRate = savedSpeed;
+        audio.preservesPitch = true;
+      };
       readingAudioInstanceRef.current = audio;
 
       const tokens = parseTextToTokens(textToPlay);
@@ -262,6 +273,7 @@ const ReadingComprehension = ({ onExit }) => {
   const handleOptionClick = (questionIdx, optionText, correctAnswer) => {
     if (selectedAnswers[questionIdx]) return; // Ya respondida
 
+    recordDailyStudyActivity();
     setSelectedAnswers(prev => ({
       ...prev,
       [questionIdx]: optionText

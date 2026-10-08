@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader2, Send, X, Volume2, Sparkles, Square } from 'lucide-react';
-import { awardCoins } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
+import { recordDailyStudyActivity } from '../utils/helpers';
 
 const RoleplaySimulator = ({
   onExit
@@ -182,7 +182,7 @@ const RoleplaySimulator = ({
     }];
     setMessages(newMsgs);
     setInput("");
-    await awardCoins(10);
+    recordDailyStudyActivity();
     setLoading(true);
     try {
       const response = await fetch(API_ENDPOINTS.ROLEPLAY, {

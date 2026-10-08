@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check, Film } from 'lucide-react';
-import { getSafeId, awardCoins } from '../utils/helpers';
+import { getSafeId, recordDailyStudyActivity, recordCardStudied } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import { functions } from '../App';
@@ -181,7 +181,11 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
 
   const handleSpeakWord = (e) => {
     if (e) e.stopPropagation();
-    awardCoins(1);
+    recordDailyStudyActivity();
+    if (wordObj?.de) {
+      const sId = getSafeId(wordObj.de).substring(0, 150);
+      recordCardStudied(sId);
+    }
     setIsPlayingAudio(true);
     playGermanAudio(wordObj.de, {
       type: "vocab",
@@ -198,6 +202,11 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   const handleSpeakSentence = (e) => {
     if (e) e.stopPropagation();
     if (!sentenceText) return;
+    recordDailyStudyActivity();
+    if (wordObj?.de) {
+      const sId = getSafeId(wordObj.de).substring(0, 150);
+      recordCardStudied(sId);
+    }
     setIsPlayingAudio(true);
     playGermanAudio(sentenceText, {
       type: "sentence",
@@ -461,7 +470,18 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   };
 
   return (
-    <div onClick={() => setFlipped(!flipped)} className="relative h-[310px] md:h-[330px] perspective-1000 cursor-pointer w-full group">
+    <div 
+      onClick={() => {
+        const nextFlipped = !flipped;
+        setFlipped(nextFlipped);
+        recordDailyStudyActivity();
+        if (nextFlipped && wordObj?.de) {
+          const sId = getSafeId(wordObj.de).substring(0, 150);
+          recordCardStudied(sId);
+        }
+      }} 
+      className="relative h-[310px] md:h-[330px] perspective-1000 cursor-pointer w-full group"
+    >
       <div className={`w-full h-full transition-all duration-500 preserve-3d ${flipped ? 'rotate-y-180' : ''}`}>
         
         {/* FRENTE */}
@@ -614,7 +634,6 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                   <div 
                     onClick={(e) => {
                       e.stopPropagation();
-                      awardCoins(1);
                       setIsPlayingAudio(true);
                       playGermanAudio(wordObj.plural, {
                         type: "vocab",

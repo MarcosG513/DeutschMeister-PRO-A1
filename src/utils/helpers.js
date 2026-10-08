@@ -90,12 +90,14 @@ export const compressImageBase64 = (base64Str, maxWidth = 512, quality = 0.6) =>
 };
 
 export const nativeSpeak = async (text) => {
+  const rawSpeed = localStorage.getItem('dm_voice_speed') || '1.0';
+  const savedSpeed = parseFloat(rawSpeed) || 1.0;
   if (Capacitor.isNativePlatform()) {
     try {
       await TextToSpeech.speak({
         text: text,
         lang: 'de-DE',
-        rate: 0.85,
+        rate: savedSpeed,
         pitch: 1.0,
       });
     } catch (e) {
@@ -106,7 +108,7 @@ export const nativeSpeak = async (text) => {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'de-DE';
-      utterance.rate = 0.85; 
+      utterance.rate = savedSpeed;
       window.speechSynthesis.speak(utterance);
     } else {
       console.error("Web Speech API no está soportada en este navegador.");
@@ -114,27 +116,189 @@ export const nativeSpeak = async (text) => {
   }
 };
 
-export const awardCoins = async (amount) => {
+// =========================================================================
+// 1. RACHA DIARIA REAL DE ESTUDIO (CALENDAR STREAK - YYYY-MM-DD)
+// =========================================================================
+
+export const getLocalDateString = (d = new Date()) => {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+export const recordDailyStudyActivity = async () => {
   try {
-    const currentCoins = (await localforage.getItem('dm_user_coins')) || 0;
-    await localforage.setItem('dm_user_coins', currentCoins + amount);
-    window.dispatchEvent(new Event('coinsUpdated'));
-  } catch (error) {
-    console.error("Error otorgando monedas:", error);
+    const todayStr = getLocalDateString();
+    const lastDateStr = localStorage.getItem('dm_last_study_date');
+    let currentStreak = parseInt(localStorage.getItem('dm_study_streak') || '0', 10);
+
+    if (!lastDateStr) {
+      currentStreak = 1;
+    } else if (lastDateStr === todayStr) {
+      if (currentStreak < 1) currentStreak = 1;
+    } else {
+      const [y1, m1, d1] = lastDateStr.split('-').map(Number);
+      const [y2, m2, d2] = todayStr.split('-').map(Number);
+      const prevDate = new Date(y1, m1 - 1, d1);
+      const curDate = new Date(y2, m2 - 1, d2);
+      const diffMs = curDate.getTime() - prevDate.getTime();
+      const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        currentStreak += 1;
+      } else {
+        currentStreak = 1;
+      }
+    }
+
+    localStorage.setItem('dm_study_streak', currentStreak.toString());
+    localStorage.setItem('dm_last_study_date', todayStr);
+    await localforage.setItem('dm_user_streak', currentStreak);
+    window.dispatchEvent(new CustomEvent('studyActivityUpdated', { detail: { streak: currentStreak } }));
+    return currentStreak;
+  } catch (err) {
+    console.warn("Error en recordDailyStudyActivity:", err);
+    return 1;
   }
 };
 
-export const spendCoins = async (amount) => {
+export const getDailyStudyStreak = async () => {
   try {
-    const currentCoins = (await localforage.getItem('dm_user_coins')) || 0;
-    if (currentCoins >= amount) {
-      await localforage.setItem('dm_user_coins', currentCoins - amount);
-      window.dispatchEvent(new Event('coinsUpdated'));
-      return true;
+    const todayStr = getLocalDateString();
+    const lastDateStr = localStorage.getItem('dm_last_study_date');
+    let streak = parseInt(localStorage.getItem('dm_study_streak') || '0', 10);
+
+    if (!lastDateStr) {
+      const saved = await localforage.getItem('dm_user_streak');
+      return (typeof saved === 'number' && saved > 0) ? saved : 0;
     }
-    return false;
-  } catch (error) {
-    console.error("Error gastando monedas:", error);
-    return false;
+
+    const [y1, m1, d1] = lastDateStr.split('-').map(Number);
+    const [y2, m2, d2] = todayStr.split('-').map(Number);
+    const prevDate = new Date(y1, m1 - 1, d1);
+    const curDate = new Date(y2, m2 - 1, d2);
+    const diffDays = Math.round((curDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (diffDays > 1) {
+      return 0; // Expirada por inactividad de más de 24h
+    }
+
+    return streak;
+  } catch (_) {
+    return parseInt(localStorage.getItem('dm_study_streak') || '0', 10);
   }
 };
+
+// =========================================================================
+// 2. MÉTRICA DE VOCABULARIO ESTUDIADO (CARDS STUDIED)
+// =========================================================================
+
+export const recordCardStudied = async (safeId) => {
+  if (!safeId) return;
+  try {
+    recordDailyStudyActivity();
+    const currentList = (await localforage.getItem('dm_cards_studied')) || [];
+    if (!currentList.includes(safeId)) {
+      currentList.push(safeId);
+      await localforage.setItem('dm_cards_studied', currentList);
+      localStorage.setItem('dm_cards_studied_count', currentList.length.toString());
+      window.dispatchEvent(new CustomEvent('cardStudiedUpdated', { detail: { count: currentList.length, safeId } }));
+      return currentList.length;
+    }
+    return currentList.length;
+  } catch (err) {
+    console.warn("Error al registrar carta estudiada:", err);
+  }
+};
+
+export const getStudiedCardsCount = async () => {
+  try {
+    // Migración inicial automática si existen desbloqueos previos
+    if (!localStorage.getItem('dm_cards_studied_migrated')) {
+      try {
+        const rawUnlocked = localStorage.getItem('deutschmeister_unlocked');
+        if (rawUnlocked) {
+          const parsed = JSON.parse(rawUnlocked);
+          const keys = Object.keys(parsed || {});
+          if (keys.length > 0) {
+            const existing = (await localforage.getItem('dm_cards_studied')) || [];
+            const merged = Array.from(new Set([...existing, ...keys]));
+            await localforage.setItem('dm_cards_studied', merged);
+            localStorage.setItem('dm_cards_studied_count', merged.length.toString());
+          }
+        }
+      } catch (_) {}
+      localStorage.setItem('dm_cards_studied_migrated', 'true');
+    }
+
+    const list = await localforage.getItem('dm_cards_studied');
+    if (Array.isArray(list)) return list.length;
+    return parseInt(localStorage.getItem('dm_cards_studied_count') || '0', 10);
+  } catch (_) {
+    return parseInt(localStorage.getItem('dm_cards_studied_count') || '0', 10);
+  }
+};
+
+// =========================================================================
+// 3. SEGUIMIENTO DE MÓDULOS DE PREPARACIÓN GOETHE A1
+// =========================================================================
+
+export const recordModuleCompleted = async (moduleId) => {
+  if (!moduleId) return;
+  try {
+    recordDailyStudyActivity();
+    const currentList = (await localforage.getItem('dm_completed_modules')) || [];
+    if (!currentList.includes(moduleId)) {
+      currentList.push(moduleId);
+      await localforage.setItem('dm_completed_modules', currentList);
+      localStorage.setItem('dm_completed_modules_count', currentList.length.toString());
+      window.dispatchEvent(new CustomEvent('moduleCompletedUpdated', { detail: { count: currentList.length, moduleId } }));
+      return currentList.length;
+    }
+    return currentList.length;
+  } catch (err) {
+    console.warn("Error al registrar módulo completado:", err);
+  }
+};
+
+export const getCompletedModulesCount = async () => {
+  try {
+    const list = await localforage.getItem('dm_completed_modules');
+    if (Array.isArray(list)) return list.length;
+    return parseInt(localStorage.getItem('dm_completed_modules_count') || '0', 10);
+  } catch (_) {
+    return parseInt(localStorage.getItem('dm_completed_modules_count') || '0', 10);
+  }
+};
+
+export const recordGoetheScore = async (moduleId, score) => {
+  if (!moduleId || typeof score !== 'number') return;
+  try {
+    recordDailyStudyActivity();
+    await recordModuleCompleted(moduleId);
+
+    const scores = (await localforage.getItem('dm_goethe_scores')) || {};
+    scores[moduleId] = Math.max(scores[moduleId] || 0, score);
+    await localforage.setItem('dm_goethe_scores', scores);
+    localStorage.setItem('dm_goethe_scores', JSON.stringify(scores));
+    localStorage.setItem(`dm_goethe_${moduleId}_score`, score.toString());
+
+    window.dispatchEvent(new CustomEvent('goetheScoreUpdated', { detail: { moduleId, score, scores } }));
+    return scores;
+  } catch (err) {
+    console.warn("Error guardando puntuación Goethe:", err);
+  }
+};
+
+export const getGoetheScores = async () => {
+  try {
+    const scores = await localforage.getItem('dm_goethe_scores');
+    if (scores && typeof scores === 'object') return scores;
+    const raw = localStorage.getItem('dm_goethe_scores');
+    return raw ? JSON.parse(raw) : {};
+  } catch (_) {
+    return {};
+  }
+};
+

@@ -1591,7 +1591,7 @@ async function synthesizeWithGoogleDirect(text, voice, apiKey) {
       speechConfig: {
         voiceConfig: {
           prebuiltVoiceConfig: {
-            voiceName: voice || "Charon" // 'Charon' (masculina pedagógica) o 'Kore' (femenina)
+            voiceName: "Charon" // Voz masculina oficial exclusiva de DeutschMeister
           }
         }
       }
@@ -1631,7 +1631,7 @@ async function synthesizeWithFalFallback(text, voice, falKeyValue) {
   const result = await fal.subscribe("google/gemini-3.8-flash-tts", {
     input: {
       prompt: text,
-      voice: voice || "Charon",
+      voice: "Charon", // Voz masculina oficial exclusiva de DeutschMeister
       style_instructions: "Speak in clear, natural, standard German (Hochdeutsch) with precise A1 pedagogical pronunciation and natural pacing."
     }
   });
@@ -1658,7 +1658,8 @@ export const synthesizeGermanSpeech = onCall(
     cors: true
   },
   async (request) => {
-    const { text, voice = "Charon", type = "vocab" } = request.data || {};
+    const { text, type = "vocab" } = request.data || {};
+    const voice = "Charon"; // Voz masculina oficial exclusiva de DeutschMeister
     if (!text || typeof text !== "string") {
       throw new HttpsError("invalid-argument", "El parámetro 'text' es obligatorio y debe ser una cadena.");
     }
