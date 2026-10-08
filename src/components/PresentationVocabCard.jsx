@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check } from 'lucide-react';
+import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check, Film } from 'lucide-react';
 import { getSafeId, awardCoins } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
+import { functions } from '../App';
+import { httpsCallable } from 'firebase/functions';
+import localforage from 'localforage';
+import { Capacitor } from '@capacitor/core';
 
 const SVGClock = ({ deWord }) => {
   const cleanWord = deWord.trim().toLowerCase();
@@ -160,7 +164,19 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   const [pronunciationStatus, setPronunciationStatus] = useState(null); // 'listening', 'success', 'error'
   const [recognizedText, setRecognizedText] = useState("");
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [localMediaUrl, setLocalMediaUrl] = useState(null);
+  const [localMediaType, setLocalMediaType] = useState(null);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [regenType, setRegenType] = useState(null); // 'image' | 'video'
   const feedbackTimeoutRef = useRef(null);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    setLocalMediaUrl(null);
+    setLocalMediaType(null);
+    setIsRegenerating(false);
+    setRegenType(null);
+  }, [wordObj?.de]);
 
   const handleSpeakWord = (e) => {
     if (e) e.stopPropagation();
@@ -174,8 +190,9 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
     });
   };
 
-  const sentenceText = wordObj.exampleSentenceDe || 
-    (Array.isArray(wordObj.exampleSentenceDeBlocks) ? wordObj.exampleSentenceDeBlocks.join(" ") : "");
+  const sentenceText = (Array.isArray(wordObj.exampleSentenceDeBlocks) && wordObj.exampleSentenceDeBlocks.length > 0)
+    ? wordObj.exampleSentenceDeBlocks.map(b => (typeof b === 'object' && b !== null && b.text ? b.text : b)).join(" ")
+    : (wordObj.exampleSentenceDe || "");
 
   const handleSpeakSentence = (e) => {
     if (e) e.stopPropagation();
@@ -196,6 +213,128 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   const existsGlobally = cardImages && !!cardImages[safeId];
   const isGenLoading = isImageLoading === safeId;
   const isRegenerated = true;
+
+  const rawImage = localMediaUrl || (typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:')) ? imgData : (typeof imgData === 'string' && imgData ? `data:image/png;base64,${imgData}` : null)) || wordObj.imageUrl || wordObj.videoUrl || null;
+  const cardImage = rawImage;
+  const isVideo = Boolean(
+    localMediaType === 'video' ||
+    wordObj.videoUrl || 
+    (cardImage && (cardImage.endsWith('.mp4') || cardImage.includes('.mp4') || cardImage.startsWith('data:video/')))
+  );
+  const activeMediaUrl = (isVideo && wordObj.videoUrl) ? wordObj.videoUrl : cardImage;
+
+  useEffect(() => {
+    const currentVideo = videoRef.current;
+    return () => {
+      if (currentVideo) {
+        currentVideo.pause();
+        currentVideo.removeAttribute("src");
+        currentVideo.load();
+      }
+    };
+  }, [wordObj.videoUrl, activeMediaUrl]);
+
+  const checkIsVerb = (word) => {
+    if (!word) return false;
+    const type = (word.type || "").toLowerCase();
+    const category = (word.category || "").toLowerCase();
+    const regimen = (word.regimen || "").toLowerCase();
+    const de = (word.de || "").toLowerCase();
+
+    return (
+      type.includes("verb") ||
+      type.includes("acción") ||
+      type.includes("accion") ||
+      category.includes("verb") ||
+      category === "bewegung" ||
+      category === "aktivitäten" ||
+      category === "aktionen" ||
+      regimen.includes("separable") ||
+      regimen.includes("reflexiv") ||
+      de.startsWith("sich ") ||
+      de.includes("|")
+    );
+  };
+
+  const isVerb = checkIsVerb(wordObj);
+
+  // Detección de Plataforma y Privilegios
+  const isNative = Capacitor.isNativePlatform();
+  const isDev = Boolean(
+    import.meta.env.DEV || 
+    window.location.hostname === "localhost" || 
+    window.location.hostname === "127.0.0.1"
+  );
+
+  // Solo el entorno local y la APK tienen privilegios de generación multimedia
+  const canGenerateMedia = isDev || isNative;
+
+  const hasExistingVideo = Boolean(
+    localMediaType === 'video' ||
+    wordObj.videoUrl || 
+    (activeMediaUrl && (activeMediaUrl.endsWith('.mp4') || activeMediaUrl.includes('.mp4') || activeMediaUrl.startsWith('data:video/')))
+  );
+  const hasExistingImage = Boolean(
+    localMediaType === 'image' ||
+    wordObj.imageUrl || 
+    (activeMediaUrl && !hasExistingVideo)
+  );
+  const hasAnyMedia = Boolean(hasExistingVideo || hasExistingImage || activeMediaUrl);
+
+  const handleRegenerateMedia = async (targetWord, desiredMediaType, e) => {
+    if (e) e.stopPropagation();
+    if (isRegenerating || !canGenerateMedia) return;
+
+    try {
+      setIsRegenerating(true);
+      setRegenType(desiredMediaType);
+
+      const regenerateMediaFn = httpsCallable(functions, "regenerateCardMedia");
+      
+      const response = await regenerateMediaFn({
+        wordObj: targetWord,
+        mediaType: desiredMediaType,
+        forceRegenerate: isDev || isNative,
+        isDevEnvironment: isDev,
+        isNativePlatform: isNative,
+        clientPlatform: isDev ? 'dev' : (isNative ? 'native' : 'web')
+      });
+
+      if (!response.data || !response.data.success) {
+        throw new Error(response.data?.error || "Error al procesar el activo multimedia.");
+      }
+
+      const { mediaUrl, mediaType, fromCache } = response.data;
+      const targetSafeId = targetWord.de.toLowerCase().replace(/[^a-z0-9]/gi, "_").substring(0, 100);
+
+      // Actualización reactiva instantánea
+      setLocalMediaType(mediaType);
+      setLocalMediaUrl(mediaUrl);
+      if (mediaType === "video") {
+        targetWord.videoUrl = mediaUrl;
+        targetWord.mediaType = "video";
+      } else {
+        targetWord.imageUrl = mediaUrl;
+        targetWord.mediaType = "image";
+      }
+
+      // Persistir en localforage
+      await localforage.setItem(`img_${safeId}`, mediaUrl);
+      if (targetSafeId !== safeId) {
+        await localforage.setItem(`img_${targetSafeId}`, mediaUrl);
+      }
+
+      if (fromCache) {
+        console.log(`[Sync] Medio sincronizado desde la nube para ${targetWord.de} sin costo de IA.`);
+      }
+    } catch (err) {
+      console.error("[Media Sync Error]:", err);
+      alert(`No se pudo procesar el medio: ${err.message}`);
+    } finally {
+      setIsRegenerating(false);
+      setRegenType(null);
+    }
+  };
 
   useEffect(() => {
     setFlipped(!!isRevealed);
@@ -322,21 +461,90 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
         
         {/* FRENTE */}
         <div className={`absolute inset-0 backface-hidden bg-white border-2 border-slate-200 rounded-xl shadow-sm flex flex-col justify-between items-center text-center group-hover:border-blue-300 overflow-hidden ${flipped ? 'pointer-events-none' : 'pointer-events-auto'}`}>
+          {/* Controles de Generación: Exclusivos de Entorno Local y APK */}
+          {canGenerateMedia && (
+            <div className="flex items-center gap-1.5 absolute top-3 right-3 z-30">
+              {/* Botón Imagen con Nano Banana 2 */}
+              <button
+                onClick={(e) => handleRegenerateMedia(wordObj, "image", e)}
+                disabled={isRegenerating}
+                title={isDev ? "Regenerar imagen (Modo Dev)" : "Generar/Regenerar imagen con IA"}
+                className="p-1.5 rounded-lg bg-white/90 shadow hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 transition disabled:opacity-50"
+              >
+                <Sparkles className={isRegenerating && regenType === 'image' ? "animate-spin text-indigo-600" : ""} size={16}/>
+              </button>
+
+              {/* Botón Video con Gemini Omni Flash (Exclusivo Verbos) */}
+              {isVerb && (
+                <button
+                  onClick={(e) => handleRegenerateMedia(wordObj, "video", e)}
+                  disabled={isRegenerating}
+                  title={isDev ? "Regenerar video (Modo Dev)" : "Generar/Regenerar video de acción"}
+                  className="p-1.5 rounded-lg bg-amber-500 text-white shadow hover:bg-amber-600 transition flex items-center gap-1 text-[11px] font-bold px-2 disabled:opacity-50"
+                >
+                  <Film className={isRegenerating && regenType === 'video' ? "animate-pulse" : ""} size={14}/>
+                  <span>{isRegenerating && regenType === 'video' ? 'Creando...' : 'Video'}</span>
+                </button>
+              )}
+            </div>
+          )}
+
           {wordObj.category === 'Uhrzeit' ? (
             <div className="w-full h-[140px] md:h-[150px] shrink-0 border-b border-slate-100 relative">
                <SVGClock deWord={wordObj.de} />
             </div>
-          ) : imgData ? (
-            <div className="w-full flex-1 min-h-0 bg-slate-50 border-b border-slate-100 relative group/regen flex items-center justify-center">
-               <img src={(typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:'))) ? imgData : (typeof imgData === 'string' ? `data:image/png;base64,${imgData}` : '')} alt={wordObj.de} className="object-contain max-h-full max-w-full p-2 shrink-0 rounded-lg mix-blend-multiply cursor-zoom-in hover:scale-105 transition-transform" onClick={(e) => { e.stopPropagation(); if (typeof setFullscreenImage === 'function') setFullscreenImage(imgData); }} />
+          ) : activeMediaUrl ? (
+            <div className="w-full flex-1 min-h-0 bg-slate-50 border-b border-slate-100 relative group/regen flex items-center justify-center overflow-hidden">
+               {isRegenerating && (
+                 <div className="absolute inset-0 bg-white/75 backdrop-blur-xs z-20 flex flex-col items-center justify-center gap-1.5">
+                   <Loader2 className="animate-spin text-indigo-600" size={24} />
+                   <span className="text-[10px] font-bold text-slate-700 bg-white/90 px-2 py-0.5 rounded shadow-xs">
+                     {regenType === 'video' ? 'Generando video de acción...' : 'Generando con Google Imagen...'}
+                   </span>
+                 </div>
+               )}
+               {isVideo ? (
+                 <video
+                   ref={videoRef}
+                   key={wordObj.videoUrl || activeMediaUrl}
+                   src={wordObj.videoUrl || activeMediaUrl}
+                   autoPlay
+                   loop
+                   muted
+                   playsInline
+                   controls={false}
+                   onLoadedData={(e) => {
+                     e.target.play().catch((err) => console.warn("Autoplay bloqueado:", err));
+                   }}
+                   className="w-44 h-44 max-h-full max-w-full object-contain rounded-2xl drop-shadow-md mx-auto"
+                 />
+               ) : (
+                 <img
+                   src={cardImage || activeMediaUrl || "/placeholder-card.png"}
+                   alt={wordObj.de}
+                   className="w-44 h-44 max-h-full max-w-full object-contain rounded-2xl drop-shadow-md mx-auto mix-blend-multiply cursor-zoom-in hover:scale-105 transition-transform"
+                   onClick={(e) => {
+                     e.stopPropagation();
+                     if (typeof setFullscreenImage === 'function') setFullscreenImage(activeMediaUrl || cardImage);
+                   }}
+                 />
+               )}
             </div>
           ) : (
-            <div className="w-full flex-1 min-h-0 bg-slate-50 flex flex-col items-center justify-center relative border-b border-slate-100 group/imgbtn z-10">
+            <div className="w-full flex-1 min-h-0 bg-slate-50 flex flex-col items-center justify-center relative border-b border-slate-100 group/imgbtn z-10 overflow-hidden">
+               {isRegenerating && (
+                 <div className="absolute inset-0 bg-white/75 backdrop-blur-xs z-20 flex flex-col items-center justify-center gap-1.5">
+                   <Loader2 className="animate-spin text-indigo-600" size={24} />
+                   <span className="text-[10px] font-bold text-slate-700 bg-white/90 px-2 py-0.5 rounded shadow-xs">
+                     {regenType === 'video' ? 'Generando video de acción...' : 'Generando con Google Imagen...'}
+                   </span>
+                 </div>
+               )}
                <span className="text-4xl opacity-20 absolute pointer-events-none">{wordObj.emoji || "📝"}</span>
                {generateCardImage && (
                  <button 
                    onClick={(e) => { e.stopPropagation(); generateCardImage(wordObj, e); }} 
-                   className="relative z-30 bg-white hover:bg-blue-50 text-blue-600 px-3 py-1.5 rounded shadow-sm border border-blue-200 transition-all flex items-center gap-1.5 text-xs font-bold"
+                   className="relative z-20 bg-white hover:bg-blue-50 text-blue-600 px-3 py-1.5 rounded shadow-sm border border-blue-200 transition-all flex items-center gap-1.5 text-xs font-bold"
                    title="Revelar Imagen"
                  >
                    {isGenLoading ? <Loader2 size={14} className="animate-spin text-blue-500" /> : <Sparkles size={14} className="text-blue-500" />}
@@ -462,9 +670,11 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
             <span className="text-[9px] font-semibold text-blue-300/80 mb-0.5 tracking-wider uppercase">{wordObj.type}</span>
             <span className="font-bold text-sm md:text-base text-yellow-400 leading-tight text-center break-words w-full px-2 shrink-0">{wordObj.es}</span>
             {/* Renderizado de oraciones reales */}
-            {(wordObj.exampleSentenceDe || (wordObj.exampleSentenceDeBlocks && wordObj.exampleSentenceDeBlocks.length > 0)) && (
+            {((Array.isArray(wordObj.exampleSentenceDeBlocks) && wordObj.exampleSentenceDeBlocks.length > 0) || wordObj.exampleSentenceDe) && (
               (() => {
-                const oracionDe = wordObj.exampleSentenceDe || wordObj.exampleSentenceDeBlocks.join(" ");
+                const oracionDe = (Array.isArray(wordObj.exampleSentenceDeBlocks) && wordObj.exampleSentenceDeBlocks.length > 0)
+                  ? wordObj.exampleSentenceDeBlocks.map(b => (typeof b === 'object' && b !== null && b.text ? b.text : b)).join(" ")
+                  : (wordObj.exampleSentenceDe || "");
                 const deLength = oracionDe.length;
                 // Invertimos las jerarquías: Alemán protagonista (grande), Español soporte (pequeño/tenue)
                 const deTextClass = deLength > 60 
@@ -532,6 +742,14 @@ export default React.memo(PresentationVocabCard, (prevProps, nextProps) => {
   const prevImage = prevProps.cardImages?.[safeId];
   const nextImage = nextProps.cardImages?.[safeId];
   if (prevImage !== nextImage) return false;
+
+  const prevVideo = prevProps.wordObj?.videoUrl;
+  const nextVideo = nextProps.wordObj?.videoUrl;
+  if (prevVideo !== nextVideo) return false;
+
+  const prevImgUrl = prevProps.wordObj?.imageUrl;
+  const nextImgUrl = nextProps.wordObj?.imageUrl;
+  if (prevImgUrl !== nextImgUrl) return false;
 
   return true;
 });

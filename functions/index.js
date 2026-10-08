@@ -5,6 +5,7 @@ import admin from "firebase-admin";
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { fal } from "@fal-ai/client";
 import crypto from "crypto";
+import sharp from "sharp";
 import {
   executeBackendGemini,
   executeBackendGeminiChatStream,
@@ -419,6 +420,8 @@ Tu esencia es conversacional, cálida y paciente. Tu objetivo no es ser un dicci
 - Fin de los Tabúes Gramaticales: Trata al estudiante como a un adulto inteligente. Tienes total libertad para usar terminología técnica (sustantivo, verbo, adjetivo, nominativo, acusativo, dativo, género), pero SIEMPRE debes explicarla de manera ultra-sencilla y digerible.
 - Analogías Funcionales: Usa trucos mnemotécnicos o metáforas breves de la vida real solo si ayudan a aclarar la regla rápidamente (ej. "el verbo conjugado es el rey y siempre exige el trono de la posición 2"), pero nunca para ocultar el nombre técnico real.
 - Scaffolding (Andamiaje Socrático): Nunca le des al alumno la respuesta final de golpe a lo que te está preguntando, pero TAMPOCO lo dejes a la deriva adivinando. Si no sabe algo, explícale la regla usando un *ejemplo paralelo corto* diferente a su duda, para que entienda el mecanismo.
+- Cláusula de Triaje Léxico (Excepción FR-01 para Vocabulario Puro y Cultura):
+  Si el estudiante pregunta directamente por el significado de una palabra aislada, una lista léxica (ej. los colores, los meses) o un modismo cultural intraducible sin contexto previo (ej. "¿Qué significa Mahlzeit?"), NO intentes forzar una deducción imposible. En este caso específico, tienes autorización para revelar el significado directo en la primera oración del Párrafo 1 usando una escena cotidiana breve. El reto socrático del Párrafo 2 consistirá entonces en pedirle al estudiante que aplique ese término recién aprendido en una situación práctica inmediata.
 
 === 3. MANEJO DE IDIOMAS Y TRADUCCIONES ===
 - Artículos Obligatorios: ¡Regla de Oro! Todo sustantivo en alemán que menciones debe presentarse SIEMPRE con su artículo definido y su marca de plural si aplica. Ejemplo: **der Tisch (-e)**. Jamás enseñes sustantivos "desnudos".
@@ -1771,5 +1774,504 @@ export const synthesizeGermanSpeech = onCall(
       provider: audioResult.provider,
       persisted: true
     };
+  }
+);
+
+/**
+ * Detecta si una palabra es cualquier variante de verbo en la taxonomía de DeutschMeister
+ */
+function isVerbItem(wordObj) {
+  if (!wordObj) return false;
+  const type = (wordObj.type || "").toLowerCase();
+  const category = (wordObj.category || "").toLowerCase();
+  const regimen = (wordObj.regimen || "").toLowerCase();
+  const de = (wordObj.de || "").toLowerCase();
+
+  return (
+    type.includes("verb") ||
+    type.includes("acción") ||
+    type.includes("accion") ||
+    category.includes("verb") ||
+    category === "bewegung" ||
+    category === "aktivitäten" ||
+    category === "aktionen" ||
+    regimen.includes("separable") ||
+    regimen.includes("reflexiv") ||
+    de.startsWith("sich ") ||
+    de.includes("|") // Notación de separables como ein|laden
+  );
+}
+
+/**
+ * Diccionario cinético optimizado para verbos de alta frecuencia A1
+ */
+const KINETIC_ACTIONS = {
+  // Locomoción y Movimiento
+  gehen: "walking in place with steady rhythmic steps (treadmill style), swinging arms smoothly, remaining perfectly centered",
+  laufen: "running happily in place with fluid energetic steps (treadmill cycle), remaining centered",
+  springen: "jumping up and down vertically with bouncy clay elasticity, landing softly in the exact same spot",
+  tanzen: "doing a fun, joyful dance groove moving rhythmically side-to-side in place",
+  schwimmen: "doing smooth breaststroke swimming motions in place, gliding rhythmically",
+  fahren: "riding a tiny cute clay bicycle moving wheels in place, centered",
+  
+  // Postura y Estados
+  schlafen: "sleeping comfortably curled up on a small clay pillow, gentle rhythmic breathing motion",
+  aufstehen: "smoothly standing up from a sitting posture, stretching arms upward, then resetting",
+  sitzen: "sitting upright comfortably, looking around with a gentle head tilt and blinking",
+  warten: "standing still and tapping one foot patiently, checking an imaginary clay wrist watch",
+  
+  // Manipulación y Acciones Cotidianas
+  trinken: "holding a small colorful clay mug with both hands and taking cheerful sips in a repeating loop",
+  essen: "eating a tiny stylized clay snack happily, chewing rhythmically in place",
+  kochen: "stirring a small bubbling clay pot with a wooden clay spoon in a steady circular motion",
+  putzen: "wiping a clean imaginary glass surface back and forth with a small yellow sponge",
+  öffnen: "gently pushing open a small cute clay door and peeking through with a smile",
+  schließen: "smoothly pulling shut a small cute clay door until it clicks closed",
+  lesen: "holding an open clay book, eyes moving gently across pages with a slight head nod",
+  schreiben: "holding a thick clay pencil and scribbling smoothly on a small clay notepad",
+  
+  // Emociones y Social
+  sich_freuen: "jumping with pure joy, raising both arms celebrating happily with cheerful bounce",
+  lachen: "laughing joyfully, body shaking with hearty friendly laughter in place",
+  einladen: "making a warm, welcoming two-handed invitation gesture forward with a wide friendly smile"
+};
+
+/**
+ * Normaliza y construye la acción cinética óptima en inglés
+ */
+function resolveKineticAction(wordObj) {
+  const deKey = (wordObj.de || "").toLowerCase().replace(/[^a-z0-9]/gi, "_").replace(/^sich_/, "sich_");
+
+  if (KINETIC_ACTIONS[deKey]) {
+    return KINETIC_ACTIONS[deKey];
+  }
+
+  // Saneamiento dinámico si no está en el diccionario precalibrado
+  let raw = (wordObj.en || wordObj.concepto_ingles || wordObj.es || "").toLowerCase();
+  
+  // Quitar anotaciones gramaticales, regímenes y conectores
+  raw = raw.replace(/[≠+].*$/g, "").trim();
+  // Tomar solo el primer término si hay barras o comas (ej. "to go / walk" -> "to go")
+  raw = raw.split(/[\/,]/)[0].trim();
+  // Eliminar el "to " inicial
+  raw = raw.replace(/^to\s+/, "").trim();
+
+  // Convertir a gerundio simple
+  const verbIng = raw.endsWith("e") && !raw.endsWith("ee") 
+    ? raw.slice(0, -1) + "ing" 
+    : raw.endsWith("ing") ? raw : raw + "ing";
+
+  return `performing the physical action of ${verbIng} in place, staying centered with steady rhythmic motion`;
+}
+
+/**
+ * Generador de Prompt Visual Calibrado para Gemini Omni Flash & Nano Banana 2
+ */
+function buildVisualPrompt(wordObj, isVideo = false) {
+  const cleanGerman = (wordObj.de || "").replace(/[|]/g, "").trim();
+
+  if (isVideo) {
+    const kineticAction = resolveKineticAction(wordObj);
+
+    return [
+      `A cute stylized 3D clay figurine with friendly proportions, sculpted from smooth soft matte clay.`,
+      `The character is centered and strictly ${kineticAction}.`,
+      `Realistic claymation stop-motion physics, cohesive solid clay volume, zero melting, zero morphing, zero body distortion.`,
+      `Front isometric three-quarters angle, full-body framing completely centered.`,
+      `Subtle soft ambient contact shadow directly beneath feet on a pure seamless solid white background hex #FFFFFF.`,
+      `Completely static camera, locked tripod framing, no panning, no zoom.`,
+      `Strictly purely visual: absolutely no text, no letters, no words.`,
+      `Seamless continuous rhythmic loop that starts and ends in the exact same posture.`
+    ].join(" ");
+  }
+
+  // Prompt estático para gemini-3.1-flash-image (Nano Banana 2)
+  const cleanConcept = (wordObj.en || wordObj.concepto_ingles || wordObj.es || "")
+    .replace(/[≠+].*$/g, "")
+    .trim();
+
+  return [
+    `A 3D isometric minimalist UI illustration depicting the concept of "${cleanConcept}" (${cleanGerman}).`,
+    `Made of smooth matte soft clay, clean geometry, pastel smooth shading, bright studio lighting.`,
+    `Subtle soft drop shadow resting on a pure seamless solid white background hex #FFFFFF.`,
+    `Strictly purely visual: absolutely NO TEXT, NO LETTERS, NO WORDS.`
+  ].join(" ");
+}
+
+/**
+ * Optimiza y comprime buffers de imagen a 512x512 JPEG (~30-50 KB)
+ */
+async function optimizeImageBuffer(buffer) {
+  return await sharp(buffer)
+    .resize(512, 512, { fit: "inside", withoutEnlargement: true })
+    .jpeg({ quality: 80, mozjpeg: true })
+    .toBuffer();
+}
+
+/**
+ * 1. Generación de Imagen con Nano Banana 2 (gemini-3.1-flash-image)
+ */
+async function generateGoogleFlashImage(prompt, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+
+  const payload = {
+    contents: [
+      {
+        parts: [{ text: prompt }]
+      }
+    ],
+    generationConfig: {
+      responseModalities: ["IMAGE"],
+      imageConfig: {
+        aspectRatio: "1:1"
+      }
+    }
+  };
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Google Flash Image API HTTP ${response.status}: ${errText}`);
+  }
+
+  const data = await response.json();
+  const parts = data.candidates?.[0]?.content?.parts || [];
+  const imagePart = parts.find(p => p.inlineData && p.inlineData.data);
+
+  if (!imagePart) {
+    throw new Error("gemini-3.1-flash-image no devolvió bytes de imagen inlineData.");
+  }
+
+  return {
+    buffer: Buffer.from(imagePart.inlineData.data, "base64"),
+    mimeType: imagePart.inlineData.mimeType || "image/jpeg"
+  };
+}
+
+/**
+ * Helper para localizar recursivamente datos o URI de video en la respuesta de Google
+ */
+function findVideoInObject(obj, visited = new Set()) {
+  if (!obj || typeof obj !== "object" || visited.has(obj)) return null;
+  visited.add(obj);
+
+  // Variante: string base64 directo de video
+  if (typeof obj.data === "string" && obj.data.length > 500) {
+    return { base64: obj.data, mimeType: obj.mime_type || obj.mimeType || "video/mp4" };
+  }
+  if (obj.inlineData && typeof obj.inlineData.data === "string" && obj.inlineData.data.length > 500) {
+    return { base64: obj.inlineData.data, mimeType: obj.inlineData.mimeType || obj.inlineData.mime_type || "video/mp4" };
+  }
+  if (obj.inline_data && typeof obj.inline_data.data === "string" && obj.inline_data.data.length > 500) {
+    return { base64: obj.inline_data.data, mimeType: obj.inline_data.mime_type || obj.inline_data.mimeType || "video/mp4" };
+  }
+
+  // Variante: URI de archivo de video
+  if (typeof obj.uri === "string" && obj.uri.length > 5) {
+    return { uri: obj.uri, mimeType: obj.mime_type || obj.mimeType || "video/mp4" };
+  }
+  if (obj.fileData && typeof obj.fileData.fileUri === "string") {
+    return { uri: obj.fileData.fileUri, mimeType: "video/mp4" };
+  }
+  if (obj.file_data && typeof obj.file_data.file_uri === "string") {
+    return { uri: obj.file_data.file_uri, mimeType: "video/mp4" };
+  }
+
+  // Búsqueda en arrays o campos anidados (ignorando tokens de consumo)
+  for (const key of Object.keys(obj)) {
+    if (key === "usage" || key === "raw_prompt_tokens" || key === "safety_settings") continue;
+    const found = findVideoInObject(obj[key], visited);
+    if (found) return found;
+  }
+  return null;
+}
+
+/**
+ * 2. Generación de Video con Gemini Omni Flash (gemini-omni-1.1-flash)
+ */
+async function generateGoogleOmniVideo(prompt, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/interactions?key=${apiKey}`;
+
+  const payload = {
+    model: "gemini-omni-1.1-flash",
+    input: prompt,
+    response_format: {
+      type: "video",
+      resolution: "360p",
+      aspect_ratio: "1:1", // Encuadre 1:1 cuadrado nativo para la tarjeta
+      delivery: "inline"
+    }
+  };
+
+  let response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok && response.status === 400) {
+    const errText = await response.text();
+    // Si el error es por aspect_ratio no soportado en video (ej. solo 16:9 / 9:16), reintentar sin aspect_ratio
+    if (errText.includes("aspect_ratio") || errText.includes("aspectRatio")) {
+      console.warn(`[Omni Video] aspect_ratio 1:1 rechazado por API (${errText}), reintentando sin aspect_ratio...`);
+      delete payload.response_format.aspect_ratio;
+      response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    } else {
+      throw new Error(`Google Omni Video HTTP ${response.status}: ${errText}`);
+    }
+  }
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Google Omni Video HTTP ${response.status}: ${errText}`);
+  }
+
+  const data = await response.json();
+  console.log("[Omni Video Raw Keys]:", Object.keys(data));
+
+  // Extracción exhaustiva de video en steps, outputs, candidates y objetos anidados
+  const extracted = findVideoInObject(data);
+
+  if (extracted?.base64) {
+    console.log(`[Omni Video] Video extraído exitosamente en Base64 (longitud: ${extracted.base64.length})`);
+    return {
+      buffer: Buffer.from(extracted.base64, "base64"),
+      mimeType: extracted.mimeType || "video/mp4"
+    };
+  }
+
+  if (extracted?.uri) {
+    console.log(`[Omni Video] Descargando desde URI de Google: ${extracted.uri}`);
+    let downloadUrl = extracted.uri;
+    if (!downloadUrl.includes("key=")) {
+      const sep = downloadUrl.includes("?") ? "&" : "?";
+      downloadUrl = `${downloadUrl}${sep}key=${apiKey}`;
+    }
+
+    let downloadRes = await fetch(downloadUrl, {
+      headers: { "x-goog-api-key": apiKey }
+    });
+    if (!downloadRes.ok) {
+      downloadRes = await fetch(`${downloadUrl}&alt=media`, {
+        headers: { "x-goog-api-key": apiKey }
+      });
+    }
+
+    if (!downloadRes.ok) {
+      throw new Error(`Fallo al descargar video desde URI: HTTP ${downloadRes.status}`);
+    }
+
+    return {
+      buffer: Buffer.from(await downloadRes.arrayBuffer()),
+      mimeType: extracted.mimeType || "video/mp4"
+    };
+  }
+
+  // Si no se encontró ningún byte o URI
+  console.error("[Omni Video Parse Error] Resumen de steps:", JSON.stringify(
+    data.steps?.map(s => ({
+      type: s.type,
+      contentTypes: Array.isArray(s.content) ? s.content.map(c => ({ type: c.type, hasData: !!c.data, hasUri: !!c.uri })) : typeof s.content
+    })) || "No steps"
+  ));
+  throw new Error("No se encontraron bytes de video válidos en la respuesta de gemini-omni-1.1-flash.");
+}
+
+/**
+ * Cloud Function: regenerateCardMedia
+ */
+export const regenerateCardMedia = onCall(
+  {
+    secrets: [geminiPaidKey],
+    timeoutSeconds: 90,
+    memory: "512MiB",
+    cors: true
+  },
+  async (request) => {
+    try {
+      const { 
+        wordObj, 
+        mediaType = "auto", 
+        forceRegenerate = false, 
+        isDevEnvironment = false, 
+        isNativePlatform = false,
+        clientPlatform = "web"
+      } = request.data || {};
+
+      if (!wordObj || !wordObj.de) {
+        return { success: false, error: "wordObj.de es requerido." };
+      }
+
+      const isAuthorizedClient = Boolean(isDevEnvironment || isNativePlatform || clientPlatform === "native" || clientPlatform === "dev");
+      const db = admin.firestore();
+      const safeId = wordObj.de.toLowerCase().replace(/[^a-z0-9]/gi, "_").substring(0, 100);
+      const isVerb = isVerbItem(wordObj);
+      const wantVideo = mediaType === "video" || (mediaType === "auto" && isVerb);
+
+      // 1. Candado para Web Producción: Prohibición total de generar videos
+      if (wantVideo && !isAuthorizedClient) {
+        return {
+          success: false,
+          error: "La generación de videos está inhabilitada en la versión web pública."
+        };
+      }
+
+      // 2. Verificación previa en Firestore (Cache-First)
+      const cardDocRef = db.collection("global_flashcards").doc(safeId);
+      let docSnap = await cardDocRef.get();
+      if (!docSnap.exists) {
+        const slugId = wordObj.de.toLowerCase().replace(/[\s\/?!\\,.]+/g, "_");
+        if (slugId && slugId !== safeId) {
+          docSnap = await db.collection("global_flashcards").doc(slugId).get();
+        }
+      }
+
+      if (docSnap.exists) {
+        const existingData = docSnap.data() || {};
+
+        // Reutilizar video existente si está disponible
+        if (wantVideo && existingData.videoUrl && !forceRegenerate) {
+          console.log(`[Cache Hit] Video existente reutilizado para: ${wordObj.de}`);
+          return {
+            success: true,
+            mediaUrl: existingData.videoUrl,
+            mediaType: "video",
+            fromCache: true,
+            wordDe: wordObj.de
+          };
+        }
+
+        // Reutilizar imagen existente si está disponible
+        if (!wantVideo && existingData.imageUrl && !forceRegenerate) {
+          console.log(`[Cache Hit] Imagen existente reutilizada para: ${wordObj.de}`);
+          return {
+            success: true,
+            mediaUrl: existingData.imageUrl,
+            mediaType: "image",
+            fromCache: true,
+            wordDe: wordObj.de
+          };
+        }
+      }
+
+      // 3. Candado para Creación/Regeneración: Solo APK y Entorno Local
+      if (!isAuthorizedClient) {
+        return {
+          success: false,
+          error: "La generación de medios con IA está restringida a la APK y al entorno de desarrollo."
+        };
+      }
+
+      // ── PASO 3: INFERENCIA DE IA (SOLO SI NO EXISTÍA EN LA BASE DE DATOS) ──
+      const apiKey = (geminiPaidKey && typeof geminiPaidKey.value === "function" ? geminiPaidKey.value() : "") || process.env.GEMINI_PAID_KEY || "";
+      if (!apiKey) {
+        return { success: false, error: "No se encontró GEMINI_PAID_KEY configurada." };
+      }
+
+      let fileBuffer = null;
+      let mimeType = "image/jpeg";
+      let fileExtension = "jpeg";
+      let actualMediaType = "image";
+      let provider = "gemini-3.1-flash-image";
+
+      // Intento de video para verbos
+      if (wantVideo) {
+        try {
+          console.log(`[Media Engine] Generando video para verbo: ${wordObj.de}`);
+          const videoPrompt = buildVisualPrompt(wordObj, true);
+          const videoResult = await generateGoogleOmniVideo(videoPrompt, apiKey);
+          fileBuffer = videoResult.buffer;
+          mimeType = "video/mp4";
+          fileExtension = "mp4";
+          actualMediaType = "video";
+          provider = "gemini-omni-1.1-flash";
+        } catch (videoErr) {
+          console.warn("[Media Engine] Error al generar video con Omni, recurriendo a imagen:", videoErr.message);
+          const imagePrompt = buildVisualPrompt(wordObj, false);
+          const rawImage = await generateGoogleFlashImage(imagePrompt, apiKey);
+
+          // COMPRESIÓN CON SHARP (512x512 ~35-50 KB)
+          fileBuffer = await optimizeImageBuffer(rawImage.buffer);
+          mimeType = "image/jpeg";
+          fileExtension = "jpeg";
+          actualMediaType = "image";
+          provider = "gemini-3.1-flash-image";
+        }
+      } else {
+        console.log(`[Media Engine] Generando imagen para: ${wordObj.de}`);
+        const imagePrompt = buildVisualPrompt(wordObj, false);
+        const rawImage = await generateGoogleFlashImage(imagePrompt, apiKey);
+
+        // COMPRESIÓN CON SHARP (512x512 ~35-50 KB)
+        fileBuffer = await optimizeImageBuffer(rawImage.buffer);
+        mimeType = "image/jpeg";
+        fileExtension = "jpeg";
+        actualMediaType = "image";
+        provider = "gemini-3.1-flash-image";
+      }
+
+      // Persistencia en Cloud Storage
+      const STORAGE_BUCKET_NAME = process.env.STORAGE_BUCKET || "deutschmeister-audio-vault";
+      const bucket = admin.storage().bucket(STORAGE_BUCKET_NAME);
+      const folder = actualMediaType === "video" ? "videos" : "images";
+      const filePath = `flashcards/${folder}/${safeId}_${Date.now()}.${fileExtension}`;
+      const file = bucket.file(filePath);
+
+      await file.save(fileBuffer, {
+        metadata: {
+          contentType: mimeType,
+          cacheControl: "public, max-age=31536000",
+          metadata: {
+            wordDe: wordObj.de,
+            provider,
+            optimized: actualMediaType === "image" ? "sharp-512x512-q80" : "raw-mp4",
+            createdAt: new Date().toISOString()
+          }
+        }
+      });
+
+      try { await file.makePublic(); } catch (_) {}
+
+      const permanentMediaUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+
+      // Actualizar metadatos en Firestore
+      const updatePayload = {
+        mediaType: actualMediaType,
+        provider,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      };
+      if (actualMediaType === "video") {
+        updatePayload.videoUrl = permanentMediaUrl;
+      } else {
+        updatePayload.imageUrl = permanentMediaUrl;
+      }
+
+      const slugId = wordObj.de.toLowerCase().replace(/[\s\/?!\\,.]+/g, "_");
+      await db.collection("global_flashcards").doc(safeId).set(updatePayload, { merge: true });
+      if (slugId && slugId !== safeId) {
+        await db.collection("global_flashcards").doc(slugId).set(updatePayload, { merge: true });
+      }
+
+      return {
+        success: true,
+        mediaUrl: permanentMediaUrl,
+        mediaType: actualMediaType,
+        provider,
+        fromCache: false,
+        wordDe: wordObj.de
+      };
+    } catch (err) {
+      console.error("[RegenerateCardMedia Fatal Error]", err);
+      return { success: false, error: err.message };
+    }
   }
 );
