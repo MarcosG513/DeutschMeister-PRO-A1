@@ -66,6 +66,33 @@ export const pcmToWav = (pcmBuffer, sampleRate) => {
 
 export const getSafeId = (str) => btoa(encodeURIComponent(str)).replace(/[/+=]/g, '_');
 
+/**
+ * Divide un texto (alemán o español) en término principal y subtítulo/código/aclaración entre paréntesis.
+ * Soporta saltos de línea explícitos '\n' o sufijos entre paréntesis como '(das Zeichen 201)', '(prioridad del tren)', '(PLZ)'.
+ *
+ * @param {string} text 
+ * @returns {{ main: string, sub: string | null, code: string | null }}
+ */
+export const splitParentheticalText = (text) => {
+  if (!text || typeof text !== 'string') return { main: '', sub: null, code: null };
+
+  if (text.includes('\n')) {
+    const [main, ...rest] = text.split('\n');
+    const sub = rest.join('\n').trim() || null;
+    return { main: main.trim(), sub, code: sub };
+  }
+
+  const match = text.match(/^(.*?)\s*(\([^)]+\))$/);
+  if (match && match[1].trim() && match[2].trim()) {
+    const sub = match[2].trim();
+    return { main: match[1].trim(), sub, code: sub };
+  }
+
+  return { main: text.trim(), sub: null, code: null };
+};
+
+export const splitGermanTitle = splitParentheticalText;
+
 export const compressImageBase64 = (base64Str, maxWidth = 512, quality = 0.6) => {
   return new Promise((resolve) => {
     if (!base64Str || !base64Str.startsWith('data:')) return resolve(base64Str);

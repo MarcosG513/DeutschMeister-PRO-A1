@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check, Film } from 'lucide-react';
-import { getSafeId, recordDailyStudyActivity, recordCardStudied } from '../utils/helpers';
+import { getSafeId, recordDailyStudyActivity, recordCardStudied, splitGermanTitle, splitParentheticalText } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import { functions } from '../App';
@@ -216,7 +216,8 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
     });
   };
 
-  const isLongText = wordObj.de.length > 20;
+  const { main: deMainTitle, code: deTitleCode } = splitGermanTitle(wordObj.de);
+  const isLongText = (deMainTitle || wordObj.de).length > 20;
   const safeId = getSafeId(wordObj.de).substring(0, 150);
   const isUnlocked = true;
   const imgData = cardImages ? cardImages[safeId] : null;
@@ -585,10 +586,10 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                   <div></div> {/* Pilar invisible izquierdo para equilibrar */}
  
                   <div className="flex items-center justify-center gap-1 min-w-0 w-full overflow-hidden">
-                    <h3 className={`font-bold leading-tight text-center break-words min-w-0 w-full px-2 shrink-0 overflow-hidden ${
-                      (wordObj.de?.length || 0) > 20
+                    <h3 className={`font-bold leading-tight text-center break-words min-w-0 w-full px-1 shrink-0 overflow-hidden whitespace-pre-line ${
+                      (deMainTitle?.length || 0) > 20
                         ? 'text-xs md:text-sm'
-                        : (wordObj.de?.length || 0) > 12
+                        : (deMainTitle?.length || 0) > 12
                           ? 'text-sm md:text-base'
                           : 'text-base md:text-lg'
                     } ${
@@ -598,7 +599,12 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                           ? 'text-rose-500' 
                           : 'text-slate-800'
                     }`}>
-                      {wordObj.de}
+                      <span className="block leading-tight">{deMainTitle}</span>
+                      {deTitleCode && (
+                        <span className="block text-xs md:text-sm font-normal text-slate-500 mt-0.5 tracking-normal">
+                          {deTitleCode}
+                        </span>
+                      )}
                     </h3>
                     {pronunciationStatus === 'success-singular' && <Check size={16} className="text-emerald-500 animate-bounce shrink-0" />}
                   </div>
@@ -692,7 +698,19 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
           
           <div className="flex-1 flex flex-col items-center justify-center w-full h-auto py-1.5 min-h-0">
             <span className="text-[9px] font-semibold text-blue-300/80 mb-0.5 tracking-wider uppercase">{wordObj.type}</span>
-            <span className="font-bold text-sm md:text-base text-yellow-400 leading-tight text-center break-words w-full px-2 shrink-0">{wordObj.es}</span>
+            {(() => {
+              const { main: esMain, sub: esSub } = splitParentheticalText(wordObj.es);
+              return (
+                <div className="font-bold text-sm md:text-base text-yellow-400 leading-tight text-center break-words w-full px-2 shrink-0 whitespace-pre-line">
+                  <span className="block">{esMain}</span>
+                  {esSub && (
+                    <span className="block text-xs font-normal text-blue-200 mt-0.5 tracking-normal">
+                      {esSub}
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
             {/* Renderizado de oraciones reales */}
             {((Array.isArray(wordObj.exampleSentenceDeBlocks) && wordObj.exampleSentenceDeBlocks.length > 0) || wordObj.exampleSentenceDe) && (
               (() => {

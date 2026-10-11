@@ -14,7 +14,7 @@ import GrammarAccordion from './components/GrammarAccordion';
 import AudioSim from './components/AudioSim';
 import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
-import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount } from './utils/helpers';
+import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, splitGermanTitle, splitParentheticalText } from './utils/helpers';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
 import { API_ENDPOINTS } from './config/apiEndpoints';
 
@@ -405,6 +405,9 @@ export default function App() {
   
   const categories = useMemo(() => {
     if (!activeChapter?.words) return ['Todas'];
+    if (activeChapter.categoryFilter && Array.isArray(activeChapter.categoryFilter)) {
+      return activeChapter.categoryFilter;
+    }
     return ['Todas', ...new Set(activeChapter.words.map(w => w.category).filter(Boolean))];
   }, [activeChapter]);
 
@@ -1009,7 +1012,7 @@ export default function App() {
         auth={auth}
         studiedCardsCount={studiedCardsCount}
         unlockedCardsCount={Object.keys(unlockedCards || {}).length}
-        totalCardsCount={chapters.flatMap(c => c.words || []).length || 1320}
+        totalCardsCount={chapters.flatMap(c => c.words || []).length || 1389}
       /> : viewMode === "quiz" ? <DynamicQuiz 
         onExit={() => setViewMode('flashcards')} 
         chapters={chapters}
@@ -1373,12 +1376,24 @@ export default function App() {
                           return "bg-slate-100 text-slate-800 border-slate-200";
                         };
                         return <tr key={idx} className="hover:bg-slate-50 transition-colors border-b border-slate-100">
-                              <td className="px-4 py-3 flex items-center gap-2 align-middle">
-                                <span className="font-bold text-slate-800">{word.de}</span>
+                              <td className="px-4 py-3 flex items-center justify-between gap-3 align-middle">
+                                {(() => {
+                                  const { main, code } = splitGermanTitle(word.de);
+                                  return (
+                                    <div className="flex flex-col min-w-0">
+                                      <span className="font-bold text-slate-800 leading-tight">{main}</span>
+                                      {code && (
+                                        <span className="text-xs text-slate-500 font-normal mt-0.5 tracking-normal">
+                                          {code}
+                                        </span>
+                                      )}
+                                    </div>
+                                  );
+                                })()}
                                 <button onClick={e => {
                               e.stopPropagation();
                               playGermanAudio(word.de, { type: "vocab", voice: "Charon" });
-                            }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110">
+                            }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110 shrink-0">
                                   <Volume2 size={16} />
                                 </button>
                               </td>
@@ -1386,7 +1401,19 @@ export default function App() {
                                 {word.pron ? `/${word.pron}/` : "-"}
                               </td>
                               <td className="px-4 py-3 text-center align-middle">
-                                <div className="font-medium text-slate-700">{word.es}</div>
+                                {(() => {
+                                  const { main, sub } = splitParentheticalText(word.es);
+                                  return (
+                                    <div className="flex flex-col items-center">
+                                      <span className="font-medium text-slate-700 leading-tight">{main}</span>
+                                      {sub && (
+                                        <span className="text-xs text-slate-500 font-normal mt-0.5 tracking-normal">
+                                          {sub}
+                                        </span>
+                                      )}
+                                    </div>
+                                  );
+                                })()}
                                 <span className={`inline-block px-2.5 py-0.5 mt-1 rounded-full text-xs font-semibold border ${getTypeBadgeClass(word)}`}>{word.type}</span>
                               </td>
                               <td className="px-4 py-3 text-slate-500 max-w-xs md:max-w-md align-middle">

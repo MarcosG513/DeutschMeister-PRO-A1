@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../App';
-import { recordDailyStudyActivity } from '../utils/helpers';
+import { recordDailyStudyActivity, splitGermanTitle } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { chapters as defaultChapters } from '../data/chapters';
 import { generateLocalQuizQuestions, shuffleArray } from '../utils/quizEngine';
@@ -615,7 +615,19 @@ const DynamicQuiz = ({
                     </span>
                   </div>
                 ) : (
-                  currentQuestion.questionText
+                  (() => {
+                    const { main, code } = splitGermanTitle(currentQuestion.questionText);
+                    return (
+                      <div className="flex flex-col items-center">
+                        <span>{main}</span>
+                        {code && (
+                          <span className="text-sm sm:text-base font-normal text-slate-500 mt-1">
+                            {code}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()
                 )}
               </div>
 
@@ -665,7 +677,16 @@ const DynamicQuiz = ({
                     disabled={selectedOption !== null || isEliminated}
                     className={`py-4 px-5 rounded-2xl text-base sm:text-lg transition-all text-center leading-snug font-bold ${btnClass}`}
                   >
-                    {opt}
+                    {(() => {
+                      const { main, code } = splitGermanTitle(opt);
+                      if (!code) return opt;
+                      return (
+                        <span className="flex flex-col items-center">
+                          <span>{main}</span>
+                          <span className="text-xs opacity-75 font-normal mt-0.5">{code}</span>
+                        </span>
+                      );
+                    })()}
                   </button>
                 );
               })}

@@ -36,7 +36,7 @@ export function stopCurrentAudio() {
 export async function getGermanSpeechUrl(text, options = {}) {
   const { voice = "Charon", type = "story" } = options;
   if (!text || typeof text !== "string") return null;
-  const cleanText = text.replace(/[*_#`~]/g, "").trim();
+  const cleanText = text.replace(/[*_#`~]/g, "").replace(/\s+/g, " ").trim();
   if (!cleanText) return null;
 
   const fns = appFunctions || getFunctions();
@@ -53,7 +53,7 @@ export async function playGermanAudio(text, options = {}) {
   const { onStart, onEnd, onError, voice = "Charon", type = "vocab" } = options;
   if (!text || typeof text !== "string") return;
 
-  const cleanText = text.replace(/[*_#`~]/g, "").trim();
+  const cleanText = text.replace(/[*_#`~]/g, "").replace(/\s+/g, " ").trim();
   if (!cleanText) return;
 
   stopCurrentAudio();
