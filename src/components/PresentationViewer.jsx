@@ -74,24 +74,6 @@ const PresentationViewer = ({
   const isMedical = presentation.theme === 'medical';
   const isNotebook = presentation.theme === 'notebook';
 
-  let containerClass = "flex-1 flex flex-col overflow-hidden ";
-  let headerClass = "flex flex-col p-4 border-b shrink-0 ";
-  let bodyClass = "flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6 md:p-10 flex flex-col justify-start ";
-
-  if (isBlueprint) {
-    containerClass += "bg-blue-950 text-blue-50 font-sans";
-    bodyClass += " bg-[linear-gradient(to_right,#1e3a8a_1px,transparent_1px),linear-gradient(to_bottom,#1e3a8a_1px,transparent_1px)] bg-[size:3rem_3rem]";
-    headerClass += "bg-blue-950 border-blue-800";
-  } else if (isMedical) {
-    containerClass += "bg-slate-50 text-slate-800 font-sans";
-    bodyClass += " bg-white/50";
-    headerClass += "bg-white border-emerald-100 shadow-sm";
-  } else if (isNotebook) {
-    containerClass += "bg-[#fdfbf7] text-slate-800 font-serif";
-    bodyClass += " bg-[linear-gradient(transparent_95%,#e5e7eb_5%)] bg-[size:100%_2rem]";
-    headerClass += "bg-[#fdfbf7] border-amber-900/10 shadow-sm";
-  }
-
   const slideProps = {
     cardImages,
     generateCardImage,
@@ -116,14 +98,14 @@ const PresentationViewer = ({
 
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
-        return <strong key={i} className="font-bold text-slate-900">{part.slice(2, -2)}</strong>;
+        return <strong key={i} className="font-extrabold text-slate-900">{part.slice(2, -2)}</strong>;
       }
       if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
-        return <em key={i} className="italic text-indigo-900 font-medium">{part.slice(1, -1)}</em>;
+        return <em key={i} className="italic text-indigo-950 font-semibold">{part.slice(1, -1)}</em>;
       }
       if (part.startsWith('`') && part.endsWith('`') && part.length > 2) {
         return (
-          <code key={i} className="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono text-sm font-semibold border border-amber-200">
+          <code key={i} className={`px-1.5 py-0.5 rounded font-mono text-sm font-semibold border ${isBlueprint ? 'bg-blue-100/80 text-blue-900 border-blue-200' : 'bg-amber-100 text-amber-900 border-amber-200'}`}>
             {part.slice(1, -1)}
           </code>
         );
@@ -165,7 +147,7 @@ const PresentationViewer = ({
       const blocks = cleanContent.split('\n\n');
 
       return (
-        <div className="space-y-4 text-slate-800 leading-relaxed text-sm md:text-base text-left max-w-4xl mx-auto">
+        <div className="space-y-4 text-slate-800 leading-relaxed text-sm md:text-base text-left max-w-4xl mx-auto prose prose-slate max-w-none">
           {blocks.map((block, bIdx) => {
             const lines = block.split('\n').filter(l => l.trim() !== '');
             if (lines.length === 0) return null;
@@ -177,12 +159,12 @@ const PresentationViewer = ({
               const bodyRows = tableRows.slice(1).map(row => row.split('|').map(c => c.trim()).filter(Boolean));
 
               return (
-                <div key={bIdx} className="my-4 overflow-x-auto rounded-xl border border-slate-200 shadow-sm bg-white">
+                <div key={bIdx} className="my-4 overflow-x-auto rounded-xl border border-slate-200 shadow-sm bg-white not-prose">
                   <table className="w-full text-left text-xs sm:text-sm border-collapse">
                     <thead>
-                      <tr className="bg-indigo-950 text-white font-semibold">
+                      <tr className="bg-slate-800 text-white font-semibold">
                         {headerCells.map((cell, hIdx) => (
-                          <th key={hIdx} className="p-3 border-b border-indigo-900">
+                          <th key={hIdx} className="p-3 border-b border-slate-700">
                             {formatInlineMarkdown(cell)}
                           </th>
                         ))}
@@ -192,7 +174,7 @@ const PresentationViewer = ({
                       {bodyRows.map((row, rIdx) => (
                         <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50/70'}>
                           {row.map((cell, cIdx) => (
-                            <td key={cIdx} className="p-3 text-slate-700 font-medium">
+                            <td key={cIdx} className="p-3 text-slate-800 font-medium">
                               {formatInlineMarkdown(cell)}
                             </td>
                           ))}
@@ -215,22 +197,59 @@ const PresentationViewer = ({
                 .trim();
 
               return (
-                <div key={bIdx} className="my-3 p-4 bg-gradient-to-r from-slate-900 to-indigo-950 text-amber-300 rounded-xl font-mono text-center text-xs md:text-sm border border-indigo-700/40 shadow-inner">
+                <div key={bIdx} className="my-3 p-4 bg-slate-900 text-amber-300 rounded-xl font-mono text-center text-xs md:text-sm border border-slate-700 shadow-inner not-prose">
                   {cleanFormula}
                 </div>
               );
             }
 
-            // C. LISTAS CON VIÑETA
+            // C. LLAMADAS Y ALERTAS DIDÁCTICAS (⚠️, ⚡, 🚫, 💡, 🎯, 💶, 🔍)
+            if (block.startsWith('⚠️') || block.startsWith('⚡')) {
+              return (
+                <div key={bIdx} className="my-3 p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl text-amber-950 text-xs md:text-sm font-medium space-y-1.5 shadow-sm not-prose">
+                  {lines.map((line, lIdx) => (
+                    <p key={lIdx} className="leading-relaxed">
+                      {formatInlineMarkdown(line)}
+                    </p>
+                  ))}
+                </div>
+              );
+            }
+
+            if (block.startsWith('🚫')) {
+              return (
+                <div key={bIdx} className="my-3 p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-xl text-rose-950 text-xs md:text-sm font-medium space-y-1.5 shadow-sm not-prose">
+                  {lines.map((line, lIdx) => (
+                    <p key={lIdx} className="leading-relaxed">
+                      {formatInlineMarkdown(line)}
+                    </p>
+                  ))}
+                </div>
+              );
+            }
+
+            if (block.startsWith('💡') || block.startsWith('🎯') || block.startsWith('💶') || block.startsWith('🔍')) {
+              return (
+                <div key={bIdx} className="my-3 p-4 bg-blue-50/80 border-l-4 border-blue-500 rounded-r-xl text-slate-800 text-xs md:text-sm font-medium space-y-1.5 shadow-sm not-prose">
+                  {lines.map((line, lIdx) => (
+                    <p key={lIdx} className="leading-relaxed">
+                      {formatInlineMarkdown(line)}
+                    </p>
+                  ))}
+                </div>
+              );
+            }
+
+            // D. LISTAS CON VIÑETA
             if (lines.every(l => l.trim().startsWith('* ') || l.trim().startsWith('- '))) {
               return (
-                <ul key={bIdx} className="space-y-2 my-2 pl-1">
+                <ul key={bIdx} className="space-y-2 my-2 pl-1 text-slate-800 not-prose">
                   {lines.map((line, lIdx) => {
                     const itemText = line.trim().replace(/^[\*\-]\s+/, '');
                     return (
-                      <li key={lIdx} className="flex items-start gap-2.5 text-slate-700">
-                        <span className="inline-block w-2 h-2 rounded-full bg-indigo-600 mt-2 shrink-0" />
-                        <div>{formatInlineMarkdown(itemText)}</div>
+                      <li key={lIdx} className="flex items-start gap-2.5 text-slate-800">
+                        <span className="inline-block w-2 h-2 rounded-full bg-blue-600 mt-2 shrink-0" />
+                        <div className="leading-relaxed">{formatInlineMarkdown(itemText)}</div>
                       </li>
                     );
                   })}
@@ -238,11 +257,11 @@ const PresentationViewer = ({
               );
             }
 
-            // D. PÁRRAFO ESTÁNDAR
+            // E. PÁRRAFO ESTÁNDAR
             return (
-              <div key={bIdx} className="space-y-1.5">
+              <div key={bIdx} className="space-y-1.5 text-slate-800">
                 {lines.map((line, lIdx) => (
-                  <p key={lIdx} className="leading-relaxed">
+                  <p key={lIdx} className="leading-relaxed text-slate-800">
                     {formatInlineMarkdown(line)}
                   </p>
                 ))}
@@ -256,151 +275,169 @@ const PresentationViewer = ({
     return null;
   };
 
+  const bodyBackground = isBlueprint
+    ? "bg-slate-50 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:24px_24px]"
+    : isMedical
+      ? "bg-slate-50 bg-white/50"
+      : "bg-[#fdfbf7] bg-[linear-gradient(transparent_95%,#e5e7eb_5%)] bg-[size:100%_2rem]";
+
   return (
-    <div className="flex flex-col min-h-[100dvh] h-[100dvh] max-h-[100dvh] w-full bg-white animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
-      <div className={containerClass}>
-        <div className={headerClass}>
-          {/* BLOQUE 1: TÍTULO PRINCIPAL Y BOTÓN DE CERRAR */}
-          <div className="w-full flex justify-between items-start gap-4">
-            <div className="flex items-start gap-3 flex-1 min-w-0">
-              <div className={`p-2 rounded-lg shrink-0 ${isBlueprint ? 'bg-blue-900 text-blue-300' : isMedical ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-700'}`}>
-                <Presentation size={24} />
-              </div>
-              <h2 className="text-lg md:text-xl font-extrabold leading-tight break-words flex-1 min-w-0">
-                {presentation.title}
-              </h2>
+    <div className={`fixed inset-0 z-50 flex flex-col h-[100dvh] w-full overflow-hidden bg-slate-50 ${isNotebook ? 'font-serif' : 'font-sans'} animate-in fade-in duration-200`}>
+      {/* 1. HEADER (SUPERIOR FIJO) */}
+      <header className="flex-shrink-0 w-full z-20 bg-white/95 backdrop-blur border-b border-slate-200 p-3 sm:p-4 shadow-xs">
+        {/* Fila 1: Título y Botón Cerrar */}
+        <div className="w-full flex justify-between items-center gap-3">
+          <div className="flex items-center gap-2.5 flex-1 min-w-0">
+            <div className={`p-2 rounded-xl shrink-0 ${isBlueprint ? 'bg-blue-100 text-blue-700' : isMedical ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-700'}`}>
+              <Presentation size={20} className="sm:w-6 sm:h-6" />
             </div>
-            <button 
-              onClick={onClose} 
-              className={`p-2 rounded-full transition shrink-0 ${isBlueprint ? 'hover:bg-blue-900 text-blue-300' : 'hover:bg-slate-200 text-slate-500'}`}
-              aria-label="Cerrar presentación"
-            >
-              <X size={24} />
-            </button>
+            <h2 className="text-base sm:text-lg md:text-xl font-extrabold leading-tight truncate text-slate-900 flex-1 min-w-0">
+              {presentation.title}
+            </h2>
           </div>
-
-          {/* BLOQUE 2: BARRA DE CONTROLES INDEPENDIENTE (Hereda el tema dinámico) */}
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-black/5 dark:bg-white/5 p-2.5 sm:p-3 rounded-2xl w-full mt-4">
-            {/* Controles de Navegación de Diapositiva */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={prevSlide}
-                disabled={currentSlide === 0}
-                className="p-2 rounded-xl bg-white/50 hover:bg-white/80 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm text-slate-800"
-                aria-label="Diapositiva anterior"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-
-              <span className="text-xs sm:text-sm font-bold px-2 font-mono opacity-80">
-                Slide {currentSlide + 1} / {presentation.slides.length}
-              </span>
-
-              <button
-                onClick={nextSlide}
-                disabled={currentSlide === presentation.slides.length - 1}
-                className="p-2 rounded-xl bg-white/50 hover:bg-white/80 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm text-slate-800"
-                aria-label="Siguiente diapositiva"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Botón "Diapositivas" (Enlace externo o Estado Deshabilitado) */}
-            <div>
-              {presentation.presentationUrl ? (
-                <a
-                  href={presentation.presentationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-white/80 hover:bg-white shadow-sm border border-black/10 rounded-xl transition-all active:scale-95 text-slate-800"
-                >
-                  <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                  <span>Diapositivas</span>
-                </a>
-              ) : (
-                <button
-                  disabled
-                  title="Sin presentación externa disponible"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-black/5 border border-black/10 rounded-xl cursor-not-allowed opacity-60"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                  </svg>
-                  <span>Próximamente</span>
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className={bodyClass}>
-          <div className="max-w-6xl mx-auto w-full animate-in slide-in-from-bottom-4 fade-in duration-300" key={currentSlide}>
-            <div className="mb-6 md:mb-10 text-center">
-              <h1 className={`text-3xl md:text-5xl font-black mb-3 ${isBlueprint ? 'text-white' : isMedical ? 'text-emerald-950' : 'text-amber-950'}`}>
-                {slide.title}
-              </h1>
-              {slide.subtitle && (
-                <h2 className={`text-lg md:text-xl font-medium ${isBlueprint ? 'text-blue-300' : isMedical ? 'text-emerald-700' : 'text-amber-700/80'}`}>
-                  {slide.subtitle}
-                </h2>
-              )}
-            </div>
-            <div className="w-full">
-              {renderSlideContent(slide, slideProps)}
-            </div>
-          </div>
-        </div>
-
-        <div className={`p-4 shrink-0 flex items-center justify-between border-t ${isBlueprint ? 'border-blue-800 bg-blue-950/80 backdrop-blur' : isMedical ? 'border-emerald-100 bg-white/80 backdrop-blur' : 'border-amber-900/10 bg-[#fdfbf7]/80 backdrop-blur'}`}>
-          <button onClick={prevSlide} disabled={currentSlide === 0} className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition disabled:opacity-30 ${isBlueprint ? 'bg-blue-900 text-white hover:bg-blue-800' : isMedical ? 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' : 'bg-amber-100 text-amber-900 hover:bg-amber-200'}`}>
-            <ChevronLeft size={20} /> Anterior
+          <button 
+            onClick={onClose} 
+            className="p-2 rounded-full transition shrink-0 hover:bg-slate-100 text-slate-500 hover:text-slate-800 cursor-pointer active:scale-95"
+            aria-label="Cerrar presentación"
+          >
+            <X size={22} />
           </button>
-          
-          <div className="flex gap-1.5">
-            {presentation.slides.map((_, idx) => (
-              <div key={idx} className={`w-2 h-2 rounded-full transition-all ${idx === currentSlide ? isBlueprint ? 'bg-blue-400 w-6' : isMedical ? 'bg-emerald-500 w-6' : 'bg-amber-600 w-6' : isBlueprint ? 'bg-blue-900' : isMedical ? 'bg-emerald-200' : 'bg-amber-200'}`} />
-            ))}
+        </div>
+
+        {/* Fila 2: Barra de Controles (< Slide X / Y > y [Diapositivas]) */}
+        <div className="flex items-center justify-between gap-2 bg-slate-100/90 border border-slate-200/80 px-2.5 py-1.5 sm:py-2 rounded-xl w-full mt-2.5">
+          {/* Controles de Navegación de Diapositiva */}
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={prevSlide}
+              disabled={currentSlide === 0}
+              className="p-1.5 rounded-lg bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-xs border border-slate-200 text-slate-800 active:scale-95 cursor-pointer"
+              aria-label="Diapositiva anterior"
+            >
+              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <span className="text-xs sm:text-sm font-bold px-1.5 sm:px-2 font-mono text-slate-700 select-none">
+              Slide {currentSlide + 1} / {presentation.slides.length}
+            </span>
+
+            <button
+              onClick={nextSlide}
+              disabled={currentSlide === presentation.slides.length - 1}
+              className="p-1.5 rounded-lg bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-xs border border-slate-200 text-slate-800 active:scale-95 cursor-pointer"
+              aria-label="Siguiente diapositiva"
+            >
+              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
 
-          {isLastSlide && nextModule && nextModule.id ? (
-            <button 
-              onClick={() => {
-                if (presentation?.id) recordModuleCompleted(presentation.id);
-                onNextModule(nextModule.id);
-              }} 
-              className="flex flex-col items-center justify-center px-4 py-1.5 rounded-lg font-bold transition bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-500/30 animate-pulse animate-duration-1000 text-center"
-            >
-              <div className="flex items-center gap-1 text-sm font-bold">
-                Siguiente Módulo <ChevronRight size={16} />
-              </div>
-              <span className="block text-[10px] sm:text-xs font-normal text-emerald-200 truncate max-w-[120px] sm:max-w-xs">
-                {nextModule?.title}
-              </span>
-            </button>
-          ) : (
-            <button 
-              onClick={() => {
-                if (isLastSlide) {
-                  if (presentation?.id) recordModuleCompleted(presentation.id);
-                  onClose();
-                } else {
-                  nextSlide();
-                }
-              }} 
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition ${isBlueprint ? 'bg-blue-500 text-blue-950 hover:bg-blue-400' : isMedical ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-amber-600 text-white hover:bg-amber-700'}`}
-            >
-              {isLastSlide ? 'Finalizar' : 'Siguiente'} <ChevronRight size={20} />
-            </button>
-          )}
+          {/* Botón "Diapositivas" (Enlace externo o Estado Deshabilitado) */}
+          <div>
+            {presentation.presentationUrl ? (
+              <a
+                href={presentation.presentationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold bg-white hover:bg-slate-50 shadow-xs border border-slate-200 rounded-lg transition-all active:scale-95 text-slate-800"
+              >
+                <svg className="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                <span>Diapositivas</span>
+              </a>
+            ) : (
+              <button
+                disabled
+                title="Sin presentación externa disponible"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold bg-slate-100 border border-slate-200 rounded-lg cursor-not-allowed opacity-60 text-slate-500"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+                <span>Próximamente</span>
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      </header>
+
+      {/* 2. MAIN (ÁREA DE CONTENIDO SCROLLEABLE) */}
+      <main className={`flex-1 w-full overflow-y-auto overscroll-contain px-4 sm:px-6 md:px-10 py-6 pb-28 ${bodyBackground}`}>
+        <div className="max-w-4xl mx-auto w-full animate-in slide-in-from-bottom-3 fade-in duration-200" key={currentSlide}>
+          <div className="mb-6 md:mb-8 text-center">
+            <h1 className={`text-2xl sm:text-3xl md:text-4xl mb-2 tracking-tight ${isBlueprint ? 'text-slate-900 font-extrabold' : isMedical ? 'text-emerald-950 font-black' : 'text-amber-950 font-black'}`}>
+              {slide.title}
+            </h1>
+            {slide.subtitle && (
+              <h2 className={`text-sm sm:text-base md:text-lg ${isBlueprint ? 'text-blue-600 font-semibold' : isMedical ? 'text-emerald-700 font-medium' : 'text-amber-700/80 font-medium'}`}>
+                {slide.subtitle}
+              </h2>
+            )}
+          </div>
+          <div className="w-full text-slate-800 leading-relaxed">
+            {renderSlideContent(slide, slideProps)}
+          </div>
+        </div>
+      </main>
+
+      {/* 3. FOOTER (INFERIOR DE NAVEGACIÓN ANCLADO) */}
+      <footer className="flex-shrink-0 w-full z-20 bg-white/95 backdrop-blur border-t border-slate-200 py-3 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] flex items-center justify-between gap-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <button 
+          onClick={prevSlide} 
+          disabled={currentSlide === 0} 
+          className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition disabled:opacity-30 active:scale-95 cursor-pointer shrink-0 ${isBlueprint ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300 shadow-xs' : isMedical ? 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200' : 'bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-200'}`}
+        >
+          <ChevronLeft size={18} /> Anterior
+        </button>
+        
+        <div className="flex gap-1 sm:gap-1.5 items-center justify-center overflow-x-auto max-w-[40%] sm:max-w-none px-1">
+          {presentation.slides.map((_, idx) => (
+            <div 
+              key={idx} 
+              className={`h-2 rounded-full transition-all duration-300 shrink-0 ${
+                idx === currentSlide 
+                  ? isBlueprint ? 'bg-blue-600 w-5 sm:w-6' : isMedical ? 'bg-emerald-500 w-5 sm:w-6' : 'bg-amber-600 w-5 sm:w-6' 
+                  : isBlueprint ? 'bg-slate-300 w-2' : isMedical ? 'bg-emerald-200 w-2' : 'bg-amber-200 w-2'
+              }`} 
+            />
+          ))}
+        </div>
+
+        {isLastSlide && nextModule && nextModule.id ? (
+          <button 
+            onClick={() => {
+              if (presentation?.id) recordModuleCompleted(presentation.id);
+              onNextModule(nextModule.id);
+            }} 
+            className="flex flex-col items-center justify-center px-3 sm:px-4 py-1.5 rounded-xl font-bold transition bg-emerald-600 text-white hover:bg-emerald-500 shadow-md shadow-emerald-500/20 animate-pulse animate-duration-1000 text-center active:scale-95 cursor-pointer shrink-0"
+          >
+            <div className="flex items-center gap-1 text-xs sm:text-sm font-bold">
+              Siguiente Módulo <ChevronRight size={16} />
+            </div>
+            <span className="block text-[9px] sm:text-[10px] font-normal text-emerald-100 truncate max-w-[100px] sm:max-w-[140px]">
+              {nextModule?.title}
+            </span>
+          </button>
+        ) : (
+          <button 
+            onClick={() => {
+              if (isLastSlide) {
+                if (presentation?.id) recordModuleCompleted(presentation.id);
+                onClose();
+              } else {
+                nextSlide();
+              }
+            }} 
+            className={`flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm active:scale-95 cursor-pointer shrink-0 ${isBlueprint ? 'bg-blue-600 text-white hover:bg-blue-700' : isMedical ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-amber-600 text-white hover:bg-amber-700'}`}
+          >
+            {isLastSlide ? 'Finalizar' : 'Siguiente'} <ChevronRight size={18} />
+          </button>
+        )}
+      </footer>
     </div>
   );
 };

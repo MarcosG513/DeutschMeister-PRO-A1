@@ -965,27 +965,51 @@ export default function App() {
   }>
     <div className="min-h-[100svh] bg-slate-50 font-sans text-slate-800 flex flex-col overflow-y-auto relative">
       
-      {viewMode === "presentation" && activePresentationId && activePresentation ? <PresentationViewer
-        presentation={activePresentation}
-        onClose={() => {
-          setViewMode('flashcards');
-          setActivePresentationId(null);
-        }}
-        cardImages={cardImages}
-        generateCardImage={generateCardImage}
-        isImageLoading={isImageLoading}
-        openAiTutor={openAiTutor}
-        setFullscreenImage={setFullscreenImage}
-        unlockedCards={unlockedCards}
-        speakText={speakText}
-        lazyLoadImage={lazyLoadImage}
-        onNextModule={setActivePresentationId}
-      /> : viewMode === "profile" ? <Profile
+      {viewMode === "presentation" && activePresentationId && activePresentation ? (
+        <PresentationViewer
+          presentation={activePresentation}
+          onClose={() => {
+            setViewMode('flashcards');
+            setActivePresentationId(null);
+          }}
+          cardImages={cardImages}
+          generateCardImage={generateCardImage}
+          isImageLoading={isImageLoading}
+          openAiTutor={openAiTutor}
+          setFullscreenImage={setFullscreenImage}
+          unlockedCards={unlockedCards}
+          speakText={speakText}
+          lazyLoadImage={lazyLoadImage}
+          onNextModule={setActivePresentationId}
+        />
+      ) : viewMode === "studyPlan" && activeStudyPlanId ? (() => {
+        const activeModule = studyPlanModules.find(m => m.id === activeStudyPlanId);
+        if (!activeModule) return null;
+        return (
+          <PresentationViewer
+            presentation={activeModule}
+            onClose={() => {
+              setViewMode('flashcards');
+              setActiveStudyPlanId(null);
+            }}
+            cardImages={cardImages}
+            generateCardImage={generateCardImage}
+            isImageLoading={isImageLoading}
+            openAiTutor={openAiTutor}
+            setFullscreenImage={setFullscreenImage}
+            unlockedCards={unlockedCards}
+            speakText={speakText}
+            lazyLoadImage={lazyLoadImage}
+            onNextModule={setActiveStudyPlanId}
+          />
+        );
+      })() : viewMode === "profile" ? <Profile
         onExit={() => setViewMode('flashcards')}
         user={user}
         auth={auth}
         studiedCardsCount={studiedCardsCount}
         unlockedCardsCount={Object.keys(unlockedCards || {}).length}
+        totalCardsCount={chapters.flatMap(c => c.words || []).length || 1320}
       /> : viewMode === "quiz" ? <DynamicQuiz 
         onExit={() => setViewMode('flashcards')} 
         chapters={chapters}
@@ -1225,52 +1249,11 @@ export default function App() {
             </div>
           }>
           
-          {/* MODO PRESENTACIÓN VISUAL */}
-          {viewMode === "presentation" && activePresentationId && activePresentation && <PresentationViewer
-            presentation={activePresentation}
-            onClose={() => {
-              setViewMode('flashcards');
-              setActivePresentationId(null);
-              setIsFullscreen(false);
-            }}
-            cardImages={cardImages}
-            generateCardImage={generateCardImage}
-            isImageLoading={isImageLoading}
-            openAiTutor={openAiTutor}
-            setFullscreenImage={setFullscreenImage}
-            unlockedCards={unlockedCards}
-            speakText={speakText}
-            lazyLoadImage={lazyLoadImage}
-            onNextModule={setActivePresentationId}
-          />}
-
           {/* VISTA: SIMULADOR DE ROL (GEMINI API) ✨ */}
           {viewMode === "roleplay" && typeof RoleplaySimulator !== 'undefined' && <RoleplaySimulator onExit={() => setViewMode("flashcards")} />}
 
           {/* VISTA: COMPRENSIÓN LECTORA IA 📖 */}
           {viewMode === "reading" && <ReadingComprehension onExit={() => setViewMode("flashcards")} />}
-
-          {/* VISTA: PLAN DE ESTUDIO (CLASES MAGISTRALES) */}
-          {viewMode === "studyPlan" && activeStudyPlanId && (() => {
-            const activeModule = studyPlanModules.find(m => m.id === activeStudyPlanId);
-            if (!activeModule) return null;
-            return <PresentationViewer
-              presentation={activeModule}
-              onClose={() => {
-                setViewMode('flashcards');
-                setActiveStudyPlanId(null);
-              }}
-              cardImages={cardImages}
-              generateCardImage={generateCardImage}
-              isImageLoading={isImageLoading}
-              openAiTutor={openAiTutor}
-              setFullscreenImage={setFullscreenImage}
-              unlockedCards={unlockedCards}
-              speakText={speakText}
-              lazyLoadImage={lazyLoadImage}
-              onNextModule={setActiveStudyPlanId}
-            />;
-          })()}
           
           {/* VISTAS: FLASHCARDS Y TABLA */}
           {(viewMode === "flashcards" || viewMode === "table") && <>

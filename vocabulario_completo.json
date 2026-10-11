@@ -20055,5 +20055,3445 @@
         "order": 4
       }
     ]
+  },
+  {
+    "id": "ZGllJTIwSXNvbGllcmhhbmRzY2h1aGUlMjBWREUlMjAoYmlzJTIwMTAwMCUyMFYp",
+    "word": "die Isolierhandschuhe VDE (bis 1000 V)",
+    "exampleSentenceDe": "Ich trage die Isolierhandschuhe beim Einsetzen der NH-Sicherung.",
+    "exampleSentenceEs": "Llevo los guantes aislantes al insertar el fusible NH.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "trage",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Isolierhandschuhe",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "beim Einsetzen der NH-Sicherung",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwSXNvbGllcm1hdHRlJTIwKElzb2xpZXJ0ZXJtYXR0ZSk_",
+    "word": "die Isoliermatte (Isoliertermatte)",
+    "exampleSentenceDe": "Die Isoliermatte liegt vor dem Zählerschrank auf dem Boden.",
+    "exampleSentenceEs": "La alfombra aislante está en el suelo frente al armario del contador.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Isoliermatte",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "liegt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "vor dem Zählerschrank",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "auf dem Boden",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwR3JpZmZzdHVscGUlMjAoTkgp",
+    "word": "die Griffstulpe (NH)",
+    "exampleSentenceDe": "Mit der Griffstulpe ziehe ich die NH-Sicherung sicher heraus.",
+    "exampleSentenceEs": "Con la manopla de extracción saco el fusible NH con seguridad.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit der Griffstulpe",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "ziehe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich die NH-Sicherung sicher",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "heraus",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwVmlzaWVy",
+    "word": "das Visier",
+    "exampleSentenceDe": "Das Visier schützt mein Gesicht vor einem Lichtbogen.",
+    "exampleSentenceEs": "La pantalla facial protege mi rostro contra un arco eléctrico.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das Visier",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "mein Gesicht",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "vor einem Lichtbogen",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwSGVsbQ__",
+    "word": "der Helm",
+    "exampleSentenceDe": "Auf der Baustelle trage ich immer den weißen Helm.",
+    "exampleSentenceEs": "En la obra siempre llevo el casco blanco.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Auf der Baustelle",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "trage",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "immer den weißen Helm",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU2NodXR6aGFuZHNjaHVo",
+    "word": "der Schutzhandschuh",
+    "exampleSentenceDe": "Die Schutzhandschuhe schützen vor scharfen Blechkanten.",
+    "exampleSentenceEs": "Los guantes de protección protegen contra bordes de chapa afilados.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Schutzhandschuhe",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "vor scharfen Blechkanten",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwU2NodXR6YnJpbGxl",
+    "word": "die Schutzbrille",
+    "exampleSentenceDe": "Beim Bohren setze ich die Schutzbrille auf.",
+    "exampleSentenceEs": "Al taladrar me pongo las gafas de protección.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Beim Bohren",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "setze",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich die Schutzbrille",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "auf",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwU2ljaGVyaGVpdHNzY2h1aGU_",
+    "word": "die Sicherheitsschuhe",
+    "exampleSentenceDe": "Meine Sicherheitsschuhe haben eine Stahlkappe und durchtrittsichere Sohlen.",
+    "exampleSentenceEs": "Mis zapatos de seguridad tienen puntera de acero y suela antiperforación.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Meine Sicherheitsschuhe",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "haben",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "eine Stahlkappe",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "und durchtrittsichere Sohlen",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwR2VoJUMzJUI2cnNjaHV0eg__",
+    "word": "der Gehörschutz",
+    "exampleSentenceDe": "Beim Meißeln brauche ich einen Gehörschutz.",
+    "exampleSentenceEs": "Al picar con el cincel necesito protección auditiva.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Beim Meißeln",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "brauche",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "einen Gehörschutz",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU3Bhbm51bmdzcHIlQzMlQkNmZXIlMjAlMkYlMjBEdXNwb2w_",
+    "word": "der Spannungsprüfer / Duspol",
+    "exampleSentenceDe": "Ich stelle die Spannungsfreiheit mit dem Duspol fest.",
+    "exampleSentenceEs": "Compruebo la ausencia de tensión con el Duspol.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "stelle",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Spannungsfreiheit mit dem Duspol",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "fest",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwRmx1a2UtTWVzc2dlciVDMyVBNHQ_",
+    "word": "das Fluke-Messgerät",
+    "exampleSentenceDe": "Wir messen die Schleifenimpedanz mit dem Fluke-Messgerät.",
+    "exampleSentenceEs": "Medimos la impedancia de bucle con el equipo de medición Fluke.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Wir",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "messen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Schleifenimpedanz",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit dem Fluke-Messgerät",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwV2FsbGJveC1NZXNzYWRhcHRlcg__",
+    "word": "der Wallbox-Messadapter",
+    "exampleSentenceDe": "Der Wallbox-Messadapter simuliert ein Elektroauto beim Test.",
+    "exampleSentenceEs": "El adaptador de medición simula un coche eléctrico durante la prueba.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Wallbox-Messadapter",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "simuliert",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ein Elektroauto",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "beim Test",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwUko0NS1LYWJlbHRlc3Rlcg__",
+    "word": "der RJ45-Kabeltester",
+    "exampleSentenceDe": "Der RJ45-Kabeltester prüft alle acht Adern auf Durchgang.",
+    "exampleSentenceEs": "El probador de cables RJ45 comprueba la continuidad de los ocho hilos.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der RJ45-Kabeltester",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "prüft",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "alle acht Adern",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "auf Durchgang",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwTGVpdHVuZ3NvcnR1bmdzZ2VyJUMzJUE0dA__",
+    "word": "das Leitungsortungsgerät",
+    "exampleSentenceDe": "Vor dem Bohren scanne ich die Wand mit dem Leitungsortungsgerät.",
+    "exampleSentenceEs": "Antes de taladrar escaneo la pared con el detector de cables.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Vor dem Bohren",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "scanne",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "die Wand mit dem Leitungsortungsgerät",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwTmV0enRlc3RlciUyMExURQ__",
+    "word": "der Netztester LTE",
+    "exampleSentenceDe": "Mit dem Netztester LTE prüfen wir den Empfang für den Wechselrichter.",
+    "exampleSentenceEs": "Con el comprobador LTE verificamos la cobertura para el inversor.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Netztester LTE",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "prüfen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "wir",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "den Empfang für den Wechselrichter",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwQ1RTLU1lc3N3YW5kbGVy",
+    "word": "der CTS-Messwandler",
+    "exampleSentenceDe": "Der CTS-Messwandler misst den Stromfluss der drei Phasen berührungslos.",
+    "exampleSentenceEs": "El transformador CT mide el flujo de corriente de las tres fases sin contacto.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der CTS-Messwandler",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "misst",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Stromfluss der drei Phasen",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "berührungslos",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwTWVzc2FkYXB0ZXItV2VjaHNlbHJpY2h0ZXI_",
+    "word": "der Messadapter-Wechselrichter",
+    "exampleSentenceDe": "Wir schließen den Messadapter an den Wechselrichter an.",
+    "exampleSentenceEs": "Conectamos el adaptador de prueba al inversor.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Wir",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schließen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Messadapter an den Wechselrichter",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "an",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwQWtrdXNjaHJhdWJlcg__",
+    "word": "der Akkuschrauber",
+    "exampleSentenceDe": "Mit dem Akkuschrauber befestige ich die Kabelkanäle.",
+    "exampleSentenceEs": "Con el atornillador a batería fijo las canaletas de cables.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Akkuschrauber",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "befestige",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "die Kabelkanäle",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwQml0LVNldA__",
+    "word": "das Bit-Set",
+    "exampleSentenceDe": "Das Bit-Set enthält Torx- und Kreuzschlitz-Bits.",
+    "exampleSentenceEs": "El juego de puntas contiene puntas Torx y Pozidriv.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das Bit-Set",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "enthält",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "Torx- und Kreuzschlitz-Bits",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwQml0",
+    "word": "das Bit",
+    "exampleSentenceDe": "Ich setze das Torx-Bit in den Bithalter ein.",
+    "exampleSentenceEs": "Inserto la punta Torx en el portapuntas.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "setze",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "das Torx-Bit in den Bithalter",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ein",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwQml0dmVybCVDMyVBNG5nZXJ1bmc_",
+    "word": "die Bitverlängerung",
+    "exampleSentenceDe": "Für tiefe Schrauben nutze ich die Bitverlängerung.",
+    "exampleSentenceEs": "Para tornillos profundos uso el prolongador de puntas.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Für tiefe Schrauben",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "nutze",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "die Bitverlängerung",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwQWtrdS1Cb2hyaGFtbWVy",
+    "word": "der Akku-Bohrhammer",
+    "exampleSentenceDe": "Der Akku-Bohrhammer bohrt mühelos Löcher in Beton.",
+    "exampleSentenceEs": "El martillo perforador a batería taladra sin esfuerzo agujeros en hormigón.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Akku-Bohrhammer",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "bohrt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "mühelos Löcher",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "in Beton",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwQWtrdS1MYWRlZ2VyJUMzJUE0dA__",
+    "word": "das Akku-Ladegerät",
+    "exampleSentenceDe": "Ich stecke den leeren Akku in das Akku-Ladegerät.",
+    "exampleSentenceEs": "Enchufo la batería vacía en el cargador.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "stecke",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den leeren Akku",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "in das Akku-Ladegerät",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwQm9ocmVy",
+    "word": "der Bohrer",
+    "exampleSentenceDe": "Ich nehme einen Sechser-Bohrer für den Dübel.",
+    "exampleSentenceEs": "Tomo una broca del seis para el taco.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "nehme",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "einen Sechser-Bohrer",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "für den Dübel",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU3R1ZmVuYm9ocmVy",
+    "word": "der Stufenbohrer",
+    "exampleSentenceDe": "Mit dem Stufenbohrer bohre ich saubere Löcher für Kabelverschraubungen.",
+    "exampleSentenceEs": "Con la broca escalonada taladro agujeros limpios para prensaestopas.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Stufenbohrer",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "bohre",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "saubere Löcher für Kabelverschraubungen",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwV2lua2Vsc2NobGVpZmVy",
+    "word": "der Winkelschleifer",
+    "exampleSentenceDe": "Der Winkelschleifer schneidet die Metallschiene schnell ab.",
+    "exampleSentenceEs": "La amoladora angular corta la pletina de metal rápidamente.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Winkelschleifer",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schneidet",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Metallschiene schnell",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ab",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU2NocmF1YmVuZHJlaGVy",
+    "word": "der Schraubendreher",
+    "exampleSentenceDe": "Der Elektriker nutzt einen isolierten Schraubendreher.",
+    "exampleSentenceEs": "El electricista utiliza un destornillador aislado.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Elektriker",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "nutzt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "einen isolierten Schraubendreher",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU2NocmF1YmVuZHJlaGVyJTIwU0wtUFoy",
+    "word": "der Schraubendreher SL-PZ2",
+    "exampleSentenceDe": "Der SL-PZ2 Schraubendreher passt perfekt auf Sicherungsautomaten.",
+    "exampleSentenceEs": "El destornillador SL-PZ2 encaja perfectamente en los interruptores automáticos.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der SL-PZ2 Schraubendreher",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "passt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "perfekt auf Sicherungsautomaten",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU2VjaHNrYW50LVNjaHJhdWJlbmRyZWhlcg__",
+    "word": "der Sechskant-Schraubendreher",
+    "exampleSentenceDe": "Mit dem Sechskant-Schraubendreher ziehe ich die HLAK-Klemmen an.",
+    "exampleSentenceEs": "Con el destornillador hexagonal aprieto los bornes del HLAK.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Sechskant-Schraubendreher",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "ziehe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich die HLAK-Klemmen",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "an",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwYXV0b21hdGlzY2hlJTIwQWJpc29saWVyemFuZ2U_",
+    "word": "die automatische Abisolierzange",
+    "exampleSentenceDe": "Die automatische Abisolierzange entfernt die Aderisolierung sekundenschnell.",
+    "exampleSentenceEs": "El pelacables automático retira el aislamiento del conductor en segundos.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die automatische Abisolierzange",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "entfernt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Aderisolierung",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "sekundenschnell",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwQWJpc29saWVyemFuZ2U_",
+    "word": "die Abisolierzange",
+    "exampleSentenceDe": "Ich stelle die Schraube der Abisolierzange auf den Aderquerschnitt ein.",
+    "exampleSentenceEs": "Ajusto el tornillo del alicate pelacables a la sección del conductor.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "stelle",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Schraube der Abisolierzange auf den Aderquerschnitt",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ein",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwS2FiZWxlbnRtYW50bGVy",
+    "word": "der Kabelentmantler",
+    "exampleSentenceDe": "Mit dem Kabelentmantler entferne ich den Außenmantel des NYM-Kabels.",
+    "exampleSentenceEs": "Con el desenvainador retiro la cubierta exterior del cable NYM.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Kabelentmantler",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "entferne",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "den Außenmantel des NYM-Kabels",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwSm9rYXJpLUthYmVsbWVzc2Vy",
+    "word": "das Jokari-Kabelmesser",
+    "exampleSentenceDe": "Das Jokari-Kabelmesser schneidet den Kabelmantel längs auf.",
+    "exampleSentenceEs": "El cuchillo Jokari rasga la cubierta del cable longitudinalmente.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das Jokari-Kabelmesser",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schneidet",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Kabelmantel längs",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "auf",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwUGxvbWJlbnphbmdl",
+    "word": "die Plombenzange",
+    "exampleSentenceDe": "Nach der Montage verplombe ich den Zähler mit der Plombenzange.",
+    "exampleSentenceEs": "Tras el montaje precinto el contador con el alicate de precintos.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Nach der Montage",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "verplombe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "den Zähler mit der Plombenzange",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwS2FiZWxzY2hlcmUlMjBtaXQlMjBEb3BwZWxzY2huZWlkZQ__",
+    "word": "die Kabelschere mit Doppelschneide",
+    "exampleSentenceDe": "Die Kabelschere mit Doppelschneide trennt dicke Kupferleiter ohne Quetschen.",
+    "exampleSentenceEs": "La tijera cortacables de doble filo corta conductores gruesos sin aplastar.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Kabelschere mit Doppelschneide",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "trennt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "dicke Kupferleiter",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ohne Quetschen",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU2VpdGVuc2NobmVpZGVy",
+    "word": "der Seitenschneider",
+    "exampleSentenceDe": "Ich schneide die Kabelbinder bündig mit dem Seitenschneider ab.",
+    "exampleSentenceEs": "Corto las bridas al ras con el alicate de corte diagonal.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schneide",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Kabelbinder bündig mit dem Seitenschneider",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ab",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwQ3JpbXB6YW5nZSUyMCg2LWthbnQp",
+    "word": "die Crimpzange (6-kant)",
+    "exampleSentenceDe": "Die 6-kant Crimpzange presst die Aderendhülse perfekt rund.",
+    "exampleSentenceEs": "La crimpadora hexagonal prensa la puntera perfectamente redonda.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die 6-kant Crimpzange",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "presst",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Aderendhülse",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "perfekt rund",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwUHJlc3N6YW5nZSUyMCg0LWthbnQp",
+    "word": "die Presszange (4-kant)",
+    "exampleSentenceDe": "Mit der 4-kant Presszange presse ich die Aderendhülsen für Reihenklemmen.",
+    "exampleSentenceEs": "Con la pinza de engaste cuadrado prenso las punteras para bornas de carril.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit der 4-kant Presszange",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "presse",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "die Aderendhülsen für Reihenklemmen",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwS2xhdWtlLVByZXNzemFuZ2U_",
+    "word": "die Klauke-Presszange",
+    "exampleSentenceDe": "Für den 16 mm² Erdungskabelschuh verwende ich die Klauke-Presszange.",
+    "exampleSentenceEs": "Para el terminal de tierra de 16 mm² utilizo la tenaza Klauke.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Für den 16 mm² Erdungskabelschuh",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "verwende",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "die Klauke-Presszange",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwSW5idXNzY2hsJUMzJUJDc3NlbA__",
+    "word": "der Inbusschlüssel",
+    "exampleSentenceDe": "Ich ziehe die Gehäuseschrauben mit dem Inbusschlüssel fest.",
+    "exampleSentenceEs": "Aprieto los tornillos de la carcasa con la llave Allen.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "ziehe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Gehäuseschrauben mit dem Inbusschlüssel",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "fest",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwUmF0c2NoZW4tUmluZ21hdWxzY2hsJUMzJUJDc3NlbA__",
+    "word": "der Ratschen-Ringmaulschlüssel",
+    "exampleSentenceDe": "Der Ratschen-Ringmaulschlüssel beschleunigt die Montage im Zählerschrank.",
+    "exampleSentenceEs": "La llave combinada con carraca acelera el montaje en el armario del contador.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Ratschen-Ringmaulschlüssel",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "beschleunigt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Montage",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "im Zählerschrank",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwSGFtbWVy",
+    "word": "der Hammer",
+    "exampleSentenceDe": "Ich schlage die Nagelschellen mit dem Hammer ein.",
+    "exampleSentenceEs": "Clavo las grapas de clavo con el martillo.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schlage",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Nagelschellen mit dem Hammer",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ein",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwR3VtbWloYW1tZXI_",
+    "word": "der Gummihammer",
+    "exampleSentenceDe": "Mit dem Gummihammer drücke ich den Kabelkanaldeckel schonend fest.",
+    "exampleSentenceEs": "Con el martillo de goma encajo la tapa de la canaleta sin dañarla.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Gummihammer",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "drücke",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich den Kabelkanaldeckel schonend",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "fest",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwUnVuZHphbmdl",
+    "word": "die Rundzange",
+    "exampleSentenceDe": "Mit der Rundzange biege ich Ösen an starre Kupferdrähte.",
+    "exampleSentenceEs": "Con el alicate de punta redonda doblo ojales en cables de cobre rígidos.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit der Rundzange",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "biege",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "Ösen an starre Kupferdrähte",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRWxla3Ryb3NlaXRlbnNjaG5laWRlcg__",
+    "word": "der Elektroseitenschneider",
+    "exampleSentenceDe": "Der Elektroseitenschneider kappt dünne Datenleitungen sauber.",
+    "exampleSentenceEs": "El cortacables de precisión corta cables finos de datos limpiamente.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Elektroseitenschneider",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "kappt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "dünne Datenleitungen",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "sauber",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwV2Fzc2Vyd2FhZ2U_",
+    "word": "die Wasserwaage",
+    "exampleSentenceDe": "Ich richte den Verteilerkasten mit der Wasserwaage waagerecht aus.",
+    "exampleSentenceEs": "Nivelo el cuadro de distribución horizontalmente con el nivel de burbuja.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "richte",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Verteilerkasten mit der Wasserwaage waagerecht",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "aus",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwWm9sbHN0b2Nr",
+    "word": "der Zollstock",
+    "exampleSentenceDe": "Ich messe die Höhe der Steckdose mit dem Zollstock.",
+    "exampleSentenceEs": "Mido la altura de la toma de corriente con el metro plegable.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "messe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Höhe der Steckdose",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit dem Zollstock",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwQW5zY2hsYWd3aW5rZWw_",
+    "word": "der Anschlagwinkel",
+    "exampleSentenceDe": "Mit dem Anschlagwinkel zeichne ich den Schnitt am Kabelkanal an.",
+    "exampleSentenceEs": "Con la escuadra marco el corte en la canaleta.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Anschlagwinkel",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "zeichne",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich den Schnitt am Kabelkanal",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "an",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwU2ljaGVyaGVpdHNtZXNzZXI_",
+    "word": "das Sicherheitsmesser",
+    "exampleSentenceDe": "Das Sicherheitsmesser zieht die Klinge nach dem Schnitt sofort ein.",
+    "exampleSentenceEs": "El cuchillo de seguridad repliega la cuchilla de inmediato tras el corte.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das Sicherheitsmesser",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "zieht",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Klinge nach dem Schnitt sofort",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ein",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwUHVrcyVDMyVBNGdl",
+    "word": "die Puksäge",
+    "exampleSentenceDe": "Ich säge die Hutschiene mit der Puksäge ab.",
+    "exampleSentenceEs": "Sierro el carril DIN con la sierra de mano PUK.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "säge",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Hutschiene mit der Puksäge",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ab",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwTWV0YWxscyVDMyVBNGdl",
+    "word": "die Metallsäge",
+    "exampleSentenceDe": "Mit der Metallsäge kürze ich das Schutzrohr M40.",
+    "exampleSentenceEs": "Con la sierra para metal acorto el tubo protector M40.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit der Metallsäge",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "kürze",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "das Schutzrohr M40",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwU2ljaGVyaGVpdHMtQ3V0dGVybWVzc2Vy",
+    "word": "das Sicherheits-Cuttermesser",
+    "exampleSentenceDe": "Ich öffne den Karton vorsichtig mit dem Sicherheits-Cuttermesser.",
+    "exampleSentenceEs": "Abro la caja de cartón con cuidado con el cúter de seguridad.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "öffne",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Karton vorsichtig",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit dem Sicherheits-Cuttermesser",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwWmltbWVybWFubnNzdGlmdA__",
+    "word": "der Zimmermannsstift",
+    "exampleSentenceDe": "Ich markiere die Bohrlöcher auf der Wand mit dem roten Zimmermannsstift.",
+    "exampleSentenceEs": "Marco los puntos de taladrado en la pared con el lápiz de carpintero rojo.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "markiere",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Bohrlöcher auf der Wand",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit dem roten Zimmermannsstift",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwSDA3Vi1LLUxlaXR1bmclMjAoMSVDMyU5NzEwJTIwbW0lQzIlQjIp",
+    "word": "die H07V-K-Leitung (1×10 mm²)",
+    "exampleSentenceDe": "Wir verdrahten den Zählerschrank mit der braunen H07V-K-Leitung 10 mm².",
+    "exampleSentenceEs": "Cableamos el armario del contador con el cable flexible H07V-K de 10 mm².",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Wir",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verdrahten",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Zählerschrank",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit der braunen H07V-K-Leitung 10 mm²",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwSDA3Uk4tRi1LYWJlbCUyMCg1RzQlMjAlMkYlMjA1RzYlMjBtbSVDMiVCMik_",
+    "word": "das H07RN-F-Kabel (5G4 / 5G6 mm²)",
+    "exampleSentenceDe": "Das H07RN-F-Kabel verbindet die Wallbox im Außenbereich flexibel.",
+    "exampleSentenceEs": "El cable de goma H07RN-F conecta la Wallbox en exteriores de forma flexible.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das H07RN-F-Kabel",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verbindet",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Wallbox im Außenbereich",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "flexibel",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwTllZLUotS2FiZWwlMjAoNSVDMyU5NzIlMkM1JTIwJTJGJTIwNSVDMyU5NzQlMjBtbSVDMiVCMik_",
+    "word": "das NYY-J-Kabel (5×2,5 / 5×4 mm²)",
+    "exampleSentenceDe": "Das schwarze NYY-J-Kabel ist für die Verlegung im Erdreich zugelassen.",
+    "exampleSentenceEs": "El cable negro NYY-J está homologado para su instalación enterrada.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das schwarze NYY-J-Kabel",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "ist",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "für die Verlegung im Erdreich",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "zugelassen",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwTllZLUotTGVpdHVuZyUyMCgxJUMzJTk3MTAlMjAlMkYlMjAxJUMzJTk3MTYlMjBtbSVDMiVCMik_",
+    "word": "die NYY-J-Leitung (1×10 / 1×16 mm²)",
+    "exampleSentenceDe": "Die NYY-J-Leitung 1×16 mm² führt von der Poti-Schiene zum Tiefenerder.",
+    "exampleSentenceEs": "El cable NYY-J 1×16 mm² va desde la barra equipotencial hasta la pica de tierra.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die NYY-J-Leitung 1×16 mm²",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "führt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "von der Poti-Schiene",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "zum Tiefenerder",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwTllNLUotS2FiZWwlMjAoMyVDMyU5NzIlMkM1JTIwbW0lQzIlQjIp",
+    "word": "das NYM-J-Kabel (3×2,5 mm²)",
+    "exampleSentenceDe": "Das graue NYM-J-Kabel 3×2,5 mm² versorgt die Steckdosen.",
+    "exampleSentenceEs": "El cable gris NYM-J 3×2,5 mm² alimenta las tomas de corriente.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das graue NYM-J-Kabel 3×2,5 mm²",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "versorgt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Steckdosen",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwTllNLUotS2FiZWwlMjAoNSVDMyU5NzEwJTIwbW0lQzIlQjIp",
+    "word": "das NYM-J-Kabel (5×10 mm²)",
+    "exampleSentenceDe": "Das NYM-J 5×10 mm² verbindet den Zähler mit der Unterverteilung.",
+    "exampleSentenceEs": "El cable NYM-J 5×10 mm² une el contador con el cuadro secundario.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das NYM-J 5×10 mm²",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verbindet",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Zähler",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit der Unterverteilung",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwTllNLUotS2FiZWwlMjAoNSVDMyU5NzE2JTIwbW0lQzIlQjIp",
+    "word": "das NYM-J-Kabel (5×16 mm²)",
+    "exampleSentenceDe": "Die Hauptzuleitung zum Zählerschrank besteht aus einem NYM-J 5×16 mm².",
+    "exampleSentenceEs": "La acometida principal al armario del contador consiste en un NYM-J 5×16 mm².",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Hauptzuleitung zum Zählerschrank",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "besteht",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "aus einem NYM-J 5×16 mm²",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwTGlZQ1ktS2FiZWw_",
+    "word": "das LiYCY-Kabel",
+    "exampleSentenceDe": "Das LiYCY-Kabel überträgt die Modbus-Daten zum Smart Meter störungsfrei.",
+    "exampleSentenceEs": "El cable LiYCY transmite los datos Modbus al Smart Meter sin interferencias.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das LiYCY-Kabel",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "überträgt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Modbus-Daten zum Smart Meter",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "störungsfrei",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwTEFOLUthYmVs",
+    "word": "das LAN-Kabel",
+    "exampleSentenceDe": "Ich verlege das LAN-Kabel vom Wechselrichter zum Router.",
+    "exampleSentenceEs": "Tiendo el cable LAN desde el inversor hasta el router.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verlege",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "das LAN-Kabel",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "vom Wechselrichter zum Router",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwUGF0Y2hrYWJlbA__",
+    "word": "das Patchkabel",
+    "exampleSentenceDe": "Ich stecke das blaue Patchkabel in den Switch.",
+    "exampleSentenceEs": "Conecto el latiguillo de red azul en el switch.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "stecke",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "das blaue Patchkabel",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "in den Switch",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwTllZLUotTGVpdHVuZyUyMCgxJUMzJTk3MTYlMjBtbSVDMiVCMik_",
+    "word": "die NYY-J-Leitung (1×16 mm²)",
+    "exampleSentenceDe": "Die NYY-J-Leitung 1×16 mm² schützt die PV-Anlage vor Überspannung.",
+    "exampleSentenceEs": "El cable NYY-J 1×16 mm² protege la instalación fotovoltaica contra sobretensiones.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die NYY-J-Leitung 1×16 mm²",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die PV-Anlage",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "vor Überspannung",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwQWRlcmVuZGglQzMlQkNsc2UlMjAoMSVDMyU5NzEwJTIwbW0lQzIlQjIp",
+    "word": "die Aderendhülse (1×10 mm²)",
+    "exampleSentenceDe": "Vor dem Festschrauben crimpe ich eine rote Aderendhülse auf das 10 mm² Kabel.",
+    "exampleSentenceEs": "Antes de atornillar crimpo una puntera roja en el cable de 10 mm².",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Vor dem Festschrauben",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "crimpe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "eine rote Aderendhülse auf das 10 mm² Kabel",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwQWRlcmVuZGglQzMlQkNsc2UlMjAoMSVDMyU5NzE2JTIwbW0lQzIlQjIp",
+    "word": "die Aderendhülse (1×16 mm²)",
+    "exampleSentenceDe": "Der 16 mm² Leiter benötigt eine blaue Aderendhülse.",
+    "exampleSentenceEs": "El conductor de 16 mm² requiere una puntera azul.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der 16 mm² Leiter",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "benötigt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "eine blaue Aderendhülse",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwRG9wcGVsLUFkZXJlbmRoJUMzJUJDbHNlJTIwKDEwJTIwbW0lQzIlQjIp",
+    "word": "die Doppel-Aderendhülse (10 mm²)",
+    "exampleSentenceDe": "Mit der Doppel-Aderendhülse klemme ich zwei 10 mm² Leiter in einen Anschluss.",
+    "exampleSentenceEs": "Con la puntera doble conecto dos conductores de 10 mm² en un solo borne.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit der Doppel-Aderendhülse",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "klemme",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "zwei 10 mm² Leiter in einen Anschluss",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwUm9ocmthYmVsc2NodWg_",
+    "word": "der Rohrkabelschuh",
+    "exampleSentenceDe": "Ich schraube den Rohrkabelschuh auf den Massebolzen des Wechselrichters.",
+    "exampleSentenceEs": "Atornillo el terminal de anillo en el perno de masa del inversor.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schraube",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Rohrkabelschuh",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "auf den Massebolzen des Wechselrichters",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwSGF1cHRsZWl0dW5nc2FiendlaWdrbGVtbWUlMjAoSExBSyk_",
+    "word": "die Hauptleitungsabzweigklemme (HLAK)",
+    "exampleSentenceDe": "Auf der HLAK verteilen wir die Phasen L1, L2 und L3 sicher.",
+    "exampleSentenceEs": "En el HLAK distribuimos las fases L1, L2 y L3 con seguridad.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Auf der HLAK",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "verteilen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "wir die Phasen L1, L2 und L3",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "sicher",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwU2FtbWVsc2NoaWVuZW5rbGVtbWU_",
+    "word": "die Sammelschienenklemme",
+    "exampleSentenceDe": "Die Sammelschienenklemme klemmt den Leiter direkt auf die Kupferschiene.",
+    "exampleSentenceEs": "El borne para barra colectora sujeta el conductor directamente a la pletina de cobre.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Sammelschienenklemme",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "klemmt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Leiter direkt",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "auf die Kupferschiene",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwV0FHTy1LbGVtbWU_",
+    "word": "die WAGO-Klemme",
+    "exampleSentenceDe": "Mit der WAGO-Klemme verbinde ich starre und flexible Leiter werkzeuglos.",
+    "exampleSentenceEs": "Con el conector WAGO uno conductores rígidos y flexibles sin herramientas.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit der WAGO-Klemme",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "verbinde",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "starre und flexible Leiter werkzeuglos",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU3RvJUMzJTlGdmVyYmluZGVy",
+    "word": "der Stoßverbinder",
+    "exampleSentenceDe": "Ich crimpe den Stoßverbinder und erwärme ihn zum Abdichten.",
+    "exampleSentenceEs": "Crimpo el conector de empalme y lo caliento para sellarlo.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "crimpe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Stoßverbinder",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "und erwärme ihn zum Abdichten",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwUEUtU2NoaWVuZQ__",
+    "word": "die PE-Schiene",
+    "exampleSentenceDe": "Alle Schutzleiter werden an der grünen PE-Schiene angeschlossen.",
+    "exampleSentenceEs": "Todos los conductores de tierra se conectan a la barra verde PE.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Alle Schutzleiter",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "werden",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "an der grünen PE-Schiene",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "angeschlossen",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwTmV1dHJhbGxlaXRlcnNjaGllbmU_",
+    "word": "die Neutralleiterschiene",
+    "exampleSentenceDe": "Die blauen Neutralleiter führen zur Neutralleiterschiene.",
+    "exampleSentenceEs": "Los conductores neutros azules van hacia la barra de neutro.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die blauen Neutralleiter",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "führen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "zur Neutralleiterschiene",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwSHV0c2NoaWVuZSUyMCg3JTJDNSUyMG1tKQ__",
+    "word": "die Hutschiene (7,5 mm)",
+    "exampleSentenceDe": "Die Sicherungsautomaten rasten auf der Hutschiene ein.",
+    "exampleSentenceEs": "Los interruptores automáticos encajan en el carril DIN.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Sicherungsautomaten",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "rasten",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "auf der Hutschiene",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ein",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwVW50ZXJ2ZXJ0ZWlsZXIlMjAoVVZUKQ__",
+    "word": "der Unterverteiler (UVT)",
+    "exampleSentenceDe": "Die Sicherungen für die Wallbox montieren wir im Unterverteiler.",
+    "exampleSentenceEs": "Montamos los automáticos para la Wallbox en el subcuadro.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Sicherungen für die Wallbox",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "montieren",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "wir",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "im Unterverteiler",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRUhaLVolQzMlQTRobGVy",
+    "word": "der EHZ-Zähler",
+    "exampleSentenceDe": "Der EHZ-Zähler misst die Einspeisung der Solaranlage und den Netzbezug.",
+    "exampleSentenceEs": "El contador eHZ mide la inyección solar y el consumo de la red.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der EHZ-Zähler",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "misst",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Einspeisung der Solaranlage",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "und den Netzbezug",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRUhaLUFkYXB0ZXI_",
+    "word": "der EHZ-Adapter",
+    "exampleSentenceDe": "Mit dem EHZ-Adapter bauen wir den neuen Zähler auf die alte Zählertafel.",
+    "exampleSentenceEs": "Con el adaptador eHZ montamos el contador nuevo en el panel de cruceta antiguo.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem EHZ-Adapter",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "bauen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "wir den neuen Zähler",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "auf die alte Zählertafel",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRWluc3BlaXNlYWRhcHRlcg__",
+    "word": "der Einspeiseadapter",
+    "exampleSentenceDe": "Der Einspeiseadapter verbindet die PV-Leitung mit dem Sammelschienensystem.",
+    "exampleSentenceEs": "El adaptador de alimentación conecta la línea solar al sistema de barras.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Einspeiseadapter",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verbindet",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die PV-Leitung",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit dem Sammelschienensystem",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwQWJkZWNrc3RyZWlmZW4_",
+    "word": "die Abdeckstreifen",
+    "exampleSentenceDe": "Die Abdeckstreifen verschließen die freien Modulplätze im Verteiler.",
+    "exampleSentenceEs": "Las tiras cubreranuras tapan los huecos libres en el cuadro.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Abdeckstreifen",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verschließen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die freien Modulplätze",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "im Verteiler",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwQWJkZWNrc3RyZWlmZW4tU3BlcnJiYXI_",
+    "word": "die Abdeckstreifen-Sperrbar",
+    "exampleSentenceDe": "Die Abdeckstreifen-Sperrbar verhindert das ungewollte Eindrücken der Tapa.",
+    "exampleSentenceEs": "La tapa de bloqueo impide que la cubierta se desplace o hunda.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Abdeckstreifen-Sperrbar",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verhindert",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "das ungewollte Eindrücken",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "der Tapa",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwUko0NS1TdGVja2Vy",
+    "word": "der RJ45-Stecker",
+    "exampleSentenceDe": "Ich crimpe den feldkonfektionierbaren RJ45-Stecker auf das Datenkabel.",
+    "exampleSentenceEs": "Crimpo el conector RJ45 de montaje en campo en el cable de datos.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "crimpe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den feldkonfektionierbaren RJ45-Stecker",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "auf das Datenkabel",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwTW9kdWxhcmt1cHBsdW5nc3ZlcmJpbmRlciUyMChSSjQ1KQ__",
+    "word": "der Modularkupplungsverbinder (RJ45)",
+    "exampleSentenceDe": "Der Modularkupplungsverbinder verlängert zwei LAN-Kabel miteinander.",
+    "exampleSentenceEs": "El acoplador modular prolonga dos cables LAN entre sí.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Modularkupplungsverbinder",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verlängert",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "zwei LAN-Kabel",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "miteinander",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwQXVmcHV0ei1TdGVja2Rvc2U_",
+    "word": "die Aufputz-Steckdose",
+    "exampleSentenceDe": "Ich installiere die Aufputz-Steckdose im Keller neben dem Wechselrichter.",
+    "exampleSentenceEs": "Instalo la toma de superficie en el sótano junto al inversor.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "installiere",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Aufputz-Steckdose im Keller",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "neben dem Wechselrichter",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwTkgtU2ljaGVydW5n",
+    "word": "die NH-Sicherung",
+    "exampleSentenceDe": "Die NH-Sicherung im Hausanschlusskasten schützt vor Kurzschluss.",
+    "exampleSentenceEs": "El fusible NH en la caja general de acometida protege contra cortocircuitos.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die NH-Sicherung im Hausanschlusskasten",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "vor Kurzschluss",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwU2NobWVsenNpY2hlcnVuZw__",
+    "word": "die Schmelzsicherung",
+    "exampleSentenceDe": "Die 35A Schmelzsicherung sichert die Zuleitung des Wechselrichters ab.",
+    "exampleSentenceEs": "El fusible cerámico de 35 A protege la acometida del inversor.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die 35A Schmelzsicherung",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "sichert",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Zuleitung des Wechselrichters",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ab",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRkklMkZMUy1TY2hhbHRlciUyMDEtcGhhc2lnJTIwKFJDQk8p",
+    "word": "der FI/LS-Schalter 1-phasig (RCBO)",
+    "exampleSentenceDe": "Der 1-phasige FI/LS-Schalter schützt die Steckdose vor Überlast und Fehlerstrom.",
+    "exampleSentenceEs": "El interruptor magnetotérmico-diferencial protege la base contra sobrecargas y fugas.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der 1-phasige FI/LS-Schalter",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Steckdose",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "vor Überlast und Fehlerstrom",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwUkNEJTIwJTJGJTIwRkktU2NoYWx0ZXIlMjAoMzAwJTIwbUEp",
+    "word": "der RCD / FI-Schalter (300 mA)",
+    "exampleSentenceDe": "Der 300 mA FI-Schalter schützt die PV-Anlage vor Isolationsbränden.",
+    "exampleSentenceEs": "El diferencial de 300 mA protege la instalación fotovoltaica contra incendios por aislamiento.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der 300 mA FI-Schalter",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die PV-Anlage",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "vor Isolationsbränden",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwTFMtU2NoYWx0ZXIlMjAlMkYlMjBMU1MlMjBDMTZBJTIwM1A_",
+    "word": "der LS-Schalter / LSS C16A 3P",
+    "exampleSentenceDe": "Der 3-polige LS-Schalter C16 schützt die dreiphasige Zuleitung.",
+    "exampleSentenceEs": "El interruptor automático tripolar C16 protege la línea trifásica.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der 3-polige LS-Schalter C16",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die dreiphasige Zuleitung",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRkklMkZMUy1TY2hhbHRlciUyMChSQ0JPKSUyMDMtcGhhc2ln",
+    "word": "der FI/LS-Schalter (RCBO) 3-phasig",
+    "exampleSentenceDe": "Die Wallbox wird durch einen 3-phasigen RCBO abgesichert.",
+    "exampleSentenceEs": "La Wallbox queda protegida mediante un RCBO trifásico.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Wallbox",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "wird",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "durch einen 3-phasigen RCBO",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "abgesichert",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwc2VsZWt0aXZlJTIwSGF1cHRsZWl0dW5nc3NjaHV0enNjaGFsdGVyJTIwKFNMUyk_",
+    "word": "der selektive Hauptleitungsschutzschalter (SLS)",
+    "exampleSentenceDe": "Der SLS-Schalter sitzt im unteren Anschlussraum vor dem Zähler.",
+    "exampleSentenceEs": "El interruptor SLS va en la zona inferior previa al contador.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der SLS-Schalter",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "sitzt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "im unteren Anschlussraum",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "vor dem Zähler",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwS2FiZWxrYW5hbA__",
+    "word": "der Kabelkanal",
+    "exampleSentenceDe": "Ich verlege die Leitungen ordentlich im weißen Kabelkanal.",
+    "exampleSentenceEs": "Tiendo los cables ordenadamente dentro de la canaleta blanca.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verlege",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Leitungen ordentlich",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "im weißen Kabelkanal",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwRW5kc3QlQzMlQkNjaw__",
+    "word": "das Endstück",
+    "exampleSentenceDe": "Das Endstück schließt den Kabelkanal sauber an der Wand ab.",
+    "exampleSentenceEs": "La pieza terminal remata la canaleta de cables limpiamente en la pared.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das Endstück",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schließt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Kabelkanal sauber an der Wand",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ab",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwUFZDLVJvaHIlMjBNNDA_",
+    "word": "das PVC-Rohr M40",
+    "exampleSentenceDe": "Das starre PVC-Rohr M40 schützt die Hauptleitung mechanisch.",
+    "exampleSentenceEs": "El tubo rígido de PVC M40 protege la línea principal mecánicamente.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das starre PVC-Rohr M40",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Hauptleitung",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mechanisch",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwRmxleHJvaHI_",
+    "word": "das Flexrohr",
+    "exampleSentenceDe": "Das schwarze Flexrohr schützt das Kabel bei der Durchführung durch die Decke.",
+    "exampleSentenceEs": "El tubo corrugado negro protege el cable al cruzar el techo.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das schwarze Flexrohr",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "das Kabel bei der Durchführung",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "durch die Decke",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwUXVpY2stU2NoZWxsZQ__",
+    "word": "die Quick-Schelle",
+    "exampleSentenceDe": "Ich drücke das PVC-Rohr mit einem Klick in die Quick-Schelle.",
+    "exampleSentenceEs": "Encajo el tubo de PVC en la abrazadera rápida con un simple clic.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "drücke",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "das PVC-Rohr mit einem Klick",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "in die Quick-Schelle",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwS2FiZWxiaW5kZXI_",
+    "word": "der Kabelbinder",
+    "exampleSentenceDe": "Ich bündele die Leitungen mit einem schwarzen Kabelbinder.",
+    "exampleSentenceEs": "Agrupo los cables con una brida negra.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "bündele",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Leitungen",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit einem schwarzen Kabelbinder",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRmVydGlnc3BhY2h0ZWw_",
+    "word": "der Fertigspachtel",
+    "exampleSentenceDe": "Ich verschließe die Bohrlöcher sauber mit dem Fertigspachtel.",
+    "exampleSentenceEs": "Tapo los agujeros de perforación limpiamente con la masilla lista para usar.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "verschließe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Bohrlöcher sauber",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit dem Fertigspachtel",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRmxhY2htZWklQzMlOUZlbA__",
+    "word": "der Flachmeißel",
+    "exampleSentenceDe": "Mit dem Flachmeißel stemme ich den Schlitz für das Rohr frei.",
+    "exampleSentenceEs": "Con el cincel plano pico la roza para el tubo.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Flachmeißel",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "stemme",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich den Schlitz für das Rohr",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "frei",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwS2FydHVzY2hlbnBpc3RvbGU_",
+    "word": "die Kartuschenpistole",
+    "exampleSentenceDe": "Ich spanne die Dichtmasse in die Kartuschenpistole ein.",
+    "exampleSentenceEs": "Coloco la masilla de sellado en la pistola para cartuchos.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "spanne",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Dichtmasse in die Kartuschenpistole",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ein",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwRGljaHRmbGV4JTIwKFNlbGxhZG9yKQ__",
+    "word": "das Dichtflex (Sellador)",
+    "exampleSentenceDe": "Das Dichtflex dichtet den Wanddurchbruch gegen Feuchtigkeit ab.",
+    "exampleSentenceEs": "El sellador Dichtflex impermeabiliza el pasamuros contra la humedad.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das Dichtflex",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "dichtet",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Wanddurchbruch gegen Feuchtigkeit",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ab",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwUGxvbWJlbmRyYWh0",
+    "word": "der Plombendraht",
+    "exampleSentenceDe": "Ich ziehe den Plombendraht durch die Schraubenösen des Zählers.",
+    "exampleSentenceEs": "Paso el alambre de precinto por las anillas del contador.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "ziehe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Plombendraht",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "durch die Schraubenösen des Zählers",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwV2FuZGR1cmNoZiVDMyVCQ2hydW5n",
+    "word": "die Wanddurchführung",
+    "exampleSentenceDe": "Die Wanddurchführung dichtet das Erdkabel im Keller absolut wasserdicht ab.",
+    "exampleSentenceEs": "El pasamuros sella el cable enterrado en el sótano garantizando total estanqueidad.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die Wanddurchführung",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "dichtet",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "das Erdkabel im Keller absolut wasserdicht",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ab",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwSXNvbGllcmJhbmQ_",
+    "word": "das Isolierband",
+    "exampleSentenceDe": "Ich markiere die Phase mit schwarzem Isolierband.",
+    "exampleSentenceEs": "Marco la fase con cinta aislante negra.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "markiere",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Phase",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit schwarzem Isolierband",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU2NocnVtcGZzY2hsYXVjaA__",
+    "word": "der Schrumpfschlauch",
+    "exampleSentenceDe": "Der Schrumpfschlauch schützt die Kabelverbindung vor Feuchtigkeit.",
+    "exampleSentenceEs": "El tubo termorretráctil protege la conexión de cables contra la humedad.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Schrumpfschlauch",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schützt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Kabelverbindung",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "vor Feuchtigkeit",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwUG90ZW50aWFsYXVzZ2xlaWNoc3NjaGllbmUlMjAoUG90aS1TY2hpZW5lKQ__",
+    "word": "die Potentialausgleichsschiene (Poti-Schiene)",
+    "exampleSentenceDe": "Alle Erdungsleitungen laufen auf der Potentialausgleichsschiene zusammen.",
+    "exampleSentenceEs": "Todas las líneas de tierra convergen en la barra equipotencial.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Alle Erdungsleitungen",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "laufen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "auf der Potentialausgleichsschiene",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "zusammen",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwVGllZmVuZXJkZXI_",
+    "word": "der Tiefenerder",
+    "exampleSentenceDe": "Wir schlagen den Tiefenerder tief in das Erdreich ein.",
+    "exampleSentenceEs": "Clavamos la pica de tierra a gran profundidad en el terreno.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Wir",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "schlagen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Tiefenerder tief in das Erdreich",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ein",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwS29ycm9zaW9uc3NjaHV0eiUyMChEZW5zby1CaW5kZSk_",
+    "word": "der Korrosionsschutz (Denso-Binde)",
+    "exampleSentenceDe": "Ich wickele den Korrosionsschutz um die Erdschelle im Boden.",
+    "exampleSentenceEs": "Envuelvo la protección anticorrosiva alrededor de la abrazadera de tierra en el suelo.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "wickele",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Korrosionsschutz",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "um die Erdschelle im Boden",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwU2ljaGVyaGVpdHNiYW5kJTIwZiVDMyVCQ3IlMjBFcmR2ZXJsZWd1bmc_",
+    "word": "das Sicherheitsband für Erdverlegung",
+    "exampleSentenceDe": "Das rote Sicherheitsband warnt vor dem Erdkabel beim Graben.",
+    "exampleSentenceEs": "La cinta roja de seguridad avisa de la presencia del cable enterrado al cavar.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das rote Sicherheitsband",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "warnt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "vor dem Erdkabel",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "beim Graben",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwQnJhbmRzY2h1dHpwbGF0dGU_",
+    "word": "die Brandschutzplatte",
+    "exampleSentenceDe": "Wir montieren die Brandschutzplatte hinter dem Wechselrichter an der Holzwand.",
+    "exampleSentenceEs": "Montamos el panel ignífugo detrás del inversor en la pared de madera.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Wir",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "montieren",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Brandschutzplatte hinter dem Wechselrichter",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "an der Holzwand",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwUGFuemVydGFwZQ__",
+    "word": "das Panzertape",
+    "exampleSentenceDe": "Das Panzertape sichert Schläuche und Kabel vorübergehend ab.",
+    "exampleSentenceEs": "La cinta americana asegura tubos y cables temporalmente.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Das Panzertape",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "sichert",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "Schläuche und Kabel vorübergehend",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ab",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwQmVzY2hyaWZ0dW5nc2dlciVDMyVBNHQ_",
+    "word": "das Beschriftungsgerät",
+    "exampleSentenceDe": "Mit dem Beschriftungsgerät drucke ich Etiketten für alle Sicherungen.",
+    "exampleSentenceEs": "Con la rotuladora imprimo etiquetas para todos los automáticos.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Beschriftungsgerät",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "drucke",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "Etiketten für alle Sicherungen",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwd2VpJUMzJTlGZSUyMFN0aWZ0",
+    "word": "der weiße Stift",
+    "exampleSentenceDe": "Ich markiere die schwarzen Kabel mit dem weißen Stift.",
+    "exampleSentenceEs": "Marco los cables negros con el rotulador blanco.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "markiere",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die schwarzen Kabel",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit dem weißen Stift",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRXJzdGUtSGlsZmUtS29mZmVy",
+    "word": "der Erste-Hilfe-Koffer",
+    "exampleSentenceDe": "Der orangefarbene Erste-Hilfe-Koffer befindet sich im Montagefahrzeug.",
+    "exampleSentenceEs": "El botiquín de primeros auxilios naranja está en el furgón de montaje.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der orangefarbene Erste-Hilfe-Koffer",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "befindet sich",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "im Montagefahrzeug",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwTEVELUxhbXBlJTIwVyVDMyVCQ3J0aA__",
+    "word": "die LED-Lampe Würth",
+    "exampleSentenceDe": "Die magnetische LED-Lampe beleuchtet den dunklen Zählerschrank.",
+    "exampleSentenceEs": "La lámpara LED imantada ilumina el armario del contador oscuro.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Die magnetische LED-Lampe",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "beleuchtet",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den dunklen Zählerschrank",
+        "role": "complement",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwSG9semxlaXRlcg__",
+    "word": "die Holzleiter",
+    "exampleSentenceDe": "Elektriker nutzen die Holzleiter, weil Holz keinen Strom leitet.",
+    "exampleSentenceEs": "Los electricistas usan la escalera de madera porque la madera no conduce electricidad.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Elektriker",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "nutzen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Holzleiter",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "weil Holz keinen Strom leitet",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGllJTIwVHJpdHRsZWl0ZXI_",
+    "word": "die Trittleiter",
+    "exampleSentenceDe": "Auf der Trittleiter erreiche ich die oberen Reihen des Verteilerkastens.",
+    "exampleSentenceEs": "En la escalera corta alcanzo las filas superiores del cuadro de distribución.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Auf der Trittleiter",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "erreiche",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "die oberen Reihen des Verteilerkastens",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU3Bhbm5ndXJ0",
+    "word": "der Spanngurt",
+    "exampleSentenceDe": "Ich sichere die Leitern im Transporter mit dem Spanngurt.",
+    "exampleSentenceEs": "Aseguro las escaleras en la furgoneta con la cincha de amarre.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "sichere",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "die Leitern im Transporter",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "mit dem Spanngurt",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwS2F0aWJsaXR6",
+    "word": "der Katiblitz",
+    "exampleSentenceDe": "Mit dem Katiblitz ziehe ich das LAN-Kabel durch das lange Leerrohr.",
+    "exampleSentenceEs": "Con el Katiblitz tiro del cable LAN a través del tubo corrugado largo.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Mit dem Katiblitz",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "ziehe",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "ich",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "das LAN-Kabel durch das lange Leerrohr",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGFzJTIwS2VocmJsZWNo",
+    "word": "das Kehrblech",
+    "exampleSentenceDe": "Ich fege den Bohrstaub mit dem Handfeger auf das Kehrblech.",
+    "exampleSentenceEs": "Barro el polvo de perforar con la escobilla hacia el recogedor.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "fege",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Bohrstaub mit dem Handfeger",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "auf das Kehrblech",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwSGFuZGZlZ2Vy",
+    "word": "der Handfeger",
+    "exampleSentenceDe": "Der Handfeger säubert den Zählerschrank nach der Montage.",
+    "exampleSentenceEs": "La escobilla limpia el armario del contador tras el montaje.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Handfeger",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "säubert",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den Zählerschrank",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "nach der Montage",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU3RhdWJzYXVnZXI_",
+    "word": "der Staubsauger",
+    "exampleSentenceDe": "Der Staubsauger saugt den feinen Betonstaub direkt beim Bohren ab.",
+    "exampleSentenceEs": "El aspirador absorbe el polvo fino de hormigón directamente al taladrar.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Der Staubsauger",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "saugt",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "den feinen Betonstaub direkt beim Bohren",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ab",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwU3RhdWJzYXVnZXJiZXV0ZWw_",
+    "word": "der Staubsaugerbeutel",
+    "exampleSentenceDe": "Ich setze einen neuen Staubsaugerbeutel in den Sauger ein.",
+    "exampleSentenceEs": "Coloco una nueva bolsa de aspiradora en el aspirador.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "setze",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "einen neuen Staubsaugerbeutel in den Sauger",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "ein",
+        "role": "verb_p2",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwQmVzZW4_",
+    "word": "der Besen",
+    "exampleSentenceDe": "Zum Feierabend fegen wir den Kellerboden sauber mit dem Besen.",
+    "exampleSentenceEs": "Al terminar la jornada barremos el suelo del sótano limpiamente con la escoba.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Zum Feierabend",
+        "role": "complement",
+        "order": 1
+      },
+      {
+        "text": "fegen",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "wir den Kellerboden sauber",
+        "role": "subject",
+        "order": 3
+      },
+      {
+        "text": "mit dem Besen",
+        "role": "complement",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "ZGVyJTIwRWltZXI_",
+    "word": "der Eimer",
+    "exampleSentenceDe": "Ich sammle Kabelreste und Abfall im roten Eimer.",
+    "exampleSentenceEs": "Recojo los restos de cable y residuos en el cubo rojo.",
+    "exampleSentenceDeBlocks": [
+      {
+        "text": "Ich",
+        "role": "subject",
+        "order": 1
+      },
+      {
+        "text": "sammle",
+        "role": "verb_p1",
+        "order": 2
+      },
+      {
+        "text": "Kabelreste und Abfall",
+        "role": "complement",
+        "order": 3
+      },
+      {
+        "text": "im roten Eimer",
+        "role": "complement",
+        "order": 4
+      }
+    ]
   }
 ]
