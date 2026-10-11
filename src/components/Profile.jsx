@@ -11,7 +11,7 @@ import { EmailAuthProvider, GoogleAuthProvider, linkWithCredential, linkWithPopu
 
 const AVATARS = ['🦊', '🦉', '🐼', '🦁', '🐯', '🐸', '🦄', '🦖', '🚀', '👑', '⚡', '🎓'];
 
-const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount = 1320 }) => {
+const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount = 1389 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginMode, setIsLoginMode] = useState(false);
