@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
-import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause, Filter, CloudDownload } from 'lucide-react';
+import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause, Filter } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
@@ -16,7 +16,6 @@ import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, splitGermanTitle, splitParentheticalText } from './utils/helpers';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
-import { syncCloudMediaToLocal } from './services/syncMediaService';
 import { API_ENDPOINTS } from './config/apiEndpoints';
 
 import Profile from './components/Profile';
@@ -259,9 +258,6 @@ export default function App() {
     }
   };
 
-  const [isSyncingGlobalMedia, setIsSyncingGlobalMedia] = useState(false);
-  const [globalSyncProgress, setGlobalSyncProgress] = useState(null);
-
   // Escucha el evento mediaSyncCompleted para refrescar el estado de cardImages en memoria
   useEffect(() => {
     const handleMediaSyncCompleted = async () => {
@@ -288,28 +284,6 @@ export default function App() {
       window.removeEventListener('mediaSyncCompleted', handleMediaSyncCompleted);
     };
   }, []);
-
-  const handleSyncCloudMedia = async () => {
-    if (isSyncingGlobalMedia) return;
-    setIsSyncingGlobalMedia(true);
-    setGlobalSyncProgress(null);
-    try {
-      const res = await syncCloudMediaToLocal(prog => {
-        setGlobalSyncProgress(prog);
-      });
-      if (res.success) {
-        window.dispatchEvent(new CustomEvent('mediaSyncCompleted', { detail: { syncedCount: res.syncedCount } }));
-        alert(`¡Sincronización exitosa! Se han actualizado ${res.syncedCount} ilustraciones y videos.`);
-      } else {
-        alert(`Error al sincronizar medios: ${res.error || 'Error desconocido'}`);
-      }
-    } catch (err) {
-      alert(`Error al sincronizar medios: ${err.message}`);
-    } finally {
-      setIsSyncingGlobalMedia(false);
-      setGlobalSyncProgress(null);
-    }
-  };
 
   const [unlockedCards, setUnlockedCards] = useState(() => {
     try {
@@ -1086,17 +1060,8 @@ export default function App() {
                     <p className="text-xs text-slate-400">Alemán Técnico & Preparación Goethe Zertifikat</p>
                   </div>
                 </div>
-                {/* HAMBURGER + PROFILE + SYNC ON MOBILE */}
+                {/* HAMBURGER + PROFILE ON MOBILE */}
                 <div className="flex items-center gap-2 md:hidden">
-                  <button 
-                    onClick={handleSyncCloudMedia} 
-                    disabled={isSyncingGlobalMedia} 
-                    className="bg-slate-800 text-indigo-400 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" 
-                    aria-label="Sincronizar Medios de la Nube"
-                    title={isSyncingGlobalMedia ? "Sincronizando medios..." : "Sincronizar Medios de la Nube"}
-                  >
-                    <CloudDownload size={20} className={isSyncingGlobalMedia ? "animate-bounce text-yellow-400" : ""} />
-                  </button>
                   <button onClick={() => setViewMode('profile')} className="bg-slate-800 text-blue-400 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Perfil">
                     <User size={20} />
                   </button>
@@ -1114,17 +1079,8 @@ export default function App() {
                 <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
               </div>
 
-              {/* HAMBURGER + PROFILE + SYNC ON DESKTOP */}
+              {/* PROFILE + MENU ON DESKTOP */}
               <div className="hidden md:flex items-center gap-2">
-                <button 
-                  onClick={handleSyncCloudMedia} 
-                  disabled={isSyncingGlobalMedia} 
-                  className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-2 shadow-md cursor-pointer text-sm"
-                  title="Descargar catálogo de medios de la nube a almacenamiento local"
-                >
-                  <CloudDownload size={18} className={isSyncingGlobalMedia ? "animate-bounce text-yellow-300" : ""} />
-                  <span>{isSyncingGlobalMedia ? (globalSyncProgress ? `${globalSyncProgress.current}/${globalSyncProgress.total}` : 'Sincronizando...') : 'Sincronizar Medios'}</span>
-                </button>
                 <button onClick={() => setViewMode('profile')} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-2 shadow-md cursor-pointer text-sm">
                   <User size={18} /> Perfil
                 </button>
@@ -1184,13 +1140,6 @@ export default function App() {
                 setIsMenuOpen(false);
               }} className="bg-blue-600 text-white col-span-2 py-2.5 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-xs shadow-sm">
                       <User size={18} /> Mi Perfil y Configuración
-                    </button>
-                    <button onClick={() => {
-                setIsMenuOpen(false);
-                handleSyncCloudMedia();
-              }} className="bg-indigo-700/80 text-white col-span-2 py-2.5 rounded-lg font-bold hover:bg-indigo-600 transition flex items-center justify-center gap-2 text-xs shadow-sm">
-                      <CloudDownload size={18} className={isSyncingGlobalMedia ? "animate-bounce text-yellow-300" : ""} />
-                      <span>{isSyncingGlobalMedia ? 'Sincronizando Medios...' : '🔄 Sincronizar Medios de la Nube'}</span>
                     </button>
                   </div>
 
