@@ -195,9 +195,11 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
     });
   };
 
-  const sentenceText = (Array.isArray(wordObj.exampleSentenceDeBlocks) && wordObj.exampleSentenceDeBlocks.length > 0)
-    ? wordObj.exampleSentenceDeBlocks.map(b => (typeof b === 'object' && b !== null && b.text ? b.text : b)).join(" ")
-    : (wordObj.exampleSentenceDe || "");
+  const sentenceToPlay = wordObj.exampleSentenceDe?.trim() || 
+    (Array.isArray(wordObj.exampleSentenceDeBlocks) 
+      ? wordObj.exampleSentenceDeBlocks.map(b => (typeof b === 'object' && b !== null && b.text ? b.text : b)).join(" ").trim() 
+      : "");
+  const sentenceText = sentenceToPlay;
 
   const handleSpeakSentence = (e) => {
     if (e) e.stopPropagation();
@@ -271,14 +273,17 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
 
   // Detección de Plataforma y Privilegios
   const isNative = Capacitor.isNativePlatform();
+  // Exclusividad absoluta para localhost / entorno de desarrollo
   const isDev = Boolean(
-    import.meta.env.DEV || 
-    window.location.hostname === "localhost" || 
-    window.location.hostname === "127.0.0.1"
+    !isNative && (
+      import.meta.env.DEV || 
+      window.location.hostname === "localhost" || 
+      window.location.hostname === "127.0.0.1"
+    )
   );
 
-  // Solo el entorno local y la APK tienen privilegios de generación multimedia
-  const canGenerateMedia = isDev || isNative;
+  // En la APK nativa (Capacitor) y en producción web esto evalúa SIEMPRE a false
+  const canGenerateMedia = isDev;
 
   // Condición estricta: sólo si el entorno permite generar medios Y el verbo es kinestésico/de movimiento
   const canShowVideoButton = canGenerateMedia && isMotionVideoEligible(wordObj);
@@ -309,10 +314,10 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
       const response = await regenerateMediaFn({
         wordObj: targetWord,
         mediaType: desiredMediaType,
-        forceRegenerate: isDev || isNative,
+        forceRegenerate: isDev,
         isDevEnvironment: isDev,
-        isNativePlatform: isNative,
-        clientPlatform: isDev ? 'dev' : (isNative ? 'native' : 'web')
+        isNativePlatform: false,
+        clientPlatform: isDev ? 'dev' : 'web'
       });
 
       if (!response.data || !response.data.success) {
@@ -490,7 +495,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
           {/* Controles de Generación: Exclusivos de Entorno Local y APK */}
           {canGenerateMedia && (
             <div className="flex items-center gap-1.5 absolute top-3 right-3 z-30">
-              {/* Botón Imagen con Nano Banana 2 */}
+              {/* Botón Imagen con Nano Banana 2 Lite (gemini-3.1-flash-lite-image) */}
               <button
                 onClick={(e) => handleRegenerateMedia(wordObj, "image", e)}
                 disabled={isRegenerating}
@@ -567,7 +572,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                  </div>
                )}
                <span className="text-4xl opacity-20 absolute pointer-events-none">{wordObj.emoji || "📝"}</span>
-               {generateCardImage && (
+               {canGenerateMedia && generateCardImage && (
                  <button 
                    onClick={(e) => { e.stopPropagation(); generateCardImage(wordObj, e); }} 
                    className="relative z-20 bg-white hover:bg-blue-50 text-blue-600 px-3 py-1.5 rounded shadow-sm border border-blue-200 transition-all flex items-center gap-1.5 text-xs font-bold"
@@ -712,11 +717,9 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
               );
             })()}
             {/* Renderizado de oraciones reales */}
-            {((Array.isArray(wordObj.exampleSentenceDeBlocks) && wordObj.exampleSentenceDeBlocks.length > 0) || wordObj.exampleSentenceDe) && (
+            {Boolean(sentenceToPlay) && (
               (() => {
-                const oracionDe = (Array.isArray(wordObj.exampleSentenceDeBlocks) && wordObj.exampleSentenceDeBlocks.length > 0)
-                  ? wordObj.exampleSentenceDeBlocks.map(b => (typeof b === 'object' && b !== null && b.text ? b.text : b)).join(" ")
-                  : (wordObj.exampleSentenceDe || "");
+                const oracionDe = sentenceToPlay;
                 const deLength = oracionDe.length;
                 // Invertimos las jerarquías: Alemán protagonista (grande), Español soporte (pequeño/tenue)
                 const deTextClass = deLength > 60 

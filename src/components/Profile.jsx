@@ -3,10 +3,12 @@ import localforage from 'localforage';
 import { 
   User, Mail, Lock, RefreshCw, Crown, CheckCircle2, Flame, 
   Layers, Trophy, Volume2, ShieldCheck, FileText, ChevronRight, 
-  ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle 
+  ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle,
+  CloudDownload, Loader2
 } from 'lucide-react';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { getDailyStudyStreak, getStudiedCardsCount, getCompletedModulesCount } from '../utils/helpers';
+import { syncCloudMediaToLocal, getLastMediaSyncTime } from '../services/syncMediaService';
 import { EmailAuthProvider, GoogleAuthProvider, linkWithCredential, linkWithPopup, signInWithEmailAndPassword, signInWithPopup, signOut, deleteUser } from 'firebase/auth';
 
 const AVATARS = ['🦊', '🦉', '🐼', '🦁', '🐯', '🐸', '🦄', '🦖', '🚀', '👑', '⚡', '🎓'];
@@ -29,6 +31,10 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
   const [studiedCount, setStudiedCount] = useState(studiedCardsCount || unlockedCardsCount || 0);
   const [completedModulesCount, setCompletedModulesCount] = useState(0);
   const [isPlayingTest, setIsPlayingTest] = useState(false);
+  const [isSyncingMedia, setIsSyncingMedia] = useState(false);
+  const [mediaSyncProgress, setMediaSyncProgress] = useState(null);
+  const [lastMediaSync, setLastMediaSync] = useState(null);
+  const [syncSuccessMessage, setSyncSuccessMessage] = useState(null);
 
   const isRegistered = user && user.isAnonymous === false;
 
@@ -78,6 +84,37 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
   useEffect(() => {
     localStorage.setItem('dm_voice_speed', voiceSpeed);
   }, [voiceSpeed]);
+
+  useEffect(() => {
+    getLastMediaSyncTime().then(time => {
+      if (time) setLastMediaSync(time);
+    });
+  }, []);
+
+  const handleSyncMedia = async () => {
+    if (isSyncingMedia) return;
+    setIsSyncingMedia(true);
+    setMediaSyncProgress(null);
+    setSyncSuccessMessage(null);
+    setError(null);
+    try {
+      const res = await syncCloudMediaToLocal((prog) => {
+        setMediaSyncProgress(prog);
+      });
+      if (res.success) {
+        setLastMediaSync(res.lastSyncTime);
+        const msg = `¡Sincronización exitosa! Se han actualizado ${res.syncedCount} ilustraciones y videos.`;
+        setSyncSuccessMessage(msg);
+        window.dispatchEvent(new CustomEvent('mediaSyncCompleted', { detail: { syncedCount: res.syncedCount } }));
+      } else {
+        setError(`Error en la sincronización: ${res.error || 'Error desconocido'}`);
+      }
+    } catch (err) {
+      setError(`Error en la sincronización: ${err.message}`);
+    } finally {
+      setIsSyncingMedia(false);
+    }
+  };
 
   const handlePlayAudioTest = async () => {
     if (isPlayingTest) {
@@ -572,6 +609,81 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
                     />
                   </div>
                 </div>
+              </div>
+            </section>
+
+            {/* Tarjeta de Utilidades: Sincronización Masiva de Medios de la Nube */}
+            <section className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-4 sm:p-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-indigo-50 text-indigo-600 shrink-0">
+                    <CloudDownload size={24} className={isSyncingMedia ? "animate-bounce text-indigo-600" : ""} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-1.5">
+                      🔄 Actualizar Medios de la Nube
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Descarga el catálogo completo de ilustraciones y videos desde Firestore para acceso instantáneo offline.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleSyncMedia}
+                  disabled={isSyncingMedia}
+                  className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-60 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-2 cursor-pointer self-stretch sm:self-auto shrink-0"
+                >
+                  {isSyncingMedia ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      <span>Sincronizando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw size={15} />
+                      <span>Sincronizar Ahora</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Estado y Barra de Progreso Dinámica */}
+              {isSyncingMedia && mediaSyncProgress && (
+                <div className="mt-4 pt-3 border-t border-slate-100">
+                  <div className="flex justify-between items-center text-xs font-semibold text-slate-600 mb-1.5">
+                    <span className="flex items-center gap-1.5 text-indigo-600">
+                      <Loader2 size={13} className="animate-spin" />
+                      Sincronizando {mediaSyncProgress.current} de {mediaSyncProgress.total}...
+                    </span>
+                    <span>{Math.round((mediaSyncProgress.current / (mediaSyncProgress.total || 1)) * 100)}%</span>
+                  </div>
+                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-300"
+                      style={{ width: `${Math.round((mediaSyncProgress.current / (mediaSyncProgress.total || 1)) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Mensaje de éxito al completar */}
+              {syncSuccessMessage && !isSyncingMedia && (
+                <div className="mt-3 p-3 bg-emerald-50 border border-emerald-200/60 rounded-xl flex items-center gap-2 text-emerald-800 text-xs font-medium animate-in fade-in">
+                  <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+                  <span>{syncSuccessMessage}</span>
+                </div>
+              )}
+
+              {/* Marca de tiempo de última sincronización */}
+              <div className="mt-3 pt-2 border-t border-slate-50 flex items-center justify-between text-[11px] text-slate-400 font-medium">
+                <span>Estado de almacenamiento local:</span>
+                <span>
+                  {lastMediaSync 
+                    ? `Última sincronización: ${new Date(lastMediaSync).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' })}`
+                    : 'Sin sincronización previa'}
+                </span>
               </div>
             </section>
 

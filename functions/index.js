@@ -1568,15 +1568,22 @@ Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocab
 // Arquitectura de Caché Global Nivel 2 y 3 (Firestore + Cloud Storage + Fal.ai)
 // =========================================================================
 
-// Sanitización determinista de texto alemán a ID seguro para Firestore y Storage
+// Sanitización canónica determinista de texto alemán a ID seguro para Firestore y Storage
 function getSafeAudioId(text) {
-  return "audio_" + text
+  if (!text || typeof text !== "string") return "audio_unknown";
+  
+  const normalized = text
     .trim()
     .toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quitar acentos
     .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
-    .replace(/[^a-z0-9_]/gi, "_")
+    .replace(/[.,/#!$%^&*;:{}=\-_`~()?"'«»]/g, " ") // Convertir puntuación a espacios
+    .replace(/\s+/g, "_")                            // Espacios a guión bajo
+    .replace(/[^a-z0-9_]/g, "")                     // Quitar cualquier caracter residual
+    .replace(/^_+|_+$/g, "")                        // Recortar guiones bajos iniciales y finales
     .substring(0, 120);
+
+  return "audio_" + (normalized || "audio");
 }
 
 /**
@@ -1676,15 +1683,25 @@ export const synthesizeGermanSpeech = onCall(
     // ── NIVEL 2: REVISIÓN DE CACHÉ EN LA NUBE (Excluido para cuentos y lecturas efímeras) ──
     if (!isEphemeral) {
       const audioDocRef = db.collection("global_audio_pronunciations").doc(audioId);
-      const docSnap = await audioDocRef.get();
+      let docSnap = await audioDocRef.get();
+
+      // Compatibilidad con audios generados anteriormente con guión bajo final
+      if (!docSnap.exists) {
+        const legacyDocRef = db.collection("global_audio_pronunciations").doc(`${audioId}_`);
+        const legacySnap = await legacyDocRef.get();
+        if (legacySnap.exists) {
+          docSnap = legacySnap;
+        }
+      }
+
       if (docSnap.exists) {
         const data = docSnap.data();
         if (data && data.audioUrl && !data.audioUrl.includes("gcf-v2-sources") && !data.audioUrl.includes("gcf-v2-uploads")) {
-          console.log(`[TTS Cache Hit] Audio válido encontrado en Firestore [${audioId}]`);
+          console.log(`[TTS Cache Hit] Audio válido encontrado en Firestore [${docSnap.id}]`);
           return {
             success: true,
             audioUrl: data.audioUrl,
-            audioId: audioId,
+            audioId: data.audioId || audioId,
             fromCloudCache: true,
             provider: "cloud-cache"
           };
@@ -1886,7 +1903,7 @@ function buildVisualPrompt(wordObj, isVideo = false) {
     ].join(" ");
   }
 
-  // Prompt estático para gemini-3.1-flash-image (Nano Banana 2)
+  // Prompt estático para gemini-3.1-flash-lite-image (Nano Banana 2 Lite)
   const cleanConcept = (wordObj.en || wordObj.concepto_ingles || wordObj.es || "")
     .replace(/[≠+].*$/g, "")
     .trim();
@@ -1910,10 +1927,10 @@ async function optimizeImageBuffer(buffer) {
 }
 
 /**
- * 1. Generación de Imagen con Nano Banana 2 (gemini-3.1-flash-image)
+ * 1. Generación de Imagen con Nano Banana 2 Lite (gemini-3.1-flash-lite-image)
  */
 async function generateGoogleFlashImage(prompt, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-image:generateContent?key=${apiKey}`;
 
   const payload = {
     contents: [
@@ -1945,7 +1962,7 @@ async function generateGoogleFlashImage(prompt, apiKey) {
   const imagePart = parts.find(p => p.inlineData && p.inlineData.data);
 
   if (!imagePart) {
-    throw new Error("gemini-3.1-flash-image no devolvió bytes de imagen inlineData.");
+    throw new Error("gemini-3.1-flash-lite-image no devolvió bytes de imagen inlineData.");
   }
 
   return {
@@ -2108,11 +2125,19 @@ export const regenerateCardMedia = onCall(
         clientPlatform = "web"
       } = request.data || {};
 
+      // Candado Estricto de Seguridad: Exclusivo de Entorno Local de Desarrollo
+      if (!isDevEnvironment || clientPlatform === "native") {
+        return {
+          success: false,
+          error: "La generación de medios con IA está estrictamente inhabilitada fuera del entorno de desarrollo local."
+        };
+      }
+
       if (!wordObj || !wordObj.de) {
         return { success: false, error: "wordObj.de es requerido." };
       }
 
-      const isAuthorizedClient = Boolean(isDevEnvironment || isNativePlatform || clientPlatform === "native" || clientPlatform === "dev");
+      const isAuthorizedClient = Boolean(isDevEnvironment && clientPlatform !== "native");
       const db = admin.firestore();
       const safeId = wordObj.de.toLowerCase().replace(/[^a-z0-9]/gi, "_").substring(0, 100);
       const isVerb = isVerbItem(wordObj);
@@ -2186,11 +2211,11 @@ export const regenerateCardMedia = onCall(
         }
       }
 
-      // 3. Candado para Creación/Regeneración: Solo APK y Entorno Local
-      if (!isAuthorizedClient) {
+      // 3. Candado para Creación/Regeneración: Solo Entorno Local de Desarrollo
+      if (!isDevEnvironment || clientPlatform === "native") {
         return {
           success: false,
-          error: "La generación de medios con IA está restringida a la APK y al entorno de desarrollo."
+          error: "La generación de medios con IA está estrictamente inhabilitada fuera del entorno de desarrollo local."
         };
       }
 
@@ -2204,7 +2229,7 @@ export const regenerateCardMedia = onCall(
       let mimeType = "image/jpeg";
       let fileExtension = "jpeg";
       let actualMediaType = "image";
-      let provider = "gemini-3.1-flash-image";
+      let provider = "gemini-3.1-flash-lite-image";
 
       // Intento de video para verbos
       if (wantVideo) {
@@ -2227,7 +2252,7 @@ export const regenerateCardMedia = onCall(
           mimeType = "image/jpeg";
           fileExtension = "jpeg";
           actualMediaType = "image";
-          provider = "gemini-3.1-flash-image";
+          provider = "gemini-3.1-flash-lite-image";
         }
       } else {
         console.log(`[Media Engine] Generando imagen para: ${wordObj.de}`);
@@ -2239,7 +2264,7 @@ export const regenerateCardMedia = onCall(
         mimeType = "image/jpeg";
         fileExtension = "jpeg";
         actualMediaType = "image";
-        provider = "gemini-3.1-flash-image";
+        provider = "gemini-3.1-flash-lite-image";
       }
 
       // Persistencia en Cloud Storage

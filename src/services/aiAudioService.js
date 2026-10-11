@@ -11,13 +11,20 @@ const audioStore = localforage.createInstance({
 let currentAudioInstance = null;
 
 export const getSafeAudioKey = (text) => {
-  return "tts_" + text
+  if (!text || typeof text !== "string") return "tts_unknown";
+  
+  const normalized = text
     .trim()
     .toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
-    .replace(/[^a-z0-9_]/gi, "_")
-    .substring(0, 100);
+    .replace(/[.,/#!$%^&*;:{}=\-_`~()?"'«»]/g, " ")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_]/g, "")
+    .replace(/^_+|_+$/g, "")
+    .substring(0, 120);
+
+  return "tts_" + (normalized || "audio");
 };
 
 export function stopCurrentAudio() {
@@ -67,7 +74,10 @@ export async function playGermanAudio(text, options = {}) {
     const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
 
     if (!isEphemeral) {
-      const cachedBlob = await audioStore.getItem(cacheKey);
+      let cachedBlob = await audioStore.getItem(cacheKey);
+      if (!cachedBlob) {
+        cachedBlob = await audioStore.getItem(`${cacheKey}_`);
+      }
       if (cachedBlob) {
         const localBlobUrl = URL.createObjectURL(cachedBlob);
         const localAudio = new Audio(localBlobUrl);
