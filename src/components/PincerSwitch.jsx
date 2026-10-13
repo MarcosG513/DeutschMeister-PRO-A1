@@ -2,17 +2,28 @@ import React, { useState } from 'react';
 import { Scissors, Play, CheckCircle2, RotateCcw, ArrowRight } from 'lucide-react';
 import { playGermanAudio } from '../services/aiAudioService';
 
-const PincerSwitch = ({ exercises = [] }) => {
-  const list = exercises.length > 0 ? exercises : [
-    { subject: "Ich", verbRaiz: "stehe", prefix: "auf", complement: "um 7 Uhr", verbOriginal: "aufstehen", translation: "Yo me levanto a las 7" },
-    { subject: "Er", verbRaiz: "kauft", prefix: "ein", complement: "im Supermarkt", verbOriginal: "einkaufen", translation: "Él compra en el supermercado" },
-    { subject: "Wir", verbRaiz: "sehen", prefix: "fern", complement: "am Abend", verbOriginal: "fernsehen", translation: "Nosotros vemos TV por la noche" }
+const PincerSwitch = ({ exercises = [], isModal = false }) => {
+  const defaultSeparable = [
+    { isModal: false, subject: "Ich", verbRaiz: "stehe", prefix: "auf", complement: "um 7 Uhr", verbOriginal: "aufstehen", translation: "Yo me levanto a las 7" },
+    { isModal: false, subject: "Er", verbRaiz: "kauft", prefix: "ein", complement: "im Supermarkt", verbOriginal: "einkaufen", translation: "Él compra en el supermercado" },
+    { isModal: false, subject: "Wir", verbRaiz: "sehen", prefix: "fern", complement: "am Abend", verbOriginal: "fernsehen", translation: "Nosotros vemos TV por la noche" }
   ];
+
+  const defaultModal = [
+    { isModal: true, subject: "Ich", verbRaiz: "muss", prefix: "arbeiten", complement: "heute", verbOriginal: "müssen + arbeiten", translation: "Yo tengo que trabajar hoy" },
+    { isModal: true, subject: "Wir", verbRaiz: "können", prefix: "sprechen", complement: "gut Deutsch", verbOriginal: "können + sprechen", translation: "Nosotros podemos hablar bien alemán" },
+    { isModal: true, subject: "Du", verbRaiz: "sollst", prefix: "bleiben", complement: "im Bett", verbOriginal: "sollen + bleiben", translation: "Tú debes quedarte en cama" }
+  ];
+
+  const list = exercises.length > 0 
+    ? exercises 
+    : (isModal ? defaultModal : defaultSeparable);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isActive, setIsActive] = useState(false);
 
-  const current = list[currentIndex];
+  const current = list[currentIndex] || list[0];
+  const isModalActive = Boolean(current.isModal || isModal);
 
   const triggerPincer = () => {
     setIsActive(true);
@@ -35,7 +46,7 @@ const PincerSwitch = ({ exercises = [] }) => {
     <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm max-w-xl mx-auto my-6 text-left">
       <div className="flex justify-between items-center mb-4">
         <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-          🗜️ {current.isModal ? 'El Sándwich Verbal (Verbo Modal + Infinitivo)' : 'El Interruptor de Pinza (Verbo Separable)'}
+          🗜️ {isModalActive ? 'El Sándwich Verbal (Verbo Modal + Infinitivo)' : 'El Interruptor de Pinza (Verbo Separable)'}
         </span>
         <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
           {current.verbOriginal}
@@ -57,7 +68,7 @@ const PincerSwitch = ({ exercises = [] }) => {
           </div>
 
           <div className="relative min-h-[48px] md:min-h-[64px] h-auto py-2 flex items-center justify-center w-full">
-            {/* Prefijo + Raíz juntos */}
+            {/* Prefijo / Infinitivo + Raíz juntos */}
             <div 
               className="absolute inset-0 bg-rose-50 border-2 border-rose-200 text-rose-800 rounded-lg p-1 flex flex-col justify-center items-center transition-all duration-500 max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{
@@ -67,7 +78,7 @@ const PincerSwitch = ({ exercises = [] }) => {
               }}
             >
               <span className="font-extrabold text-[10px] sm:text-xs md:text-sm text-rose-700 break-words whitespace-normal leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">
-                {current.isModal ? (
+                {isModalActive ? (
                   <>{current.verbRaiz} {current.prefix}</>
                 ) : (
                   <><span className="underline">{current.prefix}</span>{current.verbRaiz}</>
@@ -76,7 +87,7 @@ const PincerSwitch = ({ exercises = [] }) => {
               <span className="text-[8px] font-medium text-rose-500">Incorrecto</span>
             </div>
 
-            {/* Solo Raíz */}
+            {/* Solo Raíz / Verbo Conjugado */}
             <div 
               className="absolute inset-0 bg-indigo-600 border border-indigo-600 text-white rounded-lg p-1 flex flex-col justify-center items-center transition-all duration-500 shadow-sm max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{
@@ -86,7 +97,7 @@ const PincerSwitch = ({ exercises = [] }) => {
               }}
             >
               <span className="font-black text-[10px] sm:text-xs md:text-sm break-words whitespace-normal leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">{current.verbRaiz}</span>
-              <span className="text-[8px] font-medium text-indigo-200">Raíz</span>
+              <span className="text-[8px] font-medium text-indigo-200">Posición 2</span>
             </div>
           </div>
 
@@ -102,7 +113,7 @@ const PincerSwitch = ({ exercises = [] }) => {
               Vacío
             </div>
 
-            {/* Prefijo volando al final */}
+            {/* Prefijo / Infinitivo al final */}
             <div 
               className="absolute inset-0 bg-emerald-600 border-emerald-600 text-white rounded-lg p-1 flex flex-col justify-center items-center transition-all duration-500 shadow-sm max-w-full break-words whitespace-normal text-center overflow-hidden"
               style={{
@@ -112,7 +123,7 @@ const PincerSwitch = ({ exercises = [] }) => {
               }}
             >
               <span className="font-black text-[10px] sm:text-xs md:text-sm break-words whitespace-normal leading-tight max-w-full break-words whitespace-normal text-center overflow-hidden">{current.prefix}</span>
-              <span className="text-[8px] font-medium text-emerald-100">Prefijo</span>
+              <span className="text-[8px] font-medium text-emerald-100">{isModalActive ? 'Infinitivo' : 'Prefijo'}</span>
             </div>
           </div>
         </div>
@@ -125,7 +136,11 @@ const PincerSwitch = ({ exercises = [] }) => {
         <div className="bg-emerald-100 border border-emerald-200 text-emerald-800 p-3 rounded-xl flex items-start gap-2 mb-6 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-bottom-2">
           <CheckCircle2 size={18} className="shrink-0 text-emerald-600 mt-0.5" />
           <span>
-            ¡Efecto Pinza Activado! El prefijo separable <strong>"{current.prefix}"</strong> se separa de la raíz y se va al final absoluto de la oración.
+            {isModalActive ? (
+              <>¡Sándwich Verbal Activado! El verbo modal conjugado <strong>"{current.verbRaiz}"</strong> se ubica en Posición 2 y envía al infinitivo <strong>"{current.prefix}"</strong> al final absoluto de la oración.</>
+            ) : (
+              <>¡Efecto Pinza Activado! El prefijo separable <strong>"{current.prefix}"</strong> se separa de la raíz y se va al final absoluto de la oración.</>
+            )}
           </span>
         </div>
       )}
@@ -134,22 +149,25 @@ const PincerSwitch = ({ exercises = [] }) => {
       <div className="flex gap-3 justify-center">
         {!isActive ? (
           <button
+            type="button"
             onClick={triggerPincer}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition shadow-sm hover:scale-105"
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition shadow-sm hover:scale-105 cursor-pointer"
           >
-            <Scissors size={18} /> Activar Efecto Pinza
+            <Scissors size={18} /> {isModalActive ? 'Activar Sándwich Verbal' : 'Activar Efecto Pinza'}
           </button>
         ) : (
           <>
             <button
+              type="button"
               onClick={resetPincer}
-              className="flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-sm transition shadow-sm"
+              className="flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-sm transition shadow-sm cursor-pointer"
             >
               <RotateCcw size={18} /> Reiniciar
             </button>
             <button
+              type="button"
               onClick={nextExercise}
-              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition shadow-sm hover:scale-105"
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition shadow-sm hover:scale-105 cursor-pointer"
             >
               Siguiente Verbo <ArrowRight size={18} />
             </button>

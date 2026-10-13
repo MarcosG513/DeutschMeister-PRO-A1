@@ -62,12 +62,11 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
         
         nativeListeningRef.current = true;
 
-        // Escuchador de resultados parciales (tiempo real en nativo)
+        // Escuchador de resultados parciales (solo actualiza UI en nativo, sin disparar onResultCallback)
         partialListener = await SpeechRecognition.addListener('partialResults', (data) => {
           if (nativeListeningRef.current && data && data.matches && data.matches.length > 0) {
             const text = data.matches[0];
             setTranscript(text);
-            if (onResultCallback) onResultCallback(text);
           }
         });
 
@@ -80,12 +79,13 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
           popup: true,
         });
 
-        // Resultado final nativo
+        // Resultado final nativo (ejecución única al concluir)
         if (nativeListeningRef.current) {
           if (result && result.matches && result.matches.length > 0) {
             const matches = result.matches;
-            setTranscript(matches[0]);
-            if (onResultCallback) onResultCallback(matches[0]);
+            const finalText = matches[0].trim();
+            setTranscript(finalText);
+            if (onResultCallback) onResultCallback(finalText);
           } else {
             setError('No se detectó audio.');
           }
@@ -133,14 +133,23 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
 
       recognition.onresult = (event) => {
         let interimTranscript = '';
+        let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const transcriptText = event.results[i][0].transcript;
-          interimTranscript += transcriptText;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcriptText;
+          } else {
+            interimTranscript += transcriptText;
+          }
         }
         if (interimTranscript) {
           setTranscript(interimTranscript);
+        }
+        if (finalTranscript) {
+          const cleanFinal = finalTranscript.trim();
+          setTranscript(cleanFinal);
           if (onResultCallback) {
-            onResultCallback(interimTranscript);
+            onResultCallback(cleanFinal);
           }
         }
       };

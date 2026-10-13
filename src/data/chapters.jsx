@@ -23,6 +23,7 @@ import ClockSVG from '../components/ClockSVG';
 import GoetheHorenExam from '../components/GoetheHorenExam';
 import GoetheLesenExam from '../components/GoetheLesenExam';
 import GoetheWritingForm from '../components/GoetheWritingForm';
+import { playGermanAudio } from '../services/aiAudioService';
 import GoetheSprechenExam from '../components/GoetheSprechenExam';
 const rawChapters = [
 {
@@ -24849,8 +24850,28 @@ const TimeClockSimulator = ({ initialTime = "14:30" }) => {
         {String(hour).padStart(2, '0')}:{String(minute).padStart(2, '0')}
       </div>
       <div className="flex flex-col gap-2 bg-slate-800/80 p-4 rounded-xl border border-slate-700">
-        <div className="text-sm"><span className="text-slate-400 font-semibold">Hora Formal (Oficial):</span> <strong className="text-emerald-400">{formal}</strong></div>
-        <div className="text-sm"><span className="text-slate-400 font-semibold">Hora Informal (Cotidiana):</span> <strong className="text-indigo-300">{informal}</strong></div>
+        <div className="flex items-center justify-between text-sm">
+          <div><span className="text-slate-400 font-semibold">Hora Formal (Oficial):</span> <strong className="text-emerald-400">{formal}</strong></div>
+          <button 
+            type="button"
+            onClick={() => playGermanAudio(formal, { type: "vocab", voice: "Charon" })}
+            className="p-1.5 bg-slate-700 hover:bg-slate-600 text-emerald-400 rounded-lg transition shrink-0 cursor-pointer"
+            title="Escuchar hora formal"
+          >
+            <Volume2 size={16} />
+          </button>
+        </div>
+        <div className="flex items-center justify-between text-sm">
+          <div><span className="text-slate-400 font-semibold">Hora Informal (Cotidiana):</span> <strong className="text-indigo-300">{informal}</strong></div>
+          <button 
+            type="button"
+            onClick={() => playGermanAudio(informal, { type: "vocab", voice: "Charon" })}
+            className="p-1.5 bg-slate-700 hover:bg-slate-600 text-indigo-300 rounded-lg transition shrink-0 cursor-pointer"
+            title="Escuchar hora informal"
+          >
+            <Volume2 size={16} />
+          </button>
+        </div>
       </div>
       <div className="flex justify-center gap-6 pt-2">
         <div className="flex flex-col items-center gap-1">
@@ -24884,11 +24905,12 @@ const TimeClockSimulator = ({ initialTime = "14:30" }) => {
 const DativeMatrixClicker = ({ mode, ...props }) => (
   <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center">
     <AccusativeShield 
+      mode="dative"
       words={[
-        { word: "dem Mann", gender: "der", translation: "al hombre (Masculino: dem)" },
-        { word: "der Frau", gender: "die", translation: "a la mujer (Femenino: der)" },
-        { word: "dem Kind", gender: "das", translation: "al niño (Neutro: dem)" },
-        { word: "den Kindern", gender: "die", translation: "a los niños (Plural: den + n)" }
+        { word: "Mann", gender: "der", type: "Masc", correct: "dem", alt: "den", translation: "al hombre (Dativ Masc: dem)" },
+        { word: "Frau", gender: "die", type: "Fem", correct: "der", alt: "die", translation: "a la mujer (Dativ Fem: der)" },
+        { word: "Kind", gender: "das", type: "Neutro", correct: "dem", alt: "das", translation: "al niño (Dativ Neutro: dem)" },
+        { word: "Kindern", gender: "die", type: "Plural", correct: "den", alt: "die", translation: "a los niños (Dativ Plural: den + n)" }
       ]}
       {...props}
     />

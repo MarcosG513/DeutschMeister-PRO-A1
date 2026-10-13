@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Shield, ArrowRight, CheckCircle2, AlertTriangle, RotateCcw } from 'lucide-react';
 import { playGermanAudio } from '../services/aiAudioService';
 
-const AccusativeShield = ({ words = [] }) => {
+const AccusativeShield = ({ words = [], mode = "accusative" }) => {
   const list = words.length > 0 ? words : [
     { word: "Apfel", gender: "der", translation: "manzana" },
     { word: "Tomate", gender: "die", translation: "tomate" },
@@ -29,6 +29,40 @@ const AccusativeShield = ({ words = [] }) => {
   const effectiveGender = currentRaw.gender || (currentRaw.type === "Masc" ? "der" : currentRaw.type === "Fem" ? "die" : currentRaw.type === "Neutro" ? "das" : "die");
   const wordText = currentRaw.word || currentRaw.de || "";
   const currentWord = { ...currentRaw, gender: effectiveGender, word: wordText };
+  const hasBinaryChoice = Boolean(currentRaw.correct && currentRaw.alt);
+
+  // Opciones binarias estables por índice
+  const choices = hasBinaryChoice
+    ? (currentIndex % 2 === 0 ? [currentRaw.correct, currentRaw.alt] : [currentRaw.alt, currentRaw.correct])
+    : [];
+
+  const handleBinaryChoice = (chosen) => {
+    if (showFeedback) return;
+    const isCorrect = chosen === currentRaw.correct;
+    let explanation = "";
+
+    if (isCorrect) {
+      explanation = `¡Correcto! '${chosen} ${currentWord.word}' (${currentWord.translation || ''}).`;
+      playGermanAudio(`${chosen} ${currentWord.word}`, { type: "vocab", voice: "Charon" });
+      setScore(prev => prev + 1);
+      setShowFeedback('correct');
+    } else {
+      explanation = `¡Error! La opción correcta es '${currentRaw.correct} ${currentWord.word}' (${currentWord.translation || ''}).`;
+      setShowFeedback('incorrect');
+    }
+    setFeedbackMsg(explanation);
+
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      setShowFeedback(null);
+      setFeedbackMsg("");
+      if (currentIndex + 1 < list.length) {
+        setCurrentIndex(prev => prev + 1);
+      } else {
+        setFinished(true);
+      }
+    }, 2800);
+  };
 
   const handleAction = (applyShield) => {
     if (showFeedback) return;
@@ -89,6 +123,14 @@ const AccusativeShield = ({ words = [] }) => {
     setShieldApplied(false);
   };
 
+  const modeTitle = mode === "dative" 
+    ? "🛡️ Matriz del Dativo" 
+    : mode === "possessives" 
+      ? "🛡️ Escudo de Posesivos" 
+      : mode === "pronouns" 
+        ? "🛡️ Escudo de Pronombres" 
+        : "🛡️ El Escudo del Acusativo";
+
   if (finished) {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-sm max-w-md mx-auto">
@@ -96,8 +138,8 @@ const AccusativeShield = ({ words = [] }) => {
         <div className="text-4xl font-extrabold text-indigo-600 my-4">{score} / {list.length}</div>
         <p className="text-sm text-slate-600 mb-6">
           {score === list.length 
-            ? "¡Excelente! Has dominado la regla del acusativo. ¡Ningún masculino logró burlar tu escudo!" 
-            : "Sigue practicando. Recuerda: ¡Solo declinamos los sustantivos masculinos (der → den)!"}
+            ? "¡Excelente! Has dominado el reto gramatical." 
+            : "Sigue practicando para perfeccionar las terminaciones y declinaciones."}
         </p>
         <button 
           onClick={resetGame}
@@ -118,7 +160,7 @@ const AccusativeShield = ({ words = [] }) => {
           : 'border-slate-200'
     }`}>
       <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-wider">
-        <span>🛡️ El Escudo del Acusativo</span>
+        <span>{modeTitle}</span>
         <span>Palabra {currentIndex + 1} de {list.length}</span>
       </div>
 
@@ -127,13 +169,15 @@ const AccusativeShield = ({ words = [] }) => {
         <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase mb-2 transition-all duration-500 ${
           shieldApplied 
             ? "bg-emerald-600 text-white scale-110 shadow-sm" 
-            : currentWord.gender === "der" 
+            : currentWord.gender === "der" || currentWord.type === "Masc"
               ? "bg-blue-100 text-blue-800" 
-              : currentWord.gender === "die" 
+              : currentWord.gender === "die" || currentWord.type === "Fem" || currentWord.type === "Plural"
                 ? "bg-rose-100 text-rose-800" 
                 : "bg-amber-100 text-amber-800"
         }`}>
-          {shieldApplied ? "den" : currentWord.gender}
+          {hasBinaryChoice 
+            ? (currentWord.type ? `${currentWord.type} (${currentWord.gender || ''})` : currentWord.gender)
+            : (shieldApplied ? "den" : currentWord.gender)}
         </span>
         <h3 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight max-w-full break-words whitespace-normal text-center overflow-hidden px-2">{currentWord.word}</h3>
         <p className="text-sm text-slate-400 mt-1 italic">({currentWord.translation})</p>
@@ -152,27 +196,43 @@ const AccusativeShield = ({ words = [] }) => {
       )}
 
       {/* Action Buttons */}
-      <div className="grid grid-cols-2 gap-3">
-        <button
-          onClick={() => handleAction(true)}
-          disabled={showFeedback !== null}
-          className="flex flex-col items-center justify-center p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none max-w-full break-words whitespace-normal text-center overflow-hidden"
-        >
-          <Shield size={22} className="mb-1" />
-          <span className="text-sm">Aplicar Escudo</span>
-          <span className="text-[10px] font-medium opacity-80">(Cambiar a -en)</span>
-        </button>
+      {hasBinaryChoice ? (
+        <div className="grid grid-cols-2 gap-3">
+          {choices.map((choice, i) => (
+            <button
+              key={i}
+              onClick={() => handleBinaryChoice(choice)}
+              disabled={showFeedback !== null}
+              className="flex flex-col items-center justify-center p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-extrabold text-base sm:text-lg shadow transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            >
+              <span>{choice}</span>
+              <span className="text-[10px] font-normal opacity-85 mt-0.5">Elegir opción</span>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={() => handleAction(true)}
+            disabled={showFeedback !== null}
+            className="flex flex-col items-center justify-center p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none max-w-full break-words whitespace-normal text-center overflow-hidden"
+          >
+            <Shield size={22} className="mb-1" />
+            <span className="text-sm">Aplicar Escudo</span>
+            <span className="text-[10px] font-medium opacity-80">(Cambiar a -en)</span>
+          </button>
 
-        <button
-          onClick={() => handleAction(false)}
-          disabled={showFeedback !== null}
-          className="flex flex-col items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold border border-slate-200 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none max-w-full break-words whitespace-normal text-center overflow-hidden"
-        >
-          <ArrowRight size={22} className="mb-1" />
-          <span className="text-sm">Dejar Pasar</span>
-          <span className="text-[10px] font-medium opacity-85">(Sin cambios)</span>
-        </button>
-      </div>
+          <button
+            onClick={() => handleAction(false)}
+            disabled={showFeedback !== null}
+            className="flex flex-col items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold border border-slate-200 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none max-w-full break-words whitespace-normal text-center overflow-hidden"
+          >
+            <ArrowRight size={22} className="mb-1" />
+            <span className="text-sm">Dejar Pasar</span>
+            <span className="text-[10px] font-medium opacity-85">(Sin cambios)</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

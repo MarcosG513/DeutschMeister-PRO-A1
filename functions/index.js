@@ -70,6 +70,42 @@ async function getSystemPrompt(promptId, defaultPrompt) {
 }
 
 /**
+ * Helper unificado de autenticación para Cloud Functions (onCall y onRequest)
+ */
+async function verifyRequestAuth(reqOrRequest) {
+  // Caso 1: onCall de Firebase (objeto CallableRequest con propiedad auth)
+  if (reqOrRequest && ('auth' in reqOrRequest || reqOrRequest.rawRequest !== undefined)) {
+    if (!reqOrRequest.auth?.uid) {
+      throw new HttpsError("unauthenticated", "Autenticación de Firebase requerida.");
+    }
+    return {
+      uid: reqOrRequest.auth.uid,
+      token: reqOrRequest.auth.token || {},
+      isPro: reqOrRequest.auth.token?.stripeRole === "premium" || reqOrRequest.auth.token?.pro === true
+    };
+  }
+
+  // Caso 2: onRequest de Express
+  const req = reqOrRequest;
+  const authHeader = req.headers?.authorization || (typeof req.header === 'function' ? req.header('authorization') : null);
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    throw new HttpsError("unauthenticated", "Header de autorización Bearer ausente o inválido.");
+  }
+
+  const idToken = authHeader.split("Bearer ")[1].trim();
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    return {
+      uid: decodedToken.uid,
+      token: decodedToken,
+      isPro: decodedToken.stripeRole === "premium" || decodedToken.pro === true
+    };
+  } catch (err) {
+    throw new HttpsError("unauthenticated", `Token de autenticación inválido: ${err.message}`);
+  }
+}
+
+/**
  * Función centralizada de enrutamiento con Pool Resiliente de 3 llaves y Fallback a Claude Haiku 4.5
  * Pool:
  * 1. Clave de Facturación (créditos): gemini-3.8-flash
@@ -193,9 +229,9 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
       }
       promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
 
-      const falStream = await fal.stream("openrouter/router", {
+      const falStream = await fal.stream("openrouter/router/enterprise", {
         input: {
-          model: "deepseek/deepseek-chat",
+          model: "anthropic/claude-haiku-4.5",
           prompt: promptBuilder,
           system_prompt: promptSystem,
           temperature: options.temperature || 0.7
@@ -240,6 +276,14 @@ export const runRoleplaySimulator = onRequest({
     res.status(405).send("Method Not Allowed");
     return;
   }
+  let authUser;
+  try {
+    authUser = await verifyRequestAuth(req);
+  } catch (authErr) {
+    res.status(401).json({ error: authErr.message || "Autenticación de Firebase requerida." });
+    return;
+  }
+
   let data;
   try {
     data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
@@ -347,6 +391,14 @@ export const generateStory = onRequest({
     return;
   }
   res.set("Access-Control-Allow-Origin", "*");
+  let authUser;
+  try {
+    authUser = await verifyRequestAuth(req);
+  } catch (authErr) {
+    res.status(401).json({ error: authErr.message || "Autenticación de Firebase requerida." });
+    return;
+  }
+
   try {
     const bodyData = req.body.data || req.body;
     const {
@@ -456,20 +508,16 @@ export const sendTutorChatMessage = onRequest({
     return;
   }
 
-  // Verificación de Custom Claims de Firebase Auth
-  let isPro = false;
-  let uid = data?.uid || null;
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    const idToken = authHeader.split("Bearer ")[1];
-    try {
-      const decodedToken = await admin.auth().verifyIdToken(idToken);
-      uid = decodedToken.uid;
-      isPro = decodedToken.stripeRole === "premium" || decodedToken.pro === true;
-    } catch (authErr) {
-      console.warn("FinOps Tutor: Token no válido, usando UID de body:", authErr.message);
-    }
+  // Verificación estricta de Autenticación y Custom Claims de Firebase Auth
+  let authUser;
+  try {
+    authUser = await verifyRequestAuth(req);
+  } catch (authErr) {
+    res.status(401).json({ error: authErr.message || "Autenticación de Firebase requerida." });
+    return;
   }
+  const uid = authUser.uid;
+  const isPro = authUser.isPro;
 
   // Protección de Cuota (10 msgs/día para usuarios Free)
   if (!isPro && uid) {
@@ -1251,6 +1299,11 @@ export const generateCardImage = onCall({
     console.warn("⚠️ Cache check falló, continuando con generación:", cacheErr.message);
   }
   // ── FIN CACHE CHECK ───────────────────────────────────────────────────────
+
+  // Bloquear generación fuera de entorno local para salvaguardar costos FinOps
+  if (!request.data?.isDevEnvironment) {
+    return { imageUrl: null, error: "Generación deshabilitada fuera de entorno local" };
+  }
 
   try {
     fal.config({

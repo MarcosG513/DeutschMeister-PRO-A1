@@ -861,7 +861,8 @@ export default function App() {
   };
   const speakText = async (word, e) => {
     if (e) e.stopPropagation();
-    const textToSpeak = typeof word === 'string' ? word : word.de;
+    const rawText = typeof word === 'string' ? word : word.de;
+    const textToSpeak = splitGermanTitle(rawText).main || rawText;
     recordDailyStudyActivity();
     if (typeof word === 'object' && word?.de) {
       const safeId = getSafeId(word.de).substring(0, 150);
@@ -1300,22 +1301,24 @@ export default function App() {
                                 {(() => {
                                   const { main, code } = splitGermanTitle(word.de);
                                   return (
-                                    <div className="flex flex-col min-w-0">
-                                      <span className="font-bold text-slate-800 leading-tight">{main}</span>
-                                      {code && (
-                                        <span className="text-xs text-slate-500 font-normal mt-0.5 tracking-normal">
-                                          {code}
-                                        </span>
-                                      )}
-                                    </div>
+                                    <>
+                                      <div className="flex flex-col min-w-0">
+                                        <span className="font-bold text-slate-800 leading-tight">{main}</span>
+                                        {code && (
+                                          <span className="text-xs text-slate-500 font-normal mt-0.5 tracking-normal">
+                                            {code}
+                                          </span>
+                                        )}
+                                      </div>
+                                      <button onClick={e => {
+                                        e.stopPropagation();
+                                        playGermanAudio(main || word.de, { type: "vocab", voice: "Charon" });
+                                      }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110 shrink-0">
+                                        <Volume2 size={16} />
+                                      </button>
+                                    </>
                                   );
                                 })()}
-                                <button onClick={e => {
-                              e.stopPropagation();
-                              playGermanAudio(word.de, { type: "vocab", voice: "Charon" });
-                            }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110 shrink-0">
-                                  <Volume2 size={16} />
-                                </button>
                               </td>
                               <td className="px-4 py-3 text-slate-500 font-mono text-sm align-middle">
                                 {word.pron ? `/${word.pron}/` : "-"}

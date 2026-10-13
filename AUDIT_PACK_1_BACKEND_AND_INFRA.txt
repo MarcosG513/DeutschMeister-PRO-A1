@@ -1,0 +1,3124 @@
+# DEUTSCHMEISTER PRO A1 v2.0 — AUDIT PACK 1: BACKEND, INFRASTRUCTURE, PWA & SECURITY
+# Generated: 2026-10-13T20:23:43.348Z
+
+================================================================================
+FILE: package.json (51 lines | 1.4 KB)
+================================================================================
+
+{
+  "name": "temp-vite",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@capacitor-community/speech-recognition": "^7.0.1",
+    "@capacitor-community/text-to-speech": "^8.0.2",
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/keyboard": "^8.0.5",
+    "@capacitor/status-bar": "^8.0.2",
+    "@google/generative-ai": "^0.24.1",
+    "@tailwindcss/vite": "^4.3.1",
+    "autoprefixer": "^10.5.0",
+    "dotenv": "^17.4.2",
+    "firebase": "^12.15.0",
+    "localforage": "^1.10.0",
+    "lucide-react": "^1.21.0",
+    "postcss": "^8.5.15",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "tailwindcss": "^4.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/preset-react": "^8.0.1",
+    "@babel/traverse": "^8.0.0",
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.4.1",
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^10.3.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "vite": "^8.1.4"
+  }
+}
+
+================================================================================
+FILE: vite.config.js (12 lines | 0.2 KB)
+================================================================================
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+    react(),
+  ],
+})
+
+================================================================================
+FILE: firebase.json (32 lines | 0.5 KB)
+================================================================================
+
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "functions": {
+    "source": "functions",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log"
+    ]
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+
+================================================================================
+FILE: firestore.rules (58 lines | 1.6 KB)
+================================================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidPayloadSize() {
+      return request.resource.data.keys().size() <= 25;
+    }
+
+    match /global_flashcards/{cardId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /global_audio_pronunciations/{audioId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /artifacts/{appId}/users/{userId} {
+      allow read, write: if isOwner(userId) && isValidPayloadSize();
+
+      match /unlockedCards/{cardId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && request.resource.data.keys().hasOnly(['unlocked', 'imageUrl', 'updatedAt'])
+          && request.resource.data.unlocked is bool;
+        allow delete: if isOwner(userId);
+      }
+
+      match /chat/{docId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && request.resource.data.keys().hasOnly(['messages', 'updatedAt'])
+          && request.resource.data.messages is list
+          && request.resource.data.messages.size() <= 100;
+        allow delete: if isOwner(userId);
+      }
+
+      match /pedagogy/{docId} {
+        allow read: if isOwner(userId);
+        allow write: if isOwner(userId) && isValidPayloadSize();
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+================================================================================
+FILE: capacitor.config.json (15 lines | 0.3 KB)
+================================================================================
+
+{
+  "appId": "com.deutschmeister.app",
+  "appName": "Deutsch A1",
+  "webDir": "dist",
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": false,
+      "backgroundColor": "#0F172A"
+    },
+    "Keyboard": {
+      "resize": "body"
+    }
+  }
+}
+
+================================================================================
+FILE: index.html (32 lines | 1.5 KB)
+================================================================================
+
+<!doctype html>
+<html lang="de" translate="no" class="notranslate">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- PWA & Mobile Web App Meta -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Deutsch A1" />
+    <meta name="application-name" content="Deutsch A1" />
+    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
+    <title>DeutschMeister PRO A1</title>
+    <script>
+      window.onerror = function(message, source, lineno, colno, error) {
+        alert('Global Error: ' + message + ' at ' + source + ':' + lineno + ':' + colno + '\n' + (error ? error.stack : ''));
+      };
+      window.addEventListener('unhandledrejection', function(event) {
+        alert('Unhandled Promise Rejection: ' + (event.reason ? event.reason.message || event.reason : 'unknown'));
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+================================================================================
+FILE: public/manifest.json (34 lines | 0.7 KB)
+================================================================================
+
+{
+  "name": "DeutschMeister PRO A1",
+  "short_name": "Deutsch A1",
+  "description": "Alemán Técnico & Preparación Goethe Zertifikat A1",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "lang": "de-DE",
+  "categories": ["education", "books"],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
+
+================================================================================
+FILE: public/sw.js (23 lines | 0.5 KB)
+================================================================================
+
+const CACHE_NAME = 'dm-pwa-v2.0';
+
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener('fetch', (event) => {
+  // Solo interceptar peticiones GET
+  if (event.request.method !== 'GET') return;
+
+  event.respondWith(
+    fetch(event.request).catch(async () => {
+      const cache = await caches.open(CACHE_NAME);
+      const cached = await cache.match(event.request);
+      return cached || Response.error();
+    })
+  );
+});
+
+================================================================================
+FILE: android/app/build.gradle (55 lines | 2.2 KB)
+================================================================================
+
+apply plugin: 'com.android.application'
+
+android {
+    namespace = "com.deutschmeister.app"
+    compileSdk = rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.deutschmeister.app"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 2
+        versionName "2.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception ignored) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}
+
+================================================================================
+FILE: android/app/src/main/AndroidManifest.xml (45 lines | 1.8 KB)
+================================================================================
+
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+</manifest>
+
+================================================================================
+FILE: functions/index.js (2325 lines | 104.0 KB)
+================================================================================
+
+import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { onRequest } from "firebase-functions/v2/https";
+import { defineSecret } from "firebase-functions/params";
+import admin from "firebase-admin";
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
+import { fal } from "@fal-ai/client";
+import crypto from "crypto";
+import sharp from "sharp";
+import {
+  executeBackendGemini,
+  executeBackendGeminiChatStream,
+  resolveModelForTier,
+  isQuotaOrBillingError,
+  buildKeyPool,
+  getPoolStatus
+} from "./services/geminiClient.js";
+
+// Inicializa Firebase Admin
+admin.initializeApp();
+const db = admin.firestore();
+
+// Define los secretos que se tomarán de Secret Manager (FASE 1)
+const falKey = defineSecret("FAL_KEY");
+const geminiPaidKey = defineSecret("GEMINI_PAID_KEY");
+const geminiFreeKey1 = defineSecret("GEMINI_FREE_KEY_1");
+const geminiFreeKey2 = defineSecret("GEMINI_FREE_KEY_2");
+const geminiFreeKey = defineSecret("GEMINI_FREE_KEY"); // Compatibilidad con despliegues previos
+
+// Array unificado de secretos para Cloud Functions v2
+const ALL_AI_SECRETS = [geminiPaidKey, geminiFreeKey1, geminiFreeKey2, geminiFreeKey, falKey];
+
+/**
+ * Resuelve la configuración de las 3 API Keys activas desde secretos de Firebase o variables de entorno
+ */
+function getGeminiKeyConfig() {
+  const resolve = (sec, envVar) => {
+    try {
+      if (sec && typeof sec.value === "function") {
+        const val = sec.value();
+        if (val) return val;
+      }
+    } catch (_) {}
+    return process.env[envVar] || "";
+  };
+
+  return {
+    paidKey: resolve(geminiPaidKey, "GEMINI_PAID_KEY"),
+    freeKey1: resolve(geminiFreeKey1, "GEMINI_FREE_KEY_1") || resolve(geminiFreeKey, "GEMINI_FREE_KEY"),
+    freeKey2: resolve(geminiFreeKey2, "GEMINI_FREE_KEY_2")
+  };
+}
+
+/**
+ * Función auxiliar para obtener los prompts desde Firestore (FASE 2)
+ */
+async function getSystemPrompt(promptId, defaultPrompt) {
+  try {
+    const docRef = db.collection("config").doc("system_prompts");
+    const docSnap = await docRef.get();
+    if (docSnap.exists) {
+      const data = docSnap.data();
+      if (data[promptId]) {
+        return data[promptId];
+      }
+    }
+  } catch (error) {
+    console.error("Error obteniendo system prompt desde Firestore, usando fallback:", error);
+  }
+  return defaultPrompt;
+}
+
+/**
+ * Función centralizada de enrutamiento con Pool Resiliente de 3 llaves y Fallback a Claude Haiku 4.5
+ * Pool:
+ * 1. Clave de Facturación (créditos): gemini-3.8-flash
+ * 2. Clave Gratuita 1: gemini-3.5-flash-lite
+ * 3. Clave Gratuita 2: gemini-3.5-flash-lite
+ * 4. Fallback de contingencia: Claude Haiku 4.5 via Fal.ai
+ */
+async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}) {
+  const isJson = options.isJson || false;
+  const temperature = options.temperature !== undefined ? options.temperature : 0.3;
+  const preferredModel = options.model || "gemini-3.8-flash";
+  const mode = options.mode || "paid_first";
+  const keys = getGeminiKeyConfig();
+
+  try {
+    console.log(`FinOps ResilientPool: Invocando pool de 3 llaves (Modo: ${mode}, Modelo deseado: ${preferredModel})...`);
+    const poolResult = await executeBackendGemini(promptUser, {
+      keys,
+      preferredModel,
+      systemInstruction: promptSystem,
+      isJson,
+      responseSchema: options.responseSchema || null,
+      mode
+    });
+
+    const responseText = poolResult.text.trim();
+    if (isJson) {
+      const cleanJson = responseText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+      return JSON.parse(cleanJson);
+    }
+    return responseText;
+  } catch (poolError) {
+    console.warn("FinOps: Agotadas las 3 llaves de Gemini (o error grave en pool). Activando fallback a Claude Haiku 4.5:", poolError.message);
+
+    // Fallback: Claude Haiku 4.5 en Fal.ai via enterprise (Costo premium de contingencia)
+    try {
+      fal.config({
+        credentials: falKey.value()
+      });
+      console.log("FinOps: Invocando Claude Haiku 4.5 via Fal.ai...");
+
+      let finalPromptUser = promptUser;
+      if (isJson) {
+        finalPromptUser += "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
+      }
+
+      const response = await fal.subscribe("openrouter/router/enterprise", {
+        input: {
+          model: "anthropic/claude-haiku-4.5",
+          prompt: finalPromptUser,
+          system_prompt: promptSystem,
+          temperature: temperature,
+          top_p: 0.9
+        }
+      });
+
+      const outputText = response.data.output || response.data.text || "";
+      if (isJson) {
+        const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+        return JSON.parse(cleanJson);
+      }
+      return outputText;
+    } catch (fallbackErr) {
+      console.error("FinOps: Error crítico en fallback definitivo de Claude Haiku 4.5:", fallbackErr);
+      throw new Error("Servicio no disponible temporalmente. Inténtalo más tarde.");
+    }
+  }
+}
+
+/**
+ * Función centralizada para Streaming SSE con Pool Resiliente de 3 llaves y Fallback a Claude Haiku 4.5
+ */
+async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessage, options = {}) {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+
+  const preferredModel = options.model || "gemini-3.8-flash";
+  const mode = options.mode || "paid_first";
+  const keys = getGeminiKeyConfig();
+
+  try {
+    console.log(`FinOps Stream: Invocando chat stream con pool de 3 llaves (Modo: ${mode})...`);
+    const streamResult = await executeBackendGeminiChatStream(history, lastMessage, {
+      keys,
+      preferredModel,
+      systemInstruction: promptSystem,
+      mode
+    });
+
+    for await (const chunk of streamResult.stream) {
+      const chunkText = chunk.text();
+      if (chunkText) {
+        const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '').replace(/\*/g, '') : chunkText;
+        res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
+      }
+    }
+    res.write('data: [DONE]\n\n');
+    res.end();
+    return;
+  } catch (poolError) {
+    console.warn("FinOps Stream: Agotadas las 3 llaves de Gemini. Activando fallback a Claude Haiku 4.5:", poolError.message);
+
+    // Fallback: Claude Haiku 4.5 en Fal.ai via enterprise (Costo premium de contingencia)
+    try {
+      fal.config({
+        credentials: falKey.value()
+      });
+      console.log("FinOps Stream: Invocando stream de Claude Haiku 4.5 via Fal.ai...");
+
+      let promptBuilder = "";
+      if (history && history.length > 0) {
+        promptBuilder += "Historial de conversación previa:\n";
+        history.forEach(msg => {
+          const roleLabel = msg.role === 'user' ? 'Usuario' : 'Asistente';
+          const text = msg.parts && msg.parts[0] ? msg.parts[0].text : '';
+          promptBuilder += `${roleLabel}: ${text}\n`;
+        });
+        promptBuilder += "\n";
+      }
+      promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
+
+      const falStream = await fal.stream("openrouter/router", {
+        input: {
+          model: "deepseek/deepseek-chat",
+          prompt: promptBuilder,
+          system_prompt: promptSystem,
+          temperature: options.temperature || 0.7
+        }
+      });
+
+      let lastOutput = "";
+      for await (const event of falStream) {
+        const currentOutput = event.output || "";
+        if (currentOutput.length > lastOutput.length) {
+          const chunkText = currentOutput.substring(lastOutput.length);
+          lastOutput = currentOutput;
+          if (chunkText) {
+            const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '').replace(/\*/g, '') : chunkText;
+            res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
+          }
+        }
+      }
+      res.write('data: [DONE]\n\n');
+      res.end();
+    } catch (fallbackErr) {
+      console.error("FinOps Stream: Error crítico en fallback de Claude Haiku 4.5:", fallbackErr);
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Error en el servidor de fallback." });
+      } else {
+        res.write(`data: ${JSON.stringify({ error: "Stream fallback error: " + fallbackErr.message })}\n\n`);
+        res.end();
+      }
+    }
+  }
+}
+
+// =========================================================================
+// 1. SIMULADOR DE ROL A1 (RoleplaySimulator)
+// Pool: gemini-3.8-flash (Paid) -> gemini-3.5-flash-lite (Free 1 y 2) -> Claude Haiku 4.5
+// =========================================================================
+export const runRoleplaySimulator = onRequest({
+  secrets: ALL_AI_SECRETS,
+  cors: true
+}, async (req, res) => {
+  if (req.method !== "POST" && req.method !== "OPTIONS") {
+    res.status(405).send("Method Not Allowed");
+    return;
+  }
+  let data;
+  try {
+    data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    if (data && data.data) data = data.data;
+  } catch (e) {
+    res.status(400).send("Invalid JSON body");
+    return;
+  }
+  const {
+    historialConversacion,
+    escenario
+  } = data || {};
+  if (!historialConversacion || !escenario) {
+    res.status(400).send("Faltan parámetros requeridos: historialConversacion o escenario");
+    return;
+  }
+  const defaultSystemInstruction = `Eres un hablante nativo de alemán en un escenario de juego de rol de nivel A1: "${escenario}".
+      REGLAS ESTRICTAS E INVIOLABLES:
+      1. Usa SOLO alemán de nivel A1. Cada frase u oración debe tener un MÁXIMO ESTRICTO de 8 palabras. Vocabulario básico y cotidiano. Solo tiempo presente.
+      2. No uses gramática compleja: sin voz pasiva ni subjuntivos (excepto fórmulas fijas de cortesía A1 como 'möchten' o 'hätte').
+      3. EXACTAMENTE UNA SOLA acción o pregunta por turno. Máximo 2 frases en total por mensaje. Cero monólogos.
+      4. CORRECCIÓN IMPLÍCITA: Si el usuario comete un error, NO lo corrijas explícitamente y nunca salgas de tu rol. Responde integrando la estructura correcta de forma natural. Ej: Si dice 'Ich krank bin', tú respondes: 'Oh, Sie sind krank? Was fehlt Ihnen?'
+      5. INICIO DE SESIÓN: Si es el primer turno de la conversación, limita tu respuesta ESTRICTAMENTE a la frase de apertura indicada en el escenario, sin agregar nada más.
+      6. PROHIBICIÓN ABSOLUTA DE FORMATO: Nunca uses asteriscos (*), negritas (**) ni Markdown de ningún tipo. Solo texto plano.`;
+  const systemInstruction = await getSystemPrompt("roleplay_simulator", defaultSystemInstruction);
+  const finalSystemPrompt = systemInstruction.replace("${escenario}", escenario);
+
+  const history = historialConversacion.slice(0, -1);
+  const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
+
+  return await streamWithDeepSeekFallback(res, finalSystemPrompt, history, lastMessage, {
+    model: "gemini-3.8-flash",
+    cleanBold: true,
+    temperature: 0.7
+  });
+});
+
+// =========================================================================
+// 2. EVALUADOR DE CORREOS (EmailSimulator) - Migrado a Gemini 3.8 Flash con Pool
+// =========================================================================
+export const evaluateEmail = onCall(
+  { secrets: ALL_AI_SECRETS, maxInstances: 6 },
+  async (request) => {
+    const { textoCorreo, consignaExamen } = request.data;
+
+    const systemPrompt = `Por favor, actúa como un examinador oficial del Goethe-Institut para el examen Start Deutsch 1 (Schreiben Teil 2 - E-Mail).
+Evalúa minuciosamente el correo redactado por el estudiante aplicando la rúbrica oficial estricta de 3 criterios y extensión:
+
+ESTRUCTURA EXACTA DE TU RESPUESTA EN MARKDOWN:
+
+### 1. 📋 Evaluación de los 3 Leitpunkte (Puntos de Contenido)
+- Analiza cada uno de los 3 puntos de la consigna de forma individual y explícita:
+  * **Punto 1:** [Cumplido ✅ / Parcialmente cumplido ⚠️ / No cumplido ❌] - Justificación y análisis de la respuesta.
+  * **Punto 2:** [Cumplido ✅ / Parcialmente cumplido ⚠️ / No cumplido ❌] - Justificación y análisis de la respuesta.
+  * **Punto 3:** [Cumplido ✅ / Parcialmente cumplido ⚠️ / No cumplido ❌] - Justificación y análisis de la respuesta.
+- Regla Socrática: Si el estudiante intentó abordar el punto pero cometió errores gramaticales o léxicos, valida primero su intención comunicativa ("Veo que intentaste expresar...") y nunca digas que 'no respondió' a menos que lo haya omitido por completo.
+- CERO ALUCINACIONES: No inventes requisitos que no estén en la consigna.
+
+### 2. 🎩 Registro y Formalidad (du vs. Sie)
+- Analiza la adecuación del saludo (Anrede) y la despedida (Grußformel) según el destinatario del escenario:
+  * **Informal (amigos/familia):** Saludo con "Liebe/r..." o "Hallo...", despedida como "Viele Grüße", "Liebe Grüße" o "Bis bald".
+  * **Formal (profesor, hotel, médico, oficina):** Saludo obligatorio formal "Sehr geehrte/r..." o "Sehr geehrte Damen und Herren", despedida formal "Mit freundlichen Grüßen".
+- **Norma Ortográfica Alemana:** Recuerda que en alemán las fórmulas de despedida (ej. "Viele Grüße" o "Mit freundlichen Grüßen") NUNCA llevan coma al final. Señala si el estudiante colocó una coma incorrectamente.
+
+### 3. 📐 Gramática y Vocabulario A1
+- **Posición del Verbo (V2):** Comprueba si el verbo conjugado está en la Posición 2 en oraciones enunciativas, o al final en subordinadas con "weil/dass".
+- **Sustantivos con Mayúscula:** Verifica que TODOS los sustantivos alemanes comiencen con mayúscula (Großschreibung).
+- **Casos y Preposiciones:** Señala aciertos y correcciones de casos (Nominativo, Acusativo, Dativo) y preposiciones básicas A1.
+
+### 4. 📊 Conteo de Palabras y Extensión Oficial
+- Analiza la longitud del texto frente al rango óptimo oficial del Goethe A1 (25 a 45 palabras, recomendación estándar: ca. 30 Wörter):
+  * Indica el número exacto de palabras redactadas y califícalo (Óptimo, Muy corto o Excesivamente largo).
+
+### 🌟 Correo Modelo Ideal (Muster-E-Mail A1)
+> [Escribe aquí un correo modelo perfecto en alemán A1 de 25-35 palabras, con saludo, desarrollo de los 3 puntos y despedida correcta sin coma. DEBE estar obligatoriamente dentro de este bloque de cita '> ' para que el estudiante pueda escucharlo en audio nativo]`;
+
+    const userPrompt = `Consigna del examen: "${consignaExamen}"\nTexto del estudiante: "${textoCorreo}"`;
+
+    try {
+      return await invokeWithDeepSeekFallback(systemPrompt, userPrompt, { 
+        model: "gemini-3.8-flash", 
+        temperature: 0.3 
+      });
+    } catch (error) {
+      console.error("❌ Error en la Evaluación de Correo:", error);
+      throw new HttpsError("internal", "Error procesando la evaluación.");
+    }
+  }
+);
+
+// =========================================================================
+// 3. GENERADOR DE CUENTOS (generateStory)
+// Pool: gemini-3.8-flash (Paid) -> gemini-3.5-flash-lite (Free 1 y 2) -> Claude Haiku 4.5
+// =========================================================================
+export const generateStory = onRequest({
+  secrets: ALL_AI_SECRETS,
+  cors: true,
+  timeoutSeconds: 120
+}, async (req, res) => {
+  if (req.method === "OPTIONS") {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "POST");
+    res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.status(204).send("");
+    return;
+  }
+  res.set("Access-Control-Allow-Origin", "*");
+  try {
+    const bodyData = req.body.data || req.body;
+    const {
+      palabrasVocabulario
+    } = bodyData;
+    if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario)) {
+      res.status(400).json({
+        error: "Faltan parámetros requeridos: palabrasVocabulario"
+      });
+      return;
+    }
+    const listaPalabras = palabrasVocabulario.join(", ");
+    const promptSistema = "Eres un creador de cuentos infantiles y profesor de alemán nivel A1. Tu objetivo es escribir historias coherentes, inmersivas y gramaticalmente perfectas integrando vocabulario específico. REGLA DE CASOS GRAMATICALES (CRÍTICO): Integra las palabras clave de forma natural y declina correctamente sus artículos al caso correspondiente (Acusativo, Dativo) según requiera la oración. Por ejemplo, escribe 'Sie sieht den Hund' o 'einen Hund' (nunca 'Sie sieht der Hund' o 'einen der Hund'), escribe 'Lisa geht in den Park' o 'spielt im Park' (nunca 'in der Park'), escribe 'Er sieht den Schnee' (nunca 'der Schnee'). Está estrictamente prohibido duplicar artículos (ej. 'einen der Apfel' es incorrecto; usa simplemente 'den Apfel' o 'einen Apfel').";
+    const promptDefinido = `Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
+      En el campo "cuento_aleman", debes envolver obligatoriamente cada una de estas palabras clave de vocabulario [${listaPalabras}] con doble asterisco "**" (ej. **palabra**) cada vez que las uses en el texto para que resalten.
+      La salida debe coincidir EXACTAMENTE con este esquema JSON, sin texto adicional:
+      {
+        "titulo": "Título en alemán",
+        "cuento_aleman": "El microcuento en alemán...",
+        "traduccion_espanol": "Traducción fluida al español",
+        "palabras_clave_usadas": [ 
+          { 
+            "palabra": "Forma original recibida", 
+            "contexto": "Oración completa en alemán donde se usó" 
+          } 
+        ],
+        "pregunta_comprension": {
+           "pregunta": "Pregunta en alemán A1",
+           "opciones": ["Opción A en alemán", "Opción B en alemán", "Opción C en alemán"],
+           "respuesta_correcta": "La opción exacta en alemán"
+        }
+      }
+      NOTA CRÍTICA DE LIBERTAD MORFOLÓGICA: Al registrar la 'Forma original recibida' en el array de palabras_clave_usadas, tienes total permiso para alterar la palabra morfológicamente dentro del 'cuento_aleman' (por ejemplo, pasar de Buch a Bücher o declinar en Akkusativ/Dativ) para que el alemán suene 100% natural.`;
+
+    console.log("Story FinOps: Iniciando generateStory con Pool Resiliente (gemini-3.8-flash)...");
+    
+    const jsonOutput = await invokeWithDeepSeekFallback(promptSistema, promptDefinido, {
+      model: "gemini-3.8-flash",
+      isJson: true,
+      temperature: 0.7
+    });
+
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+      "X-Accel-Buffering": "no"
+    });
+
+    const safeText = JSON.stringify(jsonOutput).replace(/\n/g, " ");
+    res.write(`data: ${safeText}\n\n`);
+    res.write("data: [DONE]\n\n");
+    res.end();
+  } catch (globalError) {
+    console.error("FinOps Story Error:", globalError);
+    if (!res.headersSent) {
+      res.status(500).json({
+        error: "Error al generar el cuento."
+      });
+    } else {
+      res.end();
+    }
+  }
+});
+
+const TUTOR_STATIC_SYSTEM_PROMPT = `=== 1. IDENTIDAD Y ROL ===
+Eres 'DeutschMeister Tutor', un profesor de alemán nativo, carismático y experto en pedagogía para adultos hispanohablantes (Nivel A1 - Goethe-Zertifikat). 
+Tu esencia es conversacional, cálida y paciente. Tu objetivo no es ser un diccionario ni un solucionador de tareas, sino un guía experto que utiliza el método socrático para ayudar al estudiante a deducir la lógica del idioma por sí mismo.
+
+=== 2. DIRECTRICES PEDAGÓGICAS (GRAMÁTICA Y ESTILO DE EXPLICACIÓN) ===
+- Fin de los Tabúes Gramaticales: Trata al estudiante como a un adulto inteligente. Tienes total libertad para usar terminología técnica (sustantivo, verbo, adjetivo, nominativo, acusativo, dativo, género), pero SIEMPRE debes explicarla de manera ultra-sencilla y digerible.
+- Analogías Funcionales: Usa trucos mnemotécnicos o metáforas breves de la vida real solo si ayudan a aclarar la regla rápidamente (ej. "el verbo conjugado es el rey y siempre exige el trono de la posición 2"), pero nunca para ocultar el nombre técnico real.
+- Scaffolding (Andamiaje Socrático): Nunca le des al alumno la respuesta final de golpe a lo que te está preguntando, pero TAMPOCO lo dejes a la deriva adivinando. Si no sabe algo, explícale la regla usando un *ejemplo paralelo corto* diferente a su duda, para que entienda el mecanismo.
+- Cláusula de Triaje Léxico (Excepción FR-01 para Vocabulario Puro y Cultura):
+  Si el estudiante pregunta directamente por el significado de una palabra aislada, una lista léxica (ej. los colores, los meses) o un modismo cultural intraducible sin contexto previo (ej. "¿Qué significa Mahlzeit?"), NO intentes forzar una deducción imposible. En este caso específico, tienes autorización para revelar el significado directo en la primera oración del Párrafo 1 usando una escena cotidiana breve. El reto socrático del Párrafo 2 consistirá entonces en pedirle al estudiante que aplique ese término recién aprendido en una situación práctica inmediata.
+
+=== 3. MANEJO DE IDIOMAS Y TRADUCCIONES ===
+- Artículos Obligatorios: ¡Regla de Oro! Todo sustantivo en alemán que menciones debe presentarse SIEMPRE con su artículo definido y su marca de plural si aplica. Ejemplo: **der Tisch (-e)**. Jamás enseñes sustantivos "desnudos".
+- Traducción Inmediata Obligatoria: Toda palabra o frase en alemán debe ir en **negrita** seguida OBLIGATORIAMENTE de su traducción en español entre paréntesis de forma contigua: **haben** (tener). No dejes términos en alemán sin su equivalente adyacente.
+
+=== 4. ESTRUCTURA ESTRICTA (2 PÁRRAFOS) Y REGLAS DE CIERRE ===
+- Detección Emocional en Cero Disparos: Si el alumno expresa frustración, desánimo o pánico de examen, valida cálidamente su emoción con empatía (usando 1 o 2 emojis) al iniciar el primer párrafo antes de la explicación. Si su estado es normal, inicia validando su interés de forma inspiradora.
+- Regla Inflexible de 2 Párrafos: Tu respuesta debe tener EXACTAMENTE 2 párrafos cortos (entre 6 y 8 oraciones en total). PROHIBIDO generar un tercer párrafo o listas largas desglosadas.
+  * Párrafo 1: Validación empática + explicación conceptual o analogía con ejemplo paralelo.
+  * Párrafo 2: El Reto Socrático Práctico.
+- Prohibición de Preguntas de Permiso o Retóricas: JAMÁS termines preguntando "¿Quieres que veamos un ejemplo?", "¿Te gustaría intentarlo?" o "¿Tiene sentido?". Lanza DIRECTAMENTE el micro-ejercicio para que el estudiante aplique la regla ahora mismo. Cierra SIEMPRE con exactamente UNA sola pregunta o reto activo.`;
+
+export const sendTutorChatMessage = onRequest({
+  secrets: ALL_AI_SECRETS,
+  cors: true
+}, async (req, res) => {
+  if (req.method !== "POST" && req.method !== "OPTIONS") {
+    res.status(405).send("Method Not Allowed");
+    return;
+  }
+  if (req.method === "OPTIONS") {
+    res.status(204).send("");
+    return;
+  }
+
+  let data;
+  try {
+    data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    if (data && data.data) data = data.data;
+  } catch (e) {
+    res.status(400).send("Invalid JSON body");
+    return;
+  }
+
+  // Verificación de Custom Claims de Firebase Auth
+  let isPro = false;
+  let uid = data?.uid || null;
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const idToken = authHeader.split("Bearer ")[1];
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      uid = decodedToken.uid;
+      isPro = decodedToken.stripeRole === "premium" || decodedToken.pro === true;
+    } catch (authErr) {
+      console.warn("FinOps Tutor: Token no válido, usando UID de body:", authErr.message);
+    }
+  }
+
+  // Protección de Cuota (10 msgs/día para usuarios Free)
+  if (!isPro && uid) {
+    const todayStr = new Date().toISOString().split("T")[0];
+    const usageDocRef = db.collection("artifacts").doc("deutschmeister-pro").collection("users").doc(uid).collection("usage").doc("today");
+    
+    try {
+      const usageSnap = await usageDocRef.get();
+      let currentCount = 0;
+      if (usageSnap.exists) {
+        const usageData = usageSnap.data();
+        if (usageData.date === todayStr) {
+          currentCount = usageData.messageCount || 0;
+        }
+      }
+
+      if (currentCount >= 10) {
+        res.status(429).json({
+          error: "Límite diario alcanzado. Actualiza a PRO para mensajes ilimitados.",
+          limitReached: true,
+          isPro: false
+        });
+        return;
+      }
+
+      await usageDocRef.set({
+        date: todayStr,
+        messageCount: currentCount + 1,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (dbErr) {
+      console.error("FinOps Tutor: Error consultando Firestore:", dbErr);
+    }
+  }
+
+  const historialConversacion = data?.historialConversacion;
+  if (!historialConversacion || !Array.isArray(historialConversacion)) {
+    res.status(400).send("Faltan parámetros requeridos: historialConversacion");
+    return;
+  }
+
+  const history = historialConversacion.slice(0, -1);
+  const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
+
+  await streamWithDeepSeekFallback(res, TUTOR_STATIC_SYSTEM_PROMPT, history, lastMessage, {
+    model: "gemini-3.8-flash",
+    cleanBold: false,
+    thinking_level: "MINIMAL"
+  });
+});
+
+// Función auxiliar para traducir conceptos a descripciones visuales usando Gemini Resilient Pool
+async function getVisualDescriptionForConcept(conceptoEspanol, category = "") {
+  const contextText = category ? `Contexto temático de la palabra (área o tema de vocabulario): "${category}". Úsalo para que el objeto tenga sentido y sea adecuado para este contexto específico (ej. si la categoría menciona "Auto" y el concepto es "luces" o "luz", describe luces/faros de auto, no lámparas domésticas; si menciona "Auto" y el concepto es "limpiaparabrisas", describe la escobilla o parabrisas del auto).` : '';
+  const promptDirectorArte = `
+    Actúa como Director de Arte de utilería 3D para flashcards educativas. 
+    El usuario necesita representar visualmente el concepto en español: "${conceptoEspanol}".
+    ${contextText}
+    
+    Tu tarea es proporcionar ÚNICAMENTE una descripción física en inglés del objeto o elemento central que representará esta palabra.
+    
+    REGLAS ESTRICTAS:
+    1. TANGIBILIDAD: Describe un objeto físico real o una escena en miniatura. 
+    2. ANTI-PAREIDOLIA (CRÍTICO): Si el concepto es abstracto (verbos, adjetivos, preposiciones, adverbios), descríbelo usando utilería INANIMADA y simbólica. Está absolutamente prohibido incluir rostros, ojos, caras felices, humanos o animales, a menos que la palabra represente explícitamente a una persona o ser vivo (ej. "madre", "perro").
+    3. CERO TEXTO: Prohibido incluir letreros, pantallas con texto, libros abiertos con letras, o cualquier tipo de tipografía.
+    4. PRECISIÓN: Ve directo a la forma física (ej. para "Enero" -> "A classic desk calendar with snowflakes", para "escribir" -> "A stylized feather quill pen resting on a clean notebook").
+    
+    Devuelve solo la descripción en inglés en una sola línea. Sin introducciones, sin confirmaciones y sin comillas.
+  `;
+  try {
+    const res = await executeBackendGemini(promptDirectorArte, {
+      keys: getGeminiKeyConfig(),
+      preferredModel: "gemini-3.5-flash-lite",
+      mode: "free_first" // Modo ahorro para micro-prompts de traducción
+    });
+    return res.text.trim().replace(/['"]/g, '');
+  } catch (error) {
+    console.warn("getVisualDescriptionForConcept falló en pool:", error.message);
+    return conceptoEspanol;
+  }
+}
+
+// Función auxiliar para traducir conceptos directos de sentimientos/adjetivos/verbos a inglés limpio
+async function getCleanEnglishTranslation(wordEspanol) {
+  const prompt = `Translate the Spanish word "${wordEspanol}" to a single English word representing the emotion, state, or action (e.g., "cansado" -> "tired", "feliz" -> "happy", "triste" -> "sad", "enojado" -> "angry"). Return ONLY the translated English word in lowercase, with no punctuation or extra text.`;
+  try {
+    const res = await executeBackendGemini(prompt, {
+      keys: getGeminiKeyConfig(),
+      preferredModel: "gemini-3.5-flash-lite",
+      mode: "free_first"
+    });
+    return res.text.trim().toLowerCase().replace(/[^a-z\s-]/g, '');
+  } catch (error) {
+    console.warn("getCleanEnglishTranslation falló en pool:", error.message);
+    return wordEspanol;
+  }
+}
+
+const diccionarioIndustrial = {
+  "der strom": "glowing yellow lightning bolt symbol",
+  "die spannung": "industrial electrical voltmeter dial with a red needle",
+  "der stromkreis": "closed electrical circuit board with a glowing lightbulb",
+  "das kabel": "thick industrial electrical copper cable spool",
+  "der stecker": "standard heavy European electrical plug",
+  "die steckdose": "white electrical wall socket",
+  "der schalter": "modern industrial wall light switch",
+  "die sicherung": "industrial electrical fuse breaker box with switches",
+  "der transformator": "heavy industrial electrical power transformer unit",
+  "die batterie": "standard AA battery with plus and minus signs",
+  "der akku": "green lithium ion rechargeable battery pack",
+  "der zähler": "smart electrical power meter with digital display",
+  "die erdung": "copper grounding rod driven into a small block of earth",
+  "der kurzschluss": "broken thick electrical wire emitting bright electric sparks",
+  "die solaranlage": "miniature house roof completely covered with solar panels",
+  "das solarmodul": "single large blue photovoltaic solar panel on a stand",
+  "die solarzelle": "close-up of a blue micro photovoltaic solar cell grid",
+  "der wechselrichter": "modern solar power inverter wall box with a digital display",
+  "der speicher": "large modern home solar battery storage unit",
+  "das netz": "tall electrical power transmission tower with cables",
+  "der ertrag": "rising bar chart with a glowing sun symbol on top",
+  "die gleichspannung": "electrical block showing the Direct Current DC straight line symbol",
+  "die wechselspannung": "oscilloscope screen showing an Alternating Current AC sine wave",
+  "die leistung": "glowing futuristic energy core",
+  "die dachmontage": "aluminum construction brackets mounted on a piece of rooftop",
+  "das werkzeug": "open red toolbox filled with tools",
+  "der schraubenzieher": "yellow and black mechanical screwdriver",
+  "die zange": "pair of heavy metal pliers with rubber grips",
+  "der bohrer": "heavy duty power drill",
+  "das multimeter": "digital multimeter testing tool with red and black probes",
+  "der helm": "yellow industrial hard hat",
+  "die handschuhe": "pair of heavy duty protective leather work gloves",
+  "die leiter": "tall aluminum folding stepladder",
+  "die gefahr": "yellow high voltage warning triangle sign",
+  "gefährlich": "yellow skull and crossbones hazard sign",
+  "messen": "extended yellow measuring tape next to a wire",
+  "anschließen": "two thick electrical cables firmly plugged together",
+  "installieren": "silver wrench tightening a bolt on a metal machine part",
+  "prüfen": "green checkmark hovering over a technical clipboard",
+  "warten": "red oil can and a silver mechanical gear",
+  "einschalten": "green glowing ON button switch",
+  "ausschalten": "red glowing OFF button switch",
+  "löten": "hot soldering iron melting silver wire onto a green circuit board",
+  "isolieren": "roll of black electrical insulation tape",
+  "abisolieren": "wire strippers removing plastic insulation from a thick copper wire",
+  "austauschen": "two mechanical gears swapping places with arrows",
+  "einspeisen": "electricity energy flowing from a house into a power grid tower",
+  "funktionieren": "two interlocking mechanical gears turning smoothly"
+};
+
+// =========================================================================
+// 5. GENERADOR DE IMÁGENES DE TARJETAS (generateCardImage)
+// Modelo: fal-ai/flux-2
+// =========================================================================
+
+const diccionarioLetras = {
+  "A, a": {
+    shape: "uppercase letter A",
+    obj: "shiny red apple"
+  },
+  // Apfel
+  "B, b": {
+    shape: "uppercase letter B",
+    obj: "yellow banana"
+  },
+  // Banane
+  "C, c": {
+    shape: "uppercase letter C",
+    obj: "cute chameleon"
+  },
+  // Chamäleon
+  "D, d": {
+    shape: "uppercase letter D",
+    obj: "aluminum soda can"
+  },
+  // Dose
+  "E, e": {
+    shape: "uppercase letter E",
+    obj: "cute little elephant"
+  },
+  // Elefant
+  "F, f": {
+    shape: "uppercase letter F",
+    obj: "cute green frog"
+  },
+  // Frosch
+  "G, g": {
+    shape: "uppercase letter G",
+    obj: "tall cute giraffe"
+  },
+  // Giraffe
+  "H, h": {
+    shape: "uppercase letter H",
+    obj: "small cute 3D house"
+  },
+  // Haus
+  "I, i": {
+    shape: "uppercase letter I",
+    obj: "cute little hedgehog"
+  },
+  // Igel
+  "J, j": {
+    shape: "uppercase letter J",
+    obj: "folded colorful jacket"
+  },
+  // Jacke
+  "K, k": {
+    shape: "uppercase letter K",
+    obj: "cute little cat"
+  },
+  // Katze (reemplaza Kitten)
+  "L, l": {
+    shape: "uppercase letter L",
+    obj: "cute little lion"
+  },
+  // Löwe
+  "M, m": {
+    shape: "uppercase letter M",
+    obj: "cute small mouse"
+  },
+  // Maus
+  "N, n": {
+    shape: "uppercase letter N",
+    obj: "cute 3D human nose"
+  },
+  // Nase
+  "O, o": {
+    shape: "uppercase letter O",
+    obj: "bright orange fruit"
+  },
+  // Orange
+  "P, p": {
+    shape: "uppercase letter P",
+    obj: "cute little penguin"
+  },
+  // Pinguin
+  "Q, q": {
+    shape: "uppercase letter Q",
+    obj: "cute pink jellyfish"
+  },
+  // Qualle (reemplaza Queen/Krone)
+  "R, r": {
+    shape: "uppercase letter R",
+    obj: "beautiful red rose"
+  },
+  // Rose
+  "S, s": {
+    shape: "uppercase letter S",
+    obj: "bright yellow sun"
+  },
+  // Sonne
+  "T, t": {
+    shape: "uppercase letter T",
+    obj: "ceramic coffee mug"
+  },
+  // Tasse (reemplaza Tree/Baum)
+  "U, u": {
+    shape: "uppercase letter U",
+    obj: "analog wall clock"
+  },
+  // Uhr (reemplaza Umbrella/Regenschirm)
+  "V, v": {
+    shape: "uppercase letter V",
+    obj: "cute little flying bird"
+  },
+  // Vogel (reemplaza Violin/Geige)
+  "W, w": {
+    shape: "uppercase letter W",
+    obj: "fluffy white cloud"
+  },
+  // Wolke (reemplaza Whale/Wal)
+  "X, x": {
+    shape: "uppercase letter X",
+    obj: "colorful toy xylophone"
+  },
+  // Xylophon
+  "Y, y": {
+    shape: "uppercase letter Y",
+    obj: "small luxury toy yacht"
+  },
+  // Yacht (reemplaza Yoyo/Jojo)
+  "Z, z": {
+    shape: "uppercase letter Z",
+    obj: "cute little zebra"
+  },
+  // Zebra
+
+  // Umlauts y caracteres especiales
+  "Ä, ä": {
+    shape: "uppercase letter A with two small dots (umlaut) floating above it",
+    obj: "two shiny red apples"
+  },
+  // Äpfel
+  "Ö, ö": {
+    shape: "uppercase letter O with two small dots (umlaut) floating above it",
+    obj: "small glass bottle of olive oil"
+  },
+  // Öl
+  "Ü, ü": {
+    shape: "uppercase letter U with two small dots (umlaut) floating above it",
+    obj: "small open gift box with a surprise inside"
+  },
+  // Überraschung
+  "ß": {
+    shape: "German sharp S (Eszett) character",
+    obj: "small piece of a paved street"
+  } // Straße (contiene la ß)
+};
+const diccionarioNumeros = {
+  "null": {
+    num: "number 0",
+    obj: "small empty yellow basket"
+  },
+  "eins": {
+    num: "number 1",
+    obj: "exactly one small bright yellow star"
+  },
+  "zwei": {
+    num: "number 2",
+    obj: "exactly two small bright yellow stars"
+  },
+  "drei": {
+    num: "number 3",
+    obj: "exactly three small bright yellow stars"
+  },
+  "vier": {
+    num: "number 4",
+    obj: "exactly four small bright yellow stars"
+  },
+  "fünf": {
+    num: "number 5",
+    obj: "exactly five small bright yellow stars"
+  },
+  "sechs": {
+    num: "number 6",
+    obj: "group of small bright yellow stars"
+  },
+  "sieben": {
+    num: "number 7",
+    obj: "group of small bright yellow stars"
+  },
+  "acht": {
+    num: "number 8",
+    obj: "group of small bright yellow stars"
+  },
+  "neun": {
+    num: "number 9",
+    obj: "group of small bright yellow stars"
+  },
+  "zehn": {
+    num: "number 10",
+    obj: "group of small bright yellow stars"
+  },
+  "elf": {
+    num: "number 11",
+    obj: "group of small bright yellow stars"
+  },
+  "zwölf": {
+    num: "number 12",
+    obj: "group of small bright yellow stars"
+  },
+  "dreizehn": {
+    num: "number 13",
+    obj: "group of small bright yellow stars"
+  },
+  "vierzehn": {
+    num: "number 14",
+    obj: "group of small bright yellow stars"
+  },
+  "fünfzehn": {
+    num: "number 15",
+    obj: "group of small bright yellow stars"
+  },
+  "sechzehn": {
+    num: "number 16",
+    obj: "group of small bright yellow stars"
+  },
+  "siebzehn": {
+    num: "number 17",
+    obj: "group of small bright yellow stars"
+  },
+  "achtzehn": {
+    num: "number 18",
+    obj: "group of small bright yellow stars"
+  },
+  "neunzehn": {
+    num: "number 19",
+    obj: "group of small bright yellow stars"
+  },
+  "zwanzig": {
+    num: "number 20",
+    obj: "group of small bright yellow stars"
+  },
+  "einundzwanzig": {
+    num: "number 21",
+    obj: "group of small bright yellow stars"
+  },
+  "dreißig": {
+    num: "number 30",
+    obj: "group of small bright yellow stars"
+  },
+  "vierzig": {
+    num: "number 40",
+    obj: "group of small bright yellow stars"
+  },
+  "fünfzig": {
+    num: "number 50",
+    obj: "group of small bright yellow stars"
+  },
+  "sechzig": {
+    num: "number 60",
+    obj: "group of small bright yellow stars"
+  },
+  "siebzig": {
+    num: "number 70",
+    obj: "group of small bright yellow stars"
+  },
+  "achtzig": {
+    num: "number 80",
+    obj: "group of small bright yellow stars"
+  },
+  "neunzig": {
+    num: "number 90",
+    obj: "group of small bright yellow stars"
+  },
+  "hundert": {
+    num: "number 100",
+    obj: "group of small bright yellow stars"
+  },
+  "tausend": {
+    num: "number 1000",
+    obj: "group of small bright yellow stars"
+  },
+  // Ordinales (Se renderizan como números con una medalla)
+  "der erste": {
+    num: "number 1",
+    obj: "shiny gold medal"
+  },
+  "der zweite": {
+    num: "number 2",
+    obj: "shiny silver medal"
+  },
+  "der dritte": {
+    num: "number 3",
+    obj: "shiny bronze medal"
+  },
+  "der vierte": {
+    num: "number 4",
+    obj: "blue ribbon"
+  },
+  "der fünfte": {
+    num: "number 5",
+    obj: "small blue ribbon"
+  },
+  "der sechste": {
+    num: "number 6",
+    obj: "small blue ribbon"
+  },
+  "der siebte": {
+    num: "number 7",
+    obj: "small blue ribbon"
+  },
+  "der achte": {
+    num: "number 8",
+    obj: "small blue ribbon"
+  },
+  "der neunte": {
+    num: "number 9",
+    obj: "small blue ribbon"
+  },
+  "der zehnte": {
+    num: "number 10",
+    obj: "small blue ribbon"
+  },
+  "der elfte": {
+    num: "number 11",
+    obj: "small blue ribbon"
+  },
+  "der zwölfte": {
+    num: "number 12",
+    obj: "small blue ribbon"
+  },
+  "der zwanzigste": {
+    num: "number 20",
+    obj: "small blue ribbon"
+  },
+  "der einundzwanzigste": {
+    num: "number 21",
+    obj: "small blue ribbon"
+  }
+};
+
+// Nuevo Diccionario de Preguntas
+const diccionarioPreguntas = {
+  "warum?": "a small cute 3D thought bubble",
+  "wo?": "a small cute 3D map location pin",
+  "wann?": "a small cute 3D hourglass",
+  "wer?": "a small cute 3D user profile avatar",
+  "was?": "a small cute 3D mystery gift box",
+  "wie?": "two small interlocking puzzle pieces",
+  "woher?": "a small cute 3D arrow pointing away from a map pin",
+  "wohin?": "a small cute 3D arrow pointing directly at a target bulls-eye",
+  "welcher?": "two small cute 3D checkboxes, one with a vibrant checkmark"
+};
+
+// Diccionario de Horas (Uhrzeit) para mapear manecillas de reloj exactas
+const diccionarioUhrzeit = {
+  "ein uhr": "a minimalist clean round 3D analog wall clock showing exactly 1:00, with the short hour hand pointing directly at the number 1, and the long minute hand pointing directly at the number 12",
+  "halb zwei": "a minimalist clean round 3D analog wall clock showing exactly 1:30, with the short hour hand pointing halfway between 1 and 2, and the long minute hand pointing directly at the number 6",
+  "viertel vor drei": "a minimalist clean round 3D analog wall clock showing exactly 2:45, with the short hour hand pointing close to the number 3, and the long minute hand pointing directly at the number 9",
+  "kurz vor 4": "a minimalist clean round 3D analog wall clock showing exactly 3:55 (five minutes to 4), with the short hour hand pointing almost directly at 4, and the long minute hand pointing at 11",
+  "gleich 4": "a minimalist clean round 3D analog wall clock showing exactly 3:58 (almost 4 o'clock), with the short hour hand pointing almost exactly at 4, and the long minute hand pointing very close to 12",
+  "genau 4 uhr": "a minimalist clean round 3D analog wall clock showing exactly 4:00, with the short hour hand pointing directly at the number 4, and the long minute hand pointing directly at the number 12",
+  "fünf nach 4": "a minimalist clean round 3D analog wall clock showing exactly 4:05 (five minutes past 4), with the short hour hand pointing slightly past 4, and the long minute hand pointing directly at the number 1",
+  "um 3 uhr": "a minimalist clean round 3D analog wall clock showing exactly 3:00, with the short hour hand pointing directly at the number 3, and the long minute hand pointing directly at the number 12",
+  "von 2 bis 3 uhr": "a minimalist clean round 3D analog wall clock with a brightly colored highlighted pie-slice segment between the hours 2 and 3, representing the time slot from 2:00 to 3:00",
+  "ab 3 uhr": "a minimalist clean round 3D analog wall clock with a brightly colored highlighted pie-slice segment starting at 3:00 and extending clockwise, representing starting from 3:00 onwards"
+};
+
+// Diccionario de Conceptos Especiales (Palabras abstractas complejas)
+const diccionarioConceptosEspeciales = {
+  "der vorname": "a minimalist 3D isometric employee ID card badge with a lanyard, featuring a cartoon silhouette profile picture of a person and the first line of details highlighted in vibrant blue, resting on a clean white surface",
+  "der nachname": "a minimalist 3D isometric family tree chart showing stylized connected icons of family members, representing family lineage and family name (surname), resting on a clean white surface",
+  "das abblendlicht": "a 3D isometric car headlight emitting a focused bright yellow beam of light pointing downwards onto a road surface, representing low beam headlights",
+  "das fernlicht": "a 3D isometric car headlight emitting intense, bright blue beams of light extending straight forward, representing high beam headlights",
+  "das tagfahrlicht": "a 3D isometric car headlight with modern LED signature strip daytime running lights glowing softly in white",
+  "die nebelschlussleuchte": "a 3D isometric rear car bumper showing a single glowing bright red fog light casting a strong red beam through a soft grey mist",
+  "die bremsleuchte": "a 3D isometric rear car tail light assembly with the round brake lights glowing in intense red",
+  "die warnblinkanlage": "a 3D isometric car dashboard hazard warning light button, featuring a red triangle icon glowing and flashing",
+  "einsteigen / aussteigen": "a 3D isometric representation of a clean car with an open driver door, showing a path to enter or exit",
+  "aufschließen": "a 3D isometric car door handle keyhole with a key being inserted or turned inside the lock",
+  "der blinker / blinken": "a 3D isometric front corner of a car showing a bright orange amber indicator light blinking with radiating light rays",
+  "die gangschaltung": "a 3D isometric gear shifter stick for a car transmission, showing a sphere knob with gear pattern markings on top",
+  "der schalthebel": "a 3D isometric manual gear shift lever stick with a round knob showing gear numbers",
+  "die bremse / bremsen": "a 3D isometric car brake pedal being pressed down slightly",
+  "das bremspedal": "a 3D isometric car footwell showing a clean metal brake pedal being pressed down",
+  "das gaspedal": "a 3D isometric car footwell showing an accelerator pedal being pressed down",
+  "gas geben": "a 3D isometric car accelerator pedal being pressed down to speed up",
+  "die kupplung": "a 3D isometric car clutch pedal being pressed down in the footwell",
+  "die handbremse": "a 3D isometric car handbrake lever pulled up on the center console",
+  "der scheibenwischer": "a 3D isometric car windshield with a wiper blade wiping away rain droplets, showing a clear swept arc",
+  "der lichtschalter": "a 3D isometric dial switch on a car dashboard showing icons for headlights and fog lights",
+  "der motor": "a 3D isometric modern clean car engine block with metal pipes and valve covers",
+  "motor starten": "a 3D isometric car ignition switch with a key turning to start the engine, or an illuminated engine start-stop button glowing red"
+};
+
+const diccionarioAccionesDinamicas = {
+  "abfahren": "train moving away from a station platform on tracks",
+  "ankommen": "train arriving at a station platform",
+  "einsteigen": "passenger stepping into a train or bus",
+  "aussteigen": "passenger stepping out of a train or bus",
+  "umsteigen": "two trains parked side by side at a station",
+  "fliegen": "airplane flying high in the sky",
+  "parken": "car perfectly parked in a parking slot",
+  "regnen": "dark storm cloud dropping rain",
+  "schneien": "fluffy cloud dropping snowflakes",
+  "überholen": "car overtaking another car on the highway",
+  "bremsen": "car tire braking hard on asphalt"
+};
+
+const mapColoresHex = {
+  "weiß": "strictly white hex #FFFFFF",
+  "schwarz": "strictly black hex #000000",
+  "grau": "strictly grey hex #808080",
+  "rot": "strictly red hex #FF0000",
+  "blau": "strictly blue hex #0000FF",
+  "gelb": "strictly yellow hex #FFFF00",
+  "grün": "strictly green hex #008000",
+  "braun": "strictly brown hex #8B4513",
+  "orange": "strictly orange hex #FFA500",
+  "rosa": "strictly pink hex #FFC0CB",
+  "lila": "strictly purple hex #800080"
+};
+
+/**
+ * 🏭 FÁBRICA DE PROMPTS (El Enrutador Lógico)
+ * Estructura un JSON aislando colores naturales del indicador de género
+ */
+function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman = "") {
+  // 1. Detección Inteligente de Color (Evita la epidemia gris leyendo el prefijo)
+  let hexAsignado = "hex #9E9E9E";
+  const palabraLimpia = (palabraAleman || "").trim().toLowerCase();
+  const tipoLimpio = (tipoGramatical || "").toLowerCase().trim();
+
+  // Detección infalible de preguntas
+  const esPregunta = tipoLimpio.includes("pregunta") || tipoLimpio.includes("w-frage") || tipoLimpio.includes("interrogativ") || palabraLimpia.includes("?");
+  const diasYMeses = ["montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag", "januar", "februar", "märz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember"];
+
+  // MODIFICACIÓN AQUÍ:
+  if (palabraLimpia.startsWith("der ") || diasYMeses.includes(palabraLimpia)) {
+    hexAsignado = "hex #4285F4";
+  } else if (palabraLimpia.startsWith("die ")) {
+    hexAsignado = "hex #EA4335";
+  } else if (palabraLimpia.startsWith("das ")) {
+    hexAsignado = "hex #34A853";
+  } else if (tipoLimpio === "verbo" || tipoLimpio === "acción") {
+    hexAsignado = "hex #FBBC05";
+  } else if (tipoLimpio === "preposición" || tipoLimpio === "preposicion") {
+    hexAsignado = "hex #FF9800";
+  } else if (esPregunta) {
+    hexAsignado = "hex #9C27B0";
+  }
+
+  // 2. Base JSON Estructurada
+  let promptObj = {
+    "scene": "A pure seamless solid white background in hex #FFFFFF",
+    "subjects": [],
+    "style": "3D isometric, minimalist, simple, educational language-app aesthetic, made of smooth matte soft clay",
+    "lighting": "Bright, even studio lighting"
+  };
+
+  // 3. Enrutamiento Lógico de Sujetos
+  if (esPregunta) {
+    const objPregunta = diccionarioPreguntas[palabraLimpia] || "small cute 3D exclamation mark symbol";
+    promptObj.subjects = [{
+      "type": "large chunky 3D question mark symbol",
+      "color": "strictly Material Purple hex #9C27B0",
+      "position": "left"
+    }, {
+      "type": objPregunta,
+      "color": "vibrant natural clay colors",
+      "position": "sitting right next to the question mark"
+    }];
+  } else if (tipoLimpio === 'letra' || tipoLimpio === 'alfabeto') {
+    const fallbackShape = `uppercase letter ${palabraAleman.charAt(0).toUpperCase()}`;
+    const datosLetra = diccionarioLetras[palabraAleman] || {
+      shape: fallbackShape,
+      obj: "small colorful bouncy ball"
+    };
+    promptObj = {
+      "scene": "A pure seamless solid white background hex #FFFFFF",
+      "subjects": [{
+        "type": `large chunky 3D block shaped like the ${datosLetra.shape}`,
+        "color": "strictly Material Grey hex #9E9E9E",
+        "position": "left"
+      }, {
+        "type": datosLetra.obj,
+        "color": "vibrant natural clay colors",
+        "position": "sitting right next to the letter block"
+      }],
+      "style_rules": "Strictly purely visual: absolutely NO TEXT, NO LETTERS, NO WORDS. Minimalist, simple, made of smooth matte soft clay."
+    };
+  } else if (tipoLimpio === 'numero' || tipoLimpio === 'número' || diccionarioNumeros[palabraLimpia]) {
+    const datosNum = diccionarioNumeros[palabraLimpia] || {
+      num: "number " + palabraLimpia,
+      obj: "group of small bright yellow stars"
+    };
+    promptObj.subjects = [{
+      "type": `large chunky 3D block shaped like the ${datosNum.num}`,
+      "color": "strictly Material Grey hex #9E9E9E",
+      "position": "left"
+    }, {
+      "type": datosNum.obj,
+      "color": "vibrant Material Yellow",
+      "position": "sitting right next to the number block"
+    }];
+  } else if (diccionarioUhrzeit[palabraLimpia]) {
+    promptObj.subjects = [{
+      "type": diccionarioUhrzeit[palabraLimpia],
+      "description": "Clean, educational, clear visualization of time. Made of smooth matte soft clay. Purely visual, zero text.",
+      "position": "centered"
+    }];
+  } else if (diccionarioConceptosEspeciales[palabraLimpia]) {
+    promptObj.subjects = [{
+      "type": diccionarioConceptosEspeciales[palabraLimpia],
+      "description": "Clean, educational, minimalist language app illustration. Made of smooth matte soft clay. Purely visual, zero text.",
+      "position": "centered"
+    }, {
+      "type": "small geometric floating sphere",
+      "description": "Made of glossy clay, perfectly round, acting as a grammatical gender indicator. Zero text.",
+      "position": "floating near the top right corner of the main object",
+      "color_match": "exact",
+      "color": hexAsignado
+    }];
+  } else if (diccionarioIndustrial[palabraLimpia]) {
+    const isSinGenero = tipoLimpio === 'adverbio' || tipoLimpio === 'adjetivo' || tipoLimpio.includes('expresión') || tipoLimpio.includes('expresion') || tipoLimpio.includes('frase') || tipoLimpio.includes('regla') || palabraLimpia.includes('+');
+    promptObj.subjects = [{
+      "type": diccionarioIndustrial[palabraLimpia],
+      "color": "natural realistic industrial colors",
+      "position": "centered"
+    }];
+    if (!isSinGenero) {
+      promptObj.subjects.push({
+        "type": "A magical glowing sphere",
+        "color": `strictly ${hexAsignado}`,
+        "position": "floating gently next to the main object"
+      });
+    }
+    promptObj.style_rules = "CRITICAL: Must be an INANIMATE object or symbolic prop. Absolutely NO FACES, NO EYES, NO MOUTHS. Strictly purely visual: absolutely NO TEXT, NO LETTERS, NO WORDS. Minimalist, simple.";
+  } else {
+    // 🔥 NUEVA LÓGICA DE ENRUTAMIENTO SEMÁNTICO (NUBE)
+    const esColor = palabraLimpia === "weiß" || palabraLimpia === "schwarz" || palabraLimpia === "grau" || palabraLimpia === "rot" || palabraLimpia === "blau" || palabraLimpia === "gelb" || palabraLimpia === "grün" || palabraLimpia === "braun" || palabraLimpia === "orange" || palabraLimpia === "rosa" || palabraLimpia === "lila" || palabraLimpia.includes("farbe") || tipoLimpio.includes("color");
+    const esAdjetivo = !esColor && (tipoLimpio.includes("adjetivo") || tipoLimpio.includes("sentimiento"));
+    const esVerbo = !esColor && (tipoLimpio.includes("verbo") || tipoLimpio.includes("acción"));
+    const esPersona = !esColor && (tipoLimpio.includes("pronombre") || tipoLimpio.includes("persona") || tipoLimpio.includes("profesión") || tipoLimpio.includes("profesion"));
+    const esAbstractoInanimado = !esColor && (tipoLimpio.includes("preposición") || tipoLimpio.includes("preposicion") || tipoLimpio.includes("adverbio") || tipoLimpio.includes("conjunción"));
+
+    // Filtro ampliado para determinar si lleva o no la esfera gramatical
+    const isSinGenero = esColor || esAdjetivo || esVerbo || esPersona || esAbstractoInanimado || diccionarioAccionesDinamicas[palabraLimpia] || tipoLimpio.includes('expresión') || tipoLimpio.includes('expresion') || tipoLimpio.includes('frase') || tipoLimpio.includes('regla') || palabraLimpia.includes('+');
+    let subjectType = conceptoIngles;
+    const colorAsignado = hexAsignado; // Garantizar compatibilidad con hexAsignado
+
+    // Asignación de sujeto y escudo anti-caritas según el tipo
+    if (diccionarioAccionesDinamicas[palabraLimpia]) {
+      subjectType = diccionarioAccionesDinamicas[palabraLimpia];
+    } else if (esColor) {
+      subjectType = conceptoIngles;
+      promptObj.style_rules = "CRITICAL: Purely visual representation of the color itself. Absolutely NO PEOPLE, NO CHARACTERS, NO CLOTHES, NO FACES, NO ANIMALS. Minimalist, simple.";
+    } else if (esAdjetivo) {
+      subjectType = `expressive human character who is visibly ${conceptoIngles}. The character's pose, facial expression, and body language perfectly illustrate the adjective`;
+    } else if (esVerbo) {
+      subjectType = `expressive human character actively performing the action of ${conceptoIngles}. The character's pose dynamically captures the verb in motion`;
+    } else if (esPersona) {
+      subjectType = `expressive human character representing a ${conceptoIngles}`;
+    } else if (esAbstractoInanimado) {
+      subjectType = `faceless inanimate object or symbolic prop representing the concept of "${conceptoIngles}"`;
+      promptObj.style_rules += " CRITICAL: Must be an INANIMATE object or symbolic prop. Absolutely NO FACES, NO EYES, NO MOUTHS, NO ANIMALS, NO CHARACTERS, NO ANTHROPOMORPHISM.";
+    } else {
+      subjectType = `UI icon representing "${conceptoIngles}"`;
+    }
+
+    // Determinar el color del sujeto principal
+    let colorDelSujeto = "vibrant natural clay colors";
+    if (esColor) {
+      if (mapColoresHex[palabraLimpia]) {
+        colorDelSujeto = mapColoresHex[palabraLimpia];
+      } else {
+        const limpio = (conceptoIngles || "").replace("a vibrant splash of ", "").replace(" paint", "").trim().toLowerCase();
+        colorDelSujeto = limpio ? `strictly ${limpio}` : "vibrant natural clay colors";
+      }
+    }
+
+    // Insertar el sujeto principal
+    promptObj.subjects.push({
+      "type": subjectType,
+      "color": colorDelSujeto,
+      "position": isSinGenero ? "centered" : "left"
+    });
+
+    // Insertar la esfera indicadora de género si corresponde
+    if (!isSinGenero) {
+      promptObj.subjects.push({
+        "type": "magical glowing sphere",
+        "color": `strictly ${colorAsignado}`,
+        "position": "floating gently right next to the main object"
+      });
+    }
+  }
+  return JSON.stringify(promptObj);
+}
+export const generateCardImage = onCall({
+  secrets: ALL_AI_SECRETS
+}, async request => {
+  const {
+    wordObj,
+    conceptoIngles
+  } = request.data;
+  if (!wordObj || !wordObj.es || !wordObj.de) {
+    throw new HttpsError("invalid-argument", "Faltan parámetros requeridos en wordObj");
+  }
+
+  // Usar el tipo gramatical si viene en wordObj, o intentar deducirlo
+  const tipoGramatical = wordObj.type || wordObj.tipo_gramatical || 'sustantivo';
+  const tipoLimpio = tipoGramatical.toLowerCase().trim();
+  const palabraLimpia = (wordObj.de || "").trim().toLowerCase();
+  const categoryLimpia = (wordObj.category || request.data.category || "").toLowerCase().trim();
+  const esColor = palabraLimpia === "weiß" || palabraLimpia === "schwarz" || palabraLimpia === "grau" || palabraLimpia === "rot" || palabraLimpia === "blau" || palabraLimpia === "gelb" || palabraLimpia === "grün" || palabraLimpia === "braun" || palabraLimpia === "orange" || palabraLimpia === "rosa" || palabraLimpia === "lila" || palabraLimpia.includes("farbe") || categoryLimpia.includes("farben") || categoryLimpia.includes("color") || tipoLimpio.includes("color");
+  const esPersonaje = !esColor && (tipoLimpio.includes("adjetivo") || tipoLimpio.includes("verbo") || tipoLimpio.includes("acción") || tipoLimpio.includes("pronombre") || tipoLimpio.includes("sentimiento"));
+
+  // ── CACHE CHECK BARRIER (global_flashcards) ───────────────────────────────
+  const safeWordId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
+  try {
+    const cacheRef = db.collection("global_flashcards").doc(safeWordId);
+    const docSnap = await cacheRef.get();
+    if (docSnap.exists && docSnap.data().imageUrl) {
+      console.log(`✅ Cache Hit Backend: Imagen recuperada de global_flashcards [${safeWordId}]`);
+      return { imageUrl: docSnap.data().imageUrl };
+    }
+  } catch (cacheErr) {
+    console.warn("⚠️ Cache check falló, continuando con generación:", cacheErr.message);
+  }
+  // ── FIN CACHE CHECK ───────────────────────────────────────────────────────
+
+  try {
+    fal.config({
+      credentials: falKey.value()
+    });
+
+    // Si no tenemos un concepto en inglés predefinido, usamos Gemini Resilient Pool para traducirlo rápido
+    let concepto = conceptoIngles;
+    if (esColor) {
+      // Si es un color, obtenemos la traducción limpia en inglés (ej. "blanco" -> "white")
+      // y definimos una salpicadura de pintura de ese color en lugar de personas
+      const colorEn = await getCleanEnglishTranslation(wordObj.es);
+      concepto = `a vibrant splash of ${colorEn} paint`;
+    } else if (esPersonaje) {
+      // Ignorar la descripción de icono predefinida (por ej. luna, estrella, nube con caritas)
+      // para forzar la generación de un personaje humano que represente la emoción/acción.
+      concepto = await getCleanEnglishTranslation(wordObj.es);
+    } else if (!concepto) {
+      const category = (request.data.category || "") + (wordObj.category ? ` - ${wordObj.category}` : "");
+      concepto = await getVisualDescriptionForConcept(wordObj.es, category);
+    }
+
+    // Ensamblar el prompt usando la Fábrica
+    const promptDinamicoGenerado = construirPromptDinamico(concepto, tipoGramatical, wordObj.de);
+    console.log(`🎨 Renderizando: ${wordObj.de} (${tipoGramatical})`);
+    console.log(`📝 Prompt ensamblado: "${promptDinamicoGenerado}"`);
+
+    // 3. Llamamos a Flux a través de Fal.ai (optimizando API endpoint, formato y dimensiones)
+    const result = await fal.subscribe("fal-ai/flux-2/klein/9b/base", {
+      input: {
+        prompt: promptDinamicoGenerado,
+        image_size: {
+          width: 512,
+          height: 512
+        },
+        num_inference_steps: 20,
+        guidance_scale: 3.5,
+        output_format: "jpeg"
+      }
+    });
+    const dataUri = result.data.images?.[0]?.url || result.data?.url || result.images && result.images[0]?.url;
+    if (!dataUri) throw new Error("No image data returned from FAL API");
+
+    // PARTE 1: Guardado Global en Caché (safeWordId ya definido en el Cache Check)
+    try {
+      await db.collection("global_flashcards").doc(safeWordId).set({
+        imageUrl: dataUri,
+        model: "fal-ai/flux-2/klein/9b/base",
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      }, {
+        merge: true
+      });
+    } catch (err) {
+      console.warn("No se pudo guardar en el caché global:", err);
+    }
+    return {
+      imageUrl: dataUri
+    };
+  } catch (error) {
+    console.error("Error en generateCardImage:", error);
+    throw new HttpsError("internal", "Error al generar imagen de la tarjeta", error.message);
+  }
+});
+
+// =========================================================================
+// 6. GENERADOR DE COMPRENSIÓN LECTORA (generateReadingTest)
+// =========================================================================
+export const generateReadingTest = onCall({
+  secrets: ALL_AI_SECRETS,
+  timeoutSeconds: 120
+}, async request => {
+  const {
+    tema
+  } = request.data;
+  if (!tema) {
+    throw new HttpsError("invalid-argument", "Falta el parámetro requerido: tema");
+  }
+  const defaultSystemInstruction = `
+      Eres un profesor de alemán de nivel A1 del Goethe-Institut. El usuario te dará un tema de su interés.
+      Tu tarea es generar:
+      1. Un título en alemán para la lectura.
+      2. Un texto de lectura en alemán nivel A1 sobre el tema con una longitud mínima estricta de 100 a 130 palabras, dividido fluidamente en 2 o 3 párrafos. Usa conectores A1 (und, oder, aber, denn) para unir ideas y dar mayor volumen de lectura.
+      3. Un cuestionario de exactamente 3 preguntas de opción múltiple en alemán para medir la comprensión lectora del texto.
+      
+      Debes devolver ÚNICAMENTE un JSON con esta estructura exacta:
+      {
+        "titulo_aleman": "...",
+        "texto_aleman": "...",
+        "preguntas": [
+          {
+            "pregunta_aleman": "...",
+            "opciones_aleman": ["Opción A", "Opción B", "Opción C"],
+            "respuesta_correcta": "La opción exacta (debe coincidir exactamente con una de las opciones del array opciones_aleman)",
+            "explicacion_espanol": "Una retroalimentación didáctica y concluyente en español. Debe explicar claramente y de forma ultra-sencilla por qué la opción correcta es la adecuada basándose en el texto, y por qué las otras no lo son, asegurando que el alumno aprenda tanto si acertó como si falló. PROHIBIDO hacer preguntas abiertas o retóricas al final."
+          }
+        ]
+      }
+
+      === RIGOR GOETHE ZERTIFIKAT A1 (LESEN) ===
+      1. LONGITUD OBLIGATORIA Y CONECTORES: El 'texto_aleman' DEBE tener estrictamente entre 100 y 130 palabras. Tienes PROHIBIDO hacer listas de oraciones cortas y robóticas. Escribe 2 o 3 párrafos fluidos uniendo las ideas con conectores A1 (und, oder, aber, denn, deshalb).
+      2. PROHIBIDA LA EXTRACCIÓN LITERAL (El Juego de los Espejos): Las preguntas de comprensión JAMÁS deben resolverse buscando la misma frase exacta en el texto. Debes obligar al alumno a usar deducción por antónimos o sinónimos simples. Ej: Si el texto dice 'Das Hotel ist nicht teuer' (El hotel no es caro), la opción correcta de la pregunta debe ser 'Es ist billig / günstig' (Es barato).
+      3. DISTRACTORES LETALES: Las 2 opciones incorrectas de cada pregunta DEBEN ser sustantivos o datos que SÍ aparecen en el texto, pero que pertenecen a otro sujeto, lugar o momento. Prohibido usar palabras que no estén en la lectura para despistar.
+
+      === EJEMPLO DE SALIDA ESPERADA (FEW-SHOT PATTERN) ===
+      Estudia este ejemplo. Nota cómo el texto tiene más de 100 palabras, usa conectores, la primera pregunta usa la trampa de antónimos (nicht teuer -> billig) y los distractores son palabras que sí aparecen en la lectura pero en otro contexto:
+
+      {
+        "titulo_aleman": "Ein Wochenende in Berlin",
+        "texto_aleman": "Ich heiße Martin und ich besuche dieses Wochenende Berlin. Die Stadt ist sehr groß und interessant. Das Wetter ist leider schlecht, denn es regnet viel. Mein Hotelzimmer ist klein, aber es ist nicht teuer. Ich besuche viele Museen, weil ich Geschichte liebe. Am Mittag esse ich eine Currywurst mit Pommes. Das ist sehr typisch hier. Meine Schwester Anna wohnt auch in Berlin, aber sie studiert heute an der Universität. Am Abend gehen wir zusammen in ein Restaurant. Wir trinken ein Bier und sprechen viel. Morgen fahre ich mit dem Zug zurück nach Hamburg. Die Reise war kurz, aber sehr schön.",
+        "preguntas": [
+          {
+            "pregunta_aleman": "Wie ist das Hotelzimmer von Martin?",
+            "opciones_aleman": [
+              "Es ist billig.",
+              "Es ist groß.",
+              "Es ist teuer."
+            ],
+            "respuesta_correcta": "Es ist billig.",
+            "explicacion_espanol": "La respuesta correcta es 'Es ist billig' (Es barato) porque el texto dice 'es ist nicht teuer' (no es caro). 'Es ist groß' es incorrecta porque el texto dice que es pequeña (la ciudad es la grande)."
+          },
+          {
+            "pregunta_aleman": "Was macht Anna heute?",
+            "opciones_aleman": [
+              "Sie studiert an der Universität.",
+              "Sie isst eine Currywurst.",
+              "Sie fährt mit dem Zug."
+            ],
+            "respuesta_correcta": "Sie studiert an der Universität.",
+            "explicacion_espanol": "La respuesta es 'Sie studiert an der Universität'. Las otras opciones son trampas: Martin es quien come Currywurst y quien viaja en tren, no Anna."
+          }
+        ]
+      }
+
+      REGLAS DE FORMATO Y LENGUAJE:
+      - RETROALIMENTACIÓN CONCLUYENTE: En 'explicacion_espanol', ofrece una conclusión didáctica sin preguntas abiertas o retóricas al final.
+      - Usa diacríticos/umlauts estándar del alemán (ä, ö, ü, ß) en lugar de dígrafos (como "fuer" en lugar de "für", o "schoen" en lugar de "schön").
+      - NO coloques espacios antes de los signos de puntuación (ej. escribe "Familie." y no "Familie .", "Personen:" y no "Personen :", "Vater," y no "Vater ,"). El texto debe tener una puntuación limpia y profesional.
+      - Responde únicamente con el formato JSON válido.
+      - El texto y las preguntas deben estar estrictamente redactados en alemán nivel A1.
+      - La explicación de las respuestas correctas debe estar en español.
+    `;
+  const systemInstruction = await getSystemPrompt("reading_comprehension_system", defaultSystemInstruction);
+  const promptUser = `Genera la prueba de comprensión lectora para el tema: "${tema}".`;
+
+  const readingSchema = {
+    type: SchemaType.OBJECT,
+    properties: {
+      titulo_aleman: { type: SchemaType.STRING, description: "Título en alemán para la lectura" },
+      texto_aleman: { type: SchemaType.STRING, description: "Texto de lectura corto y sencillo en alemán nivel A1" },
+      preguntas: {
+        type: SchemaType.ARRAY,
+        items: {
+          type: SchemaType.OBJECT,
+          properties: {
+            pregunta_aleman: { type: SchemaType.STRING, description: "Pregunta de opción múltiple en alemán" },
+            opciones_aleman: {
+              type: SchemaType.ARRAY,
+              items: { type: SchemaType.STRING },
+              description: "3 opciones de respuesta en alemán"
+            },
+            respuesta_correcta: { type: SchemaType.STRING, description: "La opción exacta de respuesta correcta" },
+            explicacion_espanol: { type: SchemaType.STRING, description: "Una retroalimentación didáctica y concluyente en español. Debe explicar claramente por qué la opción correcta es la adecuada. PROHIBIDO hacer preguntas abiertas o retóricas al final." }
+          },
+          required: ["pregunta_aleman", "opciones_aleman", "respuesta_correcta", "explicacion_espanol"]
+        },
+        description: "Lista de exactamente 3 preguntas de opción múltiple"
+      }
+    },
+    required: ["titulo_aleman", "texto_aleman", "preguntas"]
+  };
+
+  try {
+    console.log("ReadingTest FinOps: Invocando pool de 3 llaves con gemini-3.8-flash...");
+    const poolRes = await executeBackendGemini(promptUser, {
+      keys: getGeminiKeyConfig(),
+      preferredModel: "gemini-3.8-flash",
+      systemInstruction,
+      responseSchema: readingSchema,
+      mode: "paid_first"
+    });
+    const cleanJson = poolRes.text.trim().replace(/^```json\s*/i, "").replace(/```$/, "").replace(/```/g, "").trim();
+    return JSON.parse(cleanJson);
+  } catch (geminiError) {
+    console.warn("ReadingTest FinOps: Fallaron las llaves de Gemini. Activando fallback a Claude Haiku 4.5:", geminiError.message);
+    try {
+      fal.config({
+        credentials: falKey.value()
+      });
+      console.log("ReadingTest FinOps: Invocando Claude Haiku 4.5 via Fal.ai...");
+
+      const finalPromptUser = promptUser + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
+      const response = await fal.subscribe("openrouter/router/enterprise", {
+        input: {
+          model: "anthropic/claude-haiku-4.5",
+          prompt: finalPromptUser,
+          system_prompt: systemInstruction,
+          temperature: 0.7,
+          top_p: 0.9
+        }
+      });
+
+      const outputText = response.data.output || response.data.text || "";
+      const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+      return JSON.parse(cleanJson);
+    } catch (fallbackError) {
+      console.error("ReadingTest FinOps: Error crítico en fallback de Claude Haiku 4.5:", fallbackError);
+      throw new HttpsError("internal", "Error generando el examen de comprensión lectora en ambos proveedores: " + fallbackError.message);
+    }
+  }
+});
+
+export const generateDynamicQuiz = onCall({
+  timeoutSeconds: 120,
+  memory: "512MiB",
+  secrets: ALL_AI_SECRETS,
+}, async (request) => {
+  const { tema } = request.data || {};
+  if (!tema) {
+    throw new HttpsError("invalid-argument", "El parámetro 'tema' es obligatorio.");
+  }
+
+  const systemInstruction = `=== REGULACIÓN PEDAGÓGICA Y DE CONTENIDO ===
+Actúa como un examinador oficial del Goethe-Institut especializado en el nivel A1 (Start Deutsch 1). Tu objetivo es evaluar al estudiante mediante un quiz de exactamente 10 preguntas de opción múltiple.
+El usuario proporcionará el tema gramatical o de vocabulario a evaluar.
+
+Genera un JSON estrictamente válido que contenga:
+1. 'titulo_quiz': Un título atractivo y contextualizado en español sobre el tema.
+2. 'preguntas': Un array de exactamente 10 objetos de preguntas independientes. Para evitar la monotonía, varía los verbos, contextos y sustantivos en cada pregunta. Cada objeto debe tener:
+   - 'pregunta': Una oración corta en alemán con un hueco (___) o una pregunta situacional sencilla A1.
+   - 'opciones': Un array de exactamente 3 opciones de respuesta cortas en alemán (alineado al estándar real A/B/C del Goethe A1).
+   - 'respuesta_correcta': La opción exacta del array que es la correcta.
+   - 'explicacion_didactica': Una breve explicación pedagógica en español de máximo 2 líneas que aclare la regla aplicada y descarte los distractores de forma ultra-sencilla.
+
+Mantén la dificultad estrictamente en el nivel A1 (oraciones muy simples, vocabulario básico, presente e imperativo, estructuras sencillas). Cero excepciones avanzadas.`;
+
+  const promptUser = `Genera un quiz de exactamente 10 preguntas para el nivel Goethe A1 sobre el siguiente tema: ${tema}.`;
+
+  const quizSchema = {
+    type: SchemaType.OBJECT,
+    properties: {
+      titulo_quiz: { type: SchemaType.STRING, description: "Título atractivo en español sobre el tema" },
+      preguntas: {
+        type: SchemaType.ARRAY,
+        items: {
+          type: SchemaType.OBJECT,
+          properties: {
+            pregunta: { type: SchemaType.STRING, description: "Oración corta en alemán con hueco (___) o pregunta situacional A1" },
+            opciones: {
+              type: SchemaType.ARRAY,
+              items: { type: SchemaType.STRING },
+              description: "Exactamente 3 opciones de respuesta en alemán"
+            },
+            respuesta_correcta: { type: SchemaType.STRING, description: "La opción exacta del array que es correcta" },
+            explicacion_didactica: { type: SchemaType.STRING, description: "Breve explicación pedagógica en español de máximo 2 líneas" }
+          },
+          required: ["pregunta", "opciones", "respuesta_correcta", "explicacion_didactica"]
+        },
+        description: "Lista de exactamente 10 preguntas independientes A1"
+      }
+    },
+    required: ["titulo_quiz", "preguntas"]
+  };
+
+  try {
+    console.log("DynamicQuiz FinOps: Invocando pool de 3 llaves con gemini-3.8-flash...");
+    const poolRes = await executeBackendGemini(promptUser, {
+      keys: getGeminiKeyConfig(),
+      preferredModel: "gemini-3.8-flash",
+      systemInstruction,
+      responseSchema: quizSchema,
+      mode: "paid_first"
+    });
+
+    const cleanJson = poolRes.text.trim().replace(/^```json\s*/i, "").replace(/```$/, "").replace(/```/g, "").trim();
+    const data = JSON.parse(cleanJson);
+
+    // Mapear explicacion_didactica a explicacion_socratica para asegurar compatibilidad 100% con el frontend
+    if (data && Array.isArray(data.preguntas)) {
+      data.preguntas = data.preguntas.map(q => ({
+        ...q,
+        explicacion_socratica: q.explicacion_didactica || q.explicacion_socratica,
+        explicacion_didactica: q.explicacion_didactica || q.explicacion_socratica
+      }));
+    }
+    return data;
+  } catch (geminiError) {
+    console.warn("DynamicQuiz FinOps: Fallaron las llaves de Gemini. Activando fallback a Claude Haiku 4.5:", geminiError.message);
+    try {
+      fal.config({ credentials: falKey.value() });
+      console.log("DynamicQuiz FinOps: Invocando Claude Haiku 4.5 via Fal.ai...");
+
+      const finalPromptUser = promptUser + "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
+      const response = await fal.subscribe("openrouter/router/enterprise", {
+        input: {
+          model: "anthropic/claude-haiku-4.5",
+          prompt: finalPromptUser,
+          system_prompt: systemInstruction,
+          temperature: 0.3,
+          top_p: 0.9
+        }
+      });
+
+      const outputText = response.data.output || response.data.text || "";
+      const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+      return JSON.parse(cleanJson);
+    } catch (fallbackError) {
+      console.error("DynamicQuiz FinOps: Error crítico en fallback de Claude Haiku 4.5:", fallbackError);
+      throw new HttpsError("internal", "Error generando el quiz dinámico en ambos proveedores: " + fallbackError.message);
+    }
+  }
+});
+
+// =========================================================================
+// SÍNTESIS DE VOZ Y PRONUNCIACIÓN HUMANA EN ALEMÁN (Gemini 3.8 Flash TTS)
+// Arquitectura de Caché Global Nivel 2 y 3 (Firestore + Cloud Storage + Fal.ai)
+// =========================================================================
+
+// Sanitización canónica determinista de texto alemán a ID seguro para Firestore y Storage
+function getSafeAudioId(text) {
+  if (!text || typeof text !== "string") return "audio_unknown";
+  
+  const normalized = text
+    .trim()
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quitar acentos
+    .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+    .replace(/[.,/#!$%^&*;:{}=\-_`~()?"'«»]/g, " ") // Convertir puntuación a espacios
+    .replace(/\s+/g, "_")                            // Espacios a guión bajo
+    .replace(/[^a-z0-9_]/g, "")                     // Quitar cualquier caracter residual
+    .replace(/^_+|_+$/g, "")                        // Recortar guiones bajos iniciales y finales
+    .substring(0, 120);
+
+  return "audio_" + (normalized || "audio");
+}
+
+/**
+ * 1. Invocación Directa a la API de Google AI Studio (Consume Créditos del Google Developer Program)
+ */
+async function synthesizeWithGoogleDirect(text, voice, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash-tts:generateContent?key=${apiKey}`;
+  const payload = {
+    contents: [{ parts: [{ text }] }],
+    generationConfig: {
+      responseModalities: ["AUDIO"],
+      speechConfig: {
+        voiceConfig: {
+          prebuiltVoiceConfig: {
+            voiceName: "Charon" // Voz masculina oficial exclusiva de DeutschMeister
+          }
+        }
+      }
+    }
+  };
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`Google Direct API HTTP ${response.status}: ${errorBody}`);
+  }
+
+  const json = await response.json();
+  const inlineData = json.candidates?.[0]?.content?.parts?.[0]?.inlineData;
+  if (!inlineData || !inlineData.data) {
+    throw new Error("La API directa de Google no devolvió datos de audio válidos.");
+  }
+
+  return {
+    buffer: Buffer.from(inlineData.data, "base64"),
+    mimeType: inlineData.mimeType || "audio/wav",
+    provider: "google-direct"
+  };
+}
+
+/**
+ * 2. Invocación de Respaldo a Fal.ai
+ */
+async function synthesizeWithFalFallback(text, voice, falKeyValue) {
+  fal.config({ credentials: falKeyValue });
+
+  const result = await fal.subscribe("google/gemini-3.8-flash-tts", {
+    input: {
+      prompt: text,
+      voice: "Charon", // Voz masculina oficial exclusiva de DeutschMeister
+      style_instructions: "Speak in clear, natural, standard German (Hochdeutsch) with precise A1 pedagogical pronunciation and natural pacing."
+    }
+  });
+
+  if (!result.data || !result.data.audio || !result.data.audio.url) {
+    throw new Error("Fal.ai no devolvió URL de audio.");
+  }
+
+  const audioRes = await fetch(result.data.audio.url);
+  if (!audioRes.ok) throw new Error(`Fallo descargando audio de Fal.ai: HTTP ${audioRes.status}`);
+
+  return {
+    buffer: Buffer.from(await audioRes.arrayBuffer()),
+    mimeType: result.data.audio.content_type || "audio/wav",
+    provider: "fal-fallback"
+  };
+}
+
+export const synthesizeGermanSpeech = onCall(
+  {
+    secrets: [geminiPaidKey, falKey],
+    timeoutSeconds: 60,
+    memory: "512MiB",
+    cors: true
+  },
+  async (request) => {
+    const { text, type = "vocab" } = request.data || {};
+    const voice = "Charon"; // Voz masculina oficial exclusiva de DeutschMeister
+    if (!text || typeof text !== "string") {
+      throw new HttpsError("invalid-argument", "El parámetro 'text' es obligatorio y debe ser una cadena.");
+    }
+
+    const cleanText = text.replace(/[*_#`~]/g, "").trim();
+    if (!cleanText) {
+      throw new HttpsError("invalid-argument", "El texto proporcionado está vacío.");
+    }
+
+    const isEphemeral = type === "story" || type === "reading";
+    const audioId = getSafeAudioId(cleanText);
+    const db = admin.firestore();
+
+    // ── NIVEL 2: REVISIÓN DE CACHÉ EN LA NUBE (Excluido para cuentos y lecturas efímeras) ──
+    if (!isEphemeral) {
+      const audioDocRef = db.collection("global_audio_pronunciations").doc(audioId);
+      let docSnap = await audioDocRef.get();
+
+      // Compatibilidad con audios generados anteriormente con guión bajo final
+      if (!docSnap.exists) {
+        const legacyDocRef = db.collection("global_audio_pronunciations").doc(`${audioId}_`);
+        const legacySnap = await legacyDocRef.get();
+        if (legacySnap.exists) {
+          docSnap = legacySnap;
+        }
+      }
+
+      if (docSnap.exists) {
+        const data = docSnap.data();
+        if (data && data.audioUrl && !data.audioUrl.includes("gcf-v2-sources") && !data.audioUrl.includes("gcf-v2-uploads")) {
+          console.log(`[TTS Cache Hit] Audio válido encontrado en Firestore [${docSnap.id}]`);
+          return {
+            success: true,
+            audioUrl: data.audioUrl,
+            audioId: data.audioId || audioId,
+            fromCloudCache: true,
+            provider: "cloud-cache"
+          };
+        }
+        console.log(`[TTS Cache Purge] URL corrupta o interna detectada para [${audioId}], regenerando...`);
+      }
+    }
+
+    // ── INFERENCIA: GOOGLE DIRECTO -> FALLBACK FAL.AI ──
+    let audioResult = null;
+    const paidKey = (geminiPaidKey && typeof geminiPaidKey.value === "function" ? geminiPaidKey.value() : "") || process.env.GEMINI_PAID_KEY || "";
+    const falKeyValue = (falKey && typeof falKey.value === "function" ? falKey.value() : "") || process.env.FAL_KEY || process.env.VITE_FAL_KEY || "";
+
+    try {
+      if (!paidKey) {
+        throw new Error("No hay GEMINI_PAID_KEY disponible para invocación directa.");
+      }
+      audioResult = await synthesizeWithGoogleDirect(cleanText, voice, paidKey);
+      console.log(`[TTS Engine] Generado exitosamente vía Google AI Studio Direct (${cleanText.substring(0, 30)}...)`);
+    } catch (googleError) {
+      console.warn("[TTS Warning] Falló Google Direct API. Conmutando a contingencia Fal.ai:", googleError.message);
+      try {
+        if (!falKeyValue) {
+          throw new Error("No hay FAL_KEY disponible para invocación de contingencia.");
+        }
+        audioResult = await synthesizeWithFalFallback(cleanText, voice, falKeyValue);
+        console.log(`[TTS Engine] Generado exitosamente vía Fal.ai Contingencia (${cleanText.substring(0, 30)}...)`);
+      } catch (falError) {
+        console.error("[TTS Critical Error] Fallaron ambos proveedores:", falError);
+        throw new HttpsError("internal", "No se pudo sintetizar el audio con ningún proveedor disponible: " + falError.message);
+      }
+    }
+
+    // ── CASO EFÍMERO (Cuentos y Comprensión Lectora): RETORNAR DIRECTAMENTE SIN PERSISTIR EN STORAGE NI FIRESTORE ──
+    if (isEphemeral) {
+      const base64DataUri = `data:${audioResult.mimeType};base64,${audioResult.buffer.toString("base64")}`;
+      return {
+        success: true,
+        audioUrl: base64DataUri,
+        audioId: audioId,
+        fromCloudCache: false,
+        provider: audioResult.provider,
+        persisted: false
+      };
+    }
+
+    // ── PERSISTENCIA GLOBAL (Solo para vocabulario, oraciones, lecturas y diálogos) ──
+    const STORAGE_BUCKET_NAME = process.env.STORAGE_BUCKET || "deutschmeister-audio-vault";
+    const bucket = admin.storage().bucket(STORAGE_BUCKET_NAME);
+    const ext = audioResult.mimeType.includes("mp3") ? "mp3" : "wav";
+    const filePath = `pronunciations/${type}/${audioId}.${ext}`;
+    const file = bucket.file(filePath);
+
+    await file.save(audioResult.buffer, {
+      metadata: {
+        contentType: audioResult.mimeType,
+        cacheControl: "public, max-age=31536000",
+        metadata: {
+          text: cleanText,
+          voice: voice,
+          type: type,
+          provider: audioResult.provider,
+          createdAt: new Date().toISOString()
+        }
+      }
+    });
+
+    try { await file.makePublic(); } catch (_) {}
+
+    const permanentAudioUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+
+    await db.collection("global_audio_pronunciations").doc(audioId).set({
+      audioId: audioId,
+      text: cleanText,
+      audioUrl: permanentAudioUrl,
+      storagePath: filePath,
+      voice: voice,
+      type: type,
+      provider: audioResult.provider,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+
+    return {
+      success: true,
+      audioUrl: permanentAudioUrl,
+      audioId: audioId,
+      fromCloudCache: false,
+      provider: audioResult.provider,
+      persisted: true
+    };
+  }
+);
+
+/**
+ * Detecta si una palabra es cualquier variante de verbo en la taxonomía de DeutschMeister
+ */
+function isVerbItem(wordObj) {
+  if (!wordObj) return false;
+  const type = (wordObj.type || "").toLowerCase();
+  const category = (wordObj.category || "").toLowerCase();
+  const regimen = (wordObj.regimen || "").toLowerCase();
+  const de = (wordObj.de || "").toLowerCase();
+
+  return (
+    type.includes("verb") ||
+    type.includes("acción") ||
+    type.includes("accion") ||
+    category.includes("verb") ||
+    category === "bewegung" ||
+    category === "aktivitäten" ||
+    category === "aktionen" ||
+    regimen.includes("separable") ||
+    regimen.includes("reflexiv") ||
+    de.startsWith("sich ") ||
+    de.includes("|") // Notación de separables como ein|laden
+  );
+}
+
+/**
+ * Diccionario cinético optimizado para verbos de alta frecuencia A1
+ */
+const KINETIC_ACTIONS = {
+  // Locomoción y Movimiento
+  gehen: "walking in place with steady rhythmic steps (treadmill style), swinging arms smoothly, remaining perfectly centered",
+  laufen: "running happily in place with fluid energetic steps (treadmill cycle), remaining centered",
+  springen: "jumping up and down vertically with bouncy clay elasticity, landing softly in the exact same spot",
+  tanzen: "doing a fun, joyful dance groove moving rhythmically side-to-side in place",
+  schwimmen: "doing smooth breaststroke swimming motions in place, gliding rhythmically",
+  fahren: "riding a tiny cute clay bicycle moving wheels in place, centered",
+  
+  // Postura y Estados
+  schlafen: "sleeping comfortably curled up on a small clay pillow, gentle rhythmic breathing motion",
+  aufstehen: "smoothly standing up from a sitting posture, stretching arms upward, then resetting",
+  sitzen: "sitting upright comfortably, looking around with a gentle head tilt and blinking",
+  warten: "standing still and tapping one foot patiently, checking an imaginary clay wrist watch",
+  
+  // Manipulación y Acciones Cotidianas
+  trinken: "holding a small colorful clay mug with both hands and taking cheerful sips in a repeating loop",
+  essen: "eating a tiny stylized clay snack happily, chewing rhythmically in place",
+  kochen: "stirring a small bubbling clay pot with a wooden clay spoon in a steady circular motion",
+  putzen: "wiping a clean imaginary glass surface back and forth with a small yellow sponge",
+  öffnen: "gently pushing open a small cute clay door and peeking through with a smile",
+  schließen: "smoothly pulling shut a small cute clay door until it clicks closed",
+  lesen: "holding an open clay book, eyes moving gently across pages with a slight head nod",
+  schreiben: "holding a thick clay pencil and scribbling smoothly on a small clay notepad",
+  
+  // Emociones y Social
+  sich_freuen: "jumping with pure joy, raising both arms celebrating happily with cheerful bounce",
+  lachen: "laughing joyfully, body shaking with hearty friendly laughter in place",
+  einladen: "making a warm, welcoming two-handed invitation gesture forward with a wide friendly smile"
+};
+
+/**
+ * Normaliza y construye la acción cinética óptima en inglés
+ */
+function resolveKineticAction(wordObj) {
+  const deKey = (wordObj.de || "").toLowerCase().replace(/[^a-z0-9]/gi, "_").replace(/^sich_/, "sich_");
+
+  if (KINETIC_ACTIONS[deKey]) {
+    return KINETIC_ACTIONS[deKey];
+  }
+
+  // Saneamiento dinámico si no está en el diccionario precalibrado
+  let raw = (wordObj.en || wordObj.concepto_ingles || wordObj.es || "").toLowerCase();
+  
+  // Quitar anotaciones gramaticales, regímenes y conectores
+  raw = raw.replace(/[≠+].*$/g, "").trim();
+  // Tomar solo el primer término si hay barras o comas (ej. "to go / walk" -> "to go")
+  raw = raw.split(/[\/,]/)[0].trim();
+  // Eliminar el "to " inicial
+  raw = raw.replace(/^to\s+/, "").trim();
+
+  // Convertir a gerundio simple
+  const verbIng = raw.endsWith("e") && !raw.endsWith("ee") 
+    ? raw.slice(0, -1) + "ing" 
+    : raw.endsWith("ing") ? raw : raw + "ing";
+
+  return `performing the physical action of ${verbIng} in place, staying centered with steady rhythmic motion`;
+}
+
+/**
+ * Generador de Prompt Visual Calibrado para Gemini Omni Flash & Nano Banana 2
+ */
+function buildVisualPrompt(wordObj, isVideo = false) {
+  const cleanGerman = (wordObj.de || "").replace(/[|]/g, "").trim();
+
+  if (isVideo) {
+    const kineticAction = resolveKineticAction(wordObj);
+
+    return [
+      `A cute stylized 3D clay figurine with friendly proportions, sculpted from smooth soft matte clay.`,
+      `The character is centered and strictly ${kineticAction}.`,
+      `Realistic claymation stop-motion physics, cohesive solid clay volume, zero melting, zero morphing, zero body distortion.`,
+      `Front isometric three-quarters angle, full-body framing completely centered.`,
+      `Subtle soft ambient contact shadow directly beneath feet on a pure seamless solid white background hex #FFFFFF.`,
+      `Completely static camera, locked tripod framing, no panning, no zoom.`,
+      `Strictly purely visual: absolutely no text, no letters, no words.`,
+      `Seamless continuous rhythmic loop that starts and ends in the exact same posture.`
+    ].join(" ");
+  }
+
+  // Prompt estático para gemini-3.1-flash-lite-image (Nano Banana 2 Lite)
+  const cleanConcept = (wordObj.en || wordObj.concepto_ingles || wordObj.es || "")
+    .replace(/[≠+].*$/g, "")
+    .trim();
+
+  return [
+    `A 3D isometric minimalist UI illustration depicting the concept of "${cleanConcept}" (${cleanGerman}).`,
+    `Made of smooth matte soft clay, clean geometry, pastel smooth shading, bright studio lighting.`,
+    `Subtle soft drop shadow resting on a pure seamless solid white background hex #FFFFFF.`,
+    `Strictly purely visual: absolutely NO TEXT, NO LETTERS, NO WORDS.`
+  ].join(" ");
+}
+
+/**
+ * Optimiza y comprime buffers de imagen a 512x512 JPEG (~30-50 KB)
+ */
+async function optimizeImageBuffer(buffer) {
+  return await sharp(buffer)
+    .resize(512, 512, { fit: "inside", withoutEnlargement: true })
+    .jpeg({ quality: 80, mozjpeg: true })
+    .toBuffer();
+}
+
+/**
+ * 1. Generación de Imagen con Nano Banana 2 Lite (gemini-3.1-flash-lite-image)
+ */
+async function generateGoogleFlashImage(prompt, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-image:generateContent?key=${apiKey}`;
+
+  const payload = {
+    contents: [
+      {
+        parts: [{ text: prompt }]
+      }
+    ],
+    generationConfig: {
+      responseModalities: ["IMAGE"],
+      imageConfig: {
+        aspectRatio: "1:1"
+      }
+    }
+  };
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Google Flash Image API HTTP ${response.status}: ${errText}`);
+  }
+
+  const data = await response.json();
+  const parts = data.candidates?.[0]?.content?.parts || [];
+  const imagePart = parts.find(p => p.inlineData && p.inlineData.data);
+
+  if (!imagePart) {
+    throw new Error("gemini-3.1-flash-lite-image no devolvió bytes de imagen inlineData.");
+  }
+
+  return {
+    buffer: Buffer.from(imagePart.inlineData.data, "base64"),
+    mimeType: imagePart.inlineData.mimeType || "image/jpeg"
+  };
+}
+
+/**
+ * Helper para localizar recursivamente datos o URI de video en la respuesta de Google
+ */
+function findVideoInObject(obj, visited = new Set()) {
+  if (!obj || typeof obj !== "object" || visited.has(obj)) return null;
+  visited.add(obj);
+
+  // Variante: string base64 directo de video
+  if (typeof obj.data === "string" && obj.data.length > 500) {
+    return { base64: obj.data, mimeType: obj.mime_type || obj.mimeType || "video/mp4" };
+  }
+  if (obj.inlineData && typeof obj.inlineData.data === "string" && obj.inlineData.data.length > 500) {
+    return { base64: obj.inlineData.data, mimeType: obj.inlineData.mimeType || obj.inlineData.mime_type || "video/mp4" };
+  }
+  if (obj.inline_data && typeof obj.inline_data.data === "string" && obj.inline_data.data.length > 500) {
+    return { base64: obj.inline_data.data, mimeType: obj.inline_data.mime_type || obj.inline_data.mimeType || "video/mp4" };
+  }
+
+  // Variante: URI de archivo de video
+  if (typeof obj.uri === "string" && obj.uri.length > 5) {
+    return { uri: obj.uri, mimeType: obj.mime_type || obj.mimeType || "video/mp4" };
+  }
+  if (obj.fileData && typeof obj.fileData.fileUri === "string") {
+    return { uri: obj.fileData.fileUri, mimeType: "video/mp4" };
+  }
+  if (obj.file_data && typeof obj.file_data.file_uri === "string") {
+    return { uri: obj.file_data.file_uri, mimeType: "video/mp4" };
+  }
+
+  // Búsqueda en arrays o campos anidados (ignorando tokens de consumo)
+  for (const key of Object.keys(obj)) {
+    if (key === "usage" || key === "raw_prompt_tokens" || key === "safety_settings") continue;
+    const found = findVideoInObject(obj[key], visited);
+    if (found) return found;
+  }
+  return null;
+}
+
+/**
+ * 2. Generación de Video con Gemini Omni Flash (gemini-omni-1.1-flash)
+ */
+async function generateGoogleOmniVideo(prompt, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/interactions?key=${apiKey}`;
+
+  const payload = {
+    model: "gemini-omni-1.1-flash",
+    input: prompt,
+    response_format: {
+      type: "video",
+      resolution: "360p",
+      aspect_ratio: "1:1", // Encuadre 1:1 cuadrado nativo para la tarjeta
+      delivery: "inline"
+    }
+  };
+
+  let response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok && response.status === 400) {
+    const errText = await response.text();
+    // Si el error es por aspect_ratio no soportado en video (ej. solo 16:9 / 9:16), reintentar sin aspect_ratio
+    if (errText.includes("aspect_ratio") || errText.includes("aspectRatio")) {
+      console.warn(`[Omni Video] aspect_ratio 1:1 rechazado por API (${errText}), reintentando sin aspect_ratio...`);
+      delete payload.response_format.aspect_ratio;
+      response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    } else {
+      throw new Error(`Google Omni Video HTTP ${response.status}: ${errText}`);
+    }
+  }
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Google Omni Video HTTP ${response.status}: ${errText}`);
+  }
+
+  const data = await response.json();
+  console.log("[Omni Video Raw Keys]:", Object.keys(data));
+
+  // Extracción exhaustiva de video en steps, outputs, candidates y objetos anidados
+  const extracted = findVideoInObject(data);
+
+  if (extracted?.base64) {
+    console.log(`[Omni Video] Video extraído exitosamente en Base64 (longitud: ${extracted.base64.length})`);
+    return {
+      buffer: Buffer.from(extracted.base64, "base64"),
+      mimeType: extracted.mimeType || "video/mp4"
+    };
+  }
+
+  if (extracted?.uri) {
+    console.log(`[Omni Video] Descargando desde URI de Google: ${extracted.uri}`);
+    let downloadUrl = extracted.uri;
+    if (!downloadUrl.includes("key=")) {
+      const sep = downloadUrl.includes("?") ? "&" : "?";
+      downloadUrl = `${downloadUrl}${sep}key=${apiKey}`;
+    }
+
+    let downloadRes = await fetch(downloadUrl, {
+      headers: { "x-goog-api-key": apiKey }
+    });
+    if (!downloadRes.ok) {
+      downloadRes = await fetch(`${downloadUrl}&alt=media`, {
+        headers: { "x-goog-api-key": apiKey }
+      });
+    }
+
+    if (!downloadRes.ok) {
+      throw new Error(`Fallo al descargar video desde URI: HTTP ${downloadRes.status}`);
+    }
+
+    return {
+      buffer: Buffer.from(await downloadRes.arrayBuffer()),
+      mimeType: extracted.mimeType || "video/mp4"
+    };
+  }
+
+  // Si no se encontró ningún byte o URI
+  console.error("[Omni Video Parse Error] Resumen de steps:", JSON.stringify(
+    data.steps?.map(s => ({
+      type: s.type,
+      contentTypes: Array.isArray(s.content) ? s.content.map(c => ({ type: c.type, hasData: !!c.data, hasUri: !!c.uri })) : typeof s.content
+    })) || "No steps"
+  ));
+  throw new Error("No se encontraron bytes de video válidos en la respuesta de gemini-omni-1.1-flash.");
+}
+
+/**
+ * Cloud Function: regenerateCardMedia
+ */
+export const regenerateCardMedia = onCall(
+  {
+    secrets: [geminiPaidKey],
+    timeoutSeconds: 90,
+    memory: "512MiB",
+    cors: true
+  },
+  async (request) => {
+    try {
+      const { 
+        wordObj, 
+        mediaType = "auto", 
+        forceRegenerate = false, 
+        isDevEnvironment = false, 
+        isNativePlatform = false,
+        clientPlatform = "web"
+      } = request.data || {};
+
+      // Candado Estricto de Seguridad: Exclusivo de Entorno Local de Desarrollo
+      if (!isDevEnvironment || clientPlatform === "native") {
+        return {
+          success: false,
+          error: "La generación de medios con IA está estrictamente inhabilitada fuera del entorno de desarrollo local."
+        };
+      }
+
+      if (!wordObj || !wordObj.de) {
+        return { success: false, error: "wordObj.de es requerido." };
+      }
+
+      const isAuthorizedClient = Boolean(isDevEnvironment && clientPlatform !== "native");
+      const db = admin.firestore();
+      const safeId = wordObj.de.toLowerCase().replace(/[^a-z0-9]/gi, "_").substring(0, 100);
+      const isVerb = isVerbItem(wordObj);
+
+      // 1. Salvaguarda Kinestésica: Restricción estricta de video a verbos de locomoción y mecánica física
+      const ALLOWED_MOTION = new Set([
+        "gehen", "laufen", "rennen", "springen", "steigen", "fallen",
+        "fliegen", "schwimmen", "wandern", "fahren", "abbiegen",
+        "aufstehen", "umsteigen", "einsteigen", "aussteigen", "mitkommen",
+        "ziehen", "drücken", "schieben", "werfen", "fangen",
+        "bremsen", "beschleunigen", "gas geben", "blinken", "abschleppen",
+        "einpacken", "auspacken", "abtrocknen", "abgeben"
+      ]);
+
+      const rawTerm = wordObj.de || request.data?.word || "";
+      const cleanTerm = rawTerm.replace(/\|/g, "").replace(/^sich\s+/i, "").trim().toLowerCase();
+      const isMotionVerb = isVerb && (ALLOWED_MOTION.has(cleanTerm) || ((wordObj.category || "").toLowerCase() === "bewegung"));
+
+      if (mediaType === "video" && !isMotionVerb) {
+        return {
+          success: false,
+          error: "El término no es un verbo de movimiento o cinemática crítica apto para video."
+        };
+      }
+
+      const wantVideo = (mediaType === "video" || (mediaType === "auto" && isVerb)) && isMotionVerb;
+
+      // 2. Candado para Web Producción: Prohibición total de generar videos
+      if (wantVideo && !isAuthorizedClient) {
+        return {
+          success: false,
+          error: "La generación de videos está inhabilitada en la versión web pública."
+        };
+      }
+
+      // 2. Verificación previa en Firestore (Cache-First)
+      const cardDocRef = db.collection("global_flashcards").doc(safeId);
+      let docSnap = await cardDocRef.get();
+      if (!docSnap.exists) {
+        const slugId = wordObj.de.toLowerCase().replace(/[\s\/?!\\,.]+/g, "_");
+        if (slugId && slugId !== safeId) {
+          docSnap = await db.collection("global_flashcards").doc(slugId).get();
+        }
+      }
+
+      if (docSnap.exists) {
+        const existingData = docSnap.data() || {};
+
+        // Reutilizar video existente si está disponible
+        if (wantVideo && existingData.videoUrl && !forceRegenerate) {
+          console.log(`[Cache Hit] Video existente reutilizado para: ${wordObj.de}`);
+          return {
+            success: true,
+            mediaUrl: existingData.videoUrl,
+            mediaType: "video",
+            fromCache: true,
+            wordDe: wordObj.de
+          };
+        }
+
+        // Reutilizar imagen existente si está disponible
+        if (!wantVideo && existingData.imageUrl && !forceRegenerate) {
+          console.log(`[Cache Hit] Imagen existente reutilizada para: ${wordObj.de}`);
+          return {
+            success: true,
+            mediaUrl: existingData.imageUrl,
+            mediaType: "image",
+            fromCache: true,
+            wordDe: wordObj.de
+          };
+        }
+      }
+
+      // 3. Candado para Creación/Regeneración: Solo Entorno Local de Desarrollo
+      if (!isDevEnvironment || clientPlatform === "native") {
+        return {
+          success: false,
+          error: "La generación de medios con IA está estrictamente inhabilitada fuera del entorno de desarrollo local."
+        };
+      }
+
+      // ── PASO 3: INFERENCIA DE IA (SOLO SI NO EXISTÍA EN LA BASE DE DATOS) ──
+      const apiKey = (geminiPaidKey && typeof geminiPaidKey.value === "function" ? geminiPaidKey.value() : "") || process.env.GEMINI_PAID_KEY || "";
+      if (!apiKey) {
+        return { success: false, error: "No se encontró GEMINI_PAID_KEY configurada." };
+      }
+
+      let fileBuffer = null;
+      let mimeType = "image/jpeg";
+      let fileExtension = "jpeg";
+      let actualMediaType = "image";
+      let provider = "gemini-3.1-flash-lite-image";
+
+      // Intento de video para verbos
+      if (wantVideo) {
+        try {
+          console.log(`[Media Engine] Generando video para verbo: ${wordObj.de}`);
+          const videoPrompt = buildVisualPrompt(wordObj, true);
+          const videoResult = await generateGoogleOmniVideo(videoPrompt, apiKey);
+          fileBuffer = videoResult.buffer;
+          mimeType = "video/mp4";
+          fileExtension = "mp4";
+          actualMediaType = "video";
+          provider = "gemini-omni-1.1-flash";
+        } catch (videoErr) {
+          console.warn("[Media Engine] Error al generar video con Omni, recurriendo a imagen:", videoErr.message);
+          const imagePrompt = buildVisualPrompt(wordObj, false);
+          const rawImage = await generateGoogleFlashImage(imagePrompt, apiKey);
+
+          // COMPRESIÓN CON SHARP (512x512 ~35-50 KB)
+          fileBuffer = await optimizeImageBuffer(rawImage.buffer);
+          mimeType = "image/jpeg";
+          fileExtension = "jpeg";
+          actualMediaType = "image";
+          provider = "gemini-3.1-flash-lite-image";
+        }
+      } else {
+        console.log(`[Media Engine] Generando imagen para: ${wordObj.de}`);
+        const imagePrompt = buildVisualPrompt(wordObj, false);
+        const rawImage = await generateGoogleFlashImage(imagePrompt, apiKey);
+
+        // COMPRESIÓN CON SHARP (512x512 ~35-50 KB)
+        fileBuffer = await optimizeImageBuffer(rawImage.buffer);
+        mimeType = "image/jpeg";
+        fileExtension = "jpeg";
+        actualMediaType = "image";
+        provider = "gemini-3.1-flash-lite-image";
+      }
+
+      // Persistencia en Cloud Storage
+      const STORAGE_BUCKET_NAME = process.env.STORAGE_BUCKET || "deutschmeister-audio-vault";
+      const bucket = admin.storage().bucket(STORAGE_BUCKET_NAME);
+      const folder = actualMediaType === "video" ? "videos" : "images";
+      const filePath = `flashcards/${folder}/${safeId}_${Date.now()}.${fileExtension}`;
+      const file = bucket.file(filePath);
+
+      await file.save(fileBuffer, {
+        metadata: {
+          contentType: mimeType,
+          cacheControl: "public, max-age=31536000",
+          metadata: {
+            wordDe: wordObj.de,
+            provider,
+            optimized: actualMediaType === "image" ? "sharp-512x512-q80" : "raw-mp4",
+            createdAt: new Date().toISOString()
+          }
+        }
+      });
+
+      try { await file.makePublic(); } catch (_) {}
+
+      const permanentMediaUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+
+      // Actualizar metadatos en Firestore
+      const updatePayload = {
+        mediaType: actualMediaType,
+        provider,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      };
+      if (actualMediaType === "video") {
+        updatePayload.videoUrl = permanentMediaUrl;
+      } else {
+        updatePayload.imageUrl = permanentMediaUrl;
+      }
+
+      const slugId = wordObj.de.toLowerCase().replace(/[\s\/?!\\,.]+/g, "_");
+      await db.collection("global_flashcards").doc(safeId).set(updatePayload, { merge: true });
+      if (slugId && slugId !== safeId) {
+        await db.collection("global_flashcards").doc(slugId).set(updatePayload, { merge: true });
+      }
+
+      return {
+        success: true,
+        mediaUrl: permanentMediaUrl,
+        mediaType: actualMediaType,
+        provider,
+        fromCache: false,
+        wordDe: wordObj.de
+      };
+    } catch (err) {
+      console.error("[RegenerateCardMedia Fatal Error]", err);
+      return { success: false, error: err.message };
+    }
+  }
+);
+================================================================================
+FILE: functions/package.json (31 lines | 0.8 KB)
+================================================================================
+
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "@fal-ai/client": "^1.10.1",
+    "@google/generative-ai": "^0.21.0",
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+
+================================================================================
+FILE: functions/services/geminiClient.js (357 lines | 10.8 KB)
+================================================================================
+
+/**
+ * geminiClient.js - Gestor de Resiliencia Multi-Key para Firebase Cloud Functions
+ * DeutschMeister PRO A1 (Node 20 ESM)
+ *
+ * Pool de 3 llaves con conmutación bidireccional por error (Failover / Circuit Breaker):
+ * 1. Clave de Facturación (Google Developer Program / créditos): gemini-3.8-flash
+ * 2. Clave Gratuita 1 (Free Tier): gemini-3.5-flash-lite
+ * 3. Clave Gratuita 2 (Free Tier): gemini-3.5-flash-lite
+ */
+
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// Estado en memoria de llaves bloqueadas temporalmente (Circuit Breaker)
+const exhaustedKeys = new Map(); // keyId -> timestamp de desbloqueo (ms)
+
+/**
+ * Determina el modelo óptimo según el tipo de clave:
+ * - Clave de Facturación: aprovecha Gemini 3.8 Flash (o Gemini 3.5 Flash-Lite)
+ * - Claves Gratuitas: usa modelos compatibles con el Free Tier (gemini-3.5-flash-lite / gemini-3.5-flash)
+ */
+export function resolveModelForTier(requestedModel, isPaidKey) {
+  if (isPaidKey) {
+    return requestedModel || "gemini-3.8-flash";
+  }
+  if (requestedModel === "gemini-3.8-flash") {
+    return "gemini-3.5-flash-lite";
+  }
+  return requestedModel || "gemini-3.5-flash-lite";
+}
+
+/**
+ * Comprueba si un error es originado por límite de cuota, tarifa o saldo
+ */
+export function isQuotaOrBillingError(error) {
+  const status = error?.status || error?.response?.status || error?.statusCode;
+  const msg = (error?.message || "").toLowerCase();
+
+  return (
+    status === 429 ||
+    status === 402 ||
+    status === 403 ||
+    status === 401 ||
+    status === 503 ||
+    msg.includes("429") ||
+    msg.includes("402") ||
+    msg.includes("403") ||
+    msg.includes("401") ||
+    msg.includes("api_key_invalid") ||
+    msg.includes("api key not valid") ||
+    msg.includes("quota") ||
+    msg.includes("limit") ||
+    msg.includes("resource_exhausted") ||
+    msg.includes("billing") ||
+    msg.includes("payment") ||
+    msg.includes("overloaded")
+  );
+}
+
+/**
+ * Obtiene el valor de una llave a partir de un secreto de Firebase o variable de entorno
+ */
+function resolveKeyValue(secretOrString) {
+  if (!secretOrString) return "";
+  if (typeof secretOrString === "function") {
+    try {
+      return secretOrString();
+    } catch {
+      return "";
+    }
+  }
+  if (typeof secretOrString.value === "function") {
+    try {
+      return secretOrString.value();
+    } catch {
+      return "";
+    }
+  }
+  return String(secretOrString);
+}
+
+/**
+ * Construye el pool dinámico de 3 llaves
+ */
+export function buildKeyPool(keysConfig = {}) {
+  const paidKey = resolveKeyValue(keysConfig.paidKey || process.env.GEMINI_PAID_KEY);
+  const freeKey1 = resolveKeyValue(
+    keysConfig.freeKey1 || 
+    process.env.GEMINI_FREE_KEY_1 || 
+    keysConfig.freeKey || 
+    process.env.GEMINI_FREE_KEY
+  );
+  const freeKey2 = resolveKeyValue(keysConfig.freeKey2 || process.env.GEMINI_FREE_KEY_2);
+
+  return [
+    {
+      id: "PAID_CREDITS",
+      key: paidKey,
+      isPaid: true,
+      description: "Cuenta con Facturación / Google Developer Program (gemini-3.8-flash)"
+    },
+    {
+      id: "FREE_1",
+      key: freeKey1,
+      isPaid: false,
+      description: "Cuenta Gratuita A (gemini-3.5-flash-lite)"
+    },
+    {
+      id: "FREE_2",
+      key: freeKey2,
+      isPaid: false,
+      description: "Cuenta Gratuita B (gemini-3.5-flash-lite)"
+    }
+  ];
+}
+
+/**
+ * Ejecutor resiliente con Circuit Breaker y Failover multi-key para Cloud Functions
+ *
+ * @param {string|object} prompt
+ * @param {object} options
+ * @param {object} [options.keys] { paidKey, freeKey1, freeKey2, freeKey }
+ * @param {string} [options.preferredModel="gemini-3.8-flash"]
+ * @param {string} [options.systemInstruction]
+ * @param {boolean} [options.isJson=false]
+ * @param {boolean} [options.isStreaming=false]
+ * @param {"paid_first"|"free_first"} [options.mode="paid_first"]
+ * @param {number} [options.cooldownMs=3600000] (1 hora por defecto)
+ */
+export async function executeBackendGemini(prompt, options = {}) {
+  const {
+    keys = {},
+    preferredModel = "gemini-3.8-flash",
+    systemInstruction,
+    isJson = false,
+    responseSchema = null,
+    isStreaming = false,
+    mode = "paid_first",
+    cooldownMs = 60 * 60 * 1000
+  } = options;
+
+  const now = Date.now();
+
+  // 1. Limpieza de Circuit Breaker
+  for (const [keyId, resetTime] of exhaustedKeys.entries()) {
+    if (now >= resetTime) {
+      console.log(`⏱️ [Backend GeminiPool] Cooldown vencido para la llave ${keyId}. Restaurando...`);
+      exhaustedKeys.delete(keyId);
+    }
+  }
+
+  // 2. Construcción y ordenamiento del pool
+  const pool = buildKeyPool(keys);
+  let sortedPool = [...pool];
+
+  if (mode === "free_first") {
+    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? 1 : -1));
+  } else {
+    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? -1 : 1));
+  }
+
+  const availableKeys = sortedPool.filter(k => k.key && !exhaustedKeys.has(k.id));
+
+  if (availableKeys.length === 0) {
+    const error = new Error("⚠️ Todas las API Keys (Facturación y Gratuitas) han alcanzado su límite de cuota.");
+    error.status = 429;
+    throw error;
+  }
+
+  let lastError = null;
+  const initialKeyId = availableKeys[0].id;
+
+  for (const keyConfig of availableKeys) {
+    try {
+      const selectedModelName = resolveModelForTier(preferredModel, keyConfig.isPaid);
+      console.log(`[GeminiPool] Invocando llave ${keyConfig.id} (${keyConfig.description}) con modelo: ${selectedModelName}`);
+
+      const genAI = new GoogleGenerativeAI(keyConfig.key);
+
+      // Directrices Gemini 3.x: sin temperature, top_p ni top_k a menos que se especifique
+      const modelConfig = {
+        model: selectedModelName
+      };
+
+      if (systemInstruction) {
+        modelConfig.systemInstruction = systemInstruction;
+      }
+
+      if (isJson || responseSchema) {
+        modelConfig.generationConfig = {
+          responseMimeType: "application/json",
+          ...(responseSchema ? { responseSchema } : {})
+        };
+      }
+
+      const model = genAI.getGenerativeModel(modelConfig);
+
+      if (isStreaming) {
+        const result = await model.generateContentStream(prompt);
+        return {
+          stream: result.stream,
+          usedKeyId: keyConfig.id,
+          model: selectedModelName,
+          wasFallback: keyConfig.id !== initialKeyId
+        };
+      } else {
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
+        return {
+          text,
+          usedKeyId: keyConfig.id,
+          model: selectedModelName,
+          wasFallback: keyConfig.id !== initialKeyId
+        };
+      }
+    } catch (error) {
+      lastError = error;
+      const status = error.status || error?.response?.status;
+      const msg = error.message || "";
+
+      if (isQuotaOrBillingError(error)) {
+        console.warn(`[Failover Backend] Clave ${keyConfig.id} agotada o bloqueada (${status || msg}). Conmutando al siguiente respaldo...`);
+        exhaustedKeys.set(keyConfig.id, Date.now() + cooldownMs);
+        continue;
+      }
+
+      throw error;
+    }
+  }
+
+  throw lastError || new Error("Fallo en el pool de Gemini tras agotar todos los respaldos.");
+}
+
+/**
+ * Ejecutor de chat con streaming multi-key con soporte de historial y failover automático
+ *
+ * @param {Array} history Historial previo de conversación ([{ role, parts }])
+ * @param {string} lastMessage Último mensaje del usuario
+ * @param {object} options
+ */
+export async function executeBackendGeminiChatStream(history, lastMessage, options = {}) {
+  const {
+    keys = {},
+    preferredModel = "gemini-3.8-flash",
+    systemInstruction,
+    mode = "paid_first",
+    cleanBold = false,
+    cooldownMs = 60 * 60 * 1000
+  } = options;
+
+  const now = Date.now();
+  for (const [keyId, resetTime] of exhaustedKeys.entries()) {
+    if (now >= resetTime) {
+      exhaustedKeys.delete(keyId);
+    }
+  }
+
+  const pool = buildKeyPool(keys);
+  let sortedPool = [...pool];
+
+  if (mode === "free_first") {
+    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? 1 : -1));
+  } else {
+    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? -1 : 1));
+  }
+
+  const availableKeys = sortedPool.filter(k => k.key && !exhaustedKeys.has(k.id));
+  if (availableKeys.length === 0) {
+    const error = new Error("⚠️ Todas las API Keys (Facturación y Gratuitas) han alcanzado su límite de cuota.");
+    error.status = 429;
+    throw error;
+  }
+
+  let validHistory = (history || []).slice(0);
+  if (validHistory.length > 0 && validHistory[0].role !== "user") {
+    validHistory.shift();
+  }
+
+  let lastError = null;
+  const initialKeyId = availableKeys[0].id;
+
+  for (const keyConfig of availableKeys) {
+    try {
+      const selectedModelName = resolveModelForTier(preferredModel, keyConfig.isPaid);
+      console.log(`[GeminiPool ChatStream] Invocando llave ${keyConfig.id} (${keyConfig.description}) con modelo: ${selectedModelName}`);
+
+      const genAI = new GoogleGenerativeAI(keyConfig.key);
+      const modelConfig = {
+        model: selectedModelName,
+        ...(systemInstruction ? { systemInstruction } : {})
+      };
+
+      const model = genAI.getGenerativeModel(modelConfig);
+      const chat = model.startChat({ history: validHistory });
+      const resultStream = await chat.sendMessageStream(lastMessage);
+
+      return {
+        stream: resultStream.stream,
+        usedKeyId: keyConfig.id,
+        model: selectedModelName,
+        wasFallback: keyConfig.id !== initialKeyId
+      };
+    } catch (error) {
+      lastError = error;
+      const status = error.status || error?.response?.status;
+      const msg = error.message || "";
+
+      if (isQuotaOrBillingError(error)) {
+        console.warn(`[Failover ChatStream] Clave ${keyConfig.id} agotada o bloqueada (${status || msg}). Conmutando al siguiente respaldo...`);
+        exhaustedKeys.set(keyConfig.id, Date.now() + cooldownMs);
+        continue;
+      }
+
+      throw error;
+    }
+  }
+
+  throw lastError || new Error("Fallo en el pool de Gemini ChatStream tras agotar todos los respaldos.");
+}
+
+/**
+ * Devuelve el estado actual de las llaves del backend
+ */
+export function getPoolStatus(keys = {}) {
+  const now = Date.now();
+  const pool = buildKeyPool(keys);
+  return pool.map(k => {
+    const isExhausted = exhaustedKeys.has(k.id) && now < exhaustedKeys.get(k.id);
+    const cooldownRemaining = isExhausted ? Math.round((exhaustedKeys.get(k.id) - now) / 1000) : 0;
+    return {
+      id: k.id,
+      isPaid: k.isPaid,
+      description: k.description,
+      isConfigured: Boolean(k.key),
+      isAvailable: Boolean(k.key) && !isExhausted,
+      cooldownRemainingSeconds: cooldownRemaining
+    };
+  });
+}
+
+/**
+ * Resetea manualmente el estado del Circuit Breaker
+ */
+export function resetCircuitBreaker() {
+  exhaustedKeys.clear();
+  console.log("🔄 Circuit Breaker del Backend GeminiPool restablecido.");
+}
+
+export default {
+  buildKeyPool,
+  executeBackendGemini,
+  executeBackendGeminiChatStream,
+  resolveModelForTier,
+  isQuotaOrBillingError,
+  getPoolStatus,
+  resetCircuitBreaker
+};

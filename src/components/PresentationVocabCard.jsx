@@ -186,8 +186,9 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
       const sId = getSafeId(wordObj.de).substring(0, 150);
       recordCardStudied(sId);
     }
+    const cleanWordDe = splitGermanTitle(wordObj?.de).main || wordObj?.de;
     setIsPlayingAudio(true);
-    playGermanAudio(wordObj.de, {
+    playGermanAudio(cleanWordDe, {
       type: "vocab",
       voice: "Charon",
       onEnd: () => setIsPlayingAudio(false),
