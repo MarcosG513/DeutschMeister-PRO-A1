@@ -6,7 +6,7 @@ const TextHighlighter = ({ sentence, trapWord, options, correctAntonym, translat
   const [resolved, setResolved] = useState(false);
   const [selectedOpt, setSelectedOpt] = useState(null);
 
-  const parts = sentence.split(trapWord);
+  const parts = trapWord && sentence?.includes(trapWord) ? sentence.split(trapWord) : [sentence || "", ""];
 
   const handleSelect = (opt) => {
     setSelectedOpt(opt);
@@ -39,7 +39,7 @@ const TextHighlighter = ({ sentence, trapWord, options, correctAntonym, translat
               <button 
                 key={i}
                 onClick={() => handleSelect(opt)}
-                className={`py-2 px-4 rounded-lg border text-sm font-bold transition-all duration-150 ${selectedOpt === opt ? 'bg-red-55 border-red-300 text-red-700' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'}`}
+                className={`py-2 px-4 rounded-lg border text-sm font-bold transition-all duration-150 ${selectedOpt === opt ? 'bg-rose-50 border-rose-300 text-rose-700' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'}`}
               >
                 {opt}
               </button>

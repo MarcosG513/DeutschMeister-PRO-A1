@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Shield, ArrowRight, CheckCircle2, AlertTriangle, RotateCcw } from 'lucide-react';
 import { playGermanAudio } from '../services/aiAudioService';
 
@@ -17,6 +17,13 @@ const AccusativeShield = ({ words = [] }) => {
   const [feedbackMsg, setFeedbackMsg] = useState("");
   const [finished, setFinished] = useState(false);
   const [shieldApplied, setShieldApplied] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const currentRaw = list[currentIndex] || {};
   const effectiveGender = currentRaw.gender || (currentRaw.type === "Masc" ? "der" : currentRaw.type === "Fem" ? "die" : currentRaw.type === "Neutro" ? "das" : "die");
@@ -59,7 +66,8 @@ const AccusativeShield = ({ words = [] }) => {
     }
     setFeedbackMsg(explanation);
 
-    setTimeout(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
       setShowFeedback(null);
       setFeedbackMsg("");
       setShieldApplied(false);
@@ -72,6 +80,7 @@ const AccusativeShield = ({ words = [] }) => {
   };
 
   const resetGame = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
     setCurrentIndex(0);
     setScore(0);
     setShowFeedback(null);

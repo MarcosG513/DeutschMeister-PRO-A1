@@ -117,14 +117,12 @@ export const compressImageBase64 = (base64Str, maxWidth = 512, quality = 0.6) =>
 };
 
 export const nativeSpeak = async (text) => {
-  const rawSpeed = localStorage.getItem('dm_voice_speed') || '1.0';
-  const savedSpeed = parseFloat(rawSpeed) || 1.0;
   if (Capacitor.isNativePlatform()) {
     try {
       await TextToSpeech.speak({
         text: text,
         lang: 'de-DE',
-        rate: savedSpeed,
+        rate: 0.85, // Claridad pedagógica estándar en sintetizador mecánico Android
         pitch: 1.0,
       });
     } catch (e) {
@@ -135,7 +133,7 @@ export const nativeSpeak = async (text) => {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'de-DE';
-      utterance.rate = savedSpeed;
+      utterance.rate = 1.0;
       window.speechSynthesis.speak(utterance);
     } else {
       console.error("Web Speech API no está soportada en este navegador.");

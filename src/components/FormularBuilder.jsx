@@ -36,6 +36,12 @@ const FormularBuilder = () => {
   const handleDrop = (slotName) => {
     const itemToPlace = dragged || activeSelection;
     if (!itemToPlace) return;
+    if (itemToPlace.label !== slotName) {
+      alert(`"${itemToPlace.value}" corresponde al campo ${itemToPlace.label}, no a ${slotName}.`);
+      setDragged(null);
+      setActiveSelection(null);
+      return;
+    }
     setSlots({
       ...slots,
       [slotName]: itemToPlace.value

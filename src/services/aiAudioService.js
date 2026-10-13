@@ -71,8 +71,6 @@ export async function playGermanAudio(text, options = {}) {
     if (onStart) onStart();
 
     // 1. Si no es efímero (cuento o lectura), buscar primero en IndexedDB (0 ms, offline)
-    const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
-
     if (!isEphemeral) {
       let cachedBlob = await audioStore.getItem(cacheKey);
       if (!cachedBlob) {
@@ -81,10 +79,10 @@ export async function playGermanAudio(text, options = {}) {
       if (cachedBlob) {
         const localBlobUrl = URL.createObjectURL(cachedBlob);
         const localAudio = new Audio(localBlobUrl);
-        localAudio.playbackRate = savedSpeed;
+        localAudio.playbackRate = 1.0;
         localAudio.preservesPitch = true;
         localAudio.onloadedmetadata = () => {
-          localAudio.playbackRate = savedSpeed;
+          localAudio.playbackRate = 1.0;
           localAudio.preservesPitch = true;
         };
         currentAudioInstance = localAudio;
@@ -108,12 +106,12 @@ export async function playGermanAudio(text, options = {}) {
     // 2. Invocar Backend (Google Direct -> Fal -> Cloud Storage o Base64) - Voz oficial Charon
     const audioSource = await getGermanSpeechUrl(cleanText, { voice: "Charon", type });
 
-    // 3. Reproducción
+    // 3. Reproducción (Velocidad natural estándar 1.0x)
     const audio = new Audio(audioSource);
-    audio.playbackRate = savedSpeed;
+    audio.playbackRate = 1.0;
     audio.preservesPitch = true;
     audio.onloadedmetadata = () => {
-      audio.playbackRate = savedSpeed;
+      audio.playbackRate = 1.0;
       audio.preservesPitch = true;
     };
     currentAudioInstance = audio;

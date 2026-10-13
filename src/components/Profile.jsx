@@ -2,18 +2,17 @@ import React, { useState, useEffect } from 'react';
 import localforage from 'localforage';
 import { 
   User, Mail, Lock, RefreshCw, Crown, CheckCircle2, Flame, 
-  Layers, Trophy, Volume2, ShieldCheck, FileText, ChevronRight, 
+  Layers, Trophy, ShieldCheck, FileText, ChevronRight, 
   ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle,
-  CloudDownload, Loader2
+  CloudDownload, Loader2, Download
 } from 'lucide-react';
-import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { getDailyStudyStreak, getStudiedCardsCount, getCompletedModulesCount } from '../utils/helpers';
 import { syncCloudMediaToLocal, getLastMediaSyncTime } from '../services/syncMediaService';
 import { EmailAuthProvider, GoogleAuthProvider, linkWithCredential, linkWithPopup, signInWithEmailAndPassword, signInWithPopup, signOut, deleteUser } from 'firebase/auth';
 
 const AVATARS = ['🦊', '🦉', '🐼', '🦁', '🐯', '🐸', '🦄', '🦖', '🚀', '👑', '⚡', '🎓'];
 
-const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount = 1389 }) => {
+const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount = 1389, canInstallPWA = false, onInstallApp }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginMode, setIsLoginMode] = useState(false);
@@ -21,16 +20,12 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
     return localStorage.getItem('dm_user_avatar') || '🦊';
   });
   const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
-  const [voiceSpeed, setVoiceSpeed] = useState(() => {
-    return localStorage.getItem('dm_voice_speed') || '0.7x';
-  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [streak, setStreak] = useState(0);
   const [studiedCount, setStudiedCount] = useState(studiedCardsCount || unlockedCardsCount || 0);
   const [completedModulesCount, setCompletedModulesCount] = useState(0);
-  const [isPlayingTest, setIsPlayingTest] = useState(false);
   const [isSyncingMedia, setIsSyncingMedia] = useState(false);
   const [mediaSyncProgress, setMediaSyncProgress] = useState(null);
   const [lastMediaSync, setLastMediaSync] = useState(null);
@@ -81,9 +76,12 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
     };
   }, [studiedCardsCount]);
 
+  // Limpieza preventiva permanente de la clave obsoleta de velocidad
   useEffect(() => {
-    localStorage.setItem('dm_voice_speed', voiceSpeed);
-  }, [voiceSpeed]);
+    try {
+      localStorage.removeItem('dm_voice_speed');
+    } catch (_) {}
+  }, []);
 
   useEffect(() => {
     getLastMediaSyncTime().then(time => {
@@ -113,26 +111,6 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
       setError(`Error en la sincronización: ${err.message}`);
     } finally {
       setIsSyncingMedia(false);
-    }
-  };
-
-  const handlePlayAudioTest = async () => {
-    if (isPlayingTest) {
-      stopCurrentAudio();
-      setIsPlayingTest(false);
-      return;
-    }
-    localStorage.setItem('dm_voice_speed', voiceSpeed);
-    setIsPlayingTest(true);
-    try {
-      await playGermanAudio("Hallo! Ich lerne Deutsch mit DeutschMeister.", {
-        type: "vocab",
-        voice: "Charon",
-        onEnd: () => setIsPlayingTest(false),
-        onError: () => setIsPlayingTest(false)
-      });
-    } catch (_) {
-      setIsPlayingTest(false);
     }
   };
 
@@ -290,9 +268,14 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
             <User className="text-blue-600" size={22} /> Perfil y Configuración
           </h1>
         </div>
-        <span className="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-200">
-          Goethe A1
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-200">
+            Goethe A1
+          </span>
+          <span className="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full border border-slate-200">
+            Versión 2.0
+          </span>
+        </div>
       </header>
 
       {/* Main Content Layout */}
@@ -611,6 +594,33 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
                 </div>
               </div>
             </section>
+ 
+            {/* PWA Native Installation Banner */}
+            {canInstallPWA && (
+              <section className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 rounded-2xl p-4 sm:p-5 text-white shadow-lg border border-emerald-400/30 flex flex-col sm:flex-row items-center justify-between gap-4 animate-in fade-in">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-white/20 text-white shrink-0">
+                    <Download size={24} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white text-sm sm:text-base flex items-center gap-1.5">
+                      📲 Instalar DeutschMeister PRO
+                    </h3>
+                    <p className="text-xs text-emerald-100 mt-0.5">
+                      Instala la aplicación en tu pantalla de inicio para una experiencia nativa rápida y a pantalla completa.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={onInstallApp}
+                  className="px-5 py-2.5 bg-white hover:bg-emerald-50 text-emerald-950 font-black text-xs rounded-xl shadow-md transition active:scale-95 whitespace-nowrap cursor-pointer self-stretch sm:self-auto shrink-0"
+                >
+                  Instalar App
+                </button>
+              </section>
+            )}
 
             {/* Tarjeta de Utilidades: Sincronización Masiva de Medios de la Nube */}
             <section className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-4 sm:p-5">
@@ -687,51 +697,8 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
               </div>
             </section>
 
-            {/* iOS-Style Settings & Voice Speed Control */}
+            {/* iOS-Style Legal & Support Settings */}
             <section className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] overflow-hidden">
-              
-              {/* Speed Segment Control */}
-              <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <Volume2 className="text-blue-600" size={20} />
-                  <span className="font-semibold text-slate-800 text-sm">Velocidad de Pronunciación</span>
-                </div>
-                <div className="flex items-center gap-2 self-end sm:self-auto">
-                  <div className="flex bg-slate-100 p-1 rounded-xl gap-1 border border-slate-200/60">
-                    {['1.0x', '0.7x', '0.5x'].map((speed) => (
-                      <button
-                        key={speed}
-                        type="button"
-                        onClick={() => {
-                          setVoiceSpeed(speed);
-                          localStorage.setItem('dm_voice_speed', speed);
-                        }}
-                        className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                          voiceSpeed === speed
-                            ? 'bg-white text-blue-700 shadow-sm'
-                            : 'text-slate-500 hover:text-slate-800'
-                        }`}
-                      >
-                        {speed}
-                      </button>
-                    ))}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handlePlayAudioTest}
-                    className={`p-2 ml-2 rounded-lg transition flex items-center gap-1.5 text-xs font-semibold cursor-pointer active:scale-95 ${
-                      isPlayingTest 
-                        ? 'bg-amber-100 text-amber-700 animate-pulse'
-                        : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
-                    }`}
-                    title="Escuchar prueba de voz"
-                  >
-                    <Volume2 size={16} />
-                    <span>{isPlayingTest ? 'Detener' : 'Probar'}</span>
-                  </button>
-                </div>
-              </div>
-
               {/* Legal & Help Links */}
               <a 
                 href="#"
@@ -757,6 +724,9 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
                 <ExternalLink size={16} className="text-slate-400 group-hover:text-blue-600 transition" />
               </a>
             </section>
+            <div className="text-center pt-2 text-xs text-slate-400 font-medium">
+              DeutschMeister PRO A1 • Versión 2.0 (Build 2)
+            </div>
           </div>
 
         </div>

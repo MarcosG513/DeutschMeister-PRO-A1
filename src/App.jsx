@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
-import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause, Filter } from 'lucide-react';
+import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause, Filter, Download } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
@@ -15,6 +15,7 @@ import AudioSim from './components/AudioSim';
 import MarkdownMessage from './components/MarkdownMessage';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, splitGermanTitle, splitParentheticalText } from './utils/helpers';
+import { parseTextToTokens, calculateWordTimings } from './utils/textTokenizer';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
 import { API_ENDPOINTS } from './config/apiEndpoints';
 
@@ -43,76 +44,6 @@ const auth = firebaseApp ? getAuth(firebaseApp) : null;
 const db = firebaseApp ? getFirestore(firebaseApp) : null;
 export const functions = firebaseApp ? getFunctions(firebaseApp) : null;
 const appId = firebaseConfig.appId || 'default-app-id';
-
-// --- UTILS PARA IA Y DATOS ---
-
-const base64ToArrayBuffer = base64 => {
-  const binaryString = window.atob(base64);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes.buffer;
-};
-const pcmToWav = (pcmBuffer, sampleRate) => {
-  const numChannels = 1;
-  const bitsPerSample = 16;
-  const byteRate = sampleRate * numChannels * bitsPerSample / 8;
-  const blockAlign = numChannels * bitsPerSample / 8;
-  const dataSize = pcmBuffer.byteLength;
-  const buffer = new ArrayBuffer(44 + dataSize);
-  const view = new DataView(buffer);
-  const writeString = (offset, string) => {
-    for (let i = 0; i < string.length; i++) {
-      view.setUint8(offset + i, string.charCodeAt(i));
-    }
-  };
-  writeString(0, 'RIFF');
-  view.setUint32(4, 36 + dataSize, true);
-  writeString(8, 'WAVE');
-  writeString(12, 'fmt ');
-  view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true);
-  view.setUint16(22, numChannels, true);
-  view.setUint32(24, sampleRate, true);
-  view.setUint32(28, byteRate, true);
-  view.setUint16(32, blockAlign, true);
-  view.setUint16(34, bitsPerSample, true);
-  writeString(36, 'data');
-  view.setUint32(40, dataSize, true);
-  const pcmView = new Int16Array(pcmBuffer);
-  let offset = 44;
-  for (let i = 0; i < pcmView.length; i++) {
-    view.setInt16(offset, pcmView[i], true);
-    offset += 2;
-  }
-  return new Blob([view], {
-    type: 'audio/wav'
-  });
-};
-const compressImageBase64 = (base64Str, maxWidth = 512, quality = 0.6) => {
-  return new Promise(resolve => {
-    if (!base64Str || !base64Str.startsWith('data:')) return resolve(base64Str);
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
-      if (width > maxWidth) {
-        height = Math.round(height * maxWidth / width);
-        width = maxWidth;
-      }
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-      resolve(canvas.toDataURL('image/jpeg', quality));
-    };
-    img.onerror = () => resolve(base64Str);
-    img.src = base64Str;
-  });
-};
 
 // --- COMPONENTES AUXILIARES ---
 
@@ -285,6 +216,43 @@ export default function App() {
     };
   }, []);
 
+  // PWA: Soporte para instalación nativa en navegador (beforeinstallprompt)
+  const [canInstallPWA, setCanInstallPWA] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      window.deferredPrompt = e;
+      setCanInstallPWA(true);
+      console.log('[PWA] beforeinstallprompt capturado y guardado');
+    };
+
+    const handleAppInstalled = () => {
+      window.deferredPrompt = null;
+      setCanInstallPWA(false);
+      console.log('[PWA] Aplicación instalada exitosamente');
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    const promptEvent = window.deferredPrompt;
+    if (!promptEvent) return;
+    promptEvent.prompt();
+    const { outcome } = await promptEvent.userChoice;
+    console.log('[PWA] Resultado de instalación:', outcome);
+    if (outcome === 'accepted') {
+      setCanInstallPWA(false);
+      window.deferredPrompt = null;
+    }
+  };
+
   const [unlockedCards, setUnlockedCards] = useState(() => {
     try {
       const saved = localStorage.getItem('deutschmeister_unlocked');
@@ -314,6 +282,9 @@ export default function App() {
   const [studiedCardsCount, setStudiedCardsCount] = useState(0);
 
   useEffect(() => {
+    try {
+      localStorage.removeItem('dm_voice_speed');
+    } catch (_) {}
     recordDailyStudyActivity();
     getStudiedCardsCount().then(c => setStudiedCardsCount(c));
     const handleStudied = (e) => {
@@ -521,10 +492,12 @@ export default function App() {
       es: ""
     });
     const attemptFetch = async () => {
+      const idToken = user ? await user.getIdToken().catch(() => '') : '';
       const response = await fetch(API_ENDPOINTS.STORY_GEN, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(idToken ? { 'Authorization': `Bearer ${idToken}` } : {})
         },
         body: JSON.stringify({
           palabrasVocabulario: palabrasValidas
@@ -603,96 +576,6 @@ export default function App() {
       }
     }
   };
-  const parseTextToTokens = text => {
-    if (!text) return [];
-    const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
-    const tokens = [];
-    let isBold = false;
-    let charIndex = 0;
-    let wordCounter = 0;
-    let i = 0;
-    while (i < cleanedText.length) {
-      if (cleanedText.startsWith('**', i)) {
-        isBold = !isBold;
-        i += 2;
-        continue;
-      }
-      const spaceMatch = cleanedText.slice(i).match(/^\s+/);
-      if (spaceMatch) {
-        const spaceStr = spaceMatch[0];
-        tokens.push({
-          text: spaceStr,
-          isWord: false,
-          isBold: isBold,
-          isKeyword: isBold,
-          charStart: charIndex,
-          charEnd: charIndex + spaceStr.length,
-          wordIndex: -1
-        });
-        charIndex += spaceStr.length;
-        i += spaceStr.length;
-        continue;
-      }
-      const punctMatch = cleanedText.slice(i).match(/^[.,!?:;()[\]{}'"“”«»„“\-–—/\\+]+/);
-      if (punctMatch) {
-        const punctStr = punctMatch[0];
-        tokens.push({
-          text: punctStr,
-          isWord: false,
-          isBold: isBold,
-          isKeyword: isBold,
-          charStart: charIndex,
-          charEnd: charIndex + punctStr.length,
-          wordIndex: -1
-        });
-        charIndex += punctStr.length;
-        i += punctStr.length;
-        continue;
-      }
-      const wordMatch = cleanedText.slice(i).match(/^[^\s.,!?:;()[\]{}'"“”«»„“\-–—/\\+*]+/);
-      if (wordMatch) {
-        const wordStr = wordMatch[0];
-        tokens.push({
-          text: wordStr,
-          isWord: true,
-          isBold: isBold,
-          isKeyword: isBold,
-          charStart: charIndex,
-          charEnd: charIndex + wordStr.length,
-          wordIndex: wordCounter++
-        });
-        charIndex += wordStr.length;
-        i += wordStr.length;
-        continue;
-      }
-      const singleChar = cleanedText[i];
-      const isWord = /^[a-zA-Z0-9ÄäÖöÜüß]$/.test(singleChar);
-      tokens.push({
-        text: singleChar,
-        isWord: isWord,
-        isBold: isBold,
-        isKeyword: isBold,
-        charStart: charIndex,
-        charEnd: charIndex + 1,
-        wordIndex: isWord ? wordCounter++ : -1
-      });
-      charIndex += 1;
-      i += 1;
-    }
-    return tokens;
-  };
-  const calculateWordTimings = (tokens) => {
-    const words = tokens.filter(t => t.isWord);
-    const totalChars = words.reduce((sum, w) => sum + w.text.length, 0);
-    let accumulated = 0;
-
-    return words.map((w, idx) => {
-      const startRatio = accumulated / (totalChars || 1);
-      accumulated += w.text.length;
-      const endRatio = accumulated / (totalChars || 1);
-      return { wordIndex: idx, startRatio, endRatio };
-    });
-  };
 
   const handleToggleStoryAudio = async () => {
     if (!storyState.de) return;
@@ -711,8 +594,7 @@ export default function App() {
         storyAudioInstanceRef.current.currentTime = 0;
         setCurrentWordIndex(0);
       }
-      const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
-      storyAudioInstanceRef.current.playbackRate = savedSpeed;
+      storyAudioInstanceRef.current.playbackRate = 1.0;
       storyAudioInstanceRef.current.preservesPitch = true;
       storyAudioInstanceRef.current.play();
       setIsPlayingStoryAudio(true);
@@ -732,11 +614,10 @@ export default function App() {
       storyAudioUrlRef.current = audioSource;
 
       const audio = new Audio(audioSource);
-      const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
-      audio.playbackRate = savedSpeed;
+      audio.playbackRate = 1.0;
       audio.preservesPitch = true;
       audio.onloadedmetadata = () => {
-        audio.playbackRate = savedSpeed;
+        audio.playbackRate = 1.0;
         audio.preservesPitch = true;
       };
       storyAudioInstanceRef.current = audio;
@@ -791,7 +672,7 @@ export default function App() {
     }, {});
   };
   const toggleFullScreen = () => {
-    setIsFullscreen(prev => !prev);
+    setIsTutorFullscreen(prev => !prev);
   };
   const sendChatMessage = async () => {
     if (!chatInput.trim()) return;
@@ -937,7 +818,7 @@ export default function App() {
             imageUrl = cachedData.videoUrl || cachedData.imageUrl || cachedData.imageBase64;
             if (imageUrl) {
               if (!imageUrl.endsWith('.mp4') && !imageUrl.includes('.mp4')) {
-                imageUrl = await compressImageBase64(imageUrl, 1024, 0.9);
+                imageUrl = await compressImage(imageUrl, 1024, 0.9);
               }
               await localforage.setItem(`img_${safeId}`, imageUrl).catch(e => console.warn(e));
             }
@@ -1041,6 +922,8 @@ export default function App() {
         studiedCardsCount={studiedCardsCount}
         unlockedCardsCount={Object.keys(unlockedCards || {}).length}
         totalCardsCount={chapters.flatMap(c => c.words || []).length || 1389}
+        canInstallPWA={canInstallPWA}
+        onInstallApp={handleInstallApp}
       /> : viewMode === "quiz" ? <DynamicQuiz 
         onExit={() => setViewMode('flashcards')} 
         chapters={chapters}
@@ -1141,6 +1024,15 @@ export default function App() {
               }} className="bg-blue-600 text-white col-span-2 py-2.5 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-xs shadow-sm">
                       <User size={18} /> Mi Perfil y Configuración
                     </button>
+                    {canInstallPWA && (
+                      <button onClick={() => {
+                        setIsMenuOpen(false);
+                        handleInstallApp();
+                      }} className="bg-emerald-600 hover:bg-emerald-500 text-white col-span-2 py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2 text-xs shadow-md shadow-emerald-500/20 active:scale-95 animate-pulse">
+                        <Download size={18} />
+                        <span>📲 Instalar App en este Dispositivo</span>
+                      </button>
+                    )}
                   </div>
 
                   {/* ACORDEÓN 1: Tablas Maestras */}
@@ -1159,7 +1051,7 @@ export default function App() {
                               onClick={() => {
                                 setActiveChapterId(chap.id);
                                 setSelectedCategory("Todas");
-                                setViewMode('table');
+                                setViewMode(chap.isRedemittel ? 'table' : 'flashcards');
                                 setIsMenuOpen(false);
                               }}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
@@ -1369,7 +1261,7 @@ export default function App() {
                   const existsGlobally = !!cardImages[safeId];
                   const isGenLoading = isImageLoading === safeId;
                   const isRegenerated = true;
-                  return <PresentationVocabCard key={index} wordObj={{
+                  return <PresentationVocabCard key={`${safeId}_${word.category || index}`} wordObj={{
                     ...word,
                     chapter: searchTerm ? word.chapter : undefined
                   }} cardImages={cardImages} regeneratedImages={unlockedCards} generateCardImage={generateCardImage} isImageLoading={isImageLoading} openAiTutor={openAiTutor} setFullscreenImage={setFullscreenImage} unlockedCards={unlockedCards} speakText={speakText} lazyLoadImage={lazyLoadImage} isRevealed={isRevealed} />;

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader2, Send, X, Volume2, Sparkles, Square } from 'lucide-react';
+import { getAuth } from 'firebase/auth';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 import { recordDailyStudyActivity } from '../utils/helpers';
@@ -88,7 +89,7 @@ const RoleplaySimulator = ({
   };
 
   const submitBlurting = () => {
-    if (blurtInput.trim().length < 3) return;
+    if (blurtInput.trim().split(/[\s,;]+/).filter(w => w.length >= 2).length < 2) return;
     setIsBlurting(false);
     startScenario(scenario);
   };
@@ -105,10 +106,13 @@ const RoleplaySimulator = ({
       }]
     }];
     try {
+      const currentUser = getAuth().currentUser;
+      const idToken = currentUser ? await currentUser.getIdToken().catch(() => '') : '';
       const response = await fetch(API_ENDPOINTS.ROLEPLAY, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(idToken ? { 'Authorization': `Bearer ${idToken}` } : {})
         },
         body: JSON.stringify({
           historialConversacion: initialMsgs,
@@ -162,7 +166,7 @@ const RoleplaySimulator = ({
       setMessages([{
         role: 'model',
         parts: [{
-          text: "Entschuldigung, es hay un error de conexión."
+          text: "Entschuldigung, es gibt ein Verbindungsproblem. (Error de conexión)."
         }]
       }]);
     } finally {
@@ -185,10 +189,13 @@ const RoleplaySimulator = ({
     recordDailyStudyActivity();
     setLoading(true);
     try {
+      const currentUser = getAuth().currentUser;
+      const idToken = currentUser ? await currentUser.getIdToken().catch(() => '') : '';
       const response = await fetch(API_ENDPOINTS.ROLEPLAY, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(idToken ? { 'Authorization': `Bearer ${idToken}` } : {})
         },
         body: JSON.stringify({
           historialConversacion: newMsgs,
@@ -243,7 +250,7 @@ const RoleplaySimulator = ({
       setMessages([...newMsgs, {
         role: 'model',
         parts: [{
-          text: "Entschuldigung, es hay un error de conexión."
+          text: "Entschuldigung, es gibt ein Verbindungsproblem. (Error de conexión)."
         }]
       }]);
     } finally {

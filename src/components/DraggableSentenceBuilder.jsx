@@ -31,8 +31,10 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
     const initialWords = [activeSubject, activeVerb, activeComplement];
     let shuffled = [...initialWords];
     // Evitar que el estado inicial de barajado sea el orden correcto
-    while (shuffled[0] === activeSubject && shuffled[1] === activeVerb) {
+    let attempts = 0;
+    while (shuffled[0] === activeSubject && shuffled[1] === activeVerb && attempts < 10) {
       shuffled = shuffled.sort(() => Math.random() - 0.5);
+      attempts++;
     }
     setPool(shuffled);
     setSlots([null, null, null]);

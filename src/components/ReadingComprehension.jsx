@@ -4,6 +4,7 @@ import { functions } from '../App';
 import { httpsCallable } from 'firebase/functions';
 import { getGermanSpeechUrl, stopCurrentAudio } from '../services/aiAudioService';
 import { recordDailyStudyActivity } from '../utils/helpers';
+import { parseTextToTokens, calculateWordTimings } from '../utils/textTokenizer';
 
 const ReadingComprehension = ({ onExit }) => {
   const [tema, setTema] = useState("");
@@ -20,20 +21,6 @@ const ReadingComprehension = ({ onExit }) => {
 
   const readingAudioInstanceRef = useRef(null);
   const readingAudioUrlRef = useRef(null);
-
-  // Cálculo de Sincronización Ponderada (Karaoke Exacto)
-  const calculateWordTimings = (tokens) => {
-    const words = tokens.filter(t => t.isWord);
-    const totalChars = words.reduce((sum, w) => sum + w.text.length, 0);
-    let accumulated = 0;
-
-    return words.map((w, idx) => {
-      const startRatio = accumulated / (totalChars || 1);
-      accumulated += w.text.length;
-      const endRatio = accumulated / (totalChars || 1);
-      return { wordIndex: idx, startRatio, endRatio };
-    });
-  };
 
   // Función de Limpieza de Audio (cleanupReadingAudio)
   const cleanupReadingAudio = () => {
@@ -53,87 +40,6 @@ const ReadingComprehension = ({ onExit }) => {
     return () => cleanupReadingAudio();
   }, []);
 
-  // Analizador Léxico A1
-  const parseTextToTokens = (text) => {
-    if (!text) return [];
-    const cleanedText = text.replace(/\s+([.,!?:;()\-!])/g, '$1');
-    const tokens = [];
-    let isBold = false;
-    let charIndex = 0;
-    let wordCounter = 0;
-    let i = 0;
-
-    while (i < cleanedText.length) {
-      if (cleanedText.startsWith('**', i)) {
-        isBold = !isBold;
-        i += 2;
-        continue;
-      }
-      const spaceMatch = cleanedText.slice(i).match(/^\s+/);
-      if (spaceMatch) {
-        const spaceStr = spaceMatch[0];
-        tokens.push({
-          text: spaceStr,
-          isWord: false,
-          isBold: isBold,
-          isKeyword: isBold,
-          charStart: charIndex,
-          charEnd: charIndex + spaceStr.length,
-          wordIndex: -1
-        });
-        charIndex += spaceStr.length;
-        i += spaceStr.length;
-        continue;
-      }
-      const punctMatch = cleanedText.slice(i).match(/^[.,!?:;()[\]{}'"“”«»„“\-–—/\\+]+/);
-      if (punctMatch) {
-        const punctStr = punctMatch[0];
-        tokens.push({
-          text: punctStr,
-          isWord: false,
-          isBold: isBold,
-          isKeyword: isBold,
-          charStart: charIndex,
-          charEnd: charIndex + punctStr.length,
-          wordIndex: -1
-        });
-        charIndex += punctStr.length;
-        i += punctStr.length;
-        continue;
-      }
-      const wordMatch = cleanedText.slice(i).match(/^[^\s.,!?:;()[\]{}'"“”«»„“\-–—/\\+*]+/);
-      if (wordMatch) {
-        const wordStr = wordMatch[0];
-        tokens.push({
-          text: wordStr,
-          isWord: true,
-          isBold: isBold,
-          isKeyword: isBold,
-          charStart: charIndex,
-          charEnd: charIndex + wordStr.length,
-          wordIndex: wordCounter++
-        });
-        charIndex += wordStr.length;
-        i += wordStr.length;
-        continue;
-      }
-      const singleChar = cleanedText[i];
-      const isWord = /^[a-zA-Z0-9ÄäÖöÜüß]$/.test(singleChar);
-      tokens.push({
-        text: singleChar,
-        isWord: isWord,
-        isBold: isBold,
-        isKeyword: isBold,
-        charStart: charIndex,
-        charEnd: charIndex + 1,
-        wordIndex: isWord ? wordCounter++ : -1
-      });
-      charIndex += 1;
-      i += 1;
-    }
-    return tokens;
-  };
-
   // Manejador de Reproducción (handleToggleReadingAudio)
   const handleToggleReadingAudio = async () => {
     const textToPlay = readingTest?.texto_aleman;
@@ -152,8 +58,7 @@ const ReadingComprehension = ({ onExit }) => {
         readingAudioInstanceRef.current.currentTime = 0;
         setCurrentWordIndex(0);
       }
-      const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
-      readingAudioInstanceRef.current.playbackRate = savedSpeed;
+      readingAudioInstanceRef.current.playbackRate = 1.0;
       readingAudioInstanceRef.current.preservesPitch = true;
       readingAudioInstanceRef.current.play();
       setIsPlayingAudio(true);
@@ -173,11 +78,10 @@ const ReadingComprehension = ({ onExit }) => {
       readingAudioUrlRef.current = audioSource;
 
       const audio = new Audio(audioSource);
-      const savedSpeed = parseFloat(localStorage.getItem('dm_voice_speed') || '1.0');
-      audio.playbackRate = savedSpeed;
+      audio.playbackRate = 1.0;
       audio.preservesPitch = true;
       audio.onloadedmetadata = () => {
-        audio.playbackRate = savedSpeed;
+        audio.playbackRate = 1.0;
         audio.preservesPitch = true;
       };
       readingAudioInstanceRef.current = audio;

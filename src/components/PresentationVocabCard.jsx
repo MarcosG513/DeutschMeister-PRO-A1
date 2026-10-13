@@ -394,7 +394,9 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
     startListening((transcript) => {
       // Normalización de cadenas (minúsculas y sin puntuación)
       let cleanSpoken = transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
-      const cleanSingular = wordObj.de.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+      const baseGermanTarget = (deMainTitle || wordObj.de || "").split("/")[0].replace(/[|]/g, "").trim();
+      const cleanSingular = baseGermanTarget.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim();
+      const cleanSingularWithoutArticle = cleanSingular.replace(/^(der|die|das|ein|eine)\s+/i, "").trim();
       const cleanPlural = (wordObj.plural && wordObj.plural !== "-") 
         ? wordObj.plural.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim() 
         : "";
@@ -415,7 +417,10 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
         cleanSpoken = numMap[cleanSpoken];
       }
 
-      let isSuccessSingular = (cleanSpoken === cleanSingular);
+      let isSuccessSingular = (
+        cleanSpoken === cleanSingular ||
+        (cleanSingularWithoutArticle.length > 1 && cleanSpoken === cleanSingularWithoutArticle)
+      );
       let isSuccessPlural = (cleanPlural && cleanSpoken === cleanPlural);
 
       // Lógica especial para letras del alfabeto (longitud 1)

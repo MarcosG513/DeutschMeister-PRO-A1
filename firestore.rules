@@ -1,42 +1,57 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    function isAuthenticated() { return request.auth != null; }
-    function isOwner(userId) { return isAuthenticated() && request.auth.uid == userId; }
 
-    match /global_flashcards/{document} {
-      allow read: if isAuthenticated();
-      allow write: if false;
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
     }
 
-    match /global_audio_pronunciations/{document} {
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidPayloadSize() {
+      return request.resource.data.keys().size() <= 25;
+    }
+
+    match /global_flashcards/{cardId} {
       allow read: if true;
       allow write: if false;
     }
 
-    match /public_content/data/flashcardImages/{imageId} {
+    match /global_audio_pronunciations/{audioId} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow write: if false;
     }
 
-    match /artifacts/{appId} {
-      match /public/data/flashcardImages/{imageId} {
-        allow read: if true;
-        allow write: if isAuthenticated();
+    match /artifacts/{appId}/users/{userId} {
+      allow read, write: if isOwner(userId) && isValidPayloadSize();
+
+      match /unlockedCards/{cardId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && request.resource.data.keys().hasOnly(['unlocked', 'imageUrl', 'updatedAt'])
+          && request.resource.data.unlocked is bool;
+        allow delete: if isOwner(userId);
       }
 
-      match /users/{userId} {
-        match /chat/history {
-          allow read, write: if isOwner(userId);
-        }
-        match /profile/data {
-          allow read, write: if isOwner(userId);
-        }
-        match /unlockedCards/{document=**} {
-          allow read, write: if isOwner(userId);
-        }
+      match /chat/{docId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && request.resource.data.keys().hasOnly(['messages', 'updatedAt'])
+          && request.resource.data.messages is list
+          && request.resource.data.messages.size() <= 100;
+        allow delete: if isOwner(userId);
       }
+
+      match /pedagogy/{docId} {
+        allow read: if isOwner(userId);
+        allow write: if isOwner(userId) && isValidPayloadSize();
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

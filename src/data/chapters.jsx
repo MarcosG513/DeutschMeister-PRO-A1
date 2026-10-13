@@ -4421,12 +4421,12 @@ const rawChapters = [
     type: "Adjetivo",
     category: "Gegensätze",
     en: "person bowing politely",
-    exampleSentenceDe: "Der Kellner ist muy cortés.",
+    exampleSentenceDe: "Der Kellner ist sehr höflich.",
     exampleSentenceEs: "El camarero es muy cortés.",
     exampleSentenceDeBlocks: [
       { text: "Der Kellner", role: "subject", order: 1 },
       { text: "ist", role: "verb_p1", order: 2 },
-      { text: "muy cortés", role: "complement", order: 3 }
+      { text: "sehr höflich", role: "complement", order: 3 }
     ]
   }, {
         de: "freundlich",
@@ -4640,10 +4640,10 @@ const rawChapters = [
     category: "Gefühle",
     regimen: "Intransitivo",
     en: "smiling happy person",
-    exampleSentenceDe: "Das Kid lächelt.",
+    exampleSentenceDe: "Das Kind lächelt.",
     exampleSentenceEs: "El niño sonríe.",
     exampleSentenceDeBlocks: [
-      { text: "Das Kid", role: "subject", order: 1 },
+      { text: "Das Kind", role: "subject", order: 1 },
       { text: "lächelt", role: "verb_p1", order: 2 }
     ]
   }, {
@@ -6057,9 +6057,10 @@ const rawChapters = [
       exampleSentenceDe: "Ich lerne Deutsch, weil ich in Deutschland lebe.",
       exampleSentenceEs: "Aprendo alemán porque vivo en Alemania.",
     exampleSentenceDeBlocks: [
-      { text: "Ich", role: "subject", order: 1 },
-      { text: "lerne", role: "verb_p1", order: 2 },
-      { text: "Deutsch, weil ich in Deutschland lebe", role: "complement", order: 3 }
+      { text: "Ich lerne Deutsch,", role: "subject", order: 1 },
+      { text: "weil ich", role: "verb_p1", order: 2 },
+      { text: "in Deutschland", role: "complement", order: 3 },
+      { text: "lebe", role: "verb_p2", order: 4 }
     ],
       en: "cause and effect connecting logic arrow link"
     },
@@ -6074,9 +6075,10 @@ const rawChapters = [
       exampleSentenceDe: "Ich weiß, dass der Unterricht um 9 Uhr beginnt.",
       exampleSentenceEs: "Sé que la clase comienza a las 9:00.",
     exampleSentenceDeBlocks: [
-      { text: "Ich", role: "subject", order: 1 },
-      { text: "weiß,", role: "verb_p1", order: 2 },
-      { text: "dass der Unterricht um 9 Uhr beginnt", role: "complement", order: 3 }
+      { text: "Ich weiß,", role: "subject", order: 1 },
+      { text: "dass der Unterricht", role: "verb_p1", order: 2 },
+      { text: "um 9 Uhr", role: "complement", order: 3 },
+      { text: "beginnt", role: "verb_p2", order: 4 }
     ],
       en: "statement speech bubble within a larger bubble"
     },
@@ -7547,12 +7549,12 @@ const rawChapters = [
     es: "sed",
     type: "Sustantivo",
     category: "Gefühle",
-    exampleSentenceDe: "Ich habe der Durst.",
+    exampleSentenceDe: "Ich habe großen Durst.",
     exampleSentenceEs: "Tengo sed.",
     exampleSentenceDeBlocks: [
       { text: "Ich", role: "subject", order: 1 },
       { text: "habe", role: "verb_p1", order: 2 },
-      { text: "der Durst", role: "complement", order: 3 }
+      { text: "großen Durst", role: "complement", order: 3 }
     ],
     plural: "die Durste"
   }, {
@@ -7757,12 +7759,12 @@ const rawChapters = [
     es: "pastel",
     type: "Sustantivo",
     category: "Lebensmittel",
-    exampleSentenceDe: "Ich mag der Kuchen.",
+    exampleSentenceDe: "Ich mag den Kuchen.",
     exampleSentenceEs: "Me gusta el pastel.",
     exampleSentenceDeBlocks: [
       { text: "Ich", role: "subject", order: 1 },
       { text: "mag", role: "verb_p1", order: 2 },
-      { text: "der Kuchen", role: "complement", order: 3 }
+      { text: "den Kuchen", role: "complement", order: 3 }
     ],
     plural: "die Kuchen"
   }, {
@@ -8451,12 +8453,12 @@ const rawChapters = [
     category: "Lebensmittel",
     plural: "die Pfirsiche",
     en: "fresh peach fruit",
-    exampleSentenceDe: "Der Pfirsich ist muy dulce.",
+    exampleSentenceDe: "Der Pfirsich ist sehr süß.",
     exampleSentenceEs: "El durazno es muy dulce.",
     exampleSentenceDeBlocks: [
       { text: "Der Pfirsich", role: "subject", order: 1 },
       { text: "ist", role: "verb_p1", order: 2 },
-      { text: "muy dulce", role: "complement", order: 3 }
+      { text: "sehr süß", role: "complement", order: 3 }
     ]
   }, {
         de: "die Melone",
@@ -9450,12 +9452,12 @@ const rawChapters = [
     es: "descuento",
     type: "Sustantivo",
     category: "Preis",
-    exampleSentenceDe: "Ich sehe der Rabatt. Der Rabatt ist gut.",
+    exampleSentenceDe: "Ich sehe den Rabatt. Der Rabatt ist gut.",
     exampleSentenceEs: "Veo el descuento. El descuento es bueno.",
     exampleSentenceDeBlocks: [
       { text: "Ich", role: "subject", order: 1 },
       { text: "sehe", role: "verb_p1", order: 2 },
-      { text: "der Rabatt", role: "complement", order: 3 }
+      { text: "den Rabatt", role: "complement", order: 3 }
     ],
     plural: "die Rabatte"
   },
@@ -9865,12 +9867,12 @@ const rawChapters = [
     es: "deporte",
     type: "Sustantivo",
     category: "Aktivitäten",
-    exampleSentenceDe: "Ich mag der Sport.",
+    exampleSentenceDe: "Ich mag den Sport.",
     exampleSentenceEs: "Me gusta el deporte.",
     exampleSentenceDeBlocks: [
       { text: "Ich", role: "subject", order: 1 },
       { text: "mag", role: "verb_p1", order: 2 },
-      { text: "der Sport", role: "complement", order: 3 }
+      { text: "den Sport", role: "complement", order: 3 }
     ],
     plural: "die Sportarten"
   }, {
@@ -11026,11 +11028,11 @@ const rawChapters = [
     category: "Wetter",
     plural: "die Nebel",
     en: "thick gray fog",
-    exampleSentenceDe: "Der Nebel is sehr dicht.",
+    exampleSentenceDe: "Der Nebel ist sehr dicht.",
     exampleSentenceEs: "La niebla es muy densa.",
     exampleSentenceDeBlocks: [
       { text: "Der Nebel", role: "subject", order: 1 },
-      { text: "is", role: "verb_p1", order: 2 },
+      { text: "ist", role: "verb_p1", order: 2 },
       { text: "sehr dicht", role: "complement", order: 3 }
     ]
   }, {
@@ -16056,406 +16058,857 @@ const rawChapters = [
   title: "Kapitel 18: Elektrotechnik & Solar",
   icon: <Zap size={20} />,
   emoji: "⚡",
-  words: [{
-    de: "der Strom",
-    pron: "dea shtrom",
-    es: "la electricidad / corriente",
-    type: "Sustantivo (Masc)",
-    category: "Elektrizität",
-    plural: "die Ströme",
-    en: "a cute 3D isometric UI icon of a glowing yellow lightning bolt"
-  }, {
-    de: "die Spannung",
-    pron: "di shpá-nung",
-    es: "el voltaje / tensión",
-    type: "Sustantivo (Fem)",
-    category: "Elektrizität",
-    plural: "die Spannungen",
-    en: "a cute 3D isometric UI icon of an electrical voltmeter dial"
-  }, {
-    de: "der Stromkreis",
-    pron: "dea shtróm-krais",
-    es: "el circuito eléctrico",
-    type: "Sustantivo (Masc)",
-    category: "Elektrizität",
-    plural: "die Stromkreise",
-    en: "a cute 3D isometric UI icon of a closed electrical circuit with a glowing lightbulb"
-  }, {
-    de: "das Kabel",
-    pron: "das ká-bel",
-    es: "el cable",
-    type: "Sustantivo (Neutro)",
-    category: "Komponenten",
-    plural: "die Kabel",
-    en: "a cute 3D isometric UI icon of a thick industrial electrical copper cable spool"
-  }, {
-    de: "der Stecker",
-    pron: "dea shté-ka",
-    es: "el enchufe (macho)",
-    type: "Sustantivo (Masc)",
-    category: "Komponenten",
-    plural: "die Stecker",
-    en: "a cute 3D isometric UI icon of a standard European electrical plug"
-  }, {
-    de: "die Steckdose",
-    pron: "di shték-do-ze",
-    es: "la toma de corriente",
-    type: "Sustantivo (Fem)",
-    category: "Komponenten",
-    plural: "die Steckdosen",
-    en: "a cute 3D isometric UI icon of an electrical wall socket"
-  }, {
-    de: "der Schalter",
-    pron: "dea shál-ta",
-    es: "el interruptor",
-    type: "Sustantivo (Masc)",
-    category: "Komponenten",
-    plural: "die Schalter",
-    en: "a cute 3D isometric UI icon of a modern wall light switch"
-  }, {
-    de: "die Sicherung",
-    pron: "di zí-je-rung",
-    es: "el fusible / el taco",
-    type: "Sustantivo (Fem)",
-    category: "Komponenten",
-    plural: "die Sicherungen",
-    en: "a cute 3D isometric UI icon of an electrical fuse breaker box"
-  }, {
-    de: "der Transformator",
-    pron: "dea trans-for-má-tor",
-    es: "el transformador",
-    type: "Sustantivo (Masc)",
-    category: "Komponenten",
-    plural: "die Transformatoren",
-    en: "a cute 3D isometric UI icon of an industrial electrical power transformer"
-  }, {
-    de: "die Batterie",
-    pron: "di ba-te-rí",
-    es: "la batería",
-    type: "Sustantivo (Fem)",
-    category: "Energie",
-    plural: "die Batterien",
-    en: "a cute 3D isometric UI icon of a standard AA battery"
-  }, {
-    de: "der Akku",
-    pron: "dea á-ku",
-    es: "la batería recargable",
-    type: "Sustantivo (Masc)",
-    category: "Energie",
-    plural: "die Akkus",
-    en: "a cute 3D isometric UI icon of a lithium ion rechargeable battery pack"
-  }, {
-    de: "der Zähler",
-    pron: "dea tsé-la",
-    es: "el medidor eléctrico",
-    type: "Sustantivo (Masc)",
-    category: "Komponenten",
-    plural: "die Zähler",
-    en: "a cute 3D isometric UI icon of a smart electrical power meter"
-  }, {
-    de: "die Erdung",
-    pron: "di ér-dung",
-    es: "la toma de tierra",
-    type: "Sustantivo (Fem)",
-    category: "Sicherheit",
-    plural: "die Erdungen",
-    en: "a cute 3D isometric UI icon of a copper grounding rod symbol"
-  }, {
-    de: "der Kurzschluss",
-    pron: "dea kúrts-shlus",
-    es: "el cortocircuito",
-    type: "Sustantivo (Masc)",
-    category: "Sicherheit",
-    plural: "die Kurzschlüsse",
-    en: "a cute 3D isometric UI icon of electric sparks and a broken wire"
-  }, {
-    de: "die Solaranlage",
-    pron: "di zo-lár-an-la-gue",
-    es: "el sistema solar / fotovoltaico",
-    type: "Sustantivo (Fem)",
-    category: "Solartechnik",
-    plural: "die Solaranlagen",
-    en: "a cute 3D isometric UI icon of a house roof with shiny solar panels"
-  }, {
-    de: "das Solarmodul",
-    pron: "das zo-lár-mo-dul",
-    es: "el módulo solar",
-    type: "Sustantivo (Neutro)",
-    category: "Solartechnik",
-    plural: "die Solarmodule",
-    en: "a cute 3D isometric UI icon of a single large blue solar panel"
-  }, {
-    de: "die Solarzelle",
-    pron: "di zo-lár-tse-le",
-    es: "la célula solar",
-    type: "Sustantivo (Fem)",
-    category: "Solartechnik",
-    plural: "die Solarzellen",
-    en: "a cute 3D isometric UI icon of a micro photovoltaic solar cell grid"
-  }, {
-    de: "der Wechselrichter",
-    pron: "dea vék-sel-rij-ta",
-    es: "el inversor (AC/DC)",
-    type: "Sustantivo (Masc)",
-    category: "Solartechnik",
-    plural: "die Wechselrichter",
-    en: "a cute 3D isometric UI icon of a modern solar power inverter box"
-  }, {
-    de: "der Speicher",
-    pron: "dea shpái-ja",
-    es: "el acumulador / banco de baterías",
-    type: "Sustantivo (Masc)",
-    category: "Solartechnik",
-    plural: "die Speicher",
-    en: "a cute 3D isometric UI icon of a home solar battery storage system"
-  }, {
-    de: "das Netz",
-    pron: "das nets",
-    es: "la red eléctrica",
-    type: "Sustantivo (Neutro)",
-    category: "Infrastruktur",
-    plural: "die Netze",
-    en: "a cute 3D isometric UI icon of electrical power transmission towers"
-  }, {
-    de: "der Ertrag",
-    pron: "dea ea-trák",
-    es: "el rendimiento / producción",
-    type: "Sustantivo (Masc)",
-    category: "Solartechnik",
-    plural: "die Erträge",
-    en: "a cute 3D isometric UI icon of a rising chart with a sun symbol"
-  }, {
-    de: "die Gleichspannung",
-    pron: "di gláij-shpa-nung",
-    es: "tensión continua (DC)",
-    type: "Sustantivo (Fem)",
-    category: "Elektrizität",
-    plural: "die Gleichspannungen",
-    en: "a cute 3D isometric UI icon showing the Direct Current DC symbol"
-  }, {
-    de: "die Wechselspannung",
-    pron: "di vék-sel-shpa-nung",
-    es: "tensión alterna (AC)",
-    type: "Sustantivo (Fem)",
-    category: "Elektrizität",
-    plural: "die Wechselspannungen",
-    en: "a cute 3D isometric UI icon showing the Alternating Current AC sine wave symbol"
-  }, {
-    de: "die Leistung",
-    pron: "di láis-tung",
-    es: "la potencia (W/kW)",
-    type: "Sustantivo (Fem)",
-    category: "Elektrizität",
-    plural: "die Leistungen",
-    en: "a cute 3D isometric UI icon of a glowing energy core"
-  }, {
-    de: "die Dachmontage",
-    pron: "di daj-mon-tá-je",
-    es: "el montaje en techo",
-    type: "Sustantivo (Fem)",
-    category: "Installation",
-    plural: "die Dachmontagen",
-    en: "a cute 3D isometric UI icon of construction brackets on a rooftop"
-  }, {
-    de: "das Werkzeug",
-    pron: "das véak-tsoik",
-    es: "la herramienta",
-    type: "Sustantivo (Neutro)",
-    category: "Werkzeuge",
-    plural: "die Werkzeuge",
-    en: "a cute 3D isometric UI icon of a red toolbox"
-  }, {
-    de: "der Schraubenzieher",
-    pron: "dea shrjáu-ben-tsi-a",
-    es: "el destornillador",
-    type: "Sustantivo (Masc)",
-    category: "Werkzeuge",
-    plural: "die Schraubenzieher",
-    en: "a cute 3D isometric UI icon of a yellow and black screwdriver"
-  }, {
-    de: "die Zange",
-    pron: "di tsáng-e",
-    es: "el alicate / pinza",
-    type: "Sustantivo (Fem)",
-    category: "Werkzeuge",
-    plural: "die Zangen",
-    en: "a cute 3D isometric UI icon of a pair of metal pliers with rubber grips"
-  }, {
-    de: "der Bohrer",
-    pron: "dea bó-ra",
-    es: "el taladro",
-    type: "Sustantivo (Masc)",
-    category: "Werkzeuge",
-    plural: "die Bohrer",
-    en: "a cute 3D isometric UI icon of a power drill"
-  }, {
-    de: "das Multimeter",
-    pron: "das mul-ti-mé-ta",
-    es: "el multímetro",
-    type: "Sustantivo (Neutro)",
-    category: "Werkzeuge",
-    plural: "die Multimeter",
-    en: "a cute 3D isometric UI icon of a digital multimeter with probes"
-  }, {
-    de: "der Helm",
-    pron: "dea jelm",
-    es: "el casco de seguridad",
-    type: "Sustantivo (Masc)",
-    category: "Sicherheit",
-    plural: "die Helme",
-    en: "a cute 3D isometric UI icon of a yellow hard hat"
-  }, {
-    de: "die Handschuhe",
-    pron: "di jánt-shu-e",
-    es: "los guantes de trabajo",
-    type: "Sustantivo (Plural)",
-    category: "Sicherheit",
-    plural: "-",
-    en: "a cute 3D isometric UI icon of heavy duty protective work gloves"
-  }, {
-    de: "die Leiter",
-    pron: "di lái-ta",
-    es: "la escalera",
-    type: "Sustantivo (Fem)",
-    category: "Werkzeuge",
-    plural: "die Leitern",
-    en: "a cute 3D isometric UI icon of a tall aluminum stepladder"
-  }, {
-    de: "der Elektriker",
-    pron: "dea e-lék-tri-ka",
-    es: "el electricista",
-    type: "Sustantivo (Masc)",
-    category: "Beruf",
-    plural: "die Elektriker",
-    en: "a cute 3D isometric UI icon of a worker holding cables"
-  }, {
-    de: "der Techniker",
-    pron: "dea téj-ni-ka",
-    es: "el técnico",
-    type: "Sustantivo (Masc)",
-    category: "Beruf",
-    plural: "die Techniker",
-    en: "a cute 3D isometric UI icon of a worker with blueprints and tools"
-  }, {
-    de: "die Gefahr",
-    pron: "di gue-fár",
-    es: "el peligro / riesgo",
-    type: "Sustantivo (Fem)",
-    category: "Sicherheit",
-    plural: "die Gefahren",
-    en: "a cute 3D isometric UI icon of a yellow high voltage warning sign"
-  }, {
-    de: "gefährlich",
-    pron: "gue-féa-lij",
-    es: "peligroso",
-    type: "Adjetivo",
-    category: "Sicherheit",
-    en: "a cute 3D isometric UI icon of a skull and crossbones hazard symbol"
-  }, {
-    de: "messen",
-    pron: "mé-sen",
-    es: "medir",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "+ Akkusativ",
-    en: "a cute 3D isometric UI icon of a measuring tape extended"
-  }, {
-    de: "anschließen",
-    pron: "án-shli-sen",
-    es: "conectar",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "Separable (an-) / + Akkusativ",
-    en: "a cute 3D isometric UI icon of two electrical wires being connected together"
-  }, {
-    de: "installieren",
-    pron: "ins-ta-lí-ren",
-    es: "instalar",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "+ Akkusativ",
-    en: "a cute 3D isometric UI icon of a wrench tightening a bolt on a machine"
-  }, {
-    de: "prüfen",
-    pron: "prü-fen",
-    es: "comprobar / revisar",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "+ Akkusativ",
-    en: "a cute 3D isometric UI icon of a green checkmark over a technical clipboard"
-  }, {
-    de: "warten",
-    pron: "vár-ten",
-    es: "mantener (mantenimiento)",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "+ Akkusativ",
-    en: "a cute 3D isometric UI icon of an oil can and a gear"
-  }, {
-    de: "einschalten",
-    pron: "áin-shal-ten",
-    es: "encender (equipo)",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "Separable (ein-) / + Akkusativ",
-    en: "a cute 3D isometric UI icon of a green glowing ON button"
-  }, {
-    de: "ausschalten",
-    pron: "áus-shal-ten",
-    es: "apagar (equipo)",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "Separable (aus-) / + Akkusativ",
-    en: "a cute 3D isometric UI icon of a red OFF button"
-  }, {
-    de: "löten",
-    pron: "lö-ten",
-    es: "soldar (electrónica)",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "+ Akkusativ",
-    en: "a cute 3D isometric UI icon of a soldering iron melting silver wire"
-  }, {
-    de: "isolieren",
-    pron: "i-zo-lí-ren",
-    es: "aislar (cableado)",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "+ Akkusativ",
-    en: "a cute 3D isometric UI icon of a roll of black electrical insulation tape"
-  }, {
-    de: "abisolieren",
-    pron: "áp-i-zo-li-ren",
-    es: "pelar un cable",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "Separable (ab-) / + Akkusativ",
-    en: "a cute 3D isometric UI icon of wire strippers removing plastic from a copper wire"
-  }, {
-    de: "austauschen",
-    pron: "áus-tau-shen",
-    es: "reemplazar / cambiar",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "Separable (aus-) / + Akkusativ",
-    en: "a cute 3D isometric UI icon of two mechanical parts swapping places with arrows"
-  }, {
-    de: "einspeisen",
-    pron: "áin-shpai-zen",
-    es: "inyectar (a la red)",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "Separable (ein-) / + Akkusativ",
-    en: "a cute 3D isometric UI icon of electricity flowing from a house into a power grid tower"
-  }, {
-    de: "funktionieren",
-    pron: "funk-tsio-ní-ren",
-    es: "funcionar",
-    type: "Verbo",
-    category: "Aktionen",
-    regimen: "Intransitivo",
-    en: "a cute 3D isometric UI icon of two interlocking gears turning smoothly"
-  }]
+  words: [
+    {
+      de: "der Strom",
+      pron: "dea shtrom",
+      es: "la electricidad / corriente",
+      type: "Sustantivo (Masc)",
+      category: "Elektrizität",
+      plural: "die Ströme",
+      exampleSentenceDe: "Der Strom fließt durch das Kabel.",
+      exampleSentenceEs: "La corriente fluye a través del cable.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Strom", role: "subject", order: 1 },
+        { text: "fließt", role: "verb_p1", order: 2 },
+        { text: "durch das", role: "complement", order: 3 },
+        { text: "Kabel.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a glowing yellow lightning bolt"
+    },
+    {
+      de: "die Spannung",
+      pron: "di shpá-nung",
+      es: "el voltaje / tensión",
+      type: "Sustantivo (Fem)",
+      category: "Elektrizität",
+      plural: "die Spannungen",
+      exampleSentenceDe: "Die Spannung beträgt genau 230 Volt.",
+      exampleSentenceEs: "El voltaje es exactamente de 230 voltios.",
+      exampleSentenceDeBlocks: [
+        { text: "Die Spannung", role: "subject", order: 1 },
+        { text: "beträgt", role: "verb_p1", order: 2 },
+        { text: "genau", role: "complement", order: 3 },
+        { text: "230 Volt.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of an electrical voltmeter dial"
+    },
+    {
+      de: "der Stromkreis",
+      pron: "dea shtróm-krais",
+      es: "el circuito eléctrico",
+      type: "Sustantivo (Masc)",
+      category: "Elektrizität",
+      plural: "die Stromkreise",
+      exampleSentenceDe: "Der Stromkreis ist jetzt sicher unterbrochen.",
+      exampleSentenceEs: "El circuito eléctrico está ahora interrumpido de forma segura.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Stromkreis", role: "subject", order: 1 },
+        { text: "ist jetzt", role: "verb_p1", order: 2 },
+        { text: "vollständig und sicher", role: "complement", order: 3 },
+        { text: "unterbrochen.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a closed electrical circuit with a glowing lightbulb"
+    },
+    {
+      de: "das Kabel",
+      pron: "das ká-bel",
+      es: "el cable",
+      type: "Sustantivo (Neutro)",
+      category: "Komponenten",
+      plural: "die Kabel",
+      exampleSentenceDe: "Wir verlegen das Kabel zum Verteiler.",
+      exampleSentenceEs: "Tendemos el cable hacia el distribuidor.",
+      exampleSentenceDeBlocks: [
+        { text: "Wir verlegen", role: "verb_p1", order: 1 },
+        { text: "das Kabel", role: "subject", order: 2 },
+        { text: "direkt zum", role: "complement", order: 3 },
+        { text: "Verteilerkasten.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a thick industrial electrical copper cable spool"
+    },
+    {
+      de: "der Stecker",
+      pron: "dea shté-ka",
+      es: "el enchufe (macho)",
+      type: "Sustantivo (Masc)",
+      category: "Komponenten",
+      plural: "die Stecker",
+      exampleSentenceDe: "Ziehen Sie bitte zuerst den Stecker.",
+      exampleSentenceEs: "Por favor, desconecte primero el enchufe.",
+      exampleSentenceDeBlocks: [
+        { text: "Ziehen Sie", role: "verb_p1", order: 1 },
+        { text: "bitte zuerst", role: "complement", order: 2 },
+        { text: "den Stecker", role: "subject", order: 3 },
+        { text: "vorsichtig ab.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a standard European electrical plug"
+    },
+    {
+      de: "die Steckdose",
+      pron: "di shték-do-ze",
+      es: "la toma de corriente",
+      type: "Sustantivo (Fem)",
+      category: "Komponenten",
+      plural: "die Steckdosen",
+      exampleSentenceDe: "Die neue Steckdose ist fest montiert.",
+      exampleSentenceEs: "La nueva toma de corriente está firmemente montada.",
+      exampleSentenceDeBlocks: [
+        { text: "Die neue Steckdose", role: "subject", order: 1 },
+        { text: "ist an der Wand", role: "complement", order: 2 },
+        { text: "fachgerecht", role: "complement", order: 3 },
+        { text: "montiert.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of an electrical wall socket"
+    },
+    {
+      de: "der Schalter",
+      pron: "dea shál-ta",
+      es: "el interruptor",
+      type: "Sustantivo (Masc)",
+      category: "Komponenten",
+      plural: "die Schalter",
+      exampleSentenceDe: "Drücken Sie den Schalter für Licht.",
+      exampleSentenceEs: "Presione el interruptor para la luz.",
+      exampleSentenceDeBlocks: [
+        { text: "Drücken Sie", role: "verb_p1", order: 1 },
+        { text: "den Schalter,", role: "subject", order: 2 },
+        { text: "um das Licht", role: "complement", order: 3 },
+        { text: "einzuschalten.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a modern wall light switch"
+    },
+    {
+      de: "die Sicherung",
+      pron: "di zí-je-rung",
+      es: "el fusible / el taco",
+      type: "Sustantivo (Fem)",
+      category: "Komponenten",
+      plural: "die Sicherungen",
+      exampleSentenceDe: "Die Sicherung hat sofort automatisch ausgelöst.",
+      exampleSentenceEs: "El fusible se disparó inmediatamente de forma automática.",
+      exampleSentenceDeBlocks: [
+        { text: "Die Sicherung", role: "subject", order: 1 },
+        { text: "hat im Kasten", role: "complement", order: 2 },
+        { text: "wegen Überlastung", role: "complement", order: 3 },
+        { text: "ausgelöst.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of an electrical fuse breaker box"
+    },
+    {
+      de: "der Transformator",
+      pron: "dea trans-for-má-tor",
+      es: "el transformador",
+      type: "Sustantivo (Masc)",
+      category: "Komponenten",
+      plural: "die Transformatoren",
+      exampleSentenceDe: "Der Transformator wandelt die Spannung um.",
+      exampleSentenceEs: "El transformador convierte el voltaje.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Transformator", role: "subject", order: 1 },
+        { text: "wandelt", role: "verb_p1", order: 2 },
+        { text: "die hohe Spannung", role: "complement", order: 3 },
+        { text: "sicher um.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of an industrial electrical power transformer"
+    },
+    {
+      de: "die Batterie",
+      pron: "di ba-te-rí",
+      es: "la batería",
+      type: "Sustantivo (Fem)",
+      category: "Energie",
+      plural: "die Batterien",
+      exampleSentenceDe: "Die Batterie liefert Gleichstrom für Notfälle.",
+      exampleSentenceEs: "La batería suministra corriente continua para emergencias.",
+      exampleSentenceDeBlocks: [
+        { text: "Die Batterie", role: "subject", order: 1 },
+        { text: "liefert", role: "verb_p1", order: 2 },
+        { text: "Gleichstrom", role: "complement", order: 3 },
+        { text: "für die Anlage.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a standard AA battery"
+    },
+    {
+      de: "der Akku",
+      pron: "dea á-ku",
+      es: "la batería recargable",
+      type: "Sustantivo (Masc)",
+      category: "Energie",
+      plural: "die Akkus",
+      exampleSentenceDe: "Der Akku des Bohrers lädt schnell.",
+      exampleSentenceEs: "La batería del taladro se carga rápido.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Akku", role: "subject", order: 1 },
+        { text: "des Bohrers", role: "complement", order: 2 },
+        { text: "lädt an der Station", role: "verb_p1", order: 3 },
+        { text: "sehr schnell.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a lithium ion rechargeable battery pack"
+    },
+    {
+      de: "der Zähler",
+      pron: "dea tsé-la",
+      es: "el medidor eléctrico",
+      type: "Sustantivo (Masc)",
+      category: "Komponenten",
+      plural: "die Zähler",
+      exampleSentenceDe: "Der Elektriker liest den Zähler ab.",
+      exampleSentenceEs: "El electricista lee el contador.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Elektriker", role: "subject", order: 1 },
+        { text: "liest den Zähler", role: "verb_p1", order: 2 },
+        { text: "im Keller", role: "complement", order: 3 },
+        { text: "sorgfältig ab.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a smart electrical power meter"
+    },
+    {
+      de: "die Gleichspannung",
+      pron: "di gláij-shpa-nung",
+      es: "tensión continua (DC)",
+      type: "Sustantivo (Fem)",
+      category: "Elektrizität",
+      plural: "die Gleichspannungen",
+      exampleSentenceDe: "Solarmodule erzeugen immer saubere Gleichspannung.",
+      exampleSentenceEs: "Los módulos solares generan siempre tensión continua limpia.",
+      exampleSentenceDeBlocks: [
+        { text: "Die Solarmodule", role: "subject", order: 1 },
+        { text: "erzeugen", role: "verb_p1", order: 2 },
+        { text: "immer saubere", role: "complement", order: 3 },
+        { text: "Gleichspannung.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon showing the Direct Current DC symbol"
+    },
+    {
+      de: "die Wechselspannung",
+      pron: "di vék-sel-shpa-nung",
+      es: "tensión alterna (AC)",
+      type: "Sustantivo (Fem)",
+      category: "Elektrizität",
+      plural: "die Wechselspannungen",
+      exampleSentenceDe: "Haushaltsgeräte brauchen 230 Volt Wechselspannung.",
+      exampleSentenceEs: "Los electrodomésticos necesitan 230 voltios de tensión alterna.",
+      exampleSentenceDeBlocks: [
+        { text: "Normale Geräte", role: "subject", order: 1 },
+        { text: "brauchen", role: "verb_p1", order: 2 },
+        { text: "230 Volt", role: "complement", order: 3 },
+        { text: "Wechselspannung.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon showing the Alternating Current AC sine wave symbol"
+    },
+    {
+      de: "die Leistung",
+      pron: "di láis-tung",
+      es: "la potencia (W/kW)",
+      type: "Sustantivo (Fem)",
+      category: "Elektrizität",
+      plural: "die Leistungen",
+      exampleSentenceDe: "Die maximale Leistung beträgt zehn Kilowatt.",
+      exampleSentenceEs: "La potencia máxima es de diez kilovatios.",
+      exampleSentenceDeBlocks: [
+        { text: "Die maximale Leistung", role: "subject", order: 1 },
+        { text: "beträgt", role: "verb_p1", order: 2 },
+        { text: "bei Sonnenschein", role: "complement", order: 3 },
+        { text: "zehn Kilowatt.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a glowing energy core"
+    },
+    {
+      de: "die Solaranlage",
+      pron: "di zo-lár-an-la-gue",
+      es: "el sistema solar / fotovoltaico",
+      type: "Sustantivo (Fem)",
+      category: "Solartechnik",
+      plural: "die Solaranlagen",
+      exampleSentenceDe: "Die Solaranlage produziert grünen Strom täglich.",
+      exampleSentenceEs: "La instalación solar produce electricidad ecológica a diario.",
+      exampleSentenceDeBlocks: [
+        { text: "Die Solaranlage", role: "subject", order: 1 },
+        { text: "produziert auf dem Dach", role: "verb_p1", order: 2 },
+        { text: "täglich sauberen", role: "complement", order: 3 },
+        { text: "grünen Strom.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a house roof with shiny solar panels"
+    },
+    {
+      de: "das Solarmodul",
+      pron: "das zo-lár-mo-dul",
+      es: "el módulo solar",
+      type: "Sustantivo (Neutro)",
+      category: "Solartechnik",
+      plural: "die Solarmodule",
+      exampleSentenceDe: "Wir befestigen jedes Solarmodul mit Klemmen.",
+      exampleSentenceEs: "Fijamos cada módulo solar con abrazaderas.",
+      exampleSentenceDeBlocks: [
+        { text: "Wir befestigen", role: "verb_p1", order: 1 },
+        { text: "jedes Solarmodul", role: "subject", order: 2 },
+        { text: "auf der Schiene", role: "complement", order: 3 },
+        { text: "mit Klemmen.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a single large blue solar panel"
+    },
+    {
+      de: "die Solarzelle",
+      pron: "di zo-lár-tse-le",
+      es: "la célula solar",
+      type: "Sustantivo (Fem)",
+      category: "Solartechnik",
+      plural: "die Solarzellen",
+      exampleSentenceDe: "Eine Solarzelle wandelt Licht in Strom.",
+      exampleSentenceEs: "Una célula solar convierte luz en electricidad.",
+      exampleSentenceDeBlocks: [
+        { text: "Die Solarzelle", role: "subject", order: 1 },
+        { text: "wandelt", role: "verb_p1", order: 2 },
+        { text: "das Sonnenlicht", role: "complement", order: 3 },
+        { text: "in Strom um.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a micro photovoltaic solar cell grid"
+    },
+    {
+      de: "der Wechselrichter",
+      pron: "dea vék-sel-rij-ta",
+      es: "el inversor (AC/DC)",
+      type: "Sustantivo (Masc)",
+      category: "Solartechnik",
+      plural: "die Wechselrichter",
+      exampleSentenceDe: "Der Wechselrichter wandelt Gleichstrom in Wechselstrom.",
+      exampleSentenceEs: "El inversor convierte corriente continua en alterna.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Wechselrichter", role: "subject", order: 1 },
+        { text: "wandelt Gleichstrom", role: "verb_p1", order: 2 },
+        { text: "sehr effizient", role: "complement", order: 3 },
+        { text: "in Wechselstrom.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a modern solar power inverter box"
+    },
+    {
+      de: "der Speicher",
+      pron: "dea shpái-ja",
+      es: "el acumulador / banco de baterías",
+      type: "Sustantivo (Masc)",
+      category: "Solartechnik",
+      plural: "die Speicher",
+      exampleSentenceDe: "Der Speicher speichert Energie für nachts.",
+      exampleSentenceEs: "La batería de almacenamiento guarda energía para la noche.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Batteriespeicher", role: "subject", order: 1 },
+        { text: "speichert Solarstrom", role: "verb_p1", order: 2 },
+        { text: "zuverlässig", role: "complement", order: 3 },
+        { text: "für die Nacht.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a home solar battery storage system"
+    },
+    {
+      de: "das Netz",
+      pron: "das nets",
+      es: "la red eléctrica",
+      type: "Sustantivo (Neutro)",
+      category: "Infrastruktur",
+      plural: "die Netze",
+      exampleSentenceDe: "Die Anlage speist Strom ins Netz.",
+      exampleSentenceEs: "La instalación inyecta electricidad a la red.",
+      exampleSentenceDeBlocks: [
+        { text: "Die Anlage", role: "subject", order: 1 },
+        { text: "speist überschüssigen Strom", role: "verb_p1", order: 2 },
+        { text: "automatisch", role: "complement", order: 3 },
+        { text: "ins Netz ein.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of electrical power transmission towers"
+    },
+    {
+      de: "der Ertrag",
+      pron: "dea ea-trák",
+      es: "el rendimiento / producción",
+      type: "Sustantivo (Masc)",
+      category: "Solartechnik",
+      plural: "die Erträge",
+      exampleSentenceDe: "Im Sommer ist der Ertrag hoch.",
+      exampleSentenceEs: "En verano la producción energética es alta.",
+      exampleSentenceDeBlocks: [
+        { text: "Im Sommer", role: "complement", order: 1 },
+        { text: "ist der Ertrag", role: "verb_p1", order: 2 },
+        { text: "unserer Anlage", role: "subject", order: 3 },
+        { text: "besonders hoch.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a rising chart with a sun symbol"
+    },
+    {
+      de: "die Dachmontage",
+      pron: "di daj-mon-tá-je",
+      es: "el montaje en techo",
+      type: "Sustantivo (Fem)",
+      category: "Installation",
+      plural: "die Dachmontagen",
+      exampleSentenceDe: "Wir planen die Dachmontage für morgen.",
+      exampleSentenceEs: "Planificamos el montaje en tejado para mañana.",
+      exampleSentenceDeBlocks: [
+        { text: "Wir planen", role: "verb_p1", order: 1 },
+        { text: "die Dachmontage", role: "subject", order: 2 },
+        { text: "mit dem Team", role: "complement", order: 3 },
+        { text: "für morgen.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of construction brackets on a rooftop"
+    },
+    {
+      de: "das Werkzeug",
+      pron: "das véak-tsoik",
+      es: "la herramienta",
+      type: "Sustantivo (Neutro)",
+      category: "Werkzeuge",
+      plural: "die Werkzeuge",
+      exampleSentenceDe: "Bringe bitte das Werkzeug nach oben.",
+      exampleSentenceEs: "Lleva por favor las herramientas arriba.",
+      exampleSentenceDeBlocks: [
+        { text: "Bringe bitte", role: "verb_p1", order: 1 },
+        { text: "das Werkzeug", role: "subject", order: 2 },
+        { text: "in der Kiste", role: "complement", order: 3 },
+        { text: "nach oben.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a red toolbox"
+    },
+    {
+      de: "der Schraubenzieher",
+      pron: "dea shrjáu-ben-tsi-a",
+      es: "el destornillador",
+      type: "Sustantivo (Masc)",
+      category: "Werkzeuge",
+      plural: "die Schraubenzieher",
+      exampleSentenceDe: "Ich ziehe Schrauben mit dem Schraubenzieher.",
+      exampleSentenceEs: "Aprieto tornillos con el destornillador.",
+      exampleSentenceDeBlocks: [
+        { text: "Ich ziehe", role: "verb_p1", order: 1 },
+        { text: "die Klemme", role: "subject", order: 2 },
+        { text: "mit dem Schraubenzieher", role: "complement", order: 3 },
+        { text: "fest an.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a yellow and black screwdriver"
+    },
+    {
+      de: "die Zange",
+      pron: "di tsáng-e",
+      es: "el alicate / pinza",
+      type: "Sustantivo (Fem)",
+      category: "Werkzeuge",
+      plural: "die Zangen",
+      exampleSentenceDe: "Mit der Zange schneide ich Kabel.",
+      exampleSentenceEs: "Con el alicate corto cables.",
+      exampleSentenceDeBlocks: [
+        { text: "Mit der Zange", role: "complement", order: 1 },
+        { text: "schneidet der Monteur", role: "verb_p1", order: 2 },
+        { text: "das dicke Kabel", role: "subject", order: 3 },
+        { text: "schnell ab.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a pair of metal pliers with rubber grips"
+    },
+    {
+      de: "der Bohrer",
+      pron: "dea bó-ra",
+      es: "el taladro",
+      type: "Sustantivo (Masc)",
+      category: "Werkzeuge",
+      plural: "die Bohrer",
+      exampleSentenceDe: "Der Bohrer bohrt Löcher in Beton.",
+      exampleSentenceEs: "El taladro perfora agujeros en hormigón.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Bohrer", role: "subject", order: 1 },
+        { text: "bohrt präzise Löcher", role: "verb_p1", order: 2 },
+        { text: "in die Wand", role: "complement", order: 3 },
+        { text: "aus Beton.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a power drill"
+    },
+    {
+      de: "das Multimeter",
+      pron: "das mul-ti-mé-ta",
+      es: "el multímetro",
+      type: "Sustantivo (Neutro)",
+      category: "Werkzeuge",
+      plural: "die Multimeter",
+      exampleSentenceDe: "Mit dem Multimeter prüfen wir Durchgang.",
+      exampleSentenceEs: "Con el multímetro comprobamos la continuidad.",
+      exampleSentenceDeBlocks: [
+        { text: "Mit dem Multimeter", role: "complement", order: 1 },
+        { text: "prüfen wir", role: "verb_p1", order: 2 },
+        { text: "die Spannung", role: "subject", order: 3 },
+        { text: "ganz genau.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a digital multimeter with probes"
+    },
+    {
+      de: "die Leiter",
+      pron: "di lái-ta",
+      es: "la escalera",
+      type: "Sustantivo (Fem)",
+      category: "Werkzeuge",
+      plural: "die Leitern",
+      exampleSentenceDe: "Halte die Leiter bitte gut fest.",
+      exampleSentenceEs: "Sujeta la escalera firmemente, por favor.",
+      exampleSentenceDeBlocks: [
+        { text: "Halte die Leiter", role: "verb_p1", order: 1 },
+        { text: "auf dem Boden", role: "complement", order: 2 },
+        { text: "für die Sicherheit", role: "complement", order: 3 },
+        { text: "gut fest.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a tall aluminum stepladder"
+    },
+    {
+      de: "die Erdung",
+      pron: "di ér-dung",
+      es: "la toma de tierra",
+      type: "Sustantivo (Fem)",
+      category: "Sicherheit",
+      plural: "die Erdungen",
+      exampleSentenceDe: "Eine feste Erdung schützt vor Unfällen.",
+      exampleSentenceEs: "Una toma de tierra sólida protege contra accidentes.",
+      exampleSentenceDeBlocks: [
+        { text: "Eine gute Erdung", role: "subject", order: 1 },
+        { text: "schützt das Haus", role: "verb_p1", order: 2 },
+        { text: "und die Monteure", role: "complement", order: 3 },
+        { text: "vor Unfällen.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a copper grounding rod symbol"
+    },
+    {
+      de: "der Kurzschluss",
+      pron: "dea kúrts-shlus",
+      es: "el cortocircuito",
+      type: "Sustantivo (Masc)",
+      category: "Sicherheit",
+      plural: "die Kurzschlüsse",
+      exampleSentenceDe: "Ein Kurzschluss kann die Bauteile beschädigen.",
+      exampleSentenceEs: "Un cortocircuito puede dañar los componentes.",
+      exampleSentenceDeBlocks: [
+        { text: "Ein Kurzschluss", role: "subject", order: 1 },
+        { text: "kann die Bauteile", role: "verb_p1", order: 2 },
+        { text: "in Sekunden", role: "complement", order: 3 },
+        { text: "schwer beschädigen.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of electric sparks and a broken wire"
+    },
+    {
+      de: "der Helm",
+      pron: "dea jelm",
+      es: "el casco de seguridad",
+      type: "Sustantivo (Masc)",
+      category: "Sicherheit",
+      plural: "die Helme",
+      exampleSentenceDe: "Auf der Baustelle tragen wir Helme.",
+      exampleSentenceEs: "En la obra llevamos cascos.",
+      exampleSentenceDeBlocks: [
+        { text: "Auf der Baustelle", role: "complement", order: 1 },
+        { text: "tragen alle Arbeiter", role: "verb_p1", order: 2 },
+        { text: "immer einen gelben", role: "subject", order: 3 },
+        { text: "Schutzhelm.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a yellow hard hat"
+    },
+    {
+      de: "die Handschuhe",
+      pron: "di jánt-shu-e",
+      es: "los guantes de trabajo",
+      type: "Sustantivo (Plural)",
+      category: "Sicherheit",
+      plural: "-",
+      exampleSentenceDe: "Isolierte Handschuhe schützen vor Stromschlägen.",
+      exampleSentenceEs: "Los guantes aislantes protegen de descargas eléctricas.",
+      exampleSentenceDeBlocks: [
+        { text: "Isolierte Handschuhe", role: "subject", order: 1 },
+        { text: "schützen die Hände", role: "verb_p1", order: 2 },
+        { text: "zuverlässig", role: "complement", order: 3 },
+        { text: "vor Strom.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of heavy duty protective work gloves"
+    },
+    {
+      de: "die Gefahr",
+      pron: "di gue-fár",
+      es: "el peligro / riesgo",
+      type: "Sustantivo (Fem)",
+      category: "Sicherheit",
+      plural: "die Gefahren",
+      exampleSentenceDe: "Bei Hochspannung herrscht immer Lebensgefahr.",
+      exampleSentenceEs: "Con alta tensión hay siempre peligro de muerte.",
+      exampleSentenceDeBlocks: [
+        { text: "Bei Hochspannung", role: "complement", order: 1 },
+        { text: "besteht für jeden", role: "verb_p1", order: 2 },
+        { text: "eine sehr große", role: "subject", order: 3 },
+        { text: "Lebensgefahr.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a yellow high voltage warning sign"
+    },
+    {
+      de: "gefährlich",
+      pron: "gue-féa-lij",
+      es: "peligroso",
+      type: "Adjetivo",
+      category: "Sicherheit",
+      exampleSentenceDe: "Offene Stromkabel sind extrem gefährlich.",
+      exampleSentenceEs: "Los cables eléctricos al descubierto son sumamente peligrosos.",
+      exampleSentenceDeBlocks: [
+        { text: "Offene Elektrokabel", role: "subject", order: 1 },
+        { text: "sind bei Berührung", role: "verb_p1", order: 2 },
+        { text: "für Laien", role: "complement", order: 3 },
+        { text: "extrem gefährlich.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a skull and crossbones hazard symbol"
+    },
+    {
+      de: "der Elektriker",
+      pron: "dea e-lék-tri-ka",
+      es: "el electricista",
+      type: "Sustantivo (Masc)",
+      category: "Beruf",
+      plural: "die Elektriker",
+      exampleSentenceDe: "Der Elektriker schließt den Speicher an.",
+      exampleSentenceEs: "El electricista conecta el acumulador.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Elektriker", role: "subject", order: 1 },
+        { text: "schließt den Speicher", role: "verb_p1", order: 2 },
+        { text: "im Keller", role: "complement", order: 3 },
+        { text: "fachgerecht an.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a worker holding cables"
+    },
+    {
+      de: "der Techniker",
+      pron: "dea téj-ni-ka",
+      es: "el técnico",
+      type: "Sustantivo (Masc)",
+      category: "Beruf",
+      plural: "die Techniker",
+      exampleSentenceDe: "Der Techniker prüft die Solaranlage genau.",
+      exampleSentenceEs: "El técnico revisa la instalación solar con precisión.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Techniker", role: "subject", order: 1 },
+        { text: "prüft die Anlage", role: "verb_p1", order: 2 },
+        { text: "vor der Abnahme", role: "complement", order: 3 },
+        { text: "ganz genau.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a worker with blueprints and tools"
+    },
+    {
+      de: "messen",
+      pron: "mé-sen",
+      es: "medir",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "+ Akkusativ",
+      exampleSentenceDe: "Wir messen den Strom mit Prüfspitzen.",
+      exampleSentenceEs: "Medimos la corriente con puntas de prueba.",
+      exampleSentenceDeBlocks: [
+        { text: "Wir messen", role: "verb_p1", order: 1 },
+        { text: "die Spannung", role: "subject", order: 2 },
+        { text: "am Messpunkt", role: "complement", order: 3 },
+        { text: "mit Prüfspitzen.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a measuring tape extended"
+    },
+    {
+      de: "anschließen",
+      pron: "án-shli-sen",
+      es: "conectar",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "Separable (an-) / + Akkusativ",
+      exampleSentenceDe: "Wir schließen den Wechselrichter an das Netz.",
+      exampleSentenceEs: "Conectamos el inversor a la red.",
+      exampleSentenceDeBlocks: [
+        { text: "Wir schließen", role: "verb_p1", order: 1 },
+        { text: "den Wechselrichter", role: "subject", order: 2 },
+        { text: "an das Netz", role: "complement", order: 3 },
+        { text: "sicher an.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of two electrical wires being connected together"
+    },
+    {
+      de: "installieren",
+      pron: "ins-ta-lí-ren",
+      es: "instalar",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "+ Akkusativ",
+      exampleSentenceDe: "Monteure installieren Solarmodule auf dem Dach.",
+      exampleSentenceEs: "Los montadores instalan módulos solares en el tejado.",
+      exampleSentenceDeBlocks: [
+        { text: "Die Monteure", role: "subject", order: 1 },
+        { text: "installieren Module", role: "verb_p1", order: 2 },
+        { text: "auf dem Schrägdach", role: "complement", order: 3 },
+        { text: "sehr zügig.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a wrench tightening a bolt on a machine"
+    },
+    {
+      de: "prüfen",
+      pron: "prü-fen",
+      es: "comprobar / revisar",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "+ Akkusativ",
+      exampleSentenceDe: "Vor Inbetriebnahme prüfen wir alle Kabel.",
+      exampleSentenceEs: "Antes de la puesta en marcha comprobamos todos los cables.",
+      exampleSentenceDeBlocks: [
+        { text: "Vor Inbetriebnahme", role: "complement", order: 1 },
+        { text: "prüfen wir", role: "verb_p1", order: 2 },
+        { text: "alle Kabel", role: "subject", order: 3 },
+        { text: "sehr gründlich.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a green checkmark over a technical clipboard"
+    },
+    {
+      de: "warten",
+      pron: "vár-ten",
+      es: "mantener (mantenimiento)",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "+ Akkusativ",
+      exampleSentenceDe: "Der Techniker wartet die Anlage jährlich.",
+      exampleSentenceEs: "El técnico realiza el mantenimiento de la instalación anualmente.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Techniker", role: "subject", order: 1 },
+        { text: "wartet die Anlage", role: "verb_p1", order: 2 },
+        { text: "beim Kunden", role: "complement", order: 3 },
+        { text: "einmal jährlich.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of an oil can and a gear"
+    },
+    {
+      de: "einschalten",
+      pron: "áin-shal-ten",
+      es: "encender (equipo)",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "Separable (ein-) / + Akkusativ",
+      exampleSentenceDe: "Schalten Sie den Schalter jetzt ein.",
+      exampleSentenceEs: "Encienda el interruptor ahora.",
+      exampleSentenceDeBlocks: [
+        { text: "Schalten Sie", role: "verb_p1", order: 1 },
+        { text: "den Hauptschalter", role: "subject", order: 2 },
+        { text: "nach der Montage", role: "complement", order: 3 },
+        { text: "vorsichtig ein.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a green glowing ON button"
+    },
+    {
+      de: "ausschalten",
+      pron: "áus-shal-ten",
+      es: "apagar (equipo)",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "Separable (aus-) / + Akkusativ",
+      exampleSentenceDe: "Schalten Sie den Strom vor Reparaturen aus.",
+      exampleSentenceEs: "Desconecte la corriente antes de las reparaciones.",
+      exampleSentenceDeBlocks: [
+        { text: "Schalten Sie", role: "verb_p1", order: 1 },
+        { text: "den Strom", role: "subject", order: 2 },
+        { text: "vor jeder Reparatur", role: "complement", order: 3 },
+        { text: "immer aus.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a red OFF button"
+    },
+    {
+      de: "löten",
+      pron: "lö-ten",
+      es: "soldar (electrónica)",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "+ Akkusativ",
+      exampleSentenceDe: "Der Techniker lötet Drähte auf Platinen.",
+      exampleSentenceEs: "El técnico suelda cables en placas de circuitos.",
+      exampleSentenceDeBlocks: [
+        { text: "Der Techniker", role: "subject", order: 1 },
+        { text: "lötet feine Drähte", role: "verb_p1", order: 2 },
+        { text: "auf die Platine", role: "complement", order: 3 },
+        { text: "sauber fest.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a soldering iron melting silver wire"
+    },
+    {
+      de: "isolieren",
+      pron: "i-zo-lí-ren",
+      es: "aislar (cableado)",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "+ Akkusativ",
+      exampleSentenceDe: "Wir isolieren offene Kontakte mit Isolierband.",
+      exampleSentenceEs: "Aislamos contactos al descubierto con cinta aislante.",
+      exampleSentenceDeBlocks: [
+        { text: "Wir isolieren", role: "verb_p1", order: 1 },
+        { text: "die Kontakte", role: "subject", order: 2 },
+        { text: "mit Isolierband", role: "complement", order: 3 },
+        { text: "vollständig.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of a roll of black electrical insulation tape"
+    },
+    {
+      de: "abisolieren",
+      pron: "áp-i-zo-li-ren",
+      es: "pelar un cable",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "Separable (ab-) / + Akkusativ",
+      exampleSentenceDe: "Mit der Zange isolieren wir Kabel ab.",
+      exampleSentenceEs: "Con la pinza pelamos los cables.",
+      exampleSentenceDeBlocks: [
+        { text: "Mit der Zange", role: "complement", order: 1 },
+        { text: "isoliert man", role: "verb_p1", order: 2 },
+        { text: "das Kupferkabel", role: "subject", order: 3 },
+        { text: "schnell ab.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of wire strippers removing plastic from a copper wire"
+    },
+    {
+      de: "austauschen",
+      pron: "áus-tau-shen",
+      es: "reemplazar / cambiar",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "Separable (aus-) / + Akkusativ",
+      exampleSentenceDe: "Wir tauschen die defekte Sicherung aus.",
+      exampleSentenceEs: "Cambiamos el fusible defectuoso.",
+      exampleSentenceDeBlocks: [
+        { text: "Wir tauschen", role: "verb_p1", order: 1 },
+        { text: "die Sicherung", role: "subject", order: 2 },
+        { text: "im Kasten", role: "complement", order: 3 },
+        { text: "sofort aus.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of two mechanical parts swapping places with arrows"
+    },
+    {
+      de: "einspeisen",
+      pron: "áin-shpai-zen",
+      es: "inyectar (a la red)",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "Separable (ein-) / + Akkusativ",
+      exampleSentenceDe: "Die Anlage speist Solarstrom ins Netz ein.",
+      exampleSentenceEs: "La instalación inyecta electricidad solar a la red.",
+      exampleSentenceDeBlocks: [
+        { text: "Die Anlage", role: "subject", order: 1 },
+        { text: "speist Solarstrom", role: "verb_p1", order: 2 },
+        { text: "in das Netz", role: "complement", order: 3 },
+        { text: "verlässlich ein.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of electricity flowing from a house into a power grid tower"
+    },
+    {
+      de: "funktionieren",
+      pron: "funk-tsio-ní-ren",
+      es: "funcionar",
+      type: "Verbo",
+      category: "Aktionen",
+      regimen: "Intransitivo",
+      exampleSentenceDe: "Alle Module funktionieren einwandfrei und sicher.",
+      exampleSentenceEs: "Todos los módulos funcionan de forma impecable y segura.",
+      exampleSentenceDeBlocks: [
+        { text: "Alle Module", role: "subject", order: 1 },
+        { text: "funktionieren heute", role: "verb_p1", order: 2 },
+        { text: "ohne Störung", role: "complement", order: 3 },
+        { text: "einwandfrei.", role: "verb_p2", order: 4 }
+      ],
+      en: "a cute 3D isometric UI icon of two interlocking gears turning smoothly"
+    }
+  ]
 },
 {
   id: 19,
