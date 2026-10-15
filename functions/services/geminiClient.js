@@ -90,8 +90,11 @@ export function buildKeyPool(keysConfig = {}) {
     process.env.GEMINI_FREE_KEY
   );
   const freeKey2 = resolveKeyValue(keysConfig.freeKey2 || process.env.GEMINI_FREE_KEY_2);
+  const freeKey3 = resolveKeyValue(keysConfig.freeKey3 || process.env.GEMINI_FREE_KEY_3);
+  const freeKey4 = resolveKeyValue(keysConfig.freeKey4 || process.env.GEMINI_FREE_KEY_4);
+  const freeKey5 = resolveKeyValue(keysConfig.freeKey5 || process.env.GEMINI_FREE_KEY_5);
 
-  return [
+  const candidates = [
     {
       id: "PAID_CREDITS",
       key: paidKey,
@@ -102,15 +105,50 @@ export function buildKeyPool(keysConfig = {}) {
       id: "FREE_1",
       key: freeKey1,
       isPaid: false,
-      description: "Cuenta Gratuita A (gemini-3.5-flash-lite)"
+      description: "Cuenta Gratuita 1 (gemini-3.5-flash-lite)"
     },
     {
       id: "FREE_2",
       key: freeKey2,
       isPaid: false,
-      description: "Cuenta Gratuita B (gemini-3.5-flash-lite)"
+      description: "Cuenta Gratuita 2 (gemini-3.5-flash-lite)"
+    },
+    {
+      id: "FREE_3",
+      key: freeKey3,
+      isPaid: false,
+      description: "Cuenta Gratuita 3 (gemini-3.5-flash-lite)"
+    },
+    {
+      id: "FREE_4",
+      key: freeKey4,
+      isPaid: false,
+      description: "Cuenta Gratuita 4 (gemini-3.5-flash-lite)"
+    },
+    {
+      id: "FREE_5",
+      key: freeKey5,
+      isPaid: false,
+      description: "Cuenta Gratuita 5 (gemini-3.5-flash-lite)"
     }
   ];
+
+  // Deduplicación por valor exacto de string
+  const pool = [];
+  const seenKeys = new Set();
+  for (const item of candidates) {
+    if (item.key && typeof item.key === "string") {
+      const trimmed = item.key.trim();
+      if (trimmed.length > 10 && !seenKeys.has(trimmed)) {
+        seenKeys.add(trimmed);
+        pool.push({
+          ...item,
+          key: trimmed
+        });
+      }
+    }
+  }
+  return pool;
 }
 
 /**

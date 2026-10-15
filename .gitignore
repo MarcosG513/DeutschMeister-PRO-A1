@@ -27,6 +27,8 @@ dist-ssr
 .env
 .env.*
 **/.env
+**/.env.*
+functions/.env*
 serviceAccountKey.json
 
 # Temp & Scratchpad files

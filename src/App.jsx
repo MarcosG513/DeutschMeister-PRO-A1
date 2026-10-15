@@ -410,11 +410,6 @@ export default function App() {
     return ['Todas', ...new Set(activeChapter.words.map(w => w.category).filter(Boolean))];
   }, [activeChapter]);
 
-  useEffect(() => {
-    if (activeChapter?.isRedemittel && viewMode === "flashcards") {
-      setViewMode("table");
-    }
-  }, [activeChapterId, viewMode, activeChapter]);
 
   const displayedWords = useMemo(() => {
     if (searchTerm.trim() !== "") {
@@ -922,7 +917,7 @@ export default function App() {
         auth={auth}
         studiedCardsCount={studiedCardsCount}
         unlockedCardsCount={Object.keys(unlockedCards || {}).length}
-        totalCardsCount={chapters.flatMap(c => c.words || []).length || 1389}
+        totalCardsCount={chapters.reduce((acc, c) => acc + (c.words ? c.words.length : 0), 0)}
         canInstallPWA={canInstallPWA}
         onInstallApp={handleInstallApp}
       /> : viewMode === "quiz" ? <DynamicQuiz 
@@ -1024,6 +1019,18 @@ export default function App() {
                 setIsMenuOpen(false);
               }} className="bg-blue-600 text-white col-span-2 py-2.5 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-xs shadow-sm">
                       <User size={18} /> Mi Perfil y Configuración
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveChapterId(22);
+                        setSelectedCategory("Todas");
+                        setViewMode("table");
+                        setIsMenuOpen(false);
+                      }}
+                      className="bg-indigo-900/70 text-indigo-200 border border-indigo-500/30 col-span-2 py-2.5 rounded-lg font-bold hover:bg-indigo-800 transition flex items-center justify-center gap-2 text-xs shadow-sm cursor-pointer"
+                    >
+                      <MessageCircle className="text-indigo-400" size={18} />
+                      <span>💬 Kapitel 22: Redemittel & Alltagskommunikation</span>
                     </button>
                     {canInstallPWA && (
                       <button onClick={() => {
@@ -1201,14 +1208,14 @@ export default function App() {
                       Cuento IA ✨
                     </button>
 
-                    {(!activeChapter?.isRedemittel || searchTerm) && <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
-                        <button onClick={() => setViewMode("flashcards")} className={`px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition cursor-pointer ${viewMode === "flashcards" ? 'bg-white shadow text-blue-700 font-semibold' : 'text-slate-500 hover:text-slate-800'}`}>
-                          <LayoutGrid size={16} /> Flashcards
-                        </button>
-                        <button onClick={() => setViewMode("table")} className={`px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition cursor-pointer ${viewMode === "table" ? 'bg-white shadow text-blue-700 font-semibold' : 'text-slate-500 hover:text-slate-800'}`}>
-                          <List size={16} /> Tabla
-                        </button>
-                      </div>}
+                    <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                      <button onClick={() => setViewMode("flashcards")} className={`px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition cursor-pointer ${viewMode === "flashcards" ? 'bg-white shadow text-blue-700 font-semibold' : 'text-slate-500 hover:text-slate-800'}`}>
+                        <LayoutGrid size={16} /> Flashcards
+                      </button>
+                      <button onClick={() => setViewMode("table")} className={`px-4 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition cursor-pointer ${viewMode === "table" ? 'bg-white shadow text-blue-700 font-semibold' : 'text-slate-500 hover:text-slate-800'}`}>
+                        <List size={16} /> Tabla
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -1299,6 +1306,30 @@ export default function App() {
                         return <tr key={idx} className="hover:bg-slate-50 transition-colors border-b border-slate-100">
                               <td className="px-4 py-3 flex items-center justify-between gap-3 align-middle">
                                 {(() => {
+                                  if (word.audioDe) {
+                                    const parts = (word.de || "").split(/(\([^)]+\))/g);
+                                    return (
+                                      <>
+                                        <div className="flex flex-col min-w-0">
+                                          <span className="font-bold text-slate-800 leading-tight">
+                                            {parts.map((part, pIdx) =>
+                                              part.startsWith("(") && part.endsWith(")") ? (
+                                                <span key={pIdx} className="text-indigo-600 font-semibold">{part}</span>
+                                              ) : (
+                                                part
+                                              )
+                                            )}
+                                          </span>
+                                        </div>
+                                        <button onClick={e => {
+                                          e.stopPropagation();
+                                          playGermanAudio(word.audioDe || splitGermanTitle(word.de).main, { type: "vocab", voice: "Charon" });
+                                        }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110 shrink-0">
+                                          <Volume2 size={16} />
+                                        </button>
+                                      </>
+                                    );
+                                  }
                                   const { main, code } = splitGermanTitle(word.de);
                                   return (
                                     <>
@@ -1312,7 +1343,7 @@ export default function App() {
                                       </div>
                                       <button onClick={e => {
                                         e.stopPropagation();
-                                        playGermanAudio(main || word.de, { type: "vocab", voice: "Charon" });
+                                        playGermanAudio(word.audioDe || main || word.de, { type: "vocab", voice: "Charon" });
                                       }} className="text-blue-500 hover:text-blue-700 p-1 transition-transform hover:scale-110 shrink-0">
                                         <Volume2 size={16} />
                                       </button>

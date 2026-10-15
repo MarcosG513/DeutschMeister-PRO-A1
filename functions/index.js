@@ -30,7 +30,7 @@ const geminiFreeKey = defineSecret("GEMINI_FREE_KEY"); // Compatibilidad con des
 const ALL_AI_SECRETS = [geminiPaidKey, geminiFreeKey1, geminiFreeKey2, geminiFreeKey, falKey];
 
 /**
- * Resuelve la configuración de las 3 API Keys activas desde secretos de Firebase o variables de entorno
+ * Resuelve la configuración de las API Keys activas desde secretos de Firebase o variables de entorno
  */
 function getGeminiKeyConfig() {
   const resolve = (sec, envVar) => {
@@ -46,8 +46,45 @@ function getGeminiKeyConfig() {
   return {
     paidKey: resolve(geminiPaidKey, "GEMINI_PAID_KEY"),
     freeKey1: resolve(geminiFreeKey1, "GEMINI_FREE_KEY_1") || resolve(geminiFreeKey, "GEMINI_FREE_KEY"),
-    freeKey2: resolve(geminiFreeKey2, "GEMINI_FREE_KEY_2")
+    freeKey2: resolve(geminiFreeKey2, "GEMINI_FREE_KEY_2"),
+    freeKey3: process.env.GEMINI_FREE_KEY_3 || "",
+    freeKey4: process.env.GEMINI_FREE_KEY_4 || "",
+    freeKey5: process.env.GEMINI_FREE_KEY_5 || ""
   };
+}
+
+/**
+ * Resuelve el pool dinámico de 6 llaves para síntesis de audio Charon TTS,
+ * deduplicando por valor exacto de string y priorizando PAID primero.
+ */
+function getGoogleKeyPool() {
+  const config = getGeminiKeyConfig();
+  const rawKeys = [
+    { id: "PAID", key: config.paidKey, isPaid: true },
+    { id: "PAID_2", key: process.env.GEMINI_PAID_KEY_2 || "", isPaid: true },
+    { id: "FREE_1", key: config.freeKey1, isPaid: false },
+    { id: "FREE_2", key: config.freeKey2, isPaid: false },
+    { id: "FREE_3", key: config.freeKey3, isPaid: false },
+    { id: "FREE_4", key: config.freeKey4, isPaid: false },
+    { id: "FREE_5", key: config.freeKey5, isPaid: false },
+    { id: "GENERIC", key: process.env.GEMINI_API_KEY || "", isPaid: false }
+  ];
+
+  const pool = [];
+  const seenKeys = new Set();
+  for (const item of rawKeys) {
+    if (item.key && typeof item.key === "string") {
+      const trimmed = item.key.trim();
+      if (trimmed.length > 10 && !seenKeys.has(trimmed)) {
+        seenKeys.add(trimmed);
+        pool.push({ id: item.id, key: trimmed, isPaid: item.isPaid });
+      }
+    }
+  }
+
+  // Ordenar: PAID primero, luego FREE
+  pool.sort((a, b) => (b.isPaid ? 1 : 0) - (a.isPaid ? 1 : 0));
+  return pool;
 }
 
 /**
@@ -1765,13 +1802,7 @@ export const synthesizeGermanSpeech = onCall(
 
     // ── INFERENCIA: POOL GOOGLE DIRECTO CON ROTACIÓN Y REINTENTO (0% FAL.AI) ──
     let audioResult = null;
-    const keyConfig = getGeminiKeyConfig();
-    const googleKeys = [
-      { id: "PAID", key: keyConfig.paidKey },
-      { id: "FREE_1", key: keyConfig.freeKey1 },
-      { id: "FREE_2", key: keyConfig.freeKey2 }
-    ].filter(k => k.key && typeof k.key === "string" && k.key.trim().length > 0);
-
+    const googleKeys = getGoogleKeyPool();
     let lastGoogleError = null;
 
     for (const keyItem of googleKeys) {
@@ -1782,12 +1813,12 @@ export const synthesizeGermanSpeech = onCall(
       } catch (err) {
         lastGoogleError = err;
         console.warn(`[TTS Warning] Falló Google Direct con ${keyItem.id}: ${err.message}`);
-        if (keyItem.id === "PAID" && err.message.includes("429") && !err.message.includes("PerDay")) {
+        if (keyItem.isPaid && err.message.includes("429") && !err.message.includes("PerDay")) {
           try {
-            console.log("[TTS Info] Esperando 4s para reintento con GEMINI_PAID_KEY...");
+            console.log(`[TTS Info] Esperando 4s para reintento con ${keyItem.id}...`);
             await new Promise(r => setTimeout(r, 4000));
             audioResult = await synthesizeWithGoogleDirect(cleanText, voice, keyItem.key);
-            console.log(`[TTS Engine] Reintento exitoso con GEMINI_PAID_KEY (${cleanText.substring(0, 30)}...)`);
+            console.log(`[TTS Engine] Reintento exitoso con ${keyItem.id} (${cleanText.substring(0, 30)}...)`);
             break;
           } catch (retryErr) {
             lastGoogleError = retryErr;

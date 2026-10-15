@@ -54,6 +54,19 @@ export function getItemPriority(item) {
   if (item.type === 'dialogue') return 2;
   // Prioridad 3: Expresiones de Kapitel 22: Redemittel & Alltagskommunikation
   if (item.source && (item.source === 'redemittel' || item.source === 'redemittel_sentence' || item.source.includes('redemittel') || item.source.includes('kapitel_22'))) return 3;
+  // Prioridad 3.5: Capítulos técnicos y laborales (Fahrschuldeutsch 13, Schule & Beruf 16, IT 17, Elektrotechnik & Solar 18, Señales & Werkzeuge 19-21)
+  if (item.isTechnical || (item.source && (
+    item.source.includes('technical') ||
+    item.source.includes('chapter_13') ||
+    item.source.includes('chapter_16') ||
+    item.source.includes('chapter_17') ||
+    item.source.includes('chapter_18') ||
+    item.source.includes('chapter_19') ||
+    item.source.includes('chapter_20') ||
+    item.source.includes('chapter_21')
+  ))) {
+    return 3.5;
+  }
   // Prioridad 4: type === "vocab" restantes
   if (item.type === 'vocab') return 4;
   // Prioridad 5: type === "sentence" restantes
@@ -64,13 +77,21 @@ export function getItemPriority(item) {
 // ── 3. EXTRACCIÓN Y COLA MAESTRA DEDUPLICADA ──
 const audioMap = new Map();
 
-function enqueueAudio(rawText, type, source = "") {
+function enqueueAudio(rawText, type, source = "", meta = {}) {
   if (!rawText || typeof rawText !== "string") return;
   const clean = rawText.replace(/[*_#`~]/g, "").replace(/\s+/g, " ").trim();
   if (!clean || clean.length < 2) return;
   const audioId = getSafeAudioId(clean);
   if (!audioMap.has(audioId)) {
-    audioMap.set(audioId, { text: clean, type, audioId, source });
+    audioMap.set(audioId, { text: clean, type, audioId, source, ...meta });
+  } else {
+    // Si ya existe pero el nuevo tiene mayor especificidad técnica, actualizar
+    const existing = audioMap.get(audioId);
+    if (meta.isTechnical || (source && source.includes("technical"))) {
+      existing.isTechnical = true;
+      if (meta.chapterId) existing.chapterId = meta.chapterId;
+      existing.source = source;
+    }
   }
 }
 
@@ -115,24 +136,46 @@ async function extractAllAudios() {
     console.log(`  ✓ redemittelBegegnungen.js procesado (${redemittel.words.length} expresiones).`);
   }
 
-  // C. Escaneo directo de chapters.jsx
+  // C. Escaneo estructurado por capítulos de chapters.jsx
   const chaptersPath = path.join(ROOT, 'src/data/chapters.jsx');
   if (fs.existsSync(chaptersPath)) {
     const chaptersContent = fs.readFileSync(chaptersPath, 'utf8');
-    const wordRegex = /\{\s*de:\s*"([^"]+)"(?:[\s\S]*?plural:\s*"([^"]*)")?(?:[\s\S]*?exampleSentenceDe:\s*"([^"]*)")?/g;
-    let wm;
+    const chRegex = /id:\s*(\d+),\s*title:\s*"([^"]+)"/g;
+    const chaptersMeta = [];
+    let cm;
+    while ((cm = chRegex.exec(chaptersContent)) !== null) {
+      chaptersMeta.push({
+        id: parseInt(cm[1], 10),
+        title: cm[2],
+        startIndex: cm.index
+      });
+    }
+
     let countChapters = 0;
-    while ((wm = wordRegex.exec(chaptersContent)) !== null) {
-      countChapters++;
-      enqueueAudio(splitGermanTitle(wm[1]).main, 'vocab', 'chapters_vocab');
-      if (wm[2] && wm[2] !== '-' && wm[2].trim() !== '') {
-        enqueueAudio(wm[2], 'vocab', 'chapters_plural');
-      }
-      if (wm[3] && wm[3].trim() !== '') {
-        enqueueAudio(wm[3], 'sentence', 'chapters_sentence');
+    const TECHNICAL_CHAPTER_IDS = new Set([13, 16, 17, 18, 19, 20, 21]);
+
+    for (let i = 0; i < chaptersMeta.length; i++) {
+      const ch = chaptersMeta[i];
+      const nextStart = chaptersMeta[i + 1] ? chaptersMeta[i + 1].startIndex : chaptersContent.length;
+      const chapterSlice = chaptersContent.substring(ch.startIndex, nextStart);
+      const isTechnical = TECHNICAL_CHAPTER_IDS.has(ch.id) ||
+        /solar|elektro|fahrschul|beruf|digitale|it|werkzeug|handwerk|montage|verkehrszeichen|markierung|schilder/i.test(ch.title);
+
+      const wordRegex = /\{\s*de:\s*"([^"]+)"(?:[\s\S]*?plural:\s*"([^"]*)")?(?:[\s\S]*?exampleSentenceDe:\s*"([^"]*)")?/g;
+      let wm;
+      while ((wm = wordRegex.exec(chapterSlice)) !== null) {
+        countChapters++;
+        const chSource = isTechnical ? `chapter_${ch.id}_technical` : `chapter_${ch.id}`;
+        enqueueAudio(splitGermanTitle(wm[1]).main, 'vocab', chSource, { chapterId: ch.id, isTechnical });
+        if (wm[2] && wm[2] !== '-' && wm[2].trim() !== '') {
+          enqueueAudio(wm[2], 'vocab', `${chSource}_plural`, { chapterId: ch.id, isTechnical });
+        }
+        if (wm[3] && wm[3].trim() !== '') {
+          enqueueAudio(wm[3], 'sentence', `${chSource}_sentence`, { chapterId: ch.id, isTechnical });
+        }
       }
     }
-    console.log(`  ✓ src/data/chapters.jsx escaneado (${countChapters} términos encontrados).`);
+    console.log(`  ✓ src/data/chapters.jsx escaneado (${countChapters} términos encontrados en ${chaptersMeta.length} capítulos).`);
   }
 
   // D. Goethe Horen Exam (HOREN_TEILS)
@@ -498,6 +541,7 @@ async function main() {
     1: { label: "Prioridad 1: Exámenes Goethe (Hören/Sprechen quiz)", count: 0, items: [] },
     2: { label: "Prioridad 2: Diálogos interactivos (dialogue)", count: 0, items: [] },
     3: { label: "Prioridad 3: Kapitel 22: Redemittel & Alltagskommunikation", count: 0, items: [] },
+    3.5: { label: "Prioridad 3.5: Capítulos Técnicos & Laborales (13, 16–21)", count: 0, items: [] },
     4: { label: "Prioridad 4: Vocabulario general restante (vocab)", count: 0, items: [] },
     5: { label: "Prioridad 5: Oraciones de ejemplo restantes (sentence)", count: 0, items: [] }
   };
@@ -513,7 +557,10 @@ async function main() {
   });
 
   console.log("\n🎯 Orden de Prioridad Pedagógica en la Cola de Pendientes:");
-  for (const [p, stat] of Object.entries(priorityBreakdown)) {
+  const priorityOrder = [1, 2, 3, 3.5, 4, 5];
+  for (const p of priorityOrder) {
+    const stat = priorityBreakdown[p];
+    if (!stat) continue;
     const preview = stat.items.length > 0 ? ` (Ej: "${stat.items[0].substring(0, 32)}...")` : " (Completado al 100%)";
     console.log(`   ${stat.label.padEnd(58)} : ${String(stat.count).padStart(5)} pendientes${preview}`);
   }
