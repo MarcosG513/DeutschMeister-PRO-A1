@@ -307,32 +307,44 @@ async function synthesizeWithGoogleDirect(text, voice, apiKey) {
 
 // ── 4. POOL DE LLAVES GOOGLE DIRECT CON DESCARTE INTELIGENTE ──
 function buildGoogleKeyPool() {
-  const rawKeys = [
+  const candidateKeys = [
+    // Llaves Paid
     { id: "PAID", key: process.env.GEMINI_PAID_KEY, isPaid: true },
-    { id: "VITE_PAID", key: process.env.VITE_GEMINI_PAID_KEY, isPaid: true },
+    { id: "PAID_2", key: process.env.GEMINI_PAID_KEY_2, isPaid: true },
+    { id: "PAID_3", key: process.env.GEMINI_PAID_KEY_3, isPaid: true },
+    { id: "PAID_4", key: process.env.GEMINI_PAID_KEY_4, isPaid: true },
+    { id: "PAID_5", key: process.env.GEMINI_PAID_KEY_5, isPaid: true },
+    // Llaves Free
     { id: "FREE_1", key: process.env.GEMINI_FREE_KEY_1 || process.env.GEMINI_FREE_KEY, isPaid: false },
     { id: "FREE_2", key: process.env.GEMINI_FREE_KEY_2, isPaid: false },
+    { id: "FREE_3", key: process.env.GEMINI_FREE_KEY_3, isPaid: false },
+    { id: "FREE_4", key: process.env.GEMINI_FREE_KEY_4, isPaid: false },
+    { id: "FREE_5", key: process.env.GEMINI_FREE_KEY_5, isPaid: false },
+    // Respaldo genérico
     { id: "GENERIC", key: process.env.GEMINI_API_KEY, isPaid: false }
   ];
 
   const pool = [];
-  const seen = new Set();
+  const seenKeys = new Set();
 
-  for (const r of rawKeys) {
-    if (r.key && typeof r.key === 'string' && r.key.trim() && !seen.has(r.key.trim())) {
-      seen.add(r.key.trim());
-      pool.push({
-        id: r.id,
-        key: r.key.trim(),
-        isPaid: r.isPaid,
-        lastUsedAt: 0,
-        exhausted: false,
-        exhaustedReason: null
-      });
+  for (const item of candidateKeys) {
+    if (item.key && typeof item.key === 'string') {
+      const trimmed = item.key.trim();
+      if (trimmed.length > 10 && !seenKeys.has(trimmed)) {
+        seenKeys.add(trimmed);
+        pool.push({
+          id: item.id,
+          key: trimmed,
+          isPaid: item.isPaid,
+          lastUsedAt: 0,
+          exhausted: false,
+          exhaustedReason: null
+        });
+      }
     }
   }
 
-  // Priorizar PAID primero
+  // Ordenar llaves: PAID primero, luego FREE_1..5
   pool.sort((a, b) => (b.isPaid ? 1 : 0) - (a.isPaid ? 1 : 0));
   return pool;
 }
@@ -506,6 +518,15 @@ async function main() {
     console.log(`   ${stat.label.padEnd(58)} : ${String(stat.count).padStart(5)} pendientes${preview}`);
   }
 
+  const keyPool = buildGoogleKeyPool();
+  console.log(`\n🔑 Pool de llaves Google Direct inicializado (${keyPool.length} llaves únicas):`);
+  keyPool.forEach(k => console.log(`   - [${k.id}] (${k.isPaid ? 'Prioritaria PAID' : 'Respaldo FREE'})`));
+
+  if (keyPool.length === 0) {
+    console.error("❌ No se encontraron llaves de Gemini en .env");
+    process.exit(1);
+  }
+
   if (isDryRun) {
     console.log("\n🧪 SIMULACIÓN FINALIZADA CON ÉXITO:");
     console.log(`   - Audios únicos totales identificados: ${totalUnique}`);
@@ -524,21 +545,13 @@ async function main() {
   }
 
   // 5. MODO REAL: GENERACIÓN Y SUBIDA 100% GOOGLE DIRECT
-  const keyPool = buildGoogleKeyPool();
-  console.log(`\n🔑 Pool de llaves Google Direct inicializado (${keyPool.length} llaves únicas):`);
-  keyPool.forEach(k => console.log(`   - [${k.id}] (${k.isPaid ? 'Prioritaria PAID' : 'Respaldo FREE'})`));
-
-  if (keyPool.length === 0) {
-    console.error("❌ No se encontraron llaves de Gemini en .env");
-    process.exit(1);
-  }
-
   const itemsToProcess = limit ? missingItems.slice(0, limit) : missingItems;
   console.log(`\n⚡ [3/3] Iniciando generación de ${itemsToProcess.length} audios pendientes (CONCURRENCY = 1 | 9.2 RPM)...`);
 
   const PACEMAKER_MS = 6500; // 6.5s = 9.2 RPM (estrictamente menor a 10 RPM)
   let generatedCount = 0;
   let failedCount = 0;
+  let roundRobinIndex = 0;
 
   for (let i = 0; i < itemsToProcess.length; i++) {
     const item = itemsToProcess[i];
@@ -551,10 +564,11 @@ async function main() {
         break; // Detención limpia si todas las llaves agotaron su cuota
       }
 
-      // Priorizar PAID si no está agotada; si no, la primera disponible
-      const keyObj = activeKeys.find(k => k.isPaid) || activeKeys[0];
+      // Rotación Round-Robin entre las llaves activas
+      roundRobinIndex = roundRobinIndex % activeKeys.length;
+      const keyObj = activeKeys[roundRobinIndex];
 
-      // Marcapasos por llave: respetar ventana mínima de 6,500 ms
+      // Marcapasos por llave individual: garantizar mínimo 6,500 ms entre peticiones a la misma llave
       const elapsed = Date.now() - keyObj.lastUsedAt;
       if (elapsed < PACEMAKER_MS) {
         const waitMs = PACEMAKER_MS - elapsed;
@@ -565,6 +579,8 @@ async function main() {
         keyObj.lastUsedAt = Date.now();
         audioResult = await synthesizeWithGoogleDirect(item.text, "Charon", keyObj.key);
         usedKeyId = keyObj.id;
+        // Avanzar el puntero Round-Robin para el próximo audio
+        roundRobinIndex = (roundRobinIndex + 1) % activeKeys.length;
       } catch (err) {
         const errMsg = err.message || "";
 
@@ -593,7 +609,7 @@ async function main() {
 
         console.error(`    ❌ [Key: ${keyObj.id}] Error en generación (${item.audioId}): ${errMsg}`);
         await new Promise(r => setTimeout(r, 4000));
-        break; // Romper bucle de intentos para este audio si es un error no recuperable
+        roundRobinIndex = (roundRobinIndex + 1) % activeKeys.length;
       }
     }
 
