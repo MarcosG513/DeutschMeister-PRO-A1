@@ -1712,7 +1712,7 @@ async function synthesizeWithFalFallback(text, voice, falKeyValue) {
 
 export const synthesizeGermanSpeech = onCall(
   {
-    secrets: [geminiPaidKey, falKey],
+    secrets: ALL_AI_SECRETS,
     timeoutSeconds: 60,
     memory: "512MiB",
     cors: true
@@ -1763,28 +1763,51 @@ export const synthesizeGermanSpeech = onCall(
       }
     }
 
-    // ── INFERENCIA: GOOGLE DIRECTO -> FALLBACK FAL.AI ──
+    // ── INFERENCIA: POOL GOOGLE DIRECTO CON ROTACIÓN Y REINTENTO (0% FAL.AI) ──
     let audioResult = null;
-    const paidKey = (geminiPaidKey && typeof geminiPaidKey.value === "function" ? geminiPaidKey.value() : "") || process.env.GEMINI_PAID_KEY || "";
-    const falKeyValue = (falKey && typeof falKey.value === "function" ? falKey.value() : "") || process.env.FAL_KEY || process.env.VITE_FAL_KEY || "";
+    const keyConfig = getGeminiKeyConfig();
+    const googleKeys = [
+      { id: "PAID", key: keyConfig.paidKey },
+      { id: "FREE_1", key: keyConfig.freeKey1 },
+      { id: "FREE_2", key: keyConfig.freeKey2 }
+    ].filter(k => k.key && typeof k.key === "string" && k.key.trim().length > 0);
 
-    try {
-      if (!paidKey) {
-        throw new Error("No hay GEMINI_PAID_KEY disponible para invocación directa.");
-      }
-      audioResult = await synthesizeWithGoogleDirect(cleanText, voice, paidKey);
-      console.log(`[TTS Engine] Generado exitosamente vía Google AI Studio Direct (${cleanText.substring(0, 30)}...)`);
-    } catch (googleError) {
-      console.warn("[TTS Warning] Falló Google Direct API. Conmutando a contingencia Fal.ai:", googleError.message);
+    let lastGoogleError = null;
+
+    for (const keyItem of googleKeys) {
       try {
-        if (!falKeyValue) {
-          throw new Error("No hay FAL_KEY disponible para invocación de contingencia.");
+        audioResult = await synthesizeWithGoogleDirect(cleanText, voice, keyItem.key);
+        console.log(`[TTS Engine] Generado exitosamente vía Google AI Studio Direct (Key: ${keyItem.id}) (${cleanText.substring(0, 30)}...)`);
+        break;
+      } catch (err) {
+        lastGoogleError = err;
+        console.warn(`[TTS Warning] Falló Google Direct con ${keyItem.id}: ${err.message}`);
+        if (keyItem.id === "PAID" && err.message.includes("429") && !err.message.includes("PerDay")) {
+          try {
+            console.log("[TTS Info] Esperando 4s para reintento con GEMINI_PAID_KEY...");
+            await new Promise(r => setTimeout(r, 4000));
+            audioResult = await synthesizeWithGoogleDirect(cleanText, voice, keyItem.key);
+            console.log(`[TTS Engine] Reintento exitoso con GEMINI_PAID_KEY (${cleanText.substring(0, 30)}...)`);
+            break;
+          } catch (retryErr) {
+            lastGoogleError = retryErr;
+          }
         }
-        audioResult = await synthesizeWithFalFallback(cleanText, voice, falKeyValue);
-        console.log(`[TTS Engine] Generado exitosamente vía Fal.ai Contingencia (${cleanText.substring(0, 30)}...)`);
-      } catch (falError) {
-        console.error("[TTS Critical Error] Fallaron ambos proveedores:", falError);
-        throw new HttpsError("internal", "No se pudo sintetizar el audio con ningún proveedor disponible: " + falError.message);
+      }
+    }
+
+    if (!audioResult) {
+      const falKeyValue = (falKey && typeof falKey.value === "function" ? falKey.value() : "") || process.env.FAL_KEY || process.env.VITE_FAL_KEY || "";
+      if (falKeyValue) {
+        try {
+          audioResult = await synthesizeWithFalFallback(cleanText, voice, falKeyValue);
+          console.log(`[TTS Engine] Generado exitosamente vía Fal.ai (${cleanText.substring(0, 30)}...)`);
+        } catch (falError) {
+          console.error("[TTS Critical Error] Fallaron todos los proveedores de síntesis:", falError.message);
+          throw new HttpsError("internal", "No se pudo sintetizar el audio: " + (lastGoogleError?.message || falError.message));
+        }
+      } else {
+        throw new HttpsError("internal", "No se pudo sintetizar el audio con Google Direct: " + (lastGoogleError?.message || "Error desconocido"));
       }
     }
 

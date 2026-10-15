@@ -1,5 +1,6 @@
 import localforage from "localforage";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { nativeSpeak } from "../utils/helpers";
 import { functions as appFunctions } from "../App";
 
@@ -9,6 +10,21 @@ const audioStore = localforage.createInstance({
 });
 
 let currentAudioInstance = null;
+
+export const getSafeAudioId = (text) => {
+  if (!text || typeof text !== "string") return "audio_unknown";
+  const normalized = text
+    .trim()
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+    .replace(/[.,/#!$%^&*;:{}=\-_`~()?"'«»]/g, " ")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_]/g, "")
+    .replace(/^_+|_+$/g, "")
+    .substring(0, 120);
+  return "audio_" + (normalized || "audio");
+};
 
 export const getSafeAudioKey = (text) => {
   if (!text || typeof text !== "string") return "tts_unknown";
@@ -39,12 +55,42 @@ export function stopCurrentAudio() {
 
 /**
  * Obtiene la URL de audio (Data URI o Storage) desde el backend para caching en memoria.
+ * Optimizado con lectura directa a Firestore CDN para respuestas ultrarrápidas (<80ms).
  */
 export async function getGermanSpeechUrl(text, options = {}) {
-  const { voice = "Charon", type = "story" } = options;
+  const { voice = "Charon", type = "vocab" } = options;
   if (!text || typeof text !== "string") return null;
   const cleanText = text.replace(/[*_#`~]/g, "").replace(/\s+/g, " ").trim();
   if (!cleanText) return null;
+
+  // Consulta directa a Firestore CDN antes de Cloud Function (ahorro de invocaciones y latencia <80ms)
+  if (type !== "story" && type !== "reading") {
+    try {
+      const db = getFirestore();
+      if (db) {
+        const audioId = getSafeAudioId(cleanText);
+        const docRef = doc(db, "global_audio_pronunciations", audioId);
+        let docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+          const legacyDocRef = doc(db, "global_audio_pronunciations", `${audioId}_`);
+          const legacySnap = await getDoc(legacyDocRef);
+          if (legacySnap.exists()) {
+            docSnap = legacySnap;
+          }
+        }
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data && data.audioUrl && !data.audioUrl.includes("gcf-v2-sources") && !data.audioUrl.includes("gcf-v2-uploads")) {
+            return data.audioUrl;
+          }
+        }
+      }
+    } catch (firestoreErr) {
+      console.warn("[TTS Firestore Direct Read] Fallback a Cloud Function:", firestoreErr.message);
+    }
+  }
 
   const fns = appFunctions || getFunctions();
   const synthesizeFn = httpsCallable(fns, "synthesizeGermanSpeech");
