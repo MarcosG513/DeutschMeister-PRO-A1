@@ -1831,34 +1831,42 @@ export const synthesizeGermanSpeech = onCall(
     const filePath = `pronunciations/${type}/${audioId}.${ext}`;
     const file = bucket.file(filePath);
 
-    await file.save(audioResult.buffer, {
-      metadata: {
-        contentType: audioResult.mimeType,
-        cacheControl: "public, max-age=31536000",
+    let permanentAudioUrl = "";
+    try {
+      // Subida a Cloud Storage con verificación automática de suma CRC32c (@google-cloud/storage >= 7.19.0)
+      await file.save(audioResult.buffer, {
         metadata: {
-          text: cleanText,
-          voice: voice,
-          type: type,
-          provider: audioResult.provider,
-          createdAt: new Date().toISOString()
+          contentType: audioResult.mimeType,
+          cacheControl: "public, max-age=31536000",
+          metadata: {
+            text: cleanText,
+            voice: voice,
+            type: type,
+            provider: audioResult.provider,
+            createdAt: new Date().toISOString()
+          }
         }
-      }
-    });
+      });
 
-    try { await file.makePublic(); } catch (_) {}
+      try { await file.makePublic(); } catch (_) {}
 
-    const permanentAudioUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+      permanentAudioUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
 
-    await db.collection("global_audio_pronunciations").doc(audioId).set({
-      audioId: audioId,
-      text: cleanText,
-      audioUrl: permanentAudioUrl,
-      storagePath: filePath,
-      voice: voice,
-      type: type,
-      provider: audioResult.provider,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
-    }, { merge: true });
+      // Persistencia en Firestore únicamente tras completar la subida sin excepciones de integridad
+      await db.collection("global_audio_pronunciations").doc(audioId).set({
+        audioId: audioId,
+        text: cleanText,
+        audioUrl: permanentAudioUrl,
+        storagePath: filePath,
+        voice: voice,
+        type: type,
+        provider: audioResult.provider,
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (storageErr) {
+      console.error(`[TTS Storage Error] Falló la subida o verificación CRC32c para [${audioId}]:`, storageErr.message);
+      throw new HttpsError("internal", `Error de almacenamiento o verificación de integridad del audio: ${storageErr.message}`);
+    }
 
     return {
       success: true,

@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import admin from '../functions/node_modules/firebase-admin/lib/index.js';
+import admin from 'firebase-admin';
 
 dotenv.config();
 
