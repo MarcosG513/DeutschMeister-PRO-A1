@@ -307,9 +307,9 @@ async function extractAllAudios() {
   console.log(`  ✓ Componentes interactivos procesados (${interactiveItems.length} expresiones).`);
 }
 
-// ── 3. INFERENCIA TTS (100% GOOGLE AI STUDIO DIRECT) ──
-async function synthesizeWithGoogleDirect(text, voice, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash-tts:generateContent?key=${apiKey}`;
+// ── 3. INFERENCIA TTS (100% GOOGLE AI STUDIO DIRECT CON ROTACIÓN DUAL-MODEL) ──
+async function synthesizeWithGoogleDirect(text, voice, apiKey, model = "gemini-3.8-flash-tts") {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
   const payload = {
     contents: [{ parts: [{ text }] }],
     generationConfig: {
@@ -344,15 +344,16 @@ async function synthesizeWithGoogleDirect(text, voice, apiKey) {
   return {
     buffer: Buffer.from(inlineData.data, "base64"),
     mimeType: inlineData.mimeType || "audio/wav",
-    provider: "google-direct"
+    provider: "google-direct",
+    modelUsed: model
   };
 }
 
-// ── 4. POOL DE LLAVES GOOGLE DIRECT CON DESCARTE INTELIGENTE ──
+// ── 4. POOL DE LLAVES GOOGLE DIRECT CON DESCARTE INTELIGENTE Y DUAL-MODEL ──
 function buildGoogleKeyPool() {
   const candidateKeys = [
-    // Llaves Paid
-    { id: "PAID", key: process.env.GEMINI_PAID_KEY, isPaid: true },
+    // Llaves Paid (Nivel 1)
+    { id: "PAID_1", key: process.env.GEMINI_PAID_KEY, isPaid: true },
     { id: "PAID_2", key: process.env.GEMINI_PAID_KEY_2, isPaid: true },
     { id: "PAID_3", key: process.env.GEMINI_PAID_KEY_3, isPaid: true },
     { id: "PAID_4", key: process.env.GEMINI_PAID_KEY_4, isPaid: true },
@@ -379,6 +380,8 @@ function buildGoogleKeyPool() {
           id: item.id,
           key: trimmed,
           isPaid: item.isPaid,
+          models: ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts"],
+          modelIndex: 0,
           lastUsedAt: 0,
           exhausted: false,
           exhaustedReason: null
@@ -624,18 +627,33 @@ async function main() {
 
       try {
         keyObj.lastUsedAt = Date.now();
-        audioResult = await synthesizeWithGoogleDirect(item.text, "Charon", keyObj.key);
-        usedKeyId = keyObj.id;
+        const currentModel = keyObj.models[keyObj.modelIndex];
+        audioResult = await synthesizeWithGoogleDirect(item.text, "Charon", keyObj.key, currentModel);
+        usedKeyId = `${keyObj.id}:${currentModel.replace("gemini-3.8-", "")}`;
         // Avanzar el puntero Round-Robin para el próximo audio
         roundRobinIndex = (roundRobinIndex + 1) % activeKeys.length;
       } catch (err) {
         const errMsg = err.message || "";
+        const currentModel = keyObj.models[keyObj.modelIndex];
 
-        if (errMsg.includes("PerDay") || errMsg.includes("GenerateRequestsPerDay")) {
-          keyObj.exhausted = true;
-          keyObj.exhaustedReason = "PerDay";
-          console.warn(`    ⚠️ [Key: ${keyObj.id}] Cuota diaria agotada (PerDay). Descartando llave del pool activo.`);
-          continue; // Intentar inmediatamente con la siguiente llave activa
+        // Verificar si la cuota agotada es específica de este modelo (PerDay o límite diario por modelo)
+        const isPerDay = errMsg.includes("PerDay") || 
+                         errMsg.includes("GenerateRequestsPerDay") || 
+                         errMsg.includes("generate_requests_per_model_per_day") ||
+                         errMsg.includes("generate_content_free_tier_requests");
+
+        if (isPerDay) {
+          if (keyObj.modelIndex < keyObj.models.length - 1) {
+            keyObj.modelIndex++;
+            const nextModel = keyObj.models[keyObj.modelIndex];
+            console.log(`    🔄 [Key: ${keyObj.id}] Cuota diaria de ${currentModel} alcanzada. Conmutando automáticamente a ${nextModel} (Charon TTS)...`);
+            continue; // Reintentar inmediatamente con el nuevo modelo en la misma llave
+          } else {
+            keyObj.exhausted = true;
+            keyObj.exhaustedReason = "PerDay";
+            console.warn(`    ⚠️ [Key: ${keyObj.id}] Todos los modelos de voz agotaron su cuota diaria. Descartando llave del pool activo.`);
+            continue; // Intentar con la siguiente llave activa
+          }
         }
 
         if (errMsg.includes("429")) {
