@@ -7,7 +7,7 @@ import {
   CloudDownload, Loader2, Download
 } from 'lucide-react';
 import { getDailyStudyStreak, getStudiedCardsCount, getCompletedModulesCount } from '../utils/helpers';
-import { syncCloudMediaToLocal, getLastMediaSyncTime } from '../services/syncMediaService';
+import { syncCloudMediaToLocal, getLastMediaSyncTime, getOfflineSyncStats } from '../services/syncMediaService';
 import { EmailAuthProvider, GoogleAuthProvider, linkWithCredential, linkWithPopup, signInWithEmailAndPassword, signInWithPopup, signOut, deleteUser } from 'firebase/auth';
 
 const AVATARS = ['🦊', '🦉', '🐼', '🦁', '🐯', '🐸', '🦄', '🦖', '🚀', '👑', '⚡', '🎓'];
@@ -30,6 +30,7 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
   const [mediaSyncProgress, setMediaSyncProgress] = useState(null);
   const [lastMediaSync, setLastMediaSync] = useState(null);
   const [syncSuccessMessage, setSyncSuccessMessage] = useState(null);
+  const [offlineStats, setOfflineStats] = useState({ visualsCached: 0, audiosCached: 0 });
 
   const isRegistered = user && user.isAnonymous === false;
 
@@ -83,10 +84,19 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
     } catch (_) {}
   }, []);
 
+  const loadOfflineStats = async () => {
+    try {
+      const stats = await getOfflineSyncStats();
+      if (stats.lastSyncTime) setLastMediaSync(stats.lastSyncTime);
+      setOfflineStats({
+        visualsCached: stats.visualsCached || 0,
+        audiosCached: stats.audiosCached || 0
+      });
+    } catch (_) {}
+  };
+
   useEffect(() => {
-    getLastMediaSyncTime().then(time => {
-      if (time) setLastMediaSync(time);
-    });
+    loadOfflineStats();
   }, []);
 
   const handleSyncMedia = async () => {
@@ -101,9 +111,16 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
       });
       if (res.success) {
         setLastMediaSync(res.lastSyncTime);
-        const msg = `¡Sincronización exitosa! Se han actualizado ${res.syncedCount} ilustraciones y videos.`;
+        await loadOfflineStats();
+        const msg = `¡Sincronización Offline completada! Tienes ${res.visualsSynced || res.syncedCount} medios visuales y ${res.audiosSynced || 0} audios guardados en la memoria de tu teléfono para estudiar sin internet.`;
         setSyncSuccessMessage(msg);
-        window.dispatchEvent(new CustomEvent('mediaSyncCompleted', { detail: { syncedCount: res.syncedCount } }));
+        window.dispatchEvent(new CustomEvent('mediaSyncCompleted', { 
+          detail: { 
+            syncedCount: res.syncedCount,
+            visualsSynced: res.visualsSynced,
+            audiosSynced: res.audiosSynced
+          } 
+        }));
       } else {
         setError(`Error en la sincronización: ${res.error || 'Error desconocido'}`);
       }
@@ -634,7 +651,7 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
                       🔄 Actualizar Medios de la Nube
                     </h3>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      Descarga el catálogo completo de ilustraciones y videos desde Firestore para acceso instantáneo offline.
+                      Descarga y almacena en tu dispositivo todas las ilustraciones, videos y audios de pronunciación (Charon) para estudiar a 0 ms sin internet.
                     </p>
                   </div>
                 </div>
@@ -659,13 +676,38 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
                 </button>
               </div>
 
+              {/* Contadores de Disponibilidad Offline en Memoria */}
+              <div className="mt-3.5 grid grid-cols-1 sm:grid-cols-2 gap-2 pt-3 border-t border-slate-100">
+                <div className="flex items-center gap-2 p-2.5 bg-slate-50/80 rounded-xl border border-slate-100 text-xs">
+                  <span className="text-base shrink-0">🖼️</span>
+                  <div>
+                    <span className="font-bold text-slate-700 block">Ilustraciones y Videos:</span>
+                    <span className="text-slate-500 text-[11px] font-medium">
+                      <strong className="text-indigo-600 font-bold">{offlineStats.visualsCached}</strong> en memoria
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 bg-slate-50/80 rounded-xl border border-slate-100 text-xs">
+                  <span className="text-base shrink-0">🎙️</span>
+                  <div>
+                    <span className="font-bold text-slate-700 block">Audios Charon (Pronunciación):</span>
+                    <span className="text-slate-500 text-[11px] font-medium">
+                      <strong className="text-emerald-600 font-bold">{offlineStats.audiosCached}</strong> en memoria
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               {/* Estado y Barra de Progreso Dinámica */}
               {isSyncingMedia && mediaSyncProgress && (
-                <div className="mt-4 pt-3 border-t border-slate-100">
+                <div className="mt-3 pt-3 border-t border-slate-100">
                   <div className="flex justify-between items-center text-xs font-semibold text-slate-600 mb-1.5">
                     <span className="flex items-center gap-1.5 text-indigo-600">
                       <Loader2 size={13} className="animate-spin" />
-                      Sincronizando {mediaSyncProgress.current} de {mediaSyncProgress.total}...
+                      {mediaSyncProgress.phase === "fetching_catalog" && "Consultando catálogo en la nube..."}
+                      {mediaSyncProgress.phase === "syncing_visuals" && `Guardando ilustraciones y videos (${mediaSyncProgress.visualsSynced || mediaSyncProgress.current} / ${mediaSyncProgress.totalVisuals || mediaSyncProgress.total})...`}
+                      {mediaSyncProgress.phase === "syncing_audios" && `Descargando audios Charon al teléfono (${mediaSyncProgress.audiosSynced || mediaSyncProgress.current} / ${mediaSyncProgress.totalAudios || mediaSyncProgress.total})...`}
+                      {!["fetching_catalog", "syncing_visuals", "syncing_audios"].includes(mediaSyncProgress.phase) && `Sincronizando ${mediaSyncProgress.current} de ${mediaSyncProgress.total}...`}
                     </span>
                     <span>{Math.round((mediaSyncProgress.current / (mediaSyncProgress.total || 1)) * 100)}%</span>
                   </div>

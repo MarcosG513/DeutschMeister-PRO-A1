@@ -26678,5 +26678,1048 @@
         "order": 4
       }
     ]
+  },
+  {
+    "id": "R3V0ZW4lMjBNb3JnZW4hJTIwJTJGJTIwR3V0ZW4lMjBUYWchJTIwJTJGJTIwR3V0ZW4lMjBBYmVuZCElMjAlMkYlMjBIYWxsbyE_",
+    "word": "Guten Morgen! / Guten Tag! / Guten Abend! / Hallo!",
+    "audioDe": "Guten Morgen! Guten Tag! Guten Abend! Hallo!",
+    "exampleSentenceDe": "Guten Morgen! Wie heißen Sie?",
+    "exampleSentenceEs": "¡Buenos días! ¿Cómo se llama usted?"
+  },
+  {
+    "id": "QXVmJTIwV2llZGVyc2VoZW4hJTIwJTJGJTIwVHNjaCVDMyVCQ3NzISUyMCUyRiUyMEJpcyUyMGJhbGQhJTIwJTJGJTIwQmlzJTIwc3AlQzMlQTR0ZXIh",
+    "word": "Auf Wiedersehen! / Tschüss! / Bis bald! / Bis später!",
+    "audioDe": "Auf Wiedersehen! Tschüss! Bis bald! Bis später!",
+    "exampleSentenceDe": "Vielen Dank für Ihre Hilfe und auf Wiedersehen!",
+    "exampleSentenceEs": "¡Muchas gracias por su ayuda y hasta la vista!"
+  },
+  {
+    "id": "V2llJTIwaGVpJUMzJTlGZW4lMjBTaWUlM0Y_",
+    "word": "Wie heißen Sie?",
+    "audioDe": "Wie heißen Sie?",
+    "exampleSentenceDe": "Ich heiße Max Müller.",
+    "exampleSentenceEs": "Me llamo Max Müller."
+  },
+  {
+    "id": "V2llJTIwaGVpJUMzJTlGdCUyMGR1JTNG",
+    "word": "Wie heißt du?",
+    "audioDe": "Wie heißt du?",
+    "exampleSentenceDe": "Hallo, wie heißt du? — Ich bin Lukas.",
+    "exampleSentenceEs": "Hola, ¿cómo te llamas? — Soy Lukas."
+  },
+  {
+    "id": "SWNoJTIwaGVpJUMzJTlGZSUyMChNYXglMjBNJUMzJUJDbGxlcikuJTIwJTJGJTIwTWVpbiUyME5hbWUlMjBpc3QlMjAoTWF4JTIwTSVDMyVCQ2xsZXIpLg__",
+    "word": "Ich heiße (Max Müller). / Mein Name ist (Max Müller).",
+    "audioDe": "Ich heiße Max Müller. Mein Name ist Max Müller.",
+    "exampleSentenceDe": "Guten Tag, mein Name ist Max Müller.",
+    "exampleSentenceEs": "Buenas tardes, mi nombre es Max Müller."
+  },
+  {
+    "id": "V2llJTIwaXN0JTIwSWhyJTIwVm9ybmFtZSUyMCUyRiUyMEZhbWlsaWVubmFtZSUzRg__",
+    "word": "Wie ist Ihr Vorname / Familienname?",
+    "audioDe": "Wie ist Ihr Vorname? Wie ist Ihr Familienname?",
+    "exampleSentenceDe": "Mein Vorname ist Max und mein Familienname ist Müller.",
+    "exampleSentenceEs": "Mi nombre es Max y mi apellido es Müller."
+  },
+  {
+    "id": "TWVpbiUyMFZvcm5hbWUlMjBpc3QlMjAoTWF4KS4lMjAlMkYlMjBNZWluJTIwRmFtaWxpZW5uYW1lJTIwaXN0JTIwKE0lQzMlQkNsbGVyKS4_",
+    "word": "Mein Vorname ist (Max). / Mein Familienname ist (Müller).",
+    "audioDe": "Mein Vorname ist Max. Mein Familienname ist Müller.",
+    "exampleSentenceDe": "Können Sie Ihren Familiennamen bitte buchstabieren?",
+    "exampleSentenceEs": "¿Puede deletrear su apellido, por favor?"
+  },
+  {
+    "id": "SyVDMyVCNm5uZW4lMjBTaWUlMjBkYXMlMjBiaXR0ZSUyMGJ1Y2hzdGFiaWVyZW4lM0Y_",
+    "word": "Können Sie das bitte buchstabieren?",
+    "audioDe": "Können Sie das bitte buchstabieren?",
+    "exampleSentenceDe": "M-U-E-L-L-E-R, Müller.",
+    "exampleSentenceEs": "M-U-E-L-L-E-R, Müller."
+  },
+  {
+    "id": "V2llJTIwaXN0JTIwSWhyZSUyMFRlbGVmb25udW1tZXIlMjAlMkYlMjBIYW5keW51bW1lciUzRg__",
+    "word": "Wie ist Ihre Telefonnummer / Handynummer?",
+    "audioDe": "Wie ist Ihre Telefonnummer? Wie ist Ihre Handynummer?",
+    "exampleSentenceDe": "Meine Telefonnummer ist 0171 456789.",
+    "exampleSentenceEs": "Mi número de teléfono es 0171 456789."
+  },
+  {
+    "id": "V2llJTIwaXN0JTIwSWhyZSUyMEUtTWFpbC1BZHJlc3NlJTNG",
+    "word": "Wie ist Ihre E-Mail-Adresse?",
+    "audioDe": "Wie ist Ihre E-Mail-Adresse?",
+    "exampleSentenceDe": "Meine E-Mail-Adresse ist max punkt mueller at web punkt de.",
+    "exampleSentenceEs": "Mi correo es max punto mueller arroba web punto de."
+  },
+  {
+    "id": "V2llJTIwYWx0JTIwc2luZCUyMFNpZSUzRiUyMCVFMiU4MCU5NCUyMEljaCUyMGJpbiUyMCgzMCklMjBKYWhyZSUyMGFsdC4_",
+    "word": "Wie alt sind Sie? — Ich bin (30) Jahre alt.",
+    "audioDe": "Wie alt sind Sie? Ich bin dreißig Jahre alt.",
+    "exampleSentenceDe": "Ich bin zweiunddreißig Jahre alt.",
+    "exampleSentenceEs": "Tengo treinta y dos años."
+  },
+  {
+    "id": "V29oZXIlMjBrb21tZW4lMjBTaWUlM0YlMjAlRTIlODAlOTQlMjBJY2glMjBrb21tZSUyMGF1cyUyMChTcGFuaWVuKS4_",
+    "word": "Woher kommen Sie? — Ich komme aus (Spanien).",
+    "audioDe": "Woher kommen Sie? Ich komme aus Spanien.",
+    "exampleSentenceDe": "Ich komme aus Kolumbien.",
+    "exampleSentenceEs": "Soy de Colombia."
+  },
+  {
+    "id": "V28lMjB3b2huZW4lMjBTaWUlM0YlMjAlRTIlODAlOTQlMjBJY2glMjB3b2huZSUyMGluJTIwKE1hZHJpZCku",
+    "word": "Wo wohnen Sie? — Ich wohne in (Madrid).",
+    "audioDe": "Wo wohnen Sie? Ich wohne in Madrid.",
+    "exampleSentenceDe": "Jetzt wohne ich in Duisburg.",
+    "exampleSentenceEs": "Ahora vivo en Duisburgo."
+  },
+  {
+    "id": "V2FzJTIwc2luZCUyMFNpZSUyMHZvbiUyMEJlcnVmJTNGJTIwJUUyJTgwJTk0JTIwSWNoJTIwYmluJTIwKExlaHJlciku",
+    "word": "Was sind Sie von Beruf? — Ich bin (Lehrer).",
+    "audioDe": "Was sind Sie von Beruf? Ich bin Lehrer.",
+    "exampleSentenceDe": "Ich bin Elektroniker von Beruf.",
+    "exampleSentenceEs": "Soy técnico electrónico de profesión."
+  },
+  {
+    "id": "SWNoJTIwYXJiZWl0ZSUyMGFscyUyMChNYW5hZ2VyaW4pJTIwYmVpJTIwKFNpZW1lbnMpLg__",
+    "word": "Ich arbeite als (Managerin) bei (Siemens).",
+    "audioDe": "Ich arbeite als Managerin bei Siemens.",
+    "exampleSentenceDe": "Ich arbeite als Techniker bei Enpal.",
+    "exampleSentenceEs": "Trabajo como técnico en Enpal."
+  },
+  {
+    "id": "V2FzJTIwJTJGJTIwV28lMjBzdHVkaWVyZW4lMjBTaWUlM0YlMjAlRTIlODAlOTQlMjBJY2glMjBzdHVkaWVyZSUyMChNZWRpemluJTIwJTJGJTIwaW4lMjBCZXJsaW4pLg__",
+    "word": "Was / Wo studieren Sie? — Ich studiere (Medizin / in Berlin).",
+    "audioDe": "Was studieren Sie? Ich studiere Medizin in Berlin.",
+    "exampleSentenceDe": "Meine Schwester studiert Informatik in München.",
+    "exampleSentenceEs": "Mi hermana estudia informática en Múnich."
+  },
+  {
+    "id": "V2VsY2hlJTIwU3ByYWNoZW4lMjBzcHJlY2hlbiUyMFNpZSUzRg__",
+    "word": "Welche Sprachen sprechen Sie?",
+    "audioDe": "Welche Sprachen sprechen Sie?",
+    "exampleSentenceDe": "Meine Muttersprache ist Spanisch.",
+    "exampleSentenceEs": "Mi lengua materna es el español."
+  },
+  {
+    "id": "TWVpbmUlMjBNdXR0ZXJzcHJhY2hlJTIwaXN0JTIwKEl0YWxpZW5pc2NoKS4_",
+    "word": "Meine Muttersprache ist (Italienisch).",
+    "audioDe": "Meine Muttersprache ist Italienisch.",
+    "exampleSentenceDe": "Meine Muttersprache ist Spanisch.",
+    "exampleSentenceEs": "Mi lengua materna es el español."
+  },
+  {
+    "id": "SWNoJTIwc3ByZWNoZSUyMHNlaHIlMjBndXQlMjAlMkYlMjBndXQlMjAlMkYlMjBlaW4lMjBiaXNzY2hlbiUyMChFbmdsaXNjaCku",
+    "word": "Ich spreche sehr gut / gut / ein bisschen (Englisch).",
+    "audioDe": "Ich spreche sehr gut Englisch und ein bisschen Deutsch.",
+    "exampleSentenceDe": "Ich lerne jetzt intensiv Deutsch.",
+    "exampleSentenceEs": "Estoy aprendiendo alemán intensivamente ahora."
+  },
+  {
+    "id": "SWNoJTIwbGVybmUlMjBqZXR6dCUyMChEZXV0c2NoKS4_",
+    "word": "Ich lerne jetzt (Deutsch).",
+    "audioDe": "Ich lerne jetzt Deutsch.",
+    "exampleSentenceDe": "Ich lerne jeden Tag Deutsch.",
+    "exampleSentenceEs": "Aprendo alemán todos los días."
+  },
+  {
+    "id": "SWNoJTIwYmluJTIwbGVkaWclMjAlMkYlMjB2ZXJoZWlyYXRldCUyMCUyRiUyMGdlc2NoaWVkZW4u",
+    "word": "Ich bin ledig / verheiratet / geschieden.",
+    "audioDe": "Ich bin ledig. Ich bin verheiratet.",
+    "exampleSentenceDe": "Ich bin verheiratet und habe drei Kinder.",
+    "exampleSentenceEs": "Estoy casado y tengo tres hijos."
+  },
+  {
+    "id": "SWNoJTIwaGFiZSUyMCh6d2VpJTIwJTJGJTIwa2VpbmUpJTIwS2luZGVyLg__",
+    "word": "Ich habe (zwei / keine) Kinder.",
+    "audioDe": "Ich habe zwei Kinder. Ich habe keine Kinder.",
+    "exampleSentenceDe": "Wir haben drei Kinder.",
+    "exampleSentenceEs": "Nosotros tenemos tres hijos."
+  },
+  {
+    "id": "V2FzJTIwc2luZCUyMGRlaW5lJTIwJTJGJTIwSWhyZSUyMEhvYmJ5cyUzRg__",
+    "word": "Was sind deine / Ihre Hobbys?",
+    "audioDe": "Was sind deine Hobbys? Was sind Ihre Hobbys?",
+    "exampleSentenceDe": "Meine Hobbys sind Lesen und Schwimmen.",
+    "exampleSentenceEs": "Mis aficiones son leer y nadar."
+  },
+  {
+    "id": "SWNoJTIwc3BpZWxlJTIwZ2VybiUyMChGdSVDMyU5RmJhbGwpLiUyMCUyRiUyMEljaCUyMHNpbmdlJTIwKGltJTIwQ2hvciku",
+    "word": "Ich spiele gern (Fußball). / Ich singe (im Chor).",
+    "audioDe": "Ich spiele gern Fußball. Ich singe im Chor.",
+    "exampleSentenceDe": "Am Wochenende spiele ich gern Fußball.",
+    "exampleSentenceEs": "El fin de semana me gusta jugar al fútbol."
+  },
+  {
+    "id": "SWNoJTIwbGVzZSUyMGdlcm4lMjAoUm9tYW5lKS4lMjAlMkYlMjBJY2glMjBoJUMzJUI2cmUlMjBnZXJuJTIwKEphenotTXVzaWspLiUyMCUyRiUyMEljaCUyMHNjaHJlaWJlJTIwZ2VybiUyMChHZWRpY2h0ZSku",
+    "word": "Ich lese gern (Romane). / Ich höre gern (Jazz-Musik). / Ich schreibe gern (Gedichte).",
+    "audioDe": "Ich lese gern Romane. Ich höre gern Jazz-Musik. Ich schreibe gern Gedichte.",
+    "exampleSentenceDe": "Abends lese ich gern ein Buch.",
+    "exampleSentenceEs": "Por las noches me gusta leer un libro."
+  },
+  {
+    "id": "Qml0dGUlMjBzZWhyLiUyMCVFMiU4MCU5NCUyMERhbmtlJTIwKHNlaHIpLiUyMCUyRiUyMERhbmtlJTIwc2NoJUMzJUI2bi4lMjAlMkYlMjBWaWVsZW4lMjBEYW5rLg__",
+    "word": "Bitte sehr. — Danke (sehr). / Danke schön. / Vielen Dank.",
+    "audioDe": "Bitte sehr. Danke sehr. Danke schön. Vielen Dank.",
+    "exampleSentenceDe": "Hier ist Ihr Kaffee. — Vielen Dank!",
+    "exampleSentenceEs": "Aquí tiene su café. — ¡Muchas gracias!"
+  },
+  {
+    "id": "SGVyemxpY2glMjB3aWxsa29tbWVuISUyMCVFMiU4MCU5NCUyMFdpZSUyMGdlaHQlMjBlcyUzRiUyMCVFMiU4MCU5NCUyMFN1Y2hlbiUyMFNpZSUyMGV0d2FzJTNG",
+    "word": "Herzlich willkommen! — Wie geht es? — Suchen Sie etwas?",
+    "audioDe": "Herzlich willkommen! Wie geht es? Suchen Sie etwas?",
+    "exampleSentenceDe": "Herzlich willkommen in unserer Firma!",
+    "exampleSentenceEs": "¡Bienvenido a nuestra empresa!"
+  },
+  {
+    "id": "V2llJTIwZ2VodCUyMGVzJTIwSWhuZW4lM0YlMjAlRTIlODAlOTQlMjBEYW5rZSUyQyUyMGd1dC4lMjBVbmQlMjBJaG5lbiUzRg__",
+    "word": "Wie geht es Ihnen? — Danke, gut. Und Ihnen?",
+    "audioDe": "Wie geht es Ihnen? Danke, gut. Und Ihnen?",
+    "exampleSentenceDe": "Guten Tag, Herr Weber! Wie geht es Ihnen?",
+    "exampleSentenceEs": "¡Buenos días, Sr. Weber! ¿Cómo le va?"
+  },
+  {
+    "id": "VmllbGxlaWNodCUyMGslQzMlQjZubmVuJTIwd2lyJTIwc3AlQzMlQTR0ZXIlMjB6dXNhbW1lbiUyMEthZmZlZSUyMHRyaW5rZW4uJTIwJUUyJTgwJTk0JTIwR2VybmUuJTIwQmlzJTIwc3AlQzMlQTR0ZXIu",
+    "word": "Vielleicht können wir später zusammen Kaffee trinken. — Gerne. Bis später.",
+    "audioDe": "Vielleicht können wir später zusammen Kaffee trinken. Gerne. Bis später.",
+    "exampleSentenceDe": "Trinken wir später zusammen einen Kaffee? — Ja, gerne!",
+    "exampleSentenceEs": "¿Tomamos luego un café juntos? — ¡Sí, con gusto!"
+  },
+  {
+    "id": "RGFzJTIwaXN0JTIwZWluJTIwKHNjaCVDMyVCNm5lcyklMjBCJUMzJUJDcm8uJTIwSG9mZmVudGxpY2glMjBpc3QlMjBhbGxlcyUyMGRhJTNBJTIwKFN0dWhsJTJDJTIwQ29tcHV0ZXIlMkMlMjBEcnVja2VyKS4_",
+    "word": "Das ist ein (schönes) Büro. Hoffentlich ist alles da: (Stuhl, Computer, Drucker).",
+    "audioDe": "Das ist ein schönes Büro. Hoffentlich ist alles da: Stuhl, Computer, Drucker.",
+    "exampleSentenceDe": "Fehlt noch etwas an Ihrem Arbeitsplatz?",
+    "exampleSentenceEs": "¿Falta algo más en su puesto de trabajo?"
+  },
+  {
+    "id": "RmVobHQlMjBldHdhcyUzRiUyMCVFMiU4MCU5NCUyMChEaWUlMjBLYWZmZWVtYXNjaGluZSklMjBmdW5rdGlvbmllcnQlMjAlMkYlMjBnZWh0JTIwbmljaHQu",
+    "word": "Fehlt etwas? — (Die Kaffeemaschine) funktioniert / geht nicht.",
+    "audioDe": "Fehlt etwas? Die Kaffeemaschine funktioniert nicht.",
+    "exampleSentenceDe": "Entschuldigung, das Telefon funktioniert nicht.",
+    "exampleSentenceEs": "Disculpe, el teléfono no funciona."
+  },
+  {
+    "id": "KERlciUyMERydWNrZXIpJTIwaXN0JTIwa2FwdXR0LiUyMEljaCUyMGthbm4lMjBuaWNodCUyMChkcnVja2VuKS4_",
+    "word": "(Der Drucker) ist kaputt. Ich kann nicht (drucken).",
+    "audioDe": "Der Drucker ist kaputt. Ich kann nicht drucken.",
+    "exampleSentenceDe": "Mein Computer ist kaputt. Ich kann nicht arbeiten.",
+    "exampleSentenceEs": "Mi ordenador está estropeado. No puedo trabajar."
+  },
+  {
+    "id": "V2FzJTIwa29zdGV0JTIwKGRlciUyMEIlQzMlQkNyb3N0dWhsKSUzRiUyMCVFMiU4MCU5NCUyMChEZXIlMjBCJUMzJUJDcm9zdHVobCklMjBrb3N0ZXQlMjAoNTAwJTIwRXVybykuJTIwRGFzJTIwaXN0JTIwZWluJTIwdGV1cmVyJTIwU3R1aGwh",
+    "word": "Was kostet (der Bürostuhl)? — (Der Bürostuhl) kostet (500 Euro). Das ist ein teurer Stuhl!",
+    "audioDe": "Was kostet der Bürostuhl? Der Bürostuhl kostet fünfhundert Euro. Das ist ein teurer Stuhl!",
+    "exampleSentenceDe": "Der Schreibtisch kostet dreihundert Euro.",
+    "exampleSentenceEs": "El escritorio cuesta trescientos euros."
+  },
+  {
+    "id": "ZGllJTIwVmVyd2FsdHVuZyUzQSUyMEhpZXIlMjBrYW5uJTIwbWFuJTIwUmVjaG51bmdlbiUyMGJlemFobGVuLg__",
+    "word": "die Verwaltung: Hier kann man Rechnungen bezahlen.",
+    "audioDe": "Die Verwaltung: Hier kann man Rechnungen bezahlen.",
+    "exampleSentenceDe": "Im Sekretariat kann man Informationen bekommen.",
+    "exampleSentenceEs": "En la secretaría se puede obtener información."
+  },
+  {
+    "id": "ZGllJTIwQ2FmZXRlcmlhJTIwJTJGJTIwZGllJTIwS2FudGluZSUyMCUyRiUyMGRpZSUyME1lbnNhJTNBJTIwSGllciUyMGthbm4lMjBtYW4lMjBLYWZmZWUlMjB0cmlua2VuJTIwdW5kJTIwZXR3YXMlMjBlc3Nlbi4_",
+    "word": "die Cafeteria / die Kantine / die Mensa: Hier kann man Kaffee trinken und etwas essen.",
+    "audioDe": "Die Kantine: Hier kann man Kaffee trinken und etwas essen.",
+    "exampleSentenceDe": "Wir essen um zwölf Uhr in der Kantine.",
+    "exampleSentenceEs": "Comemos a las doce en el comedor de la empresa."
+  },
+  {
+    "id": "ZGllJTIwQmlibGlvdGhlayUyMCUyRiUyMGRhcyUyMFNwcmFjaGVuemVudHJ1bSUzQSUyMEhpZXIlMjBrYW5uJTIwbWFuJTIwQiVDMyVCQ2NoZXIlMjBsZXNlbiUyMHVuZCUyMFNwcmFjaGt1cnNlJTIwYmVzdWNoZW4u",
+    "word": "die Bibliothek / das Sprachenzentrum: Hier kann man Bücher lesen und Sprachkurse besuchen.",
+    "audioDe": "In der Bibliothek kann man Bücher lesen und im Sprachenzentrum Sprachkurse besuchen.",
+    "exampleSentenceDe": "Hier kann man Deutschkurse besuchen.",
+    "exampleSentenceEs": "Aquí se puede asistir a cursos de alemán."
+  },
+  {
+    "id": "V2llJTIwZmluZGVuJTIwU2llJTIwKE1hcmJ1cmcpJTNGJTIwJUUyJTgwJTk0JTIwS29jaGVuJTIwU2llJTIwZ2VybiUzRiUyMCVFMiU4MCU5NCUyMFdhcyUyMG1hY2hlbiUyMFNpZSUyMGFtJTIwV29jaGVuZW5kZSUzRg__",
+    "word": "Wie finden Sie (Marburg)? — Kochen Sie gern? — Was machen Sie am Wochenende?",
+    "audioDe": "Wie finden Sie Marburg? Kochen Sie gern? Was machen Sie am Wochenende?",
+    "exampleSentenceDe": "Ich finde die Stadt sehr schön.",
+    "exampleSentenceEs": "La ciudad me parece muy bonita."
+  },
+  {
+    "id": "V2VsY2hlcyUyMEluc3RydW1lbnQlMjBzcGllbGVuJTIwU2llJTNGJTIwJUUyJTgwJTk0JTIwSWNoJTIwc3BpZWxlJTIwKEtsYXZpZXIpLiUyMCUyRiUyMEljaCUyMGthbm4lMjBsZWlkZXIlMjAoa2VpbiUyMEluc3RydW1lbnQpJTIwc3BpZWxlbi4_",
+    "word": "Welches Instrument spielen Sie? — Ich spiele (Klavier). / Ich kann leider (kein Instrument) spielen.",
+    "audioDe": "Welches Instrument spielen Sie? Ich spiele Klavier. Ich kann leider kein Instrument spielen.",
+    "exampleSentenceDe": "Ich kann leider nicht gut Salsa tanzen.",
+    "exampleSentenceEs": "Desafortunadamente no sé bailar bien salsa."
+  },
+  {
+    "id": "SGFiZW4lMjBTaWUlMjBub2NoJTIwZWluJTIwWmltbWVyJTIwZnJlaSUzRiUyMCVFMiU4MCU5NCUyMEhhYmVuJTIwU2llJTIwZWluZSUyMFJlc2VydmllcnVuZyUzRg__",
+    "word": "Haben Sie noch ein Zimmer frei? — Haben Sie eine Reservierung?",
+    "audioDe": "Haben Sie noch ein Zimmer frei? Haben Sie eine Reservierung?",
+    "exampleSentenceDe": "Ja, ich habe eine Reservierung auf den Namen Gómez.",
+    "exampleSentenceEs": "Sí, tengo una reserva a nombre de Gómez."
+  },
+  {
+    "id": "V2lyJTIwbSVDMyVCNmNodGVuJTIwZ2VybmUlMjBlaW4lMjBFaW56ZWwtJTIwJTJGJTIwRG9wcGVsLSUyMCUyRiUyMERyZWliZXR0emltbWVyLg__",
+    "word": "Wir möchten gerne ein Einzel- / Doppel- / Dreibettzimmer.",
+    "audioDe": "Wir möchten gerne ein Einzelzimmer oder ein Doppelzimmer.",
+    "exampleSentenceDe": "Wir haben noch ein Doppelzimmer frei.",
+    "exampleSentenceEs": "Todavía tenemos una habitación doble libre."
+  },
+  {
+    "id": "V2llJTIwbGFuZ2UlMjBtJUMzJUI2Y2h0ZW4lMjBTaWUlMjBibGVpYmVuJTNGJTIwJUUyJTgwJTk0JTIwV2lyJTIwYmxlaWJlbiUyMGVpbmUlMjBOYWNodCUyMCUyRiUyMHp3ZWklMjBOJUMzJUE0Y2h0ZS4_",
+    "word": "Wie lange möchten Sie bleiben? — Wir bleiben eine Nacht / zwei Nächte.",
+    "audioDe": "Wie lange möchten Sie bleiben? Wir bleiben zwei Nächte.",
+    "exampleSentenceDe": "Wir möchten drei Nächte bleiben.",
+    "exampleSentenceEs": "Quisiéramos quedarnos tres noches."
+  },
+  {
+    "id": "V2llJTIwdmllbCUyMGtvc3RldCUyMGVpbiUyMERvcHBlbHppbW1lciUzRiUyMCVFMiU4MCU5NCUyMERhcyUyMFppbW1lciUyMGtvc3RldCUyMCg4MCUyQyVFMiU4MCU5MyklMjBFdXJvJTIwcHJvJTIwTmFjaHQu",
+    "word": "Wie viel kostet ein Doppelzimmer? — Das Zimmer kostet (80,–) Euro pro Nacht.",
+    "audioDe": "Wie viel kostet ein Doppelzimmer? Das Zimmer kostet achtzig Euro pro Nacht.",
+    "exampleSentenceDe": "Der Preis ist inklusive Frühstück.",
+    "exampleSentenceEs": "El precio incluye el desayuno."
+  },
+  {
+    "id": "RGVyJTIwUHJlaXMlMjBpc3QlMjBtaXQlMkZpbmtsdXNpdmUlMjBGciVDMyVCQ2hzdCVDMyVCQ2NrLiUyMCUyRiUyMERlciUyMFByZWlzJTIwaXN0JTIwb2huZSUyRmV4a2x1c2l2ZSUyMEZyJUMzJUJDaHN0JUMzJUJDY2suJTIwRGFzJTIwRnIlQzMlQkNoc3QlQzMlQkNjayUyMGtvc3RldCUyMCgyMCUyQyVFMiU4MCU5MyklMjBFdXJvJTIwZXh0cmEu",
+    "word": "Der Preis ist mit/inklusive Frühstück. / Der Preis ist ohne/exklusive Frühstück. Das Frühstück kostet (20,–) Euro extra.",
+    "audioDe": "Der Preis ist inklusive Frühstück. Das Frühstück kostet zwanzig Euro extra.",
+    "exampleSentenceDe": "Ist das Frühstück im Preis inklusive?",
+    "exampleSentenceEs": "¿Está incluido el desayuno en el precio?"
+  },
+  {
+    "id": "SGF0JTIwZGFzJTIwWmltbWVyJTIwZWluZW4lMjAoQmFsa29uKSUyMCUyRiUyMGVpbmUlMjAoTWluaWJhciklMjAlMkYlMjBlaW4lMjAoQmFkKSUzRg__",
+    "word": "Hat das Zimmer einen (Balkon) / eine (Minibar) / ein (Bad)?",
+    "audioDe": "Hat das Zimmer einen Balkon, eine Minibar und ein Bad?",
+    "exampleSentenceDe": "Ja, alle Zimmer haben ein Bad und eine Dusche.",
+    "exampleSentenceEs": "Sí, todas las habitaciones tienen baño y ducha."
+  },
+  {
+    "id": "R2lidCUyMGVzJTIwYXVjaCUyMGVpbmVuJTIwKEZlcm5zZWhlciklMjAlMkYlMjBlaW5lJTIwKER1c2NoZSklMjAlMkYlMjBlaW4lMjAoUmFkaW8pJTNG",
+    "word": "Gibt es auch einen (Fernseher) / eine (Dusche) / ein (Radio)?",
+    "audioDe": "Gibt es auch einen Fernseher, eine Dusche und ein Radio?",
+    "exampleSentenceDe": "Gibt es im Zimmer auch WLAN?",
+    "exampleSentenceEs": "¿Hay también wifi en la habitación?"
+  },
+  {
+    "id": "V2lyJTIwbmVobWVuJTIwZGFzJTIwWmltbWVyLiUyMCVFMiU4MCU5NCUyMEljaCUyMGJyYXVjaGUlMjBub2NoJTIwKElocmUlMjBBbnNjaHJpZnQpLiUyMFdpZSUyMHphaGxlbiUyMFNpZSUzRg__",
+    "word": "Wir nehmen das Zimmer. — Ich brauche noch (Ihre Anschrift). Wie zahlen Sie?",
+    "audioDe": "Wir nehmen das Zimmer. Ich brauche noch Ihre Anschrift. Wie zahlen Sie?",
+    "exampleSentenceDe": "Wir zahlen mit Kreditkarte.",
+    "exampleSentenceEs": "Pagamos con tarjeta de crédito."
+  },
+  {
+    "id": "V2lyJTIwemFobGVuJTIwYmFyJTIwJTJGJTIwbWl0JTIwS3JlZGl0a2FydGUuJTIwJUUyJTgwJTk0JTIwSGllciUyMGlzdCUyMElociUyMFppbW1lcnNjaGwlQzMlQkNzc2VsLiUyMElocmUlMjBaaW1tZXJudW1tZXIlMjBpc3QlMjBkaWUlMjAoNDA1KS4lMjBTY2glQzMlQjZuZW4lMjBBdWZlbnRoYWx0IQ__",
+    "word": "Wir zahlen bar / mit Kreditkarte. — Hier ist Ihr Zimmerschlüssel. Ihre Zimmernummer ist die (405). Schönen Aufenthalt!",
+    "audioDe": "Wir zahlen mit Kreditkarte. Hier ist Ihr Zimmerschlüssel. Ihre Zimmernummer ist die vierhundertfünf. Schönen Aufenthalt!",
+    "exampleSentenceDe": "Vielen Dank für Ihre Hilfe!",
+    "exampleSentenceEs": "¡Muchas gracias por su ayuda!"
+  },
+  {
+    "id": "SWNoJTIwaGFiZSUyMGVpbiUyMFByb2JsZW0uJTIwSWNoJTIwYnJhdWNoZSUyMChuZXVlJTIwSGFuZHQlQzMlQkNjaGVyKS4lMjAlRTIlODAlOTQlMjBEYXMlMjBicmluZ2VuJTIwd2lyJTIwaW4lMjBPcmRudW5nLg__",
+    "word": "Ich habe ein Problem. Ich brauche (neue Handtücher). — Das bringen wir in Ordnung.",
+    "audioDe": "Ich habe ein Problem. Ich brauche neue Handtücher. Das bringen wir in Ordnung.",
+    "exampleSentenceDe": "Die Heizung im Zimmer funktioniert leider nicht.",
+    "exampleSentenceEs": "Lamentablemente la calefacción de la habitación no funciona."
+  },
+  {
+    "id": "SWNoJTIwbSVDMyVCNmNodGUlMjBoZXV0ZSUyME5hY2htaXR0YWclMjBldHdhcyUyMHVudGVybmVobWVuJTJDJTIwdmllbGxlaWNodCUyMGVpbiUyME11c2V1bSUyMGJlc3VjaGVuLg__",
+    "word": "Ich möchte heute Nachmittag etwas unternehmen, vielleicht ein Museum besuchen.",
+    "audioDe": "Ich möchte heute Nachmittag etwas unternehmen, vielleicht ein Museum besuchen.",
+    "exampleSentenceDe": "Das Museum zeigt technische Erfindungen.",
+    "exampleSentenceEs": "El museo presenta inventos tecnológicos."
+  },
+  {
+    "id": "SW0lMjBNdXNldW0lMjBrYW5uJTIwbWFuJTIwKEJpbGRlciUyMHZvbiUyMFBpY2Fzc28pJTIwYmV3dW5kZXJuLiUyME1hbiUyMGZpbmRldCUyMGRvcnQlMjAodmllbGUlMjBiZWRldXRlbmRlJTIwS3Vuc3R3ZXJrZSku",
+    "word": "Im Museum kann man (Bilder von Picasso) bewundern. Man findet dort (viele bedeutende Kunstwerke).",
+    "audioDe": "Im Museum kann man Bilder von Picasso bewundern. Man findet dort viele bedeutende Kunstwerke.",
+    "exampleSentenceDe": "Ich finde moderne Kunst sehr interessant.",
+    "exampleSentenceEs": "El arte moderno me parece muy interesante."
+  },
+  {
+    "id": "V2FubiUyMGhhdCUyMChkYXMlMjBEZXV0c2NoZSUyME11c2V1bSklMjBnZSVDMyVCNmZmbmV0JTNGJTIwJUUyJTgwJTk0JTIwRXMlMjBoYXQlMjB0JUMzJUE0Z2xpY2glMjB2b24lMjAoOS4wMCklMjBiaXMlMjAoMTcuMDApJTIwVWhyJTIwZ2UlQzMlQjZmZm5ldC4_",
+    "word": "Wann hat (das Deutsche Museum) geöffnet? — Es hat täglich von (9.00) bis (17.00) Uhr geöffnet.",
+    "audioDe": "Wann hat das Deutsche Museum geöffnet? Es hat täglich von neun bis siebzehn Uhr geöffnet.",
+    "exampleSentenceDe": "Es öffnet um neun Uhr und schließt um siebzehn Uhr.",
+    "exampleSentenceEs": "Abre a las 9:00 y cierra a las 17:00 h."
+  },
+  {
+    "id": "V2llJTIwdmllbCUyMCUyRiUyMFdhcyUyMGtvc3RldCUyMGVpbmUlMjBFaW50cml0dHNrYXJ0ZSUzRiUyMCVFMiU4MCU5NCUyMEVpbmUlMjBUYWdlc2thcnRlJTIwJTJGJTIwU3R1ZGVudGVua2FydGUlMjBrb3N0ZXQlMjAoc2llYmVuKSUyMEV1cm8u",
+    "word": "Wie viel / Was kostet eine Eintrittskarte? — Eine Tageskarte / Studentenkarte kostet (sieben) Euro.",
+    "audioDe": "Wie viel kostet eine Eintrittskarte? Eine Tageskarte kostet sieben Euro.",
+    "exampleSentenceDe": "Man kann im Park spazieren gehen oder ein kühles Bier trinken.",
+    "exampleSentenceEs": "Se puede pasear por el parque o tomar una cerveza fresca."
+  },
+  {
+    "id": "SWNoJTIwbSVDMyVCNmNodGUlMjBiaXR0ZSUyMChlaW5lJTIwVGFzc2UlMjBLYWZmZWUpLiUyMCUyRiUyMEljaCUyMGglQzMlQTR0dGUlMjBnZXJuJTIwKGVpbiUyMEdsYXMlMjBXZWklQzMlOUZ3ZWluKS4_",
+    "word": "Ich möchte bitte (eine Tasse Kaffee). / Ich hätte gern (ein Glas Weißwein).",
+    "audioDe": "Ich möchte bitte eine Tasse Kaffee. Ich hätte gern ein Glas Weißwein.",
+    "exampleSentenceDe": "Ich nehme das Schnitzel und ich esse den Lachs.",
+    "exampleSentenceEs": "Voy a tomar el escalope y para comer el salmón."
+  },
+  {
+    "id": "SWNoJTIwbmVobWUlMjAoZGFzJTIwU2Nobml0emVsKS4lMjAlMkYlMjBJY2glMjBlc3NlJTIwKGRlbiUyMExhY2hzKS4lMjAlMkYlMjBJY2glMjB0cmlua2UlMjAoZWluJTIwQmllciku",
+    "word": "Ich nehme (das Schnitzel). / Ich esse (den Lachs). / Ich trinke (ein Bier).",
+    "audioDe": "Ich nehme das Schnitzel. Ich esse den Lachs. Ich trinke ein Bier.",
+    "exampleSentenceDe": "Guten Appetit! — Danke, gleichfalls! Zum Wohl! Prost!",
+    "exampleSentenceEs": "¡Que aproveche! — ¡Gracias, igualmente! ¡Salud!"
+  },
+  {
+    "id": "R3V0ZW4lMjBBcHBldGl0ISUyMCVFMiU4MCU5NCUyMERhbmtlJTJDJTIwZ2xlaWNoZmFsbHMhJTIwJTJGJTIwWnVtJTIwV29obCElMjAlMkYlMjBQcm9zdCE_",
+    "word": "Guten Appetit! — Danke, gleichfalls! / Zum Wohl! / Prost!",
+    "audioDe": "Guten Appetit! Danke, gleichfalls! Zum Wohl! Prost!",
+    "exampleSentenceDe": "Wir stoßen auf das neue Projekt an. Prost!",
+    "exampleSentenceEs": "Brindamos por el nuevo proyecto. ¡Salud!"
+  },
+  {
+    "id": "V2llJTIwc2NobWVja3QlMjAoZGVyJTIwU2FsYXQpJTNGJTIwJUUyJTgwJTk0JTIwKEVyKSUyMHNjaG1lY2t0JTIwYXVzZ2V6ZWljaG5ldCUyMCUyRiUyMGd1dCElMjAlMkYlMjAoRXIpJTIwc2NobWVja3QlMjBzY2hyZWNrbGljaCE_",
+    "word": "Wie schmeckt (der Salat)? — (Er) schmeckt ausgezeichnet / gut! / (Er) schmeckt schrecklich!",
+    "audioDe": "Wie schmeckt der Salat? Er schmeckt ausgezeichnet! Er schmeckt schrecklich!",
+    "exampleSentenceDe": "Ich finde ihn lecker und köstlich! / Ich finde ihn ungenießbar!",
+    "exampleSentenceEs": "¡Me parece rica y deliciosa! / ¡No hay quien la coma!"
+  },
+  {
+    "id": "RGllJTIwUmVjaG51bmclMkMlMjBiaXR0ZSElMjAlMkYlMjBJY2glMjBtJUMzJUI2Y2h0ZSUyMGJpdHRlJTIwemFobGVuLg__",
+    "word": "Die Rechnung, bitte! / Ich möchte bitte zahlen.",
+    "audioDe": "Die Rechnung, bitte! Ich möchte bitte zahlen.",
+    "exampleSentenceDe": "Zahlen Sie zusammen oder getrennt?",
+    "exampleSentenceEs": "¿Pagan juntos o por separado?"
+  },
+  {
+    "id": "WmFobGVuJTIwU2llJTIwenVzYW1tZW4lMjBvZGVyJTIwZ2V0cmVubnQlM0YlMjAlRTIlODAlOTQlMjBHZXRyZW5udCUyQyUyMGJpdHRlLiUyMCUyRiUyMFp1c2FtbWVuJTJDJTIwYml0dGUu",
+    "word": "Zahlen Sie zusammen oder getrennt? — Getrennt, bitte. / Zusammen, bitte.",
+    "audioDe": "Zahlen Sie zusammen oder getrennt? Getrennt, bitte. Zusammen, bitte.",
+    "exampleSentenceDe": "Das macht 18 Euro für Sie und 22 Euro für Ihre Kollegin.",
+    "exampleSentenceEs": "Son 18 euros para usted y 22 euros para su compañera."
+  },
+  {
+    "id": "RGFzJTIwbWFjaHQlMjAoMjglMjBFdXJvKS4lMjAlRTIlODAlOTQlMjBTdGltbXQlMjBzbyUyQyUyMGRhbmtlIQ__",
+    "word": "Das macht (28 Euro). — Stimmt so, danke!",
+    "audioDe": "Das macht achtundzwanzig Euro. Stimmt so, danke!",
+    "exampleSentenceDe": "Hier sind dreißig Euro. Stimmt so!",
+    "exampleSentenceEs": "Aquí tiene treinta euros. ¡Quédese el cambio!"
+  },
+  {
+    "id": "SWNoJTIwbSVDMyVCNmNodGUlMjBiaXR0ZSUyMCh6d2VpJTIwS2lsbyUyMEthcnRvZmZlbG4pLiUyMCUyRiUyMEljaCUyMG5laG1lJTIwKGRyZWklMjBCYW5hbmVuKS4lMjAlMkYlMjBJY2glMjBicmF1Y2hlJTIwKDIwMCUyMEdyYW1tJTIwU2NoaW5rZW4pLg__",
+    "word": "Ich möchte bitte (zwei Kilo Kartoffeln). / Ich nehme (drei Bananen). / Ich brauche (200 Gramm Schinken).",
+    "audioDe": "Ich möchte bitte zwei Kilo Kartoffeln und zweihundert Gramm Schinken.",
+    "exampleSentenceDe": "Sonst noch etwas? Ist das alles? — Ja, das ist alles.",
+    "exampleSentenceEs": "¿Algo más? ¿Eso es todo? — Sí, es todo."
+  },
+  {
+    "id": "U29uc3QlMjBub2NoJTIwZXR3YXMlM0YlMjAlRTIlODAlOTQlMjBJc3QlMjBkYXMlMjBhbGxlcyUzRiUyMEphJTJDJTIwZGFzJTIwaXN0JTIwYWxsZXMuJTIwJUUyJTgwJTk0JTIwSGFiZW4lMjBTaWUlMjBkYXMlMjBHZWxkJTIwcGFzc2VuZCUzRg__",
+    "word": "Sonst noch etwas? — Ist das alles? Ja, das ist alles. — Haben Sie das Geld passend?",
+    "audioDe": "Sonst noch etwas? Ist das alles? Ja, das ist alles. Haben Sie das Geld passend?",
+    "exampleSentenceDe": "Moment bitte, ich habe es passend.",
+    "exampleSentenceEs": "Un momento por favor, lo tengo exacto."
+  },
+  {
+    "id": "U2NoJUMzJUE0bGVuJTIwU2llJTIwKGRhcyUyME9ic3QpLiUyMCUyRiUyMFNjaG5laWRlbiUyMFNpZSUyMChkaWUlMjAlQzMlODRwZmVsKS4lMjAlMkYlMjBLb2NoZW4lMjBTaWUlMjAoZGllJTIwS2FydG9mZmVsbikuJTIwJTJGJTIwQnJhdGVuJTIwU2llJTIwKGRhcyUyMEZsZWlzY2gpLg__",
+    "word": "Schälen Sie (das Obst). / Schneiden Sie (die Äpfel). / Kochen Sie (die Kartoffeln). / Braten Sie (das Fleisch).",
+    "audioDe": "Schälen Sie das Obst. Schneiden Sie die Äpfel. Kochen Sie die Kartoffeln. Braten Sie das Fleisch.",
+    "exampleSentenceDe": "Geben Sie die Obststücke in eine Schüssel und vermengen Sie das Obst mit Zucker.",
+    "exampleSentenceEs": "Ponga los trozos de fruta en un bol y mezcle la fruta con azúcar."
+  },
+  {
+    "id": "SWNoJTIwZXNzZSUyMHp1bSUyMEZyJUMzJUJDaHN0JUMzJUJDY2slMjAoZnJpc2NoZXMlMjBPYnN0KSUyQyUyMHp1bSUyME1pdHRhZ2Vzc2VuJTIwKEZsZWlzY2glMjBtaXQlMjBLYXJ0b2ZmZWxuKSUyMHVuZCUyMHp1bSUyMEFiZW5kYnJvdCUyMChTcGFnaGV0dGkpLg__",
+    "word": "Ich esse zum Frühstück (frisches Obst), zum Mittagessen (Fleisch mit Kartoffeln) und zum Abendbrot (Spaghetti).",
+    "audioDe": "Ich esse zum Frühstück frisches Obst, zum Mittagessen Fleisch mit Kartoffeln und zum Abendbrot Spaghetti.",
+    "exampleSentenceDe": "Ich trinke gerne ein Glas Orangensaft, aber ich mag keine Tomatensuppe.",
+    "exampleSentenceEs": "Me gusta beber un vaso de zumo de naranja, pero no me gusta la sopa de tomate."
+  },
+  {
+    "id": "WnVtJTIwKEZyJUMzJUJDaHN0JUMzJUJDY2spJTIwZ2lidCUyMGVzJTIwbm9ybWFsZXJ3ZWlzZSUyMChlaW4lMjBCciVDMyVCNnRjaGVuJTIwbWl0JTIwTWFybWVsYWRlKS4lMjBEYXMlMjAoTWl0dGFnZXNzZW4pJTIwYmVzdGVodCUyMGF1cyUyMChGbGVpc2NoJTIwdW5kJTIwS2FydG9mZmVsbiku",
+    "word": "Zum (Frühstück) gibt es normalerweise (ein Brötchen mit Marmelade). Das (Mittagessen) besteht aus (Fleisch und Kartoffeln).",
+    "audioDe": "Zum Frühstück gibt es normalerweise ein Brötchen mit Marmelade. Das Mittagessen besteht aus Fleisch und Kartoffeln.",
+    "exampleSentenceDe": "Kaffee ist sehr beliebt. Ein besonderes Getränk ist der Apfelwein.",
+    "exampleSentenceEs": "El café es muy popular. Una bebida especial es la sidra."
+  },
+  {
+    "id": "SWNoJTIwc3RlaGUlMjB1bSUyMCg4LjAwJTIwVWhyKSUyMGF1Zi4lMjBVbSUyMCg4LjMwJTIwVWhyKSUyMGZyJUMzJUJDaHN0JUMzJUJDY2tlJTIwaWNoLiUyMFVtJTIwKDkuMDAlMjBVaHIpJTIwZmFocmUlMjBpY2glMjB6dXIlMjBBcmJlaXQlMjAlMkYlMjB6dXIlMjBVbmku",
+    "word": "Ich stehe um (8.00 Uhr) auf. Um (8.30 Uhr) frühstücke ich. Um (9.00 Uhr) fahre ich zur Arbeit / zur Uni.",
+    "audioDe": "Ich stehe um acht Uhr auf. Um halb neun frühstücke ich. Um neun Uhr fahre ich zur Arbeit.",
+    "exampleSentenceDe": "Um neun Uhr dreißig beginnt die Arbeit.",
+    "exampleSentenceEs": "El trabajo empieza a las 9:30 h."
+  },
+  {
+    "id": "SWNoJTIwbGVzZSUyMHVuZCUyMGJlYW50d29ydGUlMjBFLU1haWxzJTJDJTIwdmVyZWluYmFyZSUyMFRlcm1pbmUlMkMlMjAlQzMlQkNiZXJzZXR6ZSUyMEUtTWFpbHMlMjB1bmQlMjBoYWJlJTIwZWluZSUyMEJlc3ByZWNodW5nLg__",
+    "word": "Ich lese und beantworte E-Mails, vereinbare Termine, übersetze E-Mails und habe eine Besprechung.",
+    "audioDe": "Ich lese und beantworte E-Mails, vereinbare Termine, übersetze E-Mails und habe eine Besprechung.",
+    "exampleSentenceDe": "Ich rufe Kollegen an, führe Gespräche und präsentiere ein Projekt.",
+    "exampleSentenceEs": "Llamo a compañeros, mantengo conversaciones y presento un proyecto."
+  },
+  {
+    "id": "SWNoJTIwbWFjaGUlMjAoZWluZSklMjBQYXVzZSUyQyUyMHNjaHJlaWJlJTIwZWluJTIwQW5nZWJvdCUyQyUyMGwlQzMlQjZzZSUyMFByb2JsZW1lJTIwdW5kJTIwc2FnZSUyMFRlcm1pbmUlMjB3aWVkZXIlMjBhYi4_",
+    "word": "Ich mache (eine) Pause, schreibe ein Angebot, löse Probleme und sage Termine wieder ab.",
+    "audioDe": "Ich mache eine Pause, schreibe ein Angebot, löse Probleme und sage Termine wieder ab.",
+    "exampleSentenceDe": "Abends kaufe ich ein, sehe fern und um 23.00 Uhr gehe ich ins Bett.",
+    "exampleSentenceEs": "Por la tarde hago la compra, veo la tele y a las 23:00 me voy a la cama."
+  },
+  {
+    "id": "QWJlbmRzJTIwa2F1ZmUlMjBpY2glMjBpbSUyMFN1cGVybWFya3QlMjBlaW4lMkMlMjBzZWhlJTIwZWluJTIwYmlzc2NoZW4lMjBmZXJuJTIwdW5kJTIwZ2VoZSUyMHVtJTIwKDIzLjAwJTIwVWhyKSUyMHNjaGxhZmVuLg__",
+    "word": "Abends kaufe ich im Supermarkt ein, sehe ein bisschen fern und gehe um (23.00 Uhr) schlafen.",
+    "audioDe": "Abends kaufe ich im Supermarkt ein, sehe ein bisschen fern und gehe um dreiundzwanzig Uhr schlafen.",
+    "exampleSentenceDe": "Am Wochenende schlafe ich immer lange aus.",
+    "exampleSentenceEs": "El fin de semana siempre me quedo durmiendo hasta tarde."
+  },
+  {
+    "id": "RWluZW4lMjBDb21wdXRlciUyMCUyRiUyMERydWNrZXIlMjBtdXNzJTIwbWFuJTIwaW5zdGFsbGllcmVuJTJDJTIwZWluc2NoYWx0ZW4lMjB1bmQlMjBhdXNzY2hhbHRlbi4_",
+    "word": "Einen Computer / Drucker muss man installieren, einschalten und ausschalten.",
+    "audioDe": "Einen Computer oder Drucker muss man installieren, einschalten und ausschalten.",
+    "exampleSentenceDe": "Eine E-Mail kann man erhalten, bekommen oder senden.",
+    "exampleSentenceEs": "Un correo electrónico se puede recibir o enviar."
+  },
+  {
+    "id": "RWluZW4lMjBUZXh0JTIwa2FubiUyMG1hbiUyMHNwZWljaGVybiUyQyUyMGtvcGllcmVuJTJDJTIwbCVDMyVCNnNjaGVuJTJDJTIwYXVzZHJ1Y2tlbiUyQyUyMGF1c3NjaG5laWRlbiUyQyUyMHdlaXRlcmxlaXRlbiUyMG9kZXIlMjBlaW5mJUMzJUJDZ2VuLg__",
+    "word": "Einen Text kann man speichern, kopieren, löschen, ausdrucken, ausschneiden, weiterleiten oder einfügen.",
+    "audioDe": "Einen Text kann man speichern, kopieren, löschen, ausdrucken, ausschneiden, weiterleiten oder einfügen.",
+    "exampleSentenceDe": "Bitte speichern Sie das Dokument und drucken Sie es aus.",
+    "exampleSentenceEs": "Por favor guarde el documento e imprímalo."
+  },
+  {
+    "id": "Qml0dGUlMjBsZWl0ZW4lMjBTaWUlMjBkaWVzZSUyMEUtTWFpbCUyMGFuJTIwZGllJTIwS29sbGVnZW4lMjB3ZWl0ZXIlMjB1bmQlMjBmJUMzJUJDZ2VuJTIwU2llJTIwZGVuJTIwQW5oYW5nJTIwYmVpLg__",
+    "word": "Bitte leiten Sie diese E-Mail an die Kollegen weiter und fügen Sie den Anhang bei.",
+    "audioDe": "Bitte leiten Sie diese E-Mail an die Kollegen weiter und fügen Sie den Anhang bei.",
+    "exampleSentenceDe": "Der Anhang enthält alle wichtigen Unterlagen.",
+    "exampleSentenceEs": "El archivo adjunto contiene todos los documentos importantes."
+  },
+  {
+    "id": "R3V0ZW4lMjBUYWclMkMlMjAoUGF1bCUyMEZyaXNjaCklMjBoaWVyJTJDJTIwRmlybWElMjBBTkEuJTIwJUUyJTgwJTk0JTIwS2FubiUyMGljaCUyMGJpdHRlJTIwKEZyYXUlMjBNJUMzJUJDbGxlciklMjBzcHJlY2hlbiUzRg__",
+    "word": "Guten Tag, (Paul Frisch) hier, Firma ANA. — Kann ich bitte (Frau Müller) sprechen?",
+    "audioDe": "Guten Tag, Paul Frisch hier, Firma ANA. Kann ich bitte Frau Müller sprechen?",
+    "exampleSentenceDe": "Einen Moment, bitte. Ich verbinde Sie.",
+    "exampleSentenceEs": "Un momento, por favor. Ahora le paso (le conecto)."
+  },
+  {
+    "id": "RWluZW4lMjBNb21lbnQlMjBiaXR0ZSUyQyUyMGljaCUyMHZlcmJpbmRlJTIwU2llJTIwbWl0JTIwKEhlcnJuJTIwQmVja2VyKS4_",
+    "word": "Einen Moment bitte, ich verbinde Sie mit (Herrn Becker).",
+    "audioDe": "Einen Moment bitte, ich verbinde Sie mit Herrn Becker.",
+    "exampleSentenceDe": "Bleiben Sie bitte am Apparat.",
+    "exampleSentenceEs": "Manténgase a la espera, por favor."
+  },
+  {
+    "id": "RnJhdSUyME0lQzMlQkNsbGVyJTIwaXN0JTIwbGVpZGVyJTIwbmljaHQlMjBhbSUyMFBsYXR6JTIwJTJGJTIwaW4lMjBlaW5lciUyMEJlc3ByZWNodW5nLiUyMEthbm4lMjBzaWUlMjBTaWUlMjB6dXIlQzMlQkNja3J1ZmVuJTNG",
+    "word": "Frau Müller ist leider nicht am Platz / in einer Besprechung. Kann sie Sie zurückrufen?",
+    "audioDe": "Frau Müller ist leider nicht am Platz. Kann sie Sie zurückrufen?",
+    "exampleSentenceDe": "Ja, bitte. Meine Handynummer ist bekannt.",
+    "exampleSentenceEs": "Sí, por favor. Ya tiene mi número de móvil."
+  },
+  {
+    "id": "SWNoJTIwbSVDMyVCNmNodGUlMjBnZXJuJTIwZWluZW4lMjBUZXJtaW4lMjB2ZXJlaW5iYXJlbi4lMjBXYW5uJTIwaGFiZW4lMjBTaWUlMjBaZWl0JTNG",
+    "word": "Ich möchte gern einen Termin vereinbaren. Wann haben Sie Zeit?",
+    "audioDe": "Ich möchte gern einen Termin vereinbaren. Wann haben Sie Zeit?",
+    "exampleSentenceDe": "Haben Sie am achten April Zeit? Geht es am Dienstag um 11.00 Uhr?",
+    "exampleSentenceEs": "¿Tiene tiempo el ocho de abril? ¿Le va bien el martes a las 11:00 h?"
+  },
+  {
+    "id": "TmVpbiUyQyUyMGFtJTIwKDEwLiUyMEp1bmkpJTIwaGFiZSUyMGljaCUyMGxlaWRlciUyMGtlaW5lJTIwWmVpdC4lMjBBbSUyMChkcml0dGVuJTIwRiVDMyVCQ25mdGVuKSUyMGJpbiUyMGljaCUyMG5pY2h0JTIwaW0lMjBCJUMzJUJDcm8u",
+    "word": "Nein, am (10. Juni) habe ich leider keine Zeit. Am (dritten Fünften) bin ich nicht im Büro.",
+    "audioDe": "Nein, am zehnten Juni habe ich leider keine Zeit. Am dritten Fünften bin ich nicht im Büro.",
+    "exampleSentenceDe": "Ja, am Dienstag um elf Uhr geht es. Am Dienstag habe ich Zeit.",
+    "exampleSentenceEs": "Sí, me parece bien el martes a las 11:00 h. El martes tengo tiempo."
+  },
+  {
+    "id": "RGFubiUyMGJlc3VjaGUlMjBpY2glMjBTaWUlMjBhbSUyMChNaXR0d29jaCklMjB1bSUyMCgxMy4zMCUyMFVocikuJTIwJUUyJTgwJTk0JTIwVmllbGVuJTIwRGFuayUyMGYlQzMlQkNyJTIwSWhyZW4lMjBBbnJ1Zi4lMjBBdWYlMjBXaWVkZXJoJUMzJUI2cmVuLg__",
+    "word": "Dann besuche ich Sie am (Mittwoch) um (13.30 Uhr). — Vielen Dank für Ihren Anruf. Auf Wiederhören.",
+    "audioDe": "Dann besuche ich Sie am Mittwoch um dreizehn Uhr dreißig. Vielen Dank für Ihren Anruf. Auf Wiederhören.",
+    "exampleSentenceDe": "Wir erwarten den Monteur am Donnerstag.",
+    "exampleSentenceEs": "Esperamos al instalador el jueves."
+  },
+  {
+    "id": "U2VociUyMGdlZWhydGUlMjBGcmF1JTIwKFNvbW1lciklMkMlMjAlRTIlODAlQTYlMjAlMkYlMjBTZWhyJTIwZ2VlaHJ0ZXIlMjBIZXJyJTIwKFdpbnRlciklMkMlMjAlRTIlODAlQTYlMjAlMkYlMjBTZWhyJTIwZ2VlaHJ0ZSUyMERhbWVuJTIwdW5kJTIwSGVycmVuJTJDJTIwJUUyJTgwJUE2",
+    "word": "Sehr geehrte Frau (Sommer), … / Sehr geehrter Herr (Winter), … / Sehr geehrte Damen und Herren, …",
+    "audioDe": "Sehr geehrte Frau Sommer, sehr geehrter Herr Winter, sehr geehrte Damen und Herren,",
+    "exampleSentenceDe": "Liebe Frau Sommer, / Lieber Herr Winter, (Semiformal)",
+    "exampleSentenceEs": "Apreciada Sra. Sommer: / Apreciado Sr. Winter:"
+  },
+  {
+    "id": "TGllYmUlMjAoSnVsaWEpJTJDJTIwJUUyJTgwJUE2JTIwJTJGJTIwTGllYmVyJTIwKFN0ZWZhbiklMkMlMjAlRTIlODAlQTYlMjAlMkYlMjBIYWxsbyUyMHp1c2FtbWVuJTJDJTIwJUUyJTgwJUE2",
+    "word": "Liebe (Julia), … / Lieber (Stefan), … / Hallo zusammen, …",
+    "audioDe": "Liebe Julia, lieber Stefan, hallo zusammen,",
+    "exampleSentenceDe": "Liebe Julia, vielen Dank für deine Einladung!",
+    "exampleSentenceEs": "Querida Julia: ¡muchas gracias por tu invitación!"
+  },
+  {
+    "id": "TWl0JTIwZnJldW5kbGljaGVuJTIwR3IlQzMlQkMlQzMlOUZlbiUyMCUyRiUyME1pdCUyMGJlc3RlbiUyMEdyJUMzJUJDJUMzJTlGZW4lMjAlMkYlMjBNaXQlMjBoZXJ6bGljaGVuJTIwR3IlQzMlQkMlQzMlOUZlbiUyMCUyRiUyMExpZWJlJTIwR3IlQzMlQkMlQzMlOUZl",
+    "word": "Mit freundlichen Grüßen / Mit besten Grüßen / Mit herzlichen Grüßen / Liebe Grüße",
+    "audioDe": "Mit freundlichen Grüßen. Mit besten Grüßen. Mit herzlichen Grüßen. Liebe Grüße.",
+    "exampleSentenceDe": "Vielen Dank für Ihre Antwort. Mit freundlichen Grüßen",
+    "exampleSentenceEs": "Muchas gracias por su respuesta. Atentamente"
+  },
+  {
+    "id": "RXMlMjBzY2huZWl0LiUyMCUyRiUyMEVzJTIwcmVnbmV0LiUyMCUyRiUyMEVzJTIwaXN0JTIwa2FsdCUyQyUyMHdhcm0lMkMlMjBoZWklQzMlOUYlMkMlMjBuZWJsaWclMkMlMjAodGVpbHdlaXNlKSUyMGJldyVDMyVCNmxrdCUyQyUyMHNvbm5pZy4_",
+    "word": "Es schneit. / Es regnet. / Es ist kalt, warm, heiß, neblig, (teilweise) bewölkt, sonnig.",
+    "audioDe": "Es schneit. Es regnet. Es ist kalt, warm, neblig, teilweise bewölkt und sonnig.",
+    "exampleSentenceDe": "Die Sonne scheint. Die Temperatur liegt bei 25 Grad.",
+    "exampleSentenceEs": "Hace sol. La temperatura ronda los 25 grados."
+  },
+  {
+    "id": "RGllJTIwVGVtcGVyYXR1ciUyMGxpZWd0JTIwYmVpJTIwKDMzKSUyMEdyYWQuJTIwJTJGJTIwRGllJTIwVGFnZXNoJUMzJUI2Y2hzdHRlbXBlcmF0dXIlMjBiZXRyJUMzJUE0Z3QlMjAoMTkpJTIwR3JhZC4_",
+    "word": "Die Temperatur liegt bei (33) Grad. / Die Tageshöchsttemperatur beträgt (19) Grad.",
+    "audioDe": "Die Temperatur liegt bei dreiunddreißig Grad. Die Tageshöchsttemperatur beträgt neunzehn Grad.",
+    "exampleSentenceDe": "Im Winter liegt die Temperatur oft unter null Grad.",
+    "exampleSentenceEs": "En invierno la temperatura suele estar bajo cero."
+  },
+  {
+    "id": "S2FubiUyMGljaCUyMElobmVuJTIwaGVsZmVuJTNGJTIwJUUyJTgwJTk0JTIwSWNoJTIwaCVDMyVBNHR0ZSUyMGdlcm4lMjAoZWluZW4lMjBQdWxsb3ZlcikuJTIwJUUyJTgwJTk0JTIwV2VsY2hlJTIwR3IlQzMlQjYlQzMlOUZlJTIwaGFiZW4lMjBTaWUlM0YlMjAlRTIlODAlOTQlMjBJY2glMjB0cmFnZSUyMEdyJUMzJUI2JUMzJTlGZSUyMCg0MCku",
+    "word": "Kann ich Ihnen helfen? — Ich hätte gern (einen Pullover). — Welche Größe haben Sie? — Ich trage Größe (40).",
+    "audioDe": "Kann ich Ihnen helfen? Ich hätte gern einen Pullover. Welche Größe haben Sie? Ich trage Größe vierzig.",
+    "exampleSentenceDe": "Welche Farbe möchten Sie? — Grün gefällt mir gut.",
+    "exampleSentenceEs": "¿Qué color quiere usted? — Me encanta el verde."
+  },
+  {
+    "id": "S2FubiUyMGljaCUyMChkZW4lMjBQdWxsb3ZlciklMjBlaW5tYWwlMjBhbnByb2JpZXJlbiUzRiUyMCVFMiU4MCU5NCUyMFN0ZWh0JTIwbWlyJTIwKGRlciUyMEFuenVnKSUzRiUyMCVFMiU4MCU5NCUyMChFciklMjBzdGVodCUyMElobmVuJTIwYXVzZ2V6ZWljaG5ldCE_",
+    "word": "Kann ich (den Pullover) einmal anprobieren? — Steht mir (der Anzug)? — (Er) steht Ihnen ausgezeichnet!",
+    "audioDe": "Kann ich den Pullover einmal anprobieren? Steht mir der Anzug? Er steht Ihnen ausgezeichnet!",
+    "exampleSentenceDe": "Die Schuhe passen mir leider nicht. Was kostet das Kleid?",
+    "exampleSentenceEs": "Los zapatos lamentablemente no me valen. ¿Cuánto cuesta el vestido?"
+  },
+  {
+    "id": "V28lMjBzaW5kJTIwZGllJTIwVW1rbGVpZGVrYWJpbmVuJTNGJTIwJUUyJTgwJTk0JTIwRGElMjBkciVDMyVCQ2JlbiUyMGxpbmtzLg__",
+    "word": "Wo sind die Umkleidekabinen? — Da drüben links.",
+    "audioDe": "Wo sind die Umkleidekabinen? Da drüben links.",
+    "exampleSentenceDe": "Entschuldigung, darf ich das Hemd dort anprobieren?",
+    "exampleSentenceEs": "Disculpe, ¿puedo probarme la camisa de allí?"
+  },
+  {
+    "id": "V2FubiUyMGYlQzMlQTRocnQlMjBlaW4lMjBadWclMjBuYWNoJTIwKEZyYW5rZnVydCklM0YlMjAlMkYlMjBXYW5uJTIwa29tbXQlMjBkZXIlMjBadWclMjBpbiUyMChGcmFua2Z1cnQpJTIwYW4lM0YlMjAlMkYlMjBWb24lMjB3ZWxjaGVtJTIwR2xlaXMlMjBmJUMzJUE0aHJ0JTIwZGVyJTIwWnVnJTNG",
+    "word": "Wann fährt ein Zug nach (Frankfurt)? / Wann kommt der Zug in (Frankfurt) an? / Von welchem Gleis fährt der Zug?",
+    "audioDe": "Wann fährt ein Zug nach Frankfurt? Wann kommt der Zug in Frankfurt an? Von welchem Gleis fährt der Zug?",
+    "exampleSentenceDe": "Muss ich umsteigen oder fährt der Zug durch?",
+    "exampleSentenceEs": "¿Tengo que hacer transbordo o es un tren directo?"
+  },
+  {
+    "id": "TXVzcyUyMGljaCUyMHVtc3RlaWdlbiUyMG9kZXIlMjBmJUMzJUE0aHJ0JTIwZGVyJTIwWnVnJTIwZHVyY2glM0YlMjAlRTIlODAlOTQlMjBTaWUlMjBtJUMzJUJDc3NlbiUyMGluJTIwKEslQzMlQjZsbiklMjB1bXN0ZWlnZW4u",
+    "word": "Muss ich umsteigen oder fährt der Zug durch? — Sie müssen in (Köln) umsteigen.",
+    "audioDe": "Muss ich umsteigen oder fährt der Zug durch? Sie müssen in Köln umsteigen.",
+    "exampleSentenceDe": "Sie haben zehn Minuten Zeit zum Umsteigen.",
+    "exampleSentenceEs": "Tiene diez minutos de tiempo para hacer transbordo."
+  },
+  {
+    "id": "V2llJTIwdmllbCUyMGtvc3RldCUyMGRpZSUyMEZhaHJrYXJ0ZSUyMGYlQzMlQkNyJTIwZWluZSUyMGVpbmZhY2hlJTIwRmFocnQlMjBuYWNoJTIwKERyZXNkZW4pJTNGJTIwJTJGJTIwV2FzJTIwa29zdGV0JTIwZWluZSUyMFIlQzMlQkNja2ZhaHJrYXJ0ZSUzRg__",
+    "word": "Wie viel kostet die Fahrkarte für eine einfache Fahrt nach (Dresden)? / Was kostet eine Rückfahrkarte?",
+    "audioDe": "Wie viel kostet die Fahrkarte für eine einfache Fahrt nach Dresden? Was kostet eine Rückfahrkarte?",
+    "exampleSentenceDe": "Ich fahre zweite Klasse und möchte einen Sitzplatz reservieren.",
+    "exampleSentenceEs": "Viajo en segunda clase y quiero reservar un asiento."
+  },
+  {
+    "id": "SWNoJTIwZmFocmUlMjBtaXQlMjBkZW0lMjBBdXRvJTIwJTJGJTIwZGVtJTIwWnVnJTIwJTJGJTIwZGVyJTIwQmFobiUyMCUyRiUyMGRlbSUyMFNjaGlmZiUyMCUyRiUyMGRlciUyMEYlQzMlQTRocmUlMjAlMkYlMjBkZW0lMjBNb3RvcnJhZCUyMCUyRiUyMGRlbSUyMEJ1cy4lMjBJY2glMjBmbGllZ2UlMjBtaXQlMjBkZW0lMjBGbHVnemV1Zy4_",
+    "word": "Ich fahre mit dem Auto / dem Zug / der Bahn / dem Schiff / der Fähre / dem Motorrad / dem Bus. Ich fliege mit dem Flugzeug.",
+    "audioDe": "Ich fahre mit dem Auto, mit dem Zug, mit der Bahn oder mit dem Bus. Ich fliege mit dem Flugzeug.",
+    "exampleSentenceDe": "Zur Arbeit fahre ich immer mit der Bahn.",
+    "exampleSentenceEs": "Al trabajo voy siempre en tren."
+  },
+  {
+    "id": "TWFuJTIwa2FubiUyMGluJTIwZGVyJTIwU3RhZHQlMjAlMkYlMjBhbSUyMFN0YWR0cmFuZCUyMCUyRiUyMGF1ZiUyMGRlbSUyMExhbmQlMjB3b2huZW4uJTIwSWNoJTIwc3VjaGUlMjBlaW5lJTIwV29obnVuZyUyMCUyRiUyMGVpbiUyMEhhdXMu",
+    "word": "Man kann in der Stadt / am Stadtrand / auf dem Land wohnen. Ich suche eine Wohnung / ein Haus.",
+    "audioDe": "Man kann in der Stadt, am Stadtrand oder auf dem Land wohnen. Ich suche eine Wohnung.",
+    "exampleSentenceDe": "Wie viele Zimmer hat die Wohnung? — Sie hat 89 Quadratmeter.",
+    "exampleSentenceEs": "¿Cuántas habitaciones tiene el piso? — Tiene 89 metros cuadrados."
+  },
+  {
+    "id": "V2FzJTIwa29zdGV0JTIwZGllJTIwV29obnVuZyUzRiUyMCVFMiU4MCU5NCUyMERpZSUyMG1vbmF0bGljaGUlMjBNaWV0ZSUyMGJldHIlQzMlQTRndCUyMCg4MDApJTIwRXVybyUyMChvaG5lJTJGbWl0KSUyME5lYmVua29zdGVuLiUyMERpZSUyMEdlc2FtdGtvc3RlbiUyMGJldHJhZ2VuJTIwMTAwMCUyMEV1cm8u",
+    "word": "Was kostet die Wohnung? — Die monatliche Miete beträgt (800) Euro (ohne/mit) Nebenkosten. Die Gesamtkosten betragen 1000 Euro.",
+    "audioDe": "Was kostet die Wohnung? Die monatliche Miete beträgt achthundert Euro ohne Nebenkosten. Die Gesamtkosten betragen tausend Euro.",
+    "exampleSentenceDe": "Möchten Sie die Wohnung am Samstag besichtigen?",
+    "exampleSentenceEs": "¿Quiere usted visitar el piso el sábado?"
+  },
+  {
+    "id": "V2llJTIwaXN0JTIwZGllJTIwTGFnZSUzRiUyMCVFMiU4MCU5NCUyMERpZSUyMFdvaG51bmclMjBsaWVndCUyMChpbSUyMFplbnRydW0pJTIwdW5kJTIwaXN0JTIwKDE1JTIwTWludXRlbiklMjB2b20lMjBCYWhuaG9mJTIwZW50ZmVybnQuJTIwRXMlMjBnaWJ0JTIwZ3V0ZSUyMEVpbmthdWZzbSVDMyVCNmdsaWNoa2VpdGVuLg__",
+    "word": "Wie ist die Lage? — Die Wohnung liegt (im Zentrum) und ist (15 Minuten) vom Bahnhof entfernt. Es gibt gute Einkaufsmöglichkeiten.",
+    "audioDe": "Wie ist die Lage? Die Wohnung liegt im Zentrum und ist fünfzehn Minuten vom Bahnhof entfernt.",
+    "exampleSentenceDe": "Die Wohnung hat einen Garten und einen Balkon.",
+    "exampleSentenceEs": "El piso tiene un jardín y un balcón."
+  },
+  {
+    "id": "QWxsZSUyME1pZXRlciUyMG0lQzMlQkNzc2VuJTIwZGllJTIwTmFjaHRydWhlJTIwcmVzcGVrdGllcmVuLiUyME1hbiUyMGRhcmYlMjBpbiUyMGRlciUyMFdvaG51bmclMjB1bmQlMjBpbSUyMEhhdXMlMjBrZWluZW4lMjBMJUMzJUE0cm0lMjBtYWNoZW4u",
+    "word": "Alle Mieter müssen die Nachtruhe respektieren. Man darf in der Wohnung und im Haus keinen Lärm machen.",
+    "audioDe": "Alle Mieter müssen die Nachtruhe respektieren. Man darf in der Wohnung und im Haus keinen Lärm machen.",
+    "exampleSentenceDe": "Im Keller oder in der Tiefgarage ist Spielen verboten. Haustüren muss man ab 22 Uhr abschließen.",
+    "exampleSentenceEs": "En el sótano o en el garaje subterráneo está prohibido jugar. Las puertas deben cerrarse con llave desde las 22:00 h."
+  },
+  {
+    "id": "V2llJTIwa29tbWUlMjBpY2glMjAoenVtJTIwSG90ZWwpJTNGJTIwJUUyJTgwJTk0JTIwR2VoZW4lMjBTaWUlMjBnZXJhZGVhdXMlMjBiaXMlMjB6dXIlMjBIYXVwdHN0cmElQzMlOUZlLiUyMERhbm4lMjBuYWNoJTIwbGlua3MlMjBiaXMlMjB6dXIlMjB6d2VpdGVuJTIwUXVlcnN0cmElQzMlOUZlLg__",
+    "word": "Wie komme ich (zum Hotel)? — Gehen Sie geradeaus bis zur Hauptstraße. Dann nach links bis zur zweiten Querstraße.",
+    "audioDe": "Wie komme ich zum Hotel? Gehen Sie geradeaus bis zur Hauptstraße. Dann nach links bis zur zweiten Querstraße.",
+    "exampleSentenceDe": "Fahren Sie bis zur Ampel. An der Ampel müssen Sie links abbiegen. Das Hotel ist neben dem Museum.",
+    "exampleSentenceEs": "Siga hasta el semáforo. En el semáforo tiene que girar a la izquierda. El hotel está al lado del museo."
+  },
+  {
+    "id": "QmllZ2VuJTIwU2llJTIwYW4lMjBkZXIlMjBLcmV1enVuZyUyMHJlY2h0cyUyMCUyRiUyMGxpbmtzJTIwYWIuJTIwRGFzJTIwTXVzZXVtJTIwbGllZ3QlMjBhdWYlMjBkZXIlMjByZWNodGVuJTIwU2VpdGUu",
+    "word": "Biegen Sie an der Kreuzung rechts / links ab. Das Museum liegt auf der rechten Seite.",
+    "audioDe": "Biegen Sie an der Kreuzung rechts ab. Das Museum liegt auf der rechten Seite.",
+    "exampleSentenceDe": "Gehen Sie über den Platz und dann immer geradeaus.",
+    "exampleSentenceEs": "Cruce la plaza y después siga siempre recto."
+  },
+  {
+    "id": "SGVyemxpY2hlbiUyMEdsJUMzJUJDY2t3dW5zY2glMjB6dW0lMjBHZWJ1cnRzdGFnISUyMCUyRiUyMFp1ciUyMEhvY2h6ZWl0JTIwYWxsZSUyMGd1dGVuJTIwVyVDMyVCQ25zY2hlISUyMCUyRiUyMFp1ciUyMEJlZiVDMyVCNnJkZXJ1bmclMjBhbGxlcyUyMEd1dGUhJTIwJTJGJTIwVmllbCUyMEdsJUMzJUJDY2slMjBpbiUyMGRlciUyMG5ldWVuJTIwV29obnVuZyE_",
+    "word": "Herzlichen Glückwunsch zum Geburtstag! / Zur Hochzeit alle guten Wünsche! / Zur Beförderung alles Gute! / Viel Glück in der neuen Wohnung!",
+    "audioDe": "Herzlichen Glückwunsch zum Geburtstag! Zur Hochzeit alle guten Wünsche! Viel Glück in der neuen Wohnung!",
+    "exampleSentenceDe": "Ich gratuliere dir zum Führerschein! Ich wünsche dir gute Besserung!",
+    "exampleSentenceEs": "¡Te felicito por el carné de conducir! ¡Que te mejores!"
+  },
+  {
+    "id": "SWNoJTIwdyVDMyVCQ25zY2hlJTIwZGlyJTIwJTJGJTIwSWhuZW4lMjBndXRlJTIwQmVzc2VydW5nISUyMCVFMiU4MCU5NCUyMERhbmtlJTIwc2VociE_",
+    "word": "Ich wünsche dir / Ihnen gute Besserung! — Danke sehr!",
+    "audioDe": "Ich wünsche Ihnen gute Besserung! Danke sehr!",
+    "exampleSentenceDe": "Erholen Sie sich gut und ruhen Sie sich aus.",
+    "exampleSentenceEs": "Recupérese bien y descanse."
+  },
+  {
+    "id": "VmllbGVuJTIwRGFuayUyMGYlQzMlQkNyJTIwZGllJTIwRWlubGFkdW5nLiUyMEljaCUyMGtvbW1lJTIwZ2Vybi4lMjAlMkYlMjBMZWlkZXIlMjBrYW5uJTIwaWNoJTIwbmljaHQlMjB6dSUyMGRlaW5lciUyMEZlaWVyJTIwa29tbWVuLiUyMEljaCUyMGhvZmZlJTJDJTIwZHUlMjB2ZXJ6ZWloc3QlMjBtaXIu",
+    "word": "Vielen Dank für die Einladung. Ich komme gern. / Leider kann ich nicht zu deiner Feier kommen. Ich hoffe, du verzeihst mir.",
+    "audioDe": "Vielen Dank für die Einladung. Ich komme gern. Leider kann ich nicht zu deiner Feier kommen.",
+    "exampleSentenceDe": "Am Samstag muss ich leider arbeiten.",
+    "exampleSentenceEs": "El sábado lamentablemente tengo que trabajar."
+  },
+  {
+    "id": "V2FzJTIwaGFiZW4lMjBTaWUlMjBmJUMzJUJDciUyMEJlc2Nod2VyZGVuJTNGJTIwJUUyJTgwJTk0JTIwSWNoJTIwaGFiZSUyMEtvcGZzY2htZXJ6ZW4lMkMlMjBIdXN0ZW4lMkMlMjBTY2hudXBmZW4lMjB1bmQlMjBGaWViZXIuJTIwTWlyJTIwdHV0JTIwbWVpbiUyMEFybSUyMHdlaC4_",
+    "word": "Was haben Sie für Beschwerden? — Ich habe Kopfschmerzen, Husten, Schnupfen und Fieber. Mir tut mein Arm weh.",
+    "audioDe": "Was haben Sie für Beschwerden? Ich habe Kopfschmerzen, Husten, Schnupfen und Fieber. Mir tut mein Arm weh.",
+    "exampleSentenceDe": "Sie müssen eine Schmerztablette einnehmen und dürfen keinen Alkohol trinken.",
+    "exampleSentenceEs": "Tiene que tomar un analgésico y no puede beber alcohol."
+  },
+  {
+    "id": "SWNoJTIwYnJhdWNoZSUyMGVpbiUyMEF0dGVzdCUyMCUyRiUyMGVpbmUlMjBLcmFua21lbGR1bmclMjBmJUMzJUJDciUyMG1laW5lbiUyMEFyYmVpdGdlYmVyLg__",
+    "word": "Ich brauche ein Attest / eine Krankmeldung für meinen Arbeitgeber.",
+    "audioDe": "Ich brauche ein Attest für meinen Arbeitgeber.",
+    "exampleSentenceDe": "Der Arzt schreibt mich bis Freitag krank.",
+    "exampleSentenceEs": "El médico me da la baja hasta el viernes."
+  },
+  {
+    "id": "RGVyJTIwQiVDMyVCQ3JnZXJtZWlzdGVyJTIwZXIlQzMlQjZmZm5ldGUlMjBlaW5lJTIwQXVzc3RlbGx1bmcuJTIwJTJGJTIwJUMzJTg0cnp0ZSUyMHByb3Rlc3RpZXJ0ZW4lMjBnZWdlbiUyMHNjaGxlY2h0ZSUyMEFyYmVpdHNiZWRpbmd1bmdlbiUyMHVuZCUyMGZvcmRlcnRlbiUyMG1laHIlMjBHZWhhbHQu",
+    "word": "Der Bürgermeister eröffnete eine Ausstellung. / Ärzte protestierten gegen schlechte Arbeitsbedingungen und forderten mehr Gehalt.",
+    "audioDe": "Der Bürgermeister eröffnete eine Ausstellung. Ärzte protestierten gegen schlechte Arbeitsbedingungen und forderten mehr Gehalt.",
+    "exampleSentenceDe": "Der FC Schalke gewann gegen Galatasaray. Eintracht Frankfurt verlor mit 0:3.",
+    "exampleSentenceEs": "El FC Schalke ganó contra el Galatasaray. El Eintracht Frankfurt perdió 0:3."
+  },
+  {
+    "id": "QW50d29ydGVuJTIwU2llLiUyMCUyRiUyMEJlYW50d29ydGVuJTIwU2llJTIwZGllJTIwRnJhZ2UuJTIwJTJGJTIwQmlsZGVuJTIwU2llJTIwUyVDMyVBNHR6ZS4lMjAlMkYlMjBFcmclQzMlQTRuemVuJTIwU2llLiUyMCUyRiUyMEtyZXV6ZW4lMjBTaWUlMjBhbi4lMjAlMkYlMjBPcmRuZW4lMjBTaWUlMjB6dS4_",
+    "word": "Antworten Sie. / Beantworten Sie die Frage. / Bilden Sie Sätze. / Ergänzen Sie. / Kreuzen Sie an. / Ordnen Sie zu.",
+    "audioDe": "Antworten Sie. Beantworten Sie die Frage. Bilden Sie Sätze. Ergänzen Sie. Kreuzen Sie an. Ordnen Sie zu.",
+    "exampleSentenceDe": "Lesen Sie den Text, markieren Sie die Wörter und schreiben Sie eine E-Mail.",
+    "exampleSentenceEs": "Lea el texto, marque las palabras y escriba un correo electrónico."
+  },
+  {
+    "id": "V2llJTIwc2FndCUyMG1hbiUyMCVFMiU4MCVBNiUyMGF1ZiUyMERldXRzY2glM0YlMjAlMkYlMjBJY2glMjB2ZXJzdGVoZSUyMChkYXMpJTIwbmljaHQuJTIwJTJGJTIwSyVDMyVCNm5uZW4lMjBTaWUlMjBkYXMlMjBub2NoJTIwZWlubWFsJTIwd2llZGVyaG9sZW4lM0YlMjAlMkYlMjBTcHJlY2hlbiUyMFNpZSUyMGJpdHRlJTIwbGFuZ3NhbWVyLg__",
+    "word": "Wie sagt man … auf Deutsch? / Ich verstehe (das) nicht. / Können Sie das noch einmal wiederholen? / Sprechen Sie bitte langsamer.",
+    "audioDe": "Wie sagt man das auf Deutsch? Ich verstehe das nicht. Können Sie das noch einmal wiederholen? Sprechen Sie bitte langsamer.",
+    "exampleSentenceDe": "Ich habe eine Frage. Darf ich Sie etwas fragen?",
+    "exampleSentenceEs": "Tengo una pregunta. ¿Puedo preguntarle algo?"
+  },
+  {
+    "id": "V2FzJTIwZGVua3N0JTIwZHUlM0YlMjAlMkYlMjBXYXMlMjBtZWluZW4lMjBTaWUlM0YlMjAlMkYlMjBXaWUlMjBmaW5kZW4lMjBTaWUlMjBkYXMlM0YlMjAlRTIlODAlOTQlMjBJY2glMjBkZW5rZSUyQyUyMCVFMiU4MCVBNiUyMCUyRiUyMEljaCUyMGdsYXViZSUyQyUyMCVFMiU4MCVBNiUyMCUyRiUyMEljaCUyMGhhYmUlMjBrZWluZSUyMEFobnVuZy4_",
+    "word": "Was denkst du? / Was meinen Sie? / Wie finden Sie das? — Ich denke, … / Ich glaube, … / Ich habe keine Ahnung.",
+    "audioDe": "Was denkst du? Was meinen Sie? Wie finden Sie das? Ich glaube, das ist richtig. Ich habe keine Ahnung.",
+    "exampleSentenceDe": "Das finde ich gut! — Und Sie? — Ich auch! / Ich nicht. / Ich möchte lieber...",
+    "exampleSentenceEs": "¡Eso me parece bien! — ¿Y a usted? — ¡A mí también! / A mí no. / Yo prefiero..."
+  },
+  {
+    "id": "RGFzJTIwaXN0JTIwcmljaHRpZy4lMjAlMkYlMjBEYXMlMjBzdGltbXQuJTIwJTJGJTIwRHUlMjBoYXN0JTIwcmVjaHQuJTIwJTJGJTIwU2llJTIwaGFiZW4lMjByZWNodC4_",
+    "word": "Das ist richtig. / Das stimmt. / Du hast recht. / Sie haben recht.",
+    "audioDe": "Das ist richtig. Das stimmt. Sie haben recht.",
+    "exampleSentenceDe": "Ja, genau! Das sehe ich auch so.",
+    "exampleSentenceEs": "¡Sí, exacto! Yo también lo veo así."
+  },
+  {
+    "id": "RGFzJTIwZmluZGUlMjBpY2glMjBuaWNodCUyMGd1dC4lMjAlMkYlMjBJY2glMjBiaW4lMjBkYWdlZ2VuLiUyMCUyRiUyMEljaCUyMGJpbiUyMGFuZGVyZXIlMjBNZWludW5nLg__",
+    "word": "Das finde ich nicht gut. / Ich bin dagegen. / Ich bin anderer Meinung.",
+    "audioDe": "Das finde ich nicht gut. Ich bin dagegen. Ich bin anderer Meinung.",
+    "exampleSentenceDe": "Ich möchte lieber zu Hause bleiben.",
+    "exampleSentenceEs": "Yo prefiero quedarme en casa."
+  },
+  {
+    "id": "SWNoJTIwa29tbWUlMjBhdXMlMjAoS29sdW1iaWVuKSUyMHVuZCUyMHdvaG5lJTIwaW4lMjAoRHVpc2J1cmcpLg__",
+    "word": "Ich komme aus (Kolumbien) und wohne in (Duisburg).",
+    "audioDe": "Ich komme aus Kolumbien und wohne in Duisburg.",
+    "exampleSentenceDe": "Ich lebe seit zwei Jahren in Deutschland.",
+    "exampleSentenceEs": "Vivo desde hace dos años en Alemania."
+  },
+  {
+    "id": "U2luZCUyMFNpZSUyMHZlcmhlaXJhdGV0JTNGJTIwJUUyJTgwJTk0JTIwSmElMkMlMjBpY2glMjBiaW4lMjB2ZXJoZWlyYXRldCUyMHVuZCUyMGhhYmUlMjB6d2VpJTIwS2luZGVyLg__",
+    "word": "Sind Sie verheiratet? — Ja, ich bin verheiratet und habe zwei Kinder.",
+    "audioDe": "Sind Sie verheiratet? Ja, ich bin verheiratet und habe zwei Kinder.",
+    "exampleSentenceDe": "Mein Mann arbeitet auch in Berlin.",
+    "exampleSentenceEs": "Mi esposo también trabaja en Berlín."
+  },
+  {
+    "id": "V2FzJTIwbWFjaGVuJTIwU2llJTIwZ2VybiUyMGFtJTIwV29jaGVuZW5kZSUzRiUyMCVFMiU4MCU5NCUyMEljaCUyMGdlaGUlMjBnZXJuJTIwc3BhemllcmVuJTIwdW5kJTIwdHJlZmZlJTIwRnJldW5kZS4_",
+    "word": "Was machen Sie gern am Wochenende? — Ich gehe gern spazieren und treffe Freunde.",
+    "audioDe": "Was machen Sie gern am Wochenende? Ich gehe gern spazieren und treffe Freunde.",
+    "exampleSentenceDe": "Samstags koche ich mit meiner Familie.",
+    "exampleSentenceEs": "Los sábados cocino con mi familia."
+  },
+  {
+    "id": "TWVpbiUyMExpZWJsaW5nc2hvYmJ5JTIwaXN0JTIwKEZvdG9ncmFmaWVyZW4pLg__",
+    "word": "Mein Lieblingshobby ist (Fotografieren).",
+    "audioDe": "Mein Lieblingshobby ist Fotografieren.",
+    "exampleSentenceDe": "Fotografieren macht mir großen Spaß.",
+    "exampleSentenceEs": "La fotografía me divierte mucho."
+  },
+  {
+    "id": "SGFiZW4lMjBTaWUlMjBlaW5lbiUyMEt1Z2Vsc2NocmVpYmVyJTIwZiVDMyVCQ3IlMjBtaWNoJTNGJTIwJUUyJTgwJTk0JTIwSmElMkMlMjBiaXR0ZSUyMGhpZXIlMjBpc3QlMjBlaW5lci4_",
+    "word": "Haben Sie einen Kugelschreiber für mich? — Ja, bitte hier ist einer.",
+    "audioDe": "Haben Sie einen Kugelschreiber für mich? Ja, bitte hier ist einer.",
+    "exampleSentenceDe": "Ich brauche auch noch ein Blatt Papier.",
+    "exampleSentenceEs": "También necesito una hoja de papel."
+  },
+  {
+    "id": "V28lMjBpc3QlMjBkaWUlMjBLYWZmZWVtYXNjaGluZSUzRiUyMCVFMiU4MCU5NCUyMEluJTIwZGVyJTIwVGVlayVDMyVCQ2NoZSUyMGltJTIwZXJzdGVuJTIwU3RvY2su",
+    "word": "Wo ist die Kaffeemaschine? — In der Teeküche im ersten Stock.",
+    "audioDe": "Wo ist die Kaffeemaschine? In der Teeküche im ersten Stock.",
+    "exampleSentenceDe": "Der Aufzug ist direkt neben der Treppe.",
+    "exampleSentenceEs": "El ascensor está justo al lado de la escalera."
+  },
+  {
+    "id": "SyVDMyVCNm5uZW4lMjBTaWUlMjBtaXIlMjBiaXR0ZSUyMGhlbGZlbiUzRiUyMCVFMiU4MCU5NCUyMEphJTIwbmF0JUMzJUJDcmxpY2glMkMlMjBzZWhyJTIwZ2VybmUh",
+    "word": "Können Sie mir bitte helfen? — Ja natürlich, sehr gerne!",
+    "audioDe": "Können Sie mir bitte helfen? Ja natürlich, sehr gerne!",
+    "exampleSentenceDe": "Ich verstehe dieses Programm noch nicht.",
+    "exampleSentenceEs": "Aún no entiendo este programa."
+  },
+  {
+    "id": "RGFzJTIwaXN0JTIwSGVyciUyMChLbGVpbiklMkMlMjB1bnNlciUyMG5ldWVyJTIwS29sbGVnZS4lMjAlRTIlODAlOTQlMjBGcmV1dCUyMG1pY2glMkMlMjBTaWUlMjBrZW5uZW56dWxlcm5lbiE_",
+    "word": "Das ist Herr (Klein), unser neuer Kollege. — Freut mich, Sie kennenzulernen!",
+    "audioDe": "Das ist Herr Klein, unser neuer Kollege. Freut mich, Sie kennenzulernen!",
+    "exampleSentenceDe": "Guten Tag, Herr Klein, herzlich willkommen!",
+    "exampleSentenceEs": "Buenos días, Sr. Klein, ¡sea bienvenido!"
+  },
+  {
+    "id": "SWNoJTIwbSVDMyVCNmNodGUlMjBlaW4lMjBaaW1tZXIlMjBmJUMzJUJDciUyMChkcmVpJTIwTiVDMyVBNGNodGUpJTIwcmVzZXJ2aWVyZW4u",
+    "word": "Ich möchte ein Zimmer für (drei Nächte) reservieren.",
+    "audioDe": "Ich möchte ein Zimmer für drei Nächte reservieren.",
+    "exampleSentenceDe": "Vom zehnten bis zum dreizehnten Mai.",
+    "exampleSentenceEs": "Del 10 al 13 de mayo."
+  },
+  {
+    "id": "R2lidCUyMGVzJTIwaW0lMjBIb3RlbCUyMGVpbiUyMFNjaHdpbW1iYWQlMjBvZGVyJTIwZWluZSUyMFNhdW5hJTNG",
+    "word": "Gibt es im Hotel ein Schwimmbad oder eine Sauna?",
+    "audioDe": "Gibt es im Hotel ein Schwimmbad oder eine Sauna?",
+    "exampleSentenceDe": "Ja, der Wellnessbereich ist im Untergeschoss.",
+    "exampleSentenceEs": "Sí, la zona de spa está en la planta baja."
+  },
+  {
+    "id": "QWIlMjB3YW5uJTIwZ2lidCUyMGVzJTIwRnIlQzMlQkNoc3QlQzMlQkNjayUzRiUyMCVFMiU4MCU5NCUyMERhcyUyMEZyJUMzJUJDaHN0JUMzJUJDY2tzYnVmZmV0JTIwc3RlaHQlMjBhYiUyMCg2LjMwJTIwVWhyKSUyMGJlcmVpdC4_",
+    "word": "Ab wann gibt es Frühstück? — Das Frühstücksbuffet steht ab (6.30 Uhr) bereit.",
+    "audioDe": "Ab wann gibt es Frühstück? Das Frühstücksbuffet steht ab halb sieben bereit.",
+    "exampleSentenceDe": "Das Frühstück servieren wir bis zehn Uhr.",
+    "exampleSentenceEs": "Servimos el desayuno hasta las diez."
+  },
+  {
+    "id": "SyVDMyVCNm5uZW4lMjBTaWUlMjBtaXIlMjBlaW4lMjBUYXhpJTIwcnVmZW4lM0YlMjAlRTIlODAlOTQlMjBKYSUyMGdlcm4lMkMlMjBkYXMlMjBUYXhpJTIwa29tbXQlMjBpbiUyMHplaG4lMjBNaW51dGVuLg__",
+    "word": "Können Sie mir ein Taxi rufen? — Ja gern, das Taxi kommt in zehn Minuten.",
+    "audioDe": "Können Sie mir ein Taxi rufen? Ja gern, das Taxi kommt in zehn Minuten.",
+    "exampleSentenceDe": "Ich muss pünktlich am Flughafen sein.",
+    "exampleSentenceEs": "Tengo que estar puntual en el aeropuerto."
+  },
+  {
+    "id": "V28lMjBrYW5uJTIwbWFuJTIwaGllciUyMGVpbmVuJTIwU3RhZHRwbGFuJTIwYmVrb21tZW4lM0YlMjAlRTIlODAlOTQlMjBBbiUyMGRlciUyMEhvdGVscmV6ZXB0aW9uJTIwb2RlciUyMGluJTIwZGVyJTIwVG91cmlzdGVuaW5mb3JtYXRpb24u",
+    "word": "Wo kann man hier einen Stadtplan bekommen? — An der Hotelrezeption oder in der Touristeninformation.",
+    "audioDe": "Wo kann man hier einen Stadtplan bekommen? An der Hotelrezeption.",
+    "exampleSentenceDe": "Hier ist ein kostenloser Stadtplan für Sie.",
+    "exampleSentenceEs": "Aquí tiene un mapa gratuito de la ciudad."
+  },
+  {
+    "id": "SGFiZW4lMjBTaWUlMjB2ZWdldGFyaXNjaGUlMjBHZXJpY2h0ZSUzRiUyMCVFMiU4MCU5NCUyMEphJTJDJTIwd2lyJTIwaGFiZW4lMjBmcmlzY2hlJTIwUGFzdGElMjB1bmQlMjBTYWxhdGUu",
+    "word": "Haben Sie vegetarische Gerichte? — Ja, wir haben frische Pasta und Salate.",
+    "audioDe": "Haben Sie vegetarische Gerichte? Ja, wir haben frische Pasta und Salate.",
+    "exampleSentenceDe": "Ich esse kein Fleisch und keinen Fisch.",
+    "exampleSentenceEs": "No como carne ni pescado."
+  },
+  {
+    "id": "SyVDMyVCNm5uZW4lMjB3aXIlMjBiaXR0ZSUyMG5vY2glMjBldHdhcyUyMEJyb3QlMjB1bmQlMjBXYXNzZXIlMjBoYWJlbiUzRg__",
+    "word": "Können wir bitte noch etwas Brot und Wasser haben?",
+    "audioDe": "Können wir bitte noch etwas Brot und Wasser haben?",
+    "exampleSentenceDe": "Sofort, ich bringe Ihnen frisches Brot.",
+    "exampleSentenceEs": "Enseguida, le traigo pan fresco."
+  },
+  {
+    "id": "V2FyJTIwYWxsZXMlMjB6dSUyMElocmVyJTIwWnVmcmllZGVuaGVpdCUzRiUyMCVFMiU4MCU5NCUyMEphJTJDJTIwdmllbGVuJTIwRGFuayUyQyUyMGVzJTIwd2FyJTIwayVDMyVCNnN0bGljaCE_",
+    "word": "War alles zu Ihrer Zufriedenheit? — Ja, vielen Dank, es war köstlich!",
+    "audioDe": "War alles zu Ihrer Zufriedenheit? Ja, vielen Dank, es war köstlich!",
+    "exampleSentenceDe": "Wir kommen sehr gerne wieder.",
+    "exampleSentenceEs": "Volveremos con mucho gusto."
+  },
+  {
+    "id": "V2FzJTIwa29zdGVuJTIwZGllJTIwJUMzJTg0cGZlbCUzRiUyMCVFMiU4MCU5NCUyMFp3ZWklMjBFdXJvJTIwZiVDMyVCQ25memlnJTIwZGFzJTIwS2lsby4_",
+    "word": "Was kosten die Äpfel? — Zwei Euro fünfzig das Kilo.",
+    "audioDe": "Was kosten die Äpfel? Zwei Euro fünfzig das Kilo.",
+    "exampleSentenceDe": "Geben Sie mir bitte ein Kilo Äpfel.",
+    "exampleSentenceEs": "Deme por favor un kilo de manzanas."
+  },
+  {
+    "id": "SWNoJTIwa29jaGUlMjBzZWhyJTIwZ2VybiUyMG1pdCUyMGZyaXNjaGVtJTIwR2VtJUMzJUJDc2UlMjB1bmQlMjBPbGl2ZW4lQzMlQjZsLg__",
+    "word": "Ich koche sehr gern mit frischem Gemüse und Olivenöl.",
+    "audioDe": "Ich koche sehr gern mit frischem Gemüse und Olivenöl.",
+    "exampleSentenceDe": "Am liebsten koche ich italienische Gerichte.",
+    "exampleSentenceEs": "Lo que más me gusta es cocinar platos italianos."
+  },
+  {
+    "id": "V2FubiUyMGJlZ2lubnQlMjBJaHIlMjBEZXV0c2Noa3VycyUzRiUyMCVFMiU4MCU5NCUyME1laW4lMjBLdXJzJTIwYmVnaW5udCUyMHVtJTIwKDE4LjAwJTIwVWhyKS4_",
+    "word": "Wann beginnt Ihr Deutschkurs? — Mein Kurs beginnt um (18.00 Uhr).",
+    "audioDe": "Wann beginnt Ihr Deutschkurs? Mein Kurs beginnt um achtzehn Uhr.",
+    "exampleSentenceDe": "Der Unterricht dauert zwei Stunden.",
+    "exampleSentenceEs": "La clase dura dos horas."
+  },
+  {
+    "id": "SWNoJTIwaGFiZSUyMG1laW4lMjBQYXNzd29ydCUyMHZlcmdlc3Nlbi4lMjBLJUMzJUI2bm5lbiUyMFNpZSUyMG1pciUyMGhlbGZlbiUzRg__",
+    "word": "Ich habe mein Passwort vergessen. Können Sie mir helfen?",
+    "audioDe": "Ich habe mein Passwort vergessen. Können Sie mir helfen?",
+    "exampleSentenceDe": "Sie können Ihr Passwort online zurücksetzen.",
+    "exampleSentenceEs": "Puede restablecer su contraseña en línea."
+  },
+  {
+    "id": "SWNoJTIwc2NoaWNrZSUyMElobmVuJTIwZGllJTIwRGF0ZWklMjBhbHMlMjBQREYtQW5oYW5nJTIwcGVyJTIwRS1NYWlsLg__",
+    "word": "Ich schicke Ihnen die Datei als PDF-Anhang per E-Mail.",
+    "audioDe": "Ich schicke Ihnen die Datei als PDF-Anhang per E-Mail.",
+    "exampleSentenceDe": "Bitte prüfen Sie Ihren Posteingang.",
+    "exampleSentenceEs": "Por favor revise su bandeja de entrada."
+  },
+  {
+    "id": "SyVDMyVCNm5uZW4lMjB3aXIlMjBkZW4lMjBUZXJtaW4lMjBhdWYlMjAoRnJlaXRhZyUyMHVtJTIwMTAuMDAlMjBVaHIpJTIwdmVyc2NoaWViZW4lM0Y_",
+    "word": "Können wir den Termin auf (Freitag um 10.00 Uhr) verschieben?",
+    "audioDe": "Können wir den Termin auf Freitag um zehn Uhr verschieben?",
+    "exampleSentenceDe": "Ja, Freitag um zehn Uhr passt mir sehr gut.",
+    "exampleSentenceEs": "Sí, el viernes a las diez me va perfecto."
+  },
+  {
+    "id": "SWNoJTIwcnVmZSUyMFNpZSUyMG1vcmdlbiUyMHZvcm1pdHRhZyUyMG5vY2glMjBlaW5tYWwlMjBhbi4lMjBBdWYlMjBXaWVkZXJoJUMzJUI2cmVuIQ__",
+    "word": "Ich rufe Sie morgen vormittag noch einmal an. Auf Wiederhören!",
+    "audioDe": "Ich rufe Sie morgen vormittag noch einmal an. Auf Wiederhören!",
+    "exampleSentenceDe": "Ich bin ab neun Uhr im Büro erreichbar.",
+    "exampleSentenceEs": "Estoy localizable en la oficina a partir de las nueve."
+  },
+  {
+    "id": "VmllbGVuJTIwRGFuayUyMGYlQzMlQkNyJTIwSWhyZSUyMHNjaG5lbGxlJTIwUiVDMyVCQ2NrbWVsZHVuZy4_",
+    "word": "Vielen Dank für Ihre schnelle Rückmeldung.",
+    "audioDe": "Vielen Dank für Ihre schnelle Rückmeldung.",
+    "exampleSentenceDe": "Ich freue mich auf unsere Zusammenarbeit.",
+    "exampleSentenceEs": "Me alegro de trabajar juntos."
+  },
+  {
+    "id": "SyVDMyVCNm5udGVuJTIwU2llJTIwbWlyJTIwYml0dGUlMjBkaWUlMjBCZXN0JUMzJUE0dGlndW5nJTIwcGVyJTIwRS1NYWlsJTIwenVzZW5kZW4lM0Y_",
+    "word": "Könnten Sie mir bitte die Bestätigung per E-Mail zusenden?",
+    "audioDe": "Könnten Sie mir bitte die Bestätigung per E-Mail zusenden?",
+    "exampleSentenceDe": "Ich sende Ihnen die Buchungsbestätigung sofort.",
+    "exampleSentenceEs": "Le envío la confirmación de la reserva de inmediato."
+  },
+  {
+    "id": "TW9yZ2VuJTIwc29sbCUyMGVzJTIwaW0lMjBnYW56ZW4lMjBMYW5kJTIwc29ubmlnJTIwdW5kJTIwd2FybSUyMHdlcmRlbi4_",
+    "word": "Morgen soll es im ganzen Land sonnig und warm werden.",
+    "audioDe": "Morgen soll es im ganzen Land sonnig und warm werden.",
+    "exampleSentenceDe": "Die Höchstwerte erreichen 24 Grad.",
+    "exampleSentenceEs": "Las temperaturas máximas alcanzarán los 24 grados."
+  },
+  {
+    "id": "SGFiZW4lMjBTaWUlMjBkaWVzZSUyMEphY2tlJTIwYXVjaCUyMGluJTIwZWluZXIlMjBhbmRlcmVuJTIwRmFyYmUlMjAlMkYlMjBHciVDMyVCNiVDMyU5RmUlM0Y_",
+    "word": "Haben Sie diese Jacke auch in einer anderen Farbe / Größe?",
+    "audioDe": "Haben Sie diese Jacke auch in einer anderen Farbe oder Größe?",
+    "exampleSentenceDe": "Ja, wir haben die Jacke noch in Blau und in Größe L.",
+    "exampleSentenceEs": "Sí, tenemos la chaqueta también en azul y en talla L."
+  },
+  {
+    "id": "QWNodHVuZyUyMGFuJTIwR2xlaXMlMjAoNCklM0ElMjBEZXIlMjBJQ0UlMjBuYWNoJTIwKEJlcmxpbiklMjBmJUMzJUE0aHJ0JTIwamV0enQlMjBlaW4u",
+    "word": "Achtung an Gleis (4): Der ICE nach (Berlin) fährt jetzt ein.",
+    "audioDe": "Achtung an Gleis vier: Der ICE nach Berlin fährt jetzt ein.",
+    "exampleSentenceDe": "Bitte halten Sie Abstand von der Bahnsteigkante.",
+    "exampleSentenceEs": "Por favor mantengan la distancia respecto al borde del andén."
+  },
+  {
+    "id": "SGF0JTIwZGVyJTIwWnVnJTIwVmVyc3AlQzMlQTR0dW5nJTNGJTIwJUUyJTgwJTk0JTIwSmElMkMlMjBsZWlkZXIlMjB6ZWhuJTIwTWludXRlbiUyMFZlcnNwJUMzJUE0dHVuZy4_",
+    "word": "Hat der Zug Verspätung? — Ja, leider zehn Minuten Verspätung.",
+    "audioDe": "Hat der Zug Verspätung? Ja, leider zehn Minuten Verspätung.",
+    "exampleSentenceDe": "Wegen einer technischen Störung verspätet sich der Zug.",
+    "exampleSentenceEs": "Por una avería técnica el tren sufre retraso."
+  },
+  {
+    "id": "RWluZmFjaCUyMG9kZXIlMjBoaW4lMjB1bmQlMjB6dXIlQzMlQkNjayUzRiUyMCVFMiU4MCU5NCUyMEJpdHRlJTIwZWluZSUyMFIlQzMlQkNja2ZhaHJrYXJ0ZSUyMG5hY2glMjBIYW1idXJnLg__",
+    "word": "Einfach oder hin und zurück? — Bitte eine Rückfahrkarte nach Hamburg.",
+    "audioDe": "Einfach oder hin und zurück? Bitte eine Rückfahrkarte nach Hamburg.",
+    "exampleSentenceDe": "Haben Sie eine BahnCard? — Nein, ich habe keine.",
+    "exampleSentenceEs": "¿Tiene tarjeta BahnCard? — No, no tengo."
+  },
+  {
+    "id": "SXN0JTIwZGllJTIwV29obnVuZyUyMG0lQzMlQjZibGllcnQlMjBvZGVyJTIwdW5tJUMzJUI2YmxpZXJ0JTNG",
+    "word": "Ist die Wohnung möbliert oder unmöbliert?",
+    "audioDe": "Ist die Wohnung möbliert oder unmöbliert?",
+    "exampleSentenceDe": "Die Küche ist komplett eingerichtet mit Kühlschrank und Herd.",
+    "exampleSentenceEs": "La cocina está completamente equipada con nevera y fogones."
+  },
+  {
+    "id": "R2lidCUyMGVzJTIwZWluZW4lMjBBdWZ6dWclMjBpbSUyMEhhdXMlM0YlMjAlRTIlODAlOTQlMjBKYSUyQyUyMGVzJTIwZ2lidCUyMGVpbmVuJTIwbW9kZXJuZW4lMjBBdWZ6dWcu",
+    "word": "Gibt es einen Aufzug im Haus? — Ja, es gibt einen modernen Aufzug.",
+    "audioDe": "Gibt es einen Aufzug im Haus? Ja, es gibt einen modernen Aufzug.",
+    "exampleSentenceDe": "Die Wohnung liegt im vierten Stock.",
+    "exampleSentenceEs": "El piso está en la cuarta planta."
+  },
+  {
+    "id": "U2luZCUyMEhhdXN0aWVyZSUyMHdpZSUyMEh1bmRlJTIwb2RlciUyMEthdHplbiUyMGluJTIwZGVyJTIwV29obnVuZyUyMGVybGF1YnQlM0Y_",
+    "word": "Sind Haustiere wie Hunde oder Katzen in der Wohnung erlaubt?",
+    "audioDe": "Sind Haustiere in der Wohnung erlaubt?",
+    "exampleSentenceDe": "Kleine Haustiere sind nach Absprache gestattet.",
+    "exampleSentenceEs": "Mascotas pequeñas están permitidas previo acuerdo."
+  },
+  {
+    "id": "RW50c2NodWxkaWd1bmclMkMlMjB3byUyMGlzdCUyMGhpZXIlMjBkaWUlMjBuJUMzJUE0Y2hzdGUlMjBCdXNoYWx0ZXN0ZWxsZSUzRiUyMCVFMiU4MCU5NCUyMEdsZWljaCUyMHVtJTIwZGllJTIwRWNrZS4_",
+    "word": "Entschuldigung, wo ist hier die nächste Bushaltestelle? — Gleich um die Ecke.",
+    "audioDe": "Entschuldigung, wo ist hier die nächste Bushaltestelle? Gleich um die Ecke.",
+    "exampleSentenceDe": "Der Bus Linie 5 fährt direkt zum Bahnhof.",
+    "exampleSentenceEs": "El autobús línea 5 va directo a la estación."
+  },
+  {
+    "id": "SWNoJTIwdyVDMyVCQ25zY2hlJTIwSWhuZW4lMjBlaW4lMjBzY2glQzMlQjZuZXMlMjBXb2NoZW5lbmRlISUyMCVFMiU4MCU5NCUyMERhbmtlJTJDJTIwZ2xlaWNoZmFsbHMh",
+    "word": "Ich wünsche Ihnen ein schönes Wochenende! — Danke, gleichfalls!",
+    "audioDe": "Ich wünsche Ihnen ein schönes Wochenende! Danke, gleichfalls!",
+    "exampleSentenceDe": "Erholen Sie sich gut!",
+    "exampleSentenceEs": "¡Descanse y recupérese bien!"
+  },
+  {
+    "id": "RnJvaGUlMjBXZWlobmFjaHRlbiUyMHVuZCUyMGVpbiUyMGd1dGVzJTIwbmV1ZXMlMjBKYWhyIQ__",
+    "word": "Frohe Weihnachten und ein gutes neues Jahr!",
+    "audioDe": "Frohe Weihnachten und ein gutes neues Jahr!",
+    "exampleSentenceDe": "Alles Gute und viel Gesundheit für das neue Jahr!",
+    "exampleSentenceEs": "¡Todo lo mejor y mucha salud para el nuevo año!"
+  },
+  {
+    "id": "R3V0ZSUyMFJlaXNlJTIwdW5kJTIwdmllbCUyMFNwYSVDMyU5RiUyMGltJTIwVXJsYXViIQ__",
+    "word": "Gute Reise und viel Spaß im Urlaub!",
+    "audioDe": "Gute Reise und viel Spaß im Urlaub!",
+    "exampleSentenceDe": "Komm gesund und erholt wieder zurück!",
+    "exampleSentenceEs": "¡Regresa con salud y bien descansado!"
+  },
+  {
+    "id": "SWNoJTIwYnJhdWNoZSUyMGVpbmVuJTIwVGVybWluJTIwYmVpbSUyMEFyenQuJTIwSGFiZW4lMjBTaWUlMjBoZXV0ZSUyMG5vY2glMjBldHdhcyUyMGZyZWklM0Y_",
+    "word": "Ich brauche einen Termin beim Arzt. Haben Sie heute noch etwas frei?",
+    "audioDe": "Ich brauche einen Termin beim Arzt. Haben Sie heute noch etwas frei?",
+    "exampleSentenceDe": "Kommen Sie bitte heute um 15 Uhr in die Praxis.",
+    "exampleSentenceEs": "Venga hoy a las 15:00 a la consulta, por favor."
+  },
+  {
+    "id": "SGFiZW4lMjBTaWUlMjBJaHJlJTIwS3JhbmtlbnZlcnNpY2hlcnVuZ3NrYXJ0ZSUyMGRhYmVpJTNG",
+    "word": "Haben Sie Ihre Krankenversicherungskarte dabei?",
+    "audioDe": "Haben Sie Ihre Krankenversicherungskarte dabei?",
+    "exampleSentenceDe": "Ja, hier ist meine Versichertenkarte.",
+    "exampleSentenceEs": "Sí, aquí tiene mi tarjeta de asegurado."
+  },
+  {
+    "id": "U2llJTIwbSVDMyVCQ3NzZW4lMjBkcmVpbWFsJTIwdCVDMyVBNGdsaWNoJTIwZWluZSUyMFRhYmxldHRlJTIwbWl0JTIwdmllbCUyMFdhc3NlciUyMGVpbm5laG1lbi4_",
+    "word": "Sie müssen dreimal täglich eine Tablette mit viel Wasser einnehmen.",
+    "audioDe": "Sie müssen dreimal täglich eine Tablette mit viel Wasser einnehmen.",
+    "exampleSentenceDe": "Nehmen Sie die Medikamente immer nach dem Essen.",
+    "exampleSentenceEs": "Tome los medicamentos siempre después de comer."
+  },
+  {
+    "id": "SWNoJTIwaGFiZSUyMGVpbmUlMjBGcmFnZSUyMHp1JTIwZGllc2VyJTIwJUMzJTlDYnVuZy4lMjBLJUMzJUI2bm5lbiUyMFNpZSUyMG1pciUyMGRhcyUyMGVya2wlQzMlQTRyZW4lM0Y_",
+    "word": "Ich habe eine Frage zu dieser Übung. Können Sie mir das erklären?",
+    "audioDe": "Ich habe eine Frage zu dieser Übung. Können Sie mir das erklären?",
+    "exampleSentenceDe": "Können Sie bitte ein Beispiel an die Tafel schreiben?",
+    "exampleSentenceEs": "¿Puede escribir un ejemplo en la pizarra, por favor?"
+  },
+  {
+    "id": "QXVmJTIwd2VsY2hlciUyMFNlaXRlJTIwaW0lMjBCdWNoJTIwc2luZCUyMHdpciUzRiUyMCVFMiU4MCU5NCUyMFdpciUyMHNpbmQlMjBhdWYlMjBTZWl0ZSUyMCg0Miku",
+    "word": "Auf welcher Seite im Buch sind wir? — Wir sind auf Seite (42).",
+    "audioDe": "Auf welcher Seite im Buch sind wir? Wir sind auf Seite zweiundvierzig.",
+    "exampleSentenceDe": "Öffnen Sie bitte das Lehrbuch auf Seite 42.",
+    "exampleSentenceEs": "Abran por favor el libro de texto por la página 42."
+  },
+  {
+    "id": "RGFyZiUyMGljaCUyMGt1cnolMjBkYXMlMjBGZW5zdGVyJTIwJUMzJUI2ZmZuZW4lM0YlMjBIaWVyJTIwaXN0JTIwZXMlMjBzZWhyJTIwd2FybS4_",
+    "word": "Darf ich kurz das Fenster öffnen? Hier ist es sehr warm.",
+    "audioDe": "Darf ich kurz das Fenster öffnen? Hier ist es sehr warm.",
+    "exampleSentenceDe": "Ja natürlich, machen Sie das Fenster ruhig auf.",
+    "exampleSentenceEs": "Sí, por supuesto, abra la ventana tranquilamente."
   }
 ]

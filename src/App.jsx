@@ -18,6 +18,7 @@ import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, record
 import { parseTextToTokens, calculateWordTimings } from './utils/textTokenizer';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
 import { API_ENDPOINTS } from './config/apiEndpoints';
+import { mediaBlobStore } from './services/syncMediaService';
 
 import Profile from './components/Profile';
 
@@ -145,7 +146,23 @@ export default function App() {
       [safeId]: true
     }));
     try {
-      const cached = await localforage.getItem(`img_${safeId}`);
+      // 1. Nivel 1 (100% Offline 0 ms): Verificar si existe el Blob físico en mediaBlobStore
+      const blobKey = `blob_${safeId}`;
+      let localBlob = await mediaBlobStore.getItem(blobKey);
+      if (!localBlob && slugId) {
+        localBlob = await mediaBlobStore.getItem(`blob_${slugId}`);
+      }
+      if (localBlob instanceof Blob) {
+        const localBlobUrl = URL.createObjectURL(localBlob);
+        setCardImages(prev => ({
+          ...prev,
+          [safeId]: localBlobUrl
+        }));
+        return;
+      }
+
+      // 2. Verificar URL guardada previamente en caché local
+      const cached = await localforage.getItem(`img_${safeId}`) || (slugId ? await localforage.getItem(`img_${slugId}`) : null);
       if (cached) {
         setCardImages(prev => ({
           ...prev,
@@ -193,14 +210,30 @@ export default function App() {
   useEffect(() => {
     const handleMediaSyncCompleted = async () => {
       try {
-        const keys = await localforage.keys();
         const updatedImages = {};
+
+        // 1. Cargar Blobs binarios offline desde mediaBlobStore
+        const blobKeys = await mediaBlobStore.keys();
+        for (const bKey of blobKeys) {
+          if (bKey.startsWith('blob_')) {
+            const sId = bKey.replace('blob_', '');
+            const blob = await mediaBlobStore.getItem(bKey);
+            if (blob instanceof Blob) {
+              updatedImages[sId] = URL.createObjectURL(blob);
+            }
+          }
+        }
+
+        // 2. Complementar con URLs guardadas en localforage si no tienen Blob
+        const keys = await localforage.keys();
         for (const key of keys) {
           if (key.startsWith('img_')) {
             const safeId = key.replace('img_', '');
-            const val = await localforage.getItem(key);
-            if (val) {
-              updatedImages[safeId] = val;
+            if (!updatedImages[safeId]) {
+              const val = await localforage.getItem(key);
+              if (val) {
+                updatedImages[safeId] = val;
+              }
             }
           }
         }

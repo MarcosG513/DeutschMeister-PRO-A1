@@ -186,7 +186,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
       const sId = getSafeId(wordObj.de).substring(0, 150);
       recordCardStudied(sId);
     }
-    const cleanWordDe = splitGermanTitle(wordObj?.de).main || wordObj?.de;
+    const cleanWordDe = wordObj?.audioDe || splitGermanTitle(wordObj?.de).main || wordObj?.de;
     setIsPlayingAudio(true);
     playGermanAudio(cleanWordDe, {
       type: "vocab",
@@ -228,7 +228,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   const isGenLoading = isImageLoading === safeId;
   const isRegenerated = true;
 
-  const rawImage = localMediaUrl || (typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:')) ? imgData : (typeof imgData === 'string' && imgData ? `data:image/png;base64,${imgData}` : null)) || wordObj.imageUrl || wordObj.videoUrl || null;
+  const rawImage = localMediaUrl || (typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:') || imgData.startsWith('blob:')) ? imgData : (typeof imgData === 'string' && imgData ? `data:image/png;base64,${imgData}` : null)) || wordObj.imageUrl || wordObj.videoUrl || null;
   const cardImage = rawImage;
   const isVideo = Boolean(
     localMediaType === 'video' ||

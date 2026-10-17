@@ -4,7 +4,7 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { nativeSpeak } from "../utils/helpers";
 import { functions as appFunctions } from "../App";
 
-const audioStore = localforage.createInstance({
+export const audioStore = localforage.createInstance({
   name: "DeutschMeisterAudioCache",
   storeName: "german_tts_cache"
 });
@@ -27,20 +27,14 @@ export const getSafeAudioId = (text) => {
 };
 
 export const getSafeAudioKey = (text) => {
-  if (!text || typeof text !== "string") return "tts_unknown";
-  
-  const normalized = text
-    .trim()
+  if (!text || typeof text !== "string") return "";
+  const cleanText = text.replace(/[*_#`~]/g, "").trim();
+  return "tts_" + cleanText
     .toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
-    .replace(/[.,/#!$%^&*;:{}=\-_`~()?"'«»]/g, " ")
-    .replace(/\s+/g, "_")
-    .replace(/[^a-z0-9_]/g, "")
-    .replace(/^_+|_+$/g, "")
-    .substring(0, 120);
-
-  return "tts_" + (normalized || "audio");
+    .replace(/[^a-z0-9_]/gi, "_")
+    .substring(0, 100);
 };
 
 export function stopCurrentAudio() {
@@ -125,36 +119,73 @@ export async function playGermanAudio(text, options = {}) {
       }
     })();
 
-    // 1. Si no es efímero (cuento o lectura), buscar primero en IndexedDB (0 ms, offline)
+    // 1. Nivel 1 (100% Offline, 0 ms): Busca primero el Blob en audioStore
     if (!isEphemeral) {
-      let cachedBlob = await audioStore.getItem(cacheKey);
-      if (!cachedBlob) {
-        cachedBlob = await audioStore.getItem(`${cacheKey}_`);
+      let cachedItem = await audioStore.getItem(cacheKey);
+      if (!cachedItem) {
+        const audioAlias = cacheKey.startsWith("tts_") ? `audio_${cacheKey.replace(/^tts_/, "")}` : `audio_${cacheKey}`;
+        cachedItem = await audioStore.getItem(audioAlias);
       }
-      if (cachedBlob) {
-        const localBlobUrl = URL.createObjectURL(cachedBlob);
-        const localAudio = new Audio(localBlobUrl);
-        localAudio.playbackRate = configuredRate;
-        localAudio.preservesPitch = true;
-        localAudio.onloadedmetadata = () => {
+      if (!cachedItem) {
+        cachedItem = await audioStore.getItem(getSafeAudioId(cleanText));
+      }
+      if (!cachedItem) {
+        cachedItem = await audioStore.getItem(`${cacheKey}_`);
+      }
+
+      if (cachedItem) {
+        let blobToPlay = null;
+
+        // Si es un Blob binario local
+        if (cachedItem instanceof Blob) {
+          blobToPlay = cachedItem;
+        } else if (typeof cachedItem === "string" && (cachedItem.startsWith("http") || cachedItem.startsWith("data:"))) {
+          // Si es un string URL/Data, intentar descargarlo a Blob para uso offline permanente
+          try {
+            const resp = await fetch(cachedItem);
+            if (resp.ok) {
+              blobToPlay = await resp.blob();
+              await audioStore.setItem(cacheKey, blobToPlay);
+            }
+          } catch (_) {
+            if (cachedItem.startsWith("data:")) {
+              const dataAudio = new Audio(cachedItem);
+              dataAudio.playbackRate = configuredRate;
+              dataAudio.preservesPitch = true;
+              currentAudioInstance = dataAudio;
+              dataAudio.onended = () => { if (currentAudioInstance === dataAudio) currentAudioInstance = null; if (onEnd) onEnd(); };
+              dataAudio.onerror = () => { if (currentAudioInstance === dataAudio) currentAudioInstance = null; nativeSpeak(cleanText); if (onEnd) onEnd(); };
+              await dataAudio.play();
+              return;
+            }
+          }
+        }
+
+        if (blobToPlay instanceof Blob) {
+          const localBlobUrl = URL.createObjectURL(blobToPlay);
+          const localAudio = new Audio(localBlobUrl);
           localAudio.playbackRate = configuredRate;
           localAudio.preservesPitch = true;
-        };
-        currentAudioInstance = localAudio;
-        localAudio.onended = () => {
-          URL.revokeObjectURL(localBlobUrl);
-          if (currentAudioInstance === localAudio) currentAudioInstance = null;
-          if (onEnd) onEnd();
-        };
-        localAudio.onerror = () => {
-          URL.revokeObjectURL(localBlobUrl);
-          if (currentAudioInstance === localAudio) currentAudioInstance = null;
-          try { audioStore.removeItem(cacheKey); } catch (_) {}
-          nativeSpeak(cleanText);
-          if (onEnd) onEnd();
-        };
-        await localAudio.play();
-        return;
+          localAudio.onloadedmetadata = () => {
+            localAudio.playbackRate = configuredRate;
+            localAudio.preservesPitch = true;
+          };
+          currentAudioInstance = localAudio;
+          localAudio.onended = () => {
+            URL.revokeObjectURL(localBlobUrl);
+            if (currentAudioInstance === localAudio) currentAudioInstance = null;
+            if (onEnd) onEnd();
+          };
+          localAudio.onerror = () => {
+            URL.revokeObjectURL(localBlobUrl);
+            if (currentAudioInstance === localAudio) currentAudioInstance = null;
+            try { audioStore.removeItem(cacheKey); } catch (_) {}
+            nativeSpeak(cleanText);
+            if (onEnd) onEnd();
+          };
+          await localAudio.play();
+          return;
+        }
       }
     }
 
@@ -186,13 +217,17 @@ export async function playGermanAudio(text, options = {}) {
 
     await audio.play();
 
-    // 4. Si es vocabulario u oración persistente y no es Data URI, guardar en localforage en segundo plano
+    // 4. Si es vocabulario u oración persistente y no es Data URI, guardar en audioStore
     if (!isEphemeral && !audioSource.startsWith("data:")) {
       try {
         const audioFetch = await fetch(audioSource);
         if (audioFetch.ok) {
           const blob = await audioFetch.blob();
           await audioStore.setItem(cacheKey, blob);
+          const safeAudioId = getSafeAudioId(cleanText);
+          if (safeAudioId && safeAudioId !== cacheKey) {
+            await audioStore.setItem(safeAudioId, blob);
+          }
         }
       } catch (cacheErr) {
         console.warn("[TTS Cache Warning] No se pudo persistir en IndexedDB:", cacheErr);

@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { Activity, BookOpen, Bot, Briefcase, Car, Clock, Coffee, Edit as Edit3, Headphones, Heart, Home, Link2, List, Mail, Mic, PlayCircle, Search, ShoppingCart, Star as Sparkles, Volume2, Laptop, Zap, Wrench, ShieldAlert } from 'lucide-react';
+import { MessageCircle, Activity, BookOpen, Bot, Briefcase, Car, Clock, Coffee, Edit as Edit3, Headphones, Heart, Home, Link2, List, Mail, Mic, PlayCircle, Search, ShoppingCart, Star as Sparkles, Volume2, Laptop, Zap, Wrench, ShieldAlert } from 'lucide-react';
 import GrammarAccordion from '../components/GrammarAccordion';
 import AudioSim from '../components/AudioSim';
 const InteractiveQA = lazy(() => import('../components/InteractiveQA'));
@@ -25,6 +25,7 @@ import GoetheLesenExam from '../components/GoetheLesenExam';
 import GoetheWritingForm from '../components/GoetheWritingForm';
 import { playGermanAudio } from '../services/aiAudioService';
 import GoetheSprechenExam from '../components/GoetheSprechenExam';
+import { redemittelChapter } from './redemittelBegegnungen';
 const rawChapters = [
 {
   id: 1,
@@ -24236,8 +24237,12 @@ const rawChapters = [
     }
   ]
 }
+,
+{
+  ...redemittelChapter,
+  icon: <MessageCircle size={20} />
+}
 ];
-
 export const chapters = [...rawChapters].sort((a, b) => a.id - b.id);
 
 // --- NUEVOS MÓDULOS DE ESTUDIO GOETHE ---
