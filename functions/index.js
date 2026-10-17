@@ -45,6 +45,10 @@ function getGeminiKeyConfig() {
 
   return {
     paidKey: resolve(geminiPaidKey, "GEMINI_PAID_KEY"),
+    paidKey1: resolve(geminiPaidKey, "GEMINI_PAID_KEY"),
+    paidKey2: process.env.GEMINI_PAID_KEY_2 || "",
+    paidKey3: process.env.GEMINI_PAID_KEY_3 || "",
+    paidKey4: process.env.GEMINI_PAID_KEY_4 || "",
     freeKey1: resolve(geminiFreeKey1, "GEMINI_FREE_KEY_1") || resolve(geminiFreeKey, "GEMINI_FREE_KEY"),
     freeKey2: resolve(geminiFreeKey2, "GEMINI_FREE_KEY_2"),
     freeKey3: process.env.GEMINI_FREE_KEY_3 || "",
@@ -60,8 +64,10 @@ function getGeminiKeyConfig() {
 function getGoogleKeyPool() {
   const config = getGeminiKeyConfig();
   const rawKeys = [
-    { id: "PAID", key: config.paidKey, isPaid: true },
-    { id: "PAID_2", key: process.env.GEMINI_PAID_KEY_2 || "", isPaid: true },
+    { id: "PAID_1", key: config.paidKey1 || config.paidKey, isPaid: true },
+    { id: "PAID_2", key: config.paidKey2, isPaid: true },
+    { id: "PAID_3", key: config.paidKey3, isPaid: true },
+    { id: "PAID_4", key: config.paidKey4, isPaid: true },
     { id: "FREE_1", key: config.freeKey1, isPaid: false },
     { id: "FREE_2", key: config.freeKey2, isPaid: false },
     { id: "FREE_3", key: config.freeKey3, isPaid: false },
@@ -1679,8 +1685,8 @@ function getSafeAudioId(text) {
 /**
  * 1. Invocación Directa a la API de Google AI Studio (Consume Créditos del Google Developer Program)
  */
-async function synthesizeWithGoogleDirect(text, voice, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash-tts:generateContent?key=${apiKey}`;
+async function synthesizeWithGoogleDirect(text, voice, apiKey, modelName = "gemini-3.8-flash-tts") {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
   const payload = {
     contents: [{ parts: [{ text }] }],
     generationConfig: {
@@ -1688,7 +1694,7 @@ async function synthesizeWithGoogleDirect(text, voice, apiKey) {
       speechConfig: {
         voiceConfig: {
           prebuiltVoiceConfig: {
-            voiceName: "Charon" // Voz masculina oficial exclusiva de DeutschMeister
+            voiceName: voice || "Charon" // Voz masculina oficial exclusiva de DeutschMeister
           }
         }
       }
@@ -1703,19 +1709,19 @@ async function synthesizeWithGoogleDirect(text, voice, apiKey) {
 
   if (!response.ok) {
     const errorBody = await response.text();
-    throw new Error(`Google Direct API HTTP ${response.status}: ${errorBody}`);
+    throw new Error(`Google Direct API HTTP ${response.status} (${modelName}): ${errorBody}`);
   }
 
   const json = await response.json();
   const inlineData = json.candidates?.[0]?.content?.parts?.[0]?.inlineData;
   if (!inlineData || !inlineData.data) {
-    throw new Error("La API directa de Google no devolvió datos de audio válidos.");
+    throw new Error(`La API directa de Google (${modelName}) no devolvió datos de audio válidos.`);
   }
 
   return {
     buffer: Buffer.from(inlineData.data, "base64"),
     mimeType: inlineData.mimeType || "audio/wav",
-    provider: "google-direct"
+    provider: `google-direct-${modelName}`
   };
 }
 
@@ -1800,28 +1806,24 @@ export const synthesizeGermanSpeech = onCall(
       }
     }
 
-    // ── INFERENCIA: POOL GOOGLE DIRECTO CON ROTACIÓN Y REINTENTO (0% FAL.AI) ──
+    // ── INFERENCIA: POOL GOOGLE DIRECTO CON DUAL-MODEL Y ROTACIÓN (0% FAL.AI A MENOS DE AGOTAR POOL) ──
     let audioResult = null;
     const googleKeys = getGoogleKeyPool();
     let lastGoogleError = null;
+    const TTS_MODELS = ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts"];
 
-    for (const keyItem of googleKeys) {
-      try {
-        audioResult = await synthesizeWithGoogleDirect(cleanText, voice, keyItem.key);
-        console.log(`[TTS Engine] Generado exitosamente vía Google AI Studio Direct (Key: ${keyItem.id}) (${cleanText.substring(0, 30)}...)`);
-        break;
-      } catch (err) {
-        lastGoogleError = err;
-        console.warn(`[TTS Warning] Falló Google Direct con ${keyItem.id}: ${err.message}`);
-        if (keyItem.isPaid && err.message.includes("429") && !err.message.includes("PerDay")) {
-          try {
-            console.log(`[TTS Info] Esperando 4s para reintento con ${keyItem.id}...`);
-            await new Promise(r => setTimeout(r, 4000));
-            audioResult = await synthesizeWithGoogleDirect(cleanText, voice, keyItem.key);
-            console.log(`[TTS Engine] Reintento exitoso con ${keyItem.id} (${cleanText.substring(0, 30)}...)`);
-            break;
-          } catch (retryErr) {
-            lastGoogleError = retryErr;
+    keyLoop: for (const keyItem of googleKeys) {
+      for (const modelName of TTS_MODELS) {
+        try {
+          audioResult = await synthesizeWithGoogleDirect(cleanText, voice, keyItem.key, modelName);
+          console.log(`[TTS Engine] Generado exitosamente vía Google AI Studio Direct (${keyItem.id} / ${modelName}) (${cleanText.substring(0, 30)}...)`);
+          break keyLoop;
+        } catch (err) {
+          lastGoogleError = err;
+          console.warn(`[TTS Warning] Falló Google Direct con ${keyItem.id} (${modelName}): ${err.message}`);
+          if (keyItem.isPaid && err.message.includes("429") && !err.message.includes("PerDay") && modelName === TTS_MODELS[0]) {
+            // Si arrojó 429 en el modelo primario, intenta de inmediato gemini-3.8-flash-lite-tts en la misma llave
+            continue;
           }
         }
       }
@@ -2224,7 +2226,7 @@ async function generateGoogleOmniVideo(prompt, apiKey) {
  */
 export const regenerateCardMedia = onCall(
   {
-    secrets: [geminiPaidKey],
+    secrets: ALL_AI_SECRETS,
     timeoutSeconds: 90,
     memory: "512MiB",
     cors: true
@@ -2334,10 +2336,10 @@ export const regenerateCardMedia = onCall(
         };
       }
 
-      // ── PASO 3: INFERENCIA DE IA (SOLO SI NO EXISTÍA EN LA BASE DE DATOS) ──
-      const apiKey = (geminiPaidKey && typeof geminiPaidKey.value === "function" ? geminiPaidKey.value() : "") || process.env.GEMINI_PAID_KEY || "";
-      if (!apiKey) {
-        return { success: false, error: "No se encontró GEMINI_PAID_KEY configurada." };
+      // ── PASO 3: INFERENCIA DE IA CON POOL MULTI-KEY (PAID_1 A PAID_4) ──
+      const paidKeys = getGoogleKeyPool().filter(k => k.id.startsWith("PAID") || k.isPaid);
+      if (paidKeys.length === 0) {
+        return { success: false, error: "No se encontraron claves de facturación (PAID) en el pool." };
       }
 
       let fileBuffer = null;
@@ -2345,41 +2347,83 @@ export const regenerateCardMedia = onCall(
       let fileExtension = "jpeg";
       let actualMediaType = "image";
       let provider = "gemini-3.1-flash-lite-image";
+      let lastMediaError = null;
 
       // Intento de video para verbos
       if (wantVideo) {
-        try {
-          console.log(`[Media Engine] Generando video para verbo: ${wordObj.de}`);
-          const videoPrompt = buildVisualPrompt(wordObj, true);
-          const videoResult = await generateGoogleOmniVideo(videoPrompt, apiKey);
-          fileBuffer = videoResult.buffer;
-          mimeType = "video/mp4";
-          fileExtension = "mp4";
-          actualMediaType = "video";
-          provider = "gemini-omni-1.1-flash";
-        } catch (videoErr) {
-          console.warn("[Media Engine] Error al generar video con Omni, recurriendo a imagen:", videoErr.message);
-          const imagePrompt = buildVisualPrompt(wordObj, false);
-          const rawImage = await generateGoogleFlashImage(imagePrompt, apiKey);
+        let videoSuccess = false;
+        console.log(`[Media Engine] Generando video para verbo: ${wordObj.de} utilizando pool de ${paidKeys.length} llaves PAID...`);
+        const videoPrompt = buildVisualPrompt(wordObj, true);
 
-          // COMPRESIÓN CON SHARP (512x512 ~35-50 KB)
-          fileBuffer = await optimizeImageBuffer(rawImage.buffer);
-          mimeType = "image/jpeg";
-          fileExtension = "jpeg";
-          actualMediaType = "image";
-          provider = "gemini-3.1-flash-lite-image";
+        for (const keyItem of paidKeys) {
+          try {
+            console.log(`[Media Engine Video] Probando con llave ${keyItem.id}...`);
+            const videoResult = await generateGoogleOmniVideo(videoPrompt, keyItem.key);
+            fileBuffer = videoResult.buffer;
+            mimeType = "video/mp4";
+            fileExtension = "mp4";
+            actualMediaType = "video";
+            provider = "gemini-omni-1.1-flash";
+            videoSuccess = true;
+            break;
+          } catch (videoErr) {
+            lastMediaError = videoErr;
+            console.warn(`[Media Engine Video Warning] Error con llave ${keyItem.id}:`, videoErr.message);
+          }
+        }
+
+        // Si falló el video en todas las llaves PAID, recurrir a imagen
+        if (!videoSuccess) {
+          console.warn("[Media Engine] Error al generar video con Omni en todo el pool PAID, recurriendo a imagen...");
+          const imagePrompt = buildVisualPrompt(wordObj, false);
+          let imageSuccess = false;
+
+          for (const keyItem of paidKeys) {
+            try {
+              console.log(`[Media Engine Image Fallback] Probando con llave ${keyItem.id}...`);
+              const rawImage = await generateGoogleFlashImage(imagePrompt, keyItem.key);
+              fileBuffer = await optimizeImageBuffer(rawImage.buffer);
+              mimeType = "image/jpeg";
+              fileExtension = "jpeg";
+              actualMediaType = "image";
+              provider = "gemini-3.1-flash-lite-image";
+              imageSuccess = true;
+              break;
+            } catch (imgErr) {
+              lastMediaError = imgErr;
+              console.warn(`[Media Engine Image Fallback Warning] Error con llave ${keyItem.id}:`, imgErr.message);
+            }
+          }
+
+          if (!imageSuccess) {
+            throw new Error(`Falló la generación de video e imagen tras recorrer el pool PAID: ${lastMediaError?.message}`);
+          }
         }
       } else {
-        console.log(`[Media Engine] Generando imagen para: ${wordObj.de}`);
+        console.log(`[Media Engine] Generando imagen para: ${wordObj.de} utilizando pool de ${paidKeys.length} llaves PAID...`);
         const imagePrompt = buildVisualPrompt(wordObj, false);
-        const rawImage = await generateGoogleFlashImage(imagePrompt, apiKey);
+        let imageSuccess = false;
 
-        // COMPRESIÓN CON SHARP (512x512 ~35-50 KB)
-        fileBuffer = await optimizeImageBuffer(rawImage.buffer);
-        mimeType = "image/jpeg";
-        fileExtension = "jpeg";
-        actualMediaType = "image";
-        provider = "gemini-3.1-flash-lite-image";
+        for (const keyItem of paidKeys) {
+          try {
+            console.log(`[Media Engine Image] Probando con llave ${keyItem.id}...`);
+            const rawImage = await generateGoogleFlashImage(imagePrompt, keyItem.key);
+            fileBuffer = await optimizeImageBuffer(rawImage.buffer);
+            mimeType = "image/jpeg";
+            fileExtension = "jpeg";
+            actualMediaType = "image";
+            provider = "gemini-3.1-flash-lite-image";
+            imageSuccess = true;
+            break;
+          } catch (imgErr) {
+            lastMediaError = imgErr;
+            console.warn(`[Media Engine Image Warning] Error con llave ${keyItem.id}:`, imgErr.message);
+          }
+        }
+
+        if (!imageSuccess) {
+          throw new Error(`Falló la generación de imagen tras recorrer el pool PAID: ${lastMediaError?.message}`);
+        }
       }
 
       // Persistencia en Cloud Storage

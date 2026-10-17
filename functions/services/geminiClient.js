@@ -82,7 +82,11 @@ function resolveKeyValue(secretOrString) {
  * Construye el pool dinámico de 3 llaves
  */
 export function buildKeyPool(keysConfig = {}) {
-  const paidKey = resolveKeyValue(keysConfig.paidKey || process.env.GEMINI_PAID_KEY);
+  const paidKey1 = resolveKeyValue(keysConfig.paidKey || keysConfig.paidKey1 || process.env.GEMINI_PAID_KEY);
+  const paidKey2 = resolveKeyValue(keysConfig.paidKey2 || process.env.GEMINI_PAID_KEY_2);
+  const paidKey3 = resolveKeyValue(keysConfig.paidKey3 || process.env.GEMINI_PAID_KEY_3);
+  const paidKey4 = resolveKeyValue(keysConfig.paidKey4 || process.env.GEMINI_PAID_KEY_4);
+
   const freeKey1 = resolveKeyValue(
     keysConfig.freeKey1 || 
     process.env.GEMINI_FREE_KEY_1 || 
@@ -96,10 +100,28 @@ export function buildKeyPool(keysConfig = {}) {
 
   const candidates = [
     {
-      id: "PAID_CREDITS",
-      key: paidKey,
+      id: "PAID_1",
+      key: paidKey1,
       isPaid: true,
-      description: "Cuenta con Facturación / Google Developer Program (gemini-3.8-flash)"
+      description: "Cuenta con Facturación 1 / Google Developer Program (gemini-3.8-flash)"
+    },
+    {
+      id: "PAID_2",
+      key: paidKey2,
+      isPaid: true,
+      description: "Cuenta con Facturación 2 / Google Developer Program (gemini-3.8-flash)"
+    },
+    {
+      id: "PAID_3",
+      key: paidKey3,
+      isPaid: true,
+      description: "Cuenta con Facturación 3 / Google Developer Program (gemini-3.8-flash)"
+    },
+    {
+      id: "PAID_4",
+      key: paidKey4,
+      isPaid: true,
+      description: "Cuenta con Facturación 4 / Google Developer Program (gemini-3.8-flash)"
     },
     {
       id: "FREE_1",
