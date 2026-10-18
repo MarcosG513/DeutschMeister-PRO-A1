@@ -21,6 +21,7 @@ import { API_ENDPOINTS } from './config/apiEndpoints';
 import { mediaBlobStore } from './services/syncMediaService';
 
 import Profile from './components/Profile';
+import InstallInstructionsModal from './components/InstallInstructionsModal';
 
 const EmailSimulator = lazy(() => import('./components/EmailSimulator'));
 const ReadingComprehension = lazy(() => import('./components/ReadingComprehension'));
@@ -249,10 +250,30 @@ export default function App() {
     };
   }, []);
 
-  // PWA: Soporte para instalación nativa en navegador (beforeinstallprompt)
-  const [canInstallPWA, setCanInstallPWA] = useState(false);
+  // PWA: Detección y soporte para instalación nativa en navegador
+  const isNativeApp = Capacitor.isNativePlatform();
+  const [isStandalonePWA, setIsStandalonePWA] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true
+    );
+  });
+  const [canInstallPWA, setCanInstallPWA] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return Boolean(window.deferredPrompt);
+  });
+  const [showInstallInstructionsModal, setShowInstallInstructionsModal] = useState(false);
+
+  // Mostrar la tarjeta y accesos de instalación SIEMPRE que esté en navegador web y aún no esté instalada
+  const showWebInstallCard = !isNativeApp && !isStandalonePWA;
 
   useEffect(() => {
+    // Si index.html ya capturó beforeinstallprompt antes de montar React
+    if (typeof window !== 'undefined' && window.deferredPrompt) {
+      setCanInstallPWA(true);
+    }
+
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       window.deferredPrompt = e;
@@ -260,29 +281,56 @@ export default function App() {
       console.log('[PWA] beforeinstallprompt capturado y guardado');
     };
 
+    const handlePwaAvailable = () => {
+      setCanInstallPWA(true);
+      console.log('[PWA] Evento pwa-install-available recibido');
+    };
+
     const handleAppInstalled = () => {
       window.deferredPrompt = null;
       setCanInstallPWA(false);
+      setIsStandalonePWA(true);
+      setShowInstallInstructionsModal(false);
       console.log('[PWA] Aplicación instalada exitosamente');
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('pwa-install-available', handlePwaAvailable);
     window.addEventListener('appinstalled', handleAppInstalled);
+
+    const mql = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(display-mode: standalone)') : null;
+    const handleDisplayChange = (e) => {
+      if (e.matches) setIsStandalonePWA(true);
+    };
+    mql?.addEventListener?.('change', handleDisplayChange);
+
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('pwa-install-available', handlePwaAvailable);
       window.removeEventListener('appinstalled', handleAppInstalled);
+      mql?.removeEventListener?.('change', handleDisplayChange);
     };
   }, []);
 
   const handleInstallApp = async () => {
-    const promptEvent = window.deferredPrompt;
-    if (!promptEvent) return;
-    promptEvent.prompt();
-    const { outcome } = await promptEvent.userChoice;
-    console.log('[PWA] Resultado de instalación:', outcome);
-    if (outcome === 'accepted') {
-      setCanInstallPWA(false);
-      window.deferredPrompt = null;
+    const promptEvent = typeof window !== 'undefined' ? window.deferredPrompt : null;
+    if (promptEvent && typeof promptEvent.prompt === 'function') {
+      try {
+        await promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        console.log('[PWA] Resultado de instalación:', choice?.outcome);
+        if (choice?.outcome === 'accepted') {
+          setCanInstallPWA(false);
+          window.deferredPrompt = null;
+          setIsStandalonePWA(true);
+        }
+      } catch (err) {
+        console.warn('[PWA] Error invocando prompt:', err);
+        setShowInstallInstructionsModal(true);
+      }
+    } else {
+      // Caso B: Sin prompt nativo (iOS Safari, navegador tras recarga, Chrome desktop)
+      setShowInstallInstructionsModal(true);
     }
   };
 
@@ -953,6 +1001,7 @@ export default function App() {
         totalCardsCount={chapters.reduce((acc, c) => acc + (c.words ? c.words.length : 0), 0)}
         canInstallPWA={canInstallPWA}
         onInstallApp={handleInstallApp}
+        showWebInstallCard={showWebInstallCard}
       /> : viewMode === "quiz" ? <DynamicQuiz 
         onExit={() => setViewMode('flashcards')} 
         chapters={chapters}
@@ -1065,11 +1114,11 @@ export default function App() {
                       <MessageCircle className="text-indigo-400" size={18} />
                       <span>💬 Kapitel 22: Redemittel & Alltagskommunikation</span>
                     </button>
-                    {canInstallPWA && (
+                    {showWebInstallCard && (
                       <button onClick={() => {
                         setIsMenuOpen(false);
                         handleInstallApp();
-                      }} className="bg-emerald-600 hover:bg-emerald-500 text-white col-span-2 py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2 text-xs shadow-md shadow-emerald-500/20 active:scale-95 animate-pulse">
+                      }} className="bg-emerald-600 hover:bg-emerald-500 text-white col-span-2 py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2 text-xs shadow-md shadow-emerald-500/20 active:scale-95 cursor-pointer">
                         <Download size={18} />
                         <span>📲 Instalar App en este Dispositivo</span>
                       </button>
@@ -1543,6 +1592,12 @@ export default function App() {
           <img src={typeof fullscreenImage === 'string' && (fullscreenImage.startsWith('http') || fullscreenImage.startsWith('data:')) ? fullscreenImage : typeof fullscreenImage === 'string' ? `data:image/png;base64,${fullscreenImage}` : ''} alt="Vista Ampliada" className="max-w-full max-h-[90svh] object-contain rounded-2xl shadow-2xl p-2 cursor-zoom-out bg-white" onClick={e => e.stopPropagation()} />
         </div>
       </div>}
+
+    {/* Modal con instrucciones para iOS Safari / Instalación manual */}
+    <InstallInstructionsModal
+      isOpen={showInstallInstructionsModal}
+      onClose={() => setShowInstallInstructionsModal(false)}
+    />
 
   <style dangerouslySetInnerHTML={{
       __html: `

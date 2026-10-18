@@ -16,6 +16,14 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
     <title>DeutschMeister PRO A1</title>
     <script>
+      window.deferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        window.deferredPrompt = e;
+        window.dispatchEvent(new CustomEvent('pwa-install-available'));
+      });
+    </script>
+    <script>
       window.onerror = function(message, source, lineno, colno, error) {
         console.error('Global Error: ' + message + ' at ' + source + ':' + lineno + ':' + colno + '\n' + (error ? error.stack : ''));
       };

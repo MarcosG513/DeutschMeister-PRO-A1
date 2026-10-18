@@ -6,13 +6,15 @@ import {
   ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle,
   CloudDownload, Loader2, Download
 } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
+import InstallInstructionsModal from './InstallInstructionsModal';
 import { getDailyStudyStreak, getStudiedCardsCount, getCompletedModulesCount } from '../utils/helpers';
 import { syncCloudMediaToLocal, getLastMediaSyncTime, getOfflineSyncStats } from '../services/syncMediaService';
 import { EmailAuthProvider, GoogleAuthProvider, linkWithCredential, linkWithPopup, signInWithEmailAndPassword, signInWithPopup, signOut, deleteUser } from 'firebase/auth';
 
 const AVATARS = ['🦊', '🦉', '🐼', '🦁', '🐯', '🐸', '🦄', '🦖', '🚀', '👑', '⚡', '🎓'];
 
-const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount = 1389, canInstallPWA = false, onInstallApp }) => {
+const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount = 1389, canInstallPWA: passedCanInstall = false, onInstallApp, showWebInstallCard: passedShowWebInstallCard }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginMode, setIsLoginMode] = useState(false);
@@ -31,6 +33,88 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
   const [lastMediaSync, setLastMediaSync] = useState(null);
   const [syncSuccessMessage, setSyncSuccessMessage] = useState(null);
   const [offlineStats, setOfflineStats] = useState({ visualsCached: 0, audiosCached: 0 });
+
+  // Detección PWA reactiva para mostrar la tarjeta SIEMPRE en web
+  const isNativeApp = Capacitor.isNativePlatform();
+  const [isStandalonePWA, setIsStandalonePWA] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true
+    );
+  });
+  const [canInstallPWA, setCanInstallPWA] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return Boolean(window.deferredPrompt) || passedCanInstall;
+  });
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
+
+  const showWebInstallCard = passedShowWebInstallCard !== undefined 
+    ? passedShowWebInstallCard 
+    : (!isNativeApp && !isStandalonePWA);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.deferredPrompt) {
+      setCanInstallPWA(true);
+    }
+
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      window.deferredPrompt = e;
+      setCanInstallPWA(true);
+    };
+
+    const handlePwaAvailable = () => {
+      setCanInstallPWA(true);
+    };
+
+    const handleAppInstalled = () => {
+      window.deferredPrompt = null;
+      setCanInstallPWA(false);
+      setIsStandalonePWA(true);
+      setShowInstructionsModal(false);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('pwa-install-available', handlePwaAvailable);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    const mql = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(display-mode: standalone)') : null;
+    const handleDisplayChange = (e) => {
+      if (e.matches) setIsStandalonePWA(true);
+    };
+    mql?.addEventListener?.('change', handleDisplayChange);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('pwa-install-available', handlePwaAvailable);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+      mql?.removeEventListener?.('change', handleDisplayChange);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (onInstallApp) {
+      onInstallApp();
+      return;
+    }
+    const promptEvent = typeof window !== 'undefined' ? window.deferredPrompt : null;
+    if (promptEvent && typeof promptEvent.prompt === 'function') {
+      try {
+        await promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        if (choice?.outcome === 'accepted') {
+          setCanInstallPWA(false);
+          window.deferredPrompt = null;
+          setIsStandalonePWA(true);
+        }
+      } catch (err) {
+        setShowInstructionsModal(true);
+      }
+    } else {
+      setShowInstructionsModal(true);
+    }
+  };
 
   const isRegistered = user && user.isAnonymous === false;
 
@@ -613,7 +697,7 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
             </section>
  
             {/* PWA Native Installation Banner */}
-            {canInstallPWA && (
+            {showWebInstallCard && (
               <section className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 rounded-2xl p-4 sm:p-5 text-white shadow-lg border border-emerald-400/30 flex flex-col sm:flex-row items-center justify-between gap-4 animate-in fade-in">
                 <div className="flex items-start sm:items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-white/20 text-white shrink-0">
@@ -631,7 +715,7 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
 
                 <button
                   type="button"
-                  onClick={onInstallApp}
+                  onClick={handleInstallClick}
                   className="px-5 py-2.5 bg-white hover:bg-emerald-50 text-emerald-950 font-black text-xs rounded-xl shadow-md transition active:scale-95 whitespace-nowrap cursor-pointer self-stretch sm:self-auto shrink-0"
                 >
                   Instalar App
@@ -773,6 +857,12 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
 
         </div>
       </main>
+
+      {/* Modal con instrucciones para iOS Safari / Instalación manual */}
+      <InstallInstructionsModal 
+        isOpen={showInstructionsModal} 
+        onClose={() => setShowInstructionsModal(false)} 
+      />
     </div>
   );
 };
