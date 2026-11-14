@@ -1,6 +1,8 @@
 import { Capacitor } from '@capacitor/core';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import localforage from 'localforage';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db, appId } from '../config/firebase';
 
 export const fetchWithRetry = async (url, options, retries = 5, backoff = 1000) => {
   for (let i = 0; i < retries; i++) {
@@ -152,66 +154,440 @@ export const getLocalDateString = (d = new Date()) => {
   return `${year}-${month}-${day}`;
 };
 
-export const recordDailyStudyActivity = async () => {
+const metricsCache = {
+  hydrated: false,
+  streak: 0,
+  lastStudyDate: null,
+  studiedCards: new Set(),
+  completedModules: new Set(),
+  goetheScores: {},
+};
+
+let hydrationPromise = null;
+let localPersistQueue = Promise.resolve();
+const pendingLocalKeys = new Set();
+let localPersistTimer = null;
+let cloudSyncTimer = null;
+let cloudSyncQueue = Promise.resolve();
+
+const safeGetLocalStorage = (key) => {
   try {
-    const todayStr = getLocalDateString();
-    const lastDateStr = localStorage.getItem('dm_last_study_date');
-    let currentStreak = parseInt(localStorage.getItem('dm_study_streak') || '0', 10);
+    return typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
+  } catch (_) {
+    return null;
+  }
+};
 
-    if (!lastDateStr) {
-      currentStreak = 1;
-    } else if (lastDateStr === todayStr) {
-      if (currentStreak < 1) currentStreak = 1;
-    } else {
-      const [y1, m1, d1] = lastDateStr.split('-').map(Number);
-      const [y2, m2, d2] = todayStr.split('-').map(Number);
-      const prevDate = new Date(y1, m1 - 1, d1);
-      const curDate = new Date(y2, m2 - 1, d2);
-      const diffMs = curDate.getTime() - prevDate.getTime();
-      const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+const safeSetLocalStorage = (key, value) => {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(key, value);
+    }
+  } catch (_) {}
+};
 
-      if (diffDays === 1) {
-        currentStreak += 1;
-      } else {
-        currentStreak = 1;
+const dispatchMetricEvent = (name, detail) => {
+  try {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent(name, { detail }));
+    }
+  } catch (_) {}
+};
+
+const diffCalendarDays = (fromDateStr, toDateStr) => {
+  if (!fromDateStr || !toDateStr) return Infinity;
+  const [y1, m1, d1] = fromDateStr.split('-').map(Number);
+  const [y2, m2, d2] = toDateStr.split('-').map(Number);
+  if (!y1 || !m1 || !d1 || !y2 || !m2 || !d2) return Infinity;
+  const prevDate = new Date(y1, m1 - 1, d1);
+  const curDate = new Date(y2, m2 - 1, d2);
+  return Math.round((curDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
+};
+
+const flushLocalPersist = () => {
+  if (localPersistTimer) {
+    clearTimeout(localPersistTimer);
+    localPersistTimer = null;
+  }
+  if (pendingLocalKeys.size === 0) return localPersistQueue;
+
+  const keysToFlush = Array.from(pendingLocalKeys);
+  pendingLocalKeys.clear();
+
+  localPersistQueue = localPersistQueue
+    .then(async () => {
+      const writes = [];
+      if (keysToFlush.includes('dm_user_streak')) {
+        writes.push(localforage.setItem('dm_user_streak', metricsCache.streak));
+        if (metricsCache.lastStudyDate) {
+          writes.push(localforage.setItem('dm_last_study_date', metricsCache.lastStudyDate));
+        }
       }
+      if (keysToFlush.includes('dm_cards_studied')) {
+        writes.push(localforage.setItem('dm_cards_studied', Array.from(metricsCache.studiedCards)));
+      }
+      if (keysToFlush.includes('dm_completed_modules')) {
+        writes.push(localforage.setItem('dm_completed_modules', Array.from(metricsCache.completedModules)));
+      }
+      if (keysToFlush.includes('dm_goethe_scores')) {
+        writes.push(localforage.setItem('dm_goethe_scores', { ...metricsCache.goetheScores }));
+      }
+      await Promise.all(writes);
+    })
+    .catch((err) => {
+      console.warn('Error persisting metrics to localforage:', err);
+    });
+
+  return localPersistQueue;
+};
+
+const scheduleLocalPersist = (keys = []) => {
+  for (const k of keys) pendingLocalKeys.add(k);
+  if (localPersistTimer) return;
+  localPersistTimer = setTimeout(() => {
+    localPersistTimer = null;
+    flushLocalPersist();
+  }, 120);
+};
+
+const pushPedagogyProgressToCloud = async (uid) => {
+  if (!uid || !db) return;
+  try {
+    await ensureMetricsHydrated();
+    const progressRef = doc(db, 'artifacts', appId, 'users', uid, 'pedagogy', 'progress');
+    await setDoc(
+      progressRef,
+      {
+        studyStreak: metricsCache.streak,
+        lastStudyDate: metricsCache.lastStudyDate,
+        studiedCards: Array.from(metricsCache.studiedCards),
+        completedModules: Array.from(metricsCache.completedModules),
+        goetheScores: { ...metricsCache.goetheScores },
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+  } catch (err) {
+    console.warn('[Metrics Sync] Cloud write deferred/skipped:', err?.message || err);
+  }
+};
+
+const scheduleCloudSync = () => {
+  const uid = auth?.currentUser?.uid;
+  if (!uid || !db) return;
+  if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
+  cloudSyncTimer = setTimeout(() => {
+    cloudSyncTimer = null;
+    const activeUid = auth?.currentUser?.uid;
+    if (!activeUid) return;
+    cloudSyncQueue = cloudSyncQueue.then(() => pushPedagogyProgressToCloud(activeUid));
+  }, 1500);
+};
+
+const ensureMetricsHydrated = async () => {
+  if (metricsCache.hydrated) return metricsCache;
+  if (hydrationPromise) return hydrationPromise;
+
+  hydrationPromise = (async () => {
+    try {
+      const [savedCards, savedModules, savedScores, savedStreak, savedLastDate] = await Promise.all([
+        localforage.getItem('dm_cards_studied'),
+        localforage.getItem('dm_completed_modules'),
+        localforage.getItem('dm_goethe_scores'),
+        localforage.getItem('dm_user_streak'),
+        localforage.getItem('dm_last_study_date'),
+      ]);
+
+      const initialCards = Array.isArray(savedCards) ? savedCards.filter(Boolean) : [];
+      metricsCache.studiedCards = new Set(initialCards);
+
+      let migratedNow = false;
+      if (!safeGetLocalStorage('dm_cards_studied_migrated')) {
+        try {
+          const rawUnlocked = safeGetLocalStorage('deutschmeister_unlocked');
+          if (rawUnlocked) {
+            const parsed = JSON.parse(rawUnlocked);
+            for (const key of Object.keys(parsed || {})) {
+              if (key && !metricsCache.studiedCards.has(key)) {
+                metricsCache.studiedCards.add(key);
+                migratedNow = true;
+              }
+            }
+          }
+        } catch (_) {}
+        safeSetLocalStorage('dm_cards_studied_migrated', 'true');
+      }
+
+      metricsCache.completedModules = new Set(
+        Array.isArray(savedModules) ? savedModules.filter(Boolean) : []
+      );
+
+      const mergedScores = {};
+      try {
+        const rawLsScores = safeGetLocalStorage('dm_goethe_scores');
+        if (rawLsScores) {
+          const parsed = JSON.parse(rawLsScores);
+          if (parsed && typeof parsed === 'object') {
+            for (const [k, v] of Object.entries(parsed)) {
+              if (typeof v === 'number') mergedScores[k] = v;
+            }
+          }
+        }
+      } catch (_) {}
+      if (savedScores && typeof savedScores === 'object') {
+        for (const [k, v] of Object.entries(savedScores)) {
+          if (typeof v === 'number') {
+            mergedScores[k] = Math.max(mergedScores[k] || 0, v);
+          }
+        }
+      }
+      metricsCache.goetheScores = mergedScores;
+
+      const lsStreak = parseInt(safeGetLocalStorage('dm_study_streak') || '0', 10) || 0;
+      const lfStreak = typeof savedStreak === 'number' ? savedStreak : 0;
+      const lsLastDate = safeGetLocalStorage('dm_last_study_date');
+      const lfLastDate = typeof savedLastDate === 'string' ? savedLastDate : null;
+
+      let chosenLastDate = null;
+      let chosenStreak = 0;
+      if (lsLastDate && lfLastDate) {
+        if (lsLastDate > lfLastDate) {
+          chosenLastDate = lsLastDate;
+          chosenStreak = lsStreak;
+        } else if (lfLastDate > lsLastDate) {
+          chosenLastDate = lfLastDate;
+          chosenStreak = lfStreak;
+        } else {
+          chosenLastDate = lsLastDate;
+          chosenStreak = Math.max(lsStreak, lfStreak);
+        }
+      } else {
+        chosenLastDate = lsLastDate || lfLastDate || null;
+        chosenStreak = Math.max(lsStreak, lfStreak);
+      }
+
+      metricsCache.lastStudyDate = chosenLastDate;
+      metricsCache.streak = chosenStreak;
+
+      if (chosenLastDate) {
+        safeSetLocalStorage('dm_last_study_date', chosenLastDate);
+        safeSetLocalStorage('dm_study_streak', String(chosenStreak));
+      }
+      if (metricsCache.studiedCards.size > 0) {
+        safeSetLocalStorage('dm_cards_studied_count', String(metricsCache.studiedCards.size));
+      }
+      if (metricsCache.completedModules.size > 0) {
+        safeSetLocalStorage('dm_completed_modules_count', String(metricsCache.completedModules.size));
+      }
+
+      metricsCache.hydrated = true;
+
+      if (migratedNow) {
+        scheduleLocalPersist(['dm_cards_studied']);
+      }
+    } catch (err) {
+      console.warn('Error hydrating metrics cache:', err);
+      metricsCache.hydrated = true;
+    } finally {
+      hydrationPromise = null;
+    }
+    return metricsCache;
+  })();
+
+  return hydrationPromise;
+};
+
+const applyDailyStudyActivityMutation = () => {
+  const todayStr = getLocalDateString();
+  const lastDateStr = metricsCache.lastStudyDate;
+  let nextStreak = metricsCache.streak || 0;
+
+  if (!lastDateStr) {
+    nextStreak = 1;
+  } else if (lastDateStr === todayStr) {
+    if (nextStreak < 1) nextStreak = 1;
+  } else {
+    const diffDays = diffCalendarDays(lastDateStr, todayStr);
+    nextStreak = diffDays === 1 ? nextStreak + 1 : 1;
+  }
+
+  const changed = nextStreak !== metricsCache.streak || lastDateStr !== todayStr;
+  metricsCache.streak = nextStreak;
+  metricsCache.lastStudyDate = todayStr;
+
+  if (changed) {
+    safeSetLocalStorage('dm_study_streak', String(nextStreak));
+    safeSetLocalStorage('dm_last_study_date', todayStr);
+    dispatchMetricEvent('studyActivityUpdated', { streak: nextStreak });
+  }
+  return { streak: nextStreak, changed };
+};
+
+const applyModuleCompletedMutation = (moduleId) => {
+  if (!moduleId || metricsCache.completedModules.has(moduleId)) {
+    return { count: metricsCache.completedModules.size, changed: false };
+  }
+  metricsCache.completedModules.add(moduleId);
+  const count = metricsCache.completedModules.size;
+  safeSetLocalStorage('dm_completed_modules_count', String(count));
+  dispatchMetricEvent('moduleCompletedUpdated', { count, moduleId });
+  return { count, changed: true };
+};
+
+export const syncPedagogyProgressFromCloud = async (uid) => {
+  if (!uid || !db) return;
+  try {
+    await ensureMetricsHydrated();
+    const progressRef = doc(db, 'artifacts', appId, 'users', uid, 'pedagogy', 'progress');
+    const snap = await getDoc(progressRef);
+
+    if (!snap.exists()) {
+      const hasLocalData =
+        metricsCache.streak > 0 ||
+        metricsCache.studiedCards.size > 0 ||
+        metricsCache.completedModules.size > 0 ||
+        Object.keys(metricsCache.goetheScores).length > 0;
+      if (hasLocalData) {
+        cloudSyncQueue = cloudSyncQueue.then(() => pushPedagogyProgressToCloud(uid));
+      }
+      return;
     }
 
-    localStorage.setItem('dm_study_streak', currentStreak.toString());
-    localStorage.setItem('dm_last_study_date', todayStr);
-    await localforage.setItem('dm_user_streak', currentStreak);
-    window.dispatchEvent(new CustomEvent('studyActivityUpdated', { detail: { streak: currentStreak } }));
-    return currentStreak;
+    const cloud = snap.data() || {};
+    const dirtyLocalKeys = [];
+    let cloudNeedsUpdate = false;
+
+    // 1. Merge studiedCards
+    const cloudCards = Array.isArray(cloud.studiedCards) ? cloud.studiedCards.filter(Boolean) : [];
+    const cloudCardsSet = new Set(cloudCards);
+    let cardsChangedLocally = false;
+    for (const id of cloudCardsSet) {
+      if (!metricsCache.studiedCards.has(id)) {
+        metricsCache.studiedCards.add(id);
+        cardsChangedLocally = true;
+      }
+    }
+    if (metricsCache.studiedCards.size > cloudCardsSet.size) {
+      cloudNeedsUpdate = true;
+    }
+    if (cardsChangedLocally) {
+      safeSetLocalStorage('dm_cards_studied_count', String(metricsCache.studiedCards.size));
+      dirtyLocalKeys.push('dm_cards_studied');
+      dispatchMetricEvent('cardStudiedUpdated', { count: metricsCache.studiedCards.size });
+    }
+
+    // 2. Merge completedModules
+    const cloudModules = Array.isArray(cloud.completedModules)
+      ? cloud.completedModules.filter(Boolean)
+      : [];
+    const cloudModulesSet = new Set(cloudModules);
+    let modulesChangedLocally = false;
+    for (const id of cloudModulesSet) {
+      if (!metricsCache.completedModules.has(id)) {
+        metricsCache.completedModules.add(id);
+        modulesChangedLocally = true;
+      }
+    }
+    if (metricsCache.completedModules.size > cloudModulesSet.size) {
+      cloudNeedsUpdate = true;
+    }
+    if (modulesChangedLocally) {
+      safeSetLocalStorage('dm_completed_modules_count', String(metricsCache.completedModules.size));
+      dirtyLocalKeys.push('dm_completed_modules');
+      dispatchMetricEvent('moduleCompletedUpdated', { count: metricsCache.completedModules.size });
+    }
+
+    // 3. Merge Goethe scores (max per module)
+    const cloudScores = cloud.goetheScores && typeof cloud.goetheScores === 'object' ? cloud.goetheScores : {};
+    let scoresChangedLocally = false;
+    for (const [k, v] of Object.entries(cloudScores)) {
+      if (typeof v === 'number' && v > (metricsCache.goetheScores[k] || 0)) {
+        metricsCache.goetheScores[k] = v;
+        safeSetLocalStorage(`dm_goethe_${k}_score`, String(v));
+        scoresChangedLocally = true;
+      }
+    }
+    for (const [k, v] of Object.entries(metricsCache.goetheScores)) {
+      if (typeof v === 'number' && v > (typeof cloudScores[k] === 'number' ? cloudScores[k] : 0)) {
+        cloudNeedsUpdate = true;
+      }
+    }
+    if (scoresChangedLocally) {
+      safeSetLocalStorage('dm_goethe_scores', JSON.stringify(metricsCache.goetheScores));
+      dirtyLocalKeys.push('dm_goethe_scores');
+      dispatchMetricEvent('goetheScoreUpdated', { scores: { ...metricsCache.goetheScores } });
+    }
+
+    // 4. Merge streak & lastStudyDate
+    const cloudLastDate = typeof cloud.lastStudyDate === 'string' ? cloud.lastStudyDate : null;
+    const cloudStreak = typeof cloud.studyStreak === 'number' ? cloud.studyStreak : 0;
+    let streakChangedLocally = false;
+    if (cloudLastDate && (!metricsCache.lastStudyDate || cloudLastDate > metricsCache.lastStudyDate)) {
+      metricsCache.lastStudyDate = cloudLastDate;
+      metricsCache.streak = cloudStreak;
+      streakChangedLocally = true;
+    } else if (
+      cloudLastDate &&
+      cloudLastDate === metricsCache.lastStudyDate &&
+      cloudStreak > metricsCache.streak
+    ) {
+      metricsCache.streak = cloudStreak;
+      streakChangedLocally = true;
+    } else if (
+      metricsCache.lastStudyDate &&
+      (!cloudLastDate ||
+        metricsCache.lastStudyDate > cloudLastDate ||
+        metricsCache.streak > cloudStreak)
+    ) {
+      cloudNeedsUpdate = true;
+    }
+    if (streakChangedLocally) {
+      safeSetLocalStorage('dm_study_streak', String(metricsCache.streak));
+      if (metricsCache.lastStudyDate) {
+        safeSetLocalStorage('dm_last_study_date', metricsCache.lastStudyDate);
+      }
+      dirtyLocalKeys.push('dm_user_streak');
+      dispatchMetricEvent('studyActivityUpdated', { streak: metricsCache.streak });
+    }
+
+    if (dirtyLocalKeys.length > 0) {
+      scheduleLocalPersist(dirtyLocalKeys);
+    }
+    if (cloudNeedsUpdate) {
+      cloudSyncQueue = cloudSyncQueue.then(() => pushPedagogyProgressToCloud(uid));
+    }
   } catch (err) {
-    console.warn("Error en recordDailyStudyActivity:", err);
+    console.warn('[Metrics Sync] Cloud hydration failed, continuing offline:', err?.message || err);
+  }
+};
+
+export const recordDailyStudyActivity = async () => {
+  try {
+    await ensureMetricsHydrated();
+    const { streak, changed } = applyDailyStudyActivityMutation();
+    if (changed) {
+      scheduleLocalPersist(['dm_user_streak']);
+      scheduleCloudSync();
+    }
+    return streak;
+  } catch (err) {
+    console.warn('Error en recordDailyStudyActivity:', err);
     return 1;
   }
 };
 
 export const getDailyStudyStreak = async () => {
   try {
-    const todayStr = getLocalDateString();
-    const lastDateStr = localStorage.getItem('dm_last_study_date');
-    let streak = parseInt(localStorage.getItem('dm_study_streak') || '0', 10);
-
-    if (!lastDateStr) {
-      const saved = await localforage.getItem('dm_user_streak');
-      return (typeof saved === 'number' && saved > 0) ? saved : 0;
+    await ensureMetricsHydrated();
+    if (!metricsCache.lastStudyDate) {
+      return metricsCache.streak > 0 ? metricsCache.streak : 0;
     }
-
-    const [y1, m1, d1] = lastDateStr.split('-').map(Number);
-    const [y2, m2, d2] = todayStr.split('-').map(Number);
-    const prevDate = new Date(y1, m1 - 1, d1);
-    const curDate = new Date(y2, m2 - 1, d2);
-    const diffDays = Math.round((curDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
-
-    if (diffDays > 1) {
+    if (diffCalendarDays(metricsCache.lastStudyDate, getLocalDateString()) > 1) {
       return 0; // Expirada por inactividad de más de 24h
     }
-
-    return streak;
+    return metricsCache.streak;
   } catch (_) {
-    return parseInt(localStorage.getItem('dm_study_streak') || '0', 10);
+    return parseInt(safeGetLocalStorage('dm_study_streak') || '0', 10);
   }
 };
 
@@ -222,46 +598,38 @@ export const getDailyStudyStreak = async () => {
 export const recordCardStudied = async (safeId) => {
   if (!safeId) return;
   try {
-    recordDailyStudyActivity();
-    const currentList = (await localforage.getItem('dm_cards_studied')) || [];
-    if (!currentList.includes(safeId)) {
-      currentList.push(safeId);
-      await localforage.setItem('dm_cards_studied', currentList);
-      localStorage.setItem('dm_cards_studied_count', currentList.length.toString());
-      window.dispatchEvent(new CustomEvent('cardStudiedUpdated', { detail: { count: currentList.length, safeId } }));
-      return currentList.length;
+    await ensureMetricsHydrated();
+    const streakRes = applyDailyStudyActivityMutation();
+    const dirtyKeys = streakRes.changed ? ['dm_user_streak'] : [];
+
+    let cardAdded = false;
+    if (!metricsCache.studiedCards.has(safeId)) {
+      metricsCache.studiedCards.add(safeId);
+      const count = metricsCache.studiedCards.size;
+      safeSetLocalStorage('dm_cards_studied_count', String(count));
+      dirtyKeys.push('dm_cards_studied');
+      dispatchMetricEvent('cardStudiedUpdated', { count, safeId });
+      cardAdded = true;
     }
-    return currentList.length;
+
+    if (dirtyKeys.length > 0) {
+      scheduleLocalPersist(dirtyKeys);
+    }
+    if (streakRes.changed || cardAdded) {
+      scheduleCloudSync();
+    }
+    return metricsCache.studiedCards.size;
   } catch (err) {
-    console.warn("Error al registrar carta estudiada:", err);
+    console.warn('Error al registrar carta estudiada:', err);
   }
 };
 
 export const getStudiedCardsCount = async () => {
   try {
-    // Migración inicial automática si existen desbloqueos previos
-    if (!localStorage.getItem('dm_cards_studied_migrated')) {
-      try {
-        const rawUnlocked = localStorage.getItem('deutschmeister_unlocked');
-        if (rawUnlocked) {
-          const parsed = JSON.parse(rawUnlocked);
-          const keys = Object.keys(parsed || {});
-          if (keys.length > 0) {
-            const existing = (await localforage.getItem('dm_cards_studied')) || [];
-            const merged = Array.from(new Set([...existing, ...keys]));
-            await localforage.setItem('dm_cards_studied', merged);
-            localStorage.setItem('dm_cards_studied_count', merged.length.toString());
-          }
-        }
-      } catch (_) {}
-      localStorage.setItem('dm_cards_studied_migrated', 'true');
-    }
-
-    const list = await localforage.getItem('dm_cards_studied');
-    if (Array.isArray(list)) return list.length;
-    return parseInt(localStorage.getItem('dm_cards_studied_count') || '0', 10);
+    await ensureMetricsHydrated();
+    return metricsCache.studiedCards.size;
   } catch (_) {
-    return parseInt(localStorage.getItem('dm_cards_studied_count') || '0', 10);
+    return parseInt(safeGetLocalStorage('dm_cards_studied_count') || '0', 10);
   }
 };
 
@@ -272,58 +640,79 @@ export const getStudiedCardsCount = async () => {
 export const recordModuleCompleted = async (moduleId) => {
   if (!moduleId) return;
   try {
-    recordDailyStudyActivity();
-    const currentList = (await localforage.getItem('dm_completed_modules')) || [];
-    if (!currentList.includes(moduleId)) {
-      currentList.push(moduleId);
-      await localforage.setItem('dm_completed_modules', currentList);
-      localStorage.setItem('dm_completed_modules_count', currentList.length.toString());
-      window.dispatchEvent(new CustomEvent('moduleCompletedUpdated', { detail: { count: currentList.length, moduleId } }));
-      return currentList.length;
+    await ensureMetricsHydrated();
+    const streakRes = applyDailyStudyActivityMutation();
+    const modRes = applyModuleCompletedMutation(moduleId);
+    const dirtyKeys = [];
+    if (streakRes.changed) dirtyKeys.push('dm_user_streak');
+    if (modRes.changed) dirtyKeys.push('dm_completed_modules');
+
+    if (dirtyKeys.length > 0) {
+      scheduleLocalPersist(dirtyKeys);
+      scheduleCloudSync();
     }
-    return currentList.length;
+    return modRes.count;
   } catch (err) {
-    console.warn("Error al registrar módulo completado:", err);
+    console.warn('Error al registrar módulo completado:', err);
   }
 };
 
 export const getCompletedModulesCount = async () => {
   try {
-    const list = await localforage.getItem('dm_completed_modules');
-    if (Array.isArray(list)) return list.length;
-    return parseInt(localStorage.getItem('dm_completed_modules_count') || '0', 10);
+    await ensureMetricsHydrated();
+    return metricsCache.completedModules.size;
   } catch (_) {
-    return parseInt(localStorage.getItem('dm_completed_modules_count') || '0', 10);
+    return parseInt(safeGetLocalStorage('dm_completed_modules_count') || '0', 10);
   }
 };
 
 export const recordGoetheScore = async (moduleId, score) => {
   if (!moduleId || typeof score !== 'number') return;
   try {
-    recordDailyStudyActivity();
-    await recordModuleCompleted(moduleId);
+    await ensureMetricsHydrated();
+    const streakRes = applyDailyStudyActivityMutation();
+    const modRes = applyModuleCompletedMutation(moduleId);
 
-    const scores = (await localforage.getItem('dm_goethe_scores')) || {};
-    scores[moduleId] = Math.max(scores[moduleId] || 0, score);
-    await localforage.setItem('dm_goethe_scores', scores);
-    localStorage.setItem('dm_goethe_scores', JSON.stringify(scores));
-    localStorage.setItem(`dm_goethe_${moduleId}_score`, score.toString());
+    const prevScore = metricsCache.goetheScores[moduleId] || 0;
+    const nextScore = Math.max(prevScore, score);
+    const scoreChanged = nextScore !== prevScore || !(moduleId in metricsCache.goetheScores);
 
-    window.dispatchEvent(new CustomEvent('goetheScoreUpdated', { detail: { moduleId, score, scores } }));
-    return scores;
+    metricsCache.goetheScores[moduleId] = nextScore;
+    safeSetLocalStorage('dm_goethe_scores', JSON.stringify(metricsCache.goetheScores));
+    safeSetLocalStorage(`dm_goethe_${moduleId}_score`, String(nextScore));
+
+    const dirtyKeys = [];
+    if (streakRes.changed) dirtyKeys.push('dm_user_streak');
+    if (modRes.changed) dirtyKeys.push('dm_completed_modules');
+    if (scoreChanged) dirtyKeys.push('dm_goethe_scores');
+
+    if (dirtyKeys.length > 0) {
+      scheduleLocalPersist(dirtyKeys);
+      scheduleCloudSync();
+    }
+
+    dispatchMetricEvent('goetheScoreUpdated', {
+      moduleId,
+      score: nextScore,
+      scores: { ...metricsCache.goetheScores },
+    });
+    return { ...metricsCache.goetheScores };
   } catch (err) {
-    console.warn("Error guardando puntuación Goethe:", err);
+    console.warn('Error guardando puntuación Goethe:', err);
   }
 };
 
 export const getGoetheScores = async () => {
   try {
-    const scores = await localforage.getItem('dm_goethe_scores');
-    if (scores && typeof scores === 'object') return scores;
-    const raw = localStorage.getItem('dm_goethe_scores');
-    return raw ? JSON.parse(raw) : {};
+    await ensureMetricsHydrated();
+    return { ...metricsCache.goetheScores };
   } catch (_) {
-    return {};
+    try {
+      const raw = safeGetLocalStorage('dm_goethe_scores');
+      return raw ? JSON.parse(raw) : {};
+    } catch (_) {
+      return {};
+    }
   }
 };
 

@@ -12,7 +12,7 @@ import MarkdownMessage from './components/MarkdownMessage';
 import { app, auth, db, functions, appId } from './config/firebase';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
-import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, splitGermanTitle, splitParentheticalText } from './utils/helpers';
+import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, syncPedagogyProgressFromCloud, splitGermanTitle, splitParentheticalText } from './utils/helpers';
 import { parseTextToTokens, calculateWordTimings } from './utils/textTokenizer';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
 import { API_ENDPOINTS } from './config/apiEndpoints';
@@ -47,6 +47,17 @@ const loadingPhrases = [
 ];
 
 export default function App() {
+  const totalUniqueCardsCount = useMemo(
+    () =>
+      new Set(
+        chapters.flatMap((c) =>
+          (c.words || [])
+            .map((w) => (w?.de ? getSafeId(w.de).substring(0, 150) : null))
+            .filter(Boolean)
+        )
+      ).size,
+    []
+  );
   const [activeChapterId, setActiveChapterId] = useState(chapters[0].id);
   const [activePresentationId, setActivePresentationId] = useState(null);
   const [activeStudyPlanId, setActiveStudyPlanId] = useState(null);
@@ -330,6 +341,7 @@ export default function App() {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
+        syncPedagogyProgressFromCloud(currentUser.uid);
       } else {
         try {
           await signInAnonymously(auth);
@@ -931,7 +943,7 @@ export default function App() {
         auth={auth}
         studiedCardsCount={studiedCardsCount}
         unlockedCardsCount={Object.keys(unlockedCards || {}).length}
-        totalCardsCount={chapters.reduce((acc, c) => acc + (c.words ? c.words.length : 0), 0)}
+        totalCardsCount={totalUniqueCardsCount}
         canInstallPWA={canInstallPWA}
         onInstallApp={handleInstallApp}
         showWebInstallCard={showWebInstallCard}
