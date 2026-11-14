@@ -179,6 +179,15 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
     setRegenType(null);
   }, [wordObj?.de]);
 
+  useEffect(() => {
+    return () => {
+      if (feedbackTimeoutRef.current) {
+        clearTimeout(feedbackTimeoutRef.current);
+      }
+      stopCurrentAudio();
+    };
+  }, []);
+
   const handleSpeakWord = (e) => {
     if (e) e.stopPropagation();
     recordDailyStudyActivity();

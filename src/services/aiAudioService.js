@@ -10,10 +10,15 @@ export const audioStore = localforage.createInstance({
 });
 
 let currentAudioInstance = null;
+let currentObjectUrl = null;
+let latestPlaybackRequestId = 0;
+let cachedAudioKeysPromise = null;
+let cachedAudioKeysSet = null;
 
-export const getSafeAudioId = (text) => {
-  if (!text || typeof text !== "string") return "audio_unknown";
-  const normalized = text
+function normalizeAudioSlug(text) {
+  if (!text || typeof text !== "string") return "";
+  return text
+    .replace(/[*_#`~]/g, "")
     .trim()
     .toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -23,27 +28,138 @@ export const getSafeAudioId = (text) => {
     .replace(/[^a-z0-9_]/g, "")
     .replace(/^_+|_+$/g, "")
     .substring(0, 120);
+}
+
+export const getSafeAudioId = (text) => {
+  const normalized = normalizeAudioSlug(text);
   return "audio_" + (normalized || "audio");
 };
 
 export const getSafeAudioKey = (text) => {
-  if (!text || typeof text !== "string") return "";
-  const cleanText = text.replace(/[*_#`~]/g, "").trim();
-  return "tts_" + cleanText
-    .toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
-    .replace(/[^a-z0-9_]/gi, "_")
-    .substring(0, 100);
+  const normalized = normalizeAudioSlug(text);
+  return normalized ? `tts_${normalized}` : "";
 };
 
+export const getLegacyAudioKey = (text) => {
+  if (!text || typeof text !== "string") return "";
+  const cleanText = text.replace(/[*_#`~]/g, "").trim();
+  if (!cleanText) return "";
+  return (
+    "tts_" +
+    cleanText
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+      .replace(/[^a-z0-9_]/gi, "_")
+      .substring(0, 100)
+  );
+};
+
+async function ensureAudioKeySet() {
+  if (cachedAudioKeysSet) return cachedAudioKeysSet;
+  if (!cachedAudioKeysPromise) {
+    cachedAudioKeysPromise = audioStore
+      .keys()
+      .then((keys) => {
+        cachedAudioKeysSet = new Set(keys);
+        return cachedAudioKeysSet;
+      })
+      .catch(() => new Set())
+      .finally(() => {
+        cachedAudioKeysPromise = null;
+      });
+  }
+  return cachedAudioKeysPromise;
+}
+
+export function markAudioKeyCached(key) {
+  if (key && cachedAudioKeysSet) {
+    cachedAudioKeysSet.add(key);
+  }
+}
+
+function evictAudioKeyFromCache(key) {
+  if (!key) return;
+  if (cachedAudioKeysSet) cachedAudioKeysSet.delete(key);
+  try {
+    audioStore.removeItem(key).catch(() => {});
+  } catch (_) {}
+}
+
+function revokeCurrentObjectUrl() {
+  if (currentObjectUrl) {
+    try {
+      URL.revokeObjectURL(currentObjectUrl);
+    } catch (_) {}
+    currentObjectUrl = null;
+  }
+}
+
 export function stopCurrentAudio() {
+  latestPlaybackRequestId += 1;
   if (currentAudioInstance) {
     try {
+      currentAudioInstance.onended = null;
+      currentAudioInstance.onerror = null;
       currentAudioInstance.pause();
       currentAudioInstance.currentTime = 0;
+      currentAudioInstance.src = "";
     } catch (_) {}
     currentAudioInstance = null;
+  }
+  revokeCurrentObjectUrl();
+}
+
+async function playAudioSource(source, { rate = 1.0, cleanText, isObjectUrl = false, cacheKeyToEvict = null, onEnd, onError } = {}) {
+  const audio = new Audio(source);
+  audio.playbackRate = rate;
+  audio.preservesPitch = true;
+  audio.onloadedmetadata = () => {
+    audio.playbackRate = rate;
+    audio.preservesPitch = true;
+  };
+
+  currentAudioInstance = audio;
+  if (isObjectUrl) {
+    currentObjectUrl = source;
+  }
+
+  const cleanupPlayback = () => {
+    audio.onended = null;
+    audio.onerror = null;
+    if (currentAudioInstance === audio) {
+      currentAudioInstance = null;
+    }
+    if (isObjectUrl && currentObjectUrl === source) {
+      revokeCurrentObjectUrl();
+    } else if (isObjectUrl) {
+      try {
+        URL.revokeObjectURL(source);
+      } catch (_) {}
+    }
+  };
+
+  audio.onended = () => {
+    cleanupPlayback();
+    if (onEnd) onEnd();
+  };
+
+  audio.onerror = (e) => {
+    cleanupPlayback();
+    if (cacheKeyToEvict) {
+      evictAudioKeyFromCache(cacheKeyToEvict);
+    }
+    console.warn("[TTS Audio Playback Error] Fallback a nativo:", e);
+    if (cleanText) nativeSpeak(cleanText);
+    if (onError) onError(e);
+    if (onEnd) onEnd();
+  };
+
+  try {
+    await audio.play();
+  } catch (err) {
+    cleanupPlayback();
+    throw err;
   }
 }
 
@@ -104,7 +220,10 @@ export async function playGermanAudio(text, options = {}) {
   if (!cleanText) return;
 
   stopCurrentAudio();
+  const requestId = latestPlaybackRequestId;
   const cacheKey = getSafeAudioKey(cleanText);
+  const safeAudioId = getSafeAudioId(cleanText);
+  const legacyKey = getLegacyAudioKey(cleanText);
   const isEphemeral = type === "story" || type === "reading";
 
   try {
@@ -119,121 +238,134 @@ export async function playGermanAudio(text, options = {}) {
       }
     })();
 
-    // 1. Nivel 1 (100% Offline, 0 ms): Busca primero el Blob en audioStore
+    // 1. Nivel 1 (100% Offline, 0 ms): Busca el Blob en audioStore usando índice de claves en memoria
     if (!isEphemeral) {
-      let cachedItem = await audioStore.getItem(cacheKey);
-      if (!cachedItem) {
-        const audioAlias = cacheKey.startsWith("tts_") ? `audio_${cacheKey.replace(/^tts_/, "")}` : `audio_${cacheKey}`;
-        cachedItem = await audioStore.getItem(audioAlias);
-      }
-      if (!cachedItem) {
-        cachedItem = await audioStore.getItem(getSafeAudioId(cleanText));
-      }
-      if (!cachedItem) {
-        cachedItem = await audioStore.getItem(`${cacheKey}_`);
-      }
+      const keySet = await ensureAudioKeySet();
+      if (requestId !== latestPlaybackRequestId) return;
 
-      if (cachedItem) {
-        let blobToPlay = null;
+      const candidateKeys = Array.from(
+        new Set([
+          cacheKey,
+          safeAudioId,
+          legacyKey,
+          `${safeAudioId}_`,
+          legacyKey ? `${legacyKey}_` : "",
+        ].filter(Boolean))
+      );
 
-        // Si es un Blob binario local
-        if (cachedItem instanceof Blob) {
-          blobToPlay = cachedItem;
+      const matchedKey = candidateKeys.find((k) => keySet.has(k));
+      if (matchedKey) {
+        const cachedItem = await audioStore.getItem(matchedKey);
+        if (requestId !== latestPlaybackRequestId) return;
+
+        if (!cachedItem) {
+          keySet.delete(matchedKey);
+        } else if (cachedItem instanceof Blob) {
+          const localBlobUrl = URL.createObjectURL(cachedItem);
+          await playAudioSource(localBlobUrl, {
+            rate: configuredRate,
+            cleanText,
+            isObjectUrl: true,
+            cacheKeyToEvict: matchedKey,
+            onEnd,
+            onError,
+          });
+          return;
         } else if (typeof cachedItem === "string" && (cachedItem.startsWith("http") || cachedItem.startsWith("data:"))) {
-          // Si es un string URL/Data, intentar descargarlo a Blob para uso offline permanente
           try {
             const resp = await fetch(cachedItem);
+            if (requestId !== latestPlaybackRequestId) return;
             if (resp.ok) {
-              blobToPlay = await resp.blob();
-              await audioStore.setItem(cacheKey, blobToPlay);
+              const fetchedBlob = await resp.blob();
+              if (requestId !== latestPlaybackRequestId) return;
+              if (cacheKey) {
+                await audioStore.setItem(cacheKey, fetchedBlob);
+                markAudioKeyCached(cacheKey);
+              }
+              const localBlobUrl = URL.createObjectURL(fetchedBlob);
+              await playAudioSource(localBlobUrl, {
+                rate: configuredRate,
+                cleanText,
+                isObjectUrl: true,
+                cacheKeyToEvict: cacheKey || matchedKey,
+                onEnd,
+                onError,
+              });
+              return;
             }
           } catch (_) {
             if (cachedItem.startsWith("data:")) {
-              const dataAudio = new Audio(cachedItem);
-              dataAudio.playbackRate = configuredRate;
-              dataAudio.preservesPitch = true;
-              currentAudioInstance = dataAudio;
-              dataAudio.onended = () => { if (currentAudioInstance === dataAudio) currentAudioInstance = null; if (onEnd) onEnd(); };
-              dataAudio.onerror = () => { if (currentAudioInstance === dataAudio) currentAudioInstance = null; nativeSpeak(cleanText); if (onEnd) onEnd(); };
-              await dataAudio.play();
+              await playAudioSource(cachedItem, {
+                rate: configuredRate,
+                cleanText,
+                isObjectUrl: false,
+                onEnd,
+                onError,
+              });
               return;
             }
           }
         }
-
-        if (blobToPlay instanceof Blob) {
-          const localBlobUrl = URL.createObjectURL(blobToPlay);
-          const localAudio = new Audio(localBlobUrl);
-          localAudio.playbackRate = configuredRate;
-          localAudio.preservesPitch = true;
-          localAudio.onloadedmetadata = () => {
-            localAudio.playbackRate = configuredRate;
-            localAudio.preservesPitch = true;
-          };
-          currentAudioInstance = localAudio;
-          localAudio.onended = () => {
-            URL.revokeObjectURL(localBlobUrl);
-            if (currentAudioInstance === localAudio) currentAudioInstance = null;
-            if (onEnd) onEnd();
-          };
-          localAudio.onerror = () => {
-            URL.revokeObjectURL(localBlobUrl);
-            if (currentAudioInstance === localAudio) currentAudioInstance = null;
-            try { audioStore.removeItem(cacheKey); } catch (_) {}
-            nativeSpeak(cleanText);
-            if (onEnd) onEnd();
-          };
-          await localAudio.play();
-          return;
-        }
       }
     }
 
-    // 2. Invocar Backend (Google Direct -> Fal -> Cloud Storage o Base64) - Voz oficial Charon
-    const audioSource = await getGermanSpeechUrl(cleanText, { voice: "Charon", type });
+    // 2. Invocar Backend (Firestore CDN -> Google Direct -> Fal -> Cloud Storage / Base64)
+    const audioSource = await getGermanSpeechUrl(cleanText, { voice, type });
+    if (requestId !== latestPlaybackRequestId) return;
 
-    // 3. Reproducción respetando dm_audio_speed configurado por el usuario
-    const audio = new Audio(audioSource);
-    audio.playbackRate = configuredRate;
-    audio.preservesPitch = true;
-    audio.onloadedmetadata = () => {
-      audio.playbackRate = configuredRate;
-      audio.preservesPitch = true;
-    };
-    currentAudioInstance = audio;
-
-    audio.onended = () => {
-      if (currentAudioInstance === audio) currentAudioInstance = null;
-      if (onEnd) onEnd();
-    };
-
-    audio.onerror = (e) => {
-      if (currentAudioInstance === audio) currentAudioInstance = null;
-      console.warn("[TTS Audio Playback Error] Fallback a nativo:", e);
-      nativeSpeak(cleanText);
-      if (onError) onError(e);
-      if (onEnd) onEnd();
-    };
-
-    await audio.play();
-
-    // 4. Si es vocabulario u oración persistente y no es Data URI, guardar en audioStore
-    if (!isEphemeral && !audioSource.startsWith("data:")) {
-      try {
-        const audioFetch = await fetch(audioSource);
-        if (audioFetch.ok) {
-          const blob = await audioFetch.blob();
-          await audioStore.setItem(cacheKey, blob);
-          const safeAudioId = getSafeAudioId(cleanText);
-          if (safeAudioId && safeAudioId !== cacheKey) {
-            await audioStore.setItem(safeAudioId, blob);
-          }
-        }
-      } catch (cacheErr) {
-        console.warn("[TTS Cache Warning] No se pudo persistir en IndexedDB:", cacheErr);
-      }
+    // 3. Reproducción única sin doble descarga HTTP
+    if (audioSource.startsWith("data:")) {
+      await playAudioSource(audioSource, {
+        rate: configuredRate,
+        cleanText,
+        isObjectUrl: false,
+        onEnd,
+        onError,
+      });
+      return;
     }
+
+    try {
+      const audioFetch = await fetch(audioSource);
+      if (requestId !== latestPlaybackRequestId) return;
+      if (audioFetch.ok) {
+        const blob = await audioFetch.blob();
+        if (requestId !== latestPlaybackRequestId) return;
+
+        if (!isEphemeral && cacheKey) {
+          audioStore
+            .setItem(cacheKey, blob)
+            .then(() => markAudioKeyCached(cacheKey))
+            .catch((cacheErr) => {
+              console.warn("[TTS Cache Warning] No se pudo persistir en IndexedDB:", cacheErr);
+            });
+        }
+
+        const localBlobUrl = URL.createObjectURL(blob);
+        await playAudioSource(localBlobUrl, {
+          rate: configuredRate,
+          cleanText,
+          isObjectUrl: true,
+          cacheKeyToEvict: cacheKey,
+          onEnd,
+          onError,
+        });
+        return;
+      }
+    } catch (fetchErr) {
+      console.warn("[TTS Fetch Warning] Reproduciendo stream directo:", fetchErr?.message || fetchErr);
+    }
+
+    if (requestId !== latestPlaybackRequestId) return;
+    await playAudioSource(audioSource, {
+      rate: configuredRate,
+      cleanText,
+      isObjectUrl: false,
+      onEnd,
+      onError,
+    });
   } catch (error) {
+    if (requestId !== latestPlaybackRequestId) return;
     console.warn("[TTS Pipeline Warning] Activando fallback a motor nativo:", error);
     nativeSpeak(cleanText);
     if (onError) onError(error);

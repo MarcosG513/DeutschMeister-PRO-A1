@@ -2,6 +2,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { Presentation, Link2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { goetheModules, studyPlanModules } from '../data/chapters';
 import { recordDailyStudyActivity, recordModuleCompleted, recordCardStudied, getSafeId } from '../utils/helpers';
+import { stopCurrentAudio } from '../services/aiAudioService';
 
 const PresentationViewer = ({
   presentation,
@@ -17,6 +18,12 @@ const PresentationViewer = ({
   onNextModule
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    return () => {
+      stopCurrentAudio();
+    };
+  }, [currentSlide, presentation?.id]);
 
   useEffect(() => {
     if (presentation) {

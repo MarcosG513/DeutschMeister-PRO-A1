@@ -1,7 +1,7 @@
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { getApps, initializeApp } from "firebase/app";
 import localforage from "localforage";
-import { audioStore, getSafeAudioKey } from "./aiAudioService";
+import { audioStore, getSafeAudioId, getSafeAudioKey, getLegacyAudioKey, markAudioKeyCached } from "./aiAudioService";
 import { getSafeId } from "../utils/helpers";
 
 // Almacén dedicado para Blobs de imágenes y videos offline
@@ -157,9 +157,15 @@ export async function syncCloudMediaToLocal(onProgress) {
       const text = data.text || "";
       const docId = docSnap.id; // ej. audio_...
       const primaryKey = text ? getSafeAudioKey(text) : `tts_${docId.replace(/^audio_/, "")}`;
+      const canonicalAudioId = text ? getSafeAudioId(text) : docId;
+      const legacyKey = text ? getLegacyAudioKey(text) : "";
 
       if (audioUrl && primaryKey) {
-        const alreadyHasBlob = existingAudioKeySet.has(primaryKey) || existingAudioKeySet.has(docId);
+        const alreadyHasBlob =
+          existingAudioKeySet.has(primaryKey) ||
+          existingAudioKeySet.has(docId) ||
+          existingAudioKeySet.has(canonicalAudioId) ||
+          (legacyKey && existingAudioKeySet.has(legacyKey));
 
         if (alreadyHasBlob) {
           skippedCached++;
@@ -169,11 +175,9 @@ export async function syncCloudMediaToLocal(onProgress) {
             const response = await fetch(audioUrl, { mode: "cors" });
             if (response.ok) {
               const audioBlob = await response.blob();
-              // Guardar Blob bajo la clave normalizada de texto y bajo el docId canónico
+              // Guardar Blob una sola vez bajo la clave canónica normalizada
               await audioStore.setItem(primaryKey, audioBlob);
-              if (docId && docId !== primaryKey) {
-                await audioStore.setItem(docId, audioBlob);
-              }
+              markAudioKeyCached(primaryKey);
               audiosSynced++;
             }
           } catch (err) {
