@@ -93,21 +93,35 @@ function getGoogleKeyPool() {
   return pool;
 }
 
+const PROMPT_CACHE_TTL_MS = 600_000; // 10 minutos
+const systemPromptsCache = {
+  data: null,
+  expiresAt: 0
+};
+
 /**
- * Función auxiliar para obtener los prompts desde Firestore (FASE 2)
+ * Función auxiliar para obtener los prompts desde Firestore con caché en memoria (TTL 10 min)
  */
 async function getSystemPrompt(promptId, defaultPrompt) {
+  const now = Date.now();
+  if (systemPromptsCache.data && now < systemPromptsCache.expiresAt) {
+    return systemPromptsCache.data[promptId] || defaultPrompt;
+  }
+
   try {
     const docRef = db.collection("config").doc("system_prompts");
     const docSnap = await docRef.get();
-    if (docSnap.exists) {
-      const data = docSnap.data();
-      if (data[promptId]) {
-        return data[promptId];
-      }
+    const data = docSnap.exists ? (docSnap.data() || {}) : {};
+    systemPromptsCache.data = data;
+    systemPromptsCache.expiresAt = now + PROMPT_CACHE_TTL_MS;
+    if (data[promptId]) {
+      return data[promptId];
     }
   } catch (error) {
     console.error("Error obteniendo system prompt desde Firestore, usando fallback:", error);
+    if (systemPromptsCache.data?.[promptId]) {
+      return systemPromptsCache.data[promptId];
+    }
   }
   return defaultPrompt;
 }
@@ -248,7 +262,19 @@ async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}
 }
 
 /**
- * Función centralizada para Streaming SSE con Pool Resiliente de 3 llaves y Fallback a Claude Haiku 4.5
+ * Libera de forma segura un AsyncIterator de streaming cuando el cliente SSE aborta la conexión.
+ */
+async function closeAsyncStream(streamObj) {
+  try {
+    if (streamObj && typeof streamObj.return === "function") {
+      await streamObj.return();
+    }
+  } catch (_) {}
+}
+
+/**
+ * Función centralizada para Streaming SSE con Pool Resiliente y Fallback a Claude Haiku 4.5,
+ * con detección segura de desconexión del cliente para abortar consumo de tokens.
  */
 async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessage, options = {}) {
   res.setHeader('Content-Type', 'text/event-stream');
@@ -256,82 +282,140 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
 
+  const req = options.req || res.req;
+  let clientDisconnected = false;
+
+  const isAborted = () => clientDisconnected || res.destroyed || res.writableEnded;
+  const onReqClose = () => {
+    // En Node 18+, req emite 'close' tras leer el body POST (req.complete === true);
+    // solo se marca desconexión si la petición no completó el body o si el socket/response murió.
+    if (res.writableEnded) return;
+    if ((req && !req.complete) || res.destroyed || res.socket?.destroyed) {
+      clientDisconnected = true;
+    }
+  };
+  const onAborted = () => {
+    clientDisconnected = true;
+  };
+  const onResClose = () => {
+    if (!res.writableEnded) {
+      clientDisconnected = true;
+    }
+  };
+
+  if (req && typeof req.on === "function") {
+    req.on("close", onReqClose);
+    req.on("aborted", onAborted);
+  }
+  if (typeof res.on === "function") {
+    res.on("close", onResClose);
+  }
+
   const preferredModel = options.model || "gemini-3.8-flash";
   const mode = options.mode || "paid_first";
   const keys = getGeminiKeyConfig();
 
   try {
-    console.log(`FinOps Stream: Invocando chat stream con pool de 3 llaves (Modo: ${mode})...`);
-    const streamResult = await executeBackendGeminiChatStream(history, lastMessage, {
-      keys,
-      preferredModel,
-      systemInstruction: promptSystem,
-      mode
-    });
-
-    for await (const chunk of streamResult.stream) {
-      const chunkText = chunk.text();
-      if (chunkText) {
-        const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '').replace(/\*/g, '') : chunkText;
-        res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
-      }
-    }
-    res.write('data: [DONE]\n\n');
-    res.end();
-    return;
-  } catch (poolError) {
-    console.warn("FinOps Stream: Agotadas las 3 llaves de Gemini. Activando fallback a Claude Haiku 4.5:", poolError.message);
-
-    // Fallback: Claude Haiku 4.5 en Fal.ai via enterprise (Costo premium de contingencia)
     try {
-      fal.config({
-        credentials: falKey.value()
-      });
-      console.log("FinOps Stream: Invocando stream de Claude Haiku 4.5 via Fal.ai...");
-
-      let promptBuilder = "";
-      if (history && history.length > 0) {
-        promptBuilder += "Historial de conversación previa:\n";
-        history.forEach(msg => {
-          const roleLabel = msg.role === 'user' ? 'Usuario' : 'Asistente';
-          const text = msg.parts && msg.parts[0] ? msg.parts[0].text : '';
-          promptBuilder += `${roleLabel}: ${text}\n`;
-        });
-        promptBuilder += "\n";
-      }
-      promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
-
-      const falStream = await fal.stream("openrouter/router/enterprise", {
-        input: {
-          model: "anthropic/claude-haiku-4.5",
-          prompt: promptBuilder,
-          system_prompt: promptSystem,
-          temperature: options.temperature || 0.7
-        }
+      console.log(`FinOps Stream: Invocando chat stream con pool resiliente (Modo: ${mode})...`);
+      const streamResult = await executeBackendGeminiChatStream(history, lastMessage, {
+        keys,
+        preferredModel,
+        systemInstruction: promptSystem,
+        mode
       });
 
-      let lastOutput = "";
-      for await (const event of falStream) {
-        const currentOutput = event.output || "";
-        if (currentOutput.length > lastOutput.length) {
-          const chunkText = currentOutput.substring(lastOutput.length);
-          lastOutput = currentOutput;
-          if (chunkText) {
-            const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '').replace(/\*/g, '') : chunkText;
-            res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
-          }
+      for await (const chunk of streamResult.stream) {
+        if (isAborted()) {
+          console.log("FinOps Stream: Cliente SSE desconectado, abortando stream Gemini.");
+          await closeAsyncStream(streamResult.stream);
+          return;
+        }
+        const chunkText = chunk.text();
+        if (chunkText) {
+          const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '').replace(/\*/g, '') : chunkText;
+          res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
         }
       }
-      res.write('data: [DONE]\n\n');
-      res.end();
-    } catch (fallbackErr) {
-      console.error("FinOps Stream: Error crítico en fallback de Claude Haiku 4.5:", fallbackErr);
-      if (!res.headersSent) {
-        res.status(500).json({ error: "Error en el servidor de fallback." });
-      } else {
-        res.write(`data: ${JSON.stringify({ error: "Stream fallback error: " + fallbackErr.message })}\n\n`);
+
+      if (!isAborted()) {
+        res.write('data: [DONE]\n\n');
         res.end();
       }
+      return;
+    } catch (poolError) {
+      if (isAborted()) {
+        console.log("FinOps Stream: Cliente desconectado antes de fallback, cancelando Claude Haiku 4.5.");
+        return;
+      }
+      console.warn("FinOps Stream: Agotadas las llaves de Gemini. Activando fallback a Claude Haiku 4.5:", poolError.message);
+
+      // Fallback: Claude Haiku 4.5 en Fal.ai via enterprise (Costo premium de contingencia)
+      try {
+        fal.config({
+          credentials: falKey.value()
+        });
+        console.log("FinOps Stream: Invocando stream de Claude Haiku 4.5 via Fal.ai...");
+
+        let promptBuilder = "";
+        if (history && history.length > 0) {
+          promptBuilder += "Historial de conversación previa:\n";
+          history.forEach(msg => {
+            const roleLabel = msg.role === 'user' ? 'Usuario' : 'Asistente';
+            const text = msg.parts && msg.parts[0] ? msg.parts[0].text : '';
+            promptBuilder += `${roleLabel}: ${text}\n`;
+          });
+          promptBuilder += "\n";
+        }
+        promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
+
+        const falStream = await fal.stream("openrouter/router/enterprise", {
+          input: {
+            model: "anthropic/claude-haiku-4.5",
+            prompt: promptBuilder,
+            system_prompt: promptSystem,
+            temperature: options.temperature || 0.7
+          }
+        });
+
+        let lastOutput = "";
+        for await (const event of falStream) {
+          if (isAborted()) {
+            console.log("FinOps Stream: Cliente SSE desconectado, abortando stream Fal.ai.");
+            await closeAsyncStream(falStream);
+            return;
+          }
+          const currentOutput = event.output || "";
+          if (currentOutput.length > lastOutput.length) {
+            const chunkText = currentOutput.substring(lastOutput.length);
+            lastOutput = currentOutput;
+            if (chunkText) {
+              const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '').replace(/\*/g, '') : chunkText;
+              res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
+            }
+          }
+        }
+        if (!isAborted()) {
+          res.write('data: [DONE]\n\n');
+          res.end();
+        }
+      } catch (fallbackErr) {
+        console.error("FinOps Stream: Error crítico en fallback de Claude Haiku 4.5:", fallbackErr);
+        if (!res.headersSent) {
+          res.status(500).json({ error: "Error en el servidor de fallback." });
+        } else if (!isAborted()) {
+          res.write(`data: ${JSON.stringify({ error: "Stream fallback error: " + fallbackErr.message })}\n\n`);
+          res.end();
+        }
+      }
+    }
+  } finally {
+    if (req && typeof req.off === "function") {
+      req.off("close", onReqClose);
+      req.off("aborted", onAborted);
+    }
+    if (typeof res.off === "function") {
+      res.off("close", onResClose);
     }
   }
 }
@@ -389,7 +473,8 @@ export const runRoleplaySimulator = onRequest({
   return await streamWithDeepSeekFallback(res, finalSystemPrompt, history, lastMessage, {
     model: "gemini-3.8-flash",
     cleanBold: true,
-    temperature: 0.7
+    temperature: 0.7,
+    req
   });
 });
 
@@ -638,7 +723,8 @@ export const sendTutorChatMessage = onRequest({
   await streamWithDeepSeekFallback(res, TUTOR_STATIC_SYSTEM_PROMPT, history, lastMessage, {
     model: "gemini-3.8-flash",
     cleanBold: false,
-    thinking_level: "MINIMAL"
+    thinking_level: "MINIMAL",
+    req
   });
 });
 
@@ -1715,10 +1801,12 @@ function getSafeAudioId(text) {
   return "audio_" + (normalized || "audio");
 }
 
+const TTS_MODELS = ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts"];
+
 /**
- * 1. Invocación Directa a la API de Google AI Studio (Consume Créditos del Google Developer Program)
+ * Ejecuta una petición unitaria de síntesis TTS contra un modelo concreto de Google AI Studio.
  */
-async function synthesizeWithGoogleDirect(text, voice, apiKey, modelName = "gemini-3.8-flash-tts") {
+async function requestGoogleDirectTts(text, voice, apiKey, modelName) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
   const payload = {
     contents: [{ parts: [{ text }] }],
@@ -1756,6 +1844,37 @@ async function synthesizeWithGoogleDirect(text, voice, apiKey, modelName = "gemi
     mimeType: inlineData.mimeType || "audio/wav",
     provider: `google-direct-${modelName}`
   };
+}
+
+/**
+ * 1. Invocación Directa a la API de Google AI Studio con fallback automático a gemini-3.8-flash-lite-tts
+ */
+async function synthesizeWithGoogleDirect(text, voice, apiKey, modelName = "gemini-3.8-flash-tts") {
+  const candidateModels = modelName === "gemini-3.8-flash-lite-tts"
+    ? ["gemini-3.8-flash-lite-tts"]
+    : [modelName, "gemini-3.8-flash-lite-tts"];
+
+  let lastError = null;
+  for (let i = 0; i < candidateModels.length; i++) {
+    const currentModel = candidateModels[i];
+    try {
+      return await requestGoogleDirectTts(text, voice, apiKey, currentModel);
+    } catch (err) {
+      lastError = err;
+      const msg = (err.message || "").toLowerCase();
+      const isInvalidKey =
+        msg.includes("http 401") ||
+        msg.includes("http 403") ||
+        msg.includes("api_key_invalid") ||
+        msg.includes("api key not valid");
+
+      if (isInvalidKey || i === candidateModels.length - 1) {
+        throw err;
+      }
+      console.warn(`[TTS Direct Fallback] Falló ${currentModel} (${err.message}). Reintentando con ${candidateModels[i + 1]} en la misma llave...`);
+    }
+  }
+  throw lastError;
 }
 
 /**
@@ -1844,22 +1963,15 @@ export const synthesizeGermanSpeech = onCall(
     let audioResult = null;
     const googleKeys = getGoogleKeyPool();
     let lastGoogleError = null;
-    const TTS_MODELS = ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts"];
 
-    keyLoop: for (const keyItem of googleKeys) {
-      for (const modelName of TTS_MODELS) {
-        try {
-          audioResult = await synthesizeWithGoogleDirect(cleanText, voice, keyItem.key, modelName);
-          console.log(`[TTS Engine] Generado exitosamente vía Google AI Studio Direct (${keyItem.id} / ${modelName}) (${cleanText.substring(0, 30)}...)`);
-          break keyLoop;
-        } catch (err) {
-          lastGoogleError = err;
-          console.warn(`[TTS Warning] Falló Google Direct con ${keyItem.id} (${modelName}): ${err.message}`);
-          if (keyItem.isPaid && err.message.includes("429") && !err.message.includes("PerDay") && modelName === TTS_MODELS[0]) {
-            // Si arrojó 429 en el modelo primario, intenta de inmediato gemini-3.8-flash-lite-tts en la misma llave
-            continue;
-          }
-        }
+    for (const keyItem of googleKeys) {
+      try {
+        audioResult = await synthesizeWithGoogleDirect(cleanText, voice, keyItem.key, TTS_MODELS[0]);
+        console.log(`[TTS Engine] Generado exitosamente vía Google AI Studio Direct (${keyItem.id} / ${audioResult.provider}) (${cleanText.substring(0, 30)}...)`);
+        break;
+      } catch (err) {
+        lastGoogleError = err;
+        console.warn(`[TTS Warning] Falló Google Direct con ${keyItem.id}: ${err.message}`);
       }
     }
 

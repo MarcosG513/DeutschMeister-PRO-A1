@@ -12,6 +12,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Estado en memoria de llaves bloqueadas temporalmente (Circuit Breaker)
 const exhaustedKeys = new Map(); // keyId -> timestamp de desbloqueo (ms)
+const SHORT_COOLDOWN_MS = 60_000; // 1 minuto para errores transitorios (429 RPM / 503 overloaded)
+const LONG_COOLDOWN_MS = 3_600_000; // 1 hora para cuota diaria agotada / errores 401, 402, 403
 
 /**
  * Determina el modelo óptimo según el tipo de clave:
@@ -29,30 +31,70 @@ export function resolveModelForTier(requestedModel, isPaidKey) {
 }
 
 /**
- * Comprueba si un error es originado por límite de cuota, tarifa o saldo
+ * Detecta errores definitivos de clave inválida, permisos o falta de facturación (401/402/403).
+ */
+function isInvalidOrBillingError(error) {
+  const status = error?.status || error?.response?.status || error?.statusCode;
+  const msg = (error?.message || "").toLowerCase();
+
+  return (
+    status === 401 ||
+    status === 402 ||
+    status === 403 ||
+    msg.includes("401") ||
+    msg.includes("402") ||
+    msg.includes("403") ||
+    msg.includes("api_key_invalid") ||
+    msg.includes("api key not valid") ||
+    msg.includes("billing") ||
+    msg.includes("payment")
+  );
+}
+
+/**
+ * Detecta si el error indica agotamiento de cuota diaria (RPD) en lugar de ráfaga por minuto (RPM).
+ */
+function isDailyQuotaExhausted(error) {
+  const msg = (error?.message || "").toLowerCase();
+  return (
+    msg.includes("perday") ||
+    msg.includes("per_day") ||
+    msg.includes("per day") ||
+    msg.includes("daily") ||
+    msg.includes("requests_per_day")
+  );
+}
+
+/**
+ * Calcula el tiempo de bloqueo del Circuit Breaker según la severidad del error:
+ * - 60_000 ms para errores transitorios (429 RPM / 503 overloaded)
+ * - 3_600_000 ms (o longCooldownMs) para cuota diaria agotada o 401/402/403
+ */
+export function resolveCooldownMs(error, longCooldownMs = LONG_COOLDOWN_MS) {
+  if (isInvalidOrBillingError(error) || isDailyQuotaExhausted(error)) {
+    return longCooldownMs;
+  }
+  return Math.min(SHORT_COOLDOWN_MS, longCooldownMs);
+}
+
+/**
+ * Comprueba si un error es originado por límite de cuota, tarifa, sobrecarga o saldo
  */
 export function isQuotaOrBillingError(error) {
   const status = error?.status || error?.response?.status || error?.statusCode;
   const msg = (error?.message || "").toLowerCase();
 
   return (
+    isInvalidOrBillingError(error) ||
     status === 429 ||
-    status === 402 ||
-    status === 403 ||
-    status === 401 ||
     status === 503 ||
     msg.includes("429") ||
-    msg.includes("402") ||
-    msg.includes("403") ||
-    msg.includes("401") ||
-    msg.includes("api_key_invalid") ||
-    msg.includes("api key not valid") ||
+    msg.includes("503") ||
     msg.includes("quota") ||
     msg.includes("limit") ||
     msg.includes("resource_exhausted") ||
-    msg.includes("billing") ||
-    msg.includes("payment") ||
-    msg.includes("overloaded")
+    msg.includes("overloaded") ||
+    msg.includes("unavailable")
   );
 }
 
@@ -174,6 +216,108 @@ export function buildKeyPool(keysConfig = {}) {
 }
 
 /**
+ * Limpia el Circuit Breaker vencido y ordena las llaves disponibles según modo.
+ */
+function getAvailableSortedKeys(keys, mode = "paid_first") {
+  const now = Date.now();
+  for (const [keyId, resetTime] of exhaustedKeys.entries()) {
+    if (now >= resetTime) {
+      console.log(`⏱️ [Backend GeminiPool] Cooldown vencido para la llave ${keyId}. Restaurando...`);
+      exhaustedKeys.delete(keyId);
+    }
+  }
+
+  const pool = buildKeyPool(keys);
+  const sortedPool = [...pool];
+  if (mode === "free_first") {
+    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? 1 : -1));
+  } else {
+    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? -1 : 1));
+  }
+
+  const availableKeys = sortedPool.filter(k => k.key && !exhaustedKeys.has(k.id));
+  if (availableKeys.length === 0) {
+    const error = new Error("⚠️ Todas las API Keys (Facturación y Gratuitas) han alcanzado su límite de cuota.");
+    error.status = 429;
+    throw error;
+  }
+  return availableKeys;
+}
+
+/**
+ * Obtiene la lista ordenada de modelos a intentar en una misma llave:
+ * si gemini-3.8-flash falla en una llave PAID, reintenta con gemini-3.5-flash-lite antes de agotar la llave.
+ */
+function getCandidateModelsForKey(preferredModel, isPaidKey) {
+  const primary = resolveModelForTier(preferredModel, isPaidKey);
+  if (isPaidKey && primary === "gemini-3.8-flash") {
+    return ["gemini-3.8-flash", "gemini-3.5-flash-lite"];
+  }
+  return [primary];
+}
+
+/**
+ * Ejecuta una invocación contra el pool ordenado de llaves con respaldo intra-llave
+ * (gemini-3.8-flash -> gemini-3.5-flash-lite en llaves PAID) y Circuit Breaker diferenciado.
+ */
+async function executeAcrossKeyPool({
+  keys,
+  mode,
+  preferredModel,
+  cooldownMs,
+  logPrefix,
+  invokeAttempt
+}) {
+  const availableKeys = getAvailableSortedKeys(keys, mode);
+  let lastError = null;
+  const initialKeyId = availableKeys[0].id;
+
+  for (const keyConfig of availableKeys) {
+    const candidateModels = getCandidateModelsForKey(preferredModel, keyConfig.isPaid);
+    const genAI = new GoogleGenerativeAI(keyConfig.key);
+
+    for (let i = 0; i < candidateModels.length; i++) {
+      const selectedModelName = candidateModels[i];
+      try {
+        console.log(`[${logPrefix}] Invocando llave ${keyConfig.id} (${keyConfig.description}) con modelo: ${selectedModelName}`);
+        const result = await invokeAttempt(genAI, selectedModelName);
+        return {
+          ...result,
+          usedKeyId: keyConfig.id,
+          model: selectedModelName,
+          wasFallback: keyConfig.id !== initialKeyId || i > 0
+        };
+      } catch (error) {
+        lastError = error;
+        const status = error.status || error?.response?.status;
+        const msg = error.message || "";
+
+        if (!isQuotaOrBillingError(error)) {
+          throw error;
+        }
+
+        const canTryLiteOnSamePaidKey =
+          keyConfig.isPaid &&
+          i < candidateModels.length - 1 &&
+          !isInvalidOrBillingError(error);
+
+        if (canTryLiteOnSamePaidKey) {
+          console.warn(`[${logPrefix} Intra-Key] ${keyConfig.id} (${selectedModelName}) devolvió ${status || msg}. Reintentando con ${candidateModels[i + 1]} en la misma llave...`);
+          continue;
+        }
+
+        const appliedCooldown = resolveCooldownMs(error, cooldownMs);
+        console.warn(`[${logPrefix} Failover] Clave ${keyConfig.id} bloqueada por ${Math.round(appliedCooldown / 1000)}s (${status || msg}). Conmutando al siguiente respaldo...`);
+        exhaustedKeys.set(keyConfig.id, Date.now() + appliedCooldown);
+        break;
+      }
+    }
+  }
+
+  throw lastError || new Error(`Fallo en ${logPrefix} tras agotar todos los respaldos.`);
+}
+
+/**
  * Ejecutor resiliente con Circuit Breaker y Failover multi-key para Cloud Functions
  *
  * @param {string|object} prompt
@@ -184,7 +328,7 @@ export function buildKeyPool(keysConfig = {}) {
  * @param {boolean} [options.isJson=false]
  * @param {boolean} [options.isStreaming=false]
  * @param {"paid_first"|"free_first"} [options.mode="paid_first"]
- * @param {number} [options.cooldownMs=3600000] (1 hora por defecto)
+ * @param {number} [options.cooldownMs=3600000] (1 hora por defecto para cuota diaria/facturación; 60s para transitorios)
  */
 export async function executeBackendGemini(prompt, options = {}) {
   const {
@@ -195,99 +339,38 @@ export async function executeBackendGemini(prompt, options = {}) {
     responseSchema = null,
     isStreaming = false,
     mode = "paid_first",
-    cooldownMs = 60 * 60 * 1000
+    cooldownMs = LONG_COOLDOWN_MS
   } = options;
 
-  const now = Date.now();
-
-  // 1. Limpieza de Circuit Breaker
-  for (const [keyId, resetTime] of exhaustedKeys.entries()) {
-    if (now >= resetTime) {
-      console.log(`⏱️ [Backend GeminiPool] Cooldown vencido para la llave ${keyId}. Restaurando...`);
-      exhaustedKeys.delete(keyId);
-    }
-  }
-
-  // 2. Construcción y ordenamiento del pool
-  const pool = buildKeyPool(keys);
-  let sortedPool = [...pool];
-
-  if (mode === "free_first") {
-    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? 1 : -1));
-  } else {
-    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? -1 : 1));
-  }
-
-  const availableKeys = sortedPool.filter(k => k.key && !exhaustedKeys.has(k.id));
-
-  if (availableKeys.length === 0) {
-    const error = new Error("⚠️ Todas las API Keys (Facturación y Gratuitas) han alcanzado su límite de cuota.");
-    error.status = 429;
-    throw error;
-  }
-
-  let lastError = null;
-  const initialKeyId = availableKeys[0].id;
-
-  for (const keyConfig of availableKeys) {
-    try {
-      const selectedModelName = resolveModelForTier(preferredModel, keyConfig.isPaid);
-      console.log(`[GeminiPool] Invocando llave ${keyConfig.id} (${keyConfig.description}) con modelo: ${selectedModelName}`);
-
-      const genAI = new GoogleGenerativeAI(keyConfig.key);
-
-      // Directrices Gemini 3.x: sin temperature, top_p ni top_k a menos que se especifique
+  return executeAcrossKeyPool({
+    keys,
+    mode,
+    preferredModel,
+    cooldownMs,
+    logPrefix: "GeminiPool",
+    invokeAttempt: async (genAI, selectedModelName) => {
       const modelConfig = {
-        model: selectedModelName
+        model: selectedModelName,
+        ...(systemInstruction ? { systemInstruction } : {}),
+        ...(isJson || responseSchema
+          ? {
+              generationConfig: {
+                responseMimeType: "application/json",
+                ...(responseSchema ? { responseSchema } : {})
+              }
+            }
+          : {})
       };
 
-      if (systemInstruction) {
-        modelConfig.systemInstruction = systemInstruction;
-      }
-
-      if (isJson || responseSchema) {
-        modelConfig.generationConfig = {
-          responseMimeType: "application/json",
-          ...(responseSchema ? { responseSchema } : {})
-        };
-      }
-
       const model = genAI.getGenerativeModel(modelConfig);
-
       if (isStreaming) {
         const result = await model.generateContentStream(prompt);
-        return {
-          stream: result.stream,
-          usedKeyId: keyConfig.id,
-          model: selectedModelName,
-          wasFallback: keyConfig.id !== initialKeyId
-        };
-      } else {
-        const result = await model.generateContent(prompt);
-        const text = result.response.text();
-        return {
-          text,
-          usedKeyId: keyConfig.id,
-          model: selectedModelName,
-          wasFallback: keyConfig.id !== initialKeyId
-        };
+        return { stream: result.stream };
       }
-    } catch (error) {
-      lastError = error;
-      const status = error.status || error?.response?.status;
-      const msg = error.message || "";
-
-      if (isQuotaOrBillingError(error)) {
-        console.warn(`[Failover Backend] Clave ${keyConfig.id} agotada o bloqueada (${status || msg}). Conmutando al siguiente respaldo...`);
-        exhaustedKeys.set(keyConfig.id, Date.now() + cooldownMs);
-        continue;
-      }
-
-      throw error;
+      const result = await model.generateContent(prompt);
+      return { text: result.response.text() };
     }
-  }
-
-  throw lastError || new Error("Fallo en el pool de Gemini tras agotar todos los respaldos.");
+  });
 }
 
 /**
@@ -303,78 +386,30 @@ export async function executeBackendGeminiChatStream(history, lastMessage, optio
     preferredModel = "gemini-3.8-flash",
     systemInstruction,
     mode = "paid_first",
-    cleanBold = false,
-    cooldownMs = 60 * 60 * 1000
+    cooldownMs = LONG_COOLDOWN_MS
   } = options;
 
-  const now = Date.now();
-  for (const [keyId, resetTime] of exhaustedKeys.entries()) {
-    if (now >= resetTime) {
-      exhaustedKeys.delete(keyId);
-    }
-  }
-
-  const pool = buildKeyPool(keys);
-  let sortedPool = [...pool];
-
-  if (mode === "free_first") {
-    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? 1 : -1));
-  } else {
-    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? -1 : 1));
-  }
-
-  const availableKeys = sortedPool.filter(k => k.key && !exhaustedKeys.has(k.id));
-  if (availableKeys.length === 0) {
-    const error = new Error("⚠️ Todas las API Keys (Facturación y Gratuitas) han alcanzado su límite de cuota.");
-    error.status = 429;
-    throw error;
-  }
-
-  let validHistory = (history || []).slice(0);
+  const validHistory = (history || []).slice(0);
   if (validHistory.length > 0 && validHistory[0].role !== "user") {
     validHistory.shift();
   }
 
-  let lastError = null;
-  const initialKeyId = availableKeys[0].id;
-
-  for (const keyConfig of availableKeys) {
-    try {
-      const selectedModelName = resolveModelForTier(preferredModel, keyConfig.isPaid);
-      console.log(`[GeminiPool ChatStream] Invocando llave ${keyConfig.id} (${keyConfig.description}) con modelo: ${selectedModelName}`);
-
-      const genAI = new GoogleGenerativeAI(keyConfig.key);
-      const modelConfig = {
+  return executeAcrossKeyPool({
+    keys,
+    mode,
+    preferredModel,
+    cooldownMs,
+    logPrefix: "GeminiPool ChatStream",
+    invokeAttempt: async (genAI, selectedModelName) => {
+      const model = genAI.getGenerativeModel({
         model: selectedModelName,
         ...(systemInstruction ? { systemInstruction } : {})
-      };
-
-      const model = genAI.getGenerativeModel(modelConfig);
+      });
       const chat = model.startChat({ history: validHistory });
       const resultStream = await chat.sendMessageStream(lastMessage);
-
-      return {
-        stream: resultStream.stream,
-        usedKeyId: keyConfig.id,
-        model: selectedModelName,
-        wasFallback: keyConfig.id !== initialKeyId
-      };
-    } catch (error) {
-      lastError = error;
-      const status = error.status || error?.response?.status;
-      const msg = error.message || "";
-
-      if (isQuotaOrBillingError(error)) {
-        console.warn(`[Failover ChatStream] Clave ${keyConfig.id} agotada o bloqueada (${status || msg}). Conmutando al siguiente respaldo...`);
-        exhaustedKeys.set(keyConfig.id, Date.now() + cooldownMs);
-        continue;
-      }
-
-      throw error;
+      return { stream: resultStream.stream };
     }
-  }
-
-  throw lastError || new Error("Fallo en el pool de Gemini ChatStream tras agotar todos los respaldos.");
+  });
 }
 
 /**
@@ -410,6 +445,7 @@ export default {
   executeBackendGemini,
   executeBackendGeminiChatStream,
   resolveModelForTier,
+  resolveCooldownMs,
   isQuotaOrBillingError,
   getPoolStatus,
   resetCircuitBreaker
