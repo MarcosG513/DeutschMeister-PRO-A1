@@ -16104,12 +16104,7 @@ const rawChapters = [
       plural: "die Stromkreise",
       exampleSentenceDe: "Der Stromkreis ist jetzt sicher unterbrochen.",
       exampleSentenceEs: "El circuito eléctrico está ahora interrumpido de forma segura.",
-      exampleSentenceDeBlocks: [
-        { text: "Der Stromkreis", role: "subject", order: 1 },
-        { text: "ist jetzt", role: "verb_p1", order: 2 },
-        { text: "vollständig und sicher", role: "complement", order: 3 },
-        { text: "unterbrochen.", role: "verb_p2", order: 4 }
-      ],
+      exampleSentenceDeBlocks: ["Der Stromkreis", "ist", "jetzt", "sicher", "unterbrochen."],
       en: "a cute 3D isometric UI icon of a closed electrical circuit with a glowing lightbulb"
     },
     {

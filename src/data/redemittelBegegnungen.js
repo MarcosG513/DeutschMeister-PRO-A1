@@ -17,7 +17,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🔄 Dual (du/Sie) • Sprechen Teil 1",
     "exampleSentenceDe": "Guten Morgen! Wie heißen Sie?",
-    "exampleSentenceEs": "¡Buenos días! ¿Cómo se llama usted?"
+    "exampleSentenceEs": "¡Buenos días! ¿Cómo se llama usted?",
+    "exampleSentenceDeBlocks": [
+      "Guten Morgen!",
+      "Wie",
+      "heißen",
+      "Sie?"
+    ]
   },
   {
     "de": "Auf Wiedersehen! / Tschüss! / Bis bald! / Bis später!",
@@ -28,7 +34,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "Auf Wiedersehen (formell) vs. Tschüss (informell)",
     "exampleSentenceDe": "Vielen Dank für Ihre Hilfe und auf Wiedersehen!",
-    "exampleSentenceEs": "¡Muchas gracias por su ayuda y hasta la vista!"
+    "exampleSentenceEs": "¡Muchas gracias por su ayuda y hasta la vista!",
+    "exampleSentenceDeBlocks": [
+      "Vielen Dank",
+      "für Ihre Hilfe",
+      "und",
+      "auf Wiedersehen!"
+    ]
   },
   {
     "de": "Wie heißen Sie?",
@@ -39,7 +51,12 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🎩 Formal (Sie) • + Nominativo",
     "exampleSentenceDe": "Ich heiße Max Müller.",
-    "exampleSentenceEs": "Me llamo Max Müller."
+    "exampleSentenceEs": "Me llamo Max Müller.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "heiße",
+      "Max Müller."
+    ]
   },
   {
     "de": "Wie heißt du?",
@@ -50,7 +67,14 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "👟 Informal (du) • Verbo heißen (du heißt)",
     "exampleSentenceDe": "Hallo, wie heißt du? — Ich bin Lukas.",
-    "exampleSentenceEs": "Hola, ¿cómo te llamas? — Soy Lukas."
+    "exampleSentenceEs": "Hola, ¿cómo te llamas? — Soy Lukas.",
+    "exampleSentenceDeBlocks": [
+      "Hallo,",
+      "wie heißt du?",
+      "— Ich",
+      "bin",
+      "Lukas."
+    ]
   },
   {
     "de": "Ich heiße (Max Müller). / Mein Name ist (Max Müller).",
@@ -61,7 +85,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🔄 Dual • Presentación oficial",
     "exampleSentenceDe": "Guten Tag, mein Name ist Max Müller.",
-    "exampleSentenceEs": "Buenas tardes, mi nombre es Max Müller."
+    "exampleSentenceEs": "Buenas tardes, mi nombre es Max Müller.",
+    "exampleSentenceDeBlocks": [
+      "Guten Tag,",
+      "mein Name",
+      "ist",
+      "Max Müller."
+    ]
   },
   {
     "de": "Wie ist Ihr Vorname / Familienname?",
@@ -72,7 +102,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🎩 Formal (Ihr) • Sprechen Teil 1",
     "exampleSentenceDe": "Mein Vorname ist Max und mein Familienname ist Müller.",
-    "exampleSentenceEs": "Mi nombre es Max y mi apellido es Müller."
+    "exampleSentenceEs": "Mi nombre es Max y mi apellido es Müller.",
+    "exampleSentenceDeBlocks": [
+      "Mein Vorname",
+      "ist Max",
+      "und mein Familienname",
+      "ist Müller."
+    ]
   },
   {
     "de": "Mein Vorname ist (Max). / Mein Familienname ist (Müller).",
@@ -83,7 +119,14 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🔄 Dual • + Nominativo",
     "exampleSentenceDe": "Können Sie Ihren Familiennamen bitte buchstabieren?",
-    "exampleSentenceEs": "¿Puede deletrear su apellido, por favor?"
+    "exampleSentenceEs": "¿Puede deletrear su apellido, por favor?",
+    "exampleSentenceDeBlocks": [
+      "Können",
+      "Sie",
+      "Ihren Familiennamen",
+      "bitte",
+      "buchstabieren?"
+    ]
   },
   {
     "de": "Können Sie das bitte buchstabieren?",
@@ -94,7 +137,11 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "⭐ Clave Goethe Sprechen Teil 1 (Alphabet)",
     "exampleSentenceDe": "M-U-E-L-L-E-R, Müller.",
-    "exampleSentenceEs": "M-U-E-L-L-E-R, Müller."
+    "exampleSentenceEs": "M-U-E-L-L-E-R, Müller.",
+    "exampleSentenceDeBlocks": [
+      "M-U-E-L-L-E-R,",
+      "Müller."
+    ]
   },
   {
     "de": "Wie ist Ihre Telefonnummer / Handynummer?",
@@ -105,7 +152,12 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🎩 Formal • Zahlen 0-9 Sprechen Teil 1",
     "exampleSentenceDe": "Meine Telefonnummer ist 0171 456789.",
-    "exampleSentenceEs": "Mi número de teléfono es 0171 456789."
+    "exampleSentenceEs": "Mi número de teléfono es 0171 456789.",
+    "exampleSentenceDeBlocks": [
+      "Meine Telefonnummer",
+      "ist",
+      "0171 456789."
+    ]
   },
   {
     "de": "Wie ist Ihre E-Mail-Adresse?",
@@ -116,7 +168,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "@ = at / . = Punkt",
     "exampleSentenceDe": "Meine E-Mail-Adresse ist max punkt mueller at web punkt de.",
-    "exampleSentenceEs": "Mi correo es max punto mueller arroba web punto de."
+    "exampleSentenceEs": "Mi correo es max punto mueller arroba web punto de.",
+    "exampleSentenceDeBlocks": [
+      "Meine E-Mail-Adresse",
+      "ist",
+      "max punkt mueller",
+      "at web punkt de."
+    ]
   },
   {
     "de": "Wie alt sind Sie? — Ich bin (30) Jahre alt.",
@@ -127,7 +185,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "⚠️ Usa verbo 'sein' (nunca haben)",
     "exampleSentenceDe": "Ich bin zweiunddreißig Jahre alt.",
-    "exampleSentenceEs": "Tengo treinta y dos años."
+    "exampleSentenceEs": "Tengo treinta y dos años.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "bin",
+      "zweiunddreißig",
+      "Jahre alt."
+    ]
   },
   {
     "de": "Woher kommen Sie? — Ich komme aus (Spanien).",
@@ -138,7 +202,12 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "kommen aus + Dativo (Origen)",
     "exampleSentenceDe": "Ich komme aus Kolumbien.",
-    "exampleSentenceEs": "Soy de Colombia."
+    "exampleSentenceEs": "Soy de Colombia.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "komme",
+      "aus Kolumbien."
+    ]
   },
   {
     "de": "Wo wohnen Sie? — Ich wohne in (Madrid).",
@@ -149,7 +218,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "wohnen in + Dativo (Residencia)",
     "exampleSentenceDe": "Jetzt wohne ich in Duisburg.",
-    "exampleSentenceEs": "Ahora vivo en Duisburgo."
+    "exampleSentenceEs": "Ahora vivo en Duisburgo.",
+    "exampleSentenceDeBlocks": [
+      "Jetzt",
+      "wohne",
+      "ich",
+      "in Duisburg."
+    ]
   },
   {
     "de": "Was sind Sie von Beruf? — Ich bin (Lehrer).",
@@ -160,7 +235,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🎩 Formal • Profesión sin artículo",
     "exampleSentenceDe": "Ich bin Elektroniker von Beruf.",
-    "exampleSentenceEs": "Soy técnico electrónico de profesión."
+    "exampleSentenceEs": "Soy técnico electrónico de profesión.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "bin",
+      "Elektroniker",
+      "von Beruf."
+    ]
   },
   {
     "de": "Ich arbeite als (Managerin) bei (Siemens).",
@@ -171,7 +252,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "als + Profesión / bei + Empresa (Dativ)",
     "exampleSentenceDe": "Ich arbeite als Techniker bei Enpal.",
-    "exampleSentenceEs": "Trabajo como técnico en Enpal."
+    "exampleSentenceEs": "Trabajo como técnico en Enpal.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "arbeite",
+      "als Techniker",
+      "bei Enpal."
+    ]
   },
   {
     "de": "Was / Wo studieren Sie? — Ich studiere (Medizin / in Berlin).",
@@ -182,7 +269,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🎩 Formal • + Akkusativ / in + Dativ",
     "exampleSentenceDe": "Meine Schwester studiert Informatik in München.",
-    "exampleSentenceEs": "Mi hermana estudia informática en Múnich."
+    "exampleSentenceEs": "Mi hermana estudia informática en Múnich.",
+    "exampleSentenceDeBlocks": [
+      "Meine Schwester",
+      "studiert",
+      "Informatik",
+      "in München."
+    ]
   },
   {
     "de": "Welche Sprachen sprechen Sie?",
@@ -193,7 +286,12 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🎩 Formal • Vokalwechsel (du sprichst)",
     "exampleSentenceDe": "Meine Muttersprache ist Spanisch.",
-    "exampleSentenceEs": "Mi lengua materna es el español."
+    "exampleSentenceEs": "Mi lengua materna es el español.",
+    "exampleSentenceDeBlocks": [
+      "Meine Muttersprache",
+      "ist",
+      "Spanisch."
+    ]
   },
   {
     "de": "Meine Muttersprache ist (Italienisch).",
@@ -204,7 +302,12 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🔄 Dual • Sprechen Teil 1",
     "exampleSentenceDe": "Meine Muttersprache ist Spanisch.",
-    "exampleSentenceEs": "Mi lengua materna es el español."
+    "exampleSentenceEs": "Mi lengua materna es el español.",
+    "exampleSentenceDeBlocks": [
+      "Meine Muttersprache",
+      "ist",
+      "Spanisch."
+    ]
   },
   {
     "de": "Ich spreche sehr gut / gut / ein bisschen (Englisch).",
@@ -215,7 +318,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "Graduación: sehr gut > gut > ein bisschen",
     "exampleSentenceDe": "Ich lerne jetzt intensiv Deutsch.",
-    "exampleSentenceEs": "Estoy aprendiendo alemán intensivamente ahora."
+    "exampleSentenceEs": "Estoy aprendiendo alemán intensivamente ahora.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "lerne",
+      "jetzt",
+      "intensiv Deutsch."
+    ]
   },
   {
     "de": "Ich lerne jetzt (Deutsch).",
@@ -226,7 +335,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "Posición V2 + Adverbio temporal",
     "exampleSentenceDe": "Ich lerne jeden Tag Deutsch.",
-    "exampleSentenceEs": "Aprendo alemán todos los días."
+    "exampleSentenceEs": "Aprendo alemán todos los días.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "lerne",
+      "jeden Tag",
+      "Deutsch."
+    ]
   },
   {
     "de": "Ich bin ledig / verheiratet / geschieden.",
@@ -237,7 +352,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "Familienstand • Adjetivo predicativo",
     "exampleSentenceDe": "Ich bin verheiratet und habe drei Kinder.",
-    "exampleSentenceEs": "Estoy casado y tengo tres hijos."
+    "exampleSentenceEs": "Estoy casado y tengo tres hijos.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "bin verheiratet",
+      "und habe",
+      "drei Kinder."
+    ]
   },
   {
     "de": "Ich habe (zwei / keine) Kinder.",
@@ -248,7 +369,12 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "haben + Akkusativ / Negación con 'keine'",
     "exampleSentenceDe": "Wir haben drei Kinder.",
-    "exampleSentenceEs": "Nosotros tenemos tres hijos."
+    "exampleSentenceEs": "Nosotros tenemos tres hijos.",
+    "exampleSentenceDeBlocks": [
+      "Wir",
+      "haben",
+      "drei Kinder."
+    ]
   },
   {
     "de": "Was sind deine / Ihre Hobbys?",
@@ -259,7 +385,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "🔄 Dual (deine = du / Ihre = Sie)",
     "exampleSentenceDe": "Meine Hobbys sind Lesen und Schwimmen.",
-    "exampleSentenceEs": "Mis aficiones son leer y nadar."
+    "exampleSentenceEs": "Mis aficiones son leer y nadar.",
+    "exampleSentenceDeBlocks": [
+      "Meine Hobbys",
+      "sind",
+      "Lesen",
+      "und Schwimmen."
+    ]
   },
   {
     "de": "Ich spiele gern (Fußball). / Ich singe (im Chor).",
@@ -270,7 +402,14 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "Verbo + gern (expresa gusto)",
     "exampleSentenceDe": "Am Wochenende spiele ich gern Fußball.",
-    "exampleSentenceEs": "El fin de semana me gusta jugar al fútbol."
+    "exampleSentenceEs": "El fin de semana me gusta jugar al fútbol.",
+    "exampleSentenceDeBlocks": [
+      "Am Wochenende",
+      "spiele",
+      "ich",
+      "gern",
+      "Fußball."
+    ]
   },
   {
     "de": "Ich lese gern (Romane). / Ich höre gern (Jazz-Musik). / Ich schreibe gern (Gedichte).",
@@ -281,7 +420,14 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "Verbo + gern + Objeto en Akkusativ",
     "exampleSentenceDe": "Abends lese ich gern ein Buch.",
-    "exampleSentenceEs": "Por las noches me gusta leer un libro."
+    "exampleSentenceEs": "Por las noches me gusta leer un libro.",
+    "exampleSentenceDeBlocks": [
+      "Abends",
+      "lese",
+      "ich",
+      "gern",
+      "ein Buch."
+    ]
   },
   {
     "de": "Bitte sehr. — Danke (sehr). / Danke schön. / Vielen Dank.",
@@ -292,7 +438,13 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "🔄 Dual • Interacción cotidiana",
     "exampleSentenceDe": "Hier ist Ihr Kaffee. — Vielen Dank!",
-    "exampleSentenceEs": "Aquí tiene su café. — ¡Muchas gracias!"
+    "exampleSentenceEs": "Aquí tiene su café. — ¡Muchas gracias!",
+    "exampleSentenceDeBlocks": [
+      "Hier",
+      "ist",
+      "Ihr Kaffee.",
+      "— Vielen Dank!"
+    ]
   },
   {
     "de": "Herzlich willkommen! — Wie geht es? — Suchen Sie etwas?",
@@ -303,7 +455,12 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "🎩 Formal • Atención en oficina",
     "exampleSentenceDe": "Herzlich willkommen in unserer Firma!",
-    "exampleSentenceEs": "¡Bienvenido a nuestra empresa!"
+    "exampleSentenceEs": "¡Bienvenido a nuestra empresa!",
+    "exampleSentenceDeBlocks": [
+      "Herzlich willkommen",
+      "in",
+      "unserer Firma!"
+    ]
   },
   {
     "de": "Wie geht es Ihnen? — Danke, gut. Und Ihnen?",
@@ -314,7 +471,13 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "🎩 Formal • Wie geht es + Dativ (Ihnen)",
     "exampleSentenceDe": "Guten Tag, Herr Weber! Wie geht es Ihnen?",
-    "exampleSentenceEs": "¡Buenos días, Sr. Weber! ¿Cómo le va?"
+    "exampleSentenceEs": "¡Buenos días, Sr. Weber! ¿Cómo le va?",
+    "exampleSentenceDeBlocks": [
+      "Guten Tag,",
+      "Herr Weber!",
+      "Wie geht es",
+      "Ihnen?"
+    ]
   },
   {
     "de": "Vielleicht können wir später zusammen Kaffee trinken. — Gerne. Bis später.",
@@ -325,7 +488,14 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "Modal 'können' (Pos 2) + Infinitivo final",
     "exampleSentenceDe": "Trinken wir später zusammen einen Kaffee? — Ja, gerne!",
-    "exampleSentenceEs": "¿Tomamos luego un café juntos? — ¡Sí, con gusto!"
+    "exampleSentenceEs": "¿Tomamos luego un café juntos? — ¡Sí, con gusto!",
+    "exampleSentenceDeBlocks": [
+      "Trinken",
+      "wir",
+      "später zusammen",
+      "einen Kaffee?",
+      "— Ja, gerne!"
+    ]
   },
   {
     "de": "Das ist ein (schönes) Büro. Hoffentlich ist alles da: (Stuhl, Computer, Drucker).",
@@ -336,7 +506,12 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "Neutro Nominativo: ein schönes Büro",
     "exampleSentenceDe": "Fehlt noch etwas an Ihrem Arbeitsplatz?",
-    "exampleSentenceEs": "¿Falta algo más en su puesto de trabajo?"
+    "exampleSentenceEs": "¿Falta algo más en su puesto de trabajo?",
+    "exampleSentenceDeBlocks": [
+      "Fehlt",
+      "noch etwas",
+      "an Ihrem Arbeitsplatz?"
+    ]
   },
   {
     "de": "Fehlt etwas? — (Die Kaffeemaschine) funktioniert / geht nicht.",
@@ -347,7 +522,13 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "Negación de acción con 'nicht' al final",
     "exampleSentenceDe": "Entschuldigung, das Telefon funktioniert nicht.",
-    "exampleSentenceEs": "Disculpe, el teléfono no funciona."
+    "exampleSentenceEs": "Disculpe, el teléfono no funciona.",
+    "exampleSentenceDeBlocks": [
+      "Entschuldigung,",
+      "das Telefon",
+      "funktioniert",
+      "nicht."
+    ]
   },
   {
     "de": "(Der Drucker) ist kaputt. Ich kann nicht (drucken).",
@@ -358,7 +539,14 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "Modal 'kann' + nicht + Infinitivo final",
     "exampleSentenceDe": "Mein Computer ist kaputt. Ich kann nicht arbeiten.",
-    "exampleSentenceEs": "Mi ordenador está estropeado. No puedo trabajar."
+    "exampleSentenceEs": "Mi ordenador está estropeado. No puedo trabajar.",
+    "exampleSentenceDeBlocks": [
+      "Mein Computer",
+      "ist kaputt.",
+      "Ich kann",
+      "nicht",
+      "arbeiten."
+    ]
   },
   {
     "de": "Was kostet (der Bürostuhl)? — (Der Bürostuhl) kostet (500 Euro). Das ist ein teurer Stuhl!",
@@ -369,7 +557,12 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "Adjetivo masculino: ein teurer Stuhl",
     "exampleSentenceDe": "Der Schreibtisch kostet dreihundert Euro.",
-    "exampleSentenceEs": "El escritorio cuesta trescientos euros."
+    "exampleSentenceEs": "El escritorio cuesta trescientos euros.",
+    "exampleSentenceDeBlocks": [
+      "Der Schreibtisch",
+      "kostet",
+      "dreihundert Euro."
+    ]
   },
   {
     "de": "die Verwaltung: Hier kann man Rechnungen bezahlen.",
@@ -380,7 +573,14 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "Pronombre impersonal 'man' + kann + Infinitiv",
     "exampleSentenceDe": "Im Sekretariat kann man Informationen bekommen.",
-    "exampleSentenceEs": "En la secretaría se puede obtener información."
+    "exampleSentenceEs": "En la secretaría se puede obtener información.",
+    "exampleSentenceDeBlocks": [
+      "Im Sekretariat",
+      "kann",
+      "man",
+      "Informationen",
+      "bekommen."
+    ]
   },
   {
     "de": "die Cafeteria / die Kantine / die Mensa: Hier kann man Kaffee trinken und etwas essen.",
@@ -391,7 +591,13 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "Impersonal 'man' + Modal",
     "exampleSentenceDe": "Wir essen um zwölf Uhr in der Kantine.",
-    "exampleSentenceEs": "Comemos a las doce en el comedor de la empresa."
+    "exampleSentenceEs": "Comemos a las doce en el comedor de la empresa.",
+    "exampleSentenceDeBlocks": [
+      "Wir",
+      "essen",
+      "um zwölf Uhr",
+      "in der Kantine."
+    ]
   },
   {
     "de": "die Bibliothek / das Sprachenzentrum: Hier kann man Bücher lesen und Sprachkurse besuchen.",
@@ -402,7 +608,14 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "man kann + Objeto + Infinitivo final",
     "exampleSentenceDe": "Hier kann man Deutschkurse besuchen.",
-    "exampleSentenceEs": "Aquí se puede asistir a cursos de alemán."
+    "exampleSentenceEs": "Aquí se puede asistir a cursos de alemán.",
+    "exampleSentenceDeBlocks": [
+      "Hier",
+      "kann",
+      "man",
+      "Deutschkurse",
+      "besuchen."
+    ]
   },
   {
     "de": "Wie finden Sie (Marburg)? — Kochen Sie gern? — Was machen Sie am Wochenende?",
@@ -413,7 +626,13 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "🎩 Formal • W-Fragen & Ja/Nein-Fragen",
     "exampleSentenceDe": "Ich finde die Stadt sehr schön.",
-    "exampleSentenceEs": "La ciudad me parece muy bonita."
+    "exampleSentenceEs": "La ciudad me parece muy bonita.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "finde",
+      "die Stadt",
+      "sehr schön."
+    ]
   },
   {
     "de": "Welches Instrument spielen Sie? — Ich spiele (Klavier). / Ich kann leider (kein Instrument) spielen.",
@@ -424,7 +643,14 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "Negación sustantivo neutro: kein Instrument",
     "exampleSentenceDe": "Ich kann leider nicht gut Salsa tanzen.",
-    "exampleSentenceEs": "Desafortunadamente no sé bailar bien salsa."
+    "exampleSentenceEs": "Desafortunadamente no sé bailar bien salsa.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "kann",
+      "leider nicht gut",
+      "Salsa",
+      "tanzen."
+    ]
   },
   {
     "de": "Haben Sie noch ein Zimmer frei? — Haben Sie eine Reservierung?",
@@ -435,7 +661,14 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "Ja/Nein-Frage (Verbo en Posición 1)",
     "exampleSentenceDe": "Ja, ich habe eine Reservierung auf den Namen Gómez.",
-    "exampleSentenceEs": "Sí, tengo una reserva a nombre de Gómez."
+    "exampleSentenceEs": "Sí, tengo una reserva a nombre de Gómez.",
+    "exampleSentenceDeBlocks": [
+      "Ja,",
+      "ich habe",
+      "eine Reservierung",
+      "auf den Namen",
+      "Gómez."
+    ]
   },
   {
     "de": "Wir möchten gerne ein Einzel- / Doppel- / Dreibettzimmer.",
@@ -446,7 +679,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "möchten + Akkusativ Neutro (ein Zimmer)",
     "exampleSentenceDe": "Wir haben noch ein Doppelzimmer frei.",
-    "exampleSentenceEs": "Todavía tenemos una habitación doble libre."
+    "exampleSentenceEs": "Todavía tenemos una habitación doble libre.",
+    "exampleSentenceDeBlocks": [
+      "Wir",
+      "haben noch",
+      "ein Doppelzimmer",
+      "frei."
+    ]
   },
   {
     "de": "Wie lange möchten Sie bleiben? — Wir bleiben eine Nacht / zwei Nächte.",
@@ -457,7 +696,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "Plural con Umlaut: die Nacht -> die Nächte",
     "exampleSentenceDe": "Wir möchten drei Nächte bleiben.",
-    "exampleSentenceEs": "Quisiéramos quedarnos tres noches."
+    "exampleSentenceEs": "Quisiéramos quedarnos tres noches.",
+    "exampleSentenceDeBlocks": [
+      "Wir",
+      "möchten",
+      "drei Nächte",
+      "bleiben."
+    ]
   },
   {
     "de": "Wie viel kostet ein Doppelzimmer? — Das Zimmer kostet (80,–) Euro pro Nacht.",
@@ -468,7 +713,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "Precio + pro Nacht (por noche)",
     "exampleSentenceDe": "Der Preis ist inklusive Frühstück.",
-    "exampleSentenceEs": "El precio incluye el desayuno."
+    "exampleSentenceEs": "El precio incluye el desayuno.",
+    "exampleSentenceDeBlocks": [
+      "Der Preis",
+      "ist",
+      "inklusive",
+      "Frühstück."
+    ]
   },
   {
     "de": "Der Preis ist mit/inklusive Frühstück. / Der Preis ist ohne/exklusive Frühstück. Das Frühstück kostet (20,–) Euro extra.",
@@ -479,7 +730,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "mit / inklusive vs. ohne / exklusive",
     "exampleSentenceDe": "Ist das Frühstück im Preis inklusive?",
-    "exampleSentenceEs": "¿Está incluido el desayuno en el precio?"
+    "exampleSentenceEs": "¿Está incluido el desayuno en el precio?",
+    "exampleSentenceDeBlocks": [
+      "Ist",
+      "das Frühstück",
+      "im Preis",
+      "inklusive?"
+    ]
   },
   {
     "de": "Hat das Zimmer einen (Balkon) / eine (Minibar) / ein (Bad)?",
@@ -490,7 +747,14 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "⚠️ haben + Akkusativ: einen (Masc), eine (Fem), ein (Neut)",
     "exampleSentenceDe": "Ja, alle Zimmer haben ein Bad und eine Dusche.",
-    "exampleSentenceEs": "Sí, todas las habitaciones tienen baño y ducha."
+    "exampleSentenceEs": "Sí, todas las habitaciones tienen baño y ducha.",
+    "exampleSentenceDeBlocks": [
+      "Ja,",
+      "alle Zimmer",
+      "haben",
+      "ein Bad",
+      "und eine Dusche."
+    ]
   },
   {
     "de": "Gibt es auch einen (Fernseher) / eine (Dusche) / ein (Radio)?",
@@ -501,7 +765,14 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "⚠️ es gibt + Akkusativ obligatorio",
     "exampleSentenceDe": "Gibt es im Zimmer auch WLAN?",
-    "exampleSentenceEs": "¿Hay también wifi en la habitación?"
+    "exampleSentenceEs": "¿Hay también wifi en la habitación?",
+    "exampleSentenceDeBlocks": [
+      "Gibt",
+      "es",
+      "im Zimmer",
+      "auch",
+      "WLAN?"
+    ]
   },
   {
     "de": "Wir nehmen das Zimmer. — Ich brauche noch (Ihre Anschrift). Wie zahlen Sie?",
@@ -512,7 +783,12 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "nehmen / brauchen + Akkusativ",
     "exampleSentenceDe": "Wir zahlen mit Kreditkarte.",
-    "exampleSentenceEs": "Pagamos con tarjeta de crédito."
+    "exampleSentenceEs": "Pagamos con tarjeta de crédito.",
+    "exampleSentenceDeBlocks": [
+      "Wir",
+      "zahlen",
+      "mit Kreditkarte."
+    ]
   },
   {
     "de": "Wir zahlen bar / mit Kreditkarte. — Hier ist Ihr Zimmerschlüssel. Ihre Zimmernummer ist die (405). Schönen Aufenthalt!",
@@ -523,7 +799,12 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "bar zahlen vs. mit Kreditkarte zahlen (+ Dativ)",
     "exampleSentenceDe": "Vielen Dank für Ihre Hilfe!",
-    "exampleSentenceEs": "¡Muchas gracias por su ayuda!"
+    "exampleSentenceEs": "¡Muchas gracias por su ayuda!",
+    "exampleSentenceDeBlocks": [
+      "Vielen Dank",
+      "für",
+      "Ihre Hilfe!"
+    ]
   },
   {
     "de": "Ich habe ein Problem. Ich brauche (neue Handtücher). — Das bringen wir in Ordnung.",
@@ -534,7 +815,14 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "in Ordnung bringen = solucionar / arreglar",
     "exampleSentenceDe": "Die Heizung im Zimmer funktioniert leider nicht.",
-    "exampleSentenceEs": "Lamentablemente la calefacción de la habitación no funciona."
+    "exampleSentenceEs": "Lamentablemente la calefacción de la habitación no funciona.",
+    "exampleSentenceDeBlocks": [
+      "Die Heizung",
+      "im Zimmer",
+      "funktioniert",
+      "leider",
+      "nicht."
+    ]
   },
   {
     "de": "Ich möchte heute Nachmittag etwas unternehmen, vielleicht ein Museum besuchen.",
@@ -545,7 +833,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "etwas unternehmen = hacer planes / actividades",
     "exampleSentenceDe": "Das Museum zeigt technische Erfindungen.",
-    "exampleSentenceEs": "El museo presenta inventos tecnológicos."
+    "exampleSentenceEs": "El museo presenta inventos tecnológicos.",
+    "exampleSentenceDeBlocks": [
+      "Das Museum",
+      "zeigt",
+      "technische",
+      "Erfindungen."
+    ]
   },
   {
     "de": "Im Museum kann man (Bilder von Picasso) bewundern. Man findet dort (viele bedeutende Kunstwerke).",
@@ -556,7 +850,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "Impersonal 'man' + Verbo en Posición 2",
     "exampleSentenceDe": "Ich finde moderne Kunst sehr interessant.",
-    "exampleSentenceEs": "El arte moderno me parece muy interesante."
+    "exampleSentenceEs": "El arte moderno me parece muy interesante.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "finde",
+      "moderne Kunst",
+      "sehr interessant."
+    ]
   },
   {
     "de": "Wann hat (das Deutsche Museum) geöffnet? — Es hat täglich von (9.00) bis (17.00) Uhr geöffnet.",
@@ -567,7 +867,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "von ... bis ... Uhr geöffnet",
     "exampleSentenceDe": "Es öffnet um neun Uhr und schließt um siebzehn Uhr.",
-    "exampleSentenceEs": "Abre a las 9:00 y cierra a las 17:00 h."
+    "exampleSentenceEs": "Abre a las 9:00 y cierra a las 17:00 h.",
+    "exampleSentenceDeBlocks": [
+      "Es öffnet",
+      "um neun Uhr",
+      "und schließt",
+      "um siebzehn Uhr."
+    ]
   },
   {
     "de": "Wie viel / Was kostet eine Eintrittskarte? — Eine Tageskarte / Studentenkarte kostet (sieben) Euro.",
@@ -578,7 +884,14 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "Lesen & Hören Teil 1/2",
     "exampleSentenceDe": "Man kann im Park spazieren gehen oder ein kühles Bier trinken.",
-    "exampleSentenceEs": "Se puede pasear por el parque o tomar una cerveza fresca."
+    "exampleSentenceEs": "Se puede pasear por el parque o tomar una cerveza fresca.",
+    "exampleSentenceDeBlocks": [
+      "Man kann",
+      "im Park",
+      "spazieren gehen",
+      "oder ein kühles Bier",
+      "trinken."
+    ]
   },
   {
     "de": "Ich möchte bitte (eine Tasse Kaffee). / Ich hätte gern (ein Glas Weißwein).",
@@ -589,7 +902,13 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "Fórmulas de cortesía: möchten / hätte gern + Akk",
     "exampleSentenceDe": "Ich nehme das Schnitzel und ich esse den Lachs.",
-    "exampleSentenceEs": "Voy a tomar el escalope y para comer el salmón."
+    "exampleSentenceEs": "Voy a tomar el escalope y para comer el salmón.",
+    "exampleSentenceDeBlocks": [
+      "Ich nehme",
+      "das Schnitzel",
+      "und ich esse",
+      "den Lachs."
+    ]
   },
   {
     "de": "Ich nehme (das Schnitzel). / Ich esse (den Lachs). / Ich trinke (ein Bier).",
@@ -600,7 +919,13 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "⚠️ Acusativo masculino: der Lachs -> den Lachs",
     "exampleSentenceDe": "Guten Appetit! — Danke, gleichfalls! Zum Wohl! Prost!",
-    "exampleSentenceEs": "¡Que aproveche! — ¡Gracias, igualmente! ¡Salud!"
+    "exampleSentenceEs": "¡Que aproveche! — ¡Gracias, igualmente! ¡Salud!",
+    "exampleSentenceDeBlocks": [
+      "Guten Appetit!",
+      "— Danke, gleichfalls!",
+      "Zum Wohl!",
+      "Prost!"
+    ]
   },
   {
     "de": "Guten Appetit! — Danke, gleichfalls! / Zum Wohl! / Prost!",
@@ -611,7 +936,14 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "Prost (cerveza) vs. Zum Wohl (vino/brindis formal)",
     "exampleSentenceDe": "Wir stoßen auf das neue Projekt an. Prost!",
-    "exampleSentenceEs": "Brindamos por el nuevo proyecto. ¡Salud!"
+    "exampleSentenceEs": "Brindamos por el nuevo proyecto. ¡Salud!",
+    "exampleSentenceDeBlocks": [
+      "Wir",
+      "stoßen",
+      "auf das neue Projekt",
+      "an.",
+      "Prost!"
+    ]
   },
   {
     "de": "Wie schmeckt (der Salat)? — (Er) schmeckt ausgezeichnet / gut! / (Er) schmeckt schrecklich!",
@@ -622,7 +954,14 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "⚠️ 'der Salat' es masculino en alemán -> Pronombre 'er'",
     "exampleSentenceDe": "Ich finde ihn lecker und köstlich! / Ich finde ihn ungenießbar!",
-    "exampleSentenceEs": "¡Me parece rica y deliciosa! / ¡No hay quien la coma!"
+    "exampleSentenceEs": "¡Me parece rica y deliciosa! / ¡No hay quien la coma!",
+    "exampleSentenceDeBlocks": [
+      "Ich finde ihn",
+      "lecker und köstlich!",
+      "/",
+      "Ich finde ihn",
+      "ungenießbar!"
+    ]
   },
   {
     "de": "Die Rechnung, bitte! / Ich möchte bitte zahlen.",
@@ -633,7 +972,13 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "Sprechen Teil 3 • Petición en restaurante",
     "exampleSentenceDe": "Zahlen Sie zusammen oder getrennt?",
-    "exampleSentenceEs": "¿Pagan juntos o por separado?"
+    "exampleSentenceEs": "¿Pagan juntos o por separado?",
+    "exampleSentenceDeBlocks": [
+      "Zahlen",
+      "Sie",
+      "zusammen",
+      "oder getrennt?"
+    ]
   },
   {
     "de": "Zahlen Sie zusammen oder getrennt? — Getrennt, bitte. / Zusammen, bitte.",
@@ -644,7 +989,13 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "Kulturstandard in Deutschland (getrennt zahlen)",
     "exampleSentenceDe": "Das macht 18 Euro für Sie und 22 Euro für Ihre Kollegin.",
-    "exampleSentenceEs": "Son 18 euros para usted y 22 euros para su compañera."
+    "exampleSentenceEs": "Son 18 euros para usted y 22 euros para su compañera.",
+    "exampleSentenceDeBlocks": [
+      "Das macht",
+      "18 Euro für Sie",
+      "und 22 Euro",
+      "für Ihre Kollegin."
+    ]
   },
   {
     "de": "Das macht (28 Euro). — Stimmt so, danke!",
@@ -655,7 +1006,13 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "Stimmt so = Trinkgeld geben (propina alemana)",
     "exampleSentenceDe": "Hier sind dreißig Euro. Stimmt so!",
-    "exampleSentenceEs": "Aquí tiene treinta euros. ¡Quédese el cambio!"
+    "exampleSentenceEs": "Aquí tiene treinta euros. ¡Quédese el cambio!",
+    "exampleSentenceDeBlocks": [
+      "Hier",
+      "sind",
+      "dreißig Euro.",
+      "Stimmt so!"
+    ]
   },
   {
     "de": "Ich möchte bitte (zwei Kilo Kartoffeln). / Ich nehme (drei Bananen). / Ich brauche (200 Gramm Schinken).",
@@ -666,7 +1023,14 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "⚠️ En alemán NO se usa 'von' tras Kilo/Gramm",
     "exampleSentenceDe": "Sonst noch etwas? Ist das alles? — Ja, das ist alles.",
-    "exampleSentenceEs": "¿Algo más? ¿Eso es todo? — Sí, es todo."
+    "exampleSentenceEs": "¿Algo más? ¿Eso es todo? — Sí, es todo.",
+    "exampleSentenceDeBlocks": [
+      "Sonst noch etwas?",
+      "Ist das alles?",
+      "— Ja,",
+      "das ist",
+      "alles."
+    ]
   },
   {
     "de": "Sonst noch etwas? — Ist das alles? Ja, das ist alles. — Haben Sie das Geld passend?",
@@ -677,7 +1041,13 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "passend haben = tener el importe exacto",
     "exampleSentenceDe": "Moment bitte, ich habe es passend.",
-    "exampleSentenceEs": "Un momento por favor, lo tengo exacto."
+    "exampleSentenceEs": "Un momento por favor, lo tengo exacto.",
+    "exampleSentenceDeBlocks": [
+      "Moment bitte,",
+      "ich",
+      "habe",
+      "es passend."
+    ]
   },
   {
     "de": "Schälen Sie (das Obst). / Schneiden Sie (die Äpfel). / Kochen Sie (die Kartoffeln). / Braten Sie (das Fleisch).",
@@ -688,7 +1058,14 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "Imperativo Sie (Verbo en Posición 1 + Sie) + Akk",
     "exampleSentenceDe": "Geben Sie die Obststücke in eine Schüssel und vermengen Sie das Obst mit Zucker.",
-    "exampleSentenceEs": "Ponga los trozos de fruta en un bol y mezcle la fruta con azúcar."
+    "exampleSentenceEs": "Ponga los trozos de fruta en un bol y mezcle la fruta con azúcar.",
+    "exampleSentenceDeBlocks": [
+      "Geben Sie die Obststücke",
+      "in eine Schüssel",
+      "und vermengen Sie",
+      "das Obst",
+      "mit Zucker."
+    ]
   },
   {
     "de": "Ich esse zum Frühstück (frisches Obst), zum Mittagessen (Fleisch mit Kartoffeln) und zum Abendbrot (Spaghetti).",
@@ -699,7 +1076,14 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "zum Frühstück / zum Mittagessen / zum Abendbrot",
     "exampleSentenceDe": "Ich trinke gerne ein Glas Orangensaft, aber ich mag keine Tomatensuppe.",
-    "exampleSentenceEs": "Me gusta beber un vaso de zumo de naranja, pero no me gusta la sopa de tomate."
+    "exampleSentenceEs": "Me gusta beber un vaso de zumo de naranja, pero no me gusta la sopa de tomate.",
+    "exampleSentenceDeBlocks": [
+      "Ich trinke gerne",
+      "ein Glas Orangensaft,",
+      "aber ich mag",
+      "keine",
+      "Tomatensuppe."
+    ]
   },
   {
     "de": "Zum (Frühstück) gibt es normalerweise (ein Brötchen mit Marmelade). Das (Mittagessen) besteht aus (Fleisch und Kartoffeln).",
@@ -710,7 +1094,14 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "bestehen aus + Dativo (constar de / componerse de)",
     "exampleSentenceDe": "Kaffee ist sehr beliebt. Ein besonderes Getränk ist der Apfelwein.",
-    "exampleSentenceEs": "El café es muy popular. Una bebida especial es la sidra."
+    "exampleSentenceEs": "El café es muy popular. Una bebida especial es la sidra.",
+    "exampleSentenceDeBlocks": [
+      "Kaffee",
+      "ist sehr beliebt.",
+      "Ein besonderes Getränk",
+      "ist",
+      "der Apfelwein."
+    ]
   },
   {
     "de": "Ich stehe um (8.00 Uhr) auf. Um (8.30 Uhr) frühstücke ich. Um (9.00 Uhr) fahre ich zur Arbeit / zur Uni.",
@@ -721,7 +1112,12 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "auf|stehen (separable) + Inversión V2 tras hora",
     "exampleSentenceDe": "Um neun Uhr dreißig beginnt die Arbeit.",
-    "exampleSentenceEs": "El trabajo empieza a las 9:30 h."
+    "exampleSentenceEs": "El trabajo empieza a las 9:30 h.",
+    "exampleSentenceDeBlocks": [
+      "Um neun Uhr dreißig",
+      "beginnt",
+      "die Arbeit."
+    ]
   },
   {
     "de": "Ich lese und beantworte E-Mails, vereinbare Termine, übersetze E-Mails und habe eine Besprechung.",
@@ -732,7 +1128,14 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "Verbos inseparables: beantworten, vereinbaren, übersetzen",
     "exampleSentenceDe": "Ich rufe Kollegen an, führe Gespräche und präsentiere ein Projekt.",
-    "exampleSentenceEs": "Llamo a compañeros, mantengo conversaciones y presento un proyecto."
+    "exampleSentenceEs": "Llamo a compañeros, mantengo conversaciones y presento un proyecto.",
+    "exampleSentenceDeBlocks": [
+      "Ich rufe",
+      "Kollegen an,",
+      "führe Gespräche",
+      "und präsentiere",
+      "ein Projekt."
+    ]
   },
   {
     "de": "Ich mache (eine) Pause, schreibe ein Angebot, löse Probleme und sage Termine wieder ab.",
@@ -743,7 +1146,14 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "ab|sagen (Verbo separable: cancelar una cita)",
     "exampleSentenceDe": "Abends kaufe ich ein, sehe fern und um 23.00 Uhr gehe ich ins Bett.",
-    "exampleSentenceEs": "Por la tarde hago la compra, veo la tele y a las 23:00 me voy a la cama."
+    "exampleSentenceEs": "Por la tarde hago la compra, veo la tele y a las 23:00 me voy a la cama.",
+    "exampleSentenceDeBlocks": [
+      "Abends kaufe ich ein,",
+      "sehe fern",
+      "und um 23.00 Uhr",
+      "gehe ich",
+      "ins Bett."
+    ]
   },
   {
     "de": "Abends kaufe ich im Supermarkt ein, sehe ein bisschen fern und gehe um (23.00 Uhr) schlafen.",
@@ -754,7 +1164,14 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "ein|kaufen & fern|sehen (Verbos separables)",
     "exampleSentenceDe": "Am Wochenende schlafe ich immer lange aus.",
-    "exampleSentenceEs": "El fin de semana siempre me quedo durmiendo hasta tarde."
+    "exampleSentenceEs": "El fin de semana siempre me quedo durmiendo hasta tarde.",
+    "exampleSentenceDeBlocks": [
+      "Am Wochenende",
+      "schlafe",
+      "ich",
+      "immer lange",
+      "aus."
+    ]
   },
   {
     "de": "Einen Computer / Drucker muss man installieren, einschalten und ausschalten.",
@@ -765,7 +1182,14 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "Objeto en Akkusativ en Posición 1 + muss man + Infinitivo",
     "exampleSentenceDe": "Eine E-Mail kann man erhalten, bekommen oder senden.",
-    "exampleSentenceEs": "Un correo electrónico se puede recibir o enviar."
+    "exampleSentenceEs": "Un correo electrónico se puede recibir o enviar.",
+    "exampleSentenceDeBlocks": [
+      "Eine E-Mail",
+      "kann",
+      "man",
+      "erhalten, bekommen",
+      "oder senden."
+    ]
   },
   {
     "de": "Einen Text kann man speichern, kopieren, löschen, ausdrucken, ausschneiden, weiterleiten oder einfügen.",
@@ -776,7 +1200,14 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "7 verbos clave de informática A1/A2",
     "exampleSentenceDe": "Bitte speichern Sie das Dokument und drucken Sie es aus.",
-    "exampleSentenceEs": "Por favor guarde el documento e imprímalo."
+    "exampleSentenceEs": "Por favor guarde el documento e imprímalo.",
+    "exampleSentenceDeBlocks": [
+      "Bitte",
+      "speichern Sie",
+      "das Dokument",
+      "und drucken Sie es",
+      "aus."
+    ]
   },
   {
     "de": "Bitte leiten Sie diese E-Mail an die Kollegen weiter und fügen Sie den Anhang bei.",
@@ -787,7 +1218,13 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "weiter|leiten & bei|fügen (Verbos separables)",
     "exampleSentenceDe": "Der Anhang enthält alle wichtigen Unterlagen.",
-    "exampleSentenceEs": "El archivo adjunto contiene todos los documentos importantes."
+    "exampleSentenceEs": "El archivo adjunto contiene todos los documentos importantes.",
+    "exampleSentenceDeBlocks": [
+      "Der Anhang",
+      "enthält",
+      "alle wichtigen",
+      "Unterlagen."
+    ]
   },
   {
     "de": "Guten Tag, (Paul Frisch) hier, Firma ANA. — Kann ich bitte (Frau Müller) sprechen?",
@@ -798,7 +1235,14 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "Ich möchte bitte (Herrn Müller) sprechen",
     "exampleSentenceDe": "Einen Moment, bitte. Ich verbinde Sie.",
-    "exampleSentenceEs": "Un momento, por favor. Ahora le paso (le conecto)."
+    "exampleSentenceEs": "Un momento, por favor. Ahora le paso (le conecto).",
+    "exampleSentenceDeBlocks": [
+      "Einen Moment,",
+      "bitte.",
+      "Ich",
+      "verbinde",
+      "Sie."
+    ]
   },
   {
     "de": "Einen Moment bitte, ich verbinde Sie mit (Herrn Becker).",
@@ -809,7 +1253,13 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "verbinden mit + Dativ (Herrn Becker - N-Deklination)",
     "exampleSentenceDe": "Bleiben Sie bitte am Apparat.",
-    "exampleSentenceEs": "Manténgase a la espera, por favor."
+    "exampleSentenceEs": "Manténgase a la espera, por favor.",
+    "exampleSentenceDeBlocks": [
+      "Bleiben",
+      "Sie",
+      "bitte",
+      "am Apparat."
+    ]
   },
   {
     "de": "Frau Müller ist leider nicht am Platz / in einer Besprechung. Kann sie Sie zurückrufen?",
@@ -820,7 +1270,13 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "zurück|rufen + Akkusativ (Sie zurückrufen)",
     "exampleSentenceDe": "Ja, bitte. Meine Handynummer ist bekannt.",
-    "exampleSentenceEs": "Sí, por favor. Ya tiene mi número de móvil."
+    "exampleSentenceEs": "Sí, por favor. Ya tiene mi número de móvil.",
+    "exampleSentenceDeBlocks": [
+      "Ja, bitte.",
+      "Meine Handynummer",
+      "ist",
+      "bekannt."
+    ]
   },
   {
     "de": "Ich möchte gern einen Termin vereinbaren. Wann haben Sie Zeit?",
@@ -831,7 +1287,13 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "einen Termin vereinbaren (concertar cita)",
     "exampleSentenceDe": "Haben Sie am achten April Zeit? Geht es am Dienstag um 11.00 Uhr?",
-    "exampleSentenceEs": "¿Tiene tiempo el ocho de abril? ¿Le va bien el martes a las 11:00 h?"
+    "exampleSentenceEs": "¿Tiene tiempo el ocho de abril? ¿Le va bien el martes a las 11:00 h?",
+    "exampleSentenceDeBlocks": [
+      "Haben Sie",
+      "am achten April Zeit?",
+      "Geht es am Dienstag",
+      "um 11.00 Uhr?"
+    ]
   },
   {
     "de": "Nein, am (10. Juni) habe ich leider keine Zeit. Am (dritten Fünften) bin ich nicht im Büro.",
@@ -842,7 +1304,14 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "⚠️ Fechas con 'am' + Ordinal en Dativo (-ten / -sten)",
     "exampleSentenceDe": "Ja, am Dienstag um elf Uhr geht es. Am Dienstag habe ich Zeit.",
-    "exampleSentenceEs": "Sí, me parece bien el martes a las 11:00 h. El martes tengo tiempo."
+    "exampleSentenceEs": "Sí, me parece bien el martes a las 11:00 h. El martes tengo tiempo.",
+    "exampleSentenceDeBlocks": [
+      "Ja, am Dienstag",
+      "um elf Uhr geht es.",
+      "Am Dienstag",
+      "habe ich",
+      "Zeit."
+    ]
   },
   {
     "de": "Dann besuche ich Sie am (Mittwoch) um (13.30 Uhr). — Vielen Dank für Ihren Anruf. Auf Wiederhören.",
@@ -853,7 +1322,13 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "Auf Wiederhören (exclusivo al colgar el teléfono)",
     "exampleSentenceDe": "Wir erwarten den Monteur am Donnerstag.",
-    "exampleSentenceEs": "Esperamos al instalador el jueves."
+    "exampleSentenceEs": "Esperamos al instalador el jueves.",
+    "exampleSentenceDeBlocks": [
+      "Wir",
+      "erwarten",
+      "den Monteur",
+      "am Donnerstag."
+    ]
   },
   {
     "de": "Sehr geehrte Frau (Sommer), … / Sehr geehrter Herr (Winter), … / Sehr geehrte Damen und Herren, …",
@@ -864,7 +1339,12 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "🎩 Formal Estricto • Schreiben Teil 2",
     "exampleSentenceDe": "Liebe Frau Sommer, / Lieber Herr Winter, (Semiformal)",
-    "exampleSentenceEs": "Apreciada Sra. Sommer: / Apreciado Sr. Winter:"
+    "exampleSentenceEs": "Apreciada Sra. Sommer: / Apreciado Sr. Winter:",
+    "exampleSentenceDeBlocks": [
+      "Liebe Frau Sommer,",
+      "/ Lieber Herr Winter,",
+      "(Semiformal)"
+    ]
   },
   {
     "de": "Liebe (Julia), … / Lieber (Stefan), … / Hallo zusammen, …",
@@ -875,7 +1355,13 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "👟 Informal • Tras la coma se empieza en minúscula",
     "exampleSentenceDe": "Liebe Julia, vielen Dank für deine Einladung!",
-    "exampleSentenceEs": "Querida Julia: ¡muchas gracias por tu invitación!"
+    "exampleSentenceEs": "Querida Julia: ¡muchas gracias por tu invitación!",
+    "exampleSentenceDeBlocks": [
+      "Liebe Julia,",
+      "vielen Dank",
+      "für",
+      "deine Einladung!"
+    ]
   },
   {
     "de": "Mit freundlichen Grüßen / Mit besten Grüßen / Mit herzlichen Grüßen / Liebe Grüße",
@@ -886,7 +1372,13 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "⚠️ Regla Goethe: NUNCA llevan coma al final en alemán",
     "exampleSentenceDe": "Vielen Dank für Ihre Antwort. Mit freundlichen Grüßen",
-    "exampleSentenceEs": "Muchas gracias por su respuesta. Atentamente"
+    "exampleSentenceEs": "Muchas gracias por su respuesta. Atentamente",
+    "exampleSentenceDeBlocks": [
+      "Vielen Dank",
+      "für Ihre Antwort.",
+      "Mit freundlichen",
+      "Grüßen"
+    ]
   },
   {
     "de": "Es schneit. / Es regnet. / Es ist kalt, warm, heiß, neblig, (teilweise) bewölkt, sonnig.",
@@ -897,7 +1389,13 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "Sujeto impersonal 'es' + Verbo / Adjetivo",
     "exampleSentenceDe": "Die Sonne scheint. Die Temperatur liegt bei 25 Grad.",
-    "exampleSentenceEs": "Hace sol. La temperatura ronda los 25 grados."
+    "exampleSentenceEs": "Hace sol. La temperatura ronda los 25 grados.",
+    "exampleSentenceDeBlocks": [
+      "Die Sonne scheint.",
+      "Die Temperatur",
+      "liegt bei",
+      "25 Grad."
+    ]
   },
   {
     "de": "Die Temperatur liegt bei (33) Grad. / Die Tageshöchsttemperatur beträgt (19) Grad.",
@@ -908,7 +1406,14 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "liegen bei / betragen (Hören Teil 2 - Radio)",
     "exampleSentenceDe": "Im Winter liegt die Temperatur oft unter null Grad.",
-    "exampleSentenceEs": "En invierno la temperatura suele estar bajo cero."
+    "exampleSentenceEs": "En invierno la temperatura suele estar bajo cero.",
+    "exampleSentenceDeBlocks": [
+      "Im Winter",
+      "liegt",
+      "die Temperatur",
+      "oft",
+      "unter null Grad."
+    ]
   },
   {
     "de": "Kann ich Ihnen helfen? — Ich hätte gern (einen Pullover). — Welche Größe haben Sie? — Ich trage Größe (40).",
@@ -919,7 +1424,14 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "helfen + Dativ (Ihnen) / hätte gern + Akkusativ",
     "exampleSentenceDe": "Welche Farbe möchten Sie? — Grün gefällt mir gut.",
-    "exampleSentenceEs": "¿Qué color quiere usted? — Me encanta el verde."
+    "exampleSentenceEs": "¿Qué color quiere usted? — Me encanta el verde.",
+    "exampleSentenceDeBlocks": [
+      "Welche Farbe",
+      "möchten Sie?",
+      "— Grün",
+      "gefällt mir",
+      "gut."
+    ]
   },
   {
     "de": "Kann ich (den Pullover) einmal anprobieren? — Steht mir (der Anzug)? — (Er) steht Ihnen ausgezeichnet!",
@@ -930,7 +1442,13 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "⚠️ stehen (favorecer/sentar bien) & passen (talla) + DATIVO",
     "exampleSentenceDe": "Die Schuhe passen mir leider nicht. Was kostet das Kleid?",
-    "exampleSentenceEs": "Los zapatos lamentablemente no me valen. ¿Cuánto cuesta el vestido?"
+    "exampleSentenceEs": "Los zapatos lamentablemente no me valen. ¿Cuánto cuesta el vestido?",
+    "exampleSentenceDeBlocks": [
+      "Die Schuhe",
+      "passen mir leider nicht.",
+      "Was kostet",
+      "das Kleid?"
+    ]
   },
   {
     "de": "Wo sind die Umkleidekabinen? — Da drüben links.",
@@ -941,7 +1459,14 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "lokale Angaben: da drüben / links / rechts",
     "exampleSentenceDe": "Entschuldigung, darf ich das Hemd dort anprobieren?",
-    "exampleSentenceEs": "Disculpe, ¿puedo probarme la camisa de allí?"
+    "exampleSentenceEs": "Disculpe, ¿puedo probarme la camisa de allí?",
+    "exampleSentenceDeBlocks": [
+      "Entschuldigung,",
+      "darf",
+      "ich",
+      "das Hemd dort",
+      "anprobieren?"
+    ]
   },
   {
     "de": "Wann fährt ein Zug nach (Frankfurt)? / Wann kommt der Zug in (Frankfurt) an? / Von welchem Gleis fährt der Zug?",
@@ -952,7 +1477,14 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "ab|fahren vs. an|kommen (Verbos separables)",
     "exampleSentenceDe": "Muss ich umsteigen oder fährt der Zug durch?",
-    "exampleSentenceEs": "¿Tengo que hacer transbordo o es un tren directo?"
+    "exampleSentenceEs": "¿Tengo que hacer transbordo o es un tren directo?",
+    "exampleSentenceDeBlocks": [
+      "Muss",
+      "ich",
+      "umsteigen",
+      "oder fährt der Zug",
+      "durch?"
+    ]
   },
   {
     "de": "Muss ich umsteigen oder fährt der Zug durch? — Sie müssen in (Köln) umsteigen.",
@@ -963,7 +1495,13 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "um|steigen vs. durch|fahren",
     "exampleSentenceDe": "Sie haben zehn Minuten Zeit zum Umsteigen.",
-    "exampleSentenceEs": "Tiene diez minutos de tiempo para hacer transbordo."
+    "exampleSentenceEs": "Tiene diez minutos de tiempo para hacer transbordo.",
+    "exampleSentenceDeBlocks": [
+      "Sie",
+      "haben",
+      "zehn Minuten Zeit",
+      "zum Umsteigen."
+    ]
   },
   {
     "de": "Wie viel kostet die Fahrkarte für eine einfache Fahrt nach (Dresden)? / Was kostet eine Rückfahrkarte?",
@@ -974,7 +1512,13 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "einfache Fahrt (solo ida) vs. Rückfahrkarte (ida y vuelta)",
     "exampleSentenceDe": "Ich fahre zweite Klasse und möchte einen Sitzplatz reservieren.",
-    "exampleSentenceEs": "Viajo en segunda clase y quiero reservar un asiento."
+    "exampleSentenceEs": "Viajo en segunda clase y quiero reservar un asiento.",
+    "exampleSentenceDeBlocks": [
+      "Ich fahre zweite Klasse",
+      "und möchte",
+      "einen Sitzplatz",
+      "reservieren."
+    ]
   },
   {
     "de": "Ich fahre mit dem Auto / dem Zug / der Bahn / dem Schiff / der Fähre / dem Motorrad / dem Bus. Ich fliege mit dem Flugzeug.",
@@ -985,7 +1529,14 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "⚠️ mit + DATIVO siempre (dem Auto/Zug/Bus, der Bahn/Fähre)",
     "exampleSentenceDe": "Zur Arbeit fahre ich immer mit der Bahn.",
-    "exampleSentenceEs": "Al trabajo voy siempre en tren."
+    "exampleSentenceEs": "Al trabajo voy siempre en tren.",
+    "exampleSentenceDeBlocks": [
+      "Zur Arbeit",
+      "fahre",
+      "ich",
+      "immer",
+      "mit der Bahn."
+    ]
   },
   {
     "de": "Man kann in der Stadt / am Stadtrand / auf dem Land wohnen. Ich suche eine Wohnung / ein Haus.",
@@ -996,7 +1547,13 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "Preposiciones fijas: in der Stadt, am Stadtrand, auf dem Land",
     "exampleSentenceDe": "Wie viele Zimmer hat die Wohnung? — Sie hat 89 Quadratmeter.",
-    "exampleSentenceEs": "¿Cuántas habitaciones tiene el piso? — Tiene 89 metros cuadrados."
+    "exampleSentenceEs": "¿Cuántas habitaciones tiene el piso? — Tiene 89 metros cuadrados.",
+    "exampleSentenceDeBlocks": [
+      "Wie viele Zimmer",
+      "hat die Wohnung?",
+      "— Sie hat",
+      "89 Quadratmeter."
+    ]
   },
   {
     "de": "Was kostet die Wohnung? — Die monatliche Miete beträgt (800) Euro (ohne/mit) Nebenkosten. Die Gesamtkosten betragen 1000 Euro.",
@@ -1007,7 +1564,14 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "betragen (ascender a) + Nebenkosten (gastos de comunidad)",
     "exampleSentenceDe": "Möchten Sie die Wohnung am Samstag besichtigen?",
-    "exampleSentenceEs": "¿Quiere usted visitar el piso el sábado?"
+    "exampleSentenceEs": "¿Quiere usted visitar el piso el sábado?",
+    "exampleSentenceDeBlocks": [
+      "Möchten",
+      "Sie",
+      "die Wohnung",
+      "am Samstag",
+      "besichtigen?"
+    ]
   },
   {
     "de": "Wie ist die Lage? — Die Wohnung liegt (im Zentrum) und ist (15 Minuten) vom Bahnhof entfernt. Es gibt gute Einkaufsmöglichkeiten.",
@@ -1018,7 +1582,13 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "vom Bahnhof entfernt + kinderfreundliche Umgebung",
     "exampleSentenceDe": "Die Wohnung hat einen Garten und einen Balkon.",
-    "exampleSentenceEs": "El piso tiene un jardín y un balcón."
+    "exampleSentenceEs": "El piso tiene un jardín y un balcón.",
+    "exampleSentenceDeBlocks": [
+      "Die Wohnung",
+      "hat",
+      "einen Garten",
+      "und einen Balkon."
+    ]
   },
   {
     "de": "Alle Mieter müssen die Nachtruhe respektieren. Man darf in der Wohnung und im Haus keinen Lärm machen.",
@@ -1029,7 +1599,14 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "müssen (obligación) vs. nicht/kein dürfen (prohibición)",
     "exampleSentenceDe": "Im Keller oder in der Tiefgarage ist Spielen verboten. Haustüren muss man ab 22 Uhr abschließen.",
-    "exampleSentenceEs": "En el sótano o en el garaje subterráneo está prohibido jugar. Las puertas deben cerrarse con llave desde las 22:00 h."
+    "exampleSentenceEs": "En el sótano o en el garaje subterráneo está prohibido jugar. Las puertas deben cerrarse con llave desde las 22:00 h.",
+    "exampleSentenceDeBlocks": [
+      "Im Keller oder in der Tiefgarage",
+      "ist Spielen verboten.",
+      "Haustüren",
+      "muss man ab 22 Uhr",
+      "abschließen."
+    ]
   },
   {
     "de": "Wie komme ich (zum Hotel)? — Gehen Sie geradeaus bis zur Hauptstraße. Dann nach links bis zur zweiten Querstraße.",
@@ -1040,7 +1617,14 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "bis zu + Dativo (bis zur Hauptstraße)",
     "exampleSentenceDe": "Fahren Sie bis zur Ampel. An der Ampel müssen Sie links abbiegen. Das Hotel ist neben dem Museum.",
-    "exampleSentenceEs": "Siga hasta el semáforo. En el semáforo tiene que girar a la izquierda. El hotel está al lado del museo."
+    "exampleSentenceEs": "Siga hasta el semáforo. En el semáforo tiene que girar a la izquierda. El hotel está al lado del museo.",
+    "exampleSentenceDeBlocks": [
+      "Fahren Sie bis zur Ampel.",
+      "An der Ampel",
+      "müssen Sie links abbiegen.",
+      "Das Hotel ist",
+      "neben dem Museum."
+    ]
   },
   {
     "de": "Biegen Sie an der Kreuzung rechts / links ab. Das Museum liegt auf der rechten Seite.",
@@ -1051,7 +1635,14 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "ab|biegen (separable) + auf der rechten/linken Seite",
     "exampleSentenceDe": "Gehen Sie über den Platz und dann immer geradeaus.",
-    "exampleSentenceEs": "Cruce la plaza y después siga siempre recto."
+    "exampleSentenceEs": "Cruce la plaza y después siga siempre recto.",
+    "exampleSentenceDeBlocks": [
+      "Gehen",
+      "Sie",
+      "über den Platz",
+      "und dann",
+      "immer geradeaus."
+    ]
   },
   {
     "de": "Herzlichen Glückwunsch zum Geburtstag! / Zur Hochzeit alle guten Wünsche! / Zur Beförderung alles Gute! / Viel Glück in der neuen Wohnung!",
@@ -1062,7 +1653,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "zum (zu dem) / zur (zu der) + Dativo",
     "exampleSentenceDe": "Ich gratuliere dir zum Führerschein! Ich wünsche dir gute Besserung!",
-    "exampleSentenceEs": "¡Te felicito por el carné de conducir! ¡Que te mejores!"
+    "exampleSentenceEs": "¡Te felicito por el carné de conducir! ¡Que te mejores!",
+    "exampleSentenceDeBlocks": [
+      "Ich gratuliere dir",
+      "zum Führerschein!",
+      "Ich wünsche dir",
+      "gute Besserung!"
+    ]
   },
   {
     "de": "Ich wünsche dir / Ihnen gute Besserung! — Danke sehr!",
@@ -1073,7 +1670,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "wünschen + Dativ (dir/Ihnen) + Akkusativ",
     "exampleSentenceDe": "Erholen Sie sich gut und ruhen Sie sich aus.",
-    "exampleSentenceEs": "Recupérese bien y descanse."
+    "exampleSentenceEs": "Recupérese bien y descanse.",
+    "exampleSentenceDeBlocks": [
+      "Erholen Sie sich",
+      "gut",
+      "und ruhen Sie sich",
+      "aus."
+    ]
   },
   {
     "de": "Vielen Dank für die Einladung. Ich komme gern. / Leider kann ich nicht zu deiner Feier kommen. Ich hoffe, du verzeihst mir.",
@@ -1084,7 +1687,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "⭐ Plantilla de Oro para Schreiben Teil 2 (Goethe A1)",
     "exampleSentenceDe": "Am Samstag muss ich leider arbeiten.",
-    "exampleSentenceEs": "El sábado lamentablemente tengo que trabajar."
+    "exampleSentenceEs": "El sábado lamentablemente tengo que trabajar.",
+    "exampleSentenceDeBlocks": [
+      "Am Samstag",
+      "muss",
+      "ich",
+      "leider",
+      "arbeiten."
+    ]
   },
   {
     "de": "Was haben Sie für Beschwerden? — Ich habe Kopfschmerzen, Husten, Schnupfen und Fieber. Mir tut mein Arm weh.",
@@ -1095,7 +1705,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "weh|tun + Dativo (Mir tut ... weh)",
     "exampleSentenceDe": "Sie müssen eine Schmerztablette einnehmen und dürfen keinen Alkohol trinken.",
-    "exampleSentenceEs": "Tiene que tomar un analgésico y no puede beber alcohol."
+    "exampleSentenceEs": "Tiene que tomar un analgésico y no puede beber alcohol.",
+    "exampleSentenceDeBlocks": [
+      "Sie müssen",
+      "eine Schmerztablette einnehmen",
+      "und dürfen",
+      "keinen Alkohol",
+      "trinken."
+    ]
   },
   {
     "de": "Ich brauche ein Attest / eine Krankmeldung für meinen Arbeitgeber.",
@@ -1106,7 +1723,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "für + Akkusativ maskulin (meinen Arbeitgeber)",
     "exampleSentenceDe": "Der Arzt schreibt mich bis Freitag krank.",
-    "exampleSentenceEs": "El médico me da la baja hasta el viernes."
+    "exampleSentenceEs": "El médico me da la baja hasta el viernes.",
+    "exampleSentenceDeBlocks": [
+      "Der Arzt",
+      "schreibt",
+      "mich",
+      "bis Freitag",
+      "krank."
+    ]
   },
   {
     "de": "Der Bürgermeister eröffnete eine Ausstellung. / Ärzte protestierten gegen schlechte Arbeitsbedingungen und forderten mehr Gehalt.",
@@ -1117,7 +1741,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "Präteritum en prensa escrita (-te / -ten)",
     "exampleSentenceDe": "Der FC Schalke gewann gegen Galatasaray. Eintracht Frankfurt verlor mit 0:3.",
-    "exampleSentenceEs": "El FC Schalke ganó contra el Galatasaray. El Eintracht Frankfurt perdió 0:3."
+    "exampleSentenceEs": "El FC Schalke ganó contra el Galatasaray. El Eintracht Frankfurt perdió 0:3.",
+    "exampleSentenceDeBlocks": [
+      "Der FC Schalke",
+      "gewann gegen Galatasaray.",
+      "Eintracht Frankfurt",
+      "verlor mit 0:3."
+    ]
   },
   {
     "de": "Antworten Sie. / Beantworten Sie die Frage. / Bilden Sie Sätze. / Ergänzen Sie. / Kreuzen Sie an. / Ordnen Sie zu.",
@@ -1128,7 +1758,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "Enunciados oficiales de los exámenes Goethe y telc",
     "exampleSentenceDe": "Lesen Sie den Text, markieren Sie die Wörter und schreiben Sie eine E-Mail.",
-    "exampleSentenceEs": "Lea el texto, marque las palabras y escriba un correo electrónico."
+    "exampleSentenceEs": "Lea el texto, marque las palabras y escriba un correo electrónico.",
+    "exampleSentenceDeBlocks": [
+      "Lesen Sie den Text,",
+      "markieren Sie die Wörter",
+      "und schreiben Sie",
+      "eine E-Mail."
+    ]
   },
   {
     "de": "Wie sagt man … auf Deutsch? / Ich verstehe (das) nicht. / Können Sie das noch einmal wiederholen? / Sprechen Sie bitte langsamer.",
@@ -1139,7 +1775,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "⭐ Indispensable para Sprechen Teil 1, 2 y 3",
     "exampleSentenceDe": "Ich habe eine Frage. Darf ich Sie etwas fragen?",
-    "exampleSentenceEs": "Tengo una pregunta. ¿Puedo preguntarle algo?"
+    "exampleSentenceEs": "Tengo una pregunta. ¿Puedo preguntarle algo?",
+    "exampleSentenceDeBlocks": [
+      "Ich habe",
+      "eine Frage.",
+      "Darf ich Sie",
+      "etwas",
+      "fragen?"
+    ]
   },
   {
     "de": "Was denkst du? / Was meinen Sie? / Wie finden Sie das? — Ich denke, … / Ich glaube, … / Ich habe keine Ahnung.",
@@ -1150,7 +1793,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "(Ja,) das ist richtig. / Das stimmt. / Du hast recht. / Sie haben recht.",
     "exampleSentenceDe": "Das finde ich gut! — Und Sie? — Ich auch! / Ich nicht. / Ich möchte lieber...",
-    "exampleSentenceEs": "¡Eso me parece bien! — ¿Y a usted? — ¡A mí también! / A mí no. / Yo prefiero..."
+    "exampleSentenceEs": "¡Eso me parece bien! — ¿Y a usted? — ¡A mí también! / A mí no. / Yo prefiero...",
+    "exampleSentenceDeBlocks": [
+      "Das finde ich gut!",
+      "— Und Sie?",
+      "— Ich auch!",
+      "/ Ich nicht.",
+      "/ Ich möchte lieber..."
+    ]
   },
   {
     "de": "Das ist richtig. / Das stimmt. / Du hast recht. / Sie haben recht.",
@@ -1161,7 +1811,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "recht haben (tener razón)",
     "exampleSentenceDe": "Ja, genau! Das sehe ich auch so.",
-    "exampleSentenceEs": "¡Sí, exacto! Yo también lo veo así."
+    "exampleSentenceEs": "¡Sí, exacto! Yo también lo veo así.",
+    "exampleSentenceDeBlocks": [
+      "Ja, genau!",
+      "Das",
+      "sehe",
+      "ich",
+      "auch so."
+    ]
   },
   {
     "de": "Das finde ich nicht gut. / Ich bin dagegen. / Ich bin anderer Meinung.",
@@ -1172,7 +1829,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "dagegen sein vs. dafür sein",
     "exampleSentenceDe": "Ich möchte lieber zu Hause bleiben.",
-    "exampleSentenceEs": "Yo prefiero quedarme en casa."
+    "exampleSentenceEs": "Yo prefiero quedarme en casa.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "möchte",
+      "lieber",
+      "zu Hause",
+      "bleiben."
+    ]
   },
   {
     "de": "Ich komme aus (Kolumbien) und wohne in (Duisburg).",
@@ -1183,7 +1847,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "aus + Dativ (Herkunft) • in + Dativ (Wohnort)",
     "exampleSentenceDe": "Ich lebe seit zwei Jahren in Deutschland.",
-    "exampleSentenceEs": "Vivo desde hace dos años en Alemania."
+    "exampleSentenceEs": "Vivo desde hace dos años en Alemania.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "lebe",
+      "seit zwei Jahren",
+      "in Deutschland."
+    ]
   },
   {
     "de": "Sind Sie verheiratet? — Ja, ich bin verheiratet und habe zwei Kinder.",
@@ -1194,7 +1864,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "sein + verheiratet • haben + Akkusativ",
     "exampleSentenceDe": "Mein Mann arbeitet auch in Berlin.",
-    "exampleSentenceEs": "Mi esposo también trabaja en Berlín."
+    "exampleSentenceEs": "Mi esposo también trabaja en Berlín.",
+    "exampleSentenceDeBlocks": [
+      "Mein Mann",
+      "arbeitet",
+      "auch",
+      "in Berlin."
+    ]
   },
   {
     "de": "Was machen Sie gern am Wochenende? — Ich gehe gern spazieren und treffe Freunde.",
@@ -1205,7 +1881,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "treffen (Vokalwechsel e->i: du triffst)",
     "exampleSentenceDe": "Samstags koche ich mit meiner Familie.",
-    "exampleSentenceEs": "Los sábados cocino con mi familia."
+    "exampleSentenceEs": "Los sábados cocino con mi familia.",
+    "exampleSentenceDeBlocks": [
+      "Samstags",
+      "koche",
+      "ich",
+      "mit meiner Familie."
+    ]
   },
   {
     "de": "Mein Lieblingshobby ist (Fotografieren).",
@@ -1216,7 +1898,13 @@ export const redemittelChapter = {
     "category": "1. Person & Hobbys (Kap. 1)",
     "regimen": "Substantiviertes Verb (Neutrum)",
     "exampleSentenceDe": "Fotografieren macht mir großen Spaß.",
-    "exampleSentenceEs": "La fotografía me divierte mucho."
+    "exampleSentenceEs": "La fotografía me divierte mucho.",
+    "exampleSentenceDeBlocks": [
+      "Fotografieren",
+      "macht",
+      "mir",
+      "großen Spaß."
+    ]
   },
   {
     "de": "Haben Sie einen Kugelschreiber für mich? — Ja, bitte hier ist einer.",
@@ -1227,7 +1915,13 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "haben + Akkusativ (Kugelschreiber: Maskulin)",
     "exampleSentenceDe": "Ich brauche auch noch ein Blatt Papier.",
-    "exampleSentenceEs": "También necesito una hoja de papel."
+    "exampleSentenceEs": "También necesito una hoja de papel.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "brauche",
+      "auch noch",
+      "ein Blatt Papier."
+    ]
   },
   {
     "de": "Wo ist die Kaffeemaschine? — In der Teeküche im ersten Stock.",
@@ -1238,7 +1932,13 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "in + Dativ (in der Küche, im ersten Stock)",
     "exampleSentenceDe": "Der Aufzug ist direkt neben der Treppe.",
-    "exampleSentenceEs": "El ascensor está justo al lado de la escalera."
+    "exampleSentenceEs": "El ascensor está justo al lado de la escalera.",
+    "exampleSentenceDeBlocks": [
+      "Der Aufzug",
+      "ist",
+      "direkt",
+      "neben der Treppe."
+    ]
   },
   {
     "de": "Können Sie mir bitte helfen? — Ja natürlich, sehr gerne!",
@@ -1249,7 +1949,14 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "können + Dativ (mir) + helfen",
     "exampleSentenceDe": "Ich verstehe dieses Programm noch nicht.",
-    "exampleSentenceEs": "Aún no entiendo este programa."
+    "exampleSentenceEs": "Aún no entiendo este programa.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "verstehe",
+      "dieses Programm",
+      "noch",
+      "nicht."
+    ]
   },
   {
     "de": "Das ist Herr (Klein), unser neuer Kollege. — Freut mich, Sie kennenzulernen!",
@@ -1260,7 +1967,13 @@ export const redemittelChapter = {
     "category": "2. Büro & Freizeit (Kap. 2)",
     "regimen": "kennenlernen (separable) • Formel der Höflichkeit",
     "exampleSentenceDe": "Guten Tag, Herr Klein, herzlich willkommen!",
-    "exampleSentenceEs": "Buenos días, Sr. Klein, ¡sea bienvenido!"
+    "exampleSentenceEs": "Buenos días, Sr. Klein, ¡sea bienvenido!",
+    "exampleSentenceDeBlocks": [
+      "Guten Tag,",
+      "Herr Klein,",
+      "herzlich",
+      "willkommen!"
+    ]
   },
   {
     "de": "Ich möchte ein Zimmer für (drei Nächte) reservieren.",
@@ -1271,7 +1984,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "für + Akkusativ (drei Nächte)",
     "exampleSentenceDe": "Vom zehnten bis zum dreizehnten Mai.",
-    "exampleSentenceEs": "Del 10 al 13 de mayo."
+    "exampleSentenceEs": "Del 10 al 13 de mayo.",
+    "exampleSentenceDeBlocks": [
+      "Vom zehnten",
+      "bis zum",
+      "dreizehnten",
+      "Mai."
+    ]
   },
   {
     "de": "Gibt es im Hotel ein Schwimmbad oder eine Sauna?",
@@ -1282,7 +2001,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "es gibt + Akkusativ",
     "exampleSentenceDe": "Ja, der Wellnessbereich ist im Untergeschoss.",
-    "exampleSentenceEs": "Sí, la zona de spa está en la planta baja."
+    "exampleSentenceEs": "Sí, la zona de spa está en la planta baja.",
+    "exampleSentenceDeBlocks": [
+      "Ja,",
+      "der Wellnessbereich",
+      "ist",
+      "im Untergeschoss."
+    ]
   },
   {
     "de": "Ab wann gibt es Frühstück? — Das Frühstücksbuffet steht ab (6.30 Uhr) bereit.",
@@ -1293,7 +2018,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "ab + Dativ (ab 6.30 Uhr)",
     "exampleSentenceDe": "Das Frühstück servieren wir bis zehn Uhr.",
-    "exampleSentenceEs": "Servimos el desayuno hasta las diez."
+    "exampleSentenceEs": "Servimos el desayuno hasta las diez.",
+    "exampleSentenceDeBlocks": [
+      "Das Frühstück",
+      "servieren",
+      "wir",
+      "bis zehn Uhr."
+    ]
   },
   {
     "de": "Können Sie mir ein Taxi rufen? — Ja gern, das Taxi kommt in zehn Minuten.",
@@ -1304,7 +2035,14 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "können + Dativ (mir) + Taxi (Akk)",
     "exampleSentenceDe": "Ich muss pünktlich am Flughafen sein.",
-    "exampleSentenceEs": "Tengo que estar puntual en el aeropuerto."
+    "exampleSentenceEs": "Tengo que estar puntual en el aeropuerto.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "muss",
+      "pünktlich",
+      "am Flughafen",
+      "sein."
+    ]
   },
   {
     "de": "Wo kann man hier einen Stadtplan bekommen? — An der Hotelrezeption oder in der Touristeninformation.",
@@ -1315,7 +2053,13 @@ export const redemittelChapter = {
     "category": "3. Hotel & Tourismus (Kap. 3)",
     "regimen": "an + Dativ (an der Information)",
     "exampleSentenceDe": "Hier ist ein kostenloser Stadtplan für Sie.",
-    "exampleSentenceEs": "Aquí tiene un mapa gratuito de la ciudad."
+    "exampleSentenceEs": "Aquí tiene un mapa gratuito de la ciudad.",
+    "exampleSentenceDeBlocks": [
+      "Hier",
+      "ist",
+      "ein kostenloser Stadtplan",
+      "für Sie."
+    ]
   },
   {
     "de": "Haben Sie vegetarische Gerichte? — Ja, wir haben frische Pasta und Salate.",
@@ -1326,7 +2070,14 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "Plural Akkusativ: vegetarische Gerichte",
     "exampleSentenceDe": "Ich esse kein Fleisch und keinen Fisch.",
-    "exampleSentenceEs": "No como carne ni pescado."
+    "exampleSentenceEs": "No como carne ni pescado.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "esse",
+      "kein Fleisch",
+      "und",
+      "keinen Fisch."
+    ]
   },
   {
     "de": "Können wir bitte noch etwas Brot und Wasser haben?",
@@ -1337,7 +2088,14 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "etwas + unzählbares Substantiv",
     "exampleSentenceDe": "Sofort, ich bringe Ihnen frisches Brot.",
-    "exampleSentenceEs": "Enseguida, le traigo pan fresco."
+    "exampleSentenceEs": "Enseguida, le traigo pan fresco.",
+    "exampleSentenceDeBlocks": [
+      "Sofort,",
+      "ich",
+      "bringe",
+      "Ihnen",
+      "frisches Brot."
+    ]
   },
   {
     "de": "War alles zu Ihrer Zufriedenheit? — Ja, vielen Dank, es war köstlich!",
@@ -1348,7 +2106,13 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "zu + Dativ (zu Ihrer Zufriedenheit)",
     "exampleSentenceDe": "Wir kommen sehr gerne wieder.",
-    "exampleSentenceEs": "Volveremos con mucho gusto."
+    "exampleSentenceEs": "Volveremos con mucho gusto.",
+    "exampleSentenceDeBlocks": [
+      "Wir",
+      "kommen",
+      "sehr gerne",
+      "wieder."
+    ]
   },
   {
     "de": "Was kosten die Äpfel? — Zwei Euro fünfzig das Kilo.",
@@ -1359,7 +2123,14 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "das Kilo (Akkusativ des Maßes)",
     "exampleSentenceDe": "Geben Sie mir bitte ein Kilo Äpfel.",
-    "exampleSentenceEs": "Deme por favor un kilo de manzanas."
+    "exampleSentenceEs": "Deme por favor un kilo de manzanas.",
+    "exampleSentenceDeBlocks": [
+      "Geben",
+      "Sie",
+      "mir",
+      "bitte",
+      "ein Kilo Äpfel."
+    ]
   },
   {
     "de": "Ich koche sehr gern mit frischem Gemüse und Olivenöl.",
@@ -1370,7 +2141,13 @@ export const redemittelChapter = {
     "category": "4. Restaurant & Essen (Kap. 4)",
     "regimen": "mit + Dativ Neutrum (-em)",
     "exampleSentenceDe": "Am liebsten koche ich italienische Gerichte.",
-    "exampleSentenceEs": "Lo que más me gusta es cocinar platos italianos."
+    "exampleSentenceEs": "Lo que más me gusta es cocinar platos italianos.",
+    "exampleSentenceDeBlocks": [
+      "Am liebsten",
+      "koche",
+      "ich",
+      "italienische Gerichte."
+    ]
   },
   {
     "de": "Wann beginnt Ihr Deutschkurs? — Mein Kurs beginnt um (18.00 Uhr).",
@@ -1381,7 +2158,13 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "beginnen + um + Uhrzeit",
     "exampleSentenceDe": "Der Unterricht dauert zwei Stunden.",
-    "exampleSentenceEs": "La clase dura dos horas."
+    "exampleSentenceEs": "La clase dura dos horas.",
+    "exampleSentenceDeBlocks": [
+      "Der Unterricht",
+      "dauert",
+      "zwei",
+      "Stunden."
+    ]
   },
   {
     "de": "Ich habe mein Passwort vergessen. Können Sie mir helfen?",
@@ -1392,7 +2175,14 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "Perfekt: haben + vergessen (Partizip II)",
     "exampleSentenceDe": "Sie können Ihr Passwort online zurücksetzen.",
-    "exampleSentenceEs": "Puede restablecer su contraseña en línea."
+    "exampleSentenceEs": "Puede restablecer su contraseña en línea.",
+    "exampleSentenceDeBlocks": [
+      "Sie",
+      "können",
+      "Ihr Passwort",
+      "online",
+      "zurücksetzen."
+    ]
   },
   {
     "de": "Ich schicke Ihnen die Datei als PDF-Anhang per E-Mail.",
@@ -1403,7 +2193,13 @@ export const redemittelChapter = {
     "category": "5. Tagesablauf & IT (Kap. 5)",
     "regimen": "schicken + Dativ (Ihnen) + Akkusativ (die Datei)",
     "exampleSentenceDe": "Bitte prüfen Sie Ihren Posteingang.",
-    "exampleSentenceEs": "Por favor revise su bandeja de entrada."
+    "exampleSentenceEs": "Por favor revise su bandeja de entrada.",
+    "exampleSentenceDeBlocks": [
+      "Bitte",
+      "prüfen",
+      "Sie",
+      "Ihren Posteingang."
+    ]
   },
   {
     "de": "Können wir den Termin auf (Freitag um 10.00 Uhr) verschieben?",
@@ -1414,7 +2210,14 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "verschieben auf + Akkusativ",
     "exampleSentenceDe": "Ja, Freitag um zehn Uhr passt mir sehr gut.",
-    "exampleSentenceEs": "Sí, el viernes a las diez me va perfecto."
+    "exampleSentenceEs": "Sí, el viernes a las diez me va perfecto.",
+    "exampleSentenceDeBlocks": [
+      "Ja,",
+      "Freitag um zehn Uhr",
+      "passt",
+      "mir",
+      "sehr gut."
+    ]
   },
   {
     "de": "Ich rufe Sie morgen vormittag noch einmal an. Auf Wiederhören!",
@@ -1425,7 +2228,14 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "an|rufen + Akkusativ (Sie anrufen)",
     "exampleSentenceDe": "Ich bin ab neun Uhr im Büro erreichbar.",
-    "exampleSentenceEs": "Estoy localizable en la oficina a partir de las nueve."
+    "exampleSentenceEs": "Estoy localizable en la oficina a partir de las nueve.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "bin",
+      "ab neun Uhr",
+      "im Büro",
+      "erreichbar."
+    ]
   },
   {
     "de": "Vielen Dank für Ihre schnelle Rückmeldung.",
@@ -1436,7 +2246,13 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "danken für + Akkusativ",
     "exampleSentenceDe": "Ich freue mich auf unsere Zusammenarbeit.",
-    "exampleSentenceEs": "Me alegro de trabajar juntos."
+    "exampleSentenceEs": "Me alegro de trabajar juntos.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "freue mich",
+      "auf",
+      "unsere Zusammenarbeit."
+    ]
   },
   {
     "de": "Könnten Sie mir bitte die Bestätigung per E-Mail zusenden?",
@@ -1447,7 +2263,14 @@ export const redemittelChapter = {
     "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
     "regimen": "Konjunktiv II Höflichkeitsform (könnten Sie)",
     "exampleSentenceDe": "Ich sende Ihnen die Buchungsbestätigung sofort.",
-    "exampleSentenceEs": "Le envío la confirmación de la reserva de inmediato."
+    "exampleSentenceEs": "Le envío la confirmación de la reserva de inmediato.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "sende",
+      "Ihnen",
+      "die Buchungsbestätigung",
+      "sofort."
+    ]
   },
   {
     "de": "Morgen soll es im ganzen Land sonnig und warm werden.",
@@ -1458,7 +2281,13 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "sollen (modal) + Infinitiv (werden)",
     "exampleSentenceDe": "Die Höchstwerte erreichen 24 Grad.",
-    "exampleSentenceEs": "Las temperaturas máximas alcanzarán los 24 grados."
+    "exampleSentenceEs": "Las temperaturas máximas alcanzarán los 24 grados.",
+    "exampleSentenceDeBlocks": [
+      "Die Höchstwerte",
+      "erreichen",
+      "24",
+      "Grad."
+    ]
   },
   {
     "de": "Haben Sie diese Jacke auch in einer anderen Farbe / Größe?",
@@ -1469,7 +2298,13 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "in + Dativ feminin (in einer anderen Farbe)",
     "exampleSentenceDe": "Ja, wir haben die Jacke noch in Blau und in Größe L.",
-    "exampleSentenceEs": "Sí, tenemos la chaqueta también en azul y en talla L."
+    "exampleSentenceEs": "Sí, tenemos la chaqueta también en azul y en talla L.",
+    "exampleSentenceDeBlocks": [
+      "Ja,",
+      "wir haben die Jacke",
+      "noch in Blau",
+      "und in Größe L."
+    ]
   },
   {
     "de": "Achtung an Gleis (4): Der ICE nach (Berlin) fährt jetzt ein.",
@@ -1480,7 +2315,13 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "an + Dativ (an Gleis 4) • ein|fahren",
     "exampleSentenceDe": "Bitte halten Sie Abstand von der Bahnsteigkante.",
-    "exampleSentenceEs": "Por favor mantengan la distancia respecto al borde del andén."
+    "exampleSentenceEs": "Por favor mantengan la distancia respecto al borde del andén.",
+    "exampleSentenceDeBlocks": [
+      "Bitte",
+      "halten Sie",
+      "Abstand",
+      "von der Bahnsteigkante."
+    ]
   },
   {
     "de": "Hat der Zug Verspätung? — Ja, leider zehn Minuten Verspätung.",
@@ -1491,7 +2332,13 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "Verspätung haben",
     "exampleSentenceDe": "Wegen einer technischen Störung verspätet sich der Zug.",
-    "exampleSentenceEs": "Por una avería técnica el tren sufre retraso."
+    "exampleSentenceEs": "Por una avería técnica el tren sufre retraso.",
+    "exampleSentenceDeBlocks": [
+      "Wegen einer technischen Störung",
+      "verspätet",
+      "sich",
+      "der Zug."
+    ]
   },
   {
     "de": "Einfach oder hin und zurück? — Bitte eine Rückfahrkarte nach Hamburg.",
@@ -1502,7 +2349,14 @@ export const redemittelChapter = {
     "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
     "regimen": "einfache Fahrt vs. Hin- und Rückfahrt",
     "exampleSentenceDe": "Haben Sie eine BahnCard? — Nein, ich habe keine.",
-    "exampleSentenceEs": "¿Tiene tarjeta BahnCard? — No, no tengo."
+    "exampleSentenceEs": "¿Tiene tarjeta BahnCard? — No, no tengo.",
+    "exampleSentenceDeBlocks": [
+      "Haben Sie",
+      "eine BahnCard?",
+      "— Nein,",
+      "ich habe",
+      "keine."
+    ]
   },
   {
     "de": "Ist die Wohnung möbliert oder unmöbliert?",
@@ -1513,7 +2367,13 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "möbliert vs. unmöbliert (Adjektiv)",
     "exampleSentenceDe": "Die Küche ist komplett eingerichtet mit Kühlschrank und Herd.",
-    "exampleSentenceEs": "La cocina está completamente equipada con nevera y fogones."
+    "exampleSentenceEs": "La cocina está completamente equipada con nevera y fogones.",
+    "exampleSentenceDeBlocks": [
+      "Die Küche",
+      "ist komplett eingerichtet",
+      "mit Kühlschrank",
+      "und Herd."
+    ]
   },
   {
     "de": "Gibt es einen Aufzug im Haus? — Ja, es gibt einen modernen Aufzug.",
@@ -1524,7 +2384,13 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "es gibt + Akkusativ maskulin (einen Aufzug)",
     "exampleSentenceDe": "Die Wohnung liegt im vierten Stock.",
-    "exampleSentenceEs": "El piso está en la cuarta planta."
+    "exampleSentenceEs": "El piso está en la cuarta planta.",
+    "exampleSentenceDeBlocks": [
+      "Die Wohnung",
+      "liegt",
+      "im vierten",
+      "Stock."
+    ]
   },
   {
     "de": "Sind Haustiere wie Hunde oder Katzen in der Wohnung erlaubt?",
@@ -1535,7 +2401,13 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "erlaubt sein vs. verboten sein",
     "exampleSentenceDe": "Kleine Haustiere sind nach Absprache gestattet.",
-    "exampleSentenceEs": "Mascotas pequeñas están permitidas previo acuerdo."
+    "exampleSentenceEs": "Mascotas pequeñas están permitidas previo acuerdo.",
+    "exampleSentenceDeBlocks": [
+      "Kleine Haustiere",
+      "sind",
+      "nach Absprache",
+      "gestattet."
+    ]
   },
   {
     "de": "Entschuldigung, wo ist hier die nächste Bushaltestelle? — Gleich um die Ecke.",
@@ -1546,7 +2418,13 @@ export const redemittelChapter = {
     "category": "8. Wohnen & Wegbeschreibung (Kap. 7)",
     "regimen": "um die Ecke (Akkusativ)",
     "exampleSentenceDe": "Der Bus Linie 5 fährt direkt zum Bahnhof.",
-    "exampleSentenceEs": "El autobús línea 5 va directo a la estación."
+    "exampleSentenceEs": "El autobús línea 5 va directo a la estación.",
+    "exampleSentenceDeBlocks": [
+      "Der Bus Linie 5",
+      "fährt",
+      "direkt",
+      "zum Bahnhof."
+    ]
   },
   {
     "de": "Ich wünsche Ihnen ein schönes Wochenende! — Danke, gleichfalls!",
@@ -1557,7 +2435,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "wünschen + Dativ + Akkusativ",
     "exampleSentenceDe": "Erholen Sie sich gut!",
-    "exampleSentenceEs": "¡Descanse y recupérese bien!"
+    "exampleSentenceEs": "¡Descanse y recupérese bien!",
+    "exampleSentenceDeBlocks": [
+      "Erholen",
+      "Sie",
+      "sich",
+      "gut!"
+    ]
   },
   {
     "de": "Frohe Weihnachten und ein gutes neues Jahr!",
@@ -1568,7 +2452,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "Feste Wünsche zum Jahreswechsel",
     "exampleSentenceDe": "Alles Gute und viel Gesundheit für das neue Jahr!",
-    "exampleSentenceEs": "¡Todo lo mejor y mucha salud para el nuevo año!"
+    "exampleSentenceEs": "¡Todo lo mejor y mucha salud para el nuevo año!",
+    "exampleSentenceDeBlocks": [
+      "Alles Gute",
+      "und viel Gesundheit",
+      "für",
+      "das neue Jahr!"
+    ]
   },
   {
     "de": "Gute Reise und viel Spaß im Urlaub!",
@@ -1579,7 +2469,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "viel Spaß bei + Dativ / im Urlaub",
     "exampleSentenceDe": "Komm gesund und erholt wieder zurück!",
-    "exampleSentenceEs": "¡Regresa con salud y bien descansado!"
+    "exampleSentenceEs": "¡Regresa con salud y bien descansado!",
+    "exampleSentenceDeBlocks": [
+      "Komm",
+      "gesund",
+      "und erholt",
+      "wieder zurück!"
+    ]
   },
   {
     "de": "Ich brauche einen Termin beim Arzt. Haben Sie heute noch etwas frei?",
@@ -1590,7 +2486,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "beim Arzt (bei dem Arzt - Dativ)",
     "exampleSentenceDe": "Kommen Sie bitte heute um 15 Uhr in die Praxis.",
-    "exampleSentenceEs": "Venga hoy a las 15:00 a la consulta, por favor."
+    "exampleSentenceEs": "Venga hoy a las 15:00 a la consulta, por favor.",
+    "exampleSentenceDeBlocks": [
+      "Kommen Sie",
+      "bitte heute",
+      "um 15 Uhr",
+      "in die Praxis."
+    ]
   },
   {
     "de": "Haben Sie Ihre Krankenversicherungskarte dabei?",
@@ -1601,7 +2503,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "dabei haben (tener consigo)",
     "exampleSentenceDe": "Ja, hier ist meine Versichertenkarte.",
-    "exampleSentenceEs": "Sí, aquí tiene mi tarjeta de asegurado."
+    "exampleSentenceEs": "Sí, aquí tiene mi tarjeta de asegurado.",
+    "exampleSentenceDeBlocks": [
+      "Ja,",
+      "hier",
+      "ist",
+      "meine Versichertenkarte."
+    ]
   },
   {
     "de": "Sie müssen dreimal täglich eine Tablette mit viel Wasser einnehmen.",
@@ -1612,7 +2520,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "ein|nehmen (separable) + Akkusativ",
     "exampleSentenceDe": "Nehmen Sie die Medikamente immer nach dem Essen.",
-    "exampleSentenceEs": "Tome los medicamentos siempre después de comer."
+    "exampleSentenceEs": "Tome los medicamentos siempre después de comer.",
+    "exampleSentenceDeBlocks": [
+      "Nehmen",
+      "Sie",
+      "die Medikamente",
+      "immer",
+      "nach dem Essen."
+    ]
   },
   {
     "de": "Ich habe eine Frage zu dieser Übung. Können Sie mir das erklären?",
@@ -1623,7 +2538,13 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "Frage zu + Dativ • erklären + Dativ (mir)",
     "exampleSentenceDe": "Können Sie bitte ein Beispiel an die Tafel schreiben?",
-    "exampleSentenceEs": "¿Puede escribir un ejemplo en la pizarra, por favor?"
+    "exampleSentenceEs": "¿Puede escribir un ejemplo en la pizarra, por favor?",
+    "exampleSentenceDeBlocks": [
+      "Können Sie bitte",
+      "ein Beispiel",
+      "an die Tafel",
+      "schreiben?"
+    ]
   },
   {
     "de": "Auf welcher Seite im Buch sind wir? — Wir sind auf Seite (42).",
@@ -1634,7 +2555,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "auf Seite + Zahl (Dativ feminin)",
     "exampleSentenceDe": "Öffnen Sie bitte das Lehrbuch auf Seite 42.",
-    "exampleSentenceEs": "Abran por favor el libro de texto por la página 42."
+    "exampleSentenceEs": "Abran por favor el libro de texto por la página 42.",
+    "exampleSentenceDeBlocks": [
+      "Öffnen",
+      "Sie",
+      "bitte",
+      "das Lehrbuch",
+      "auf Seite 42."
+    ]
   },
   {
     "de": "Darf ich kurz das Fenster öffnen? Hier ist es sehr warm.",
@@ -1645,7 +2573,14 @@ export const redemittelChapter = {
     "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
     "regimen": "dürfen (modal: permiso)",
     "exampleSentenceDe": "Ja natürlich, machen Sie das Fenster ruhig auf.",
-    "exampleSentenceEs": "Sí, por supuesto, abra la ventana tranquilamente."
+    "exampleSentenceEs": "Sí, por supuesto, abra la ventana tranquilamente.",
+    "exampleSentenceDeBlocks": [
+      "Ja natürlich,",
+      "machen Sie",
+      "das Fenster",
+      "ruhig",
+      "auf."
+    ]
   }
 ]
 };
