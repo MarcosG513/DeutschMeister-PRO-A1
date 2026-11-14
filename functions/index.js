@@ -148,6 +148,35 @@ async function verifyRequestAuth(reqOrRequest) {
   }
 }
 
+let paidMediaKeyCursor = 0;
+
+/**
+ * Valida en el servidor si una petición autenticada está autorizada para generar o
+ * sobrescribir activos en global_flashcards (emulador, origen Vite dev o claim admin).
+ */
+function isServerAuthorizedMediaWriter(request, authUser) {
+  if (!authUser?.uid) return false;
+  if (authUser.token?.admin === true) return true;
+  if (request.data?.clientPlatform === "native" || request.data?.isNativePlatform === true) {
+    return false;
+  }
+  if (process.env.FUNCTIONS_EMULATOR === "true") return true;
+
+  const origin = request.rawRequest?.headers?.origin || "";
+  return origin === "http://localhost:5173" || origin === "http://localhost:5174";
+}
+
+/**
+ * Obtiene y rota (round-robin) las llaves PAID disponibles (PAID_1..PAID_4).
+ */
+function getRotatedPaidKeys() {
+  const paidKeys = getGoogleKeyPool().filter(k => k.id.startsWith("PAID") || k.isPaid);
+  if (paidKeys.length <= 1) return paidKeys;
+  const startIdx = paidMediaKeyCursor % paidKeys.length;
+  paidMediaKeyCursor = (paidMediaKeyCursor + 1) % paidKeys.length;
+  return [...paidKeys.slice(startIdx), ...paidKeys.slice(0, startIdx)];
+}
+
 /**
  * Función centralizada de enrutamiento con Pool Resiliente de 3 llaves y Fallback a Claude Haiku 4.5
  * Pool:
@@ -370,7 +399,8 @@ export const runRoleplaySimulator = onRequest({
 export const evaluateEmail = onCall(
   { secrets: ALL_AI_SECRETS, maxInstances: 6 },
   async (request) => {
-    const { textoCorreo, consignaExamen } = request.data;
+    await verifyRequestAuth(request);
+    const { textoCorreo, consignaExamen } = request.data || {};
 
     const systemPrompt = `Por favor, actúa como un examinador oficial del Goethe-Institut para el examen Start Deutsch 1 (Schreiben Teil 2 - E-Mail).
 Evalúa minuciosamente el correo redactado por el estudiante aplicando la rúbrica oficial estricta de 3 criterios y extensión:
@@ -1313,10 +1343,11 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
 export const generateCardImage = onCall({
   secrets: ALL_AI_SECRETS
 }, async request => {
+  const authUser = await verifyRequestAuth(request);
   const {
     wordObj,
     conceptoIngles
-  } = request.data;
+  } = request.data || {};
   if (!wordObj || !wordObj.es || !wordObj.de) {
     throw new HttpsError("invalid-argument", "Faltan parámetros requeridos en wordObj");
   }
@@ -1325,7 +1356,7 @@ export const generateCardImage = onCall({
   const tipoGramatical = wordObj.type || wordObj.tipo_gramatical || 'sustantivo';
   const tipoLimpio = tipoGramatical.toLowerCase().trim();
   const palabraLimpia = (wordObj.de || "").trim().toLowerCase();
-  const categoryLimpia = (wordObj.category || request.data.category || "").toLowerCase().trim();
+  const categoryLimpia = (wordObj.category || request.data?.category || "").toLowerCase().trim();
   const esColor = palabraLimpia === "weiß" || palabraLimpia === "schwarz" || palabraLimpia === "grau" || palabraLimpia === "rot" || palabraLimpia === "blau" || palabraLimpia === "gelb" || palabraLimpia === "grün" || palabraLimpia === "braun" || palabraLimpia === "orange" || palabraLimpia === "rosa" || palabraLimpia === "lila" || palabraLimpia.includes("farbe") || categoryLimpia.includes("farben") || categoryLimpia.includes("color") || tipoLimpio.includes("color");
   const esPersonaje = !esColor && (tipoLimpio.includes("adjetivo") || tipoLimpio.includes("verbo") || tipoLimpio.includes("acción") || tipoLimpio.includes("pronombre") || tipoLimpio.includes("sentimiento"));
 
@@ -1343,9 +1374,9 @@ export const generateCardImage = onCall({
   }
   // ── FIN CACHE CHECK ───────────────────────────────────────────────────────
 
-  // Bloquear generación fuera de entorno local para salvaguardar costos FinOps
-  if (!request.data?.isDevEnvironment) {
-    return { imageUrl: null, error: "Generación deshabilitada fuera de entorno local" };
+  // Bloquear generación y escritura en global_flashcards fuera de entorno autorizado en servidor
+  if (!isServerAuthorizedMediaWriter(request, authUser)) {
+    return { imageUrl: null, error: "Generación deshabilitada fuera de entorno local autorizado" };
   }
 
   try {
@@ -1418,9 +1449,10 @@ export const generateReadingTest = onCall({
   secrets: ALL_AI_SECRETS,
   timeoutSeconds: 120
 }, async request => {
+  await verifyRequestAuth(request);
   const {
     tema
-  } = request.data;
+  } = request.data || {};
   if (!tema) {
     throw new HttpsError("invalid-argument", "Falta el parámetro requerido: tema");
   }
@@ -1563,6 +1595,7 @@ export const generateDynamicQuiz = onCall({
   memory: "512MiB",
   secrets: ALL_AI_SECRETS,
 }, async (request) => {
+  await verifyRequestAuth(request);
   const { tema } = request.data || {};
   if (!tema) {
     throw new HttpsError("invalid-argument", "El parámetro 'tema' es obligatorio.");
@@ -1761,6 +1794,7 @@ export const synthesizeGermanSpeech = onCall(
     cors: true
   },
   async (request) => {
+    await verifyRequestAuth(request);
     const { text, type = "vocab" } = request.data || {};
     const voice = "Charon"; // Voz masculina oficial exclusiva de DeutschMeister
     if (!text || typeof text !== "string") {
@@ -1830,7 +1864,7 @@ export const synthesizeGermanSpeech = onCall(
     }
 
     if (!audioResult) {
-      const falKeyValue = (falKey && typeof falKey.value === "function" ? falKey.value() : "") || process.env.FAL_KEY || process.env.VITE_FAL_KEY || "";
+      const falKeyValue = (falKey && typeof falKey.value === "function" ? falKey.value() : "") || process.env.FAL_KEY || "";
       if (falKeyValue) {
         try {
           audioResult = await synthesizeWithFalFallback(cleanText, voice, falKeyValue);
@@ -2222,6 +2256,24 @@ async function generateGoogleOmniVideo(prompt, apiKey) {
 }
 
 /**
+ * Genera y optimiza una imagen iterando sobre el pool rotado de llaves PAID.
+ */
+async function generateImageWithPaidPool(imagePrompt, paidKeys, contextLabel = "Image") {
+  let lastError = null;
+  for (const keyItem of paidKeys) {
+    try {
+      console.log(`[Media Engine ${contextLabel}] Probando con llave ${keyItem.id}...`);
+      const rawImage = await generateGoogleFlashImage(imagePrompt, keyItem.key);
+      return await optimizeImageBuffer(rawImage.buffer);
+    } catch (imgErr) {
+      lastError = imgErr;
+      console.warn(`[Media Engine ${contextLabel} Warning] Error con llave ${keyItem.id}:`, imgErr.message);
+    }
+  }
+  throw lastError || new Error("No se pudo generar la imagen con ninguna llave PAID.");
+}
+
+/**
  * Cloud Function: regenerateCardMedia
  */
 export const regenerateCardMedia = onCall(
@@ -2232,21 +2284,20 @@ export const regenerateCardMedia = onCall(
     cors: true
   },
   async (request) => {
+    const authUser = await verifyRequestAuth(request);
+
     try {
       const { 
         wordObj, 
         mediaType = "auto", 
-        forceRegenerate = false, 
-        isDevEnvironment = false, 
-        isNativePlatform = false,
-        clientPlatform = "web"
+        forceRegenerate = false
       } = request.data || {};
 
-      // Candado Estricto de Seguridad: Exclusivo de Entorno Local de Desarrollo
-      if (!isDevEnvironment || clientPlatform === "native") {
+      // Candado Estricto de Seguridad en Servidor: emulador, origen Vite dev o admin
+      if (!isServerAuthorizedMediaWriter(request, authUser)) {
         return {
           success: false,
-          error: "La generación de medios con IA está estrictamente inhabilitada fuera del entorno de desarrollo local."
+          error: "La generación de medios con IA está estrictamente inhabilitada fuera del entorno de desarrollo local autorizado."
         };
       }
 
@@ -2254,7 +2305,6 @@ export const regenerateCardMedia = onCall(
         return { success: false, error: "wordObj.de es requerido." };
       }
 
-      const isAuthorizedClient = Boolean(isDevEnvironment && clientPlatform !== "native");
       const db = admin.firestore();
       const safeId = wordObj.de.toLowerCase().replace(/[^a-z0-9]/gi, "_").substring(0, 100);
       const isVerb = isVerbItem(wordObj);
@@ -2281,14 +2331,6 @@ export const regenerateCardMedia = onCall(
       }
 
       const wantVideo = (mediaType === "video" || (mediaType === "auto" && isVerb)) && isMotionVerb;
-
-      // 2. Candado para Web Producción: Prohibición total de generar videos
-      if (wantVideo && !isAuthorizedClient) {
-        return {
-          success: false,
-          error: "La generación de videos está inhabilitada en la versión web pública."
-        };
-      }
 
       // 2. Verificación previa en Firestore (Cache-First)
       const cardDocRef = db.collection("global_flashcards").doc(safeId);
@@ -2328,16 +2370,8 @@ export const regenerateCardMedia = onCall(
         }
       }
 
-      // 3. Candado para Creación/Regeneración: Solo Entorno Local de Desarrollo
-      if (!isDevEnvironment || clientPlatform === "native") {
-        return {
-          success: false,
-          error: "La generación de medios con IA está estrictamente inhabilitada fuera del entorno de desarrollo local."
-        };
-      }
-
-      // ── PASO 3: INFERENCIA DE IA CON POOL MULTI-KEY (PAID_1 A PAID_4) ──
-      const paidKeys = getGoogleKeyPool().filter(k => k.id.startsWith("PAID") || k.isPaid);
+      // ── PASO 3: INFERENCIA DE IA CON ROTACIÓN MULTI-KEY (PAID_1 A PAID_4) ──
+      const paidKeys = getRotatedPaidKeys();
       if (paidKeys.length === 0) {
         return { success: false, error: "No se encontraron claves de facturación (PAID) en el pool." };
       }
@@ -2352,7 +2386,7 @@ export const regenerateCardMedia = onCall(
       // Intento de video para verbos
       if (wantVideo) {
         let videoSuccess = false;
-        console.log(`[Media Engine] Generando video para verbo: ${wordObj.de} utilizando pool de ${paidKeys.length} llaves PAID...`);
+        console.log(`[Media Engine] Generando video para verbo: ${wordObj.de} utilizando pool rotado de ${paidKeys.length} llaves PAID...`);
         const videoPrompt = buildVisualPrompt(wordObj, true);
 
         for (const keyItem of paidKeys) {
@@ -2375,54 +2409,26 @@ export const regenerateCardMedia = onCall(
         // Si falló el video en todas las llaves PAID, recurrir a imagen
         if (!videoSuccess) {
           console.warn("[Media Engine] Error al generar video con Omni en todo el pool PAID, recurriendo a imagen...");
-          const imagePrompt = buildVisualPrompt(wordObj, false);
-          let imageSuccess = false;
-
-          for (const keyItem of paidKeys) {
-            try {
-              console.log(`[Media Engine Image Fallback] Probando con llave ${keyItem.id}...`);
-              const rawImage = await generateGoogleFlashImage(imagePrompt, keyItem.key);
-              fileBuffer = await optimizeImageBuffer(rawImage.buffer);
-              mimeType = "image/jpeg";
-              fileExtension = "jpeg";
-              actualMediaType = "image";
-              provider = "gemini-3.1-flash-lite-image";
-              imageSuccess = true;
-              break;
-            } catch (imgErr) {
-              lastMediaError = imgErr;
-              console.warn(`[Media Engine Image Fallback Warning] Error con llave ${keyItem.id}:`, imgErr.message);
-            }
-          }
-
-          if (!imageSuccess) {
-            throw new Error(`Falló la generación de video e imagen tras recorrer el pool PAID: ${lastMediaError?.message}`);
-          }
-        }
-      } else {
-        console.log(`[Media Engine] Generando imagen para: ${wordObj.de} utilizando pool de ${paidKeys.length} llaves PAID...`);
-        const imagePrompt = buildVisualPrompt(wordObj, false);
-        let imageSuccess = false;
-
-        for (const keyItem of paidKeys) {
           try {
-            console.log(`[Media Engine Image] Probando con llave ${keyItem.id}...`);
-            const rawImage = await generateGoogleFlashImage(imagePrompt, keyItem.key);
-            fileBuffer = await optimizeImageBuffer(rawImage.buffer);
+            fileBuffer = await generateImageWithPaidPool(buildVisualPrompt(wordObj, false), paidKeys, "Image Fallback");
             mimeType = "image/jpeg";
             fileExtension = "jpeg";
             actualMediaType = "image";
             provider = "gemini-3.1-flash-lite-image";
-            imageSuccess = true;
-            break;
           } catch (imgErr) {
-            lastMediaError = imgErr;
-            console.warn(`[Media Engine Image Warning] Error con llave ${keyItem.id}:`, imgErr.message);
+            throw new Error(`Falló la generación de video (${lastMediaError?.message}) e imagen (${imgErr.message}) tras recorrer el pool PAID.`);
           }
         }
-
-        if (!imageSuccess) {
-          throw new Error(`Falló la generación de imagen tras recorrer el pool PAID: ${lastMediaError?.message}`);
+      } else {
+        console.log(`[Media Engine] Generando imagen para: ${wordObj.de} utilizando pool rotado de ${paidKeys.length} llaves PAID...`);
+        try {
+          fileBuffer = await generateImageWithPaidPool(buildVisualPrompt(wordObj, false), paidKeys, "Image");
+          mimeType = "image/jpeg";
+          fileExtension = "jpeg";
+          actualMediaType = "image";
+          provider = "gemini-3.1-flash-lite-image";
+        } catch (imgErr) {
+          throw new Error(`Falló la generación de imagen tras recorrer el pool PAID: ${imgErr.message}`);
         }
       }
 
