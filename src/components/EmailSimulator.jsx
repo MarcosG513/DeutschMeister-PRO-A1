@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { httpsCallable } from 'firebase/functions';
 import { Loader2, CheckCircle, Edit as Edit3, Volume2, Square } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
-import { functions } from '../App';
+import { functions } from '../config/firebase';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 
 const consignasGoethe = [

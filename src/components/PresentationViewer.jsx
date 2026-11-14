@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Presentation, Link2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { goetheModules, studyPlanModules } from '../data/chapters';
 import { recordDailyStudyActivity, recordModuleCompleted, recordCardStudied, getSafeId } from '../utils/helpers';
@@ -116,7 +116,18 @@ const PresentationViewer = ({
 
   // --- UNIVERSAL SLIDE ENGINE ---
   const renderSlideContent = (slide, props) => {
-    if (!slide || !slide.content) return null;
+    if (!slide) return null;
+
+    if (slide.customComponent) {
+      const CustomComponent = slide.customComponent;
+      return (
+        <div className="w-full my-2 animate-in fade-in zoom-in-95 duration-200">
+          {React.isValidElement(CustomComponent) ? CustomComponent : <CustomComponent {...props} />}
+        </div>
+      );
+    }
+
+    if (!slide.content) return null;
 
     // 1. Ejecutar componentes interactivos si es una función de React
     if (typeof slide.content === 'function') {
@@ -379,7 +390,9 @@ const PresentationViewer = ({
             )}
           </div>
           <div className="w-full text-slate-800 leading-relaxed">
-            {renderSlideContent(slide, slideProps)}
+            <Suspense fallback={<div className="p-8 text-center text-slate-400 animate-pulse">Cargando módulo interactivo...</div>}>
+              {renderSlideContent(slide, slideProps)}
+            </Suspense>
           </div>
         </div>
       </main>

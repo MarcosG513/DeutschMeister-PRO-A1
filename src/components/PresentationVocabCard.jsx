@@ -3,7 +3,7 @@ import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check, Film
 import { getSafeId, recordDailyStudyActivity, recordCardStudied, splitGermanTitle, splitParentheticalText } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
-import { functions } from '../App';
+import { functions } from '../config/firebase';
 import { httpsCallable } from 'firebase/functions';
 import localforage from 'localforage';
 import { Capacitor } from '@capacitor/core';

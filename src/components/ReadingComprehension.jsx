@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BookOpen, Sparkles, X, Volume2, HelpCircle, Lightbulb, AlertTriangle, RefreshCw, Loader2, Play, Pause, CheckCircle, RotateCcw } from 'lucide-react';
-import { functions } from '../App';
+import { functions } from '../config/firebase';
 import { httpsCallable } from 'firebase/functions';
 import { getGermanSpeechUrl, stopCurrentAudio } from '../services/aiAudioService';
 import { recordDailyStudyActivity } from '../utils/helpers';

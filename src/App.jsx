@@ -1,18 +1,16 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
 import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause, Filter, Download } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
-import { getFirestore, collection, doc, setDoc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
-import { getFunctions, httpsCallable } from 'firebase/functions';
-import { Capacitor } from '@capacitor/core';
+import { onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
+import { collection, doc, setDoc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
+import { httpsCallable } from 'firebase/functions';
 import { App as CapacitorApp } from '@capacitor/app';
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import localforage from 'localforage';
 import PresentationVocabCard from './components/PresentationVocabCard';
-import GrammarAccordion from './components/GrammarAccordion';
-import AudioSim from './components/AudioSim';
 import MarkdownMessage from './components/MarkdownMessage';
+import { app, auth, db, functions, appId } from './config/firebase';
+import { usePWAInstall } from './hooks/usePWAInstall';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, splitGermanTitle, splitParentheticalText } from './utils/helpers';
 import { parseTextToTokens, calculateWordTimings } from './utils/textTokenizer';
@@ -33,19 +31,7 @@ const TutorChat = lazy(() => import('./components/TutorChat'));
 
 // --- CONFIGURACIÓN API & FIREBASE ---
 // Se removió el apiKey local, ahora se usan Firebase Functions.
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
-};
-const firebaseApp = firebaseConfig.apiKey && firebaseConfig.apiKey !== 'your_api_key' ? initializeApp(firebaseConfig) : null;
-const auth = firebaseApp ? getAuth(firebaseApp) : null;
-const db = firebaseApp ? getFirestore(firebaseApp) : null;
-export const functions = firebaseApp ? getFunctions(firebaseApp) : null;
-const appId = firebaseConfig.appId || 'default-app-id';
+export { app, auth, db, functions, appId } from './config/firebase';
 
 // --- COMPONENTES AUXILIARES ---
 
@@ -137,6 +123,28 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [cardImages, setCardImages] = useState({});
   const [loadingImages, setLoadingImages] = useState({});
+  const blobUrlsRef = useRef(new Map());
+
+  const registerBlobUrl = (key, blob) => {
+    const nextUrl = URL.createObjectURL(blob);
+    const prevUrl = blobUrlsRef.current.get(key);
+    blobUrlsRef.current.set(key, nextUrl);
+    if (prevUrl && prevUrl !== nextUrl) {
+      queueMicrotask(() => URL.revokeObjectURL(prevUrl));
+    }
+    return nextUrl;
+  };
+
+  useEffect(() => {
+    const urls = blobUrlsRef.current;
+    return () => {
+      for (const url of urls.values()) {
+        URL.revokeObjectURL(url);
+      }
+      urls.clear();
+    };
+  }, []);
+
   const lazyLoadImage = async wordObj => {
     if (!wordObj || !wordObj.de) return;
     const safeId = getSafeId(wordObj.de).substring(0, 150);
@@ -154,7 +162,7 @@ export default function App() {
         localBlob = await mediaBlobStore.getItem(`blob_${slugId}`);
       }
       if (localBlob instanceof Blob) {
-        const localBlobUrl = URL.createObjectURL(localBlob);
+        const localBlobUrl = registerBlobUrl(safeId, localBlob);
         setCardImages(prev => ({
           ...prev,
           [safeId]: localBlobUrl
@@ -220,7 +228,7 @@ export default function App() {
             const sId = bKey.replace('blob_', '');
             const blob = await mediaBlobStore.getItem(bKey);
             if (blob instanceof Blob) {
-              updatedImages[sId] = URL.createObjectURL(blob);
+              updatedImages[sId] = registerBlobUrl(sId, blob);
             }
           }
         }
@@ -250,89 +258,14 @@ export default function App() {
     };
   }, []);
 
-  // PWA: Detección y soporte para instalación nativa en navegador
-  const isNativeApp = Capacitor.isNativePlatform();
-  const [isStandalonePWA, setIsStandalonePWA] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return (
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true
-    );
-  });
-  const [canInstallPWA, setCanInstallPWA] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return Boolean(window.deferredPrompt);
-  });
-  const [showInstallInstructionsModal, setShowInstallInstructionsModal] = useState(false);
-
-  // Mostrar la tarjeta y accesos de instalación SIEMPRE que esté en navegador web y aún no esté instalada
-  const showWebInstallCard = !isNativeApp && !isStandalonePWA;
-
-  useEffect(() => {
-    // Si index.html ya capturó beforeinstallprompt antes de montar React
-    if (typeof window !== 'undefined' && window.deferredPrompt) {
-      setCanInstallPWA(true);
-    }
-
-    const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault();
-      window.deferredPrompt = e;
-      setCanInstallPWA(true);
-      console.log('[PWA] beforeinstallprompt capturado y guardado');
-    };
-
-    const handlePwaAvailable = () => {
-      setCanInstallPWA(true);
-      console.log('[PWA] Evento pwa-install-available recibido');
-    };
-
-    const handleAppInstalled = () => {
-      window.deferredPrompt = null;
-      setCanInstallPWA(false);
-      setIsStandalonePWA(true);
-      setShowInstallInstructionsModal(false);
-      console.log('[PWA] Aplicación instalada exitosamente');
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('pwa-install-available', handlePwaAvailable);
-    window.addEventListener('appinstalled', handleAppInstalled);
-
-    const mql = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(display-mode: standalone)') : null;
-    const handleDisplayChange = (e) => {
-      if (e.matches) setIsStandalonePWA(true);
-    };
-    mql?.addEventListener?.('change', handleDisplayChange);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('pwa-install-available', handlePwaAvailable);
-      window.removeEventListener('appinstalled', handleAppInstalled);
-      mql?.removeEventListener?.('change', handleDisplayChange);
-    };
-  }, []);
-
-  const handleInstallApp = async () => {
-    const promptEvent = typeof window !== 'undefined' ? window.deferredPrompt : null;
-    if (promptEvent && typeof promptEvent.prompt === 'function') {
-      try {
-        await promptEvent.prompt();
-        const choice = await promptEvent.userChoice;
-        console.log('[PWA] Resultado de instalación:', choice?.outcome);
-        if (choice?.outcome === 'accepted') {
-          setCanInstallPWA(false);
-          window.deferredPrompt = null;
-          setIsStandalonePWA(true);
-        }
-      } catch (err) {
-        console.warn('[PWA] Error invocando prompt:', err);
-        setShowInstallInstructionsModal(true);
-      }
-    } else {
-      // Caso B: Sin prompt nativo (iOS Safari, navegador tras recarga, Chrome desktop)
-      setShowInstallInstructionsModal(true);
-    }
-  };
+  // PWA: Detección y soporte compartido para instalación nativa en navegador
+  const {
+    canInstallPWA,
+    showWebInstallCard,
+    showInstallInstructionsModal,
+    setShowInstallInstructionsModal,
+    handleInstallApp,
+  } = usePWAInstall();
 
   const [unlockedCards, setUnlockedCards] = useState(() => {
     try {

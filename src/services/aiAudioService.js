@@ -2,7 +2,7 @@ import localforage from "localforage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { nativeSpeak } from "../utils/helpers";
-import { functions as appFunctions } from "../App";
+import { functions as appFunctions } from "../config/firebase";
 
 export const audioStore = localforage.createInstance({
   name: "DeutschMeisterAudioCache",

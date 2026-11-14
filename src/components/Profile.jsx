@@ -6,8 +6,8 @@ import {
   ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle,
   CloudDownload, Loader2, Download
 } from 'lucide-react';
-import { Capacitor } from '@capacitor/core';
 import InstallInstructionsModal from './InstallInstructionsModal';
+import { usePWAInstall } from '../hooks/usePWAInstall';
 import { getDailyStudyStreak, getStudiedCardsCount, getCompletedModulesCount } from '../utils/helpers';
 import { syncCloudMediaToLocal, getLastMediaSyncTime, getOfflineSyncStats } from '../services/syncMediaService';
 import { EmailAuthProvider, GoogleAuthProvider, linkWithCredential, linkWithPopup, signInWithEmailAndPassword, signInWithPopup, signOut, deleteUser } from 'firebase/auth';
@@ -34,87 +34,17 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
   const [syncSuccessMessage, setSyncSuccessMessage] = useState(null);
   const [offlineStats, setOfflineStats] = useState({ visualsCached: 0, audiosCached: 0 });
 
-  // Detección PWA reactiva para mostrar la tarjeta SIEMPRE en web
-  const isNativeApp = Capacitor.isNativePlatform();
-  const [isStandalonePWA, setIsStandalonePWA] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return (
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true
-    );
+  // Detección PWA reactiva compartida mediante hook dedicado
+  const {
+    showWebInstallCard,
+    showInstallInstructionsModal: showInstructionsModal,
+    setShowInstallInstructionsModal: setShowInstructionsModal,
+    handleInstallApp: handleInstallClick,
+  } = usePWAInstall({
+    initialCanInstall: passedCanInstall,
+    onInstallOverride: onInstallApp,
+    showCardOverride: passedShowWebInstallCard,
   });
-  const [canInstallPWA, setCanInstallPWA] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return Boolean(window.deferredPrompt) || passedCanInstall;
-  });
-  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
-
-  const showWebInstallCard = passedShowWebInstallCard !== undefined 
-    ? passedShowWebInstallCard 
-    : (!isNativeApp && !isStandalonePWA);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.deferredPrompt) {
-      setCanInstallPWA(true);
-    }
-
-    const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault();
-      window.deferredPrompt = e;
-      setCanInstallPWA(true);
-    };
-
-    const handlePwaAvailable = () => {
-      setCanInstallPWA(true);
-    };
-
-    const handleAppInstalled = () => {
-      window.deferredPrompt = null;
-      setCanInstallPWA(false);
-      setIsStandalonePWA(true);
-      setShowInstructionsModal(false);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('pwa-install-available', handlePwaAvailable);
-    window.addEventListener('appinstalled', handleAppInstalled);
-
-    const mql = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(display-mode: standalone)') : null;
-    const handleDisplayChange = (e) => {
-      if (e.matches) setIsStandalonePWA(true);
-    };
-    mql?.addEventListener?.('change', handleDisplayChange);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('pwa-install-available', handlePwaAvailable);
-      window.removeEventListener('appinstalled', handleAppInstalled);
-      mql?.removeEventListener?.('change', handleDisplayChange);
-    };
-  }, []);
-
-  const handleInstallClick = async () => {
-    if (onInstallApp) {
-      onInstallApp();
-      return;
-    }
-    const promptEvent = typeof window !== 'undefined' ? window.deferredPrompt : null;
-    if (promptEvent && typeof promptEvent.prompt === 'function') {
-      try {
-        await promptEvent.prompt();
-        const choice = await promptEvent.userChoice;
-        if (choice?.outcome === 'accepted') {
-          setCanInstallPWA(false);
-          window.deferredPrompt = null;
-          setIsStandalonePWA(true);
-        }
-      } catch (err) {
-        setShowInstructionsModal(true);
-      }
-    } else {
-      setShowInstructionsModal(true);
-    }
-  };
 
   const isRegistered = user && user.isAnonymous === false;
 

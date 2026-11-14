@@ -5,7 +5,7 @@ import {
   Layers, Headphones, Zap, RotateCcw, AlertTriangle, ShieldCheck
 } from 'lucide-react';
 import { httpsCallable } from 'firebase/functions';
-import { functions } from '../App';
+import { functions } from '../config/firebase';
 import { recordDailyStudyActivity, splitGermanTitle } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { chapters as defaultChapters } from '../data/chapters';
