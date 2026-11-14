@@ -1531,17 +1531,332 @@ export const generateCardImage = onCall({
 // =========================================================================
 // 6. GENERADOR DE COMPRENSIÓN LECTORA (generateReadingTest)
 // =========================================================================
+function normalizeImmersiveReadlePayload(raw, { category, level }) {
+  const wordGlossary = raw?.wordGlossary && !Array.isArray(raw.wordGlossary)
+    ? { ...raw.wordGlossary }
+    : {};
+
+  if (Array.isArray(raw?.wordGlossaryEntries)) {
+    for (const item of raw.wordGlossaryEntries) {
+      if (item?.wordKey) {
+        const cleanKey = String(item.wordKey).toLowerCase().trim();
+        wordGlossary[cleanKey] = {
+          lemma: item.lemma || item.wordKey,
+          translationEs: item.translationEs || "",
+          pos: item.pos || "Wort",
+          level: item.level || level,
+          isVerb: Boolean(item.isVerb),
+          ...(item.conjugationKey ? { conjugationKey: item.conjugationKey } : {})
+        };
+      }
+    }
+  }
+
+  const verbConjugations = raw?.verbConjugations && !Array.isArray(raw.verbConjugations)
+    ? { ...raw.verbConjugations }
+    : {};
+
+  if (Array.isArray(raw?.verbConjugationsEntries)) {
+    for (const vc of raw.verbConjugationsEntries) {
+      if (vc?.key) {
+        verbConjugations[vc.key] = {
+          infinitive: vc.infinitive || vc.key,
+          translationEs: vc.translationEs || "",
+          auxiliary: vc.auxiliary || "haben",
+          praesens: vc.praesens || {},
+          praeteritum: vc.praeteritum || {},
+          perfekt: vc.perfekt || "",
+          partizip: vc.partizip || ""
+        };
+      }
+    }
+  }
+
+  const rawSlug = String(raw?.id || raw?.titleDe || "story")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .substring(0, 48);
+
+  const uniqueSuffix = Date.now().toString(36);
+  const storyId = `${category}_${rawSlug || "custom"}_${uniqueSuffix}`;
+
+  return {
+    id: storyId,
+    titleDe: raw?.titleDe || "Neue Tagesgeschichte",
+    titleEs: raw?.titleEs || "Nueva historia diaria",
+    level: raw?.level === "A2" || level === "A2" ? "A2" : "A1",
+    levelLabel: raw?.level === "A2" || level === "A2" ? "A2" : "A1",
+    category,
+    emoji: raw?.emoji || (category === "enpal" ? "⚡" : category === "behoerden" ? "🏛️" : "👨‍👩‍👧‍👦"),
+    readTime: raw?.readTime || "3 min",
+    sentences: Array.isArray(raw?.sentences) ? raw.sentences : [],
+    wordGlossary,
+    verbConjugations,
+    examQuestions: Array.isArray(raw?.examQuestions) ? raw.examQuestions : [],
+    keyWords: Array.isArray(raw?.keyWords) ? raw.keyWords : [],
+    grammarCards: Array.isArray(raw?.grammarCards) ? raw.grammarCards : []
+  };
+}
+
 export const generateReadingTest = onCall({
   secrets: ALL_AI_SECRETS,
   timeoutSeconds: 120
 }, async request => {
   await verifyRequestAuth(request);
   const {
-    tema
+    tema,
+    mode,
+    category = "enpal",
+    level = "A1"
   } = request.data || {};
   if (!tema) {
     throw new HttpsError("invalid-argument", "Falta el parámetro requerido: tema");
   }
+
+  if (mode === "immersive_readle") {
+    const safeCategory = ["enpal", "behoerden", "familie"].includes(category) ? category : "enpal";
+    const safeLevel = level === "A2" ? "A2" : "A1";
+
+    const categoryContext = safeCategory === "enpal"
+      ? `CONTEXTO OBLIGATORIO ENPAL (SOLO INTERIORES): El estudiante trabaja como Elektriker en Enpal y NUNCA realiza montaje en el tejado (Dachmontage). Toda la historia debe transcurrir exclusivamente en interiores: Keller / Technikraum, Zählerschrank, conexión de Wechselrichter AC/DC, Speicher (baterías), Smart Meter, Wallbox, mediciones con Multimeter o Spannungsprüfer, las 5 reglas de seguridad VDE (Stromkreis freischalten) y trato técnico con el cliente. PROHIBIDO mencionar el tejado o paneles solares en el techo.`
+      : safeCategory === "behoerden"
+        ? `CONTEXTO BEHÖRDEN & VIDA EN ALEMANIA: Trámites reales en oficinas alemanas (Bürgeramt, Ausländerbehörde, Krankenkasse, Führerschein, banco, contratos o salud) con vocabulario útil práctico para vivir y trabajar en Alemania.`
+        : `CONTEXTO FAMILIENNACHZUG & VIDA FAMILIAR: Situaciones reales de reagrupación familiar (esposa, dos hijos varones, una hija pequeña), vivienda para cinco personas, colegio/Kita, Kindergeld y vida cotidiana en Alemania.`;
+
+    const defaultReadleInstruction = `
+      Eres un profesor experto de alemán del Goethe-Institut y editor pedagógico estilo Readle.
+      Genera una historia inmersiva completa en nivel ${safeLevel} sobre el tema solicitado.
+      ${categoryContext}
+
+      REQUISITOS OBLIGATORIOS DE CONTENIDO:
+      1. sentences: Entre 6 y 8 oraciones naturales y bien conectadas en alemán nivel ${safeLevel}, cada una con su traducción interlineal precisa al español ("de" y "es").
+      2. wordGlossaryEntries: Diccionario exhaustivo de las palabras principales de la historia (al menos 20 palabras) con: wordKey (la palabra limpia en minúsculas tal como aparece en el texto), lemma (forma base con artículo der/die/das si es sustantivo, o infinitivo si es verbo), translationEs, pos ("Nomen", "Verb", "Adj.", "Adv.", etc.), level ("A1" o "A2"), isVerb (boolean) y conjugationKey (si isVerb=true, debe coincidir exactamente con una clave de verbConjugationsEntries).
+      3. verbConjugationsEntries: Tablas de conjugación completas para los verbos clave de la historia (mínimo 4 verbos) con key, infinitive, translationEs, auxiliary ("haben" o "sein"), praesens (ich, du, er_sie_es, wir, ihr, sie_Sie), praeteritum (ich, du, er_sie_es, wir, ihr, sie_Sie), perfekt (ej. "hat angeschlossen") y partizip (ej. "anschließend").
+      4. examQuestions: Exactamente 4 preguntas (2 de comprensión lectora con "type": "comprehension" y 2 de hueco gramatical Cloze con "___" sobre frases reales de la historia con "type": "cloze"), cada una con 3 opciones, "correctIndex" (0, 1 o 2) y "explanationEs" concluyente en español.
+      5. keyWords: Entre 8 y 10 palabras o expresiones clave de la historia con de, es, pos, level, exampleDe y exampleEs.
+      6. grammarCards: 2 fichas gramaticales estilo Readle con title, exampleDe (oración real de la historia), highlightedPart, exampleEs, descriptionEs clara en español, table ({ headers, rows }) y extraExamples ([{ de, es }]).
+      7. FORMATO: Usa diacríticos estándar del alemán (ä, ö, ü, ß). No pongas espacios antes de signos de puntuación. Responde estrictamente con JSON válido.
+    `;
+
+    const systemInstruction = await getSystemPrompt("reading_readle_system", defaultReadleInstruction);
+    const promptUser = `Genera una historia inmersiva Readle completa. Categoría: "${safeCategory}". Nivel: "${safeLevel}". Tema: "${tema}".`;
+
+    const immersiveReadleSchema = {
+      type: SchemaType.OBJECT,
+      properties: {
+        id: { type: SchemaType.STRING },
+        titleDe: { type: SchemaType.STRING },
+        titleEs: { type: SchemaType.STRING },
+        level: { type: SchemaType.STRING },
+        category: { type: SchemaType.STRING },
+        emoji: { type: SchemaType.STRING },
+        readTime: { type: SchemaType.STRING },
+        sentences: {
+          type: SchemaType.ARRAY,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              de: { type: SchemaType.STRING },
+              es: { type: SchemaType.STRING }
+            },
+            required: ["de", "es"]
+          }
+        },
+        wordGlossaryEntries: {
+          type: SchemaType.ARRAY,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              wordKey: { type: SchemaType.STRING },
+              lemma: { type: SchemaType.STRING },
+              translationEs: { type: SchemaType.STRING },
+              pos: { type: SchemaType.STRING },
+              level: { type: SchemaType.STRING },
+              isVerb: { type: SchemaType.BOOLEAN },
+              conjugationKey: { type: SchemaType.STRING }
+            },
+            required: ["wordKey", "lemma", "translationEs", "pos", "level", "isVerb"]
+          }
+        },
+        verbConjugationsEntries: {
+          type: SchemaType.ARRAY,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              key: { type: SchemaType.STRING },
+              infinitive: { type: SchemaType.STRING },
+              translationEs: { type: SchemaType.STRING },
+              auxiliary: { type: SchemaType.STRING },
+              praesens: {
+                type: SchemaType.OBJECT,
+                properties: {
+                  ich: { type: SchemaType.STRING },
+                  du: { type: SchemaType.STRING },
+                  er_sie_es: { type: SchemaType.STRING },
+                  wir: { type: SchemaType.STRING },
+                  ihr: { type: SchemaType.STRING },
+                  sie_Sie: { type: SchemaType.STRING }
+                },
+                required: ["ich", "du", "er_sie_es", "wir", "ihr", "sie_Sie"]
+              },
+              praeteritum: {
+                type: SchemaType.OBJECT,
+                properties: {
+                  ich: { type: SchemaType.STRING },
+                  du: { type: SchemaType.STRING },
+                  er_sie_es: { type: SchemaType.STRING },
+                  wir: { type: SchemaType.STRING },
+                  ihr: { type: SchemaType.STRING },
+                  sie_Sie: { type: SchemaType.STRING }
+                },
+                required: ["ich", "du", "er_sie_es", "wir", "ihr", "sie_Sie"]
+              },
+              perfekt: { type: SchemaType.STRING },
+              partizip: { type: SchemaType.STRING }
+            },
+            required: ["key", "infinitive", "translationEs", "auxiliary", "praesens", "praeteritum", "perfekt", "partizip"]
+          }
+        },
+        examQuestions: {
+          type: SchemaType.ARRAY,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              type: { type: SchemaType.STRING },
+              prompt: { type: SchemaType.STRING },
+              options: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+              correctIndex: { type: SchemaType.INTEGER },
+              explanationEs: { type: SchemaType.STRING }
+            },
+            required: ["type", "prompt", "options", "correctIndex", "explanationEs"]
+          }
+        },
+        keyWords: {
+          type: SchemaType.ARRAY,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              de: { type: SchemaType.STRING },
+              es: { type: SchemaType.STRING },
+              pos: { type: SchemaType.STRING },
+              level: { type: SchemaType.STRING },
+              exampleDe: { type: SchemaType.STRING },
+              exampleEs: { type: SchemaType.STRING }
+            },
+            required: ["de", "es", "pos", "level", "exampleDe", "exampleEs"]
+          }
+        },
+        grammarCards: {
+          type: SchemaType.ARRAY,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              title: { type: SchemaType.STRING },
+              exampleDe: { type: SchemaType.STRING },
+              highlightedPart: { type: SchemaType.STRING },
+              exampleEs: { type: SchemaType.STRING },
+              descriptionEs: { type: SchemaType.STRING },
+              table: {
+                type: SchemaType.OBJECT,
+                properties: {
+                  headers: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+                  rows: { type: SchemaType.ARRAY, items: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } } }
+                },
+                required: ["headers", "rows"]
+              },
+              extraExamples: {
+                type: SchemaType.ARRAY,
+                items: {
+                  type: SchemaType.OBJECT,
+                  properties: {
+                    de: { type: SchemaType.STRING },
+                    es: { type: SchemaType.STRING }
+                  },
+                  required: ["de", "es"]
+                }
+              }
+            },
+            required: ["title", "exampleDe", "highlightedPart", "exampleEs", "descriptionEs", "table", "extraExamples"]
+          }
+        }
+      },
+      required: [
+        "id",
+        "titleDe",
+        "titleEs",
+        "level",
+        "category",
+        "emoji",
+        "readTime",
+        "sentences",
+        "wordGlossaryEntries",
+        "verbConjugationsEntries",
+        "examQuestions",
+        "keyWords",
+        "grammarCards"
+      ]
+    };
+
+    let parsedStory = null;
+    try {
+      console.log("ReadingReadle FinOps: Invocando pool de llaves con gemini-3.8-flash...");
+      const poolRes = await executeBackendGemini(promptUser, {
+        keys: getGeminiKeyConfig(),
+        preferredModel: "gemini-3.8-flash",
+        systemInstruction,
+        responseSchema: immersiveReadleSchema,
+        mode: "paid_first"
+      });
+      const cleanJson = poolRes.text.trim().replace(/^```json\s*/i, "").replace(/```$/, "").replace(/```/g, "").trim();
+      parsedStory = JSON.parse(cleanJson);
+    } catch (geminiError) {
+      console.warn("ReadingReadle FinOps: Fallaron las llaves de Gemini. Activando fallback a Claude Haiku 4.5:", geminiError.message);
+      try {
+        fal.config({ credentials: falKey.value() });
+        const finalPromptUser = `${promptUser}\n\nDevuelve un JSON válido con las claves exactas: id, titleDe, titleEs, level, category, emoji, readTime, sentences, wordGlossaryEntries, verbConjugationsEntries, examQuestions, keyWords, grammarCards. Sin markdown ni texto fuera del JSON.`;
+        const response = await fal.subscribe("openrouter/router/enterprise", {
+          input: {
+            model: "anthropic/claude-haiku-4.5",
+            prompt: finalPromptUser,
+            system_prompt: systemInstruction,
+            temperature: 0.65,
+            top_p: 0.9
+          }
+        });
+        const outputText = response.data.output || response.data.text || "";
+        const cleanJson = outputText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+        parsedStory = JSON.parse(cleanJson);
+      } catch (fallbackError) {
+        console.error("ReadingReadle FinOps: Error crítico en ambos proveedores:", fallbackError);
+        throw new HttpsError("internal", "Error generando historia inmersiva Readle: " + fallbackError.message);
+      }
+    }
+
+    const storyData = normalizeImmersiveReadlePayload(parsedStory, {
+      category: safeCategory,
+      level: safeLevel
+    });
+
+    try {
+      await db.collection("global_stories").doc(storyData.id).set(
+        {
+          ...storyData,
+          createdBy: request.auth?.uid || null,
+          topicQuery: String(tema).slice(0, 200),
+          createdAt: admin.firestore.FieldValue.serverTimestamp()
+        },
+        { merge: true }
+      );
+    } catch (firestoreErr) {
+      console.warn("ReadingReadle: Error al persistir en global_stories (continuando entrega al cliente):", firestoreErr?.message || firestoreErr);
+    }
+
+    return storyData;
+  }
+
   const defaultSystemInstruction = `
       Eres un profesor de alemán de nivel A1 del Goethe-Institut. El usuario te dará un tema de su interés.
       Tu tarea es generar:
