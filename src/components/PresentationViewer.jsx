@@ -377,7 +377,7 @@ const PresentationViewer = ({
       </header>
 
       {/* 2. MAIN (ÁREA DE CONTENIDO SCROLLEABLE) */}
-      <main className={`flex-1 w-full overflow-y-auto overscroll-contain px-4 sm:px-6 md:px-10 py-6 pb-28 ${bodyBackground}`}>
+      <main className={`flex-1 w-full overflow-y-auto overscroll-contain px-4 sm:px-6 md:px-10 py-6 pb-6 ${bodyBackground}`}>
         <div className="max-w-4xl mx-auto w-full animate-in slide-in-from-bottom-3 fade-in duration-200" key={currentSlide}>
           <div className="mb-6 md:mb-8 text-center">
             <h1 className={`text-2xl sm:text-3xl md:text-4xl mb-2 tracking-tight ${isBlueprint ? 'text-slate-900 font-extrabold' : isMedical ? 'text-emerald-950 font-black' : 'text-amber-950 font-black'}`}>

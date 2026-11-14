@@ -4,6 +4,7 @@ import { Loader2, CheckCircle, Edit as Edit3, Volume2, Square } from 'lucide-rea
 import MarkdownMessage from './MarkdownMessage';
 import { functions } from '../config/firebase';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
+import { scrollInputIntoView } from '../utils/helpers';
 
 const consignasGoethe = [
   { de: "Ihre Freundin Anna hat Geburtstag. Schreiben Sie eine E-Mail: Gratulation? Wann besuchen? Geschenk? (Schreiben Sie ca. 30 Wörter)", es: "Tu amiga Anna cumple años. Escribe un correo: ¿Felicitación? ¿Cuándo la visitas? ¿Regalo? (Escribe aprox. 30 palabras)" },
@@ -232,6 +233,7 @@ const EmailSimulator = ({ initialText }) => {
         placeholder="Escribe tu correo aquí en alemán..." 
         value={text} 
         onChange={e => setText(e.target.value)}
+        onFocus={scrollInputIntoView}
       ></textarea>
       <div className="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">

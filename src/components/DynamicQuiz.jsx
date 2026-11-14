@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../config/firebase';
-import { recordDailyStudyActivity, splitGermanTitle } from '../utils/helpers';
+import { recordDailyStudyActivity, scrollInputIntoView, splitGermanTitle } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { chapters as defaultChapters } from '../data/chapters';
 import { generateLocalQuizQuestions, shuffleArray } from '../utils/quizEngine';
@@ -293,7 +293,7 @@ const DynamicQuiz = ({
   };
 
   return (
-    <div className="flex flex-col min-h-[100svh] w-full bg-slate-50 overflow-y-auto animate-in fade-in duration-300 p-3 sm:p-6 md:p-8">
+    <div className="flex flex-col min-h-[100dvh] w-full bg-slate-50 overflow-y-auto animate-in fade-in duration-300 p-3 sm:p-6 md:p-8">
       <div className="max-w-3xl mx-auto w-full">
 
         {/* CABECERA GENERAL */}
@@ -475,6 +475,7 @@ const DynamicQuiz = ({
                     placeholder="Ej. Dativo, Acusativo, Números, La Familia..."
                     value={tema}
                     onChange={(e) => setTema(e.target.value)}
+                    onFocus={scrollInputIntoView}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleStartQuiz(); }}
                     className="flex-1 px-4 py-2.5 bg-white border border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium text-slate-800 text-sm shadow-sm"
                   />

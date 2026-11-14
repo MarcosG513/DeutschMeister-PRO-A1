@@ -716,3 +716,11 @@ export const getGoetheScores = async () => {
   }
 };
 
+export const scrollInputIntoView = (event) => {
+  const target = event?.currentTarget;
+  if (!target || typeof target.scrollIntoView !== 'function') return;
+  setTimeout(() => {
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 150);
+};
+

@@ -3,7 +3,7 @@ import { Loader2, Send, X, Volume2, Sparkles, Square } from 'lucide-react';
 import { getAuth } from 'firebase/auth';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
-import { recordDailyStudyActivity } from '../utils/helpers';
+import { recordDailyStudyActivity, scrollInputIntoView } from '../utils/helpers';
 
 const RoleplaySimulator = ({
   onExit
@@ -303,6 +303,7 @@ const RoleplaySimulator = ({
             placeholder={`Ej: ${scenario.id === 'restaurant' ? 'Essen, Trinken, Kellner' : scenario.id === 'hotel' ? 'Zimmer, Schlüssel, Nacht' : scenario.id === 'doctor' ? 'Kopf, Schmerzen, Fieber' : scenario.id === 'station' ? 'Zug, Ticket, Gleis' : scenario.id === 'shopping' ? 'Jacke, Größe, kaufen' : 'Hallo, Name, kommen'}...`}
             value={blurtInput}
             onChange={e => setBlurtInput(e.target.value)}
+            onFocus={scrollInputIntoView}
             onKeyDown={e => e.key === 'Enter' && submitBlurting()}
           />
         </div>
@@ -317,7 +318,7 @@ const RoleplaySimulator = ({
     );
   }
 
-  return <div className="bg-white rounded-2xl shadow-lg border border-slate-200 flex flex-col h-[100dvh] sm:h-[720px] sm:max-h-[85vh] max-w-3xl mx-auto sm:mt-6 overflow-hidden animate-in slide-in-from-bottom-4">
+  return <div className="bg-white rounded-2xl shadow-lg border border-slate-200 flex flex-col h-[calc(100dvh-8.5rem)] sm:h-[720px] sm:max-h-[85vh] max-w-3xl mx-auto sm:mt-6 overflow-hidden animate-in slide-in-from-bottom-4">
       <div className="bg-purple-600 text-white p-4 flex justify-between items-center shadow-md z-10 flex-shrink-0">
         <div className="flex items-center gap-3">
           <span className="text-2xl">{scenario.icon}</span>
@@ -357,7 +358,7 @@ const RoleplaySimulator = ({
 
       <div className="p-3 sm:p-4 bg-white border-t border-slate-200 flex-shrink-0">
         <div className="relative">
-          <input type="text" className="w-full bg-slate-100 border border-slate-200 rounded-full py-3.5 pl-5 pr-14 text-sm focus:outline-none focus:border-purple-500 focus:bg-white transition shadow-inner" placeholder="Escribe tu respuesta en alemán..." value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendMessage()} disabled={loading} />
+          <input type="text" className="w-full bg-slate-100 border border-slate-200 rounded-full py-3.5 pl-5 pr-14 text-sm focus:outline-none focus:border-purple-500 focus:bg-white transition shadow-inner" placeholder="Escribe tu respuesta en alemán..." value={input} onChange={e => setInput(e.target.value)} onFocus={scrollInputIntoView} onKeyDown={e => e.key === 'Enter' && sendMessage()} disabled={loading} />
           <button onClick={sendMessage} disabled={!input.trim() || loading} className="absolute right-2 top-2 p-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 disabled:opacity-50 transition shadow"><Send size={18} /></button>
         </div>
       </div>
