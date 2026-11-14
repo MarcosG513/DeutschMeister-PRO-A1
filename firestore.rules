@@ -29,6 +29,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /global_chapter_stories/{storyId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     match /artifacts/{appId}/users/{userId} {
       allow read, write: if isOwner(userId) && isValidPayloadSize();
 

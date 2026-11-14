@@ -533,8 +533,9 @@ ESTRUCTURA EXACTA DE TU RESPUESTA EN MARKDOWN:
 );
 
 // =========================================================================
-// 3. GENERADOR DE CUENTOS (generateStory)
-// Pool: gemini-3.8-flash (Paid) -> gemini-3.5-flash-lite (Free 1 y 2) -> Claude Haiku 4.5
+// 3. GENERADOR DE CUENTOS POR CAPÍTULO (generateStory)
+// Límite estricto FinOps: Máximo 3 cuentos persistentes por capítulo en global_chapter_stories
+// Pool: gemini-3.8-flash (Paid) -> gemini-3.5-flash-lite (Free 1 y 2)
 // =========================================================================
 export const generateStory = onRequest({
   secrets: ALL_AI_SECRETS,
@@ -557,20 +558,82 @@ export const generateStory = onRequest({
     return;
   }
 
+  const sendSsePayload = (payloadObj) => {
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+      "X-Accel-Buffering": "no"
+    });
+    const safeText = JSON.stringify(payloadObj).replace(/\n/g, " ");
+    res.write(`data: ${safeText}\n\n`);
+    res.write("data: [DONE]\n\n");
+    res.end();
+  };
+
   try {
-    const bodyData = req.body.data || req.body;
+    const bodyData = req.body.data || req.body || {};
     const {
-      palabrasVocabulario
+      palabrasVocabulario,
+      chapterId,
+      chapterTitle = ""
     } = bodyData;
-    if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario)) {
+
+    const hasChapterId = chapterId !== undefined && chapterId !== null && String(chapterId).trim() !== "";
+    const cleanChapterId = hasChapterId ? String(chapterId).trim().replace(/[^a-zA-Z0-9_-]/g, "") : "";
+    const slotRefs = cleanChapterId
+      ? [1, 2, 3].map((idx) => db.collection("global_chapter_stories").doc(`chapter_${cleanChapterId}_story_${idx}`))
+      : [];
+
+    let existingStories = [];
+    if (slotRefs.length === 3) {
+      const snaps = await db.getAll(...slotRefs);
+      existingStories = snaps
+        .filter((s) => s.exists)
+        .map((s) => ({ id: s.id, ...s.data() }))
+        .sort((a, b) => (a.storyIndex || 0) - (b.storyIndex || 0));
+
+      // Si ya existen los 3 cuentos del capítulo en Firestore, devolver sin invocar al LLM ($0 créditos IA)
+      if (existingStories.length >= 3) {
+        const latestStory = existingStories[existingStories.length - 1];
+        console.log(`[Story FinOps] Cupo 3/3 alcanzado para capítulo ${cleanChapterId}. Retornando desde global_chapter_stories.`);
+        sendSsePayload({
+          ...latestStory,
+          story: latestStory,
+          stories: existingStories,
+          chapterId: cleanChapterId,
+          quotaReached: true,
+          maxStories: 3,
+          count: existingStories.length,
+          fromDatabase: true
+        });
+        return;
+      }
+    }
+
+    if (!palabrasVocabulario || !Array.isArray(palabrasVocabulario) || palabrasVocabulario.length === 0) {
       res.status(400).json({
         error: "Faltan parámetros requeridos: palabrasVocabulario"
       });
       return;
     }
+
+    const nextSlotIndex = (() => {
+      const usedSlots = new Set(existingStories.map((s) => Number(s.storyIndex)));
+      for (const candidate of [1, 2, 3]) {
+        if (!usedSlots.has(candidate)) return candidate;
+      }
+      return 3;
+    })();
+
+    const existingTitles = existingStories.map((s) => s.titulo).filter(Boolean);
+    const uniquenessDirective = existingTitles.length > 0
+      ? `\n      REGLA DE DIVERSIDAD NARRATIVA (CUENTO ${nextSlotIndex} DE 3): En este capítulo (${chapterTitle || `Kapitel ${cleanChapterId}`}) ya existen los cuentos: [${existingTitles.map((t) => `"${t}"`).join(", ")}]. Está estrictamente prohibido repetir su trama, personajes o escenario. Crea una historia con situación, protagonistas y título completamente diferentes.`
+      : "";
+
     const listaPalabras = palabrasVocabulario.join(", ");
     const promptSistema = "Eres un creador de cuentos infantiles y profesor de alemán nivel A1. Tu objetivo es escribir historias coherentes, inmersivas y gramaticalmente perfectas integrando vocabulario específico. REGLA DE CASOS GRAMATICALES (CRÍTICO): Integra las palabras clave de forma natural y declina correctamente sus artículos al caso correspondiente (Acusativo, Dativo) según requiera la oración. Por ejemplo, escribe 'Sie sieht den Hund' o 'einen Hund' (nunca 'Sie sieht der Hund' o 'einen der Hund'), escribe 'Lisa geht in den Park' o 'spielt im Park' (nunca 'in der Park'), escribe 'Er sieht den Schnee' (nunca 'der Schnee'). Está estrictamente prohibido duplicar artículos (ej. 'einen der Apfel' es incorrecto; usa simplemente 'den Apfel' o 'einen Apfel').";
-    const promptDefinido = `Genera un micro-cuento interactivo en alemán nivel A1 que integre obligatoriamente estas palabras: [${listaPalabras}].
+    const promptDefinido = `Genera un micro-cuento interactivo en alemán nivel A1${chapterTitle ? ` para el tema "${chapterTitle}"` : ""} que integre obligatoriamente estas palabras: [${listaPalabras}].${uniquenessDirective}
       En el campo "cuento_aleman", debes envolver obligatoriamente cada una de estas palabras clave de vocabulario [${listaPalabras}] con doble asterisco "**" (ej. **palabra**) cada vez que las uses en el texto para que resalten.
       La salida debe coincidir EXACTAMENTE con este esquema JSON, sin texto adicional:
       {
@@ -591,25 +654,86 @@ export const generateStory = onRequest({
       }
       NOTA CRÍTICA DE LIBERTAD MORFOLÓGICA: Al registrar la 'Forma original recibida' en el array de palabras_clave_usadas, tienes total permiso para alterar la palabra morfológicamente dentro del 'cuento_aleman' (por ejemplo, pasar de Buch a Bücher o declinar en Akkusativ/Dativ) para que el alemán suene 100% natural.`;
 
-    console.log("Story FinOps: Iniciando generateStory con Pool Resiliente (gemini-3.8-flash)...");
-    
+    console.log(`Story FinOps: Generando cuento ${nextSlotIndex}/3 para capítulo ${cleanChapterId || "general"} (gemini-3.8-flash)...`);
+
     const jsonOutput = await invokeWithDeepSeekFallback(promptSistema, promptDefinido, {
       model: "gemini-3.8-flash",
       isJson: true,
-      temperature: 0.7
+      temperature: 0.75
     });
 
-    res.writeHead(200, {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      "Connection": "keep-alive",
-      "X-Accel-Buffering": "no"
-    });
+    if (slotRefs.length === 3) {
+      const txResult = await db.runTransaction(async (tx) => {
+        const snaps = await Promise.all(slotRefs.map((ref) => tx.get(ref)));
+        const currentDocs = snaps
+          .filter((s) => s.exists)
+          .map((s) => ({ id: s.id, ...s.data() }))
+          .sort((a, b) => (a.storyIndex || 0) - (b.storyIndex || 0));
 
-    const safeText = JSON.stringify(jsonOutput).replace(/\n/g, " ");
-    res.write(`data: ${safeText}\n\n`);
-    res.write("data: [DONE]\n\n");
-    res.end();
+        if (currentDocs.length >= 3) {
+          const lastDoc = currentDocs[currentDocs.length - 1];
+          return {
+            savedStory: lastDoc,
+            allStories: currentDocs,
+            fromDatabase: true
+          };
+        }
+
+        const used = new Set(currentDocs.map((d) => Number(d.storyIndex)));
+        let targetSlot = 1;
+        for (const s of [1, 2, 3]) {
+          if (!used.has(s)) {
+            targetSlot = s;
+            break;
+          }
+        }
+
+        const docId = `chapter_${cleanChapterId}_story_${targetSlot}`;
+        const targetRef = db.collection("global_chapter_stories").doc(docId);
+        const numericChapterId = Number(cleanChapterId);
+        const record = {
+          id: docId,
+          chapterId: Number.isNaN(numericChapterId) ? cleanChapterId : numericChapterId,
+          chapterKey: cleanChapterId,
+          chapterTitle: chapterTitle || `Kapitel ${cleanChapterId}`,
+          storyIndex: targetSlot,
+          titulo: jsonOutput.titulo || `Cuento ${targetSlot}`,
+          cuento_aleman: jsonOutput.cuento_aleman || jsonOutput.de || "",
+          traduccion_espanol: jsonOutput.traduccion_espanol || jsonOutput.es || "",
+          palabras_clave_usadas: Array.isArray(jsonOutput.palabras_clave_usadas) ? jsonOutput.palabras_clave_usadas : [],
+          pregunta_comprension: jsonOutput.pregunta_comprension || null,
+          createdAt: admin.firestore.FieldValue.serverTimestamp()
+        };
+
+        tx.set(targetRef, record, { merge: true });
+
+        const clientRecord = {
+          ...record,
+          createdAt: new Date().toISOString()
+        };
+        const mergedList = [...currentDocs, clientRecord].sort((a, b) => (a.storyIndex || 0) - (b.storyIndex || 0));
+        return {
+          savedStory: clientRecord,
+          allStories: mergedList,
+          fromDatabase: false
+        };
+      });
+
+      sendSsePayload({
+        ...jsonOutput,
+        ...txResult.savedStory,
+        story: txResult.savedStory,
+        stories: txResult.allStories,
+        chapterId: cleanChapterId,
+        quotaReached: txResult.allStories.length >= 3,
+        maxStories: 3,
+        count: txResult.allStories.length,
+        fromDatabase: txResult.fromDatabase
+      });
+      return;
+    }
+
+    sendSsePayload(jsonOutput);
   } catch (globalError) {
     console.error("FinOps Story Error:", globalError);
     if (!res.headersSent) {
@@ -2220,6 +2344,16 @@ async function synthesizeWithFalFallback(text, voice, falKeyValue, styleInstruct
   };
 }
 
+// Identificador SHA-256 determinista sin colisiones para textos largos (cuentos, lecturas, oraciones)
+function getSha256AudioId(cleanText, voice = "Charon") {
+  const hash24 = crypto
+    .createHash("sha256")
+    .update(`${cleanText}_${voice}`, "utf8")
+    .digest("hex")
+    .substring(0, 24);
+  return `audio_sha256_${hash24}`;
+}
+
 export const synthesizeGermanSpeech = onCall(
   {
     secrets: ALL_AI_SECRETS,
@@ -2235,47 +2369,52 @@ export const synthesizeGermanSpeech = onCall(
       throw new HttpsError("invalid-argument", "El parámetro 'text' es obligatorio y debe ser una cadena.");
     }
 
-    const cleanText = text.replace(/[*_#`~]/g, "").trim();
+    const cleanText = text.replace(/[*_#`~]/g, "").replace(/\s+/g, " ").trim();
     if (!cleanText) {
       throw new HttpsError("invalid-argument", "El texto proporcionado está vacío.");
     }
 
-    const isEphemeral = type === "story" || type === "reading";
-    const audioId = getSafeAudioId(cleanText);
+    const safeType = (type || "general").replace(/[^a-zA-Z0-9_-]/g, "") || "general";
+    const sha256Id = getSha256AudioId(cleanText, voice);
+    const canonicalId = getSafeAudioId(cleanText);
+    const legacyId = `${canonicalId}_`;
+    const docId = sha256Id;
     const db = admin.firestore();
 
     const styleInstructions = lang === "es"
       ? "Speak in clear, warm, natural Spanish as an expert German language coach (Charon). When pronouncing German words or phrases in quotes, use authentic standard German (Hochdeutsch) phonetics."
       : "Speak in clear, natural, standard German (Hochdeutsch) with precise pedagogical pronunciation and natural pacing.";
 
-    // ── NIVEL 2: REVISIÓN DE CACHÉ EN LA NUBE (Excluido para cuentos y lecturas efímeras) ──
-    if (!isEphemeral) {
-      const audioDocRef = db.collection("global_audio_pronunciations").doc(audioId);
-      let docSnap = await audioDocRef.get();
+    // ── NIVEL 2: REVISIÓN UNIVERSAL DE CACHÉ EN LA NUBE (SHA-256 + Canonical + Legacy vía db.getAll) ──
+    const sha256Ref = db.collection("global_audio_pronunciations").doc(sha256Id);
+    const canonicalRef = db.collection("global_audio_pronunciations").doc(canonicalId);
+    const legacyRef = db.collection("global_audio_pronunciations").doc(legacyId);
 
-      // Compatibilidad con audios generados anteriormente con guión bajo final
-      if (!docSnap.exists) {
-        const legacyDocRef = db.collection("global_audio_pronunciations").doc(`${audioId}_`);
-        const legacySnap = await legacyDocRef.get();
-        if (legacySnap.exists) {
-          docSnap = legacySnap;
-        }
-      }
+    const snaps = await db.getAll(sha256Ref, canonicalRef, legacyRef);
+    const hitSnap = snaps.find((snap) => {
+      if (!snap.exists) return false;
+      const d = snap.data();
+      return (
+        d &&
+        typeof d.audioUrl === "string" &&
+        d.audioUrl.length > 0 &&
+        !d.audioUrl.includes("gcf-v2-sources") &&
+        !d.audioUrl.includes("gcf-v2-uploads")
+      );
+    });
 
-      if (docSnap.exists) {
-        const data = docSnap.data();
-        if (data && data.audioUrl && !data.audioUrl.includes("gcf-v2-sources") && !data.audioUrl.includes("gcf-v2-uploads")) {
-          console.log(`[TTS Cache Hit] Audio válido encontrado en Firestore [${docSnap.id}]`);
-          return {
-            success: true,
-            audioUrl: data.audioUrl,
-            audioId: data.audioId || audioId,
-            fromCloudCache: true,
-            provider: "cloud-cache"
-          };
-        }
-        console.log(`[TTS Cache Purge] URL corrupta o interna detectada para [${audioId}], regenerando...`);
-      }
+    if (hitSnap) {
+      const data = hitSnap.data();
+      console.log(`[TTS Cache Hit] Audio válido encontrado en Firestore [${hitSnap.id}]`);
+      return {
+        success: true,
+        audioUrl: data.audioUrl,
+        audioId: data.audioId || hitSnap.id,
+        sha256Id,
+        canonicalId,
+        fromCloudCache: true,
+        provider: "cloud-cache"
+      };
     }
 
     // ── INFERENCIA: POOL GOOGLE DIRECTO CON DUAL-MODEL Y ROTACIÓN (0% FAL.AI A MENOS DE AGOTAR POOL) ──
@@ -2309,37 +2448,25 @@ export const synthesizeGermanSpeech = onCall(
       }
     }
 
-    // ── CASO EFÍMERO (Cuentos y Comprensión Lectora): RETORNAR DIRECTAMENTE SIN PERSISTIR EN STORAGE NI FIRESTORE ──
-    if (isEphemeral) {
-      const base64DataUri = `data:${audioResult.mimeType};base64,${audioResult.buffer.toString("base64")}`;
-      return {
-        success: true,
-        audioUrl: base64DataUri,
-        audioId: audioId,
-        fromCloudCache: false,
-        provider: audioResult.provider,
-        persisted: false
-      };
-    }
-
-    // ── PERSISTENCIA GLOBAL (Solo para vocabulario, oraciones, lecturas y diálogos) ──
+    // ── PERSISTENCIA GLOBAL PERMANENTE (100% de audios: vocabulario, oraciones, lecturas y cuentos) ──
     const STORAGE_BUCKET_NAME = process.env.STORAGE_BUCKET || "deutschmeister-audio-vault";
     const bucket = admin.storage().bucket(STORAGE_BUCKET_NAME);
     const ext = audioResult.mimeType.includes("mp3") ? "mp3" : "wav";
-    const filePath = `pronunciations/${type}/${audioId}.${ext}`;
+    const filePath = `pronunciations/${safeType}/${docId}.${ext}`;
     const file = bucket.file(filePath);
 
     let permanentAudioUrl = "";
     try {
-      // Subida a Cloud Storage con verificación automática de suma CRC32c (@google-cloud/storage >= 7.19.0)
       await file.save(audioResult.buffer, {
         metadata: {
           contentType: audioResult.mimeType,
           cacheControl: "public, max-age=31536000",
           metadata: {
-            text: cleanText,
+            sha256Id,
+            canonicalId,
+            text: cleanText.substring(0, 500),
             voice: voice,
-            type: type,
+            type: safeType,
             provider: audioResult.provider,
             createdAt: new Date().toISOString()
           }
@@ -2350,27 +2477,30 @@ export const synthesizeGermanSpeech = onCall(
 
       permanentAudioUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
 
-      // Persistencia en Firestore únicamente tras completar la subida sin excepciones de integridad
-      await db.collection("global_audio_pronunciations").doc(audioId).set({
-        audioId: audioId,
+      await db.collection("global_audio_pronunciations").doc(docId).set({
+        audioId: docId,
+        sha256Id: sha256Id,
+        canonicalId: canonicalId,
         text: cleanText,
         audioUrl: permanentAudioUrl,
         storagePath: filePath,
         voice: voice,
-        type: type,
+        type: safeType,
         lang: lang,
         provider: audioResult.provider,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       }, { merge: true });
     } catch (storageErr) {
-      console.error(`[TTS Storage Error] Falló la subida o verificación CRC32c para [${audioId}]:`, storageErr.message);
+      console.error(`[TTS Storage Error] Falló la subida o verificación CRC32c para [${docId}]:`, storageErr.message);
       throw new HttpsError("internal", `Error de almacenamiento o verificación de integridad del audio: ${storageErr.message}`);
     }
 
     return {
       success: true,
       audioUrl: permanentAudioUrl,
-      audioId: audioId,
+      audioId: docId,
+      sha256Id,
+      canonicalId,
       fromCloudCache: false,
       provider: audioResult.provider,
       persisted: true

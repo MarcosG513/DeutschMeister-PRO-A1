@@ -16,7 +16,7 @@ import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, record
 import { parseTextToTokens, calculateWordTimings } from './utils/textTokenizer';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
 import { API_ENDPOINTS } from './config/apiEndpoints';
-import { mediaBlobStore } from './services/syncMediaService';
+import { mediaBlobStore, CHAPTER_STORIES_CACHE_KEY } from './services/syncMediaService';
 
 import Profile from './components/Profile';
 import InstallInstructionsModal from './components/InstallInstructionsModal';
@@ -87,7 +87,11 @@ export default function App() {
     isOpen: false,
     loading: false,
     de: "",
-    es: ""
+    es: "",
+    titulo: "",
+    activeSlot: 1,
+    stories: [],
+    chapterId: null
   });
   const [loadingPhraseIdx, setLoadingPhraseIdx] = useState(0);
 
@@ -105,18 +109,33 @@ export default function App() {
   const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
   const storyAudioInstanceRef = useRef(null); // Instancia HTML5 Audio en memoria
-  const storyAudioUrlRef = useRef(null);      // Buffer/Data URI guardado mientras el modal esté abierto
+  const storyAudioUrlRef = useRef(null);      // ObjectURL o URL remota de la sesión activa
 
-  const closeStoryModal = () => {
+  const resetStoryAudioPlayback = () => {
     if (storyAudioInstanceRef.current) {
-      storyAudioInstanceRef.current.pause();
-      storyAudioInstanceRef.current.src = "";
+      storyAudioInstanceRef.current.onended = null;
+      storyAudioInstanceRef.current.onerror = null;
+      storyAudioInstanceRef.current.ontimeupdate = null;
+      storyAudioInstanceRef.current.onplay = null;
+      try {
+        storyAudioInstanceRef.current.pause();
+        storyAudioInstanceRef.current.src = "";
+      } catch (_) {}
       storyAudioInstanceRef.current = null;
     }
-    storyAudioUrlRef.current = null; // Libera la memoria del audio
+    if (storyAudioUrlRef.current && storyAudioUrlRef.current.startsWith("blob:")) {
+      try {
+        URL.revokeObjectURL(storyAudioUrlRef.current);
+      } catch (_) {}
+    }
+    storyAudioUrlRef.current = null;
     setIsPlayingStoryAudio(false);
     setIsStoryAudioLoading(false);
     setCurrentWordIndex(-1);
+  };
+
+  const closeStoryModal = () => {
+    resetStoryAudioPlayback();
     setStoryState(prev => ({
       ...prev,
       isOpen: false
@@ -125,12 +144,7 @@ export default function App() {
 
   useEffect(() => {
     return () => {
-      if (storyAudioInstanceRef.current) {
-        storyAudioInstanceRef.current.pause();
-        storyAudioInstanceRef.current.src = "";
-        storyAudioInstanceRef.current = null;
-      }
-      storyAudioUrlRef.current = null;
+      resetStoryAudioPlayback();
     };
   }, []);
   const [fullscreenImage, setFullscreenImage] = useState(null);
@@ -497,44 +511,172 @@ export default function App() {
     setRevealedCards(all);
   };
   const hideAll = () => setRevealedCards({});
-  const generateStory = async () => {
-    if (!activeChapter) return;
-    if (storyAudioInstanceRef.current) {
-      storyAudioInstanceRef.current.pause();
-      storyAudioInstanceRef.current.src = "";
-      storyAudioInstanceRef.current = null;
-    }
-    storyAudioUrlRef.current = null;
-    setIsPlayingStoryAudio(false);
-    setIsStoryAudioLoading(false);
-    setCurrentWordIndex(-1);
+  const saveChapterStoriesToLocalCache = async (chapId, storiesList = []) => {
+    const chapKey = String(chapId ?? "").trim();
+    if (!chapKey) return;
+    try {
+      const existingCache = (await localforage.getItem(CHAPTER_STORIES_CACHE_KEY)) || {};
+      const byChapter = { ...(existingCache.byChapter || {}) };
+      const byId = { ...(existingCache.byId || {}) };
+      const cleanList = (Array.isArray(storiesList) ? storiesList : [])
+        .filter((s) => s && (s.cuento_aleman || s.de))
+        .map((s, idx) => ({
+          ...s,
+          id: s.id || `chapter_${chapKey}_story_${s.storyIndex || idx + 1}`,
+          chapterId: chapId,
+          chapterKey: chapKey,
+          storyIndex: Number(s.storyIndex) || idx + 1
+        }))
+        .sort((a, b) => a.storyIndex - b.storyIndex)
+        .slice(0, 3);
 
-    const palabrasValidas = displayedWords.filter(w => w.de.length > 2).slice(0, 8).map(w => w.de);
+      byChapter[chapKey] = cleanList;
+      for (const item of cleanList) {
+        byId[item.id] = item;
+      }
+
+      await localforage.setItem(CHAPTER_STORIES_CACHE_KEY, {
+        ...byChapter,
+        byChapter,
+        byId,
+        totalStories: Object.keys(byId).length,
+        updatedAt: new Date().toISOString()
+      });
+    } catch (err) {
+      console.warn("[ChapterStories Cache] Error guardando en localforage:", err);
+    }
+  };
+
+  const loadChapterStoriesFromCacheAndCloud = async (chapId) => {
+    const chapKey = String(chapId ?? "").trim();
+    if (!chapKey) return [];
+
+    const bySlot = new Map();
+    try {
+      const localCache = await localforage.getItem(CHAPTER_STORIES_CACHE_KEY);
+      const localList = localCache?.byChapter?.[chapKey] || localCache?.[chapKey] || [];
+      if (Array.isArray(localList)) {
+        for (const item of localList) {
+          if (item && (item.cuento_aleman || item.de)) {
+            const slot = Number(item.storyIndex) || bySlot.size + 1;
+            if (slot >= 1 && slot <= 3) bySlot.set(slot, { ...item, storyIndex: slot });
+          }
+        }
+      }
+    } catch (_) {}
+
+    if (db) {
+      try {
+        const snaps = await Promise.all(
+          [1, 2, 3].map((slotIdx) =>
+            getDoc(doc(db, "global_chapter_stories", `chapter_${chapKey}_story_${slotIdx}`))
+          )
+        );
+        for (const snap of snaps) {
+          if (snap.exists()) {
+            const d = snap.data();
+            if (d && (d.cuento_aleman || d.de)) {
+              const slot = Number(d.storyIndex) || 1;
+              bySlot.set(slot, { id: snap.id, ...d, storyIndex: slot });
+            }
+          }
+        }
+      } catch (cloudErr) {
+        console.warn("[ChapterStories Cloud] Usando caché local offline:", cloudErr?.message || cloudErr);
+      }
+    }
+
+    const merged = Array.from(bySlot.values())
+      .sort((a, b) => (a.storyIndex || 0) - (b.storyIndex || 0))
+      .slice(0, 3);
+
+    if (merged.length > 0) {
+      await saveChapterStoriesToLocalCache(chapId, merged);
+    }
+    return merged;
+  };
+
+  const handleSelectChapterStorySlot = (slotNumber) => {
+    const target = (storyState.stories || []).find((s) => Number(s.storyIndex) === Number(slotNumber));
+    if (!target) return;
+    resetStoryAudioPlayback();
+    setStoryState((prev) => ({
+      ...prev,
+      activeSlot: Number(slotNumber),
+      titulo: target.titulo || `Cuento ${slotNumber}`,
+      de: target.cuento_aleman || target.de || "",
+      es: target.traduccion_espanol || target.es || ""
+    }));
+  };
+
+  const handleCreateNewChapterStory = async (existingStoriesOverride = null) => {
+    if (!activeChapter) return;
+    resetStoryAudioPlayback();
+
+    const currentStories = Array.isArray(existingStoriesOverride)
+      ? existingStoriesOverride
+      : Array.isArray(storyState.stories)
+        ? storyState.stories
+        : [];
+
+    // Límite estricto FinOps: si ya existen los 3 cuentos del capítulo, nunca volver a llamar al LLM
+    if (currentStories.length >= 3) {
+      const lastStory = currentStories[currentStories.length - 1];
+      setStoryState((prev) => ({
+        ...prev,
+        isOpen: true,
+        loading: false,
+        stories: currentStories,
+        activeSlot: Number(lastStory.storyIndex) || 3,
+        titulo: lastStory.titulo || "Cuento 3",
+        de: lastStory.cuento_aleman || lastStory.de || "",
+        es: lastStory.traduccion_espanol || lastStory.es || "",
+        chapterId: activeChapter.id
+      }));
+      return;
+    }
+
+    const palabrasValidas = (activeChapter.words || displayedWords)
+      .filter((w) => w?.de && w.de.length > 2)
+      .slice(0, 8)
+      .map((w) => w.de);
+
     if (palabrasValidas.length === 0) {
-      setStoryState({
+      setStoryState((prev) => ({
+        ...prev,
         isOpen: true,
         loading: false,
         de: "No hay suficientes palabras en este capítulo para generar un cuento.",
         es: "Por favor, agrega palabras de vocabulario antes de generar."
-      });
+      }));
       return;
     }
-    setStoryState({
+
+    const nextSlot = Math.min(3, currentStories.length + 1);
+    setStoryState((prev) => ({
+      ...prev,
       isOpen: true,
       loading: true,
+      activeSlot: nextSlot,
+      stories: currentStories,
+      chapterId: activeChapter.id,
+      titulo: `Generando Cuento ${nextSlot}/3...`,
       de: "",
       es: ""
-    });
+    }));
+
     const attemptFetch = async () => {
-      const idToken = user ? await user.getIdToken().catch(() => '') : '';
+      const idToken = user ? await user.getIdToken().catch(() => "") : "";
       const response = await fetch(API_ENDPOINTS.STORY_GEN, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          ...(idToken ? { 'Authorization': `Bearer ${idToken}` } : {})
+          "Content-Type": "application/json",
+          ...(idToken ? { Authorization: `Bearer ${idToken}` } : {})
         },
         body: JSON.stringify({
-          palabrasVocabulario: palabrasValidas
+          palabrasVocabulario: palabrasValidas,
+          chapterId: activeChapter.id,
+          chapterTitle: activeChapter.title
         })
       });
       if (!response.ok) throw new Error("Failed to generate story");
@@ -542,14 +684,9 @@ export default function App() {
       const decoder = new TextDecoder("utf-8");
       let currentBuffer = "";
       while (true) {
-        const {
-          value,
-          done
-        } = await reader.read();
+        const { value, done } = await reader.read();
         if (done) break;
-        const chunk = decoder.decode(value, {
-          stream: true
-        });
+        const chunk = decoder.decode(value, { stream: true });
         const lines = chunk.split("\n");
         for (const line of lines) {
           if (line.startsWith("data: ") && !line.includes("[DONE]")) {
@@ -565,7 +702,7 @@ export default function App() {
             };
             const partialDe = getStreamingField(currentBuffer, "cuento_aleman") || getStreamingField(currentBuffer, "de");
             const partialEs = getStreamingField(currentBuffer, "traduccion_espanol") || getStreamingField(currentBuffer, "es");
-            setStoryState(prev => ({
+            setStoryState((prev) => ({
               ...prev,
               loading: false,
               de: partialDe || "Escribiendo cuento...",
@@ -580,35 +717,90 @@ export default function App() {
       }
       return JSON.parse(jsonMatch[0]);
     };
-    try {
-      const data = await attemptFetch();
+
+    const applyStoryResult = async (data) => {
+      const returnedStory = data.story || {
+        id: `chapter_${activeChapter.id}_story_${data.storyIndex || nextSlot}`,
+        chapterId: activeChapter.id,
+        storyIndex: Number(data.storyIndex) || nextSlot,
+        titulo: data.titulo || `Cuento ${nextSlot}`,
+        cuento_aleman: data.cuento_aleman || data.de || "",
+        traduccion_espanol: data.traduccion_espanol || data.es || "",
+        palabras_clave_usadas: data.palabras_clave_usadas || []
+      };
+
+      const mergedStories = Array.isArray(data.stories) && data.stories.length > 0
+        ? data.stories
+        : [...currentStories.filter((s) => Number(s.storyIndex) !== Number(returnedStory.storyIndex)), returnedStory]
+            .sort((a, b) => (Number(a.storyIndex) || 0) - (Number(b.storyIndex) || 0))
+            .slice(0, 3);
+
+      await saveChapterStoriesToLocalCache(activeChapter.id, mergedStories);
+
       setStoryState({
         isOpen: true,
         loading: false,
-        de: data.cuento_aleman || data.de,
-        es: data.traduccion_espanol || data.es
+        chapterId: activeChapter.id,
+        stories: mergedStories,
+        activeSlot: Number(returnedStory.storyIndex) || mergedStories.length,
+        titulo: returnedStory.titulo || `Cuento ${returnedStory.storyIndex || nextSlot}`,
+        de: returnedStory.cuento_aleman || returnedStory.de || "",
+        es: returnedStory.traduccion_espanol || returnedStory.es || ""
       });
+    };
+
+    try {
+      const data = await attemptFetch();
+      await applyStoryResult(data);
     } catch (e) {
       console.warn("Intento 1 falló, reintentando...", e);
       try {
-        await new Promise(resolve => setTimeout(resolve, 600));
+        await new Promise((resolve) => setTimeout(resolve, 600));
         const data = await attemptFetch();
-        setStoryState({
-          isOpen: true,
-          loading: false,
-          de: data.cuento_aleman || data.de,
-          es: data.traduccion_espanol || data.es
-        });
+        await applyStoryResult(data);
       } catch (retryError) {
         console.error("Intento 2 falló:", retryError);
-        setStoryState({
+        setStoryState((prev) => ({
+          ...prev,
           isOpen: true,
           loading: false,
           de: "Error al generar el cuento.",
           es: "Por favor, intenta de nuevo más tarde."
-        });
+        }));
       }
     }
+  };
+
+  const generateStory = async () => {
+    if (!activeChapter) return;
+    resetStoryAudioPlayback();
+
+    setStoryState((prev) => ({
+      ...prev,
+      isOpen: true,
+      loading: true,
+      chapterId: activeChapter.id,
+      de: "",
+      es: ""
+    }));
+
+    const savedStories = await loadChapterStoriesFromCacheAndCloud(activeChapter.id);
+    if (savedStories.length > 0) {
+      const firstStory = savedStories[0];
+      setStoryState({
+        isOpen: true,
+        loading: false,
+        chapterId: activeChapter.id,
+        stories: savedStories,
+        activeSlot: Number(firstStory.storyIndex) || 1,
+        titulo: firstStory.titulo || "Cuento 1",
+        de: firstStory.cuento_aleman || firstStory.de || "",
+        es: firstStory.traduccion_espanol || firstStory.es || ""
+      });
+      return;
+    }
+
+    await handleCreateNewChapterStory([]);
   };
 
   const handleToggleStoryAudio = async () => {
@@ -1492,45 +1684,160 @@ export default function App() {
               <p className="text-lg font-medium text-slate-500">No se encontraron palabras.</p>
             </div>}
 
-          {/* MODAL DEL CUENTO IA */}
-          {storyState.isOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
-              <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 animate-in zoom-in-95 max-h-[85svh] flex flex-col overflow-hidden">
-                <div className="flex justify-between items-center mb-4 flex-shrink-0">
-                  <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2"><Sparkles className="text-indigo-500" /> Cuento A1 Generado</h3>
-                  <button onClick={closeStoryModal} className="text-slate-400 hover:bg-slate-100 p-2 rounded-full"><X size={20} /></button>
+          {/* MODAL DEL CUENTO IA (MÁXIMO 3 CUENTOS PERSISTENTES POR TABLA MAESTRA) */}
+          {storyState.isOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+              <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-5 sm:p-6 animate-in zoom-in-95 max-h-[88dvh] flex flex-col overflow-hidden">
+                <div className="flex justify-between items-start gap-3 mb-3 flex-shrink-0">
+                  <div className="min-w-0">
+                    <h3 className="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
+                      <Sparkles className="text-indigo-500 shrink-0" size={20} />
+                      <span className="truncate">{storyState.titulo || "Cuentos IA del Capítulo"}</span>
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-0.5 truncate">
+                      {activeChapter?.title} • {(storyState.stories || []).length} / 3 cuentos guardados
+                    </p>
+                  </div>
+                  <button
+                    onClick={closeStoryModal}
+                    aria-label="Cerrar modal de cuentos"
+                    className="text-slate-400 hover:bg-slate-100 p-2 rounded-full shrink-0 cursor-pointer"
+                  >
+                    <X size={20} />
+                  </button>
                 </div>
-                {storyState.loading ? <div className="py-12 flex flex-col items-center justify-center gap-3 text-indigo-500 flex-grow">
+
+                {/* SELECTOR DE SLOTS (CUENTO 1 | CUENTO 2 | CUENTO 3) Y GESTIÓN DE CUPO FINOPS */}
+                <div className="mb-3.5 space-y-2 flex-shrink-0">
+                  <div className="grid grid-cols-3 gap-2">
+                    {[1, 2, 3].map((slotNum) => {
+                      const slotStory = (storyState.stories || []).find(
+                        (s) => Number(s.storyIndex) === slotNum
+                      );
+                      const isActive = Number(storyState.activeSlot) === slotNum && Boolean(slotStory);
+                      return (
+                        <button
+                          key={slotNum}
+                          type="button"
+                          disabled={storyState.loading || !slotStory}
+                          onClick={() => slotStory && handleSelectChapterStorySlot(slotNum)}
+                          className={`py-2 px-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                            isActive
+                              ? "bg-indigo-600 border-indigo-600 text-white shadow-sm cursor-pointer"
+                              : slotStory
+                                ? "bg-slate-50 hover:bg-indigo-50 border-slate-200 text-slate-700 cursor-pointer"
+                                : "bg-slate-50/60 border-dashed border-slate-200 text-slate-400 cursor-not-allowed"
+                          }`}
+                        >
+                          <span>Cuento {slotNum}</span>
+                          {slotStory && (
+                            <CheckCircle
+                              size={13}
+                              className={isActive ? "text-indigo-200" : "text-emerald-500"}
+                            />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {(storyState.stories || []).length >= 3 ? (
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2 text-[11px] font-bold text-emerald-800 flex items-center justify-center gap-1.5 text-center">
+                      <CheckCircle size={14} className="text-emerald-600 shrink-0" />
+                      <span>✓ 3/3 Cuentos en Base de Datos — Reproducción Instantánea</span>
+                    </div>
+                  ) : (
+                    !storyState.loading &&
+                    (storyState.stories || []).length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => handleCreateNewChapterStory(storyState.stories)}
+                        className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-extrabold shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        <Sparkles size={14} />
+                        <span>
+                          ✨ Generar Cuento Nuevo ({(storyState.stories || []).length + 1}/3)
+                        </span>
+                      </button>
+                    )
+                  )}
+                </div>
+
+                {storyState.loading ? (
+                  <div className="py-12 flex flex-col items-center justify-center gap-3 text-indigo-500 flex-grow">
                     <Loader2 size={40} className="animate-spin" />
-                    <div className="animate-pulse text-indigo-600 font-medium transition-opacity duration-300 text-center px-4">{loadingPhrases[loadingPhraseIdx]}</div>
-                  </div> : <div className="space-y-4 flex-grow overflow-hidden flex flex-col">
-                    <div className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[280px]">
-                      <div className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow" onClick={handleToggleStoryAudio}>
+                    <div className="animate-pulse text-indigo-600 font-medium transition-opacity duration-300 text-center px-4">
+                      {loadingPhrases[loadingPhraseIdx]}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3.5 flex-grow overflow-hidden flex flex-col">
+                    <div className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[270px]">
+                      <div
+                        className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow"
+                        onClick={handleToggleStoryAudio}
+                      >
                         <div translate="no" className="notranslate font-normal text-lg leading-relaxed text-slate-800">
                           {parseTextToTokens(storyState.de).map((token, idx) => {
-                          if (token.isWord) {
-                            const isHighlighted = token.wordIndex === currentWordIndex;
-                            const isKeyword = token.isBold || token.isKeyword;
-                            const fontWeightClass = isKeyword ? 'font-bold' : 'font-normal';
-                            return <span key={idx} className={`inline-block transition-all duration-150 rounded px-[2px] mx-[1px] border ${isHighlighted ? 'bg-yellow-200 border-yellow-300 text-slate-900 scale-105 shadow-sm' : isKeyword ? 'bg-indigo-50 border-transparent text-indigo-700' : 'bg-transparent border-transparent text-slate-800'} ${fontWeightClass}`}>{token.text}</span>;
-                          } else {
-                            const isPunct = /^[.,!?:;]+$/.test(token.text);
-                            return <span key={idx} className={`text-slate-800 inline-block ${isPunct ? 'ml-[-3px] pl-0 pr-[1px]' : 'px-[1px]'}`}>{token.text}</span>;
-                          }
-                        })}
+                            if (token.isWord) {
+                              const isHighlighted = token.wordIndex === currentWordIndex;
+                              const isKeyword = token.isBold || token.isKeyword;
+                              const fontWeightClass = isKeyword ? "font-bold" : "font-medium";
+                              return (
+                                <span
+                                  key={idx}
+                                  style={isHighlighted ? { textShadow: "0 0 0.6px currentColor" } : undefined}
+                                  className={`inline-block transition-colors duration-150 rounded px-1 mx-[1px] border ${
+                                    isHighlighted
+                                      ? "bg-yellow-200 border-yellow-300 text-slate-900 shadow-xs"
+                                      : isKeyword
+                                        ? "bg-indigo-50 border-transparent text-indigo-700"
+                                        : "bg-transparent border-transparent text-slate-800"
+                                  } ${fontWeightClass}`}
+                                >
+                                  {token.text}
+                                </span>
+                              );
+                            } else {
+                              const isPunct = /^[.,!?:;]+$/.test(token.text);
+                              return (
+                                <span
+                                  key={idx}
+                                  className={`text-slate-800 inline-block ${
+                                    isPunct ? "ml-[-3px] pl-0 pr-[1px]" : "px-[1px]"
+                                  }`}
+                                >
+                                  {token.text}
+                                </span>
+                              );
+                            }
+                          })}
                         </div>
                       </div>
-                      <button 
+                      <button
                         onClick={handleToggleStoryAudio}
                         disabled={isStoryAudioLoading}
-                        className={`absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-md transition-all text-xs font-semibold ${
+                        className={`absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-md transition-all text-xs font-semibold cursor-pointer ${
                           isStoryAudioLoading
-                            ? 'bg-indigo-100 text-indigo-500 cursor-not-allowed opacity-100'
-                            : isPlayingStoryAudio 
-                              ? 'bg-indigo-600 text-white hover:bg-indigo-700 scale-105 opacity-100' 
-                              : 'bg-white text-indigo-600 hover:bg-indigo-50 border border-indigo-200 opacity-90 group-hover:opacity-100'
+                            ? "bg-indigo-100 text-indigo-500 cursor-not-allowed opacity-100"
+                            : isPlayingStoryAudio
+                              ? "bg-indigo-600 text-white hover:bg-indigo-700 opacity-100"
+                              : "bg-white text-indigo-600 hover:bg-indigo-50 border border-indigo-200 opacity-90 group-hover:opacity-100"
                         }`}
-                        title={isStoryAudioLoading ? "Preparando voz de estudio..." : isPlayingStoryAudio ? "Pausar cuento" : "Escuchar cuento"} 
-                        aria-label={isStoryAudioLoading ? "Preparando voz de estudio..." : isPlayingStoryAudio ? "Pausar cuento" : "Escuchar cuento"}
+                        title={
+                          isStoryAudioLoading
+                            ? "Preparando voz de estudio..."
+                            : isPlayingStoryAudio
+                              ? "Pausar cuento"
+                              : "Escuchar cuento"
+                        }
+                        aria-label={
+                          isStoryAudioLoading
+                            ? "Preparando voz de estudio..."
+                            : isPlayingStoryAudio
+                              ? "Pausar cuento"
+                              : "Escuchar cuento"
+                        }
                       >
                         {isStoryAudioLoading ? (
                           <>
@@ -1555,12 +1862,14 @@ export default function App() {
                         )}
                       </button>
                     </div>
-                    <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex-shrink-0">
-                      <p className="text-slate-700 italic">{storyState.es}</p>
+                    <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex-shrink-0 max-h-[160px] overflow-y-auto">
+                      <p className="text-slate-700 italic text-sm leading-relaxed">{storyState.es}</p>
                     </div>
-                  </div>}
+                  </div>
+                )}
               </div>
-            </div>}
+            </div>
+          )}
         </>}
     </Suspense>
     </section>

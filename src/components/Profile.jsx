@@ -44,7 +44,7 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
   const [mediaSyncProgress, setMediaSyncProgress] = useState(null);
   const [lastMediaSync, setLastMediaSync] = useState(null);
   const [syncSuccessMessage, setSyncSuccessMessage] = useState(null);
-  const [offlineStats, setOfflineStats] = useState({ visualsCached: 0, audiosCached: 0 });
+  const [offlineStats, setOfflineStats] = useState({ visualsCached: 0, audiosCached: 0, storiesCached: 0 });
 
   // Detección PWA reactiva compartida mediante hook dedicado
   const {
@@ -116,7 +116,8 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
       if (stats.lastSyncTime) setLastMediaSync(stats.lastSyncTime);
       setOfflineStats({
         visualsCached: stats.visualsCached || 0,
-        audiosCached: stats.audiosCached || 0
+        audiosCached: stats.audiosCached || 0,
+        storiesCached: stats.storiesCached || 0
       });
     } catch (_) {}
   };
@@ -138,13 +139,14 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
       if (res.success) {
         setLastMediaSync(res.lastSyncTime);
         await loadOfflineStats();
-        const msg = `¡Sincronización Offline completada! Tienes ${res.visualsSynced || res.syncedCount} medios visuales y ${res.audiosSynced || 0} audios guardados en la memoria de tu teléfono para estudiar sin internet.`;
+        const msg = `¡Sincronización Offline completada! Tienes ${res.visualsSynced || 0} medios visuales, ${res.audiosSynced || 0} audios Charon (incluyendo cuentos y lecturas) y ${res.storiesSynced || 0} cuentos por capítulo guardados en la memoria de tu teléfono para estudiar a 0 ms sin internet.`;
         setSyncSuccessMessage(msg);
         window.dispatchEvent(new CustomEvent('mediaSyncCompleted', { 
           detail: { 
             syncedCount: res.syncedCount,
             visualsSynced: res.visualsSynced,
-            audiosSynced: res.audiosSynced
+            audiosSynced: res.audiosSynced,
+            storiesSynced: res.storiesSynced
           } 
         }));
       } else {
