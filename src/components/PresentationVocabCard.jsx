@@ -237,7 +237,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   const isGenLoading = isImageLoading === safeId;
   const isRegenerated = true;
 
-  const rawImage = localMediaUrl || (typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:') || imgData.startsWith('blob:')) ? imgData : (typeof imgData === 'string' && imgData ? `data:image/png;base64,${imgData}` : null)) || wordObj.imageUrl || wordObj.videoUrl || null;
+  const rawImage = localMediaUrl || (typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:') || imgData.startsWith('blob:') || imgData.startsWith('/')) ? imgData : (typeof imgData === 'string' && imgData ? `data:image/png;base64,${imgData}` : null)) || wordObj.imageUrl || wordObj.videoUrl || null;
   const cardImage = rawImage;
   const isVideo = Boolean(
     localMediaType === 'video' ||
@@ -571,7 +571,10 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                    className="w-44 h-44 max-h-full max-w-full object-contain rounded-2xl drop-shadow-md mx-auto mix-blend-multiply cursor-zoom-in hover:scale-105 transition-transform"
                    onClick={(e) => {
                      e.stopPropagation();
-                     if (typeof setFullscreenImage === 'function') setFullscreenImage(activeMediaUrl || cardImage);
+                     const resolvedZoomUrl = activeMediaUrl || cardImage || wordObj.imageUrl;
+                     if (typeof setFullscreenImage === 'function' && resolvedZoomUrl) {
+                       setFullscreenImage(resolvedZoomUrl);
+                     }
                    }}
                  />
                )}

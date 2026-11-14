@@ -155,24 +155,45 @@ export default function App() {
   const [cardImages, setCardImages] = useState({});
   const [loadingImages, setLoadingImages] = useState({});
   const blobUrlsRef = useRef(new Map());
+  const fullscreenImageRef = useRef(null);
+  const deferredRevokeUrlsRef = useRef(new Set());
+
+  useEffect(() => {
+    fullscreenImageRef.current = fullscreenImage;
+    if (!fullscreenImage && deferredRevokeUrlsRef.current.size > 0) {
+      for (const staleUrl of deferredRevokeUrlsRef.current) {
+        URL.revokeObjectURL(staleUrl);
+      }
+      deferredRevokeUrlsRef.current.clear();
+    }
+  }, [fullscreenImage]);
 
   const registerBlobUrl = (key, blob) => {
     const nextUrl = URL.createObjectURL(blob);
     const prevUrl = blobUrlsRef.current.get(key);
     blobUrlsRef.current.set(key, nextUrl);
     if (prevUrl && prevUrl !== nextUrl) {
-      queueMicrotask(() => URL.revokeObjectURL(prevUrl));
+      if (prevUrl === fullscreenImageRef.current) {
+        deferredRevokeUrlsRef.current.add(prevUrl);
+      } else {
+        queueMicrotask(() => URL.revokeObjectURL(prevUrl));
+      }
     }
     return nextUrl;
   };
 
   useEffect(() => {
     const urls = blobUrlsRef.current;
+    const deferred = deferredRevokeUrlsRef.current;
     return () => {
       for (const url of urls.values()) {
         URL.revokeObjectURL(url);
       }
       urls.clear();
+      for (const url of deferred) {
+        URL.revokeObjectURL(url);
+      }
+      deferred.clear();
     };
   }, []);
 
@@ -1935,17 +1956,52 @@ export default function App() {
       user={user}
     />
 
-    {fullscreenImage && <div className="fixed inset-0 z-[100] bg-slate-900/95 flex items-center justify-center p-4" onClick={() => setFullscreenImage(null)}>
-        <div className="relative max-w-5xl max-h-[100svh] w-full h-full flex flex-col items-center justify-center">
-          <button onClick={e => {
-          e.stopPropagation();
-          setFullscreenImage(null);
-        }} className="absolute top-4 right-4 text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-full transition-colors z-[110]">
-            <X size={24} />
-          </button>
-          <img src={typeof fullscreenImage === 'string' && (fullscreenImage.startsWith('http') || fullscreenImage.startsWith('data:')) ? fullscreenImage : typeof fullscreenImage === 'string' ? `data:image/png;base64,${fullscreenImage}` : ''} alt="Vista Ampliada" className="max-w-full max-h-[90svh] object-contain rounded-2xl shadow-2xl p-2 cursor-zoom-out bg-white" onClick={e => e.stopPropagation()} />
-        </div>
-      </div>}
+    {fullscreenImage && (() => {
+        const resolvedFullscreenSrc =
+          typeof fullscreenImage === "string" &&
+          (fullscreenImage.startsWith("blob:") ||
+            fullscreenImage.startsWith("http") ||
+            fullscreenImage.startsWith("data:") ||
+            fullscreenImage.startsWith("/"))
+            ? fullscreenImage
+            : typeof fullscreenImage === "string"
+              ? `data:image/jpeg;base64,${fullscreenImage}`
+              : "";
+        const isFullscreenVideo =
+          typeof resolvedFullscreenSrc === "string" &&
+          (resolvedFullscreenSrc.includes(".mp4") ||
+            resolvedFullscreenSrc.startsWith("data:video/"));
+        return (
+          <div className="fixed inset-0 z-[100] bg-slate-900/95 flex items-center justify-center p-4" onClick={() => setFullscreenImage(null)}>
+            <div className="relative max-w-5xl max-h-[100svh] w-full h-full flex flex-col items-center justify-center">
+              <button onClick={e => {
+                e.stopPropagation();
+                setFullscreenImage(null);
+              }} className="absolute top-4 right-4 text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-full transition-colors z-[110]">
+                <X size={24} />
+              </button>
+              {isFullscreenVideo ? (
+                <video
+                  src={resolvedFullscreenSrc}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl"
+                  onClick={e => e.stopPropagation()}
+                />
+              ) : (
+                <img
+                  src={resolvedFullscreenSrc}
+                  alt="Vista Ampliada"
+                  className="max-w-full max-h-[90svh] object-contain rounded-2xl shadow-2xl p-2 cursor-zoom-out bg-white"
+                  onClick={e => e.stopPropagation()}
+                />
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
     {/* Modal con instrucciones para iOS Safari / Instalación manual */}
     <InstallInstructionsModal
