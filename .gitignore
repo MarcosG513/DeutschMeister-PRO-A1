@@ -41,3 +41,6 @@ scratch/
 *.jks
 *.keystore
 keystore.properties
+
+# Firebase Android client config (mantener solo en local)
+android/app/google-services.json
