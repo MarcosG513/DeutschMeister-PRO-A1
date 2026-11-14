@@ -36,3 +36,8 @@ scratch/
 *.bak
 *.premerge.bak
 .firebase/
+
+# Android Signing Keystores
+*.jks
+*.keystore
+keystore.properties

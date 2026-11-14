@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
+}
+
 android {
     namespace = "com.deutschmeister.app"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -16,8 +22,20 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            def releaseStoreFile = file(keystoreProperties.getProperty("storeFile", "deutschmeister-release.jks"))
+            if (releaseStoreFile.exists()) {
+                storeFile releaseStoreFile
+                storePassword keystoreProperties.getProperty("storePassword", "DeutschMeister2026!")
+                keyAlias keystoreProperties.getProperty("keyAlias", "deutschmeister-key")
+                keyPassword keystoreProperties.getProperty("keyPassword", "DeutschMeister2026!")
+            }
+        }
+    }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
