@@ -11,7 +11,7 @@ service cloud.firestore {
     }
 
     function isValidPayloadSize() {
-      return request.resource.data.keys().size() <= 25;
+      return request.resource == null || request.resource.data.keys().size() <= 25;
     }
 
     match /global_flashcards/{cardId} {
@@ -30,8 +30,13 @@ service cloud.firestore {
       match /unlockedCards/{cardId} {
         allow read: if isOwner(userId);
         allow create, update: if isOwner(userId)
-          && request.resource.data.keys().hasOnly(['unlocked', 'imageUrl', 'updatedAt'])
-          && request.resource.data.unlocked is bool;
+          && request.resource.data.keys().hasOnly(['unlocked', 'imageUrl', 'updatedAt', 'regenerated', 'regenerateCount'])
+          && request.resource.data.unlocked is bool
+          && (!('imageUrl' in request.resource.data)
+              || request.resource.data.imageUrl == null
+              || (request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() <= 2048))
+          && (!('regenerated' in request.resource.data) || request.resource.data.regenerated is bool)
+          && (!('regenerateCount' in request.resource.data) || (request.resource.data.regenerateCount is number && request.resource.data.regenerateCount >= 0));
         allow delete: if isOwner(userId);
       }
 
