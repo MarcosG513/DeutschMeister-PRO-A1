@@ -1,263 +1,160 @@
 /**
  * Motor DSP de estiramiento temporal limpio (Time-Stretching sin alteración de tono)
- * basado en Web Audio API + Phase Vocoder con ventana Hann de 2048 muestras y 75 % de solapamiento.
+ * basado en WSOLA (Waveform Similarity Overlap-Add) calibrado para voz humana (Charon 24 kHz).
  *
- * Elimina el efecto metálico / entrecortado del WSOLA nativo de Android WebView sobre WAVs de 24 kHz
- * al reproducir pronunciaciones, lecturas o cuentos a 0.75x.
+ * Empalma cada ciclo glótico en fase mediante Correlación Cruzada Normalizada (NCC) en el dominio
+ * del tiempo con ventana Hann simétrica al 50 %, eliminando el eco metálico del Phase Vocoder
+ * y los artefactos de Android WebView a velocidad 0.75x.
  */
 
-const FFT_SIZE = 2048;
-const HALF_FFT = FFT_SIZE >> 1; // 1024
-const HOP_ANALYSIS = 512; // 75 % de solapamiento (2048 / 4)
 const TWO_PI = Math.PI * 2;
 const DEFAULT_SAMPLE_RATE = 24000;
 const MAX_LRU_ENTRIES = 40;
 
 // Caché LRU en memoria (hasta 40 entradas indexadas por `${cacheKey}_0.75`)
 const stretchedBlobCache = new Map();
-// Registro de ObjectURLs producidos por el Phase Vocoder (ya vienen estirados -> playbackRate = 1.0)
+// Registro de ObjectURLs producidos por el procesador WSOLA (ya vienen estirados -> playbackRate = 1.0)
 const stretchedObjectUrls = new Set();
 
 let sharedOfflineCtxSampleRate = 0;
 
-// Tablas DSP precalculadas de forma perezosa (FFT Radix-2 + ventana Hann)
-let dspTables = null;
+// Cache de ventanas Hann por tamaño de ventana para evitar recomputación
+const hannWindowCache = new Map();
 
-function getDspTables() {
-  if (dspTables) return dspTables;
+function getSymmetricHannWindow(winLen) {
+  let win = hannWindowCache.get(winLen);
+  if (win) return win;
 
-  const hannWindow = new Float32Array(FFT_SIZE);
-  for (let n = 0; n < FFT_SIZE; n++) {
-    hannWindow[n] = 0.5 * (1 - Math.cos((TWO_PI * n) / FFT_SIZE));
+  win = new Float32Array(winLen);
+  for (let n = 0; n < winLen; n++) {
+    win[n] = 0.5 * (1 - Math.cos((TWO_PI * n) / winLen));
   }
-
-  const bitRev = new Uint16Array(FFT_SIZE);
-  const bits = Math.log2(FFT_SIZE) | 0;
-  for (let i = 0; i < FFT_SIZE; i++) {
-    let x = i;
-    let r = 0;
-    for (let b = 0; b < bits; b++) {
-      r = (r << 1) | (x & 1);
-      x >>= 1;
-    }
-    bitRev[i] = r;
-  }
-
-  const cosTable = new Float32Array(HALF_FFT);
-  const sinTable = new Float32Array(HALF_FFT);
-  for (let i = 0; i < HALF_FFT; i++) {
-    const angle = (-TWO_PI * i) / FFT_SIZE;
-    cosTable[i] = Math.cos(angle);
-    sinTable[i] = Math.sin(angle);
-  }
-
-  dspTables = { hannWindow, bitRev, cosTable, sinTable };
-  return dspTables;
+  hannWindowCache.set(winLen, win);
+  return win;
 }
 
 /**
- * FFT/IFFT iterativa Radix-2 Cooley-Tukey in-place de 2048 puntos.
- */
-function runFftInPlace(re, im, inverse = false) {
-  const { bitRev, cosTable, sinTable } = getDspTables();
-
-  for (let i = 0; i < FFT_SIZE; i++) {
-    const j = bitRev[i];
-    if (i < j) {
-      const tr = re[i];
-      const ti = im[i];
-      re[i] = re[j];
-      im[i] = im[j];
-      re[j] = tr;
-      im[j] = ti;
-    }
-  }
-
-  const invSign = inverse ? -1 : 1;
-
-  for (let size = 2; size <= FFT_SIZE; size <<= 1) {
-    const halfSize = size >> 1;
-    const tableStep = FFT_SIZE / size;
-    for (let start = 0; start < FFT_SIZE; start += size) {
-      for (let k = 0, twIdx = 0; k < halfSize; k++, twIdx += tableStep) {
-        const wr = cosTable[twIdx];
-        const wi = invSign * sinTable[twIdx];
-        const evenIdx = start + k;
-        const oddIdx = evenIdx + halfSize;
-        const tre = re[oddIdx] * wr - im[oddIdx] * wi;
-        const tim = re[oddIdx] * wi + im[oddIdx] * wr;
-        re[oddIdx] = re[evenIdx] - tre;
-        im[oddIdx] = im[evenIdx] - tim;
-        re[evenIdx] += tre;
-        im[evenIdx] += tim;
-      }
-    }
-  }
-
-  if (inverse) {
-    const scale = 1 / FFT_SIZE;
-    for (let i = 0; i < FFT_SIZE; i++) {
-      re[i] *= scale;
-      im[i] *= scale;
-    }
-  }
-}
-
-function wrapPhase(phase) {
-  return phase - TWO_PI * Math.round(phase / TWO_PI);
-}
-
-/**
- * Ejecuta el Phase Vocoder (FFT 2048, hopAnalysis = 512, hopSynthesis = Math.round(512 / speed))
- * con Identity Phase Locking (Laroche & Dolson) para preservar los armónicos de la voz Charon.
+ * Estira un canal PCM en el dominio del tiempo mediante WSOLA calibrado para voz humana:
+ * - Ventana de 24 ms (576 muestras a 24 kHz), hopOut = 50 % (288 muestras), COLA exacto = 1.0.
+ * - Radio de búsqueda de 11 ms (264 muestras a 24 kHz) cubriendo ciclos glóticos de 90–400 Hz.
+ * - Alineación de fase por Correlación Cruzada Normalizada (NCC) + normalización RMS suave.
  *
- * @param {Float32Array} input
+ * @param {Float32Array} samples
+ * @param {number} sampleRate
  * @param {number} speed
  * @returns {Promise<Float32Array>}
  */
-export async function phaseVocoderStretchChannel(input, speed = 0.75) {
-  if (!input || input.length === 0 || speed >= 0.98 || speed <= 0.1) {
-    return input;
+export async function wsolaSpeechStretch(samples, sampleRate = DEFAULT_SAMPLE_RATE, speed = 0.75) {
+  if (!samples || samples.length === 0 || speed >= 0.98 || speed <= 0.1) {
+    return samples;
   }
 
-  const { hannWindow } = getDspTables();
-  const hopAnalysis = HOP_ANALYSIS;
-  const hopSynthesis = Math.round(hopAnalysis / speed); // Para 0.75x => Math.round(512 / 0.75) = 683
-  const stretchRatio = hopSynthesis / hopAnalysis;
+  const len = samples.length;
+  const safeRate = sampleRate >= 8000 && sampleRate <= 96000 ? sampleRate : DEFAULT_SAMPLE_RATE;
 
-  const padLeft = HALF_FFT; // 1024 muestras => alinea t_in=0 con t_out=0 manteniendo solapamiento completo
-  const targetLen = Math.max(1, Math.round(input.length * stretchRatio));
-  const paddedLen = padLeft + input.length + FFT_SIZE + hopAnalysis;
+  let winLen = Math.max(64, Math.round(safeRate * 0.024));
+  if (winLen % 2 !== 0) winLen += 1; // Garantiza hopOut = winLen / 2 exacto (suma Hann = 1.0)
 
-  const padded = new Float32Array(paddedLen);
-  padded.set(input, padLeft);
+  if (len <= winLen) {
+    return samples;
+  }
 
-  const numFrames = Math.floor((paddedLen - FFT_SIZE) / hopAnalysis) + 1;
-  const outBufLen = (numFrames - 1) * hopSynthesis + FFT_SIZE + padLeft;
-  const outAccum = new Float32Array(outBufLen);
-  const normAccum = new Float32Array(outBufLen);
+  const hopOut = winLen >> 1; // 50 % de solapamiento (288 muestras a 24 kHz)
+  const hopIn = Math.max(1, Math.round(hopOut * speed)); // Para 0.75x => 216 muestras
+  const searchRadius = Math.max(16, Math.round(safeRate * 0.011)); // 11 ms => 264 muestras a 24 kHz
+  const hann = getSymmetricHannWindow(winLen);
 
-  const re = new Float32Array(FFT_SIZE);
-  const im = new Float32Array(FFT_SIZE);
-  const mag = new Float32Array(HALF_FFT + 1);
-  const phase = new Float32Array(HALF_FFT + 1);
-  const prevPhase = new Float32Array(HALF_FFT + 1);
-  const synPhase = new Float32Array(HALF_FFT + 1);
-  const trueFreq = new Float32Array(HALF_FFT + 1);
-  const peaks = new Int16Array(HALF_FFT + 1);
+  const stretchRatio = hopOut / hopIn;
+  const targetLen = Math.max(1, Math.round(len * stretchRatio));
+  const numFrames = Math.max(1, Math.ceil((targetLen - winLen) / hopOut) + 1);
+  const outputBuf = new Float32Array((numFrames - 1) * hopOut + winLen);
 
-  const omegaStep = TWO_PI / FFT_SIZE;
+  // Frame 0: primera mitad sin atenuación de entrada, segunda mitad con cola Hann para solapar en frame 1
+  for (let n = 0; n < hopOut; n++) {
+    outputBuf[n] = samples[n];
+  }
+  for (let n = hopOut; n < winLen; n++) {
+    outputBuf[n] = samples[n] * hann[n];
+  }
 
-  for (let frameIdx = 0; frameIdx < numFrames; frameIdx++) {
-    const inPos = frameIdx * hopAnalysis;
-    const outPos = frameIdx * hopSynthesis;
+  const maxStart = len - winLen;
 
-    // 1. Análisis con ventana Hann normalizada
-    for (let n = 0; n < FFT_SIZE; n++) {
-      re[n] = padded[inPos + n] * hannWindow[n];
-      im[n] = 0;
+  for (let k = 1; k < numFrames; k++) {
+    const outPos = k * hopOut;
+    const nominalIn = Math.min(maxStart, k * hopIn);
+
+    const deltaMin = Math.max(-searchRadius, -nominalIn);
+    const deltaMax = Math.min(searchRadius, maxStart - nominalIn);
+
+    // Energía de la cola ya sintetizada en [outPos .. outPos + hopOut)
+    let energyRef = 0;
+    for (let n = 0; n < hopOut; n++) {
+      const r = outputBuf[outPos + n];
+      energyRef += r * r;
     }
 
-    runFftInPlace(re, im, false);
-
-    // 2. Magnitud y fase de bins únicos [0 .. HALF_FFT]
-    for (let k = 0; k <= HALF_FFT; k++) {
-      const r = re[k];
-      const ig = im[k];
-      mag[k] = Math.hypot(r, ig);
-      phase[k] = Math.atan2(ig, r);
-    }
-
-    if (frameIdx === 0) {
-      synPhase.set(phase);
-      prevPhase.set(phase);
-    } else {
-      // 3. Estimación de frecuencia instantánea por diferencia de fase
-      for (let k = 0; k <= HALF_FFT; k++) {
-        const expectedAdv = k * omegaStep * hopAnalysis;
-        const delta = wrapPhase(phase[k] - prevPhase[k] - expectedAdv);
-        trueFreq[k] = k * omegaStep + delta / hopAnalysis;
-        prevPhase[k] = phase[k];
-      }
-
-      // 4. Identity Phase Locking: detecta picos espectrales locales y bloquea la fase de cada lóbulo
-      let peakCount = 0;
-      for (let k = 1; k < HALF_FFT; k++) {
-        if (mag[k] >= mag[k - 1] && mag[k] >= mag[k + 1] && mag[k] > 1e-8) {
-          peaks[peakCount++] = k;
+    let bestDelta = 0;
+    if (energyRef > 1e-8) {
+      let bestScore = -Infinity;
+      for (let delta = deltaMin; delta <= deltaMax; delta++) {
+        const candStart = nominalIn + delta;
+        let dot = 0;
+        let energyCand = 0;
+        for (let n = 0; n < hopOut; n++) {
+          const r = outputBuf[outPos + n];
+          const c = samples[candStart + n];
+          dot += r * c;
+          energyCand += c * c;
         }
-      }
-
-      // DC y Nyquist propagan directamente
-      synPhase[0] = wrapPhase(synPhase[0] + trueFreq[0] * hopSynthesis);
-      synPhase[HALF_FFT] = wrapPhase(synPhase[HALF_FFT] + trueFreq[HALF_FFT] * hopSynthesis);
-
-      if (peakCount === 0) {
-        for (let k = 1; k < HALF_FFT; k++) {
-          synPhase[k] = wrapPhase(synPhase[k] + trueFreq[k] * hopSynthesis);
-        }
-      } else {
-        for (let pIdx = 0; pIdx < peakCount; pIdx++) {
-          const p = peaks[pIdx];
-          synPhase[p] = wrapPhase(synPhase[p] + trueFreq[p] * hopSynthesis);
-        }
-
-        let currentPeakIdx = 0;
-        for (let k = 1; k < HALF_FFT; k++) {
-          while (
-            currentPeakIdx + 1 < peakCount &&
-            Math.abs(peaks[currentPeakIdx + 1] - k) <= Math.abs(peaks[currentPeakIdx] - k)
-          ) {
-            currentPeakIdx++;
-          }
-          const nearestPeak = peaks[currentPeakIdx];
-          if (k !== nearestPeak) {
-            synPhase[k] = wrapPhase(synPhase[nearestPeak] + (phase[k] - phase[nearestPeak]));
-          }
+        const score = dot / Math.sqrt(energyRef * energyCand + 1e-12);
+        if (score > bestScore) {
+          bestScore = score;
+          bestDelta = delta;
         }
       }
     }
 
-    // 5. Reconstrucción de espectro hermítico (real en dominio temporal)
-    re[0] = mag[0] * Math.cos(synPhase[0]);
-    im[0] = 0;
-    re[HALF_FFT] = mag[HALF_FFT] * Math.cos(synPhase[HALF_FFT]);
-    im[HALF_FFT] = 0;
-
-    for (let k = 1; k < HALF_FFT; k++) {
-      const yr = mag[k] * Math.cos(synPhase[k]);
-      const yi = mag[k] * Math.sin(synPhase[k]);
-      re[k] = yr;
-      im[k] = yi;
-      re[FFT_SIZE - k] = yr;
-      im[FFT_SIZE - k] = -yi;
+    const inPos = nominalIn + bestDelta;
+    for (let n = 0; n < winLen; n++) {
+      outputBuf[outPos + n] += samples[inPos + n] * hann[n];
     }
 
-    runFftInPlace(re, im, true);
-
-    // 6. Síntesis Overlap-Add (OLA) con ventana Hann cuadrada normalizada
-    for (let n = 0; n < FFT_SIZE; n++) {
-      const w = hannWindow[n];
-      const idx = outPos + n;
-      outAccum[idx] += re[n] * w;
-      normAccum[idx] += w * w;
-    }
-
-    // Cede brevemente el hilo en audios extensos (cuentos) para no bloquear animaciones UI
-    if (frameIdx > 0 && frameIdx % 450 === 0 && numFrames > 600) {
+    if (k % 600 === 0 && numFrames > 800) {
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
   }
 
-  // 7. Extraer el rango exacto [padLeft .. padLeft + targetLen) normalizando por sum(w^2)
-  const output = new Float32Array(targetLen);
+  // Conservación suave de RMS original + limitador blando en 0.98
+  let sumSqIn = 0;
+  for (let i = 0; i < len; i++) {
+    const s = samples[i];
+    sumSqIn += s * s;
+  }
+  const rmsIn = Math.sqrt(sumSqIn / len);
+
+  let sumSqOut = 0;
   for (let i = 0; i < targetLen; i++) {
-    const srcIdx = padLeft + i;
-    const norm = srcIdx < normAccum.length ? normAccum[srcIdx] : 0;
-    output[i] = norm > 1e-4 ? outAccum[srcIdx] / norm : 0;
+    const s = outputBuf[i];
+    sumSqOut += s * s;
+  }
+  const rmsOut = Math.sqrt(sumSqOut / targetLen);
+
+  const rmsGain =
+    rmsIn > 1e-6 && rmsOut > 1e-6
+      ? Math.min(1.35, Math.max(0.75, rmsIn / rmsOut))
+      : 1.0;
+
+  const finalOut = new Float32Array(targetLen);
+  for (let i = 0; i < targetLen; i++) {
+    let s = outputBuf[i] * rmsGain;
+    const absS = Math.abs(s);
+    if (absS > 0.98) {
+      s = Math.sign(s) * (0.98 + 0.019 * Math.tanh((absS - 0.98) / 0.02));
+    }
+    finalOut[i] = s;
   }
 
-  return output;
+  return finalOut;
 }
 
 /**
@@ -604,7 +501,7 @@ export async function getCleanSpeedAudioResult(sourceBlobOrUrl, speed = 1.0, cac
     const { sampleRate, channels } = await decodeBlobWithAudioContext(arrayBuffer);
     const stretchedChannels = [];
     for (let ch = 0; ch < channels.length; ch++) {
-      stretchedChannels.push(await phaseVocoderStretchChannel(channels[ch], targetSpeed));
+      stretchedChannels.push(await wsolaSpeechStretch(channels[ch], sampleRate, targetSpeed));
     }
 
     const stretchedWavBlob = encodeFloatChannelsToWavBlob(stretchedChannels, sampleRate);
