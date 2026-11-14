@@ -1880,14 +1880,14 @@ async function synthesizeWithGoogleDirect(text, voice, apiKey, modelName = "gemi
 /**
  * 2. Invocación de Respaldo a Fal.ai
  */
-async function synthesizeWithFalFallback(text, voice, falKeyValue) {
+async function synthesizeWithFalFallback(text, voice, falKeyValue, styleInstructions) {
   fal.config({ credentials: falKeyValue });
 
   const result = await fal.subscribe("google/gemini-3.8-flash-tts", {
     input: {
       prompt: text,
       voice: "Charon", // Voz masculina oficial exclusiva de DeutschMeister
-      style_instructions: "Speak in clear, natural, standard German (Hochdeutsch) with precise A1 pedagogical pronunciation and natural pacing."
+      style_instructions: styleInstructions || "Speak in clear, natural, standard German (Hochdeutsch) with precise A1 pedagogical pronunciation and natural pacing."
     }
   });
 
@@ -1914,7 +1914,7 @@ export const synthesizeGermanSpeech = onCall(
   },
   async (request) => {
     await verifyRequestAuth(request);
-    const { text, type = "vocab" } = request.data || {};
+    const { text, type = "vocab", lang = "de" } = request.data || {};
     const voice = "Charon"; // Voz masculina oficial exclusiva de DeutschMeister
     if (!text || typeof text !== "string") {
       throw new HttpsError("invalid-argument", "El parámetro 'text' es obligatorio y debe ser una cadena.");
@@ -1928,6 +1928,10 @@ export const synthesizeGermanSpeech = onCall(
     const isEphemeral = type === "story" || type === "reading";
     const audioId = getSafeAudioId(cleanText);
     const db = admin.firestore();
+
+    const styleInstructions = lang === "es"
+      ? "Speak in clear, warm, natural Spanish as an expert German language coach (Charon). When pronouncing German words or phrases in quotes, use authentic standard German (Hochdeutsch) phonetics."
+      : "Speak in clear, natural, standard German (Hochdeutsch) with precise pedagogical pronunciation and natural pacing.";
 
     // ── NIVEL 2: REVISIÓN DE CACHÉ EN LA NUBE (Excluido para cuentos y lecturas efímeras) ──
     if (!isEphemeral) {
@@ -1979,7 +1983,7 @@ export const synthesizeGermanSpeech = onCall(
       const falKeyValue = (falKey && typeof falKey.value === "function" ? falKey.value() : "") || process.env.FAL_KEY || "";
       if (falKeyValue) {
         try {
-          audioResult = await synthesizeWithFalFallback(cleanText, voice, falKeyValue);
+          audioResult = await synthesizeWithFalFallback(cleanText, voice, falKeyValue, styleInstructions);
           console.log(`[TTS Engine] Generado exitosamente vía Fal.ai (${cleanText.substring(0, 30)}...)`);
         } catch (falError) {
           console.error("[TTS Critical Error] Fallaron todos los proveedores de síntesis:", falError.message);
@@ -2039,6 +2043,7 @@ export const synthesizeGermanSpeech = onCall(
         storagePath: filePath,
         voice: voice,
         type: type,
+        lang: lang,
         provider: audioResult.provider,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       }, { merge: true });

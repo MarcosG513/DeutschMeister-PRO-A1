@@ -7,11 +7,14 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "pregenerate:driving": "node scripts/pregenerate_driving_audios.mjs",
+    "pregenerate:driving:dry": "node scripts/pregenerate_driving_audios.mjs --dry-run"
   },
   "dependencies": {
     "@capacitor-community/speech-recognition": "^7.0.1",
     "@capacitor-community/text-to-speech": "^8.0.2",
+    "@capacitor-firebase/authentication": "^8.6.0",
     "@capacitor/android": "^8.4.1",
     "@capacitor/app": "^8.1.1",
     "@capacitor/core": "^8.4.1",

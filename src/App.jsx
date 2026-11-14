@@ -20,6 +20,8 @@ import { mediaBlobStore } from './services/syncMediaService';
 
 import Profile from './components/Profile';
 import InstallInstructionsModal from './components/InstallInstructionsModal';
+import DrivingMode from './components/DrivingMode';
+import { subscribeToAndroidAutoCommands } from './services/androidAutoBridge';
 
 const EmailSimulator = lazy(() => import('./components/EmailSimulator'));
 const ReadingComprehension = lazy(() => import('./components/ReadingComprehension'));
@@ -69,6 +71,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [revealedCards, setRevealedCards] = useState({});
   const [viewMode, setViewMode] = useState("flashcards");
+  const [pendingAutoCommand, setPendingAutoCommand] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isTablasOpen, setIsTablasOpen] = useState(false);
   const [isPlanOpen, setIsPlanOpen] = useState(false);
@@ -323,6 +326,16 @@ export default function App() {
   useEffect(() => {
     recordDailyStudyActivity();
   }, [activeStudyPlanId, activePresentationId, activeChapterId, viewMode]);
+
+  // Listener global de comandos desde Android Auto (vehículo)
+  useEffect(() => {
+    const unsubscribe = subscribeToAndroidAutoCommands((action, payload) => {
+      console.log(`[AndroidAuto -> App] Comando recibido: ${action} (${payload})`);
+      setPendingAutoCommand({ action, payload, id: Date.now() });
+      setViewMode("driving");
+    });
+    return () => unsubscribe();
+  }, []);
 
   const [isImageLoading, setIsImageLoading] = useState(null);
   const [isTutorOpen, setIsTutorOpen] = useState(false);
@@ -891,6 +904,9 @@ export default function App() {
     }
     playGermanAudio(textToSpeak, { type: "vocab", voice: "Charon" });
   };
+  const markCardAsStudied = (safeId) => {
+    recordCardStudied(safeId);
+  };
   return <Suspense fallback={
     <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-6 gap-3">
       <Loader2 className="animate-spin text-yellow-400" size={36} />
@@ -937,7 +953,22 @@ export default function App() {
             onNextModule={setActiveStudyPlanId}
           />
         );
-      })() : viewMode === "profile" ? <Profile
+      })() : viewMode === "driving" ? (
+        <DrivingMode
+          activeChapterId={activeChapterId}
+          chapters={chapters}
+          onExit={() => setViewMode("flashcards")}
+          pendingAutoCommand={pendingAutoCommand}
+          onClearAutoCommand={() => setPendingAutoCommand(null)}
+          onWordStudied={(wordObj) => {
+            if (wordObj?.de) {
+              const safeId = getSafeId(wordObj.de).substring(0, 150);
+              markCardAsStudied(safeId);
+              recordDailyStudyActivity();
+            }
+          }}
+        />
+      ) : viewMode === "profile" ? <Profile
         onExit={() => setViewMode('flashcards')}
         user={user}
         auth={auth}
@@ -968,6 +999,14 @@ export default function App() {
                 </div>
                 {/* HAMBURGER + PROFILE ON MOBILE */}
                 <div className="flex items-center gap-2 md:hidden">
+                  <button
+                    onClick={() => setViewMode('driving')}
+                    className="bg-zinc-900 text-emerald-400 p-2 rounded-lg border border-emerald-500/40 transition flex items-center justify-center shadow-sm cursor-pointer"
+                    aria-label="Modo Conducción"
+                    title="Modo Conducción"
+                  >
+                    <Car size={20} />
+                  </button>
                   <button onClick={() => setViewMode('profile')} className="bg-slate-800 text-blue-400 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Perfil">
                     <User size={20} />
                   </button>
@@ -987,6 +1026,14 @@ export default function App() {
 
               {/* PROFILE + MENU ON DESKTOP */}
               <div className="hidden md:flex items-center gap-2">
+                <button
+                  onClick={() => setViewMode('driving')}
+                  className="bg-zinc-900 hover:bg-zinc-800 text-emerald-400 border border-emerald-500/40 font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-2 shadow-md cursor-pointer text-sm"
+                  title="Modo Conducción Manos Libres (Fahrmodus)"
+                >
+                  <Car size={18} />
+                  <span>Modo Conducción</span>
+                </button>
                 <button onClick={() => setViewMode('profile')} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-2 shadow-md cursor-pointer text-sm">
                   <User size={18} /> Perfil
                 </button>
@@ -1015,6 +1062,16 @@ export default function App() {
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
                   {/* Accesos rápidos */}
                   <div className="grid grid-cols-2 gap-2 pb-4 border-b border-slate-800">
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setViewMode("driving");
+                      }}
+                      className="bg-zinc-900 hover:bg-zinc-800 text-emerald-400 border border-emerald-500/40 col-span-2 py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2 text-xs shadow-md shadow-emerald-500/10 active:scale-95 cursor-pointer"
+                    >
+                      <Car size={18} />
+                      <span>🚗 Modo Conducción (Fahrmodus)</span>
+                    </button>
                     <button onClick={() => {
                 setIsTutorOpen(true);
                 setIsMenuOpen(false);

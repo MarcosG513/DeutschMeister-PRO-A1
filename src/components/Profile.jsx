@@ -6,11 +6,23 @@ import {
   ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle,
   CloudDownload, Loader2, Download
 } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import InstallInstructionsModal from './InstallInstructionsModal';
 import { usePWAInstall } from '../hooks/usePWAInstall';
 import { getDailyStudyStreak, getStudiedCardsCount, getCompletedModulesCount } from '../utils/helpers';
 import { syncCloudMediaToLocal, getLastMediaSyncTime, getOfflineSyncStats } from '../services/syncMediaService';
-import { EmailAuthProvider, GoogleAuthProvider, linkWithCredential, linkWithPopup, signInWithEmailAndPassword, signInWithPopup, signOut, deleteUser } from 'firebase/auth';
+import {
+  EmailAuthProvider,
+  GoogleAuthProvider,
+  linkWithCredential,
+  linkWithPopup,
+  signInWithCredential,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  deleteUser
+} from 'firebase/auth';
 
 const AVATARS = ['🦊', '🦉', '🐼', '🦁', '🐯', '🐸', '🦄', '🦖', '🚀', '👑', '⚡', '🎓'];
 
@@ -208,38 +220,121 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
     const targetAuth = auth || (user && user.auth);
     const currentUser = targetAuth?.currentUser || user;
 
+    // ── MODO NATIVO ANDROID (Capacitor) ──
+    // Evita abrir ventanas emergentes web que se quedan en blanco en Chrome / WebView
+    if (Capacitor.isNativePlatform()) {
+      try {
+        const result = await FirebaseAuthentication.signInWithGoogle();
+        const idToken = result?.credential?.idToken;
+        if (!idToken) {
+          throw new Error("No se pudo obtener el token de Google del dispositivo.");
+        }
+
+        const credential = GoogleAuthProvider.credential(idToken);
+
+        if (isLoginMode && targetAuth) {
+          await signInWithCredential(targetAuth, credential);
+          setMessage("¡Sesión iniciada con Google!");
+        } else if (currentUser && currentUser.isAnonymous) {
+          try {
+            await linkWithCredential(currentUser, credential);
+            setMessage("¡Cuenta vinculada con éxito mediante tu cuenta de Google!");
+          } catch (linkErr) {
+            if (
+              linkErr.code === 'auth/credential-already-in-use' ||
+              linkErr.code === 'auth/email-already-in-use'
+            ) {
+              await signInWithCredential(targetAuth, credential);
+              setMessage("¡Esta cuenta ya existía y tu sesión fue restaurada con éxito!");
+            } else {
+              throw linkErr;
+            }
+          }
+        } else if (targetAuth) {
+          await signInWithCredential(targetAuth, credential);
+          setMessage("¡Sesión iniciada con Google!");
+        }
+      } catch (nativeErr) {
+        console.warn("[GoogleAuth Native Error]:", nativeErr);
+        const errMsg = String(nativeErr?.message || nativeErr || "");
+        if (
+          errMsg.includes("cancel") ||
+          errMsg.includes("12501") ||
+          nativeErr?.code === 16 ||
+          nativeErr?.code === 12501 ||
+          nativeErr?.code === "16" ||
+          nativeErr?.code === "12501"
+        ) {
+          setError("Autenticación cancelada por el usuario.");
+        } else {
+          setError(
+            nativeErr.message ||
+              "No se pudo completar el inicio de sesión con Google en el dispositivo."
+          );
+        }
+      } finally {
+        setIsLoading(false);
+      }
+      return;
+    }
+
+    // ── MODO WEB / PWA ──
+    // Se utiliza signInWithPopup con temporizador de seguridad de 45s para evitar bloqueos
+    let timeoutId = null;
+    const timeoutPromise = new Promise((_, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new Error("auth_timeout"));
+      }, 45000);
+    });
+
     try {
       const provider = new GoogleAuthProvider();
-      if (isLoginMode && targetAuth) {
-        await signInWithPopup(targetAuth, provider);
-        setMessage("¡Sesión iniciada con Google!");
-      } else if (currentUser && currentUser.isAnonymous) {
-        await linkWithPopup(currentUser, provider);
-        setMessage("¡Cuenta vinculada con éxito mediante tu cuenta de Google!");
-      } else if (targetAuth) {
-        await signInWithPopup(targetAuth, provider);
-        setMessage("¡Sesión iniciada con Google!");
-      }
+      provider.setCustomParameters({ prompt: 'select_account' });
+
+      const authAction = async () => {
+        if (isLoginMode && targetAuth) {
+          await signInWithPopup(targetAuth, provider);
+          setMessage("¡Sesión iniciada con Google!");
+        } else if (currentUser && currentUser.isAnonymous) {
+          try {
+            await linkWithPopup(currentUser, provider);
+            setMessage("¡Cuenta vinculada con éxito mediante tu cuenta de Google!");
+          } catch (linkErr) {
+            if (
+              (linkErr.code === 'auth/credential-already-in-use' ||
+                linkErr.code === 'auth/email-already-in-use') &&
+              targetAuth
+            ) {
+              await signInWithPopup(targetAuth, provider);
+              setMessage("¡Sesión iniciada con tu cuenta de Google existente!");
+            } else {
+              throw linkErr;
+            }
+          }
+        } else if (targetAuth) {
+          await signInWithPopup(targetAuth, provider);
+          setMessage("¡Sesión iniciada con Google!");
+        }
+      };
+
+      await Promise.race([authAction(), timeoutPromise]);
     } catch (err) {
       console.warn("Error en login/link con Google:", err);
-      if ((err.code === 'auth/credential-already-in-use' || err.code === 'auth/email-already-in-use') && targetAuth) {
-        try {
-          const provider = new GoogleAuthProvider();
-          await signInWithPopup(targetAuth, provider);
-          setMessage("¡Sesión iniciada con tu cuenta de Google existente!");
-        } catch (popupErr) {
-          if (popupErr.code === 'auth/popup-closed-by-user' || popupErr.code === 'auth/user-cancelled') {
-            setError("Autenticación cancelada por el usuario.");
-          } else {
-            setError("No se pudo iniciar sesión con la cuenta de Google.");
-          }
-        }
-      } else if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/user-cancelled') {
+      if (err.message === "auth_timeout") {
+        setError("El inicio de sesión tomó demasiado tiempo o la ventana fue cerrada.");
+      } else if (
+        err.code === 'auth/popup-closed-by-user' ||
+        err.code === 'auth/user-cancelled' ||
+        err.code === 'auth/cancelled-popup-request'
+      ) {
         setError("Autenticación cancelada por el usuario.");
+      } else if (err.code === 'auth/popup-blocked') {
+        setError("Tu navegador bloqueó la ventana emergente de Google. Permite ventanas emergentes para este sitio.");
       } else {
-        setError("Ocurrió un error. Verifica tus credenciales e intenta de nuevo.");
+        setError(err.message || "Ocurrió un error. Verifica tus credenciales e intenta de nuevo.");
       }
     } finally {
+      if (timeoutId) clearTimeout(timeoutId);
       setIsLoading(false);
     }
   };
@@ -250,6 +345,9 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
     setIsLoading(true);
     setError(null);
     try {
+      if (Capacitor.isNativePlatform()) {
+        await FirebaseAuthentication.signOut().catch(() => {});
+      }
       await signOut(targetAuth);
       setMessage("Sesión cerrada.");
     } catch (err) {

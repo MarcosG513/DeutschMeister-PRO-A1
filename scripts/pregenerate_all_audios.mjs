@@ -8,6 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import admin from 'firebase-admin';
+import { drivingAcademyClasses } from '../src/data/drivingAcademyCurriculum.js';
 
 dotenv.config();
 
@@ -50,8 +51,12 @@ export const splitGermanTitle = (text) => {
 export function getItemPriority(item) {
   // Prioridad 1: type === "quiz" (33 audios de GoetheHorenExam, GoetheSprechenExam, EmailSimulator)
   if (item.type === 'quiz') return 1;
+  // Prioridad 1.5: Clases Dinámicas de Fahrmodus (A1, A2, B1)
+  if (item.source && item.source.startsWith('driving_academy')) return 1.5;
   // Prioridad 2: type === "dialogue" (7 diálogos interactivos VoiceExaminer)
   if (item.type === 'dialogue') return 2;
+  // Prioridad 2.5: Prompts, tips y coaches de Fahrmodus
+  if (item.type === 'driving_prompt' || item.type === 'driving_coach' || item.type === 'driving_tip') return 2.5;
   // Prioridad 3: Expresiones de Kapitel 22: Redemittel & Alltagskommunikation
   if (item.source && (item.source === 'redemittel' || item.source === 'redemittel_sentence' || item.source.includes('redemittel') || item.source.includes('kapitel_22'))) return 3;
   // Prioridad 3.5: Capítulos técnicos y laborales (Fahrschuldeutsch 13, Schule & Beruf 16, IT 17, Elektrotechnik & Solar 18, Señales & Werkzeuge 19-21)
@@ -305,6 +310,56 @@ async function extractAllAudios() {
     enqueueAudio(item.text, item.type, 'interactive_components');
   });
   console.log(`  ✓ Componentes interactivos procesados (${interactiveItems.length} expresiones).`);
+
+  // H. Clases de Fahrmodus: Academia de Audio A1–B1
+  if (Array.isArray(drivingAcademyClasses)) {
+    let academyCount = 0;
+    drivingAcademyClasses.forEach((cls) => {
+      (cls.steps || []).forEach((step, sIdx) => {
+        if (step.blockPromptEs) {
+          enqueueAudio(step.blockPromptEs, 'driving_prompt', `driving_academy_block_p_${cls.id}_step_${sIdx}`, { lang: 'es' });
+          academyCount++;
+        }
+        if (step.blockTargetDe) {
+          enqueueAudio(step.blockTargetDe, 'sentence', `driving_academy_block_t_${cls.id}_step_${sIdx}`, { lang: 'de' });
+          academyCount++;
+        }
+        if (step.promptEs) {
+          enqueueAudio(step.promptEs, step.stepType === 'coach' ? 'driving_coach' : 'driving_prompt', `driving_academy_${cls.id}_step_${sIdx}`, { lang: 'es' });
+          academyCount++;
+        }
+        if (step.tipEs) {
+          enqueueAudio(step.tipEs, 'driving_tip', `driving_academy_tip_${cls.id}_step_${sIdx}`, { lang: 'es' });
+          academyCount++;
+        }
+        if (step.questionDe) {
+          enqueueAudio(step.questionDe, 'dialogue', `driving_academy_q_${cls.id}_step_${sIdx}`, { lang: 'de' });
+          academyCount++;
+        }
+        if (step.targetDe) {
+          enqueueAudio(step.targetDe, 'sentence', `driving_academy_target_${cls.id}_step_${sIdx}`, { lang: 'de' });
+          academyCount++;
+        }
+      });
+    });
+    console.log(`  ✓ Clases A1–B1 de Fahrmodus procesadas (${academyCount} locuciones en ${drivingAcademyClasses.length} clases).`);
+  }
+
+  // I. Prompts deterministas en español para Fahrmodus ("¿Cómo dices: [palabra]?")
+  if (fs.existsSync(vocabJsonPath)) {
+    const vocab = JSON.parse(fs.readFileSync(vocabJsonPath, 'utf8'));
+    let drivingPromptCount = 0;
+    vocab.forEach((w) => {
+      if (w.es) {
+        const cleanEs = w.es.replace(/\([^)]*\)/g, '').trim() || w.es;
+        if (cleanEs && cleanEs.length > 1) {
+          enqueueAudio(`¿Cómo dices: ${cleanEs}?`, 'driving_prompt', 'driving_vocab_prompt', { lang: 'es' });
+          drivingPromptCount++;
+        }
+      }
+    });
+    console.log(`  ✓ Prompts deterministas de Fahrmodus generados (${drivingPromptCount} retos en español).`);
+  }
 }
 
 // ── 3. INFERENCIA TTS (100% GOOGLE AI STUDIO DIRECT CON ROTACIÓN DUAL-MODEL) ──
@@ -720,6 +775,7 @@ async function main() {
         storagePath: filePath,
         voice: "Charon",
         type: item.type,
+        lang: item.lang || (item.text.match(/[áéíóú¿¡]/i) ? "es" : "de"),
         provider: audioResult.provider,
         keyUsed: usedKeyId,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
