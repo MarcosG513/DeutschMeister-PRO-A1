@@ -4,7 +4,7 @@ import {
   User, Mail, Lock, RefreshCw, Crown, CheckCircle2, Flame, 
   Layers, Trophy, ShieldCheck, FileText, ChevronRight, 
   ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle,
-  CloudDownload, Loader2, Download
+  CloudDownload, Loader2, Download, Volume2, Square
 } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
@@ -12,6 +12,7 @@ import InstallInstructionsModal from './InstallInstructionsModal';
 import { usePWAInstall } from '../hooks/usePWAInstall';
 import { getDailyStudyStreak, getStudiedCardsCount, getCompletedModulesCount } from '../utils/helpers';
 import { syncCloudMediaToLocal, getLastMediaSyncTime, getOfflineSyncStats } from '../services/syncMediaService';
+import { getSavedPlaybackSpeed, setSavedPlaybackSpeed, playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import {
   EmailAuthProvider,
   GoogleAuthProvider,
@@ -45,6 +46,8 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
   const [lastMediaSync, setLastMediaSync] = useState(null);
   const [syncSuccessMessage, setSyncSuccessMessage] = useState(null);
   const [offlineStats, setOfflineStats] = useState({ visualsCached: 0, audiosCached: 0, storiesCached: 0 });
+  const [voiceSpeed, setVoiceSpeed] = useState(() => getSavedPlaybackSpeed());
+  const [isTestingVoice, setIsTestingVoice] = useState(false);
 
   // Detección PWA reactiva compartida mediante hook dedicado
   const {
@@ -103,12 +106,39 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
     };
   }, [studiedCardsCount]);
 
-  // Limpieza preventiva permanente de la clave obsoleta de velocidad
+  // Sincronización reactiva de velocidad global ('0.75x' / '1.0x') y limpieza de audio al desmontar
   useEffect(() => {
-    try {
-      localStorage.removeItem('dm_voice_speed');
-    } catch (_) {}
+    const syncSpeed = (e) => {
+      const next = e?.detail !== undefined ? e.detail : getSavedPlaybackSpeed();
+      setVoiceSpeed(next);
+    };
+    window.addEventListener('dm-speed-changed', syncSpeed);
+    return () => {
+      window.removeEventListener('dm-speed-changed', syncSpeed);
+      stopCurrentAudio();
+    };
   }, []);
+
+  const handleSelectVoiceSpeed = (nextSpeed) => {
+    const valid = setSavedPlaybackSpeed(nextSpeed);
+    setVoiceSpeed(valid);
+  };
+
+  const handleTestVoice = () => {
+    if (isTestingVoice) {
+      stopCurrentAudio();
+      setIsTestingVoice(false);
+      return;
+    }
+    setIsTestingVoice(true);
+    playGermanAudio("Hallo! Ich lerne Deutsch mit DeutschMeister.", {
+      voice: "Charon",
+      type: "sentence",
+      speed: voiceSpeed,
+      onEnd: () => setIsTestingVoice(false),
+      onError: () => setIsTestingVoice(false)
+    });
+  };
 
   const loadOfflineStats = async () => {
     try {
@@ -752,6 +782,78 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
                 </button>
               </section>
             )}
+
+            {/* Tarjeta de Velocidad de Pronunciación (0.75x Phase Vocoder / 1.0x Natural) */}
+            <section className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-4 sm:p-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3.5">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 shrink-0">
+                    <Volume2 size={22} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-800 text-sm sm:text-base">
+                      Velocidad de Pronunciación
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Ajusta la cadencia de la voz Charon en toda la app sin distorsión ni saltos metálicos.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleTestVoice}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold border transition flex items-center justify-center gap-1.5 cursor-pointer self-stretch sm:self-auto shrink-0 ${
+                    isTestingVoice
+                      ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
+                      : 'bg-slate-900 text-white border-slate-900 hover:bg-slate-800'
+                  }`}
+                >
+                  {isTestingVoice ? (
+                    <>
+                      <Square size={13} className="fill-current" />
+                      <span>Detener</span>
+                    </>
+                  ) : (
+                    <>
+                      <Volume2 size={14} />
+                      <span>Probar</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl border border-slate-200/80">
+                <button
+                  type="button"
+                  onClick={() => handleSelectVoiceSpeed(0.75)}
+                  className={`px-3 py-2.5 rounded-lg text-left transition cursor-pointer flex flex-col ${
+                    voiceSpeed === 0.75
+                      ? 'bg-white text-blue-700 shadow-sm ring-1 ring-blue-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                  }`}
+                >
+                  <span className="text-sm font-extrabold leading-tight">0.75x</span>
+                  <span className="text-[11px] font-medium opacity-85 mt-0.5">
+                    Didáctica · Voz Limpia
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectVoiceSpeed(1.0)}
+                  className={`px-3 py-2.5 rounded-lg text-left transition cursor-pointer flex flex-col ${
+                    voiceSpeed === 1.0
+                      ? 'bg-white text-blue-700 shadow-sm ring-1 ring-blue-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                  }`}
+                >
+                  <span className="text-sm font-extrabold leading-tight">1.0x</span>
+                  <span className="text-[11px] font-medium opacity-85 mt-0.5">
+                    Natural · Estándar
+                  </span>
+                </button>
+              </div>
+            </section>
 
             {/* Tarjeta de Utilidades: Sincronización Masiva de Medios de la Nube */}
             <section className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-4 sm:p-5">

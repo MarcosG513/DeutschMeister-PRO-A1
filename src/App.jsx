@@ -14,7 +14,8 @@ import { usePWAInstall } from './hooks/usePWAInstall';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, syncPedagogyProgressFromCloud, splitGermanTitle, splitParentheticalText } from './utils/helpers';
 import { parseTextToTokens, calculateWordTimings } from './utils/textTokenizer';
-import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl } from './services/aiAudioService';
+import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl, getSavedPlaybackSpeed, setSavedPlaybackSpeed, getProcessedSpeechBlobUrl, isCleanStretchedUrl } from './services/aiAudioService';
+import { unregisterCleanStretchedUrl } from './utils/cleanTimeStretch';
 import { API_ENDPOINTS } from './config/apiEndpoints';
 import { mediaBlobStore, CHAPTER_STORIES_CACHE_KEY } from './services/syncMediaService';
 
@@ -108,6 +109,7 @@ export default function App() {
   const [isStoryAudioLoading, setIsStoryAudioLoading] = useState(false);
   const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
+  const [storySpeed, setStorySpeed] = useState(() => getSavedPlaybackSpeed());
   const storyAudioInstanceRef = useRef(null); // Instancia HTML5 Audio en memoria
   const storyAudioUrlRef = useRef(null);      // ObjectURL o URL remota de la sesión activa
 
@@ -127,6 +129,7 @@ export default function App() {
       try {
         URL.revokeObjectURL(storyAudioUrlRef.current);
       } catch (_) {}
+      unregisterCleanStretchedUrl(storyAudioUrlRef.current);
     }
     storyAudioUrlRef.current = null;
     setIsPlayingStoryAudio(false);
@@ -324,9 +327,11 @@ export default function App() {
   const [studiedCardsCount, setStudiedCardsCount] = useState(0);
 
   useEffect(() => {
-    try {
-      localStorage.removeItem('dm_voice_speed');
-    } catch (_) {}
+    const handleSpeedSync = (e) => {
+      const next = e?.detail !== undefined ? e.detail : getSavedPlaybackSpeed();
+      setStorySpeed(next);
+    };
+    window.addEventListener('dm-speed-changed', handleSpeedSync);
     recordDailyStudyActivity();
     getStudiedCardsCount().then(c => setStudiedCardsCount(c));
     const handleStudied = (e) => {
@@ -334,7 +339,10 @@ export default function App() {
       else getStudiedCardsCount().then(c => setStudiedCardsCount(c));
     };
     window.addEventListener('cardStudiedUpdated', handleStudied);
-    return () => window.removeEventListener('cardStudiedUpdated', handleStudied);
+    return () => {
+      window.removeEventListener('dm-speed-changed', handleSpeedSync);
+      window.removeEventListener('cardStudiedUpdated', handleStudied);
+    };
   }, []);
 
   useEffect(() => {
@@ -803,6 +811,14 @@ export default function App() {
     await handleCreateNewChapterStory([]);
   };
 
+  const handleChangeStorySpeed = (nextSpeed) => {
+    const valid = setSavedPlaybackSpeed(nextSpeed);
+    setStorySpeed(valid);
+    if (storyAudioInstanceRef.current || storyAudioUrlRef.current || isPlayingStoryAudio || isStoryAudioLoading) {
+      resetStoryAudioPlayback();
+    }
+  };
+
   const handleToggleStoryAudio = async () => {
     if (!storyState.de || isStoryAudioLoading) return;
 
@@ -820,30 +836,34 @@ export default function App() {
         storyAudioInstanceRef.current.currentTime = 0;
         setCurrentWordIndex(0);
       }
-      storyAudioInstanceRef.current.playbackRate = 1.0;
+      const resumeRate = isCleanStretchedUrl(storyAudioUrlRef.current) ? 1.0 : storySpeed;
+      storyAudioInstanceRef.current.playbackRate = resumeRate;
       storyAudioInstanceRef.current.preservesPitch = true;
       storyAudioInstanceRef.current.play();
       setIsPlayingStoryAudio(true);
       return;
     }
 
-    // 3. Primera reproducción: Llamar a la API y guardar en memoria
+    // 3. Primera reproducción: Obtener URL limpia (Phase Vocoder a 0.75x o original a 1.0x) y guardar en memoria
     try {
       setIsStoryAudioLoading(true);
       stopCurrentAudio(); // Detiene cualquier otro sonido en la app
 
-      const audioSource = await getGermanSpeechUrl(storyState.de, {
+      const activeSpeed = getSavedPlaybackSpeed();
+      const audioSource = await getProcessedSpeechBlobUrl(storyState.de, {
         voice: "Charon",
-        type: "story"
+        type: "story",
+        speed: activeSpeed
       });
 
       storyAudioUrlRef.current = audioSource;
 
+      const targetRate = isCleanStretchedUrl(audioSource) ? 1.0 : activeSpeed;
       const audio = new Audio(audioSource);
-      audio.playbackRate = 1.0;
+      audio.playbackRate = targetRate;
       audio.preservesPitch = true;
       audio.onloadedmetadata = () => {
-        audio.playbackRate = 1.0;
+        audio.playbackRate = targetRate;
         audio.preservesPitch = true;
       };
       storyAudioInstanceRef.current = audio;
@@ -1770,9 +1790,81 @@ export default function App() {
                   </div>
                 ) : (
                   <div className="space-y-3.5 flex-grow overflow-hidden flex flex-col">
-                    <div className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[270px]">
+                    <div className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[290px]">
+                      <div className="flex items-center justify-between gap-2 px-3.5 py-2 border-b border-slate-200/80 bg-white/80 shrink-0">
+                        <div
+                          className="inline-flex items-center rounded-full bg-slate-100 border border-slate-200 p-0.5"
+                          role="group"
+                          aria-label="Velocidad de reproducción del cuento"
+                        >
+                          {[0.75, 1.0].map((spd) => (
+                            <button
+                              key={spd}
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleChangeStorySpeed(spd);
+                              }}
+                              className={`px-2.5 py-1 rounded-full text-[11px] font-extrabold transition cursor-pointer ${
+                                storySpeed === spd
+                                  ? "bg-indigo-600 text-white shadow-xs"
+                                  : "text-slate-600 hover:text-slate-900"
+                              }`}
+                            >
+                              {spd === 1 ? "1x" : "0.75x"}
+                            </button>
+                          ))}
+                        </div>
+                        <button
+                          onClick={handleToggleStoryAudio}
+                          disabled={isStoryAudioLoading}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-xs transition-all text-xs font-semibold cursor-pointer ${
+                            isStoryAudioLoading
+                              ? "bg-indigo-100 text-indigo-500 cursor-not-allowed opacity-100"
+                              : isPlayingStoryAudio
+                                ? "bg-indigo-600 text-white hover:bg-indigo-700 opacity-100"
+                                : "bg-white text-indigo-600 hover:bg-indigo-50 border border-indigo-200"
+                          }`}
+                          title={
+                            isStoryAudioLoading
+                              ? "Preparando voz de estudio..."
+                              : isPlayingStoryAudio
+                                ? "Pausar cuento"
+                                : "Escuchar cuento"
+                          }
+                          aria-label={
+                            isStoryAudioLoading
+                              ? "Preparando voz de estudio..."
+                              : isPlayingStoryAudio
+                                ? "Pausar cuento"
+                                : "Escuchar cuento"
+                          }
+                        >
+                          {isStoryAudioLoading ? (
+                            <>
+                              <Loader2 size={14} className="animate-spin text-indigo-500" />
+                              <span className="hidden sm:inline">Preparando voz de estudio...</span>
+                            </>
+                          ) : isPlayingStoryAudio ? (
+                            <>
+                              <div className="flex items-center gap-0.5">
+                                <span className="w-1 h-3 bg-white rounded-sm animate-pulse"></span>
+                                <span className="w-1 h-2 bg-white rounded-sm animate-pulse delay-75"></span>
+                                <span className="w-1 h-3.5 bg-white rounded-sm animate-pulse delay-150"></span>
+                              </div>
+                              <Pause size={14} className="ml-0.5" />
+                              <span className="hidden sm:inline">Pausar</span>
+                            </>
+                          ) : (
+                            <>
+                              <Play size={14} className="fill-current" />
+                              <span>{storyAudioUrlRef.current ? "Reanudar" : "Escuchar cuento"}</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
                       <div
-                        className="p-5 overflow-y-auto pb-4 pr-12 cursor-pointer hover:bg-indigo-50/10 flex-grow"
+                        className="p-5 overflow-y-auto pb-4 cursor-pointer hover:bg-indigo-50/10 flex-grow"
                         onClick={handleToggleStoryAudio}
                       >
                         <div translate="no" className="notranslate font-normal text-lg leading-relaxed text-slate-800">
@@ -1812,53 +1904,6 @@ export default function App() {
                           })}
                         </div>
                       </div>
-                      <button
-                        onClick={handleToggleStoryAudio}
-                        disabled={isStoryAudioLoading}
-                        className={`absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-md transition-all text-xs font-semibold cursor-pointer ${
-                          isStoryAudioLoading
-                            ? "bg-indigo-100 text-indigo-500 cursor-not-allowed opacity-100"
-                            : isPlayingStoryAudio
-                              ? "bg-indigo-600 text-white hover:bg-indigo-700 opacity-100"
-                              : "bg-white text-indigo-600 hover:bg-indigo-50 border border-indigo-200 opacity-90 group-hover:opacity-100"
-                        }`}
-                        title={
-                          isStoryAudioLoading
-                            ? "Preparando voz de estudio..."
-                            : isPlayingStoryAudio
-                              ? "Pausar cuento"
-                              : "Escuchar cuento"
-                        }
-                        aria-label={
-                          isStoryAudioLoading
-                            ? "Preparando voz de estudio..."
-                            : isPlayingStoryAudio
-                              ? "Pausar cuento"
-                              : "Escuchar cuento"
-                        }
-                      >
-                        {isStoryAudioLoading ? (
-                          <>
-                            <Loader2 size={14} className="animate-spin text-indigo-500" />
-                            <span className="hidden sm:inline">Preparando voz de estudio...</span>
-                          </>
-                        ) : isPlayingStoryAudio ? (
-                          <>
-                            <div className="flex items-center gap-0.5">
-                              <span className="w-1 h-3 bg-white rounded-sm animate-pulse"></span>
-                              <span className="w-1 h-2 bg-white rounded-sm animate-pulse delay-75"></span>
-                              <span className="w-1 h-3.5 bg-white rounded-sm animate-pulse delay-150"></span>
-                            </div>
-                            <Pause size={14} className="ml-0.5" />
-                            <span className="hidden sm:inline">Pausar</span>
-                          </>
-                        ) : (
-                          <>
-                            <Play size={14} className="fill-current" />
-                            <span>{storyAudioUrlRef.current ? "Reanudar" : "Escuchar cuento"}</span>
-                          </>
-                        )}
-                      </button>
                     </div>
                     <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex-shrink-0 max-h-[160px] overflow-y-auto">
                       <p className="text-slate-700 italic text-sm leading-relaxed">{storyState.es}</p>

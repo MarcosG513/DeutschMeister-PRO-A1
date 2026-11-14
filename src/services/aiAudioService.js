@@ -1,8 +1,20 @@
 import localforage from "localforage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { nativeSpeak } from "../utils/helpers";
+import {
+  nativeSpeak,
+  normalizePlaybackSpeed,
+  getSavedPlaybackSpeed,
+  setSavedPlaybackSpeed
+} from "../utils/helpers";
+import {
+  getCleanSpeedAudioResult,
+  isCleanStretchedUrl,
+  unregisterCleanStretchedUrl
+} from "../utils/cleanTimeStretch";
 import { functions as appFunctions } from "../config/firebase";
+
+export { getSavedPlaybackSpeed, setSavedPlaybackSpeed, isCleanStretchedUrl };
 
 export const audioStore = localforage.createInstance({
   name: "DeutschMeisterAudioCache",
@@ -187,11 +199,17 @@ function evictAudioKeyFromCache(key) {
   } catch (_) {}
 }
 
+function revokeTrackedObjectUrl(url) {
+  if (!url || typeof url !== "string" || !url.startsWith("blob:")) return;
+  try {
+    URL.revokeObjectURL(url);
+  } catch (_) {}
+  unregisterCleanStretchedUrl(url);
+}
+
 function revokeCurrentObjectUrl() {
   if (currentObjectUrl) {
-    try {
-      URL.revokeObjectURL(currentObjectUrl);
-    } catch (_) {}
+    revokeTrackedObjectUrl(currentObjectUrl);
     currentObjectUrl = null;
   }
 }
@@ -233,11 +251,7 @@ async function playAudioSource(
 ) {
   if (isStale()) {
     cleanupSignal();
-    if (isObjectUrl) {
-      try {
-        URL.revokeObjectURL(source);
-      } catch (_) {}
-    }
+    if (isObjectUrl) revokeTrackedObjectUrl(source);
     return;
   }
 
@@ -264,9 +278,7 @@ async function playAudioSource(
     if (isObjectUrl && currentObjectUrl === source) {
       revokeCurrentObjectUrl();
     } else if (isObjectUrl) {
-      try {
-        URL.revokeObjectURL(source);
-      } catch (_) {}
+      revokeTrackedObjectUrl(source);
     }
   };
 
@@ -305,9 +317,14 @@ async function playAudioSource(
 
 async function persistBlobUnderAudioKeys(blob, keys = []) {
   if (!(blob instanceof Blob)) return;
-  const uniqueKeys = Array.from(new Set(keys.filter(Boolean)));
+  const keySet = cachedAudioKeysSet;
+  const missingKeys = Array.from(new Set(keys.filter(Boolean))).filter(
+    (k) => !keySet || !keySet.has(k)
+  );
+  if (missingKeys.length === 0) return;
+
   await Promise.all(
-    uniqueKeys.map((key) =>
+    missingKeys.map((key) =>
       audioStore
         .setItem(key, blob)
         .then(() => markAudioKeyCached(key))
@@ -317,38 +334,69 @@ async function persistBlobUnderAudioKeys(blob, keys = []) {
 }
 
 /**
- * Obtiene la URL de reproducción de audio aplicando el flujo obligatorio de 3 niveles para TODOS los audios
- * (vocabulario, oraciones, lecturas y cuentos de Tablas Maestras, sin excepción efímera):
- *   1. audioStore IndexedDB (por sha256Id, cacheKey o safeAudioId) -> 0 ms.
- *   2. Firestore global_audio_pronunciations (por sha256Id, canonicalId y legacyId) -> $0 créditos IA, guarda Blob en audioStore.
- *   3. Cloud Function synthesizeGermanSpeech -> persiste en Storage + Firestore y guarda Blob en audioStore.
+ * Resuelve el binario Blob original (o la URL remota en fallback) siguiendo estrictamente
+ * los 3 niveles de caché (audioStore -> Firestore -> Cloud Function synthesizeGermanSpeech).
  */
-export async function getGermanSpeechUrl(text, options = {}) {
-  const { voice = "Charon", type = "vocab", lang = "de" } = options;
-  if (!text || typeof text !== "string") return null;
-  const cleanText = normalizeCleanText(text);
-  if (!cleanText) return null;
-
+async function resolveAudioAsset(
+  cleanText,
+  { voice = "Charon", type = "vocab", lang = "de", signal = null, isStale = () => false } = {}
+) {
   const sha256Id = await computeSha256AudioId(cleanText, voice);
   const cacheKey = getSafeAudioKey(cleanText);
   const safeAudioId = getSafeAudioId(cleanText);
   const legacyKey = getLegacyAudioKey(cleanText);
+  const primaryCacheId = sha256Id || cacheKey || safeAudioId;
+
+  const audioAlias =
+    cacheKey && cacheKey.startsWith("tts_")
+      ? `audio_${cacheKey.replace(/^tts_/, "")}`
+      : "";
   const allLocalKeys = Array.from(
-    new Set([sha256Id, cacheKey, safeAudioId, legacyKey].filter(Boolean))
+    new Set(
+      [
+        sha256Id,
+        cacheKey,
+        safeAudioId,
+        audioAlias,
+        legacyKey,
+        cacheKey ? `${cacheKey}_` : "",
+        `${safeAudioId}_`,
+        legacyKey ? `${legacyKey}_` : ""
+      ].filter(Boolean)
+    )
   );
 
   // 1. Nivel 1: Revisar audioStore (IndexedDB local a 0 ms)
   try {
     const keySet = await ensureAudioKeySet();
+    if (isStale()) return null;
     const matchedLocalKey = allLocalKeys.find((k) => keySet.has(k));
     if (matchedLocalKey) {
       const cached = await audioStore.getItem(matchedLocalKey);
-      if (cached instanceof Blob) {
+      if (isStale()) return null;
+      if (!cached) {
+        keySet.delete(matchedLocalKey);
+      } else if (cached instanceof Blob) {
         await persistBlobUnderAudioKeys(cached, [sha256Id, cacheKey, safeAudioId]);
-        return URL.createObjectURL(cached);
+        return { blob: cached, remoteUrl: null, cacheKey: primaryCacheId };
+      } else if (
+        typeof cached === "string" &&
+        (cached.startsWith("http") || cached.startsWith("data:"))
+      ) {
+        try {
+          const resp = await fetch(cached, signal ? { signal } : undefined);
+          if (isStale()) return null;
+          if (resp.ok) {
+            const fetchedBlob = await resp.blob();
+            await persistBlobUnderAudioKeys(fetchedBlob, [sha256Id, cacheKey, safeAudioId]);
+            return { blob: fetchedBlob, remoteUrl: null, cacheKey: primaryCacheId };
+          }
+        } catch (_) {}
       }
     }
   } catch (_) {}
+
+  if (isStale()) return null;
 
   // 2. Nivel 2: Consulta directa a Firestore CDN (por sha256Id, canonicalId y legacyId)
   let remoteAudioUrl = null;
@@ -360,6 +408,7 @@ export async function getGermanSpeechUrl(text, options = {}) {
       );
       for (const docId of candidateDocIds) {
         const snap = await getDoc(doc(db, "global_audio_pronunciations", docId));
+        if (isStale()) return null;
         if (snap.exists()) {
           const data = snap.data();
           if (
@@ -378,11 +427,14 @@ export async function getGermanSpeechUrl(text, options = {}) {
     console.warn("[TTS Firestore Direct Read] Fallback a Cloud Function:", firestoreErr.message);
   }
 
+  if (isStale()) return null;
+
   // 3. Nivel 3: Invocar Cloud Function synthesizeGermanSpeech solo si no existe en Firestore
   if (!remoteAudioUrl) {
     const fns = appFunctions || getFunctions();
     const synthesizeFn = httpsCallable(fns, "synthesizeGermanSpeech");
     const response = await synthesizeFn({ text: cleanText, voice, type, lang });
+    if (isStale()) return null;
     if (response.data && response.data.audioUrl) {
       remoteAudioUrl = response.data.audioUrl;
     }
@@ -394,15 +446,69 @@ export async function getGermanSpeechUrl(text, options = {}) {
 
   // Descargar Blob y persistir en audioStore bajo sha256Id y cacheKey para futuras reproducciones a 0 ms
   try {
-    const resp = await fetch(remoteAudioUrl);
+    const resp = await fetch(remoteAudioUrl, signal ? { signal } : undefined);
+    if (isStale()) return null;
     if (resp.ok) {
       const blob = await resp.blob();
       await persistBlobUnderAudioKeys(blob, [sha256Id, cacheKey, safeAudioId]);
-      return URL.createObjectURL(blob);
+      return { blob, remoteUrl: null, cacheKey: primaryCacheId };
     }
-  } catch (_) {}
+  } catch (_) {
+    if (isStale()) return null;
+  }
 
-  return remoteAudioUrl;
+  return { blob: null, remoteUrl: remoteAudioUrl, cacheKey: primaryCacheId };
+}
+
+/**
+ * Obtiene la URL de reproducción de audio aplicando el flujo obligatorio de 3 niveles para TODOS los audios
+ * (vocabulario, oraciones, lecturas y cuentos de Tablas Maestras, sin excepción efímera):
+ *   1. audioStore IndexedDB (por sha256Id, cacheKey o safeAudioId) -> 0 ms.
+ *   2. Firestore global_audio_pronunciations (por sha256Id, canonicalId y legacyId) -> $0 créditos IA, guarda Blob en audioStore.
+ *   3. Cloud Function synthesizeGermanSpeech -> persiste en Storage + Firestore y guarda Blob en audioStore.
+ */
+export async function getGermanSpeechUrl(text, options = {}) {
+  const { voice = "Charon", type = "vocab", lang = "de" } = options;
+  if (!text || typeof text !== "string") return null;
+  const cleanText = normalizeCleanText(text);
+  if (!cleanText) return null;
+
+  const asset = await resolveAudioAsset(cleanText, { voice, type, lang });
+  if (!asset) return null;
+  if (asset.blob instanceof Blob) {
+    return URL.createObjectURL(asset.blob);
+  }
+  return asset.remoteUrl;
+}
+
+/**
+ * Entrega un ObjectURL limpio listo para reproductores con karaoke (Cuentos y Lectura):
+ * - A velocidad 1.0x devuelve el Blob original sin modificar.
+ * - A velocidad 0.75x procesa el Blob mediante el Phase Vocoder (sin WSOLA metálico) y guarda en caché LRU.
+ */
+export async function getProcessedSpeechBlobUrl(text, options = {}) {
+  const { voice = "Charon", type = "vocab", lang = "de", speed, signal = null } = options;
+  if (!text || typeof text !== "string") return null;
+  const cleanText = normalizeCleanText(text);
+  if (!cleanText) return null;
+
+  const targetSpeed =
+    speed !== undefined ? normalizePlaybackSpeed(speed) : getSavedPlaybackSpeed();
+
+  const asset = await resolveAudioAsset(cleanText, { voice, type, lang, signal });
+  if (!asset) return null;
+
+  if (asset.blob instanceof Blob) {
+    const result = await getCleanSpeedAudioResult(asset.blob, targetSpeed, asset.cacheKey);
+    return result.url;
+  }
+
+  if (targetSpeed === 0.75 && asset.remoteUrl) {
+    const result = await getCleanSpeedAudioResult(asset.remoteUrl, 0.75, asset.cacheKey);
+    return result.url;
+  }
+
+  return asset.remoteUrl;
 }
 
 export async function playGermanAudio(text, options = {}) {
@@ -415,6 +521,9 @@ export async function playGermanAudio(text, options = {}) {
 
   const cleanText = normalizeCleanText(text);
   if (!cleanText) return;
+
+  const targetSpeed =
+    options.speed !== undefined ? normalizePlaybackSpeed(options.speed) : getSavedPlaybackSpeed();
 
   stopCurrentAudio();
   const requestId = latestPlaybackRequestId;
@@ -431,158 +540,69 @@ export async function playGermanAudio(text, options = {}) {
     signal?.removeEventListener("abort", handleAbort);
   };
 
-  const sha256Id = await computeSha256AudioId(cleanText, voice);
-  const cacheKey = getSafeAudioKey(cleanText);
-  const safeAudioId = getSafeAudioId(cleanText);
-  const legacyKey = getLegacyAudioKey(cleanText);
-
   try {
     if (onStart && !isStale()) onStart();
 
-    const configuredRate = (() => {
-      try {
-        const stored = typeof localStorage !== "undefined" ? Number(localStorage.getItem("dm_audio_speed")) : null;
-        return stored || options.rate || 1.0;
-      } catch (_) {
-        return options.rate || 1.0;
-      }
-    })();
-
-    // 1. Nivel 1 (100% Offline, 0 ms): Busca el Blob en audioStore para TODOS los tipos de audio
-    const keySet = await ensureAudioKeySet();
-    if (isStale()) { cleanupSignal(); return; }
-
-    const audioAlias = cacheKey && cacheKey.startsWith("tts_")
-      ? `audio_${cacheKey.replace(/^tts_/, "")}`
-      : "";
-    const candidateKeys = Array.from(
-      new Set([
-        sha256Id,
-        cacheKey,
-        safeAudioId,
-        audioAlias,
-        legacyKey,
-        cacheKey ? `${cacheKey}_` : "",
-        `${safeAudioId}_`,
-        legacyKey ? `${legacyKey}_` : "",
-      ].filter(Boolean))
-    );
-
-    const matchedKey = candidateKeys.find((k) => keySet.has(k));
-    if (matchedKey) {
-      const cachedItem = await audioStore.getItem(matchedKey);
-      if (isStale()) { cleanupSignal(); return; }
-
-      if (!cachedItem) {
-        keySet.delete(matchedKey);
-      } else if (cachedItem instanceof Blob) {
-        await persistBlobUnderAudioKeys(cachedItem, [sha256Id, cacheKey, safeAudioId]);
-        const localBlobUrl = URL.createObjectURL(cachedItem);
-        await playAudioSource(localBlobUrl, {
-          rate: configuredRate,
-          cleanText,
-          lang,
-          isObjectUrl: true,
-          cacheKeyToEvict: matchedKey,
-          isStale,
-          cleanupSignal,
-          onEnd,
-          onError,
-        });
-        return;
-      } else if (typeof cachedItem === "string" && (cachedItem.startsWith("http") || cachedItem.startsWith("data:"))) {
-        try {
-          const resp = await fetch(cachedItem, signal ? { signal } : undefined);
-          if (isStale()) { cleanupSignal(); return; }
-          if (resp.ok) {
-            const fetchedBlob = await resp.blob();
-            if (isStale()) { cleanupSignal(); return; }
-            await persistBlobUnderAudioKeys(fetchedBlob, [sha256Id, cacheKey, safeAudioId]);
-            const localBlobUrl = URL.createObjectURL(fetchedBlob);
-            await playAudioSource(localBlobUrl, {
-              rate: configuredRate,
-              cleanText,
-              lang,
-              isObjectUrl: true,
-              cacheKeyToEvict: sha256Id || cacheKey || matchedKey,
-              isStale,
-              cleanupSignal,
-              onEnd,
-              onError,
-            });
-            return;
-          }
-        } catch (_) {
-          if (isStale()) { cleanupSignal(); return; }
-        }
-      }
-    }
-
-    if (isStale()) { cleanupSignal(); return; }
-
-    // 2 & 3. Consultar Firestore global_audio_pronunciations -> fallback synthesizeGermanSpeech + persistir en audioStore
-    const audioSource = await getGermanSpeechUrl(cleanText, { voice, type, lang });
-    if (isStale()) {
-      if (audioSource && audioSource.startsWith("blob:")) {
-        try { URL.revokeObjectURL(audioSource); } catch (_) {}
-      }
+    const asset = await resolveAudioAsset(cleanText, { voice, type, lang, signal, isStale });
+    if (!asset || isStale()) {
       cleanupSignal();
       return;
     }
 
-    if (audioSource.startsWith("blob:") || audioSource.startsWith("data:")) {
-      await playAudioSource(audioSource, {
-        rate: configuredRate,
+    if (asset.blob instanceof Blob) {
+      const processed = await getCleanSpeedAudioResult(asset.blob, targetSpeed, asset.cacheKey);
+      if (isStale()) {
+        revokeTrackedObjectUrl(processed.url);
+        cleanupSignal();
+        return;
+      }
+
+      await playAudioSource(processed.url, {
+        rate: processed.playbackRate, // 1.0 si fue estirado por Phase Vocoder, 0.75 solo en fallback antiguo
         cleanText,
         lang,
-        isObjectUrl: audioSource.startsWith("blob:"),
-        cacheKeyToEvict: sha256Id || cacheKey,
+        isObjectUrl: processed.url.startsWith("blob:"),
+        cacheKeyToEvict: asset.cacheKey,
         isStale,
         cleanupSignal,
         onEnd,
-        onError,
+        onError
       });
       return;
     }
 
-    try {
-      const audioFetch = await fetch(audioSource, signal ? { signal } : undefined);
-      if (isStale()) { cleanupSignal(); return; }
-      if (audioFetch.ok) {
-        const blob = await audioFetch.blob();
-        if (isStale()) { cleanupSignal(); return; }
-        await persistBlobUnderAudioKeys(blob, [sha256Id, cacheKey, safeAudioId]);
-
-        const localBlobUrl = URL.createObjectURL(blob);
-        await playAudioSource(localBlobUrl, {
-          rate: configuredRate,
+    if (asset.remoteUrl) {
+      if (targetSpeed === 0.75) {
+        const processed = await getCleanSpeedAudioResult(asset.remoteUrl, 0.75, asset.cacheKey);
+        if (isStale()) {
+          revokeTrackedObjectUrl(processed.url);
+          cleanupSignal();
+          return;
+        }
+        await playAudioSource(processed.url, {
+          rate: processed.playbackRate,
           cleanText,
           lang,
-          isObjectUrl: true,
-          cacheKeyToEvict: sha256Id || cacheKey,
+          isObjectUrl: processed.url.startsWith("blob:"),
           isStale,
           cleanupSignal,
           onEnd,
-          onError,
+          onError
         });
         return;
       }
-    } catch (fetchErr) {
-      if (isStale()) { cleanupSignal(); return; }
-      console.warn("[TTS Fetch Warning] Reproduciendo stream directo:", fetchErr?.message || fetchErr);
-    }
 
-    if (isStale()) { cleanupSignal(); return; }
-    await playAudioSource(audioSource, {
-      rate: configuredRate,
-      cleanText,
-      lang,
-      isObjectUrl: false,
-      isStale,
-      cleanupSignal,
-      onEnd,
-      onError,
-    });
+      await playAudioSource(asset.remoteUrl, {
+        rate: targetSpeed,
+        cleanText,
+        lang,
+        isObjectUrl: false,
+        isStale,
+        cleanupSignal,
+        onEnd,
+        onError
+      });
+    }
   } catch (error) {
     cleanupSignal();
     if (isStale()) return;

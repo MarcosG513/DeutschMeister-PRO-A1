@@ -118,13 +118,59 @@ export const compressImageBase64 = (base64Str, maxWidth = 512, quality = 0.6) =>
   });
 };
 
+const PLAYBACK_SPEED_KEY = 'dm_voice_speed';
+
+/**
+ * Normaliza la velocidad de reproducción permitida exclusivamente a 0.75x o 1.0x.
+ */
+export const normalizePlaybackSpeed = (speed) => {
+  const num = Number(speed);
+  if (Number.isFinite(num) && Math.abs(num - 0.75) < 0.05) {
+    return 0.75;
+  }
+  return 1.0;
+};
+
+/**
+ * Lee la velocidad de pronunciación guardada en localStorage ('dm_voice_speed': 0.75 o 1.0).
+ */
+export const getSavedPlaybackSpeed = () => {
+  try {
+    if (typeof localStorage === 'undefined') return 1.0;
+    const raw = localStorage.getItem(PLAYBACK_SPEED_KEY);
+    if (!raw) return 1.0;
+    return normalizePlaybackSpeed(raw);
+  } catch (_) {
+    return 1.0;
+  }
+};
+
+/**
+ * Guarda la velocidad de pronunciación válida (0.75 o 1.0) y notifica globalmente vía 'dm-speed-changed'.
+ */
+export const setSavedPlaybackSpeed = (speed) => {
+  const validSpeed = normalizePlaybackSpeed(speed);
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(PLAYBACK_SPEED_KEY, String(validSpeed));
+    }
+  } catch (_) {}
+  try {
+    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('dm-speed-changed', { detail: validSpeed }));
+    }
+  } catch (_) {}
+  return validSpeed;
+};
+
 export const nativeSpeak = async (text) => {
+  const speed = getSavedPlaybackSpeed();
   if (Capacitor.isNativePlatform()) {
     try {
       await TextToSpeech.speak({
         text: text,
         lang: 'de-DE',
-        rate: 0.85, // Claridad pedagógica estándar en sintetizador mecánico Android
+        rate: speed === 0.75 ? 0.75 : 0.95,
         pitch: 1.0,
       });
     } catch (e) {
@@ -135,7 +181,7 @@ export const nativeSpeak = async (text) => {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'de-DE';
-      utterance.rate = 1.0;
+      utterance.rate = speed === 0.75 ? 0.75 : 1.0;
       window.speechSynthesis.speak(utterance);
     } else {
       console.error("Web Speech API no está soportada en este navegador.");

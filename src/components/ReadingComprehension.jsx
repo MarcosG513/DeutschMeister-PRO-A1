@@ -38,9 +38,17 @@ import {
   audioStore,
   getSafeAudioKey,
   getGermanSpeechUrl,
+  getProcessedSpeechBlobUrl,
+  getSavedPlaybackSpeed,
+  setSavedPlaybackSpeed,
   playGermanAudio,
   stopCurrentAudio
 } from '../services/aiAudioService';
+import {
+  getCleanSpeedAudioUrl,
+  isCleanStretchedUrl,
+  unregisterCleanStretchedUrl
+} from '../utils/cleanTimeStretch';
 import {
   immersiveStoriesCatalog,
   STORY_CATEGORIES,
@@ -75,7 +83,7 @@ const FONT_SIZE_PRESETS = [
   { id: 'lg', label: 'AA', deClass: 'text-xl sm:text-2xl leading-loose', esClass: 'text-base' }
 ];
 
-const SPEED_OPTIONS = [0.75, 1, 1.25];
+const SPEED_OPTIONS = [0.75, 1];
 
 const PRONOUN_ROWS = [
   { key: 'ich', label: 'ich' },
@@ -234,7 +242,7 @@ const ReadingComprehension = ({ onExit }) => {
   const [playbackMode, setPlaybackMode] = useState(null); // null | 'story' | 'sentence'
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [playbackSpeed, setPlaybackSpeed] = useState(() => getSavedPlaybackSpeed());
   const [isLooping, setIsLooping] = useState(false);
   const [activeGlobalWordIndex, setActiveGlobalWordIndex] = useState(-1);
   const [activeSentenceIndex, setActiveSentenceIndex] = useState(-1);
@@ -267,11 +275,17 @@ const ReadingComprehension = ({ onExit }) => {
 
   useEffect(() => {
     playbackSpeedRef.current = playbackSpeed;
-    if (audioRef.current) {
-      audioRef.current.playbackRate = playbackSpeed;
-      audioRef.current.preservesPitch = true;
-    }
   }, [playbackSpeed]);
+
+  useEffect(() => {
+    const syncSpeed = (e) => {
+      const next = e?.detail !== undefined ? e.detail : getSavedPlaybackSpeed();
+      playbackSpeedRef.current = next;
+      setPlaybackSpeed(next);
+    };
+    window.addEventListener('dm-speed-changed', syncSpeed);
+    return () => window.removeEventListener('dm-speed-changed', syncSpeed);
+  }, []);
 
   // Todas las historias disponibles (12 catálogo base + personalizadas locales/nube)
   const allStories = useMemo(() => {
@@ -361,6 +375,7 @@ const ReadingComprehension = ({ onExit }) => {
       try {
         URL.revokeObjectURL(objectUrlRef.current);
       } catch (_) {}
+      unregisterCleanStretchedUrl(objectUrlRef.current);
       objectUrlRef.current = null;
     }
   }, []);
@@ -598,7 +613,19 @@ const ReadingComprehension = ({ onExit }) => {
 
     try {
       const cached = await audioStore.getItem(cacheKey);
-      if (cached instanceof Blob) return cached;
+      if (cached instanceof Blob) {
+        if (playbackSpeedRef.current === 0.75) {
+          getCleanSpeedAudioUrl(cached, 0.75, cacheKey)
+            .then((warmUrl) => {
+              if (warmUrl && warmUrl.startsWith('blob:')) {
+                try { URL.revokeObjectURL(warmUrl); } catch (_) {}
+                unregisterCleanStretchedUrl(warmUrl);
+              }
+            })
+            .catch(() => {});
+        }
+        return cached;
+      }
     } catch (_) {}
 
     if (prefetchInFlightRef.current.has(cacheKey)) {
@@ -615,7 +642,17 @@ const ReadingComprehension = ({ onExit }) => {
         if (!resp.ok) return null;
         const blob = await resp.blob();
         await audioStore.setItem(cacheKey, blob).catch(() => {});
-        if (remoteUrl && remoteUrl.startsWith('blob:')) URL.revokeObjectURL(remoteUrl);
+        if (remoteUrl && remoteUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(remoteUrl);
+          unregisterCleanStretchedUrl(remoteUrl);
+        }
+        if (playbackSpeedRef.current === 0.75) {
+          const warmUrl = await getCleanSpeedAudioUrl(blob, 0.75, cacheKey).catch(() => null);
+          if (warmUrl && warmUrl.startsWith('blob:')) {
+            try { URL.revokeObjectURL(warmUrl); } catch (_) {}
+            unregisterCleanStretchedUrl(warmUrl);
+          }
+        }
         return blob;
       } catch (_) {
         return null;
@@ -715,6 +752,7 @@ const ReadingComprehension = ({ onExit }) => {
     };
 
     try {
+      const activeSpeed = playbackSpeedRef.current;
       const cacheKey = getSafeAudioKey(sent.de);
       let resolvedSource = null;
       let isObjectUrl = false;
@@ -733,29 +771,36 @@ const ReadingComprehension = ({ onExit }) => {
       }
 
       if (blob instanceof Blob) {
-        resolvedSource = URL.createObjectURL(blob);
-        isObjectUrl = true;
+        resolvedSource =
+          activeSpeed === 0.75
+            ? await getCleanSpeedAudioUrl(blob, 0.75, cacheKey)
+            : URL.createObjectURL(blob);
+        isObjectUrl = Boolean(resolvedSource && resolvedSource.startsWith('blob:'));
       } else {
-        const remoteUrl = await getGermanSpeechUrl(sent.de, {
+        const processedUrl = await getProcessedSpeechBlobUrl(sent.de, {
           voice: 'Charon',
-          type: 'sentence'
+          type: 'sentence',
+          speed: activeSpeed
         });
-        if (runId !== playbackRunIdRef.current) return;
-        resolvedSource = remoteUrl;
-        isObjectUrl = Boolean(remoteUrl && remoteUrl.startsWith('blob:'));
+        resolvedSource = processedUrl;
+        isObjectUrl = Boolean(processedUrl && processedUrl.startsWith('blob:'));
       }
 
       if (runId !== playbackRunIdRef.current || !resolvedSource) {
-        if (isObjectUrl && resolvedSource) URL.revokeObjectURL(resolvedSource);
+        if (isObjectUrl && resolvedSource) {
+          try { URL.revokeObjectURL(resolvedSource); } catch (_) {}
+          unregisterCleanStretchedUrl(resolvedSource);
+        }
         if (!resolvedSource) runNativeFallbackStep();
         return;
       }
 
+      const targetRate = isCleanStretchedUrl(resolvedSource) ? 1.0 : activeSpeed;
       const audio = new Audio(resolvedSource);
-      audio.playbackRate = playbackSpeedRef.current;
+      audio.playbackRate = targetRate;
       audio.preservesPitch = true;
       audio.onloadedmetadata = () => {
-        audio.playbackRate = playbackSpeedRef.current;
+        audio.playbackRate = targetRate;
         audio.preservesPitch = true;
       };
       audioRef.current = audio;
@@ -828,6 +873,16 @@ const ReadingComprehension = ({ onExit }) => {
     }
   }, [prefetchSentenceAudio, releaseCurrentAudioOnly, tokenizedStory.sentences]);
 
+  // Cambia velocidad global exclusivamente entre 0.75x (Phase Vocoder) y 1x
+  const handleSelectPlaybackSpeed = (nextSpeed) => {
+    const valid = setSavedPlaybackSpeed(nextSpeed);
+    setPlaybackSpeed(valid);
+    playbackSpeedRef.current = valid;
+    if (audioRef.current || isPlaying || playbackMode) {
+      cleanupPlayback();
+    }
+  };
+
   // Reproducir audio karaoke (historia completa frase-a-frase o frase única)
   const startKaraokePlayback = async (mode, targetSentenceIdx = null) => {
     if (!activeStory || !tokenizedStory.sentences.length) return;
@@ -839,7 +894,10 @@ const ReadingComprehension = ({ onExit }) => {
         setIsPlaying(false);
         return;
       }
-      audioRef.current.playbackRate = playbackSpeedRef.current;
+      const resumeRate = isCleanStretchedUrl(objectUrlRef.current || audioRef.current.src)
+        ? 1.0
+        : playbackSpeedRef.current;
+      audioRef.current.playbackRate = resumeRate;
       audioRef.current.preservesPitch = true;
       await audioRef.current.play().catch(() => {});
       setIsPlaying(true);
@@ -2546,8 +2604,9 @@ const ReadingComprehension = ({ onExit }) => {
                 {SPEED_OPTIONS.map((spd) => (
                   <button
                     key={spd}
-                    onClick={() => setPlaybackSpeed(spd)}
-                    className={`px-2 py-1 rounded-lg text-[11px] font-extrabold transition cursor-pointer ${
+                    type="button"
+                    onClick={() => handleSelectPlaybackSpeed(spd)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition cursor-pointer ${
                       playbackSpeed === spd
                         ? isDarkMode
                           ? 'bg-teal-500 text-slate-950'
@@ -2557,7 +2616,7 @@ const ReadingComprehension = ({ onExit }) => {
                           : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    {spd}x
+                    {spd === 1 ? '1x' : '0.75x'}
                   </button>
                 ))}
               </div>
