@@ -43,37 +43,67 @@ const RoleplaySimulator = ({
     title: 'En el Restaurante',
     icon: '🍽️',
     desc: 'Pide comida y bebida.',
+    blurtHint: 'Essen, Trinken, Kellner',
     prompt: 'Eres un camarero muy amable en un restaurante en Múnich. El usuario es un cliente de nivel A1 de alemán. Empieza saludando y preguntando qué desea beber. Usa oraciones muy cortas y vocabulario A1. Responde SOLO en alemán.'
   }, {
     id: 'station',
     title: 'Estación de Tren',
     icon: '🚆',
     desc: 'Compra un billete.',
+    blurtHint: 'Zug, Ticket, Gleis',
     prompt: 'Eres un vendedor de billetes en la estación de tren de Berlín. El usuario es un viajero nivel A1 que quiere ir a Fráncfort. Empieza diciendo "Guten Tag, wohin möchten Sie fahren?". Usa oraciones cortas A1. Responde SOLO en alemán.'
   }, {
     id: 'shopping',
     title: 'Tienda de Ropa',
     icon: '👕',
     desc: 'Busca una chaqueta.',
+    blurtHint: 'Jacke, Größe, kaufen',
     prompt: 'Eres un vendedor en una tienda de ropa en Viena. El usuario busca una chaqueta. Empieza diciendo "Guten Tag, kann ich Ihnen helfen?". Usa vocabulario A1. Responde SOLO en alemán.'
   }, {
     id: 'hotel',
     title: 'Recepción de Hotel',
     icon: '🏨',
     desc: 'Haz el check-in y pide la llave.',
+    blurtHint: 'Zimmer, Schlüssel, Nacht',
     prompt: 'Eres el recepcionista de un hotel en Berlín. El usuario tiene una reserva. Empieza diciendo "Herzlich willkommen! Haben Sie eine Reservierung?". Responde SOLO en alemán nivel A1.'
   }, {
     id: 'doctor',
     title: 'En el Médico',
     icon: '🩺',
     desc: 'Explica que te sientes mal.',
+    blurtHint: 'Kopf, Schmerzen, Fieber',
     prompt: 'Eres un médico en Alemania. El usuario es tu paciente. Empieza diciendo "Guten Tag! Was fehlt Ihnen?". Responde SOLO en alemán nivel A1.'
   }, {
     id: 'party',
     title: 'Fiesta de Intercambio',
     icon: '👋',
     desc: 'Preséntate a un desconocido.',
+    blurtHint: 'Hallo, Name, kommen',
     prompt: 'Eres un estudiante de intercambio en una fiesta en Múnich. Quieres conocer al usuario. Empieza diciendo "Hallo! Ich bin Max. Wie heißt du?". Responde SOLO en alemán nivel A1.'
+  }, {
+    id: 'police_roadside',
+    title: 'Polizeikontrolle & Pannenhilfe',
+    badge: 'Cap. 13 & 21 • StVO',
+    icon: '🚔',
+    desc: 'Control policial y avería en carretera (Führerschein, Warnweste).',
+    blurtHint: 'Führerschein, Fahrzeugschein, Warndreieck, Warnweste',
+    prompt: 'Eres un agente de policía amable en un control de tráfico o ayuda en carretera en Alemania. El usuario es un conductor de nivel A1 de alemán. Empieza diciendo "Guten Tag! Allgemeine Verkehrskontrolle. Führerschein und Fahrzeugschein, bitte." Usa oraciones cortas A1 y vocabulario de seguridad vial (Führerschein, Fahrzeugschein, Warndreieck, Warnweste). Responde SOLO en alemán.'
+  }, {
+    id: 'solar_construction',
+    title: 'Baustelle & Photovoltaik-Sicherheit',
+    badge: 'Cap. 18 & 20 • Enpal / VDE',
+    icon: '☀️',
+    desc: 'Seguridad en obra y montaje solar (Helm, Stromkreis, Wechselrichter).',
+    blurtHint: 'Helm, Stromkreis, Wechselrichter, Spannungsprüfer',
+    prompt: 'Eres el jefe de obra (Bauleiter) en una instalación fotovoltaica en Alemania. El usuario es técnico de nivel A1. Empieza saludando y revisando la seguridad eléctrica: "Guten Morgen! Hast du deinen Helm dabei? Ist der Stromkreis am Wechselrichter sicher unterbrochen?" Usa oraciones cortas A1 y vocabulario técnico (Helm, Stromkreis, Wechselrichter, Spannungsprüfer). Responde SOLO en alemán.'
+  }, {
+    id: 'it_helpdesk',
+    title: 'IT-Helpdesk im Büro',
+    badge: 'Cap. 17 • IT & Software',
+    icon: '💻',
+    desc: 'Soporte técnico en la oficina (Passwort, WLAN, Drucker).',
+    blurtHint: 'Passwort, WLAN, Bildschirm, Drucker',
+    prompt: 'Eres un técnico de soporte (IT-Helpdesk) en una oficina en Alemania. El usuario es un empleado de nivel A1 con un fallo técnico. Empieza diciendo "Hallo, IT-Helpdesk! Was funktioniert nicht? Das WLAN, der Drucker oder dein Passwort?" Usa oraciones cortas A1 con vocabulario de oficina y TI (Passwort, WLAN, Bildschirm, Drucker). Responde SOLO en alemán.'
   }];
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({
@@ -268,6 +298,11 @@ const RoleplaySimulator = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {scenarios.map(scen => <button key={scen.id} onClick={() => handleSelectScenario(scen)} className="flex flex-col items-center p-6 bg-slate-50 border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 rounded-xl transition-all text-center group cursor-pointer shadow-sm">
               <span className="text-5xl mb-4 group-hover:scale-110 transition-transform">{scen.icon}</span>
+              {scen.badge && (
+                <span className="mb-2 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-700 border border-purple-200">
+                  {scen.badge}
+                </span>
+              )}
               <h3 className="font-bold text-slate-800 text-lg">{scen.title}</h3>
               <p className="text-sm text-slate-500 mt-2">{scen.desc}</p>
             </button>)}
@@ -300,7 +335,7 @@ const RoleplaySimulator = ({
             type="text"
             autoFocus
             className="w-full bg-slate-100 border-2 border-slate-200 focus:border-purple-400 focus:bg-white rounded-xl py-3.5 px-5 text-sm text-slate-800 outline-none transition shadow-inner placeholder:text-slate-400"
-            placeholder={`Ej: ${scenario.id === 'restaurant' ? 'Essen, Trinken, Kellner' : scenario.id === 'hotel' ? 'Zimmer, Schlüssel, Nacht' : scenario.id === 'doctor' ? 'Kopf, Schmerzen, Fieber' : scenario.id === 'station' ? 'Zug, Ticket, Gleis' : scenario.id === 'shopping' ? 'Jacke, Größe, kaufen' : 'Hallo, Name, kommen'}...`}
+            placeholder={`Ej: ${scenario.blurtHint || 'Hallo, Name, kommen'}...`}
             value={blurtInput}
             onChange={e => setBlurtInput(e.target.value)}
             onFocus={scrollInputIntoView}

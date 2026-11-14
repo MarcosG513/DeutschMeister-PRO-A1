@@ -81,31 +81,33 @@ const EmailSimulator = ({ initialText }) => {
   const getWordCountStatus = (count) => {
     if (count === 0) {
       return {
+        dotClass: "bg-slate-400",
         badgeClass: "bg-slate-100 text-slate-600 border-slate-300",
-        label: "0 / 25-45 palabras",
-        hint: "Meta oficial: 25-45 palabras (ideal ~30)"
+        label: "0 / ~30 palabras",
+        hint: "Meta oficial Goethe A1: ~30 palabras (rango óptimo 20-38)"
       };
     }
-    if (count < 25) {
-      const missing = 25 - count;
+    if (count < 20) {
       return {
-        badgeClass: "bg-amber-100 text-amber-800 border-amber-300",
-        label: `${count} / 25-45 palabras (faltan ${missing})`,
-        hint: "⚠️ Texto corto para Start Deutsch 1"
+        dotClass: "bg-rose-500",
+        badgeClass: "bg-amber-50 text-rose-700 border-rose-300",
+        label: `${count} palabras`,
+        hint: "Faltan palabras — Mínimo recomendado: 25-30 palabras"
       };
     }
-    if (count <= 45) {
+    if (count <= 38) {
       return {
+        dotClass: "bg-emerald-500",
         badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-300",
-        label: `${count} palabras ✅ Rango Óptimo Goethe (25-45)`,
-        hint: "🎯 Longitud ideal para el examen oficial"
+        label: `${count} palabras`,
+        hint: "Longitud óptima Goethe A1 (~30 palabras)"
       };
     }
-    const extra = count - 45;
     return {
-      badgeClass: "bg-rose-100 text-rose-800 border-rose-300",
-      label: `${count} palabras ⚠️ (+${extra} sobre máx. 45)`,
-      hint: "⚠️ Demasiado largo para A1 (sé más conciso)"
+      dotClass: "bg-amber-500",
+      badgeClass: "bg-blue-50 text-amber-800 border-amber-300",
+      label: `${count} palabras`,
+      hint: "Texto extenso — Revisa no cometer errores extra"
     };
   };
 
@@ -185,12 +187,12 @@ const EmailSimulator = ({ initialText }) => {
       feedback += "- **Posición del Verbo (V2):** Comprueba que el verbo conjugado esté en la segunda posición en oraciones enunciativas.\n";
       feedback += "- **Sustantivos con Mayúscula (Großschreibung):** Escribe siempre todos los sustantivos con mayúscula inicial.\n";
       feedback += "\n### 4. 📊 Conteo de Palabras y Extensión Oficial\n";
-      if (currentCount >= 25 && currentCount <= 45) {
-        feedback += `✅ Excelente extensión. Has escrito **${currentCount} palabras** (rango óptimo oficial Goethe: 25-45 palabras, meta: ca. 30 Wörter).\n`;
-      } else if (currentCount < 25) {
-        feedback += `⚠️ Tu texto es un poco corto (**${currentCount} palabras**). La meta recomendada es entre 25 y 45 palabras (faltan ${25 - currentCount} para el mínimo).\n`;
+      if (currentCount >= 20 && currentCount <= 38) {
+        feedback += `✅ Excelente extensión. Has escrito **${currentCount} palabras** (longitud óptima Goethe A1: ~30 palabras, rango ideal 20-38).\n`;
+      } else if (currentCount < 20) {
+        feedback += `⚠️ Tu texto es un poco corto (**${currentCount} palabras**). Faltan palabras — el mínimo recomendado es 25-30 palabras (faltan ${20 - currentCount} para alcanzar el rango óptimo).\n`;
       } else {
-        feedback += `⚠️ Tu texto es un poco extenso (**${currentCount} palabras**). En el nivel A1 se busca concisión (máximo recomendado: 45 palabras).\n`;
+        feedback += `⚠️ Tu texto es extenso (**${currentCount} palabras**). Revisa no cometer errores extra; en A1 la longitud óptima ronda las ~30 palabras.\n`;
       }
       feedback += "\n### 🌟 Correo Modelo Ideal (Muster-E-Mail A1)\n";
       feedback += "> Hallo Anna,\n";
@@ -238,10 +240,11 @@ const EmailSimulator = ({ initialText }) => {
       <div className="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
           <span className="text-slate-500">Wortanzahl (Longitud):</span>
-          <span className={`px-2.5 py-0.5 rounded-full font-mono font-bold transition-all border ${wordStatus.badgeClass}`}>
+          <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-mono font-bold transition-all border ${wordStatus.badgeClass}`}>
+            <span className={`inline-block w-2 h-2 rounded-full ${wordStatus.dotClass}`} aria-hidden="true" />
             {wordStatus.label}
           </span>
-          <span className="text-[11px] text-slate-400 italic">
+          <span className="text-[11px] text-slate-500 italic">
             {wordStatus.hint}
           </span>
         </div>
