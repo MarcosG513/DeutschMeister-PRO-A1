@@ -202,36 +202,41 @@ export async function syncCloudMediaToLocal(onProgress) {
         if (existingLocalKey && hasAllRequiredIndexes) {
           skippedCached++;
           audiosSynced++;
-        } else if (existingLocalKey) {
-          try {
-            const localBlob = await audioStore.getItem(existingLocalKey);
-            if (localBlob instanceof Blob) {
-              for (const k of indexKeys) {
-                if (!existingAudioKeySet.has(k)) {
-                  await audioStore.setItem(k, localBlob);
+        } else {
+          let promotedFromLocal = false;
+          if (existingLocalKey) {
+            try {
+              const localBlob = await audioStore.getItem(existingLocalKey);
+              if (localBlob instanceof Blob) {
+                for (const k of indexKeys) {
+                  if (!existingAudioKeySet.has(k)) {
+                    await audioStore.setItem(k, localBlob);
+                    existingAudioKeySet.add(k);
+                    markAudioKeyCached(k);
+                  }
+                }
+                promotedFromLocal = true;
+                skippedCached++;
+                audiosSynced++;
+              }
+            } catch (_) {}
+          }
+          if (!promotedFromLocal) {
+            try {
+              const response = await fetch(audioUrl, { mode: "cors" });
+              if (response.ok) {
+                const audioBlob = await response.blob();
+                // Indexar bajo doc.id (audio_sha256_... / audio_...) y bajo tts_${canonicalSlug}
+                for (const k of indexKeys) {
+                  await audioStore.setItem(k, audioBlob);
                   existingAudioKeySet.add(k);
                   markAudioKeyCached(k);
                 }
+                audiosSynced++;
               }
-              skippedCached++;
-              audiosSynced++;
+            } catch (err) {
+              console.warn(`[Sync Audio Warning] No se pudo descargar audio ${docId}:`, err.message);
             }
-          } catch (_) {}
-        } else {
-          try {
-            const response = await fetch(audioUrl, { mode: "cors" });
-            if (response.ok) {
-              const audioBlob = await response.blob();
-              // Indexar bajo doc.id (audio_sha256_... / audio_...) y bajo tts_${canonicalSlug}
-              for (const k of indexKeys) {
-                await audioStore.setItem(k, audioBlob);
-                existingAudioKeySet.add(k);
-                markAudioKeyCached(k);
-              }
-              audiosSynced++;
-            }
-          } catch (err) {
-            console.warn(`[Sync Audio Warning] No se pudo descargar audio ${docId}:`, err.message);
           }
         }
       }

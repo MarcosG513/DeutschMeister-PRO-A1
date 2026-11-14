@@ -804,7 +804,7 @@ export default function App() {
   };
 
   const handleToggleStoryAudio = async () => {
-    if (!storyState.de) return;
+    if (!storyState.de || isStoryAudioLoading) return;
 
     // 1. Si ya se está reproduciendo, pausar
     if (isPlayingStoryAudio && storyAudioInstanceRef.current) {
@@ -862,9 +862,7 @@ export default function App() {
         const active = wordTimings.find(
           w => currentProgress >= w.startRatio && currentProgress < w.endRatio
         );
-        if (active && active.wordIndex !== currentWordIndex) {
-          setCurrentWordIndex(active.wordIndex);
-        }
+        if (active) setCurrentWordIndex(prev => (prev === active.wordIndex ? prev : active.wordIndex));
       };
 
       audio.onended = () => {

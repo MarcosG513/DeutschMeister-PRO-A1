@@ -765,7 +765,7 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
                       🔄 Actualizar Medios de la Nube
                     </h3>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      Descarga y almacena en tu dispositivo todas las ilustraciones, videos y audios de pronunciación (Charon) para estudiar a 0 ms sin internet.
+                      Descarga y almacena en tu dispositivo todas las ilustraciones, videos, audios Charon (vocabulario, lecturas y cuentos) y cuentos IA por capítulo para estudiar a 0 ms sin internet.
                     </p>
                   </div>
                 </div>
@@ -791,7 +791,7 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
               </div>
 
               {/* Contadores de Disponibilidad Offline en Memoria */}
-              <div className="mt-3.5 grid grid-cols-1 sm:grid-cols-2 gap-2 pt-3 border-t border-slate-100">
+              <div className="mt-3.5 grid grid-cols-1 sm:grid-cols-3 gap-2 pt-3 border-t border-slate-100">
                 <div className="flex items-center gap-2 p-2.5 bg-slate-50/80 rounded-xl border border-slate-100 text-xs">
                   <span className="text-base shrink-0">🖼️</span>
                   <div>
@@ -804,9 +804,18 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
                 <div className="flex items-center gap-2 p-2.5 bg-slate-50/80 rounded-xl border border-slate-100 text-xs">
                   <span className="text-base shrink-0">🎙️</span>
                   <div>
-                    <span className="font-bold text-slate-700 block">Audios Charon (Pronunciación):</span>
+                    <span className="font-bold text-slate-700 block">Audios Charon (Vocab. y Cuentos):</span>
                     <span className="text-slate-500 text-[11px] font-medium">
                       <strong className="text-emerald-600 font-bold">{offlineStats.audiosCached}</strong> en memoria
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 bg-slate-50/80 rounded-xl border border-slate-100 text-xs">
+                  <span className="text-base shrink-0">📖</span>
+                  <div>
+                    <span className="font-bold text-slate-700 block">Cuentos IA (Capítulos):</span>
+                    <span className="text-slate-500 text-[11px] font-medium">
+                      <strong className="text-purple-600 font-bold">{offlineStats.storiesCached}</strong> en memoria
                     </span>
                   </div>
                 </div>
@@ -821,7 +830,8 @@ const Profile = ({ onExit, user, auth, studiedCardsCount, unlockedCardsCount = 0
                       {mediaSyncProgress.phase === "fetching_catalog" && "Consultando catálogo en la nube..."}
                       {mediaSyncProgress.phase === "syncing_visuals" && `Guardando ilustraciones y videos (${mediaSyncProgress.visualsSynced || mediaSyncProgress.current} / ${mediaSyncProgress.totalVisuals || mediaSyncProgress.total})...`}
                       {mediaSyncProgress.phase === "syncing_audios" && `Descargando audios Charon al teléfono (${mediaSyncProgress.audiosSynced || mediaSyncProgress.current} / ${mediaSyncProgress.totalAudios || mediaSyncProgress.total})...`}
-                      {!["fetching_catalog", "syncing_visuals", "syncing_audios"].includes(mediaSyncProgress.phase) && `Sincronizando ${mediaSyncProgress.current} de ${mediaSyncProgress.total}...`}
+                      {mediaSyncProgress.phase === "syncing_stories" && `Guardando cuentos por capítulo (${mediaSyncProgress.storiesSynced || mediaSyncProgress.current} / ${mediaSyncProgress.totalStories || mediaSyncProgress.total})...`}
+                      {!["fetching_catalog", "syncing_visuals", "syncing_audios", "syncing_stories"].includes(mediaSyncProgress.phase) && `Sincronizando ${mediaSyncProgress.current} de ${mediaSyncProgress.total}...`}
                     </span>
                     <span>{Math.round((mediaSyncProgress.current / (mediaSyncProgress.total || 1)) * 100)}%</span>
                   </div>

@@ -615,6 +615,7 @@ const ReadingComprehension = ({ onExit }) => {
         if (!resp.ok) return null;
         const blob = await resp.blob();
         await audioStore.setItem(cacheKey, blob).catch(() => {});
+        if (remoteUrl && remoteUrl.startsWith('blob:')) URL.revokeObjectURL(remoteUrl);
         return blob;
       } catch (_) {
         return null;
@@ -741,6 +742,7 @@ const ReadingComprehension = ({ onExit }) => {
         });
         if (runId !== playbackRunIdRef.current) return;
         resolvedSource = remoteUrl;
+        isObjectUrl = Boolean(remoteUrl && remoteUrl.startsWith('blob:'));
       }
 
       if (runId !== playbackRunIdRef.current || !resolvedSource) {
