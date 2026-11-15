@@ -1,69 +1,406 @@
 rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model (DeutschMeister PRO A1 v2.0 - Zero-Trust)
+// ===============================================================
+//
+// Collection: access_control
+// Document ID: {userId} (Firebase Auth UID)
+// Fields:
+//   - uid: string (required, immutable, equals {userId}, max 128 chars)
+//   - email: string (required, valid email or '' if unavailable, max 320 chars)
+//   - displayName: string | null (optional, max 200 chars)
+//   - photoURL: string | null (optional, '' or http/https URL, max 2048 chars)
+//   - status: string (required, enum: 'pending' | 'approved' | 'revoked')
+//   - role: string (required, enum: 'user' | 'admin')
+//   - approvedBy: string (optional, max 320 chars)
+//   - revokedBy: string (optional, max 320 chars)
+//   - requestedAt: timestamp (optional, immutable once set)
+//   - updatedAt: timestamp (optional)
+//
+// Collection: authorized_emails
+// Document ID: {emailId} (normalized lowercase email)
+// Fields:
+//   - email: string (required, immutable, valid email matching {emailId}, 5..320 chars)
+//   - role: string (required, enum: 'user' | 'admin')
+//   - status: string (required, enum: 'approved' | 'pending' | 'revoked')
+//   - addedBy: string (optional, max 320 chars)
+//   - createdAt: timestamp (optional, immutable once set)
+//   - updatedAt: timestamp (optional)
+//
+// Global Read-Only Catalogs (Admin SDK / backend managed):
+//   - global_flashcards/{cardId}
+//   - global_audio_pronunciations/{audioId}
+//   - global_stories/{storyId}
+//   - global_chapter_stories/{storyId}
+//   Readable only by authenticated, non-anonymous, approved users. Client writes denied.
+//
+// Collection: artifacts/{appId}/users/{userId}
+// Document ID: {userId}
+// Fields:
+//   - Optional user metadata (max 30 keys; privilege/tier fields forbidden)
+//   - uid: string (optional, immutable, equals {userId}, max 128 chars)
+//   - createdAt: timestamp (optional, immutable once set)
+//   - updatedAt: timestamp (optional)
+//
+// Subcollection: artifacts/{appId}/users/{userId}/unlockedCards/{cardId}
+// Fields:
+//   - unlocked: bool (required)
+//   - imageUrl: string | null (optional, max 2048 chars)
+//   - updatedAt: timestamp (optional)
+//   - regenerated: bool (optional)
+//   - regenerateCount: number (optional, 0..10000)
+//
+// Subcollection: artifacts/{appId}/users/{userId}/chat/{docId}
+// Fields:
+//   - messages: list (required, max 100 items)
+//   - updatedAt: timestamp (optional)
+//
+// Subcollection: artifacts/{appId}/users/{userId}/pedagogy/{docId}
+// Fields:
+//   - studyStreak: number (optional, 0..100000)
+//   - lastStudyDate: string | null (optional, max 32 chars)
+//   - studiedCards: list (optional, max 5000 items)
+//   - completedModules: list (optional, max 500 items)
+//   - goetheScores: map (optional, max 200 keys)
+//   - favoriteStories: list (optional, max 500 items)
+//   - learnedStories: list (optional, max 500 items)
+//   - savedStoryWords: map (optional, max 2000 keys)
+//   - updatedAt: timestamp (optional)
+//
+// Subcollection: artifacts/{appId}/users/{userId}/usage/{docId}
+//   - Server-managed FinOps usage counter (e.g., usage/today). Owner read-only; client writes denied.
+//
+// ===============================================================
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
     function isAuthenticated() {
-      return request.auth != null && request.auth.uid != null;
+      return request.auth != null
+        && request.auth.uid != null
+        && request.auth.uid is string
+        && request.auth.uid.size() > 0
+        && request.auth.token != null
+        && ('firebase' in request.auth.token)
+        && request.auth.token.firebase is map
+        && ('sign_in_provider' in request.auth.token.firebase)
+        && request.auth.token.firebase.sign_in_provider is string
+        && request.auth.token.firebase.sign_in_provider != 'anonymous';
     }
 
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    function isValidPayloadSize() {
-      return request.resource == null || request.resource.data.keys().size() <= 25;
+    function accessControlPath(userId) {
+      return /databases/$(database)/documents/access_control/$(userId);
     }
 
+    function hasAdminTokenClaim() {
+      return 'admin' in request.auth.token && request.auth.token.admin == true;
+    }
+
+    function hasApprovedTokenClaim() {
+      return ('approved' in request.auth.token && request.auth.token.approved == true)
+        || hasAdminTokenClaim();
+    }
+
+    function hasApprovedAdminDoc(uid) {
+      let path = accessControlPath(uid);
+      return exists(path)
+        && get(path).data.get('role', '') == 'admin'
+        && get(path).data.get('status', '') == 'approved';
+    }
+
+    function hasApprovedAccessDoc(uid) {
+      let path = accessControlPath(uid);
+      return exists(path)
+        && get(path).data.get('status', '') == 'approved';
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        hasAdminTokenClaim()
+        || hasApprovedAdminDoc(request.auth.uid)
+      );
+    }
+
+    function isApprovedUser() {
+      return isAuthenticated() && (
+        hasApprovedTokenClaim()
+        || hasApprovedAccessDoc(request.auth.uid)
+      );
+    }
+
+    function isValidPayloadSize() {
+      return request.resource == null || request.resource.data.keys().size() <= 30;
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function uidNotModified() {
+      return !('uid' in resource.data)
+        || (('uid' in request.resource.data)
+            && request.resource.data.uid == resource.data.uid);
+    }
+
+    function isValidOptionalString(field, minLen, maxLen) {
+      return !(field in request.resource.data)
+        || (request.resource.data[field] is string
+            && request.resource.data[field].size() >= minLen
+            && request.resource.data[field].size() <= maxLen);
+    }
+
+    function isValidEmail(email) {
+      return email is string
+        && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUrl(url) {
+      return url is string
+        && (url.matches("^https://.*") || url.matches("^http://.*"));
+    }
+
+    // ===============================================================
+    // Domain Validators (Applied on both create and update)
+    // ===============================================================
+
+    function isValidAccessControlDoc(userId) {
+      let data = request.resource.data;
+      return isValidPayloadSize()
+        && hasOnlyAllowedFields([
+          'uid', 'email', 'displayName', 'photoURL',
+          'status', 'role', 'approvedBy', 'revokedBy',
+          'requestedAt', 'updatedAt'
+        ])
+        && hasRequiredFields(['uid', 'email', 'status', 'role'])
+        && data.uid is string
+        && data.uid == userId
+        && data.uid.size() > 0
+        && data.uid.size() <= 128
+        && data.email is string
+        && data.email.size() <= 320
+        && (data.email == '' || isValidEmail(data.email))
+        && data.status in ['pending', 'approved', 'revoked']
+        && data.role in ['user', 'admin']
+        && (!('displayName' in data)
+            || data.displayName == null
+            || (data.displayName is string && data.displayName.size() <= 200))
+        && (!('photoURL' in data)
+            || data.photoURL == null
+            || (data.photoURL is string
+                && data.photoURL.size() <= 2048
+                && (data.photoURL == '' || isValidUrl(data.photoURL))))
+        && isValidOptionalString('approvedBy', 0, 320)
+        && isValidOptionalString('revokedBy', 0, 320)
+        && (!('requestedAt' in data) || data.requestedAt is timestamp)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidAuthorizedEmailDoc(emailId) {
+      let data = request.resource.data;
+      return isValidPayloadSize()
+        && hasOnlyAllowedFields([
+          'email', 'role', 'status', 'addedBy', 'createdAt', 'updatedAt'
+        ])
+        && hasRequiredFields(['email', 'role', 'status'])
+        && data.email is string
+        && data.email == emailId
+        && data.email.size() >= 5
+        && data.email.size() <= 320
+        && isValidEmail(data.email)
+        && data.role in ['user', 'admin']
+        && data.status in ['approved', 'pending', 'revoked']
+        && isValidOptionalString('addedBy', 0, 320)
+        && (!('createdAt' in data) || data.createdAt is timestamp)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidUserRootDoc(userId) {
+      let data = request.resource.data;
+      return isValidPayloadSize()
+        && !data.keys().hasAny([
+          'role', 'roles', 'isAdmin', 'admin',
+          'approved', 'status', 'permissions', 'isPro', 'subscription'
+        ])
+        && (!('uid' in data)
+            || (data.uid is string && data.uid == userId && data.uid.size() <= 128))
+        && (!('createdAt' in data) || data.createdAt is timestamp)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidUnlockedCard() {
+      let data = request.resource.data;
+      return isValidPayloadSize()
+        && hasOnlyAllowedFields([
+          'unlocked', 'imageUrl', 'updatedAt', 'regenerated', 'regenerateCount'
+        ])
+        && hasRequiredFields(['unlocked'])
+        && data.unlocked is bool
+        && (!('imageUrl' in data)
+            || data.imageUrl == null
+            || (data.imageUrl is string && data.imageUrl.size() <= 2048))
+        && (!('updatedAt' in data) || data.updatedAt is timestamp)
+        && (!('regenerated' in data) || data.regenerated is bool)
+        && (!('regenerateCount' in data)
+            || (data.regenerateCount is number
+                && data.regenerateCount >= 0
+                && data.regenerateCount <= 10000));
+    }
+
+    function isValidChatDoc() {
+      let data = request.resource.data;
+      return isValidPayloadSize()
+        && hasOnlyAllowedFields(['messages', 'updatedAt'])
+        && hasRequiredFields(['messages'])
+        && data.messages is list
+        && data.messages.size() <= 100
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidPedagogyDoc() {
+      let data = request.resource.data;
+      return isValidPayloadSize()
+        && data.keys().size() >= 1
+        && hasOnlyAllowedFields([
+          'studyStreak', 'lastStudyDate', 'studiedCards',
+          'completedModules', 'goetheScores',
+          'favoriteStories', 'learnedStories', 'savedStoryWords',
+          'updatedAt'
+        ])
+        && (!('studyStreak' in data)
+            || (data.studyStreak is number
+                && data.studyStreak >= 0
+                && data.studyStreak <= 100000))
+        && (!('lastStudyDate' in data)
+            || data.lastStudyDate == null
+            || (data.lastStudyDate is string && data.lastStudyDate.size() <= 32))
+        && (!('studiedCards' in data)
+            || (data.studiedCards is list && data.studiedCards.size() <= 5000))
+        && (!('completedModules' in data)
+            || (data.completedModules is list && data.completedModules.size() <= 500))
+        && (!('goetheScores' in data)
+            || (data.goetheScores is map && data.goetheScores.keys().size() <= 200))
+        && (!('favoriteStories' in data)
+            || (data.favoriteStories is list && data.favoriteStories.size() <= 500))
+        && (!('learnedStories' in data)
+            || (data.learnedStories is list && data.learnedStories.size() <= 500))
+        && (!('savedStoryWords' in data)
+            || (data.savedStoryWords is map && data.savedStoryWords.keys().size() <= 2000))
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    // ===============================================================
+    // Access Control Allowlist Collections
+    // ===============================================================
+
+    match /access_control/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isAdmin() && isValidAccessControlDoc(userId);
+      allow update: if isAdmin()
+        && isValidAccessControlDoc(userId)
+        && uidNotModified()
+        && (!('requestedAt' in resource.data)
+            || (('requestedAt' in request.resource.data)
+                && request.resource.data.requestedAt == resource.data.requestedAt))
+        && (userId != request.auth.uid
+            || (request.resource.data.status == 'approved'
+                && request.resource.data.role == 'admin'));
+      allow delete: if isAdmin() && userId != request.auth.uid;
+    }
+
+    match /authorized_emails/{emailId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin() && isValidAuthorizedEmailDoc(emailId);
+      allow update: if isAdmin()
+        && isValidAuthorizedEmailDoc(emailId)
+        && (!('email' in resource.data)
+            || (('email' in request.resource.data)
+                && request.resource.data.email == resource.data.email))
+        && (!('createdAt' in resource.data)
+            || (('createdAt' in request.resource.data)
+                && request.resource.data.createdAt == resource.data.createdAt));
+      allow delete: if isAdmin();
+    }
+
+    // ===============================================================
+    // Global Read-Only Catalogs (Zero-Trust: Approved Users Only)
+    // ===============================================================
+
     match /global_flashcards/{cardId} {
-      allow read: if true;
+      allow read: if isApprovedUser();
       allow write: if false;
     }
 
     match /global_audio_pronunciations/{audioId} {
-      allow read: if true;
+      allow read: if isApprovedUser();
       allow write: if false;
     }
 
     match /global_stories/{storyId} {
-      allow read: if true;
+      allow read: if isApprovedUser();
       allow write: if false;
     }
 
     match /global_chapter_stories/{storyId} {
-      allow read: if true;
+      allow read: if isApprovedUser();
       allow write: if false;
     }
 
+    // ===============================================================
+    // Private User Data (Zero-Trust: Approved Owner Only)
+    // ===============================================================
+
     match /artifacts/{appId}/users/{userId} {
-      allow read, write: if isOwner(userId) && isValidPayloadSize();
+      allow read: if isOwner(userId) && isApprovedUser();
+      allow create: if isOwner(userId) && isApprovedUser() && isValidUserRootDoc(userId);
+      allow update: if isOwner(userId)
+        && isApprovedUser()
+        && isValidUserRootDoc(userId)
+        && uidNotModified()
+        && (!('createdAt' in resource.data)
+            || (('createdAt' in request.resource.data)
+                && request.resource.data.createdAt == resource.data.createdAt));
+      allow delete: if isOwner(userId) && isApprovedUser();
 
       match /unlockedCards/{cardId} {
-        allow read: if isOwner(userId);
-        allow create, update: if isOwner(userId)
-          && request.resource.data.keys().hasOnly(['unlocked', 'imageUrl', 'updatedAt', 'regenerated', 'regenerateCount'])
-          && request.resource.data.unlocked is bool
-          && (!('imageUrl' in request.resource.data)
-              || request.resource.data.imageUrl == null
-              || (request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() <= 2048))
-          && (!('regenerated' in request.resource.data) || request.resource.data.regenerated is bool)
-          && (!('regenerateCount' in request.resource.data) || (request.resource.data.regenerateCount is number && request.resource.data.regenerateCount >= 0));
-        allow delete: if isOwner(userId);
+        allow read: if isOwner(userId) && isApprovedUser();
+        allow create, update: if isOwner(userId) && isApprovedUser() && isValidUnlockedCard();
+        allow delete: if isOwner(userId) && isApprovedUser();
       }
 
       match /chat/{docId} {
-        allow read: if isOwner(userId);
-        allow create, update: if isOwner(userId)
-          && request.resource.data.keys().hasOnly(['messages', 'updatedAt'])
-          && request.resource.data.messages is list
-          && request.resource.data.messages.size() <= 100;
-        allow delete: if isOwner(userId);
+        allow read: if isOwner(userId) && isApprovedUser();
+        allow create, update: if isOwner(userId) && isApprovedUser() && isValidChatDoc();
+        allow delete: if isOwner(userId) && isApprovedUser();
       }
 
       match /pedagogy/{docId} {
-        allow read: if isOwner(userId);
-        allow write: if isOwner(userId) && isValidPayloadSize();
+        allow read: if isOwner(userId) && isApprovedUser();
+        allow create, update: if isOwner(userId) && isApprovedUser() && isValidPedagogyDoc();
+        allow delete: if isOwner(userId) && isApprovedUser();
+      }
+
+      match /usage/{docId} {
+        allow read: if isOwner(userId) && isApprovedUser();
+        allow write: if false;
       }
     }
+
+    // ===============================================================
+    // Default Deny
+    // ===============================================================
 
     match /{document=**} {
       allow read, write: if false;
