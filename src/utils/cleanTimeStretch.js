@@ -495,8 +495,13 @@ export async function getCleanSpeedAudioResult(sourceBlobOrUrl, speed = 1.0, cac
     throw new Error("Fuente de audio inválida.");
   }
 
-  // Velocidad didáctica 0.75x -> revisar LRU primero antes de decodificar
-  const targetSpeed = Math.abs(numericSpeed - 0.75) < 0.05 ? 0.75 : numericSpeed;
+  // Velocidades didácticas (< 0.98, p. ej. 0.75x o 0.85x) -> revisar LRU primero antes de decodificar
+  const targetSpeed =
+    Math.abs(numericSpeed - 0.75) < 0.03
+      ? 0.75
+      : Math.abs(numericSpeed - 0.85) < 0.03
+        ? 0.85
+        : numericSpeed;
   const initialLruKey = explicitKey ? `${explicitKey}_${targetSpeed}` : "";
 
   if (initialLruKey) {

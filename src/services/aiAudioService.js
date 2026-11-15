@@ -518,8 +518,8 @@ export async function getProcessedSpeechBlobUrl(text, options = {}) {
     return result.url;
   }
 
-  if (targetSpeed === 0.75 && asset.remoteUrl) {
-    const result = await getCleanSpeedAudioResult(asset.remoteUrl, 0.75, asset.cacheKey);
+  if (targetSpeed < 0.98 && asset.remoteUrl) {
+    const result = await getCleanSpeedAudioResult(asset.remoteUrl, targetSpeed, asset.cacheKey);
     return result.url;
   }
 
@@ -599,8 +599,8 @@ export async function playGermanAudio(text, options = {}) {
     }
 
     if (asset.remoteUrl) {
-      if (targetSpeed === 0.75) {
-        const processed = await getCleanSpeedAudioResult(asset.remoteUrl, 0.75, asset.cacheKey);
+      if (targetSpeed < 0.98) {
+        const processed = await getCleanSpeedAudioResult(asset.remoteUrl, targetSpeed, asset.cacheKey);
         if (isStale()) {
           revokeTrackedObjectUrl(processed.url);
           cleanupSignal();

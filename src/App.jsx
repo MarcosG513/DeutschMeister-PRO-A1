@@ -1529,7 +1529,7 @@ export default function App() {
                       onClick={() => {
                         setActiveChapterId(22);
                         setSelectedCategory("Todas");
-                        setViewMode("table");
+                        setViewMode("flashcards");
                         setIsMenuOpen(false);
                       }}
                       className="bg-indigo-900/70 text-indigo-200 border border-indigo-500/30 col-span-2 py-2.5 rounded-lg font-bold hover:bg-indigo-800 transition flex items-center justify-center gap-2 text-xs shadow-sm cursor-pointer"
@@ -1564,7 +1564,7 @@ export default function App() {
                               onClick={() => {
                                 setActiveChapterId(chap.id);
                                 setSelectedCategory("Todas");
-                                setViewMode(chap.isRedemittel ? 'table' : 'flashcards');
+                                setViewMode('flashcards');
                                 setIsMenuOpen(false);
                               }}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
@@ -2008,7 +2008,7 @@ export default function App() {
                           role="group"
                           aria-label="Velocidad de reproducción del cuento"
                         >
-                          {[0.75, 1.0].map((spd) => (
+                          {[0.75, 0.85, 1.0].map((spd) => (
                             <button
                               key={spd}
                               type="button"
@@ -2022,7 +2022,7 @@ export default function App() {
                                   : "text-slate-600 hover:text-slate-900"
                               }`}
                             >
-                              {spd === 1 ? "1x" : "0.75x"}
+                              {spd === 1 ? "1x" : `${spd}x`}
                             </button>
                           ))}
                         </div>

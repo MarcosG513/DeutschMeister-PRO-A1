@@ -121,18 +121,18 @@ export const compressImageBase64 = (base64Str, maxWidth = 512, quality = 0.6) =>
 const PLAYBACK_SPEED_KEY = 'dm_voice_speed';
 
 /**
- * Normaliza la velocidad de reproducción permitida exclusivamente a 0.75x o 1.0x.
+ * Normaliza la velocidad de reproducción permitida exclusivamente a 0.75x, 0.85x o 1.0x.
  */
-export const normalizePlaybackSpeed = (speed) => {
-  const num = Number(speed);
-  if (Number.isFinite(num) && Math.abs(num - 0.75) < 0.05) {
-    return 0.75;
-  }
+export const normalizePlaybackSpeed = (rawSpeed) => {
+  const parsed = Number(rawSpeed);
+  if (!Number.isFinite(parsed)) return 1.0;
+  if (Math.abs(parsed - 0.75) < 0.03) return 0.75;
+  if (Math.abs(parsed - 0.85) < 0.03) return 0.85;
   return 1.0;
 };
 
 /**
- * Lee la velocidad de pronunciación guardada en localStorage ('dm_voice_speed': 0.75 o 1.0).
+ * Lee la velocidad de pronunciación guardada en localStorage ('dm_voice_speed': 0.75, 0.85 o 1.0).
  */
 export const getSavedPlaybackSpeed = () => {
   try {
@@ -146,7 +146,7 @@ export const getSavedPlaybackSpeed = () => {
 };
 
 /**
- * Guarda la velocidad de pronunciación válida (0.75 o 1.0) y notifica globalmente vía 'dm-speed-changed'.
+ * Guarda la velocidad de pronunciación válida (0.75, 0.85 o 1.0) y notifica globalmente vía 'dm-speed-changed'.
  */
 export const setSavedPlaybackSpeed = (speed) => {
   const validSpeed = normalizePlaybackSpeed(speed);
@@ -165,14 +165,16 @@ export const setSavedPlaybackSpeed = (speed) => {
 
 export const nativeSpeak = async (text, options = {}) => {
   if (!text || typeof text !== 'string') return;
-  const speed = options.rate !== undefined ? options.rate : getSavedPlaybackSpeed();
+  const savedSpeed = normalizePlaybackSpeed(
+    options.rate !== undefined ? options.rate : getSavedPlaybackSpeed()
+  );
   const langTag = options.lang === 'es' ? 'es-ES' : 'de-DE';
   if (Capacitor.isNativePlatform()) {
     try {
       await TextToSpeech.speak({
         text: text,
         lang: langTag,
-        rate: speed <= 0.8 ? 0.75 : 0.95,
+        rate: savedSpeed === 0.75 ? 0.75 : savedSpeed === 0.85 ? 0.85 : 0.95,
         pitch: 1.0,
       });
     } catch (e) {
@@ -183,7 +185,7 @@ export const nativeSpeak = async (text, options = {}) => {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = langTag;
-      utterance.rate = speed <= 0.8 ? 0.75 : 1.0;
+      utterance.rate = savedSpeed === 0.75 ? 0.75 : savedSpeed === 0.85 ? 0.85 : 1.0;
       window.speechSynthesis.speak(utterance);
     } else {
       console.error("Web Speech API no está soportada en este navegador.");

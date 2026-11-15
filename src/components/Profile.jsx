@@ -713,35 +713,28 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl border border-slate-200/80">
-                <button
-                  type="button"
-                  onClick={() => handleSelectVoiceSpeed(0.75)}
-                  className={`px-3 py-2.5 rounded-lg text-left transition cursor-pointer flex flex-col ${
-                    voiceSpeed === 0.75
-                      ? 'bg-white text-blue-700 shadow-sm ring-1 ring-blue-200'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-                  }`}
-                >
-                  <span className="text-sm font-extrabold leading-tight">0.75x</span>
-                  <span className="text-[11px] font-medium opacity-85 mt-0.5">
-                    Didáctica · Voz Limpia
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSelectVoiceSpeed(1.0)}
-                  className={`px-3 py-2.5 rounded-lg text-left transition cursor-pointer flex flex-col ${
-                    voiceSpeed === 1.0
-                      ? 'bg-white text-blue-700 shadow-sm ring-1 ring-blue-200'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-                  }`}
-                >
-                  <span className="text-sm font-extrabold leading-tight">1.0x</span>
-                  <span className="text-[11px] font-medium opacity-85 mt-0.5">
-                    Natural · Estándar
-                  </span>
-                </button>
+              <div className="grid grid-cols-3 gap-2 p-1 bg-slate-100 rounded-xl border border-slate-200/80">
+                {[
+                  { value: 0.75, label: '0.75x', sub: 'Lenta' },
+                  { value: 0.85, label: '0.85x', sub: 'Didáctica' },
+                  { value: 1.0, label: '1.0x', sub: 'Natural' }
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => handleSelectVoiceSpeed(opt.value)}
+                    className={`px-2.5 sm:px-3 py-2.5 rounded-lg text-left transition cursor-pointer flex flex-col ${
+                      voiceSpeed === opt.value
+                        ? 'bg-white text-blue-700 shadow-sm ring-1 ring-blue-200'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                    }`}
+                  >
+                    <span className="text-sm font-extrabold leading-tight">{opt.label}</span>
+                    <span className="text-[11px] font-medium opacity-85 mt-0.5">
+                      {opt.sub}
+                    </span>
+                  </button>
+                ))}
               </div>
             </section>
 

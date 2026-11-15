@@ -83,7 +83,7 @@ const FONT_SIZE_PRESETS = [
   { id: 'lg', label: 'AA', deClass: 'text-xl sm:text-2xl leading-loose', esClass: 'text-base' }
 ];
 
-const SPEED_OPTIONS = [0.75, 1];
+const SPEED_OPTIONS = [0.75, 0.85, 1];
 
 const PRONOUN_ROWS = [
   { key: 'ich', label: 'ich' },
@@ -614,8 +614,8 @@ const ReadingComprehension = ({ onExit }) => {
     try {
       const cached = await audioStore.getItem(cacheKey);
       if (cached instanceof Blob) {
-        if (playbackSpeedRef.current === 0.75) {
-          getCleanSpeedAudioUrl(cached, 0.75, cacheKey)
+        if (playbackSpeedRef.current < 0.98) {
+          getCleanSpeedAudioUrl(cached, playbackSpeedRef.current, cacheKey)
             .then((warmUrl) => {
               if (warmUrl && warmUrl.startsWith('blob:')) {
                 try { URL.revokeObjectURL(warmUrl); } catch (_) {}
@@ -646,8 +646,8 @@ const ReadingComprehension = ({ onExit }) => {
           URL.revokeObjectURL(remoteUrl);
           unregisterCleanStretchedUrl(remoteUrl);
         }
-        if (playbackSpeedRef.current === 0.75) {
-          const warmUrl = await getCleanSpeedAudioUrl(blob, 0.75, cacheKey).catch(() => null);
+        if (playbackSpeedRef.current < 0.98) {
+          const warmUrl = await getCleanSpeedAudioUrl(blob, playbackSpeedRef.current, cacheKey).catch(() => null);
           if (warmUrl && warmUrl.startsWith('blob:')) {
             try { URL.revokeObjectURL(warmUrl); } catch (_) {}
             unregisterCleanStretchedUrl(warmUrl);
@@ -772,8 +772,8 @@ const ReadingComprehension = ({ onExit }) => {
 
       if (blob instanceof Blob) {
         resolvedSource =
-          activeSpeed === 0.75
-            ? await getCleanSpeedAudioUrl(blob, 0.75, cacheKey)
+          activeSpeed < 0.98
+            ? await getCleanSpeedAudioUrl(blob, activeSpeed, cacheKey)
             : URL.createObjectURL(blob);
         isObjectUrl = Boolean(resolvedSource && resolvedSource.startsWith('blob:'));
       } else {
@@ -2619,7 +2619,7 @@ const ReadingComprehension = ({ onExit }) => {
                           : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    {spd === 1 ? '1x' : '0.75x'}
+                    {spd === 1 ? '1x' : `${spd}x`}
                   </button>
                 ))}
               </div>
