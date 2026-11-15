@@ -64,6 +64,10 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
   - Los medios offline sincronizados desde `mediaBlobStore` (IndexedDB) generan URLs locales `blob:`.
   - El modal `fullscreenImage` en `src/App.jsx` (junto con el disparo de zoom desde `src/components/PresentationVocabCard.jsx`) valida explícitamente los prefijos `blob:`, `http`, `data:` y `/` antes de asumir base64 crudo (`data:image/jpeg;base64,...`), evitando corromper `blob:` URLs locales.
   - Cuando el recurso resuelto contiene `.mp4` o `data:video/`, el visor modal renderiza `<video autoPlay loop muted playsInline>` en lugar de `<img>`, y `App.jsx` difiere la revocación de `blob:` URLs activas en `fullscreenImageRef` hasta cerrar el modal.
+- **Centro de Mando Pedagógico de Inicio (`src/components/HomeDashboard.jsx`):**
+  - Vista de bienvenida predeterminada tras superar `AuthAccessGate` (`isHomeOpen = true` en `src/App.jsx`).
+  - Organiza el ecosistema en 4 bloques sin métricas ficticias (calculadas dinámicamente desde `chapters`, `studyPlanModules`, `goetheModules` y `drivingAcademyClasses`): Hero con saludo personalizado y tarjeta de continuidad (`localStorage` `dm_last_activity`), 4 Rutas de Aprendizaje Guiadas (Desde Cero, Vida Diaria/Trabajo, Goethe Zertifikat A1 y Modo Conducción), Mapa Cognitivo de Herramientas y Explorador Rápido por pestañas WAI-ARIA (`role="tablist"` / `role="tabpanel"`).
+  - Cualquier navegación hacia capítulos, Plan de Estudios, Goethe, vistas especiales (`driving`, `reading`, `roleplay`, `quiz`, `profile`) o búsqueda global no vacía cierra `isHomeOpen(false)` y registra `dm_last_activity`; tanto el logo superior como la píldora `🏠 Inicio` (visible cuando `!isHomeOpen`), el acceso superior del Drawer y el botón Back de Android permiten volver a Inicio en 1 toque.
 
 ---
 

@@ -22,6 +22,7 @@ import { API_ENDPOINTS } from './config/apiEndpoints';
 import { mediaBlobStore, CHAPTER_STORIES_CACHE_KEY } from './services/syncMediaService';
 
 import Profile from './components/Profile';
+import HomeDashboard from './components/HomeDashboard';
 import InstallInstructionsModal from './components/InstallInstructionsModal';
 import DrivingMode from './components/DrivingMode';
 import { subscribeToAndroidAutoCommands } from './services/androidAutoBridge';
@@ -51,6 +52,22 @@ const loadingPhrases = [
   "Declinando adjetivos a la velocidad de la luz... ⚡"
 ];
 
+const LAST_ACTIVITY_STORAGE_KEY = 'dm_last_activity';
+
+const readSavedLastActivity = () => {
+  try {
+    const raw = localStorage.getItem(LAST_ACTIVITY_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || !parsed.type || parsed.id === undefined || parsed.id === null) {
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+};
+
 export default function App() {
   const totalUniqueCardsCount = useMemo(
     () =>
@@ -75,10 +92,104 @@ export default function App() {
   const [revealedCards, setRevealedCards] = useState({});
   const [viewMode, setViewMode] = useState("flashcards");
   const [pendingAutoCommand, setPendingAutoCommand] = useState(null);
+  const [isHomeOpen, setIsHomeOpen] = useState(true);
+  const [lastActivity, setLastActivity] = useState(() => readSavedLastActivity());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isTablasOpen, setIsTablasOpen] = useState(false);
   const [isPlanOpen, setIsPlanOpen] = useState(false);
   const [isGoetheOpen, setIsGoetheOpen] = useState(false);
+
+  const recordLastActivity = (activity) => {
+    if (!activity?.type || activity?.id === undefined || activity?.id === null) return;
+    const next = {
+      type: activity.type,
+      id: activity.id,
+      title: activity.title || '',
+      emoji: activity.emoji || '',
+      updatedAt: new Date().toISOString()
+    };
+    setLastActivity(next);
+    try {
+      localStorage.setItem(LAST_ACTIVITY_STORAGE_KEY, JSON.stringify(next));
+    } catch {
+      // Ignorar errores de cuota o modo privado al persistir actividad reciente
+    }
+  };
+
+  const handleGoHome = () => {
+    setActivePresentationId(null);
+    setActiveStudyPlanId(null);
+    setSearchTerm("");
+    setViewMode("flashcards");
+    setIsHomeOpen(true);
+    setIsMenuOpen(false);
+  };
+
+  const handleOpenChapter = (chapterId, mode = 'flashcards') => {
+    const target = chapters.find((c) => Number(c.id) === Number(chapterId)) || chapters[0];
+    if (!target) return;
+    setActivePresentationId(null);
+    setActiveStudyPlanId(null);
+    setSearchTerm("");
+    setActiveChapterId(target.id);
+    setSelectedCategory("Todas");
+    setViewMode(mode === 'table' ? 'table' : 'flashcards');
+    setIsHomeOpen(false);
+    setIsMenuOpen(false);
+    recordLastActivity({
+      type: 'chapter',
+      id: target.id,
+      title: target.title,
+      emoji: target.emoji || '📘'
+    });
+  };
+
+  const handleOpenStudyPlan = (moduleId) => {
+    const target = studyPlanModules.find((m) => m.id === moduleId);
+    if (!target) return;
+    setActivePresentationId(null);
+    setSearchTerm("");
+    setActiveStudyPlanId(target.id);
+    setViewMode('studyPlan');
+    setIsHomeOpen(false);
+    setIsMenuOpen(false);
+    recordLastActivity({
+      type: 'studyPlan',
+      id: target.id,
+      title: target.title,
+      emoji: '🎓'
+    });
+  };
+
+  const handleOpenGoetheModule = (moduleId) => {
+    const target = goetheModules.find((g) => g.id === moduleId);
+    if (!target) return;
+    setActiveStudyPlanId(null);
+    setSearchTerm("");
+    setActivePresentationId(target.id);
+    setViewMode('presentation');
+    setIsHomeOpen(false);
+    setIsMenuOpen(false);
+    recordLastActivity({
+      type: 'goethe',
+      id: target.id,
+      title: target.title,
+      emoji: '🏛️'
+    });
+  };
+
+  const handleOpenSpecialView = (targetView) => {
+    setActivePresentationId(null);
+    setActiveStudyPlanId(null);
+    setIsHomeOpen(false);
+    setIsMenuOpen(false);
+    setViewMode(targetView);
+  };
+
+  const handleOpenTutorFromHome = () => {
+    setIsMenuOpen(false);
+    setIsTutorOpen(true);
+  };
 
   useEffect(() => {
     setSelectedCategory("Todas");
@@ -638,10 +749,15 @@ export default function App() {
       if (activePresentationId || activeStudyPlanId) {
         setActivePresentationId(null);
         setActiveStudyPlanId(null);
+        setViewMode("flashcards");
         return;
       }
       if (viewMode !== "flashcards") {
         setViewMode("flashcards");
+        return;
+      }
+      if (!isHomeOpen) {
+        setIsHomeOpen(true);
         return;
       }
       CapacitorApp.exitApp();
@@ -652,7 +768,7 @@ export default function App() {
     };
   }, [
     fullscreenImage, isTutorOpen, storyState, 
-    activePresentationId, activeStudyPlanId, viewMode
+    activePresentationId, activeStudyPlanId, viewMode, isHomeOpen
   ]);
   const activeChapter = useMemo(() => chapters.find(c => c.id === Number(activeChapterId)) || chapters[0], [activeChapterId]);
   const activePresentation = useMemo(() => goetheModules.find(p => p.id === activePresentationId), [activePresentationId]);
@@ -811,8 +927,9 @@ export default function App() {
     }));
   };
 
-  const handleCreateNewChapterStory = async (existingStoriesOverride = null) => {
-    if (!activeChapter) return;
+  const handleCreateNewChapterStory = async (existingStoriesOverride = null, chapterOverride = null) => {
+    const targetChapter = chapterOverride || activeChapter;
+    if (!targetChapter) return;
     resetStoryAudioPlayback();
 
     const currentStories = Array.isArray(existingStoriesOverride)
@@ -833,12 +950,16 @@ export default function App() {
         titulo: lastStory.titulo || "Cuento 3",
         de: lastStory.cuento_aleman || lastStory.de || "",
         es: lastStory.traduccion_espanol || lastStory.es || "",
-        chapterId: activeChapter.id
+        chapterId: targetChapter.id
       }));
       return;
     }
 
-    const palabrasValidas = (activeChapter.words || displayedWords)
+    const wordsSource =
+      Number(targetChapter.id) === Number(activeChapter?.id)
+        ? (targetChapter.words || displayedWords)
+        : (targetChapter.words || []);
+    const palabrasValidas = wordsSource
       .filter((w) => w?.de && w.de.length > 2)
       .slice(0, 8)
       .map((w) => w.de);
@@ -861,7 +982,7 @@ export default function App() {
       loading: true,
       activeSlot: nextSlot,
       stories: currentStories,
-      chapterId: activeChapter.id,
+      chapterId: targetChapter.id,
       titulo: `Generando Cuento ${nextSlot}/3...`,
       de: "",
       es: ""
@@ -877,8 +998,8 @@ export default function App() {
         },
         body: JSON.stringify({
           palabrasVocabulario: palabrasValidas,
-          chapterId: activeChapter.id,
-          chapterTitle: activeChapter.title
+          chapterId: targetChapter.id,
+          chapterTitle: targetChapter.title
         })
       });
       if (!response.ok) throw new Error("Failed to generate story");
@@ -922,8 +1043,8 @@ export default function App() {
 
     const applyStoryResult = async (data) => {
       const returnedStory = data.story || {
-        id: `chapter_${activeChapter.id}_story_${data.storyIndex || nextSlot}`,
-        chapterId: activeChapter.id,
+        id: `chapter_${targetChapter.id}_story_${data.storyIndex || nextSlot}`,
+        chapterId: targetChapter.id,
         storyIndex: Number(data.storyIndex) || nextSlot,
         titulo: data.titulo || `Cuento ${nextSlot}`,
         cuento_aleman: data.cuento_aleman || data.de || "",
@@ -937,12 +1058,12 @@ export default function App() {
             .sort((a, b) => (Number(a.storyIndex) || 0) - (Number(b.storyIndex) || 0))
             .slice(0, 3);
 
-      await saveChapterStoriesToLocalCache(activeChapter.id, mergedStories);
+      await saveChapterStoriesToLocalCache(targetChapter.id, mergedStories);
 
       setStoryState({
         isOpen: true,
         loading: false,
-        chapterId: activeChapter.id,
+        chapterId: targetChapter.id,
         stories: mergedStories,
         activeSlot: Number(returnedStory.storyIndex) || mergedStories.length,
         titulo: returnedStory.titulo || `Cuento ${returnedStory.storyIndex || nextSlot}`,
@@ -973,26 +1094,27 @@ export default function App() {
     }
   };
 
-  const generateStory = async () => {
-    if (!activeChapter) return;
+  const generateStory = async (chapterOverride = null) => {
+    const targetChapter = chapterOverride && chapterOverride.id ? chapterOverride : activeChapter;
+    if (!targetChapter) return;
     resetStoryAudioPlayback();
 
     setStoryState((prev) => ({
       ...prev,
       isOpen: true,
       loading: true,
-      chapterId: activeChapter.id,
+      chapterId: targetChapter.id,
       de: "",
       es: ""
     }));
 
-    const savedStories = await loadChapterStoriesFromCacheAndCloud(activeChapter.id);
+    const savedStories = await loadChapterStoriesFromCacheAndCloud(targetChapter.id);
     if (savedStories.length > 0) {
       const firstStory = savedStories[0];
       setStoryState({
         isOpen: true,
         loading: false,
-        chapterId: activeChapter.id,
+        chapterId: targetChapter.id,
         stories: savedStories,
         activeSlot: Number(firstStory.storyIndex) || 1,
         titulo: firstStory.titulo || "Cuento 1",
@@ -1002,7 +1124,14 @@ export default function App() {
       return;
     }
 
-    await handleCreateNewChapterStory([]);
+    await handleCreateNewChapterStory([], targetChapter);
+  };
+
+  const handleOpenChapterStory = (chapterId = 1) => {
+    const target = chapters.find((c) => Number(c.id) === Number(chapterId)) || chapters[0];
+    if (!target) return;
+    handleOpenChapter(target.id, 'flashcards');
+    generateStory(target);
   };
 
   const handleChangeStorySpeed = (nextSpeed) => {
@@ -1349,7 +1478,7 @@ export default function App() {
           unlockedCards={unlockedCards}
           speakText={speakText}
           lazyLoadImage={lazyLoadImage}
-          onNextModule={setActivePresentationId}
+          onNextModule={(nextId) => (nextId ? handleOpenGoetheModule(nextId) : setActivePresentationId(null))}
         />
       ) : viewMode === "studyPlan" && activeStudyPlanId ? (() => {
         const activeModule = studyPlanModules.find(m => m.id === activeStudyPlanId);
@@ -1369,7 +1498,7 @@ export default function App() {
             unlockedCards={unlockedCards}
             speakText={speakText}
             lazyLoadImage={lazyLoadImage}
-            onNextModule={setActiveStudyPlanId}
+            onNextModule={(nextId) => (nextId ? handleOpenStudyPlan(nextId) : setActiveStudyPlanId(null))}
           />
         );
       })() : viewMode === "driving" ? (
@@ -1408,30 +1537,48 @@ export default function App() {
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0 pt-[max(0.75rem,env(safe-area-inset-top))]">
             <div className="max-w-7xl mx-auto px-4 pb-3 flex flex-col md:flex-row items-center justify-between gap-3">
-              <div className="flex items-center justify-between w-full md:w-auto">
-                <div className="flex items-center gap-3">
-                  <div className="bg-yellow-500 text-slate-900 p-2 rounded-lg animate-pulse">
-                    <GraduationCap size={28} />
+              <div className="flex flex-wrap items-center justify-between gap-2 w-full md:w-auto">
+                <button
+                  type="button"
+                  onClick={handleGoHome}
+                  aria-label="Ir al Inicio y Guía de Estudio"
+                  className="flex items-center gap-2.5 sm:gap-3 text-left min-w-0 cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 rounded-xl p-1 -m-1 transition"
+                >
+                  <div className="bg-yellow-500 group-hover:bg-yellow-400 text-slate-900 p-2 rounded-lg shrink-0 transition">
+                    <GraduationCap size={26} />
                   </div>
-                  <div>
-                    <h1 className="text-xl font-black tracking-wide leading-tight">DeutschMeister <span className="text-yellow-400">PRO A1</span></h1>
-                    <p className="text-xs text-slate-400">Alemán Técnico & Preparación Goethe Zertifikat</p>
+                  <div className="min-w-0">
+                    <h1 className="text-lg sm:text-xl font-black tracking-wide leading-tight truncate">DeutschMeister <span className="text-yellow-400">PRO A1</span></h1>
+                    <p className="text-[11px] sm:text-xs text-slate-400 truncate">Alemán Técnico &amp; Preparación Goethe Zertifikat</p>
                   </div>
-                </div>
+                </button>
                 {/* HAMBURGER + PROFILE ON MOBILE */}
-                <div className="flex items-center gap-2 md:hidden">
+                <div className="flex items-center gap-1.5 sm:gap-2 md:hidden shrink-0">
+                  {!isHomeOpen && (
+                    <button
+                      type="button"
+                      onClick={handleGoHome}
+                      className="min-h-[40px] bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 font-bold px-2.5 py-2 rounded-lg transition flex items-center gap-1.5 text-xs shadow-sm cursor-pointer"
+                      aria-label="Volver al Inicio"
+                      title="Volver al Inicio"
+                    >
+                      <Home size={16} />
+                      <span>Inicio</span>
+                    </button>
+                  )}
                   <button
-                    onClick={() => setViewMode('driving')}
-                    className="bg-zinc-900 text-emerald-400 p-2 rounded-lg border border-emerald-500/40 transition flex items-center justify-center shadow-sm cursor-pointer"
+                    type="button"
+                    onClick={() => handleOpenSpecialView('driving')}
+                    className="min-h-[40px] min-w-[40px] bg-zinc-900 text-emerald-400 p-2 rounded-lg border border-emerald-500/40 transition flex items-center justify-center shadow-sm cursor-pointer"
                     aria-label="Modo Conducción"
                     title="Modo Conducción"
                   >
                     <Car size={20} />
                   </button>
-                  <button onClick={() => setViewMode('profile')} className="bg-slate-800 text-blue-400 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Perfil">
+                  <button type="button" onClick={() => handleOpenSpecialView('profile')} className="min-h-[40px] min-w-[40px] bg-slate-800 text-blue-400 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Perfil">
                     <User size={20} />
                   </button>
-                  <button onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Abrir menú">
+                  <button type="button" onClick={() => setIsMenuOpen(true)} className="min-h-[40px] min-w-[40px] bg-slate-800 text-slate-300 hover:text-white p-2 rounded-lg border border-slate-700 transition flex items-center justify-center shadow-sm" aria-label="Abrir menú">
                     <Menu size={20} />
                   </button>
                 </div>
@@ -1439,26 +1586,44 @@ export default function App() {
               
               <div className="relative w-full md:w-1/3">
                 <input type="text" placeholder="Buscar (ej. Motor, essen, Verbo Modal)..." className="w-full py-2 px-4 pl-10 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all" value={searchTerm} onChange={e => {
-              setSearchTerm(e.target.value);
-              if (viewMode === "quiz" || viewMode === "presentation" || viewMode === "studyPlan") setViewMode("flashcards");
+              const nextSearch = e.target.value;
+              setSearchTerm(nextSearch);
+              if (nextSearch.trim() !== "") {
+                setIsHomeOpen(false);
+                setActivePresentationId(null);
+                setActiveStudyPlanId(null);
+                if (viewMode !== "flashcards" && viewMode !== "table") setViewMode("flashcards");
+              }
             }} />
                 <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
               </div>
 
               {/* PROFILE + MENU ON DESKTOP */}
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2 shrink-0">
+                {!isHomeOpen && (
+                  <button
+                    type="button"
+                    onClick={handleGoHome}
+                    className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-1.5 shadow-md cursor-pointer text-sm"
+                    title="Volver al Inicio y Guía de Estudio"
+                  >
+                    <Home size={17} />
+                    <span>Inicio</span>
+                  </button>
+                )}
                 <button
-                  onClick={() => setViewMode('driving')}
+                  type="button"
+                  onClick={() => handleOpenSpecialView('driving')}
                   className="bg-zinc-900 hover:bg-zinc-800 text-emerald-400 border border-emerald-500/40 font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-2 shadow-md cursor-pointer text-sm"
                   title="Modo Conducción Manos Libres (Fahrmodus)"
                 >
                   <Car size={18} />
                   <span>Modo Conducción</span>
                 </button>
-                <button onClick={() => setViewMode('profile')} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-2 shadow-md cursor-pointer text-sm">
+                <button type="button" onClick={() => handleOpenSpecialView('profile')} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-lg transition flex items-center gap-2 shadow-md cursor-pointer text-sm">
                   <User size={18} /> Perfil
                 </button>
-                <button onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 px-4 py-2 rounded-lg transition flex items-center gap-2 font-bold shadow-md text-sm">
+                <button type="button" onClick={() => setIsMenuOpen(true)} className="bg-slate-800 text-slate-300 hover:text-white border border-slate-700 px-4 py-2 rounded-lg transition flex items-center gap-2 font-bold shadow-md text-sm cursor-pointer">
                   <Menu size={18} /> Menú
                 </button>
               </div>
@@ -1484,10 +1649,19 @@ export default function App() {
                   {/* Accesos rápidos */}
                   <div className="grid grid-cols-2 gap-2 pb-4 border-b border-slate-800">
                     <button
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        setViewMode("driving");
-                      }}
+                      type="button"
+                      onClick={handleGoHome}
+                      className={`col-span-2 py-2.5 px-3 rounded-lg font-bold transition flex items-center justify-center gap-2 text-xs shadow-md active:scale-95 cursor-pointer border ${
+                        isHomeOpen
+                          ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-amber-500/20'
+                          : 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border-amber-400/40'
+                      }`}
+                    >
+                      <Home size={16} />
+                      <span>🏠 Inicio y Guía de Estudio</span>
+                    </button>
+                    <button
+                      onClick={() => handleOpenSpecialView("driving")}
                       className="bg-zinc-900 hover:bg-zinc-800 text-emerald-400 border border-emerald-500/40 col-span-2 py-2.5 rounded-lg font-bold transition flex items-center justify-center gap-2 text-xs shadow-md shadow-emerald-500/10 active:scale-95 cursor-pointer"
                     >
                       <Car size={18} />
@@ -1499,39 +1673,20 @@ export default function App() {
               }} className="bg-slate-800 text-yellow-400 border border-yellow-500/20 py-2.5 rounded-lg font-bold hover:bg-slate-700 transition flex flex-col items-center justify-center gap-1 text-xs">
                       <Bot size={18} /> Tutor IA
                     </button>
-                    <button onClick={() => {
-                setViewMode('roleplay');
-                setIsMenuOpen(false);
-              }} className="bg-purple-900/60 text-purple-200 border border-purple-500/20 py-2.5 rounded-lg font-bold hover:bg-purple-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                    <button onClick={() => handleOpenSpecialView('roleplay')} className="bg-purple-900/60 text-purple-200 border border-purple-500/20 py-2.5 rounded-lg font-bold hover:bg-purple-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
                       <Sparkles size={18} /> Rol ✨
                     </button>
-                    <button onClick={() => {
-                setViewMode('reading');
-                setIsMenuOpen(false);
-              }} className="bg-emerald-900/60 text-emerald-200 border border-emerald-500/20 py-2.5 rounded-lg font-bold hover:bg-emerald-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                    <button onClick={() => handleOpenSpecialView('reading')} className="bg-emerald-900/60 text-emerald-200 border border-emerald-500/20 py-2.5 rounded-lg font-bold hover:bg-emerald-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
                       <BookOpen size={18} /> Lectura 📖
                     </button>
-                    <button onClick={() => {
-                setViewMode('quiz');
-                setActivePresentationId(null);
-                setActiveStudyPlanId(null);
-                setIsMenuOpen(false);
-              }} className="bg-yellow-600 text-slate-900 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                    <button onClick={() => handleOpenSpecialView('quiz')} className="bg-yellow-600 text-slate-900 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
                       <Gamepad2 size={18} /> Quiz
                     </button>
-                    <button onClick={() => {
-                setViewMode('profile');
-                setIsMenuOpen(false);
-              }} className="bg-blue-600 text-white col-span-2 py-2.5 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-xs shadow-sm">
+                    <button onClick={() => handleOpenSpecialView('profile')} className="bg-blue-600 text-white col-span-2 py-2.5 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-xs shadow-sm">
                       <User size={18} /> Mi Perfil y Configuración
                     </button>
                     <button
-                      onClick={() => {
-                        setActiveChapterId(22);
-                        setSelectedCategory("Todas");
-                        setViewMode("flashcards");
-                        setIsMenuOpen(false);
-                      }}
+                      onClick={() => handleOpenChapter(22, "flashcards")}
                       className="bg-indigo-900/70 text-indigo-200 border border-indigo-500/30 col-span-2 py-2.5 rounded-lg font-bold hover:bg-indigo-800 transition flex items-center justify-center gap-2 text-xs shadow-sm cursor-pointer"
                     >
                       <MessageCircle className="text-indigo-400" size={18} />
@@ -1557,16 +1712,11 @@ export default function App() {
                     {isTablasOpen && (
                       <div className="space-y-1 py-1 border-t border-slate-800/50 bg-slate-950/20 p-1.5">
                         {chapters.map((chap) => {
-                          const isSelected = activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table');
+                          const isSelected = !isHomeOpen && activeChapterId === chap.id && (viewMode === 'flashcards' || viewMode === 'table');
                           return (
                             <button
                               key={chap.id}
-                              onClick={() => {
-                                setActiveChapterId(chap.id);
-                                setSelectedCategory("Todas");
-                                setViewMode('flashcards');
-                                setIsMenuOpen(false);
-                              }}
+                              onClick={() => handleOpenChapter(chap.id, 'flashcards')}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
                                 isSelected
                                   ? 'bg-indigo-600 text-white font-semibold shadow-sm'
@@ -1597,15 +1747,11 @@ export default function App() {
                     </button>
                     {isPlanOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20 p-1.5 space-y-1">
                         {studyPlanModules.map(mod => {
-                          const isActive = activeStudyPlanId === mod.id && viewMode === 'studyPlan';
+                          const isActive = !isHomeOpen && activeStudyPlanId === mod.id && viewMode === 'studyPlan';
                           return (
                             <button
                               key={mod.id}
-                              onClick={() => {
-                                setActiveStudyPlanId(mod.id);
-                                setViewMode('studyPlan');
-                                setIsMenuOpen(false);
-                              }}
+                              onClick={() => handleOpenStudyPlan(mod.id)}
                               className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all text-left ${
                                 isActive
                                   ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
@@ -1637,15 +1783,11 @@ export default function App() {
                     </button>
                     {isGoetheOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20 p-1.5 space-y-1">
                         {goetheModules.map(pres => {
-                          const isActive = activePresentationId === pres.id && viewMode === 'presentation';
+                          const isActive = !isHomeOpen && activePresentationId === pres.id && viewMode === 'presentation';
                           return (
                             <button
                               key={pres.id}
-                              onClick={() => {
-                                setActivePresentationId(pres.id);
-                                setViewMode('presentation');
-                                setIsMenuOpen(false);
-                              }}
+                              onClick={() => handleOpenGoetheModule(pres.id)}
                               className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all text-left ${
                                 isActive
                                   ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
@@ -1685,6 +1827,26 @@ export default function App() {
             </div>
           }>
           
+          {/* VISTA: INICIO Y CENTRO DE MANDO PEDAGÓGICO 🏠 */}
+          {isHomeOpen && searchTerm.trim() === "" && viewMode !== "roleplay" && viewMode !== "reading" && (
+            <HomeDashboard
+              user={user}
+              accessRole={accessRole}
+              chapters={chapters}
+              studyPlanModules={studyPlanModules}
+              goetheModules={goetheModules}
+              studiedCardsCount={studiedCardsCount}
+              totalUniqueCardsCount={totalUniqueCardsCount}
+              lastActivity={lastActivity}
+              onOpenChapter={handleOpenChapter}
+              onOpenStudyPlan={handleOpenStudyPlan}
+              onOpenGoetheModule={handleOpenGoetheModule}
+              onOpenSpecialView={handleOpenSpecialView}
+              onOpenTutor={handleOpenTutorFromHome}
+              onOpenChapterStory={handleOpenChapterStory}
+            />
+          )}
+
           {/* VISTA: SIMULADOR DE ROL (GEMINI API) ✨ */}
           {viewMode === "roleplay" && typeof RoleplaySimulator !== 'undefined' && <RoleplaySimulator onExit={() => setViewMode("flashcards")} />}
 
@@ -1692,7 +1854,7 @@ export default function App() {
           {viewMode === "reading" && <ReadingComprehension onExit={() => setViewMode("flashcards")} />}
           
           {/* VISTAS: FLASHCARDS Y TABLA */}
-          {(viewMode === "flashcards" || viewMode === "table") && <>
+          {(!isHomeOpen || searchTerm.trim() !== "") && (viewMode === "flashcards" || viewMode === "table") && <>
               <div className="mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
                   <div>
@@ -1924,7 +2086,7 @@ export default function App() {
                       <span className="truncate">{storyState.titulo || "Cuentos IA del Capítulo"}</span>
                     </h3>
                     <p className="text-xs text-slate-500 mt-0.5 truncate">
-                      {activeChapter?.title} • {(storyState.stories || []).length} / 3 cuentos guardados
+                      {(chapters.find((c) => Number(c.id) === Number(storyState.chapterId)) || activeChapter)?.title} • {(storyState.stories || []).length} / 3 cuentos guardados
                     </p>
                   </div>
                   <button
