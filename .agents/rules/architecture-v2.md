@@ -56,24 +56,34 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
   - Se sincronizan automáticamente con Firestore en la colección canónica:
     `/artifacts/{appId}/users/{uid}/pedagogy/progress`
   - La clave de consulta para audios e imágenes en `global_flashcards` depende del campo exacto `w.de`. **NUNCA** modificar los textos en alemán de `src/data/chapters.jsx` agregando sufijos entre paréntesis (`die Maus (PC)`), ya que invalida el almacenamiento multimedia existente.
+- **Audio DSP (Voice-Tuned WSOLA para `0.75x`) y Selector de Velocidad Global:**
+  - El estiramiento temporal limpio de voz en `src/utils/cleanTimeStretch.js` (`wsolaSpeechStretch`, `getCleanSpeedAudioResult`, `getCleanSpeedAudioUrl`) utiliza **WSOLA en el dominio del tiempo** calibrado para habla humana (ventana Hann simétrica de `24 ms`, solapamiento del `50 %` con `COLA = 1.0`, alineación por Correlación Cruzada Normalizada NCC en un radio de `±11 ms`), reemplazando al Phase Vocoder FFT para evitar eco metálico en voces graves a `0.75x`.
+  - Mantiene caché LRU en memoria (`40` entradas) y fallback seguro a `playbackRate = 0.75` si el decodificador falla.
+  - El selector global (`dm_voice_speed` en `localStorage`, sincronizado vía evento `dm-speed-changed`) opera estrictamente con **`0.75x` y `1.0x`** en `src/components/Profile.jsx`, `src/App.jsx` (Cuentos IA) y `src/components/ReadingComprehension.jsx` (Leselabor); nunca usar `playbackRate = 0.75` sobre un `ObjectURL` ya estirado por WSOLA (`isCleanStretchedUrl(...)` → `playbackRate = 1.0`).
+- **Visor Multimedia y Soporte `blob:` / `.mp4` en Vista Ampliada (`fullscreenImage`):**
+  - Los medios offline sincronizados desde `mediaBlobStore` (IndexedDB) generan URLs locales `blob:`.
+  - El modal `fullscreenImage` en `src/App.jsx` (junto con el disparo de zoom desde `src/components/PresentationVocabCard.jsx`) valida explícitamente los prefijos `blob:`, `http`, `data:` y `/` antes de asumir base64 crudo (`data:image/jpeg;base64,...`), evitando corromper `blob:` URLs locales.
+  - Cuando el recurso resuelto contiene `.mp4` o `data:video/`, el visor modal renderiza `<video autoPlay loop muted playsInline>` en lugar de `<img>`, y `App.jsx` difiere la revocación de `blob:` URLs activas en `fullscreenImageRef` hasta cerrar el modal.
 
 ---
 
 ## 4. Backend Serverless & Resiliencia de IA (`functions/`)
 
-- **Funciones Cloud v2 Activas (9 endpoints):**
-  1. `sendTutorChatMessage` (Tutor socrático en streaming SSE)
-  2. `runRoleplaySimulator` (Simulador de roles A1 en streaming SSE)
-  3. `evaluateEmail` (Evaluador de redacción oficial Goethe A1)
-  4. `generateStory` (Generador de historias graduadas en streaming SSE)
-  5. `generateDynamicQuiz` (Generador de evaluaciones dinámicas)
-  6. `generateReadingTest` (Comprensión lectora A1)
-  7. `synthesizeGermanSpeech` (Síntesis de voz neural de alta calidad)
-  8. `regenerateCardMedia` (Mantenimiento y regeneración de audios/imágenes)
-  9. `generateCardImage` (Generación de ilustraciones didácticas)
-- **Autenticación Obligatoria:**
-  - Los 6 endpoints de tipo `onCall` (`evaluateEmail`, `generateCardImage`, `generateReadingTest`, `generateDynamicQuiz`, `synthesizeGermanSpeech`, `regenerateCardMedia`) ejecutan obligatoriamente `await verifyRequestAuth(request)`.
-  - Las escrituras en `global_flashcards` (`regenerateCardMedia` y `generateCardImage`) requieren validación de origen en servidor: sólo permitidas bajo emulador (`process.env.FUNCTIONS_EMULATOR === "true"`), dominios locales autorizados (`http://localhost:5173`, `http://localhost:5174`) o usuarios con claim `request.auth.token.admin === true`.
+- **Funciones Cloud v2 Activas (11 endpoints):**
+  1. `sendTutorChatMessage` (Tutor socrático en streaming SSE — `onRequest`, protegida con `assertApprovedUser`)
+  2. `runRoleplaySimulator` (Simulador de roles A1 en streaming SSE — `onRequest`, protegida con `assertApprovedUser`)
+  3. `evaluateEmail` (Evaluador de redacción oficial Goethe A1 — `onCall`, protegida con `assertApprovedUser`)
+  4. `generateStory` (Generador de historias graduadas en streaming SSE — `onRequest`, protegida con `assertApprovedUser`)
+  5. `generateDynamicQuiz` (Generador de evaluaciones dinámicas — `onCall`, protegida con `assertApprovedUser`)
+  6. `generateReadingTest` (Comprensión lectora A1 — `onCall`, protegida con `assertApprovedUser`)
+  7. `synthesizeGermanSpeech` (Síntesis de voz neural de alta calidad — `onCall`, protegida con `assertApprovedUser`)
+  8. `regenerateCardMedia` (Mantenimiento y regeneración de audios/imágenes — `onCall`, protegida con `assertApprovedUser`)
+  9. `generateCardImage` (Generación de ilustraciones didácticas — `onCall`, protegida con `assertApprovedUser`)
+  10. `verifyOrRequestAccess` (Gate Zero-Trust de auto-registro, validación contra `SUPER_ADMIN_EMAILS`/`authorized_emails` y sincronización de Custom Claims — `onCall`)
+  11. `manageUserAccess` (Panel de administración: `list`, `approve`, `revoke`, `preauthorize`, `remove_preauth` — `onCall`, exclusiva para `role === "admin"` vía `assertAdminUser`)
+- **Autenticación y Guard Zero-Trust Obligatorio (`assertApprovedUser`):**
+  - Toda Cloud Function de IA o medios ejecuta obligatoriamente `await assertApprovedUser(...)` (rechaza peticiones sin auth, rechaza sesiones anónimas `sign_in_provider === "anonymous"` y exige Custom Claim `approved === true`/`admin === true` o estado `status === "approved"` en `access_control/{uid}`, sincronizando claims en segundo plano).
+  - Las escrituras en `global_flashcards` (`regenerateCardMedia` y `generateCardImage`) mantienen validación adicional de origen/rol (`isServerAuthorizedMediaWriter`: emulador, Vite dev local o admin aprobado).
 - **Pool de API Keys & Circuit Breaker (Resiliencia Multi-Nivel):**
   - Implementado en `functions/services/geminiClient.js` con rotación entre 4 llaves Nivel 1 (`PAID_1` a `PAID_4`) y 2 gratuitas de respaldo (`FREE_1` a `FREE_2`).
   - **Cooldowns Diferenciados:**
@@ -90,12 +100,17 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
 
 ---
 
-## 5. Reglas de Seguridad en Base de Datos (`firestore.rules`)
+## 5. Seguridad Zero-Trust, Reglas Firestore (`firestore.rules`) & Approval Gate
 
-- **Principio de Mínimo Privilegio:**
-  - Colección de progreso de usuario (`/artifacts/{appId}/users/{uid}/**`): acceso exclusivo para el usuario autenticado (`request.auth.uid == uid`).
-  - Límite de tamaño en payloads para prevenir saturación de almacenamiento (`request.resource.data.size() <= 200`).
-  - Permitida la eliminación (`allow delete: if request.auth.uid == uid`) para permitir reseteos de cuenta y cumplimiento de privacidad.
-- **Colecciones Globales (`global_flashcards`, `global_audio_pronunciations`, `system_prompts`):**
-  - Lectura pública autorizada para estudiantes autenticados o anónimos.
-  - Escritura bloqueada desde el cliente web (`allow write: if false`), gestionada exclusivamente por Cloud Functions v2 mediante Firebase Admin SDK.
+- **Arquitectura Zero-Trust en 5 Capas:**
+  1. **UI Gate (`src/components/AuthAccessGate.jsx` + `src/App.jsx`):** Eliminado por completo el inicio de sesión anónimo (`signInAnonymously`); sesiones anónimas previas se cierran automáticamente (`signOutUnified`). Ningún listener o consulta a catálogos/progreso en Firestore se ejecuta hasta que `accessStatus === "approved"`.
+  2. **Flujo Compartido Google Sign-In Web/Android APK (`src/services/authService.js`):** Reutilizado por `AuthAccessGate.jsx` y `Profile.jsx`, conservando `@capacitor-firebase/authentication` (`signInWithGoogle` + `signInWithCredential`) en Android APK y `signInWithPopup` en Web/PWA.
+  3. **Sala de Espera en Tiempo Real & Resiliencia Offline:** Listener `onSnapshot` sobre `access_control/{uid}` que refresca `user.getIdToken(true)` (y sincroniza claims vía `verifyOrRequestAccess`) al instante tras la aprobación/revocación. Caché local `dm_access_approved_${uid}` / `dm_access_role_${uid}` permite abrir la app en Modo Avión tras una aprobación previa, revalidando silenciosamente al recuperar red.
+  4. **Panel de Administración Integrado (`src/components/AdminAccessPanel.jsx` en `Profile.jsx`):** Visible exclusivamente para `role === "admin"`, permite aprobar/rechazar solicitudes pendientes, revocar accesos (sin auto-revocación ni bloqueo de Super-Admins) y pre-autorizar correos antes del primer inicio de sesión.
+  5. **Reglas de Seguridad (`firestore.rules`) & Custom Claims:**
+     - **Cero acceso público o anónimo:** `isAuthenticated()` exige UID válido y `sign_in_provider != 'anonymous'`.
+     - **Control de Acceso:** `access_control/{userId}` legible solo por el propietario o `isAdmin()` y escribible solo por `isAdmin()`/Admin SDK; `authorized_emails/{emailId}` accesible solo para `isAdmin()`/Admin SDK.
+     - **Catálogos Globales (`global_flashcards`, `global_audio_pronunciations`, `global_stories`, `global_chapter_stories`):** Lectura estrictamente restringida a `isApprovedUser()` (claim `approved`/`admin` o `access_control/{uid}.status == 'approved'`); escritura bloqueada desde cliente (`allow write: if false`).
+     - **Datos Privados (`/artifacts/{appId}/users/{userId}/**`):** Exige `isOwner(userId) && isApprovedUser()` con validación estricta de esquema por subcolección (`unlockedCards`, `chat`, `pedagogy`, `usage` solo lectura en cliente) y denegación por defecto (`match /{document=**} { allow read, write: if false; }`).
+- **Bootstrap Seguro de Propietario / Super-Admin:**
+  - `DEFAULT_SUPER_ADMIN_EMAILS` en `functions/index.js` y `scripts/bootstrap_access_control.mjs` garantizan la auto-aprobación con rol `admin` del propietario (`mgmogollon13@gmail.com`) y de las cuentas `google.com` existentes en el proyecto para evitar bloqueos al activar las reglas.
