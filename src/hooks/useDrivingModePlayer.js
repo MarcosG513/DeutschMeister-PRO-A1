@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { Capacitor } from "@capacitor/core";
 import {
   abortableDelay,
   speakSpanishPrompt,
@@ -6,6 +7,8 @@ import {
   stopAllDrivingSpeech,
   buildMicroTipEs
 } from "../utils/drivingSpeechHelper";
+import { unlockWebKitAudioContext } from "../utils/cleanTimeStretch";
+import { cleanTextForCarScreen } from "../services/androidAutoBridge";
 
 function createSilentAudioDataUri() {
   if (typeof window === "undefined") return "";
@@ -136,6 +139,9 @@ export function useDrivingModePlayer({
         const audioUri = createSilentAudioDataUri();
         if (audioUri) {
           const audio = new Audio(audioUri);
+          audio.playsInline = true;
+          audio.setAttribute("playsinline", "");
+          audio.setAttribute("webkit-playsinline", "");
           audio.loop = true;
           audio.volume = 0.01;
           audio.addEventListener("pause", () => {
@@ -418,6 +424,7 @@ export function useDrivingModePlayer({
   }, [currentIndex, stepAttemptId, isPlaying, runStepCycle, queue.length]);
 
   const startOrResume = useCallback(async () => {
+    unlockWebKitAudioContext();
     await acquireKeepAlive();
     setIsPlaying(true);
   }, [acquireKeepAlive]);
@@ -431,6 +438,17 @@ export function useDrivingModePlayer({
     setCountdownSec(0);
     setPlayerState("paused");
   }, []);
+
+  const stopSession = useCallback(async () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    await stopAllDrivingSpeech();
+    await releaseKeepAlive();
+    setIsPlaying(false);
+    setCountdownSec(0);
+    setPlayerState("idle");
+  }, [releaseKeepAlive]);
 
   const skipToNext = useCallback(async () => {
     if (abortControllerRef.current) {
@@ -447,7 +465,7 @@ export function useDrivingModePlayer({
     }
   }, [acquireKeepAlive, currentItem, isPlaying]);
 
-  // Repetir actual y reencolar en dos intervalos espaciados (+3 y +8) (SRS en volante)
+  // Repetir actual y reencolar +4 turnos SRS (más segundo refuerzo espaciado +9)
   const repeatAndRequeueCurrent = useCallback(async () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -457,12 +475,12 @@ export function useDrivingModePlayer({
     if (currentItem) {
       setQueue((prev) => {
         const clone = [...prev];
-        const pos1 = Math.min(clone.length, currentIndex + 3);
+        const pos1 = Math.min(clone.length, currentIndex + 4);
         clone.splice(pos1, 0, {
           ...currentItem,
           title: `${currentItem.title || currentItem.de || "Repetición"} (Refuerzo Volante #1)`
         });
-        const pos2 = Math.min(clone.length, currentIndex + 8);
+        const pos2 = Math.min(clone.length, currentIndex + 9);
         clone.splice(pos2, 0, {
           ...currentItem,
           title: `${currentItem.title || currentItem.de || "Repetición"} (Refuerzo Volante #2)`
@@ -510,21 +528,86 @@ export function useDrivingModePlayer({
     [acquireKeepAlive, currentIndex, isPlaying, runStepCycle]
   );
 
-  // Integración con Media Session API (Botones físicos del volante / Bluetooth)
+  // Web Media Session API para PWA (pantalla bloqueada y controles Bluetooth/CarPlay/Android Auto)
   useEffect(() => {
-    if (typeof navigator !== "undefined" && "mediaSession" in navigator) {
-      try {
-        navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
+    if (Capacitor.isNativePlatform()) return;
+    if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
 
-        navigator.mediaSession.setActionHandler("play", () => startOrResume());
-        navigator.mediaSession.setActionHandler("pause", () => pauseSession());
-        navigator.mediaSession.setActionHandler("nexttrack", () => skipToNext());
-        navigator.mediaSession.setActionHandler("previoustrack", () => repeatAndRequeueCurrent());
+    try {
+      navigator.mediaSession.playbackState = isPlaying
+        ? "playing"
+        : playerState === "paused"
+          ? "paused"
+          : "none";
+
+      if (typeof window !== "undefined" && "MediaMetadata" in window) {
+        const rawEs = cleanTextForCarScreen(currentItem?.promptEs || currentItem?.es || "");
+        const rawDe = cleanTextForCarScreen(currentItem?.targetDe || currentItem?.de || "");
+        const progressTag =
+          queue.length > 0 ? `Bloque ${currentIndex + 1}/${queue.length}` : "Fahrmodus PRO";
+        const isRevealing =
+          playerState === "revealing_word" ||
+          playerState === "revealing_sentence" ||
+          playerState === "explaining";
+
+        let title = rawDe || rawEs || "DeutschMeister PRO A1";
+        let artist = rawEs ? `🇪🇸 ${rawEs} · ${progressTag}` : progressTag;
+
+        if (playerState === "prompting_word" || playerState === "prompting_sentence") {
+          title = rawEs ? `🇪🇸 ${rawEs}` : "🎧 Escucha el reto";
+          artist = `🎧 Escucha el reto · ${progressTag}`;
+        } else if (playerState === "waiting_word" || playerState === "waiting_sentence") {
+          title = rawEs ? `🗣️ ${rawEs}` : "🗣️ Tu turno en voz alta";
+          artist = `Tu turno en voz alta · ${progressTag}`;
+        } else if (isRevealing) {
+          title = rawDe ? `✅ ${rawDe}` : (rawEs || "Solución nativa");
+          artist = rawEs ? `🇪🇸 ${rawEs} · ${progressTag}` : `Solución Charon · ${progressTag}`;
+        }
+
+        navigator.mediaSession.metadata = new window.MediaMetadata({
+          title,
+          artist,
+          album: "DeutschMeister PRO A1",
+          artwork: [
+            { src: "/pwa-512x512.png", sizes: "512x512", type: "image/png" }
+          ]
+        });
+      }
+    } catch (e) {
+      console.warn("[Web MediaSession Metadata Warning]:", e);
+    }
+  }, [isPlaying, currentItem, currentIndex, queue.length, playerState]);
+
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) return;
+    if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+
+    const actions = [
+      ["play", () => startOrResume()],
+      ["pause", () => pauseSession()],
+      ["nexttrack", () => skipToNext()],
+      ["previoustrack", () => repeatAndRequeueCurrent()],
+      ["stop", () => stopSession()]
+    ];
+
+    for (const [action, handler] of actions) {
+      try {
+        navigator.mediaSession.setActionHandler(action, handler);
       } catch (e) {
-        console.warn("[MediaSession Warning]:", e);
+        console.warn(`[Web MediaSession Handler Warning] ${action}:`, e);
       }
     }
-  }, [isPlaying, pauseSession, repeatAndRequeueCurrent, skipToNext, startOrResume]);
+
+    return () => {
+      for (const [action] of actions) {
+        try {
+          navigator.mediaSession.setActionHandler(action, null);
+        } catch {
+          // Ignorar acción no soportada al desmontar
+        }
+      }
+    };
+  }, [pauseSession, repeatAndRequeueCurrent, skipToNext, startOrResume, stopSession]);
 
   // Limpieza al desmontar el componente
   useEffect(() => {
@@ -532,6 +615,13 @@ export function useDrivingModePlayer({
       if (abortControllerRef.current) abortControllerRef.current.abort();
       stopAllDrivingSpeech();
       releaseKeepAlive();
+      if (!Capacitor.isNativePlatform() && typeof navigator !== "undefined" && "mediaSession" in navigator) {
+        try {
+          navigator.mediaSession.playbackState = "none";
+        } catch {
+          // Ignorar si mediaSession no está disponible
+        }
+      }
     };
   }, [releaseKeepAlive]);
 
@@ -544,6 +634,7 @@ export function useDrivingModePlayer({
     countdownSec,
     startOrResume,
     pauseSession,
+    stopSession,
     skipToNext,
     repeatAndRequeueCurrent,
     jumpToIndex

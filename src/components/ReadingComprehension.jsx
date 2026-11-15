@@ -797,6 +797,9 @@ const ReadingComprehension = ({ onExit }) => {
 
       const targetRate = isCleanStretchedUrl(resolvedSource) ? 1.0 : activeSpeed;
       const audio = new Audio(resolvedSource);
+      audio.playsInline = true;
+      audio.setAttribute('playsinline', '');
+      audio.setAttribute('webkit-playsinline', '');
       audio.playbackRate = targetRate;
       audio.preservesPitch = true;
       audio.onloadedmetadata = () => {

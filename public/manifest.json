@@ -3,6 +3,7 @@
   "short_name": "Deutsch A1",
   "description": "Alemán Técnico & Preparación Goethe Zertifikat A1",
   "start_url": "/",
+  "scope": "/",
   "id": "/",
   "display": "standalone",
   "orientation": "portrait",

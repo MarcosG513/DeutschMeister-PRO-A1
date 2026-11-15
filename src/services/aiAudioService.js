@@ -10,11 +10,12 @@ import {
 import {
   getCleanSpeedAudioResult,
   isCleanStretchedUrl,
-  unregisterCleanStretchedUrl
+  unregisterCleanStretchedUrl,
+  unlockWebKitAudioContext
 } from "../utils/cleanTimeStretch";
 import { functions as appFunctions } from "../config/firebase";
 
-export { getSavedPlaybackSpeed, setSavedPlaybackSpeed, isCleanStretchedUrl };
+export { getSavedPlaybackSpeed, setSavedPlaybackSpeed, isCleanStretchedUrl, unlockWebKitAudioContext };
 
 export const audioStore = localforage.createInstance({
   name: "DeutschMeisterAudioCache",
@@ -256,6 +257,9 @@ async function playAudioSource(
   }
 
   const audio = new Audio(source);
+  audio.playsInline = true;
+  audio.setAttribute("playsinline", "");
+  audio.setAttribute("webkit-playsinline", "");
   audio.playbackRate = rate;
   audio.preservesPitch = true;
   audio.onloadedmetadata = () => {
@@ -541,6 +545,7 @@ export async function playGermanAudio(text, options = {}) {
   const targetSpeed =
     options.speed !== undefined ? normalizePlaybackSpeed(options.speed) : getSavedPlaybackSpeed();
 
+  unlockWebKitAudioContext();
   stopCurrentAudio();
   const requestId = latestPlaybackRequestId;
 

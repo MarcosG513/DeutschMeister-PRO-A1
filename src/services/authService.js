@@ -225,6 +225,16 @@ export async function signInWithGoogleUnified({
 
   // ── MODO WEB / PWA ──
   // Usa directamente el SDK web de Firebase con el authDomain estándar (*.firebaseapp.com)
+  const isIOS =
+    typeof navigator !== 'undefined' &&
+    (/iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+  const isIOSStandalone =
+    isIOS &&
+    typeof window !== 'undefined' &&
+    (window.navigator?.standalone === true ||
+      window.matchMedia?.('(display-mode: standalone)')?.matches);
+
   let timeoutId = null;
   const timeoutPromise = new Promise((_, reject) => {
     timeoutId = setTimeout(() => {
@@ -268,22 +278,52 @@ export async function signInWithGoogleUnified({
 
     return await Promise.race([authAction(), timeoutPromise]);
   } catch (err) {
-    if (err?.code === 'auth/popup-blocked') {
-      if (shouldLinkAnon) {
-        await linkWithRedirect(currentUser, provider);
-      } else {
-        await signInWithRedirect(targetAuth, provider);
+    const errCode = String(err?.code || '').toLowerCase();
+    const shouldFallbackToRedirect =
+      errCode === 'auth/popup-blocked' ||
+      (isIOSStandalone &&
+        (err?.message === 'auth_timeout' ||
+          errCode === 'auth/operation-not-supported-in-this-environment' ||
+          errCode === 'auth/internal-error' ||
+          errCode === 'auth/cancelled-popup-request'));
+
+    if (shouldFallbackToRedirect) {
+      try {
+        if (shouldLinkAnon) {
+          await linkWithRedirect(currentUser, provider);
+        } else {
+          await signInWithRedirect(targetAuth, provider);
+        }
+        return {
+          user: null,
+          redirecting: true,
+          message: 'Redirigiendo a Google para completar el inicio de sesión...'
+        };
+      } catch (redirectErr) {
+        if (isIOSStandalone) {
+          throw new Error(
+            'El acceso con Google fue bloqueado en la PWA de iPhone/iPad. Puedes entrar directamente con tu Correo y Contraseña en el formulario inferior.',
+            { cause: redirectErr }
+          );
+        }
+        throw new Error(mapFirebaseAuthError(redirectErr), { cause: redirectErr });
       }
-      return {
-        user: null,
-        redirecting: true,
-        message: 'Redirigiendo a Google para completar el inicio de sesión...'
-      };
     }
 
     console.warn('Error en login/link con Google:', err);
+    if (isIOSStandalone && errCode === 'auth/popup-closed-by-user') {
+      throw new Error(
+        'No se completó el acceso con Google en la app instalada de iOS. También puedes entrar con tu Correo y Contraseña en el formulario inferior.',
+        { cause: err }
+      );
+    }
     if (err?.message === 'auth_timeout') {
-      throw new Error('El inicio de sesión tomó demasiado tiempo o la ventana fue cerrada.', { cause: err });
+      throw new Error(
+        isIOSStandalone
+          ? 'El acceso con Google tardó demasiado en iOS PWA. También puedes usar tu Correo y Contraseña en el formulario inferior.'
+          : 'El inicio de sesión tomó demasiado tiempo o la ventana fue cerrada.',
+        { cause: err }
+      );
     }
     throw new Error(mapFirebaseAuthError(err), { cause: err });
   } finally {

@@ -14,8 +14,11 @@ import {
   Lock,
   User,
   Eye,
-  EyeOff
+  EyeOff,
+  Download
 } from 'lucide-react';
+import InstallInstructionsModal from './InstallInstructionsModal';
+import { usePWAInstall } from '../hooks/usePWAInstall';
 import {
   signInWithGoogleUnified,
   signInWithEmailUnified,
@@ -63,6 +66,13 @@ const AuthAccessGate = ({
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const {
+    showWebInstallCard,
+    showInstallInstructionsModal,
+    setShowInstallInstructionsModal,
+    handleInstallApp
+  } = usePWAInstall();
+
   const isBusy = busyAction !== null;
   const isChecking = accessStatus === 'checking';
   const isUnauthenticated = !user || user.isAnonymous || accessStatus === 'unauthenticated';
@@ -82,11 +92,14 @@ const AuthAccessGate = ({
     setLocalError(null);
     setLocalSuccess(null);
     try {
-      await signInWithGoogleUnified({
+      const res = await signInWithGoogleUnified({
         authInstance: auth,
         isLoginMode: true,
         allowAnonymousLink: false
       });
+      if (res?.redirecting && res?.message) {
+        setLocalSuccess(res.message);
+      }
     } catch (err) {
       setLocalError(err?.message || 'No se pudo iniciar sesión con Google.');
     } finally {
@@ -436,6 +449,22 @@ const AuthAccessGate = ({
               <p className="text-[11px] text-slate-400 mt-4 leading-relaxed">
                 Si tu correo ya fue autorizado o es administrador, entrarás de inmediato; de lo contrario, quedará en espera de aprobación.
               </p>
+
+              {showWebInstallCard && (
+                <div className="w-full mt-5 pt-4 border-t border-slate-200/80 text-center">
+                  <button
+                    type="button"
+                    onClick={handleInstallApp}
+                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-2xl shadow-sm shadow-emerald-600/20 active:scale-[0.98] transition flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer"
+                  >
+                    <Download size={16} className="shrink-0" />
+                    <span>📲 Instalar App en tu Teléfono (Android / iPhone)</span>
+                  </button>
+                  <p className="text-[11px] text-slate-500 mt-2 leading-snug">
+                    Tip iPhone: Agrégala a tu pantalla de inicio primero y luego inicia sesión desde el icono instalado.
+                  </p>
+                </div>
+              )}
             </div>
           ) : (
             /* ESTADO B: AUTENTICADO PERO PENDING O REVOKED */
@@ -520,6 +549,11 @@ const AuthAccessGate = ({
           )}
         </div>
       </div>
+
+      <InstallInstructionsModal
+        isOpen={showInstallInstructionsModal}
+        onClose={() => setShowInstallInstructionsModal(false)}
+      />
     </div>
   );
 };

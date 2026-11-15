@@ -2,6 +2,17 @@ import { useState, useCallback, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 
+const IOS_SPEECH_UNAVAILABLE_MSG =
+  'El reconocimiento de voz no está disponible en este navegador iOS; puedes continuar estudiando con el audio y las tarjetas';
+
+function isIOSBrowser() {
+  if (typeof navigator === 'undefined') return false;
+  return (
+    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  );
+}
+
 export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -113,10 +124,15 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
     } else {
       console.log('🚀 [Motor de Voz Web] Inicializando window.SpeechRecognition (Navegador)...');
       const WebSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      
+      const onIOS = isIOSBrowser();
+
       if (!WebSpeechRecognition) {
         console.warn('El reconocimiento de voz no está soportado en este navegador.');
-        setError('El reconocimiento de voz no está soportado en este navegador.');
+        setError(
+          onIOS
+            ? IOS_SPEECH_UNAVAILABLE_MSG
+            : 'El reconocimiento de voz no está soportado en este navegador.'
+        );
         setIsListening(false);
         return;
       }
@@ -156,8 +172,12 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
 
       recognition.onerror = (event) => {
         console.error('Speech recognition error (Web)', event.error);
-        if (event.error === 'not-allowed') {
-          setError('Micrófono bloqueado (not-allowed). Verifica los permisos del navegador.');
+        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+          setError(
+            onIOS
+              ? IOS_SPEECH_UNAVAILABLE_MSG
+              : 'Micrófono bloqueado (not-allowed). Verifica los permisos del navegador.'
+          );
         } else {
           setError(event.error);
         }
@@ -173,6 +193,11 @@ export const useSpeechRecognition = (targetLanguage = 'de-DE') => {
         recognition.start();
       } catch (e) {
         console.error('Error starting web speech recognition:', e);
+        setError(
+          onIOS
+            ? IOS_SPEECH_UNAVAILABLE_MSG
+            : 'No se pudo iniciar el micrófono en este navegador.'
+        );
         setIsListening(false);
       }
     }

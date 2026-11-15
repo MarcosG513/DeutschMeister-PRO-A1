@@ -81,12 +81,13 @@ export function usePWAInstall({
 
     const promptEvent = typeof window !== 'undefined' ? window.deferredPrompt : null;
     if (promptEvent && typeof promptEvent.prompt === 'function') {
+      // El evento beforeinstallprompt es de un solo uso: limpiarlo antes de esperar la elección
+      window.deferredPrompt = null;
+      setCanInstallPWA(false);
       try {
         await promptEvent.prompt();
         const choice = await promptEvent.userChoice;
         if (choice?.outcome === 'accepted') {
-          setCanInstallPWA(false);
-          window.deferredPrompt = null;
           setIsStandalonePWA(true);
         }
       } catch (err) {

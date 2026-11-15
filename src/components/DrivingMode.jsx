@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { Capacitor } from "@capacitor/core";
 import {
   Play,
   Pause,
@@ -1036,6 +1037,12 @@ export default function DrivingMode({
               <div className="text-zinc-500 text-lg font-medium">
                 No hay términos disponibles en esta ruta.
               </div>
+            )}
+
+            {!Capacitor.isNativePlatform() && (
+              <p className="text-[11px] sm:text-xs text-zinc-400/90 max-w-md px-3 pt-1 leading-snug">
+                🎧 Conectado por Bluetooth / CarPlay / Android Auto: usa los botones de pista del volante para avanzar o repetir bloques.
+              </p>
             )}
           </div>
         )}

@@ -1054,6 +1054,9 @@ export default function App() {
 
       const targetRate = isCleanStretchedUrl(audioSource) ? 1.0 : activeSpeed;
       const audio = new Audio(audioSource);
+      audio.playsInline = true;
+      audio.setAttribute('playsinline', '');
+      audio.setAttribute('webkit-playsinline', '');
       audio.playbackRate = targetRate;
       audio.preservesPitch = true;
       audio.onloadedmetadata = () => {

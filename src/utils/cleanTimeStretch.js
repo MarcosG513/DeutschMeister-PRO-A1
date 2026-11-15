@@ -17,6 +17,39 @@ const stretchedBlobCache = new Map();
 const stretchedObjectUrls = new Set();
 
 let sharedOfflineCtxSampleRate = 0;
+let sharedUnlockAudioCtx = null;
+
+/**
+ * Desbloquea el motor Web Audio de WebKit/Safari iOS tras la primera interacción táctil o clic.
+ */
+export function unlockWebKitAudioContext() {
+  if (typeof window === "undefined") return;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    if (!sharedUnlockAudioCtx || sharedUnlockAudioCtx.state === "closed") {
+      sharedUnlockAudioCtx = new AudioCtx();
+    }
+    if (sharedUnlockAudioCtx.state === "suspended") {
+      sharedUnlockAudioCtx.resume().catch(() => {});
+    }
+    const buf = sharedUnlockAudioCtx.createBuffer(1, 1, 22050);
+    const src = sharedUnlockAudioCtx.createBufferSource();
+    src.buffer = buf;
+    src.connect(sharedUnlockAudioCtx.destination);
+    src.start(0);
+  } catch {
+    // Ignorar en entornos sin Web Audio
+  }
+}
+
+if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
+  const handleFirstGesture = () => {
+    unlockWebKitAudioContext();
+  };
+  window.addEventListener("touchstart", handleFirstGesture, { once: true, passive: true });
+  window.addEventListener("click", handleFirstGesture, { once: true, passive: true });
+}
 
 // Cache de ventanas Hann por tamaño de ventana para evitar recomputación
 const hannWindowCache = new Map();
@@ -352,6 +385,9 @@ async function decodeBlobWithAudioContext(arrayBuffer) {
   if (AudioCtx) {
     const ctx = createAudioContextForRate(AudioCtx, targetSampleRate);
     try {
+      if (ctx.state === "suspended" && typeof ctx.resume === "function") {
+        await ctx.resume().catch(() => {});
+      }
       const decoded = await ctx.decodeAudioData(arrayBuffer.slice(0));
       return extractDecodedChannels(decoded, targetSampleRate);
     } finally {
