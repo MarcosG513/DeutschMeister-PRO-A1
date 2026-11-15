@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
 import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause, Filter, Download } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, setDoc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { App as CapacitorApp } from '@capacitor/app';
@@ -9,7 +9,9 @@ import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import localforage from 'localforage';
 import PresentationVocabCard from './components/PresentationVocabCard';
 import MarkdownMessage from './components/MarkdownMessage';
+import AuthAccessGate from './components/AuthAccessGate';
 import { app, auth, db, functions, appId } from './config/firebase';
+import { getCachedAccessDecision, setCachedAccessDecision, isOfflineOrTransientNetworkError, signOutUnified } from './services/authService';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, syncPedagogyProgressFromCloud, splitGermanTitle, splitParentheticalText } from './utils/helpers';
@@ -152,6 +154,10 @@ export default function App() {
   }, []);
   const [fullscreenImage, setFullscreenImage] = useState(null);
   const [user, setUser] = useState(null);
+  const [accessStatus, setAccessStatus] = useState(() => (auth ? 'checking' : 'unauthenticated'));
+  const [accessRole, setAccessRole] = useState('user');
+  const [accessError, setAccessError] = useState(null);
+  const authCheckSeqRef = useRef(0);
   const [cardImages, setCardImages] = useState({});
   const [loadingImages, setLoadingImages] = useState({});
   const blobUrlsRef = useRef(new Map());
@@ -353,7 +359,6 @@ export default function App() {
       setStorySpeed(next);
     };
     window.addEventListener('dm-speed-changed', handleSpeedSync);
-    recordDailyStudyActivity();
     getStudiedCardsCount().then(c => setStudiedCardsCount(c));
     const handleStudied = (e) => {
       if (e.detail?.count) setStudiedCardsCount(e.detail.count);
@@ -367,8 +372,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    recordDailyStudyActivity();
-  }, [activeStudyPlanId, activePresentationId, activeChapterId, viewMode]);
+    if (accessStatus === 'approved' && user && !user.isAnonymous) {
+      recordDailyStudyActivity();
+    }
+  }, [accessStatus, user, activeStudyPlanId, activePresentationId, activeChapterId, viewMode]);
 
   // Listener global de comandos desde Android Auto (vehículo)
   useEffect(() => {
@@ -392,24 +399,184 @@ export default function App() {
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
   const chatEndRef = useRef(null);
-  useEffect(() => {
-    if (!auth) return;
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        syncPedagogyProgressFromCloud(currentUser.uid);
+
+  const verifyAccessWithServer = async (targetUser, { silent = false } = {}) => {
+    if (!targetUser || targetUser.isAnonymous) {
+      setAccessRole('user');
+      setAccessStatus('unauthenticated');
+      return;
+    }
+
+    const seq = ++authCheckSeqRef.current;
+    const cached = getCachedAccessDecision(targetUser.uid);
+
+    if (!functions) {
+      if (cached.approved) {
+        setAccessRole(cached.role);
+        setAccessStatus('approved');
       } else {
-        try {
-          await signInAnonymously(auth);
-        } catch (e) {
-          console.error("Error en login anónimo:", e);
+        setAccessStatus('pending');
+        if (!silent) {
+          setAccessError('Servicio de verificación en la nube no disponible.');
         }
+      }
+      return;
+    }
+
+    try {
+      const verifyFn = httpsCallable(functions, 'verifyOrRequestAccess');
+      const res = await verifyFn({});
+      if (seq !== authCheckSeqRef.current) return;
+
+      const data = res?.data || {};
+      const nextStatus = ['approved', 'pending', 'revoked'].includes(data.status)
+        ? data.status
+        : 'pending';
+      const nextRole = data.role === 'admin' ? 'admin' : 'user';
+
+      if (data.needsTokenRefresh || nextStatus === 'approved') {
+        await targetUser.getIdToken(true).catch(() => {});
+      }
+
+      setCachedAccessDecision(targetUser.uid, nextStatus, nextRole);
+      setAccessRole(nextRole);
+      setAccessError(null);
+      setAccessStatus(nextStatus);
+    } catch (err) {
+      if (seq !== authCheckSeqRef.current) return;
+      console.warn('[AuthAccessGate] Error verificando acceso:', err?.code || err?.message);
+
+      if (isOfflineOrTransientNetworkError(err)) {
+        if (cached.approved) {
+          setAccessRole(cached.role);
+          setAccessStatus('approved');
+          setAccessError(null);
+          return;
+        }
+        if (!silent) {
+          setAccessError('Sin conexión a internet para validar tu acceso. Conéctate e inténtalo de nuevo.');
+        }
+        setAccessStatus('pending');
+        return;
+      }
+
+      const codeStr = String(err?.code || '').toLowerCase();
+      setCachedAccessDecision(targetUser.uid, 'revoked', 'user');
+      setAccessRole('user');
+      if (codeStr.includes('unauthenticated')) {
+        setAccessStatus('unauthenticated');
+      } else {
+        setAccessError(err?.message || null);
+        setAccessStatus('revoked');
+      }
+    }
+  };
+
+  // Observador principal de sesión (Sin login anónimo automático)
+  useEffect(() => {
+    if (!auth) {
+      return;
+    }
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (!currentUser) {
+        authCheckSeqRef.current += 1;
+        setUser(null);
+        setAccessRole('user');
+        setAccessError(null);
+        setAccessStatus('unauthenticated');
+        return;
+      }
+
+      if (currentUser.isAnonymous) {
+        authCheckSeqRef.current += 1;
+        setUser(null);
+        setAccessRole('user');
+        setAccessError(null);
+        setAccessStatus('unauthenticated');
+        await signOutUnified({ authInstance: auth }).catch(() => {});
+        return;
+      }
+
+      setUser(currentUser);
+      setAccessError(null);
+      const cached = getCachedAccessDecision(currentUser.uid);
+
+      if (cached.approved) {
+        setAccessRole(cached.role);
+        setAccessStatus('approved');
+        verifyAccessWithServer(currentUser, { silent: true });
+      } else {
+        setAccessStatus('checking');
+        await verifyAccessWithServer(currentUser, { silent: false });
       }
     });
     return () => unsubscribe();
   }, []);
+
+  // Listener en tiempo real sobre access_control/{uid} para aprobación o revocación instantánea
   useEffect(() => {
-    if (!user || !db || user.uid === 'offline_user') return;
+    if (!user || user.isAnonymous || !db || user.uid === 'offline_user') return;
+    const accessRef = doc(db, 'access_control', user.uid);
+    const unsubscribe = onSnapshot(
+      accessRef,
+      async (docSnap) => {
+        if (!docSnap.exists()) return;
+        const data = docSnap.data() || {};
+        const nextStatus = ['approved', 'pending', 'revoked'].includes(data.status)
+          ? data.status
+          : 'pending';
+        const nextRole = data.role === 'admin' ? 'admin' : 'user';
+
+        if (nextStatus === 'approved') {
+          try {
+            const tokenRes = await user.getIdTokenResult();
+            const hasApprovedClaim = tokenRes?.claims?.approved === true;
+            const hasMatchingAdminClaim = Boolean(tokenRes?.claims?.admin) === (nextRole === 'admin');
+            if ((!hasApprovedClaim || !hasMatchingAdminClaim) && functions) {
+              await httpsCallable(functions, 'verifyOrRequestAccess')({}).catch(() => {});
+              await user.getIdToken(true).catch(() => {});
+            } else if (!hasApprovedClaim || !hasMatchingAdminClaim) {
+              await user.getIdToken(true).catch(() => {});
+            }
+          } catch {
+            // Reintentará en la próxima sincronización de claims
+          }
+          setCachedAccessDecision(user.uid, 'approved', nextRole);
+          setAccessRole(nextRole);
+          setAccessError(null);
+          setAccessStatus('approved');
+        } else {
+          setCachedAccessDecision(user.uid, nextStatus, 'user');
+          await user.getIdToken(true).catch(() => {});
+          setAccessRole('user');
+          setAccessStatus(nextStatus);
+        }
+      },
+      (err) => {
+        console.warn('[AccessControl Listener]:', err?.message || err);
+      }
+    );
+    return () => unsubscribe();
+  }, [user]);
+
+  // Revalidación silenciosa al recuperar conectividad tras modo avión / túneles
+  useEffect(() => {
+    if (!user || user.isAnonymous) return;
+    const handleOnline = () => {
+      verifyAccessWithServer(user, { silent: accessStatus === 'approved' });
+    };
+    window.addEventListener('online', handleOnline);
+    return () => window.removeEventListener('online', handleOnline);
+  }, [user, accessStatus]);
+
+  // Sincronización pedagógica solo cuando el usuario está aprobado
+  useEffect(() => {
+    if (!user || user.isAnonymous || accessStatus !== 'approved' || user.uid === 'offline_user') return;
+    syncPedagogyProgressFromCloud(user.uid);
+  }, [user, accessStatus]);
+
+  useEffect(() => {
+    if (!user || user.isAnonymous || accessStatus !== 'approved' || !db || user.uid === 'offline_user') return;
     const userUnlockedRef = collection(db, 'artifacts', appId, 'users', user.uid, 'unlockedCards');
     const unsubscribe = onSnapshot(userUnlockedRef, snapshot => {
       const unlocked = {};
@@ -419,9 +586,10 @@ export default function App() {
       setUnlockedCards(unlocked);
     }, error => console.error("Error cargando desbloqueos:", error));
     return () => unsubscribe();
-  }, [user]);
+  }, [user, accessStatus]);
+
   useEffect(() => {
-    if (!user || !db) return;
+    if (!user || user.isAnonymous || accessStatus !== 'approved' || !db || user.uid === 'offline_user') return;
     const chatDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'chat', 'history');
     const unsubscribe = onSnapshot(chatDocRef, docSnap => {
       if (docSnap.exists()) {
@@ -440,7 +608,7 @@ export default function App() {
       }
     }, error => console.error("Error cargando chat:", error));
     return () => unsubscribe();
-  }, [user]);
+  }, [user, accessStatus]);
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({
       behavior: "smooth"
@@ -1138,6 +1306,18 @@ export default function App() {
   const markCardAsStudied = (safeId) => {
     recordCardStudied(safeId);
   };
+  if (!user || user.isAnonymous || accessStatus !== 'approved') {
+    return (
+      <AuthAccessGate
+        user={user}
+        auth={auth}
+        accessStatus={accessStatus}
+        verificationError={accessError}
+        onRecheckAccess={() => verifyAccessWithServer(user, { silent: false })}
+      />
+    );
+  }
+
   return <Suspense fallback={
     <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-6 gap-3">
       <Loader2 className="animate-spin text-yellow-400" size={36} />
@@ -1203,6 +1383,8 @@ export default function App() {
         onExit={() => setViewMode('flashcards')}
         user={user}
         auth={auth}
+        accessRole={accessRole}
+        isAdmin={accessRole === 'admin'}
         studiedCardsCount={studiedCardsCount}
         unlockedCardsCount={Object.keys(unlockedCards || {}).length}
         totalCardsCount={totalUniqueCardsCount}

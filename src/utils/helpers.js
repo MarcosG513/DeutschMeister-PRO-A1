@@ -298,8 +298,14 @@ const scheduleLocalPersist = (keys = []) => {
   }, 120);
 };
 
+const isApprovedCloudUser = (uid) => {
+  if (!uid || uid === 'offline_user') return false;
+  if (auth?.currentUser?.isAnonymous) return false;
+  return safeGetLocalStorage(`dm_access_approved_${uid}`) === 'approved';
+};
+
 const pushPedagogyProgressToCloud = async (uid) => {
-  if (!uid || !db) return;
+  if (!isApprovedCloudUser(uid) || !db) return;
   try {
     await ensureMetricsHydrated();
     const progressRef = doc(db, 'artifacts', appId, 'users', uid, 'pedagogy', 'progress');
@@ -322,12 +328,12 @@ const pushPedagogyProgressToCloud = async (uid) => {
 
 const scheduleCloudSync = () => {
   const uid = auth?.currentUser?.uid;
-  if (!uid || !db) return;
+  if (!isApprovedCloudUser(uid) || !db) return;
   if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
   cloudSyncTimer = setTimeout(() => {
     cloudSyncTimer = null;
     const activeUid = auth?.currentUser?.uid;
-    if (!activeUid) return;
+    if (!isApprovedCloudUser(activeUid)) return;
     cloudSyncQueue = cloudSyncQueue.then(() => pushPedagogyProgressToCloud(activeUid));
   }, 1500);
 };
@@ -483,7 +489,7 @@ const applyModuleCompletedMutation = (moduleId) => {
 };
 
 export const syncPedagogyProgressFromCloud = async (uid) => {
-  if (!uid || !db) return;
+  if (!isApprovedCloudUser(uid) || !db) return;
   try {
     await ensureMetricsHydrated();
     const progressRef = doc(db, 'artifacts', appId, 'users', uid, 'pedagogy', 'progress');
