@@ -126,6 +126,62 @@ async function getSystemPrompt(promptId, defaultPrompt) {
   return defaultPrompt;
 }
 
+// =========================================================================
+// CONTROL DE ACCESO ZERO-TRUST & CUSTOM CLAIMS (ALLOWLIST / APPROVAL GATE)
+// =========================================================================
+const DEFAULT_SUPER_ADMIN_EMAILS = [
+  "mgmogollon13@gmail.com",
+  "matelu.store2@gmail.com",
+  "juliethg113@gmail.com",
+  "mgmogollon@hotmail.com"
+];
+
+function normalizeEmailAddress(email) {
+  return typeof email === "string" ? email.trim().toLowerCase() : "";
+}
+
+function getSuperAdminEmailSet() {
+  const set = new Set(DEFAULT_SUPER_ADMIN_EMAILS.map(normalizeEmailAddress).filter(Boolean));
+  const envAdmins = (process.env.SUPER_ADMIN_EMAILS || "")
+    .split(",")
+    .map(normalizeEmailAddress)
+    .filter(Boolean);
+  for (const email of envAdmins) {
+    set.add(email);
+  }
+  return set;
+}
+
+function serializeTimestampIso(ts) {
+  if (!ts) return null;
+  if (typeof ts.toDate === "function") {
+    try {
+      return ts.toDate().toISOString();
+    } catch (_) {
+      return null;
+    }
+  }
+  if (ts instanceof Date) return ts.toISOString();
+  if (typeof ts === "string") return ts;
+  return null;
+}
+
+async function syncUserCustomClaimsIfNeeded(uid, currentClaims, approved, isAdmin) {
+  if (!uid) return false;
+  const targetApproved = Boolean(approved);
+  const targetAdmin = Boolean(approved && isAdmin);
+  const prev = currentClaims && typeof currentClaims === "object" ? currentClaims : {};
+  if (Boolean(prev.approved) === targetApproved && Boolean(prev.admin) === targetAdmin) {
+    return false;
+  }
+  await admin.auth().setCustomUserClaims(uid, {
+    ...prev,
+    approved: targetApproved,
+    admin: targetAdmin
+  });
+  return true;
+}
+
 /**
  * Helper unificado de autenticación para Cloud Functions (onCall y onRequest)
  */
@@ -133,7 +189,7 @@ async function verifyRequestAuth(reqOrRequest) {
   // Caso 1: onCall de Firebase (objeto CallableRequest con propiedad auth)
   if (reqOrRequest && ('auth' in reqOrRequest || reqOrRequest.rawRequest !== undefined)) {
     if (!reqOrRequest.auth?.uid) {
-      throw new HttpsError("unauthenticated", "Autenticación de Firebase requerida.");
+      throw new HttpsError("unauthenticated", "Debes iniciar sesión.");
     }
     return {
       uid: reqOrRequest.auth.uid,
@@ -146,7 +202,7 @@ async function verifyRequestAuth(reqOrRequest) {
   const req = reqOrRequest;
   const authHeader = req.headers?.authorization || (typeof req.header === 'function' ? req.header('authorization') : null);
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new HttpsError("unauthenticated", "Header de autorización Bearer ausente o inválido.");
+    throw new HttpsError("unauthenticated", "Debes iniciar sesión.");
   }
 
   const idToken = authHeader.split("Bearer ")[1].trim();
@@ -162,6 +218,97 @@ async function verifyRequestAuth(reqOrRequest) {
   }
 }
 
+/**
+ * Helper de Seguridad Global para exigir usuario autenticado NO anónimo y aprobado.
+ * Verifica Custom Claims en el token y, si faltan, valida/sincroniza desde access_control/{uid}.
+ */
+async function assertApprovedUser(reqOrRequest) {
+  const authUser = await verifyRequestAuth(reqOrRequest);
+  const signInProvider = authUser.token?.firebase?.sign_in_provider;
+
+  if (signInProvider === "anonymous") {
+    throw new HttpsError(
+      "permission-denied",
+      "El acceso anónimo está deshabilitado. Inicia sesión con una cuenta de Google autorizada."
+    );
+  }
+
+  const emailLower = normalizeEmailAddress(authUser.token?.email);
+  const tokenApproved = authUser.token?.approved === true || authUser.token?.admin === true;
+
+  if (tokenApproved) {
+    const isAdminClaim = authUser.token?.admin === true;
+    return {
+      ...authUser,
+      email: emailLower,
+      approved: true,
+      admin: isAdminClaim,
+      role: isAdminClaim ? "admin" : "user"
+    };
+  }
+
+  const accessSnap = await db.collection("access_control").doc(authUser.uid).get();
+  if (accessSnap.exists) {
+    const accessData = accessSnap.data() || {};
+    if (accessData.status === "approved") {
+      const isAdminRole = accessData.role === "admin";
+      admin.auth().getUser(authUser.uid)
+        .then((userRecord) => syncUserCustomClaimsIfNeeded(authUser.uid, userRecord.customClaims, true, isAdminRole))
+        .catch((err) => console.warn("[AuthClaims Background Sync]:", err?.message || err));
+
+      return {
+        ...authUser,
+        email: normalizeEmailAddress(accessData.email) || emailLower,
+        approved: true,
+        admin: isAdminRole,
+        role: isAdminRole ? "admin" : "user"
+      };
+    }
+  } else if (emailLower && authUser.token?.email_verified !== false && getSuperAdminEmailSet().has(emailLower)) {
+    const nowTs = admin.firestore.FieldValue.serverTimestamp();
+    await db.collection("access_control").doc(authUser.uid).set({
+      uid: authUser.uid,
+      email: emailLower,
+      displayName: authUser.token?.name || "",
+      photoURL: authUser.token?.picture || "",
+      status: "approved",
+      role: "admin",
+      approvedBy: "system_super_admin",
+      requestedAt: nowTs,
+      updatedAt: nowTs
+    }, { merge: true });
+    admin.auth().getUser(authUser.uid)
+      .then((userRecord) => syncUserCustomClaimsIfNeeded(authUser.uid, userRecord.customClaims, true, true))
+      .catch((err) => console.warn("[SuperAdmin Claim Sync]:", err?.message || err));
+
+    return {
+      ...authUser,
+      email: emailLower,
+      approved: true,
+      admin: true,
+      role: "admin"
+    };
+  }
+
+  throw new HttpsError("permission-denied", "Tu cuenta está pendiente de autorización por el administrador.");
+}
+
+async function assertAdminUser(request) {
+  const authUser = await assertApprovedUser(request);
+  if (authUser.admin === true || authUser.token?.admin === true) {
+    return authUser;
+  }
+  if (authUser.email && getSuperAdminEmailSet().has(authUser.email)) {
+    return { ...authUser, admin: true, role: "admin" };
+  }
+  const snap = await db.collection("access_control").doc(authUser.uid).get();
+  const data = snap.exists ? snap.data() || {} : {};
+  if (data.status === "approved" && data.role === "admin") {
+    return { ...authUser, admin: true, role: "admin" };
+  }
+  throw new HttpsError("permission-denied", "Acceso exclusivo para administradores.");
+}
+
 let paidMediaKeyCursor = 0;
 
 /**
@@ -170,7 +317,7 @@ let paidMediaKeyCursor = 0;
  */
 function isServerAuthorizedMediaWriter(request, authUser) {
   if (!authUser?.uid) return false;
-  if (authUser.token?.admin === true) return true;
+  if (authUser.admin === true || authUser.token?.admin === true) return true;
   if (request.data?.clientPlatform === "native" || request.data?.isNativePlatform === true) {
     return false;
   }
@@ -434,9 +581,10 @@ export const runRoleplaySimulator = onRequest({
   }
   let authUser;
   try {
-    authUser = await verifyRequestAuth(req);
+    authUser = await assertApprovedUser(req);
   } catch (authErr) {
-    res.status(401).json({ error: authErr.message || "Autenticación de Firebase requerida." });
+    const statusCode = authErr?.code === "permission-denied" ? 403 : 401;
+    res.status(statusCode).json({ error: authErr.message || "Acceso no autorizado.", code: authErr?.code || "unauthenticated" });
     return;
   }
 
@@ -484,7 +632,7 @@ export const runRoleplaySimulator = onRequest({
 export const evaluateEmail = onCall(
   { secrets: ALL_AI_SECRETS, maxInstances: 6 },
   async (request) => {
-    await verifyRequestAuth(request);
+    await assertApprovedUser(request);
     const { textoCorreo, consignaExamen } = request.data || {};
 
     const systemPrompt = `Por favor, actúa como un examinador oficial del Goethe-Institut para el examen Start Deutsch 1 (Schreiben Teil 2 - E-Mail).
@@ -552,9 +700,10 @@ export const generateStory = onRequest({
   res.set("Access-Control-Allow-Origin", "*");
   let authUser;
   try {
-    authUser = await verifyRequestAuth(req);
+    authUser = await assertApprovedUser(req);
   } catch (authErr) {
-    res.status(401).json({ error: authErr.message || "Autenticación de Firebase requerida." });
+    const statusCode = authErr?.code === "permission-denied" ? 403 : 401;
+    res.status(statusCode).json({ error: authErr.message || "Acceso no autorizado.", code: authErr?.code || "unauthenticated" });
     return;
   }
 
@@ -793,9 +942,10 @@ export const sendTutorChatMessage = onRequest({
   // Verificación estricta de Autenticación y Custom Claims de Firebase Auth
   let authUser;
   try {
-    authUser = await verifyRequestAuth(req);
+    authUser = await assertApprovedUser(req);
   } catch (authErr) {
-    res.status(401).json({ error: authErr.message || "Autenticación de Firebase requerida." });
+    const statusCode = authErr?.code === "permission-denied" ? 403 : 401;
+    res.status(statusCode).json({ error: authErr.message || "Acceso no autorizado.", code: authErr?.code || "unauthenticated" });
     return;
   }
   const uid = authUser.uid;
@@ -1553,7 +1703,7 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
 export const generateCardImage = onCall({
   secrets: ALL_AI_SECRETS
 }, async request => {
-  const authUser = await verifyRequestAuth(request);
+  const authUser = await assertApprovedUser(request);
   const {
     wordObj,
     conceptoIngles
@@ -1729,7 +1879,7 @@ export const generateReadingTest = onCall({
   secrets: ALL_AI_SECRETS,
   timeoutSeconds: 120
 }, async request => {
-  await verifyRequestAuth(request);
+  await assertApprovedUser(request);
   const {
     tema,
     mode,
@@ -2120,7 +2270,7 @@ export const generateDynamicQuiz = onCall({
   memory: "512MiB",
   secrets: ALL_AI_SECRETS,
 }, async (request) => {
-  await verifyRequestAuth(request);
+  await assertApprovedUser(request);
   const { tema } = request.data || {};
   if (!tema) {
     throw new HttpsError("invalid-argument", "El parámetro 'tema' es obligatorio.");
@@ -2362,7 +2512,7 @@ export const synthesizeGermanSpeech = onCall(
     cors: true
   },
   async (request) => {
-    await verifyRequestAuth(request);
+    await assertApprovedUser(request);
     const { text, type = "vocab", lang = "de" } = request.data || {};
     const voice = "Charon"; // Voz masculina oficial exclusiva de DeutschMeister
     if (!text || typeof text !== "string") {
@@ -2846,7 +2996,7 @@ export const regenerateCardMedia = onCall(
     cors: true
   },
   async (request) => {
-    const authUser = await verifyRequestAuth(request);
+    const authUser = await assertApprovedUser(request);
 
     try {
       const { 
@@ -3048,5 +3198,386 @@ export const regenerateCardMedia = onCall(
       console.error("[RegenerateCardMedia Fatal Error]", err);
       return { success: false, error: err.message };
     }
+  }
+);
+
+// =========================================================================
+// 10. VERIFICACIÓN DE ACCESO Y AUTO-REGISTRO ZERO-TRUST (verifyOrRequestAccess)
+// =========================================================================
+export const verifyOrRequestAccess = onCall(
+  {
+    cors: true,
+    maxInstances: 10
+  },
+  async (request) => {
+    const authUser = await verifyRequestAuth(request);
+    const uid = authUser.uid;
+    const signInProvider = authUser.token?.firebase?.sign_in_provider;
+
+    if (signInProvider === "anonymous") {
+      throw new HttpsError(
+        "permission-denied",
+        "El acceso anónimo está deshabilitado. Inicia sesión con Google."
+      );
+    }
+
+    const userRecord = await admin.auth().getUser(uid);
+    const emailLower = normalizeEmailAddress(userRecord.email || authUser.token?.email);
+
+    if (!emailLower || !emailLower.includes("@") || emailLower.includes("/")) {
+      throw new HttpsError(
+        "permission-denied",
+        "Tu cuenta debe tener un correo electrónico válido."
+      );
+    }
+
+    const hasGoogleProvider =
+      (userRecord.providerData || []).some((p) => p.providerId === "google.com") ||
+      signInProvider === "google.com";
+    const isSuperAdmin = getSuperAdminEmailSet().has(emailLower);
+
+    if (!hasGoogleProvider && userRecord.emailVerified === false && authUser.token?.email_verified === false && !isSuperAdmin) {
+      throw new HttpsError(
+        "permission-denied",
+        "Tu correo electrónico debe estar verificado para solicitar acceso."
+      );
+    }
+
+    const accessRef = db.collection("access_control").doc(uid);
+    const preAuthRef = db.collection("authorized_emails").doc(emailLower);
+    const [accessSnap, preAuthSnap] = await Promise.all([accessRef.get(), preAuthRef.get()]);
+
+    const existingData = accessSnap.exists ? accessSnap.data() || {} : null;
+    const preAuthData = preAuthSnap.exists ? preAuthSnap.data() || {} : null;
+
+    let status = "pending";
+    let role = "user";
+    let approvedBy = "";
+
+    if (isSuperAdmin) {
+      status = "approved";
+      role = "admin";
+      approvedBy = existingData?.approvedBy || "system_super_admin";
+    } else if (existingData) {
+      if (existingData.status === "pending" && preAuthData?.status === "approved") {
+        status = "approved";
+        role = preAuthData.role === "admin" ? "admin" : (existingData.role === "admin" ? "admin" : "user");
+        approvedBy = preAuthData.addedBy || "authorized_emails";
+      } else {
+        status = ["approved", "pending", "revoked"].includes(existingData.status)
+          ? existingData.status
+          : "pending";
+        role = existingData.role === "admin" ? "admin" : "user";
+        approvedBy = existingData.approvedBy || "";
+      }
+    } else if (preAuthData?.status === "approved") {
+      status = "approved";
+      role = preAuthData.role === "admin" ? "admin" : "user";
+      approvedBy = preAuthData.addedBy || "authorized_emails";
+    }
+
+    const nowTs = admin.firestore.FieldValue.serverTimestamp();
+    const displayName = userRecord.displayName || authUser.token?.name || existingData?.displayName || "";
+    const photoURL = userRecord.photoURL || authUser.token?.picture || existingData?.photoURL || "";
+
+    await accessRef.set(
+      {
+        uid,
+        email: emailLower,
+        displayName,
+        photoURL,
+        status,
+        role,
+        approvedBy,
+        requestedAt: existingData?.requestedAt || nowTs,
+        updatedAt: nowTs
+      },
+      { merge: true }
+    );
+
+    const shouldApprove = status === "approved";
+    const shouldAdmin = shouldApprove && role === "admin";
+    const claimsChanged = await syncUserCustomClaimsIfNeeded(
+      uid,
+      userRecord.customClaims,
+      shouldApprove,
+      shouldAdmin
+    );
+
+    if (status === "revoked" && claimsChanged) {
+      await admin.auth().revokeRefreshTokens(uid).catch(() => {});
+    }
+
+    const tokenOutOfSync =
+      Boolean(authUser.token?.approved) !== shouldApprove ||
+      Boolean(authUser.token?.admin) !== shouldAdmin;
+
+    return {
+      uid,
+      email: emailLower,
+      displayName,
+      photoURL,
+      status,
+      role,
+      needsTokenRefresh: Boolean(claimsChanged || tokenOutOfSync)
+    };
+  }
+);
+
+// =========================================================================
+// 11. PANEL DE ADMINISTRACIÓN DE ACCESOS (manageUserAccess - SOLO ADMIN)
+// =========================================================================
+export const manageUserAccess = onCall(
+  {
+    cors: true,
+    maxInstances: 10
+  },
+  async (request) => {
+    const adminCaller = await assertAdminUser(request);
+    const { action, targetUid, email, role } = request.data || {};
+    const validAction = typeof action === "string" ? action.trim().toLowerCase() : "";
+    const superAdmins = getSuperAdminEmailSet();
+    const nowTs = admin.firestore.FieldValue.serverTimestamp();
+    const actorLabel = adminCaller.email || adminCaller.uid;
+
+    if (validAction === "list") {
+      const [accessSnapshot, preAuthSnapshot] = await Promise.all([
+        db.collection("access_control").get(),
+        db.collection("authorized_emails").get()
+      ]);
+
+      const pendingUsers = [];
+      const approvedUsers = [];
+      const revokedUsers = [];
+
+      accessSnapshot.forEach((docSnap) => {
+        const d = docSnap.data() || {};
+        const emailVal = normalizeEmailAddress(d.email);
+        const entry = {
+          uid: docSnap.id,
+          email: emailVal,
+          displayName: d.displayName || "",
+          photoURL: d.photoURL || "",
+          status: d.status || "pending",
+          role: d.role === "admin" ? "admin" : "user",
+          approvedBy: d.approvedBy || "",
+          isSuperAdmin: superAdmins.has(emailVal),
+          requestedAt: serializeTimestampIso(d.requestedAt),
+          updatedAt: serializeTimestampIso(d.updatedAt)
+        };
+        if (entry.status === "approved") approvedUsers.push(entry);
+        else if (entry.status === "revoked") revokedUsers.push(entry);
+        else pendingUsers.push(entry);
+      });
+
+      const byRecent = (a, b) =>
+        String(b.updatedAt || b.requestedAt || "").localeCompare(String(a.updatedAt || a.requestedAt || ""));
+      pendingUsers.sort(byRecent);
+      approvedUsers.sort(byRecent);
+      revokedUsers.sort(byRecent);
+
+      const preauthorizedEmails = [];
+      preAuthSnapshot.forEach((docSnap) => {
+        const d = docSnap.data() || {};
+        if (d.status === "approved") {
+          preauthorizedEmails.push({
+            id: docSnap.id,
+            email: normalizeEmailAddress(d.email || docSnap.id),
+            role: d.role === "admin" ? "admin" : "user",
+            status: "approved",
+            addedBy: d.addedBy || "",
+            updatedAt: serializeTimestampIso(d.updatedAt || d.createdAt)
+          });
+        }
+      });
+      preauthorizedEmails.sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
+
+      return {
+        pendingUsers,
+        approvedUsers,
+        revokedUsers,
+        preauthorizedEmails
+      };
+    }
+
+    if (validAction === "approve") {
+      const cleanUid = typeof targetUid === "string" ? targetUid.trim() : "";
+      if (!cleanUid || cleanUid.includes("/")) {
+        throw new HttpsError("invalid-argument", "targetUid inválido.");
+      }
+
+      const accessRef = db.collection("access_control").doc(cleanUid);
+      const accessSnap = await accessRef.get();
+      const accessData = accessSnap.exists ? accessSnap.data() || {} : {};
+      const userRecord = await admin.auth().getUser(cleanUid).catch(() => null);
+      const targetEmail = normalizeEmailAddress(accessData.email || userRecord?.email);
+      const targetRole =
+        superAdmins.has(targetEmail) || role === "admin" ? "admin" : "user";
+
+      await accessRef.set(
+        {
+          uid: cleanUid,
+          email: targetEmail,
+          displayName: accessData.displayName || userRecord?.displayName || "",
+          photoURL: accessData.photoURL || userRecord?.photoURL || "",
+          status: "approved",
+          role: targetRole,
+          approvedBy: actorLabel,
+          requestedAt: accessData.requestedAt || nowTs,
+          updatedAt: nowTs
+        },
+        { merge: true }
+      );
+
+      if (targetEmail && !targetEmail.includes("/")) {
+        await db.collection("authorized_emails").doc(targetEmail).set(
+          {
+            email: targetEmail,
+            role: targetRole,
+            status: "approved",
+            addedBy: actorLabel,
+            createdAt: nowTs,
+            updatedAt: nowTs
+          },
+          { merge: true }
+        );
+      }
+
+      if (userRecord) {
+        await syncUserCustomClaimsIfNeeded(cleanUid, userRecord.customClaims, true, targetRole === "admin");
+      } else {
+        await syncUserCustomClaimsIfNeeded(cleanUid, {}, true, targetRole === "admin").catch(() => {});
+      }
+
+      return {
+        success: true,
+        uid: cleanUid,
+        email: targetEmail,
+        status: "approved",
+        role: targetRole
+      };
+    }
+
+    if (validAction === "revoke") {
+      const cleanUid = typeof targetUid === "string" ? targetUid.trim() : "";
+      if (!cleanUid || cleanUid.includes("/")) {
+        throw new HttpsError("invalid-argument", "targetUid inválido.");
+      }
+      if (cleanUid === adminCaller.uid) {
+        throw new HttpsError("failed-precondition", "No puedes revocar tu propio acceso de administrador.");
+      }
+
+      const accessRef = db.collection("access_control").doc(cleanUid);
+      const accessSnap = await accessRef.get();
+      const accessData = accessSnap.exists ? accessSnap.data() || {} : {};
+      const userRecord = await admin.auth().getUser(cleanUid).catch(() => null);
+      const targetEmail = normalizeEmailAddress(accessData.email || userRecord?.email);
+
+      if (targetEmail && superAdmins.has(targetEmail)) {
+        throw new HttpsError("failed-precondition", "No se puede revocar un Super-Admin protegido.");
+      }
+
+      await accessRef.set(
+        {
+          uid: cleanUid,
+          email: targetEmail,
+          status: "revoked",
+          role: "user",
+          revokedBy: actorLabel,
+          updatedAt: nowTs
+        },
+        { merge: true }
+      );
+
+      if (targetEmail && !targetEmail.includes("/")) {
+        await db.collection("authorized_emails").doc(targetEmail).delete().catch(() => {});
+      }
+
+      if (userRecord) {
+        await syncUserCustomClaimsIfNeeded(cleanUid, userRecord.customClaims, false, false);
+        await admin.auth().revokeRefreshTokens(cleanUid).catch(() => {});
+      }
+
+      return {
+        success: true,
+        uid: cleanUid,
+        email: targetEmail,
+        status: "revoked"
+      };
+    }
+
+    if (validAction === "preauthorize") {
+      const cleanEmail = normalizeEmailAddress(email);
+      if (!cleanEmail || cleanEmail.includes("/") || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+        throw new HttpsError("invalid-argument", "Introduce un correo electrónico válido.");
+      }
+
+      const targetRole = superAdmins.has(cleanEmail) || role === "admin" ? "admin" : "user";
+      await db.collection("authorized_emails").doc(cleanEmail).set(
+        {
+          email: cleanEmail,
+          role: targetRole,
+          status: "approved",
+          addedBy: actorLabel,
+          createdAt: nowTs,
+          updatedAt: nowTs
+        },
+        { merge: true }
+      );
+
+      // Si el usuario ya había iniciado sesión antes (ej. estaba en "pending"), aprobarlo de inmediato
+      const existingAuthUser = await admin.auth().getUserByEmail(cleanEmail).catch(() => null);
+      if (existingAuthUser && existingAuthUser.uid) {
+        const isExistingAnon = !(existingAuthUser.providerData && existingAuthUser.providerData.length > 0);
+        if (!isExistingAnon) {
+          const accRef = db.collection("access_control").doc(existingAuthUser.uid);
+          const accSnap = await accRef.get();
+          const prevAcc = accSnap.exists ? accSnap.data() || {} : {};
+          await accRef.set(
+            {
+              uid: existingAuthUser.uid,
+              email: cleanEmail,
+              displayName: existingAuthUser.displayName || prevAcc.displayName || "",
+              photoURL: existingAuthUser.photoURL || prevAcc.photoURL || "",
+              status: "approved",
+              role: targetRole,
+              approvedBy: actorLabel,
+              requestedAt: prevAcc.requestedAt || nowTs,
+              updatedAt: nowTs
+            },
+            { merge: true }
+          );
+          await syncUserCustomClaimsIfNeeded(
+            existingAuthUser.uid,
+            existingAuthUser.customClaims,
+            true,
+            targetRole === "admin"
+          );
+        }
+      }
+
+      return {
+        success: true,
+        email: cleanEmail,
+        role: targetRole,
+        status: "approved",
+        activatedUid: existingAuthUser?.uid || null
+      };
+    }
+
+    if (validAction === "remove_preauth") {
+      const cleanEmail = normalizeEmailAddress(email);
+      if (!cleanEmail || cleanEmail.includes("/")) {
+        throw new HttpsError("invalid-argument", "Correo inválido.");
+      }
+      await db.collection("authorized_emails").doc(cleanEmail).delete();
+      return {
+        success: true,
+        email: cleanEmail,
+        removed: true
+      };
+    }
+
+    throw new HttpsError("invalid-argument", "Acción de gestión de acceso no soportada.");
   }
 );
