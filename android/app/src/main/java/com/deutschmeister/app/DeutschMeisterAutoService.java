@@ -1,12 +1,22 @@
 package com.deutschmeister.app;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
+import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaDescriptionCompat;
@@ -20,6 +30,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.media.MediaBrowserServiceCompat;
 
 import java.util.ArrayList;
@@ -37,6 +48,8 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
 
     private static final String TAG = "DeutschMeisterAuto";
     private static final String ROOT_ID = "root_id";
+    private static final String CHANNEL_ID = "deutschmeister_fahrmodus_playback";
+    private static final int NOTIFICATION_ID = 4201;
 
     // Acciones personalizadas en la pantalla de Android Auto
     public static final String ACTION_REPEAT_SRS = "ACTION_REPEAT_SRS";
@@ -71,6 +84,50 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
 
     private MediaSessionCompat mSession;
     private PlaybackStateCompat.Builder mStateBuilder;
+    private AudioManager mAudioManager;
+    private AudioFocusRequest mAudioFocusRequest;
+    private boolean mHasAudioFocus = false;
+    private volatile boolean mWasPlayingBeforeFocusLoss = false;
+    private boolean mIsForeground = false;
+
+    private final AudioManager.OnAudioFocusChangeListener mFocusChangeListener = focusChange -> {
+        try {
+            switch (focusChange) {
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    Log.d(TAG, "AudioFocus: LOSS_TRANSIENT (ej. indicaciones GPS). Pausando temporalmente.");
+                    mWasPlayingBeforeFocusLoss = sLastIsPlaying || mIsForeground;
+                    AndroidAutoPlugin.notifyCommandToJs("pause", null);
+                    break;
+
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    Log.d(TAG, "AudioFocus: GAIN. Reanudación pendiente=" + mWasPlayingBeforeFocusLoss);
+                    mHasAudioFocus = true;
+                    if (mWasPlayingBeforeFocusLoss) {
+                        mWasPlayingBeforeFocusLoss = false;
+                        AndroidAutoPlugin.notifyCommandToJs("play", null);
+                    }
+                    break;
+
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    Log.d(TAG, "AudioFocus: LOSS_TRANSIENT_CAN_DUCK. Manteniendo sesión activa.");
+                    break;
+
+                case AudioManager.AUDIOFOCUS_LOSS:
+                    Log.d(TAG, "AudioFocus: LOSS permanente. Pausando y liberando foco.");
+                    mWasPlayingBeforeFocusLoss = false;
+                    mHasAudioFocus = false;
+                    AndroidAutoPlugin.notifyCommandToJs("pause", null);
+                    abandonAudioFocus();
+                    updateForegroundState(false, sLastTitle, sLastSubtitle);
+                    break;
+
+                default:
+                    break;
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "Error procesando cambio de AudioFocus: " + t.getMessage());
+        }
+    };
 
     public static DeutschMeisterAutoService getInstance() {
         return sInstance;
@@ -129,6 +186,8 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, sLastSubtitle)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, sLastAlbum);
             mSession.setMetadata(initMeta.build());
+            mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            createNotificationChannel();
 
         } catch (Throwable t) {
             Log.e(TAG, "Error crítico blindado en onCreate: " + t.getMessage(), t);
@@ -138,6 +197,9 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
     @Override
     public void onDestroy() {
         try {
+            mWasPlayingBeforeFocusLoss = false;
+            abandonAudioFocus();
+            stopForegroundCompat(true);
             if (sInstance == this) {
                 sInstance = null;
             }
@@ -606,8 +668,158 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
             mStateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1.0f);
             mSession.setPlaybackState(mStateBuilder.build());
 
+            // Sincronizar AudioFocus y Foreground Service (mediaPlayback)
+            if (isPlaying) {
+                mWasPlayingBeforeFocusLoss = false;
+                requestAudioFocus();
+                updateForegroundState(true, title, subtitle);
+            } else {
+                // Solo liberar el foco si la pausa NO proviene de AUDIOFOCUS_LOSS_TRANSIENT,
+                // para seguir recibiendo AUDIOFOCUS_GAIN al finalizar la indicación GPS.
+                if (!mWasPlayingBeforeFocusLoss) {
+                    abandonAudioFocus();
+                }
+                updateForegroundState(false, title, subtitle);
+            }
+
         } catch (Throwable t) {
             Log.e(TAG, "Error aplicando estado de sesión en auto: " + t.getMessage(), t);
+        }
+    }
+
+    // ── GESTIÓN DE AUDIO FOCUS Y FOREGROUND SERVICE ──
+
+    private void createNotificationChannel() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (manager != null && manager.getNotificationChannel(CHANNEL_ID) == null) {
+                    NotificationChannel channel = new NotificationChannel(
+                        CHANNEL_ID,
+                        "Fahrmodus · Modo Conducción",
+                        NotificationManager.IMPORTANCE_LOW
+                    );
+                    channel.setDescription("Reproducción continua de DeutschMeister PRO en coche y segundo plano");
+                    channel.setShowBadge(false);
+                    manager.createNotificationChannel(channel);
+                }
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "Error creando canal de notificación: " + t.getMessage());
+        }
+    }
+
+    private void requestAudioFocus() {
+        try {
+            if (mAudioManager == null) {
+                mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            }
+            if (mAudioManager == null || mHasAudioFocus) return;
+
+            int result;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (mAudioFocusRequest == null) {
+                    AudioAttributes attrs = new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .build();
+                    mAudioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                        .setAudioAttributes(attrs)
+                        .setAcceptsDelayedFocusGain(true)
+                        .setOnAudioFocusChangeListener(mFocusChangeListener)
+                        .build();
+                }
+                result = mAudioManager.requestAudioFocus(mAudioFocusRequest);
+            } else {
+                result = mAudioManager.requestAudioFocus(
+                    mFocusChangeListener,
+                    AudioManager.STREAM_MUSIC,
+                    AudioManager.AUDIOFOCUS_GAIN
+                );
+            }
+            mHasAudioFocus = (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+        } catch (Throwable t) {
+            Log.w(TAG, "Error solicitando AudioFocus: " + t.getMessage());
+        }
+    }
+
+    private void abandonAudioFocus() {
+        try {
+            if (mAudioManager == null) return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (mAudioFocusRequest != null) {
+                    mAudioManager.abandonAudioFocusRequest(mAudioFocusRequest);
+                }
+            } else {
+                mAudioManager.abandonAudioFocus(mFocusChangeListener);
+            }
+            mHasAudioFocus = false;
+        } catch (Throwable t) {
+            Log.w(TAG, "Error liberando AudioFocus: " + t.getMessage());
+        }
+    }
+
+    private void updateForegroundState(boolean isPlaying, String title, String subtitle) {
+        try {
+            if (isPlaying) {
+                createNotificationChannel();
+                Intent openAppIntent = new Intent(this, MainActivity.class);
+                openAppIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                int pendingFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    pendingFlags |= PendingIntent.FLAG_IMMUTABLE;
+                }
+                PendingIntent contentIntent = PendingIntent.getActivity(this, 0, openAppIntent, pendingFlags);
+
+                int smallIcon = getApplicationInfo().icon != 0
+                    ? getApplicationInfo().icon
+                    : android.R.drawable.ic_media_play;
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle(title != null && !title.isEmpty() ? title : "DeutschMeister Fahrmodus")
+                    .setContentText(subtitle != null && !subtitle.isEmpty() ? subtitle : "Modo conducción activo")
+                    .setSmallIcon(smallIcon)
+                    .setContentIntent(contentIntent)
+                    .setOngoing(true)
+                    .setOnlyAlertOnce(true)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+                if (mSession != null) {
+                    builder.setStyle(
+                        new androidx.media.app.NotificationCompat.MediaStyle()
+                            .setMediaSession(mSession.getSessionToken())
+                    );
+                }
+
+                Notification notification = builder.build();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    startForeground(
+                        NOTIFICATION_ID,
+                        notification,
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                    );
+                } else {
+                    startForeground(NOTIFICATION_ID, notification);
+                }
+                mIsForeground = true;
+            } else if (mIsForeground) {
+                stopForegroundCompat(false);
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "Error actualizando ForegroundService: " + t.getMessage());
+        }
+    }
+
+    private void stopForegroundCompat(boolean removeNotification) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                stopForeground(removeNotification ? STOP_FOREGROUND_REMOVE : STOP_FOREGROUND_DETACH);
+            } else {
+                stopForeground(removeNotification);
+            }
+            mIsForeground = false;
+        } catch (Throwable t) {
+            Log.w(TAG, "Error deteniendo ForegroundService: " + t.getMessage());
         }
     }
 
@@ -637,11 +849,14 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
 
         @Override
         public void onPlay() {
+            mWasPlayingBeforeFocusLoss = false;
+            requestAudioFocus();
             dispatchCommand("play", null);
         }
 
         @Override
         public void onPause() {
+            mWasPlayingBeforeFocusLoss = false;
             dispatchCommand("pause", null);
         }
 

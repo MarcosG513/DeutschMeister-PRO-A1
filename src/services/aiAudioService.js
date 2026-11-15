@@ -296,7 +296,7 @@ async function playAudioSource(
       evictAudioKeyFromCache(cacheKeyToEvict);
     }
     console.warn("[TTS Audio Playback Error] Fallback a nativo:", e);
-    if (cleanText && lang !== "es") nativeSpeak(cleanText);
+    if (cleanText && lang !== "es") nativeSpeak(cleanText, { lang, rate });
     if (onError) onError(e);
     if (onEnd) onEnd();
   };
@@ -311,6 +311,17 @@ async function playAudioSource(
     const stale = isStale();
     cleanupPlayback();
     if (stale) return;
+    if (err?.name === "NotAllowedError" && cleanText) {
+      console.warn("[TTS Autoplay Blocked (NotAllowedError)] Fallback a motor nativo:", err?.message || err);
+      try {
+        await nativeSpeak(cleanText, { lang, rate });
+      } catch (_) {}
+      if (!isStale()) {
+        onError?.(err);
+        onEnd?.();
+      }
+      return;
+    }
     throw err;
   }
 }
@@ -513,14 +524,19 @@ export async function getProcessedSpeechBlobUrl(text, options = {}) {
 
 export async function playGermanAudio(text, options = {}) {
   const { onStart, onEnd, onError, voice = "Charon", type = "vocab", lang = "de", signal } = options;
-  if (!text || typeof text !== "string") return;
   if (signal?.aborted) {
-    if (onEnd) onEnd();
+    return;
+  }
+  if (!text || typeof text !== "string") {
+    onEnd?.();
     return;
   }
 
   const cleanText = normalizeCleanText(text);
-  if (!cleanText) return;
+  if (!cleanText) {
+    onEnd?.();
+    return;
+  }
 
   const targetSpeed =
     options.speed !== undefined ? normalizePlaybackSpeed(options.speed) : getSavedPlaybackSpeed();
@@ -544,8 +560,14 @@ export async function playGermanAudio(text, options = {}) {
     if (onStart && !isStale()) onStart();
 
     const asset = await resolveAudioAsset(cleanText, { voice, type, lang, signal, isStale });
-    if (!asset || isStale()) {
+    if (isStale()) {
       cleanupSignal();
+      return;
+    }
+    if (!asset) {
+      cleanupSignal();
+      onError?.(new Error("No se pudo resolver el recurso de audio."));
+      onEnd?.();
       return;
     }
 
@@ -558,7 +580,7 @@ export async function playGermanAudio(text, options = {}) {
       }
 
       await playAudioSource(processed.url, {
-        rate: processed.playbackRate, // 1.0 si fue estirado por Phase Vocoder, 0.75 solo en fallback antiguo
+        rate: processed.playbackRate, // 1.0 si fue estirado por WSOLA, 0.75 solo en fallback antiguo
         cleanText,
         lang,
         isObjectUrl: processed.url.startsWith("blob:"),
@@ -602,13 +624,29 @@ export async function playGermanAudio(text, options = {}) {
         onEnd,
         onError
       });
+      return;
+    }
+
+    cleanupSignal();
+    if (!isStale()) {
+      if (lang !== "es") {
+        await nativeSpeak(cleanText, { lang, rate: targetSpeed }).catch(() => {});
+      }
+      onError?.(new Error("Audio asset vacío."));
+      onEnd?.();
     }
   } catch (error) {
     cleanupSignal();
     if (isStale()) return;
     console.warn("[TTS Pipeline Warning] Activando fallback a motor nativo:", error);
-    if (lang !== "es") nativeSpeak(cleanText);
-    if (onError) onError(error);
-    if (onEnd) onEnd();
+    try {
+      if (error?.name === "NotAllowedError" || lang !== "es") {
+        await nativeSpeak(cleanText, { lang, rate: targetSpeed });
+      }
+    } catch (_) {}
+    if (!isStale()) {
+      onError?.(error);
+      onEnd?.();
+    }
   }
 }

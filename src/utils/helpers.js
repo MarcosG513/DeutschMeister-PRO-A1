@@ -163,14 +163,16 @@ export const setSavedPlaybackSpeed = (speed) => {
   return validSpeed;
 };
 
-export const nativeSpeak = async (text) => {
-  const speed = getSavedPlaybackSpeed();
+export const nativeSpeak = async (text, options = {}) => {
+  if (!text || typeof text !== 'string') return;
+  const speed = options.rate !== undefined ? options.rate : getSavedPlaybackSpeed();
+  const langTag = options.lang === 'es' ? 'es-ES' : 'de-DE';
   if (Capacitor.isNativePlatform()) {
     try {
       await TextToSpeech.speak({
         text: text,
-        lang: 'de-DE',
-        rate: speed === 0.75 ? 0.75 : 0.95,
+        lang: langTag,
+        rate: speed <= 0.8 ? 0.75 : 0.95,
         pitch: 1.0,
       });
     } catch (e) {
@@ -180,8 +182,8 @@ export const nativeSpeak = async (text) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'de-DE';
-      utterance.rate = speed === 0.75 ? 0.75 : 1.0;
+      utterance.lang = langTag;
+      utterance.rate = speed <= 0.8 ? 0.75 : 1.0;
       window.speechSynthesis.speak(utterance);
     } else {
       console.error("Web Speech API no está soportada en este navegador.");

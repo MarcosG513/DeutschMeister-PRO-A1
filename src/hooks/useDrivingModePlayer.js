@@ -53,10 +53,16 @@ export function useDrivingModePlayer({
   // Estados: 'idle' | 'prompting_word' | 'waiting_word' | 'revealing_word' | 'explaining' | 'prompting_sentence' | 'waiting_sentence' | 'revealing_sentence' | 'paused'
   const [isPlaying, setIsPlaying] = useState(false);
   const [countdownSec, setCountdownSec] = useState(0);
+  const [stepAttemptId, setStepAttemptId] = useState(0);
 
   const abortControllerRef = useRef(null);
   const silentAudioRef = useRef(null);
+  const keepAliveCtxRef = useRef(null);
+  const keepAliveOscRef = useRef(null);
+  const keepAliveResumeTimerRef = useRef(null);
   const wakeLockRef = useRef(null);
+  const isPlayingRef = useRef(isPlaying);
+  isPlayingRef.current = isPlaying;
   const queueRef = useRef(queue);
   queueRef.current = queue;
 
@@ -102,7 +108,28 @@ export function useDrivingModePlayer({
 
   const currentItem = queue[currentIndex] || null;
 
-  // Gestión de Wake Lock y Audio Silente para evitar suspensión en segundo plano / pantalla apagada
+  const scheduleKeepAliveResume = useCallback(() => {
+    if (!isPlayingRef.current) return;
+    if (keepAliveResumeTimerRef.current) {
+      clearTimeout(keepAliveResumeTimerRef.current);
+    }
+    keepAliveResumeTimerRef.current = setTimeout(() => {
+      keepAliveResumeTimerRef.current = null;
+      if (!isPlayingRef.current) return;
+      try {
+        if (silentAudioRef.current && silentAudioRef.current.paused) {
+          silentAudioRef.current.play().catch(() => {});
+        }
+      } catch (_) {}
+      try {
+        if (keepAliveCtxRef.current && keepAliveCtxRef.current.state === "suspended") {
+          keepAliveCtxRef.current.resume().catch(() => {});
+        }
+      } catch (_) {}
+    }, 600);
+  }, []);
+
+  // Gestión de Wake Lock y Doble Keep-Alive Acústico (<audio> silente + AudioContext 1 Hz)
   const acquireKeepAlive = useCallback(async () => {
     try {
       if (!silentAudioRef.current && typeof Audio !== "undefined") {
@@ -111,6 +138,11 @@ export function useDrivingModePlayer({
           const audio = new Audio(audioUri);
           audio.loop = true;
           audio.volume = 0.01;
+          audio.addEventListener("pause", () => {
+            if (isPlayingRef.current) {
+              scheduleKeepAliveResume();
+            }
+          });
           silentAudioRef.current = audio;
         }
       }
@@ -120,16 +152,56 @@ export function useDrivingModePlayer({
     } catch (_) {}
 
     try {
+      const AudioCtx =
+        typeof window !== "undefined" ? window.AudioContext || window.webkitAudioContext : null;
+      if (AudioCtx) {
+        if (!keepAliveCtxRef.current || keepAliveCtxRef.current.state === "closed") {
+          const ctx = new AudioCtx();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = 1;
+          gain.gain.value = 0.0001;
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          keepAliveCtxRef.current = ctx;
+          keepAliveOscRef.current = osc;
+        }
+        if (keepAliveCtxRef.current.state === "suspended") {
+          await keepAliveCtxRef.current.resume().catch(() => {});
+        }
+      }
+    } catch (_) {}
+
+    try {
       if (typeof navigator !== "undefined" && "wakeLock" in navigator && !wakeLockRef.current) {
         wakeLockRef.current = await navigator.wakeLock.request("screen");
       }
     } catch (_) {}
-  }, []);
+  }, [scheduleKeepAliveResume]);
 
   const releaseKeepAlive = useCallback(async () => {
     try {
+      if (keepAliveResumeTimerRef.current) {
+        clearTimeout(keepAliveResumeTimerRef.current);
+        keepAliveResumeTimerRef.current = null;
+      }
       if (silentAudioRef.current) {
         silentAudioRef.current.pause();
+      }
+      if (keepAliveOscRef.current) {
+        try {
+          keepAliveOscRef.current.stop();
+          keepAliveOscRef.current.disconnect();
+        } catch (_) {}
+        keepAliveOscRef.current = null;
+      }
+      if (keepAliveCtxRef.current) {
+        try {
+          await keepAliveCtxRef.current.close();
+        } catch (_) {}
+        keepAliveCtxRef.current = null;
       }
       if (wakeLockRef.current) {
         await wakeLockRef.current.release();
@@ -138,12 +210,43 @@ export function useDrivingModePlayer({
     } catch (_) {}
   }, []);
 
-  // Pausa con cuenta regresiva visible para el rabillo del ojo en semáforos
+  // Reanudación automática de Keep-Alive al cambiar visibilidad o regresar foco tras notificaciones/GPS
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const handleVisibilityChange = () => {
+      if (!isPlayingRef.current) return;
+      scheduleKeepAliveResume();
+      if (
+        document.visibilityState === "visible" &&
+        typeof navigator !== "undefined" &&
+        "wakeLock" in navigator &&
+        !wakeLockRef.current
+      ) {
+        navigator.wakeLock
+          .request("screen")
+          .then((lock) => {
+            wakeLockRef.current = lock;
+          })
+          .catch(() => {});
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [scheduleKeepAliveResume]);
+
+  // Pausa con cuenta regresiva basada en reloj real Date.now() (resistente a throttling en pantalla apagada)
   const runCountdownWait = async (seconds, signal) => {
-    const totalSteps = Math.ceil(seconds);
-    for (let remaining = totalSteps; remaining > 0; remaining--) {
-      setCountdownSec(remaining);
-      await abortableDelay(1000, signal);
+    const endTime = Date.now() + Math.max(0, Number(seconds) || 0) * 1000;
+    while (true) {
+      if (signal?.aborted) {
+        throw new DOMException("Aborted", "AbortError");
+      }
+      const remainingMs = endTime - Date.now();
+      if (remainingMs <= 0) break;
+      setCountdownSec(Math.ceil(remainingMs / 1000));
+      await abortableDelay(Math.min(250, remainingMs), signal);
     }
     setCountdownSec(0);
   };
@@ -273,20 +376,36 @@ export function useDrivingModePlayer({
         await abortableDelay(2000, signal);
         const nextIdx = (indexToPlay + 1) % queueRef.current.length;
         if (nextIdx === indexToPlay) {
-          runStepCycle(nextIdx);
+          setStepAttemptId((prev) => prev + 1);
         } else {
           setCurrentIndex(nextIdx);
         }
       } catch (err) {
-        if (err?.name !== "AbortError") {
-          console.warn("[DrivingMode] Error en ciclo:", err);
+        if (err?.name === "AbortError" || signal.aborted) {
+          return;
+        }
+        console.warn("[DrivingMode] Error recuperable en ciclo, reanudando en 1200ms:", err);
+        try {
+          await abortableDelay(1200, signal);
+        } catch (_) {
+          return;
+        }
+        if (signal.aborted || !isPlayingRef.current) return;
+        const total = queueRef.current?.length || 0;
+        if (total > 0) {
+          const nextIdx = (indexToPlay + 1) % total;
+          if (nextIdx === indexToPlay) {
+            setStepAttemptId((prev) => prev + 1);
+          } else {
+            setCurrentIndex(nextIdx);
+          }
         }
       }
     },
     [releaseKeepAlive]
   );
 
-  // Disparar el ciclo cuando cambia currentIndex o isPlaying pasa a true
+  // Disparar el ciclo cuando cambia currentIndex, stepAttemptId o isPlaying pasa a true
   useEffect(() => {
     if (isPlaying && queue.length > 0) {
       runStepCycle(currentIndex);
@@ -296,7 +415,7 @@ export function useDrivingModePlayer({
         abortControllerRef.current.abort();
       }
     };
-  }, [currentIndex, isPlaying, runStepCycle, queue.length]);
+  }, [currentIndex, stepAttemptId, isPlaying, runStepCycle, queue.length]);
 
   const startOrResume = useCallback(async () => {
     await acquireKeepAlive();
