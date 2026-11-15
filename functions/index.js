@@ -3214,10 +3214,10 @@ export const verifyOrRequestAccess = onCall(
     const uid = authUser.uid;
     const signInProvider = authUser.token?.firebase?.sign_in_provider;
 
-    if (signInProvider === "anonymous") {
+    if (!signInProvider || signInProvider === "anonymous") {
       throw new HttpsError(
         "permission-denied",
-        "El acceso anónimo está deshabilitado. Inicia sesión con Google."
+        "El acceso anónimo está deshabilitado. Inicia sesión con Google o con tu correo electrónico."
       );
     }
 
@@ -3231,17 +3231,8 @@ export const verifyOrRequestAccess = onCall(
       );
     }
 
-    const hasGoogleProvider =
-      (userRecord.providerData || []).some((p) => p.providerId === "google.com") ||
-      signInProvider === "google.com";
+    // Acepta cualquier proveedor autenticado distinto de anonymous (ej. "google.com" y "password")
     const isSuperAdmin = getSuperAdminEmailSet().has(emailLower);
-
-    if (!hasGoogleProvider && userRecord.emailVerified === false && authUser.token?.email_verified === false && !isSuperAdmin) {
-      throw new HttpsError(
-        "permission-denied",
-        "Tu correo electrónico debe estar verificado para solicitar acceso."
-      );
-    }
 
     const accessRef = db.collection("access_control").doc(uid);
     const preAuthRef = db.collection("authorized_emails").doc(emailLower);

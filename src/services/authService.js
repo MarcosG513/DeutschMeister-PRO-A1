@@ -2,13 +2,21 @@ import { Capacitor } from '@capacitor/core';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import {
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  getRedirectResult,
   linkWithCredential,
   linkWithPopup,
+  linkWithRedirect,
+  sendPasswordResetEmail,
   signInWithCredential,
+  signInWithEmailAndPassword,
   signInWithPopup,
-  signOut
+  signInWithRedirect,
+  signOut,
+  updateProfile
 } from 'firebase/auth';
-import { auth as defaultAuth } from '../config/firebase';
+import { httpsCallable } from 'firebase/functions';
+import { auth as defaultAuth, functions as defaultFunctions } from '../config/firebase';
 
 export const ACCESS_CACHE_PREFIX = 'dm_access_approved_';
 export const ACCESS_ROLE_PREFIX = 'dm_access_role_';
@@ -61,8 +69,82 @@ export function isOfflineOrTransientNetworkError(err) {
 }
 
 /**
+ * Traduce códigos de error de Firebase Auth a mensajes claros en español.
+ */
+export function mapFirebaseAuthError(err, fallbackMessage = 'Ocurrió un error. Verifica tus credenciales e intenta de nuevo.') {
+  const code = String(err?.code || '').toLowerCase();
+  switch (code) {
+    case 'auth/invalid-credential':
+    case 'auth/wrong-password':
+    case 'auth/user-not-found':
+    case 'auth/invalid-login-credentials':
+      return 'Correo o contraseña incorrectos.';
+    case 'auth/email-already-in-use':
+      return 'Este correo ya está registrado; cambia a la pestaña Iniciar sesión.';
+    case 'auth/weak-password':
+      return 'La contraseña debe tener al menos 6 caracteres.';
+    case 'auth/invalid-email':
+      return 'El formato del correo electrónico no es válido.';
+    case 'auth/missing-password':
+      return 'Ingresa tu contraseña.';
+    case 'auth/too-many-requests':
+      return 'Demasiados intentos fallidos. Espera unos minutos e inténtalo de nuevo.';
+    case 'auth/user-disabled':
+      return 'Esta cuenta ha sido deshabilitada en el sistema.';
+    case 'auth/network-request-failed':
+      return 'Error de conexión. Verifica tu internet e inténtalo de nuevo.';
+    case 'auth/popup-closed-by-user':
+    case 'auth/user-cancelled':
+    case 'auth/cancelled-popup-request':
+      return 'Autenticación cancelada por el usuario.';
+    case 'auth/operation-not-allowed':
+      return 'Este método de acceso no está habilitado actualmente en Firebase Authentication.';
+    default:
+      return err?.message || fallbackMessage;
+  }
+}
+
+/**
+ * Procesa el resultado pendiente de signInWithRedirect al iniciar la app en Web.
+ */
+export async function processAuthRedirectResult(authInstance = defaultAuth) {
+  const targetAuth = authInstance || defaultAuth;
+  if (!targetAuth || Capacitor.isNativePlatform()) {
+    return null;
+  }
+  try {
+    const result = await getRedirectResult(targetAuth);
+    return result?.user || null;
+  } catch (err) {
+    console.warn('[Auth Redirect Result Error]:', err?.code || err?.message);
+    throw new Error(mapFirebaseAuthError(err, 'No se pudo completar el inicio de sesión con Google.'), {
+      cause: err
+    });
+  }
+}
+
+async function syncAccessRecordAfterAuth(user, functionsInstance = defaultFunctions) {
+  const targetFunctions = functionsInstance || defaultFunctions;
+  if (!user || !targetFunctions) return null;
+  try {
+    const verifyFn = httpsCallable(targetFunctions, 'verifyOrRequestAccess');
+    const res = await verifyFn({});
+    const data = res?.data || null;
+    if (data && (data.needsTokenRefresh || data.status === 'approved')) {
+      await user.getIdToken(true).catch(() => {});
+    }
+    return data;
+  } catch (err) {
+    if (isOfflineOrTransientNetworkError(err)) {
+      return null;
+    }
+    throw err;
+  }
+}
+
+/**
  * Flujo unificado de inicio de sesión con Google compatible con Android APK (@capacitor-firebase/authentication)
- * y Web/PWA (signInWithPopup). Garantiza comportamiento idéntico entre AuthAccessGate y Profile.
+ * y Web/PWA (signInWithPopup + fallback a signInWithRedirect si hay bloqueo de popups).
  */
 export async function signInWithGoogleUnified({
   authInstance = defaultAuth,
@@ -78,13 +160,17 @@ export async function signInWithGoogleUnified({
   const shouldLinkAnon = Boolean(allowAnonymousLink && !isLoginMode && currentUser?.isAnonymous);
 
   // ── MODO NATIVO ANDROID (Capacitor) ──
-  // Evita abrir ventanas emergentes web que se quedan en blanco en Chrome / WebView
+  // Usa Credential Manager / Play Services nativo con skipNativeAuth: true y autentica Firebase JS con idToken
   if (Capacitor.isNativePlatform()) {
     try {
-      const result = await FirebaseAuthentication.signInWithGoogle();
+      const result = await FirebaseAuthentication.signInWithGoogle({
+        skipNativeAuth: true
+      });
       const idToken = result?.credential?.idToken;
       if (!idToken) {
-        throw new Error('No se pudo obtener el token de Google del dispositivo.');
+        throw new Error(
+          'No se pudo obtener el token de Google en el dispositivo. Inicia sesión con tu correo y contraseña en el formulario inferior.'
+        );
       }
 
       const credential = GoogleAuthProvider.credential(idToken);
@@ -119,8 +205,9 @@ export async function signInWithGoogleUnified({
     } catch (nativeErr) {
       console.warn('[GoogleAuth Native Error]:', nativeErr);
       const errMsg = String(nativeErr?.message || nativeErr || '');
+      const errLower = errMsg.toLowerCase();
       if (
-        errMsg.includes('cancel') ||
+        errLower.includes('cancel') ||
         errMsg.includes('12501') ||
         nativeErr?.code === 16 ||
         nativeErr?.code === 12501 ||
@@ -130,14 +217,14 @@ export async function signInWithGoogleUnified({
         throw new Error('Autenticación cancelada por el usuario.', { cause: nativeErr });
       }
       throw new Error(
-        nativeErr?.message || 'No se pudo completar el inicio de sesión con Google en el dispositivo.',
+        'No se pudo iniciar sesión con Google en este dispositivo (verifica Google Play Services o tu conexión). También puedes iniciar sesión o solicitar acceso con tu correo y contraseña abajo.',
         { cause: nativeErr }
       );
     }
   }
 
   // ── MODO WEB / PWA ──
-  // Se utiliza signInWithPopup con temporizador de seguridad de 45s para evitar bloqueos
+  // Usa directamente el SDK web de Firebase con el authDomain estándar (*.firebaseapp.com)
   let timeoutId = null;
   const timeoutPromise = new Promise((_, reject) => {
     timeoutId = setTimeout(() => {
@@ -145,10 +232,10 @@ export async function signInWithGoogleUnified({
     }, 45000);
   });
 
-  try {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
 
+  try {
     const authAction = async () => {
       if (shouldLinkAnon) {
         try {
@@ -181,28 +268,129 @@ export async function signInWithGoogleUnified({
 
     return await Promise.race([authAction(), timeoutPromise]);
   } catch (err) {
+    if (err?.code === 'auth/popup-blocked') {
+      if (shouldLinkAnon) {
+        await linkWithRedirect(currentUser, provider);
+      } else {
+        await signInWithRedirect(targetAuth, provider);
+      }
+      return {
+        user: null,
+        redirecting: true,
+        message: 'Redirigiendo a Google para completar el inicio de sesión...'
+      };
+    }
+
     console.warn('Error en login/link con Google:', err);
     if (err?.message === 'auth_timeout') {
       throw new Error('El inicio de sesión tomó demasiado tiempo o la ventana fue cerrada.', { cause: err });
     }
-    if (
-      err?.code === 'auth/popup-closed-by-user' ||
-      err?.code === 'auth/user-cancelled' ||
-      err?.code === 'auth/cancelled-popup-request'
-    ) {
-      throw new Error('Autenticación cancelada por el usuario.', { cause: err });
-    }
-    if (err?.code === 'auth/popup-blocked') {
-      throw new Error(
-        'Tu navegador bloqueó la ventana emergente de Google. Permite ventanas emergentes para este sitio.',
-        { cause: err }
-      );
-    }
-    throw new Error(err?.message || 'Ocurrió un error. Verifica tus credenciales e intenta de nuevo.', {
-      cause: err
-    });
+    throw new Error(mapFirebaseAuthError(err), { cause: err });
   } finally {
     if (timeoutId) clearTimeout(timeoutId);
+  }
+}
+
+/**
+ * Inicia sesión con correo electrónico y contraseña y verifica el acceso Zero-Trust en el backend.
+ */
+export async function signInWithEmailUnified(
+  email,
+  password,
+  { authInstance = defaultAuth, functionsInstance = defaultFunctions } = {}
+) {
+  const targetAuth = authInstance || defaultAuth;
+  if (!targetAuth) {
+    throw new Error('Servicio de autenticación no disponible.');
+  }
+
+  const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+  if (!normalizedEmail || !normalizedEmail.includes('@')) {
+    throw new Error('Ingresa un correo electrónico válido.');
+  }
+  if (!password) {
+    throw new Error('Ingresa tu contraseña.');
+  }
+
+  try {
+    const cred = await signInWithEmailAndPassword(targetAuth, normalizedEmail, password);
+    const access = await syncAccessRecordAfterAuth(cred.user, functionsInstance);
+    return {
+      user: cred.user,
+      access,
+      message: '¡Sesión iniciada correctamente!'
+    };
+  } catch (err) {
+    throw new Error(mapFirebaseAuthError(err, 'No se pudo iniciar sesión con correo.'), { cause: err });
+  }
+}
+
+/**
+ * Registra un nuevo usuario con correo y contraseña, guarda su displayName y registra la solicitud/acceso Zero-Trust.
+ */
+export async function registerWithEmailUnified(
+  email,
+  password,
+  displayName = '',
+  { authInstance = defaultAuth, functionsInstance = defaultFunctions } = {}
+) {
+  const targetAuth = authInstance || defaultAuth;
+  if (!targetAuth) {
+    throw new Error('Servicio de autenticación no disponible.');
+  }
+
+  const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+  const cleanName = typeof displayName === 'string' ? displayName.trim() : '';
+
+  if (!normalizedEmail || !normalizedEmail.includes('@')) {
+    throw new Error('Ingresa un correo electrónico válido.');
+  }
+  if (!password || password.length < 6) {
+    throw new Error('La contraseña debe tener al menos 6 caracteres.');
+  }
+
+  try {
+    const cred = await createUserWithEmailAndPassword(targetAuth, normalizedEmail, password);
+    if (cleanName) {
+      await updateProfile(cred.user, { displayName: cleanName }).catch(() => {});
+      await cred.user.reload().catch(() => {});
+    }
+    const access = await syncAccessRecordAfterAuth(cred.user, functionsInstance);
+    return {
+      user: cred.user,
+      access,
+      message:
+        access?.status === 'approved'
+          ? '¡Cuenta creada y aprobada automáticamente!'
+          : '¡Cuenta registrada! Tu solicitud de acceso ha sido enviada al administrador.'
+    };
+  } catch (err) {
+    throw new Error(mapFirebaseAuthError(err, 'No se pudo registrar el correo.'), { cause: err });
+  }
+}
+
+/**
+ * Envía un correo oficial de recuperación de contraseña de Firebase Auth.
+ */
+export async function resetPasswordUnified(email, { authInstance = defaultAuth } = {}) {
+  const targetAuth = authInstance || defaultAuth;
+  if (!targetAuth) {
+    throw new Error('Servicio de autenticación no disponible.');
+  }
+
+  const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+  if (!normalizedEmail || !normalizedEmail.includes('@')) {
+    throw new Error('Escribe tu correo electrónico arriba antes de solicitar el restablecimiento.');
+  }
+
+  try {
+    await sendPasswordResetEmail(targetAuth, normalizedEmail);
+    return {
+      email: normalizedEmail,
+      message: `Te enviamos un enlace a ${normalizedEmail} para restablecer tu contraseña. Revisa también tu carpeta de spam.`
+    };
+  } catch (err) {
+    throw new Error(mapFirebaseAuthError(err, 'No se pudo enviar el correo de recuperación.'), { cause: err });
   }
 }
 

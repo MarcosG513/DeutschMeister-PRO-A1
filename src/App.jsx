@@ -11,7 +11,7 @@ import PresentationVocabCard from './components/PresentationVocabCard';
 import MarkdownMessage from './components/MarkdownMessage';
 import AuthAccessGate from './components/AuthAccessGate';
 import { app, auth, db, functions, appId } from './config/firebase';
-import { getCachedAccessDecision, setCachedAccessDecision, isOfflineOrTransientNetworkError, signOutUnified } from './services/authService';
+import { getCachedAccessDecision, setCachedAccessDecision, isOfflineOrTransientNetworkError, signOutUnified, processAuthRedirectResult } from './services/authService';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
 import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, syncPedagogyProgressFromCloud, splitGermanTitle, splitParentheticalText } from './utils/helpers';
@@ -477,6 +477,11 @@ export default function App() {
     if (!auth) {
       return;
     }
+    processAuthRedirectResult(auth).catch((redirectErr) => {
+      if (redirectErr?.message) {
+        setAccessError(redirectErr.message);
+      }
+    });
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
         authCheckSeqRef.current += 1;

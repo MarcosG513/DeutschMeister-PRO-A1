@@ -7,10 +7,22 @@ import {
   LogOut,
   Loader2,
   AlertCircle,
+  CheckCircle2,
   GraduationCap,
-  WifiOff
+  WifiOff,
+  Mail,
+  Lock,
+  User,
+  Eye,
+  EyeOff
 } from 'lucide-react';
-import { signInWithGoogleUnified, signOutUnified } from '../services/authService';
+import {
+  signInWithGoogleUnified,
+  signInWithEmailUnified,
+  registerWithEmailUnified,
+  resetPasswordUnified,
+  signOutUnified
+} from '../services/authService';
 
 const GoogleLogo = () => (
   <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
@@ -40,10 +52,18 @@ const AuthAccessGate = ({
   verificationError = null,
   onRecheckAccess
 }) => {
-  const [isBusy, setIsBusy] = useState(false);
+  const [busyAction, setBusyAction] = useState(null);
   const [localError, setLocalError] = useState(null);
+  const [localSuccess, setLocalSuccess] = useState(null);
   const [imgError, setImgError] = useState(false);
 
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const isBusy = busyAction !== null;
   const isChecking = accessStatus === 'checking';
   const isUnauthenticated = !user || user.isAnonymous || accessStatus === 'unauthenticated';
   const isRevoked = accessStatus === 'revoked';
@@ -51,9 +71,16 @@ const AuthAccessGate = ({
 
   const combinedError = localError || verificationError;
 
-  const handleGoogleSignIn = async () => {
-    setIsBusy(true);
+  const switchAuthMode = (nextMode) => {
+    setAuthMode(nextMode);
     setLocalError(null);
+    setLocalSuccess(null);
+  };
+
+  const handleGoogleSignIn = async () => {
+    setBusyAction('google');
+    setLocalError(null);
+    setLocalSuccess(null);
     try {
       await signInWithGoogleUnified({
         authInstance: auth,
@@ -63,32 +90,89 @@ const AuthAccessGate = ({
     } catch (err) {
       setLocalError(err?.message || 'No se pudo iniciar sesión con Google.');
     } finally {
-      setIsBusy(false);
+      setBusyAction(null);
+    }
+  };
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    setLocalError(null);
+    setLocalSuccess(null);
+
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail || !normalizedEmail.includes('@')) {
+      setLocalError('Ingresa un correo electrónico válido.');
+      return;
+    }
+    if (!password || password.length < 6) {
+      setLocalError('La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+
+    setBusyAction('email');
+    try {
+      if (authMode === 'register') {
+        const res = await registerWithEmailUnified(normalizedEmail, password, fullName, {
+          authInstance: auth
+        });
+        if (res?.message) {
+          setLocalSuccess(res.message);
+        }
+      } else {
+        await signInWithEmailUnified(normalizedEmail, password, {
+          authInstance: auth
+        });
+      }
+    } catch (err) {
+      setLocalError(
+        err?.message ||
+          (authMode === 'register'
+            ? 'No se pudo registrar el correo.'
+            : 'No se pudo iniciar sesión con correo.')
+      );
+    } finally {
+      setBusyAction(null);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    setLocalError(null);
+    setLocalSuccess(null);
+    setBusyAction('reset');
+    try {
+      const res = await resetPasswordUnified(email, { authInstance: auth });
+      setLocalSuccess(res?.message || 'Correo de recuperación enviado.');
+    } catch (err) {
+      setLocalError(err?.message || 'No se pudo enviar el enlace de recuperación.');
+    } finally {
+      setBusyAction(null);
     }
   };
 
   const handleVerifyNow = async () => {
     if (typeof onRecheckAccess !== 'function') return;
-    setIsBusy(true);
+    setBusyAction('recheck');
     setLocalError(null);
+    setLocalSuccess(null);
     try {
       await onRecheckAccess();
     } catch (err) {
       setLocalError(err?.message || 'Error al verificar tu autorización.');
     } finally {
-      setIsBusy(false);
+      setBusyAction(null);
     }
   };
 
   const handleSwitchAccount = async () => {
-    setIsBusy(true);
+    setBusyAction('signout');
     setLocalError(null);
+    setLocalSuccess(null);
     try {
       await signOutUnified({ authInstance: auth });
     } catch (err) {
       setLocalError(err?.message || 'No se pudo cerrar sesión.');
     } finally {
-      setIsBusy(false);
+      setBusyAction(null);
     }
   };
 
@@ -124,13 +208,20 @@ const AuthAccessGate = ({
 
         <div className="p-6 sm:p-7">
           {combinedError && (
-            <div className="mb-5 p-3.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-2.5 text-rose-700 text-xs sm:text-sm font-medium">
+            <div className="mb-4 p-3.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-2.5 text-rose-700 text-xs sm:text-sm font-medium">
               {String(combinedError).toLowerCase().includes('conexión') ? (
                 <WifiOff size={18} className="shrink-0 mt-0.5 text-rose-500" />
               ) : (
                 <AlertCircle size={18} className="shrink-0 mt-0.5 text-rose-500" />
               )}
               <span>{combinedError}</span>
+            </div>
+          )}
+
+          {localSuccess && (
+            <div className="mb-4 p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-2.5 text-emerald-800 text-xs sm:text-sm font-medium">
+              <CheckCircle2 size={18} className="shrink-0 mt-0.5 text-emerald-600" />
+              <span>{localSuccess}</span>
             </div>
           )}
 
@@ -147,23 +238,20 @@ const AuthAccessGate = ({
           ) : isUnauthenticated ? (
             /* ESTADO A: NO AUTENTICADO */
             <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-100 border border-indigo-200/70 flex items-center justify-center mb-4 shadow-sm">
-                <ShieldCheck size={32} className="text-indigo-600" />
-              </div>
               <h2 className="text-xl font-extrabold text-slate-900">
                 Acceso Autorizado Requerido
               </h2>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
-                Aplicación privada. Inicia sesión con tu cuenta de Google autorizada para acceder al contenido.
+              <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                Aplicación privada. Inicia sesión con Google o con cualquier correo electrónico para entrar o solicitar acceso.
               </p>
 
               <button
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={isBusy || !auth}
-                className="mt-6 w-full bg-white hover:bg-slate-50 text-slate-800 font-bold py-3.5 px-6 rounded-2xl border-2 border-slate-200 shadow-sm hover:shadow-md active:scale-[0.98] transition flex items-center justify-center gap-3 text-sm cursor-pointer disabled:opacity-50"
+                className="mt-5 w-full bg-white hover:bg-slate-50 text-slate-800 font-bold py-3 px-5 rounded-2xl border-2 border-slate-200 shadow-sm hover:shadow-md active:scale-[0.98] transition flex items-center justify-center gap-3 text-sm cursor-pointer disabled:opacity-50"
               >
-                {isBusy ? (
+                {busyAction === 'google' ? (
                   <>
                     <Loader2 size={18} className="animate-spin text-indigo-600" />
                     <span>Conectando con Google...</span>
@@ -176,14 +264,177 @@ const AuthAccessGate = ({
                 )}
               </button>
 
+              {/* Divisor */}
+              <div className="relative w-full my-5 flex items-center">
+                <div className="flex-grow border-t border-slate-200" />
+                <span className="shrink-0 mx-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                  o ingresa con tu correo
+                </span>
+                <div className="flex-grow border-t border-slate-200" />
+              </div>
+
+              {/* Pestañas: Iniciar sesión | Solicitar acceso / Registrarse */}
+              <div className="w-full grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl mb-4">
+                <button
+                  type="button"
+                  onClick={() => switchAuthMode('login')}
+                  disabled={isBusy}
+                  className={`py-2 px-2 rounded-lg text-xs font-bold transition cursor-pointer ${
+                    authMode === 'login'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700'
+                  }`}
+                >
+                  Iniciar sesión
+                </button>
+                <button
+                  type="button"
+                  onClick={() => switchAuthMode('register')}
+                  disabled={isBusy}
+                  className={`py-2 px-2 rounded-lg text-xs font-bold transition cursor-pointer ${
+                    authMode === 'register'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700'
+                  }`}
+                >
+                  Solicitar acceso / Registrarse
+                </button>
+              </div>
+
+              {/* Formulario Email/Password */}
+              <form onSubmit={handleEmailSubmit} className="w-full space-y-3 text-left">
+                {authMode === 'register' && (
+                  <div>
+                    <label
+                      htmlFor="auth-fullname"
+                      className="block text-[11px] font-bold text-slate-600 mb-1"
+                    >
+                      Nombre
+                    </label>
+                    <div className="relative">
+                      <User
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                      />
+                      <input
+                        id="auth-fullname"
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Tu nombre completo"
+                        autoComplete="name"
+                        disabled={isBusy}
+                        className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <label
+                    htmlFor="auth-email"
+                    className="block text-[11px] font-bold text-slate-600 mb-1"
+                  >
+                    Correo electrónico
+                  </label>
+                  <div className="relative">
+                    <Mail
+                      size={16}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                    />
+                    <input
+                      id="auth-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="nombre@hotmail.com"
+                      autoComplete="email"
+                      required
+                      disabled={isBusy}
+                      className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="auth-password"
+                    className="block text-[11px] font-bold text-slate-600 mb-1"
+                  >
+                    Contraseña <span className="font-normal text-slate-400">(mín. 6 caracteres)</span>
+                  </label>
+                  <div className="relative">
+                    <Lock
+                      size={16}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                    />
+                    <input
+                      id="auth-password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      minLength={6}
+                      autoComplete={authMode === 'register' ? 'new-password' : 'current-password'}
+                      required
+                      disabled={isBusy}
+                      className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      tabIndex={-1}
+                      aria-label={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
+
+                {authMode === 'login' && (
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handleForgotPassword}
+                      disabled={isBusy || !auth}
+                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:underline cursor-pointer disabled:opacity-50"
+                    >
+                      {busyAction === 'reset' ? 'Enviando enlace...' : '¿Olvidaste tu contraseña?'}
+                    </button>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isBusy || !auth}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-2xl shadow-sm hover:shadow active:scale-[0.98] transition flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50"
+                >
+                  {busyAction === 'email' ? (
+                    <>
+                      <Loader2 size={17} className="animate-spin" />
+                      <span>
+                        {authMode === 'register' ? 'Registrando solicitud...' : 'Verificando credenciales...'}
+                      </span>
+                    </>
+                  ) : (
+                    <span>
+                      {authMode === 'register'
+                        ? 'Registrar correo y solicitar acceso'
+                        : 'Entrar con correo'}
+                    </span>
+                  )}
+                </button>
+              </form>
+
               {!auth && (
                 <p className="text-xs text-rose-600 mt-3 font-medium">
                   Configuración de Firebase no disponible en este entorno.
                 </p>
               )}
 
-              <p className="text-[11px] text-slate-400 mt-5 leading-relaxed">
-                Si es tu primera vez ingresando, tu correo quedará registrado automáticamente para aprobación del administrador.
+              <p className="text-[11px] text-slate-400 mt-4 leading-relaxed">
+                Si tu correo ya fue autorizado o es administrador, entrarás de inmediato; de lo contrario, quedará en espera de aprobación.
               </p>
             </div>
           ) : (
@@ -250,7 +501,7 @@ const AuthAccessGate = ({
                     disabled={isBusy}
                     className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer disabled:opacity-50"
                   >
-                    <RefreshCw size={16} className={isBusy ? 'animate-spin' : ''} />
+                    <RefreshCw size={16} className={busyAction === 'recheck' ? 'animate-spin' : ''} />
                     <span>🔄 Verificar autorización ahora</span>
                   </button>
                 )}
