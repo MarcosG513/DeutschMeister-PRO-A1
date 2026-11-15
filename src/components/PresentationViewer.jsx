@@ -302,7 +302,7 @@ const PresentationViewer = ({
   return (
     <div className={`fixed inset-0 z-50 flex flex-col h-[100dvh] w-full overflow-hidden bg-slate-50 ${isNotebook ? 'font-serif' : 'font-sans'} animate-in fade-in duration-200`}>
       {/* 1. HEADER (SUPERIOR FIJO) */}
-      <header className="flex-shrink-0 w-full z-20 bg-white/95 backdrop-blur border-b border-slate-200 p-3 sm:p-4 shadow-xs">
+      <header className="flex-shrink-0 w-full z-20 bg-white/95 backdrop-blur border-b border-slate-200 px-3 pb-3 sm:px-4 sm:pb-4 pt-[max(0.75rem,env(safe-area-inset-top))] shadow-xs">
         {/* Fila 1: Título y Botón Cerrar */}
         <div className="w-full flex justify-between items-center gap-3">
           <div className="flex items-center gap-2.5 flex-1 min-w-0">

@@ -1406,8 +1406,8 @@ export default function App() {
         activeChapterTitle={activeChapter?.title}
       /> : <>
           {/* HEADER NAVBAR */}
-          <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0">
-            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+          <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0 pt-[max(0.75rem,env(safe-area-inset-top))]">
+            <div className="max-w-7xl mx-auto px-4 pb-3 flex flex-col md:flex-row items-center justify-between gap-3">
               <div className="flex items-center justify-between w-full md:w-auto">
                 <div className="flex items-center gap-3">
                   <div className="bg-yellow-500 text-slate-900 p-2 rounded-lg animate-pulse">

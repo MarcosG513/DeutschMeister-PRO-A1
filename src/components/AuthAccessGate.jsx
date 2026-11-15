@@ -193,7 +193,7 @@ const AuthAccessGate = ({
   const userInitial = displayName.charAt(0).toUpperCase();
 
   return (
-    <div className="min-h-[100dvh] w-full bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-100 flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+    <div className="min-h-[100dvh] w-full bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-100 flex flex-col items-center justify-center px-4 pb-4 sm:px-6 sm:pb-6 pt-[max(0.75rem,env(safe-area-inset-top))] relative overflow-hidden">
       {/* Decoración sutil de fondo */}
       <div className="absolute -top-24 -right-24 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />

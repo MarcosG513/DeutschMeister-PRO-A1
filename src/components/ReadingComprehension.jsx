@@ -1046,7 +1046,7 @@ const ReadingComprehension = ({ onExit }) => {
       >
         {/* TOP HEADER */}
         <header
-          className={`sticky top-0 z-20 backdrop-blur border-b px-4 py-3.5 sm:px-6 ${
+          className={`sticky top-0 z-20 backdrop-blur border-b px-4 pb-3.5 sm:px-6 pt-[max(0.75rem,env(safe-area-inset-top))] ${
             isDarkMode ? 'bg-slate-900/95 border-slate-800' : 'bg-white/95 border-slate-200 shadow-xs'
           }`}
         >
@@ -1481,13 +1481,13 @@ const ReadingComprehension = ({ onExit }) => {
     >
       {/* CABECERA DINÁMICA CONTEXTUAL (TOP BAR + HERO / INSPECTOR DE PALABRA) */}
       <header
-        className={`sticky top-0 z-30 backdrop-blur border-b ${
+        className={`sticky top-0 z-30 backdrop-blur border-b pt-[max(0.75rem,env(safe-area-inset-top))] ${
           isDarkMode
             ? 'bg-slate-900/95 border-slate-800 shadow-md'
             : 'bg-white/95 border-slate-200 shadow-xs'
         }`}
       >
-        <div className="max-w-4xl mx-auto px-4 pt-3 pb-2 flex items-center justify-between gap-2">
+        <div className="max-w-4xl mx-auto px-4 pb-2 flex items-center justify-between gap-2">
           <button
             onClick={handleBackToCatalog}
             className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
