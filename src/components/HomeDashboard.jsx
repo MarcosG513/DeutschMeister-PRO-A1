@@ -147,7 +147,8 @@ export default function HomeDashboard({
       const specialMeta = {
         driving: { label: 'Modo Conducción', emoji: '🚗', title: 'Fahrmodus Manos Libres', sub: 'Retoma tus clases guiadas en audio' },
         roleplay: { label: 'Simulador de Rol IA', emoji: '🎭', title: 'Conversación con Misiones A1', sub: 'Practica situaciones reales con diagnóstico SRS' },
-        phrase: { label: 'Modo Frase/Diálogo', emoji: '💬', title: 'Diálogos Guiados A1', sub: 'Responde paso a paso con pistas y micrófono' },
+        phrase: { label: 'Modo Frase y Diálogo', emoji: '💬', title: 'Frases Satzklammer & Turnos', sub: 'Construye oraciones y dialoga paso a paso con Charon' },
+        podcast: { label: 'Micro-Pódcasts Offline', emoji: '🎙️', title: 'Pódcasts Karaoke Charon', sub: 'Episodios A1–A2 offline a 0.75x / 0.85x / 1.0x' },
         reading: { label: 'Leselabor PRO', emoji: '📖', title: 'Comprensión Lectora Graduada', sub: 'Lectura interactiva con karaoke Charon' },
         quiz: { label: 'Quiz Dinámico', emoji: '🎮', title: 'Evaluación Rápida A1 / SRS', sub: 'Pon a prueba vocabulario y errores' },
       }[lastActivity.id];
@@ -508,13 +509,13 @@ export default function HomeDashboard({
               <div className="flex items-center justify-between gap-1 w-full">
                 <MessageCircle size={18} className="text-sky-700 shrink-0" aria-hidden="true" />
                 <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-sky-600 text-white truncate">
-                  Activo · Mic
+                  Frase + Diálogo
                 </span>
               </div>
               <div>
                 <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">Modo Frase</div>
                 <div className="text-[11px] text-slate-600 leading-snug mt-0.5">
-                  Diálogos con pistas ES y misiones SRS
+                  Orden Satzklammer, turnos y Mic + SRS
                 </div>
               </div>
             </button>
@@ -522,18 +523,18 @@ export default function HomeDashboard({
             <button
               type="button"
               onClick={() => onOpenSpecialView?.('podcast')}
-              className="min-h-[84px] p-3.5 rounded-2xl border border-violet-200 bg-violet-50/60 hover:bg-violet-100/70 transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+              className="min-h-[84px] p-3.5 rounded-2xl border-2 border-violet-200 bg-violet-50/70 hover:bg-violet-100/70 transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
             >
               <div className="flex items-center justify-between gap-1 w-full">
                 <Headphones size={18} className="text-violet-700 shrink-0" aria-hidden="true" />
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-violet-200 text-violet-900 truncate">
-                  Fase 2 · Audio
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-violet-600 text-white truncate">
+                  Activo · 0.75x
                 </span>
               </div>
               <div>
                 <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">Micro-Pódcasts</div>
                 <div className="text-[11px] text-slate-600 leading-snug mt-0.5">
-                  Episodios cortos offline + Karaoke
+                  Episodios offline + Karaoke + Test
                 </div>
               </div>
             </button>

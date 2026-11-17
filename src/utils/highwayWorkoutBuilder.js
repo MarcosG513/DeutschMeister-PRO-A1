@@ -183,3 +183,46 @@ export function buildHighwaySessionQueue(selectedClasses = [], mode = "highway")
   }));
 }
 
+/**
+ * Construye una cola manos libres (Fahrmodus) a partir de tarjetas SRS vencidas
+ * (vocabulario y errores gramaticales capturados desde chat, roleplay o pódcasts).
+ */
+export function buildSrsReviewWorkoutQueue(dueCards = [], limit = 25) {
+  if (!Array.isArray(dueCards) || dueCards.length === 0) {
+    return [];
+  }
+
+  return dueCards
+    .filter((card) => card && (card.correctedDe || card.termDe))
+    .slice(0, limit)
+    .map((card, index) => {
+      const targetDe = card.correctedDe || card.termDe;
+      const isGrammar = card.cardType === "grammar_error";
+      const promptEs =
+        card.translationEs ||
+        card.explanationEs ||
+        (card.userAttempt ? `Corrige en alemán: ${card.userAttempt}` : "Traduce al alemán");
+      const tipEs = isGrammar
+        ? card.explanationEs ||
+          (card.userAttempt ? `Evita: "${card.userAttempt}". Di: "${targetDe}".` : "")
+        : card.exampleDe || "";
+
+      return {
+        id: card.id || `srs_due_${index}`,
+        queueKey: `hw_srs_${index}`,
+        stepType: isGrammar ? "drill" : "block",
+        title: isGrammar ? `Corrección SRS (${card.errorCategory || "Gramática"})` : "Vocabulario SRS",
+        promptEs,
+        targetDe,
+        de: targetDe,
+        es: promptEs,
+        tipEs,
+        pauseSec: 4,
+        wave: 1,
+        waveLabel: "SRS • REPASO VENCIDO EN RUTA",
+        chapter: "Mazo SRS Pendiente",
+        level: card.axis === "work" ? "Técnico" : "A1–A2",
+      };
+    });
+}
+

@@ -35,6 +35,8 @@ const DynamicQuiz = lazy(() => import('./components/DynamicQuiz'));
 const RoleplaySimulator = lazy(() => import('./components/RoleplaySimulator'));
 const InteractiveQA = lazy(() => import('./components/InteractiveQA'));
 const TutorChat = lazy(() => import('./components/TutorChat'));
+const MicroPodcastPlayer = lazy(() => import('./components/MicroPodcastPlayer'));
+const PhraseDialogueTrainer = lazy(() => import('./components/PhraseDialogueTrainer'));
 
 // --- CONFIGURACIÓN API & FIREBASE ---
 // Se removió el apiKey local, ahora se usan Firebase Functions.
@@ -200,10 +202,7 @@ export default function App() {
   };
 
   const handleOpenSpecialView = (targetView, options = {}) => {
-    if (targetView === 'podcast') {
-      setPhaseBannerNotice('Micro-Pódcasts Offline Karaoke llega en la Fase 2. Mientras tanto, hemos abierto Leselabor PRO para practicar lectura + audio Charon sincronizado.');
-      targetView = 'reading';
-    } else if (targetView === 'call') {
+    if (targetView === 'call') {
       setPhaseBannerNotice('Modo Llamada Hands-Free (VAD + Avatar OLED) llega en la Fase 3. Mientras tanto, practica en vivo usando el Simulador de Rol con micrófono y Charon.');
       targetView = 'roleplay';
     } else if (targetView === 'photo') {
@@ -223,7 +222,7 @@ export default function App() {
     setIsMenuOpen(false);
     setViewMode(targetView);
 
-    if (['driving', 'roleplay', 'phrase', 'reading', 'quiz'].includes(targetView)) {
+    if (['driving', 'roleplay', 'phrase', 'podcast', 'reading', 'quiz'].includes(targetView)) {
       recordLastActivity({
         type: 'special',
         id: targetView,
@@ -1783,14 +1782,20 @@ export default function App() {
               }} className="bg-slate-800 text-yellow-400 border border-yellow-500/20 py-2.5 rounded-lg font-bold hover:bg-slate-700 transition flex flex-col items-center justify-center gap-1 text-xs">
                       <Bot size={18} /> Tutor IA
                     </button>
-                    <button onClick={() => handleOpenSpecialView('roleplay')} className="bg-purple-900/60 text-purple-200 border border-purple-500/20 py-2.5 rounded-lg font-bold hover:bg-purple-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                    <button onClick={() => handleOpenSpecialView('roleplay')} className="bg-purple-900/60 text-purple-200 border border-purple-500/20 py-2.5 rounded-lg font-bold hover:bg-purple-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
                       <Sparkles size={18} /> Rol ✨
                     </button>
-                    <button onClick={() => handleOpenSpecialView('reading')} className="bg-emerald-900/60 text-emerald-200 border border-emerald-500/20 py-2.5 rounded-lg font-bold hover:bg-emerald-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
+                    <button onClick={() => handleOpenSpecialView('phrase')} className="bg-sky-900/60 text-sky-200 border border-sky-500/20 py-2.5 rounded-lg font-bold hover:bg-sky-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
+                      <MessageCircle size={18} /> Frase / Diálogo
+                    </button>
+                    <button onClick={() => handleOpenSpecialView('podcast')} className="bg-violet-900/60 text-violet-200 border border-violet-500/20 py-2.5 rounded-lg font-bold hover:bg-violet-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
+                      <Headphones size={18} /> Pódcasts 🎙️
+                    </button>
+                    <button onClick={() => handleOpenSpecialView('reading')} className="bg-emerald-900/60 text-emerald-200 border border-emerald-500/20 py-2.5 rounded-lg font-bold hover:bg-emerald-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
                       <BookOpen size={18} /> Lectura 📖
                     </button>
-                    <button onClick={() => handleOpenSpecialView('quiz')} className="bg-yellow-600 text-slate-900 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm">
-                      <Gamepad2 size={18} /> Quiz
+                    <button onClick={() => handleOpenSpecialView('quiz')} className="bg-yellow-600 text-slate-900 col-span-2 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex items-center justify-center gap-2 text-xs shadow-sm cursor-pointer">
+                      <Gamepad2 size={18} /> Quiz Dinámico / SRS
                     </button>
                     <button onClick={() => handleOpenSpecialView('profile')} className="bg-blue-600 text-white col-span-2 py-2.5 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 text-xs shadow-sm">
                       <User size={18} /> Mi Perfil y Configuración
@@ -1952,7 +1957,7 @@ export default function App() {
           )}
 
           {/* VISTA: INICIO Y CENTRO DE MANDO PEDAGÓGICO 🏠 */}
-          {isHomeOpen && searchTerm.trim() === "" && !["roleplay", "phrase", "reading"].includes(viewMode) && (
+          {isHomeOpen && searchTerm.trim() === "" && !["roleplay", "phrase", "podcast", "reading"].includes(viewMode) && (
             <HomeDashboard
               user={user}
               accessRole={accessRole}
@@ -1975,12 +1980,22 @@ export default function App() {
             />
           )}
 
-          {/* VISTA: SIMULADOR DE ROL Y MODO FRASE (GEMINI API) ✨ */}
-          {(viewMode === "roleplay" || viewMode === "phrase") && typeof RoleplaySimulator !== 'undefined' && (
+          {/* VISTA: SIMULADOR DE ROL IA (GEMINI API) ✨ */}
+          {viewMode === "roleplay" && (
             <RoleplaySimulator
-              initialMode={viewMode === "phrase" ? "phrase" : "roleplay"}
+              initialMode="roleplay"
               onExit={handleExitToOrigin}
             />
+          )}
+
+          {/* VISTA: MODO FRASE & DIÁLOGO GUIADO (SATZKLAMMER + TURNOS) 💬 */}
+          {viewMode === "phrase" && (
+            <PhraseDialogueTrainer onExit={handleExitToOrigin} />
+          )}
+
+          {/* VISTA: MICRO-PÓDCASTS OFFLINE KARAOKE + WSOLA 🎙️ */}
+          {viewMode === "podcast" && (
+            <MicroPodcastPlayer onExit={handleExitToOrigin} />
           )}
 
           {/* VISTA: COMPRENSIÓN LECTORA IA 📖 */}

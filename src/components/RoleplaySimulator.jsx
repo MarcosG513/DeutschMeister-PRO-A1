@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { CheckCircle2, ClipboardCheck, Sparkles, X } from 'lucide-react';
 import { getAuth } from 'firebase/auth';
 import ConversationThread from './chat/ConversationThread';
@@ -6,6 +6,7 @@ import ComposerBar from './chat/ComposerBar';
 import SessionDiagnosticCard from './chat/SessionDiagnosticCard';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
+import { ROLEPLAY_AXES, roleplayScenariosCatalog } from '../data/roleplayScenarios';
 import { recordDailyStudyActivity, recordSkillActivity, scrollInputIntoView } from '../utils/helpers';
 import { captureConversationBundle } from '../services/srsBridgeService';
 
@@ -25,6 +26,7 @@ const RoleplaySimulator = ({
   onExit,
   initialMode = 'roleplay',
 }) => {
+  const [selectedAxis, setSelectedAxis] = useState('all');
   const [scenario, setScenario] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -82,191 +84,10 @@ const RoleplaySimulator = ({
     });
   };
 
-  const scenarios = [
-    {
-      id: 'restaurant',
-      title: 'En el Restaurante',
-      axis: 'general',
-      icon: '🍽️',
-      desc: 'Pide comida y bebida.',
-      blurtHint: 'Essen, Trinken, Kellner',
-      missions: [
-        { id: 'm1', titleEs: 'Saludar y pedir bebida' },
-        { id: 'm2', titleEs: 'Pedir un plato o pastel con möchte' },
-        { id: 'm3', titleEs: 'Pedir la cuenta y pagar' },
-      ],
-      starterSuggestions: [
-        { de: 'Guten Tag! Ich möchte einen Kaffee, bitte.', es: '¡Buenos días! Quiero un café, por favor.', grammarTag: 'Akk' },
-        { de: 'Haben Sie auch eine Speisekarte?', es: '¿Tienen también carta?', grammarTag: 'Sie' },
-        { de: 'Ich möchte bitte zahlen.', es: 'Quisiera pagar, por favor.', grammarTag: 'V2' },
-      ],
-      prompt:
-        'Eres un camarero muy amable en un restaurante en Múnich. El usuario es un cliente de nivel A1 de alemán. Empieza saludando y preguntando qué desea beber. Usa oraciones muy cortas y vocabulario A1. Responde SOLO en alemán.',
-    },
-    {
-      id: 'station',
-      title: 'Estación de Tren',
-      axis: 'survival',
-      icon: '🚆',
-      desc: 'Compra un billete.',
-      blurtHint: 'Zug, Ticket, Gleis',
-      missions: [
-        { id: 'm1', titleEs: 'Indicar destino con nach' },
-        { id: 'm2', titleEs: 'Preguntar hora de salida o precio' },
-        { id: 'm3', titleEs: 'Preguntar de qué andén (Gleis) sale' },
-      ],
-      starterSuggestions: [
-        { de: 'Guten Tag, ich möchte eine Fahrkarte nach Frankfurt.', es: 'Buenos días, quiero un billete a Fráncfort.', grammarTag: 'Akk' },
-        { de: 'Wann fährt der nächste Zug ab?', es: '¿Cuándo sale el próximo tren?', grammarTag: 'Trennb.' },
-        { de: 'Von welchem Gleis fährt der Zug?', es: '¿De qué andén sale el tren?', grammarTag: 'Dativ' },
-      ],
-      prompt:
-        'Eres un vendedor de billetes en la estación de tren de Berlín. El usuario es un viajero nivel A1 que quiere ir a Fráncfort. Empieza diciendo "Guten Tag, wohin möchten Sie fahren?". Usa oraciones cortas A1. Responde SOLO en alemán.',
-    },
-    {
-      id: 'shopping',
-      title: 'Tienda de Ropa',
-      axis: 'general',
-      icon: '👕',
-      desc: 'Busca una chaqueta.',
-      blurtHint: 'Jacke, Größe, kaufen',
-      missions: [
-        { id: 'm1', titleEs: 'Pedir la prenda y talla o color' },
-        { id: 'm2', titleEs: 'Preguntar cuánto cuesta' },
-        { id: 'm3', titleEs: 'Decidir compra y despedirse' },
-      ],
-      starterSuggestions: [
-        { de: 'Ich suche eine blaue Jacke in Größe M.', es: 'Busco una chaqueta azul en talla M.', grammarTag: 'Akk' },
-        { de: 'Kann ich die Jacke bitte anprobieren?', es: '¿Puedo probarme la chaqueta, por favor?', grammarTag: 'Modal' },
-        { de: 'Wie viel kostet diese Jacke?', es: '¿Cuánto cuesta esta chaqueta?', grammarTag: 'W-Frage' },
-      ],
-      prompt:
-        'Eres un vendedor en una tienda de ropa en Viena. El usuario busca una chaqueta. Empieza diciendo "Guten Tag, kann ich Ihnen helfen?". Usa vocabulario A1. Responde SOLO en alemán.',
-    },
-    {
-      id: 'hotel',
-      title: 'Recepción de Hotel',
-      axis: 'survival',
-      icon: '🏨',
-      desc: 'Haz el check-in y pide la llave.',
-      blurtHint: 'Zimmer, Schlüssel, Nacht',
-      missions: [
-        { id: 'm1', titleEs: 'Confirmar reserva con nombre' },
-        { id: 'm2', titleEs: 'Preguntar hora del desayuno o Wi-Fi' },
-        { id: 'm3', titleEs: 'Pedir la llave y agradecer' },
-      ],
-      starterSuggestions: [
-        { de: 'Guten Abend! Ich habe ein Zimmer reserviert.', es: '¡Buenas noches! Tengo una habitación reservada.', grammarTag: 'Perfekt' },
-        { de: 'Wann gibt es morgens Frühstück?', es: '¿A qué hora es el desayuno por la mañana?', grammarTag: 'V2' },
-        { de: 'Danke schön! Wo ist der Aufzug bitte?', es: '¡Muchas gracias! ¿Dónde está el ascensor?', grammarTag: 'W-Frage' },
-      ],
-      prompt:
-        'Eres el recepcionista de un hotel en Berlín. El usuario tiene una reserva. Empieza diciendo "Herzlich willkommen! Haben Sie eine Reservierung?". Responde SOLO en alemán nivel A1.',
-    },
-    {
-      id: 'doctor',
-      title: 'En el Médico',
-      axis: 'survival',
-      icon: '🩺',
-      desc: 'Explica que te sientes mal.',
-      blurtHint: 'Kopf, Schmerzen, Fieber',
-      missions: [
-        { id: 'm1', titleEs: 'Describir al menos 1 síntoma' },
-        { id: 'm2', titleEs: 'Indicar desde cuándo (seit gestern)' },
-        { id: 'm3', titleEs: 'Pedir justificante o receta (Rezept/Attest)' },
-      ],
-      starterSuggestions: [
-        { de: 'Guten Tag! Ich habe seit gestern Fieber und Kopfschmerzen.', es: '¡Buenos días! Tengo fiebre y dolor de cabeza desde ayer.', grammarTag: 'Dativ' },
-        { de: 'Ich brauche bitte eine Krankschreibung für die Arbeit.', es: 'Necesito por favor una baja médica para el trabajo.', grammarTag: 'Akk' },
-        { de: 'Wie oft muss ich die Tabletten nehmen?', es: '¿Cuántas veces debo tomar las pastillas?', grammarTag: 'Modal' },
-      ],
-      prompt:
-        'Eres un médico en Alemania. El usuario es tu paciente. Empieza diciendo "Guten Tag! Was fehlt Ihnen?". Responde SOLO en alemán nivel A1.',
-    },
-    {
-      id: 'party',
-      title: 'Fiesta de Intercambio',
-      axis: 'general',
-      icon: '👋',
-      desc: 'Preséntate a un desconocido.',
-      blurtHint: 'Hallo, Name, kommen',
-      missions: [
-        { id: 'm1', titleEs: 'Presentarte con nombre y país' },
-        { id: 'm2', titleEs: 'Hablar de tu trabajo o aficiones' },
-        { id: 'm3', titleEs: 'Hacer una pregunta usando du' },
-      ],
-      starterSuggestions: [
-        { de: 'Hallo! Ich heiße Marcos und komme aus Spanien.', es: '¡Hola! Me llamo Marcos y vengo de España.', grammarTag: 'du' },
-        { de: 'Ich wohne jetzt in Deutschland und arbeite als Techniker.', es: 'Ahora vivo en Alemania y trabajo como técnico.', grammarTag: 'V2' },
-        { de: 'Was sind deine Hobbys in deiner Freizeit?', es: '¿Cuáles son tus aficiones en tu tiempo libre?', grammarTag: 'du' },
-      ],
-      prompt:
-        'Eres un estudiante de intercambio en una fiesta en Múnich. Quieres conocer al usuario. Empieza diciendo "Hallo! Ich bin Max. Wie heißt du?". Responde SOLO en alemán nivel A1.',
-    },
-    {
-      id: 'police_roadside',
-      title: 'Polizeikontrolle & Pannenhilfe',
-      axis: 'survival',
-      badge: 'Cap. 13 & 21 • StVO',
-      icon: '🚔',
-      desc: 'Control policial y avería en carretera (Führerschein, Warnweste).',
-      blurtHint: 'Führerschein, Fahrzeugschein, Warndreieck, Warnweste',
-      missions: [
-        { id: 'm1', titleEs: 'Entregar carnet y permiso (Führerschein)' },
-        { id: 'm2', titleEs: 'Confirmar chaleco y triángulo (Warnweste/Warndreieck)' },
-        { id: 'm3', titleEs: 'Explicar motivo o avería cortésmente' },
-      ],
-      starterSuggestions: [
-        { de: 'Guten Tag! Hier sind mein Führerschein und der Fahrzeugschein.', es: '¡Buenos días! Aquí están mi carnet y el permiso del coche.', grammarTag: 'Sie' },
-        { de: 'Die Warnweste und das Warndreieck sind im Kofferraum.', es: 'El chaleco y el triángulo están en el maletero.', grammarTag: 'Dativ' },
-        { de: 'Mein Auto hat eine Panne am Motor.', es: 'Mi coche tiene una avería en el motor.', grammarTag: 'Akk' },
-      ],
-      prompt:
-        'Eres un agente de policía amable en un control de tráfico o ayuda en carretera en Alemania. El usuario es un conductor de nivel A1 de alemán. Empieza diciendo "Guten Tag! Allgemeine Verkehrskontrolle. Führerschein und Fahrzeugschein, bitte." Usa oraciones cortas A1 y vocabulario de seguridad vial (Führerschein, Fahrzeugschein, Warndreieck, Warnweste). Responde SOLO en alemán.',
-    },
-    {
-      id: 'solar_construction',
-      title: 'Baustelle & Photovoltaik-Sicherheit',
-      axis: 'work',
-      badge: 'Cap. 18 & 20 • Enpal / VDE',
-      icon: '☀️',
-      desc: 'Seguridad en obra y montaje solar (Helm, Stromkreis, Wechselrichter).',
-      blurtHint: 'Helm, Stromkreis, Wechselrichter, Spannungsprüfer',
-      missions: [
-        { id: 'm1', titleEs: 'Confirmar EPP (Helm, Schutzbrille, Schuhe)' },
-        { id: 'm2', titleEs: 'Confirmar circuito sin tensión (freischalten / Duspol)' },
-        { id: 'm3', titleEs: 'Reportar estado de montaje del Wechselrichter' },
-      ],
-      starterSuggestions: [
-        { de: 'Ja, ich trage meinen Helm, die Schutzbrille und Isolierhandschuhe.', es: 'Sí, llevo mi casco, gafas protectoras y guantes aislantes.', grammarTag: 'Akk' },
-        { de: 'Der Stromkreis ist freigeschaltet und mit dem Duspol geprüft.', es: 'El circuito está desconectado y verificado con el Duspol.', grammarTag: 'VDE' },
-        { de: 'Wir montieren jetzt den Wechselrichter im Technikraum.', es: 'Ahora montamos el inversor en el cuarto técnico.', grammarTag: 'V2' },
-      ],
-      prompt:
-        'Eres el jefe de obra (Bauleiter) en una instalación fotovoltaica en Alemania (solo interiores: Keller/Technikraum/Zählerschrank). El usuario es técnico de nivel A1. Empieza saludando y revisando la seguridad eléctrica: "Guten Morgen! Hast du deinen Helm dabei? Ist der Stromkreis am Wechselrichter sicher unterbrochen?" Usa oraciones cortas A1 y vocabulario técnico (Helm, Stromkreis, Wechselrichter, Spannungsprüfer). Responde SOLO en alemán.',
-    },
-    {
-      id: 'it_helpdesk',
-      title: 'IT-Helpdesk im Büro',
-      axis: 'work',
-      badge: 'Cap. 17 • IT & Software',
-      icon: '💻',
-      desc: 'Soporte técnico en la oficina (Passwort, WLAN, Drucker).',
-      blurtHint: 'Passwort, WLAN, Bildschirm, Drucker',
-      missions: [
-        { id: 'm1', titleEs: 'Explicar el problema técnico (WLAN/Drucker)' },
-        { id: 'm2', titleEs: 'Seguir una instrucción del técnico' },
-        { id: 'm3', titleEs: 'Confirmar que funciona y agradecer' },
-      ],
-      starterSuggestions: [
-        { de: 'Hallo! Mein Laptop hat keine Verbindung zum WLAN.', es: '¡Hola! Mi portátil no tiene conexión al Wi-Fi.', grammarTag: 'Akk' },
-        { de: 'Ich habe mein Passwort vergessen und brauche Hilfe.', es: 'He olvidado mi contraseña y necesito ayuda.', grammarTag: 'Perfekt' },
-        { de: 'Jetzt funktioniert der Drucker wieder. Vielen Dank!', es: 'Ahora la impresora vuelve a funcionar. ¡Muchas gracias!', grammarTag: 'V2' },
-      ],
-      prompt:
-        'Eres un técnico de soporte (IT-Helpdesk) en una oficina en Alemania. El usuario es un empleado de nivel A1 con un fallo técnico. Empieza diciendo "Hallo, IT-Helpdesk! Was funktioniert nicht? Das WLAN, der Drucker oder dein Passwort?" Usa oraciones cortas A1 con vocabulario de oficina y TI (Passwort, WLAN, Bildschirm, Drucker). Responde SOLO en alemán.',
-    },
-  ];
+  const filteredScenarios = useMemo(() => {
+    if (selectedAxis === 'all') return roleplayScenariosCatalog;
+    return roleplayScenariosCatalog.filter((s) => s.axis === selectedAxis);
+  }, [selectedAxis]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -497,7 +318,11 @@ const RoleplaySimulator = ({
       summaryEs: `Completaste ${completed} de ${missionsStatus.length} misiones en "${scenario?.title}".`,
       missions: missionsStatus,
       errors: collectedErrors,
-      vocabulary: [],
+      vocabulary: (scenario?.targetVocabulary || []).map((v) => ({
+        termDe: v.termDe,
+        translationEs: v.translationEs,
+        exampleDe: v.exampleDe,
+      })),
     };
   };
 
@@ -573,31 +398,67 @@ const RoleplaySimulator = ({
         >
           <X size={18} /> Salir
         </button>
-        <div className="text-center mb-8 mt-6 sm:mt-4">
+        <div className="text-center mb-6 mt-6 sm:mt-4">
           <div className="inline-flex bg-purple-100 text-purple-600 p-3 rounded-full mb-4 shadow-sm">
-            <Sparkles size={32} />
+            <Sparkles size={32} aria-hidden="true" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-800">Simulador de Rol A1</h2>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-800">Simulador de Rol A1–A2</h2>
           <p className="text-slate-500 text-sm sm:text-base mt-2">
-            Practica situaciones reales con 3 misiones, micrófono en alemán, sugerencias A1 y diagnóstico SRS.
+            Practica situaciones reales de trámites en Alemania y trabajo técnico con 3 misiones y diagnóstico SRS.
           </p>
         </div>
+
+        {/* Filtro de Eje (tabs horizontales en una sola fila sin wrapping) */}
+        <div
+          role="tablist"
+          aria-label="Filtrar escenarios de roleplay por eje"
+          className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar border-b border-slate-200 mb-5"
+        >
+          {ROLEPLAY_AXES.map((ax) => {
+            const active = selectedAxis === ax.id;
+            return (
+              <button
+                key={ax.id}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setSelectedAxis(ax.id)}
+                className={`relative min-h-[44px] px-3 sm:px-4 py-2 text-xs sm:text-sm whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer transition ${
+                  active
+                    ? 'text-purple-700 font-bold after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:border-b-[3px] after:border-purple-600'
+                    : 'text-slate-600 hover:text-slate-900 font-medium'
+                }`}
+              >
+                <span aria-hidden="true">{ax.emoji}</span>
+                <span>{ax.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {scenarios.map((scen) => (
+          {filteredScenarios.map((scen) => (
             <button
               key={scen.id}
               type="button"
               onClick={() => handleSelectScenario(scen)}
-              className="flex flex-col items-center p-5 bg-slate-50 border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 rounded-xl transition-all text-center group cursor-pointer shadow-sm"
+              className="flex flex-col items-center p-5 bg-slate-50 border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 rounded-xl transition-all text-center group cursor-pointer shadow-sm min-h-[44px]"
             >
-              <span className="text-4xl sm:text-5xl mb-3 group-hover:scale-110 transition-transform">
+              <span className="text-4xl sm:text-5xl mb-3 group-hover:scale-110 transition-transform" aria-hidden="true">
                 {scen.icon}
               </span>
-              {scen.badge && (
-                <span className="mb-2 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-700 border border-purple-200">
-                  {scen.badge}
-                </span>
-              )}
+              <div className="flex flex-wrap items-center justify-center gap-1.5 mb-2">
+                {scen.badge && (
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-700 border border-purple-200">
+                    {scen.badge}
+                  </span>
+                )}
+                {scen.level && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-slate-200 text-slate-700">
+                    {scen.level}
+                  </span>
+                )}
+              </div>
               <h3 className="font-bold text-slate-800 text-base sm:text-lg">{scen.title}</h3>
               <p className="text-xs sm:text-sm text-slate-500 mt-1.5">{scen.desc}</p>
             </button>

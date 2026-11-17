@@ -22,11 +22,18 @@ export const audioStore = localforage.createInstance({
   storeName: "german_tts_cache"
 });
 
+export const audioAliasStore = localforage.createInstance({
+  name: "DeutschMeisterAudioCache",
+  storeName: "audio_alias_index"
+});
+
 let currentAudioInstance = null;
 let currentObjectUrl = null;
 let latestPlaybackRequestId = 0;
 let cachedAudioKeysPromise = null;
 let cachedAudioKeysSet = null;
+let cachedAliasKeysPromise = null;
+let cachedAliasKeysSet = null;
 
 function normalizeCleanText(text) {
   if (!text || typeof text !== "string") return "";
@@ -186,9 +193,32 @@ async function ensureAudioKeySet() {
   return cachedAudioKeysPromise;
 }
 
+async function ensureAliasKeySet() {
+  if (cachedAliasKeysSet) return cachedAliasKeysSet;
+  if (!cachedAliasKeysPromise) {
+    cachedAliasKeysPromise = audioAliasStore
+      .keys()
+      .then((keys) => {
+        cachedAliasKeysSet = new Set(keys);
+        return cachedAliasKeysSet;
+      })
+      .catch(() => new Set())
+      .finally(() => {
+        cachedAliasKeysPromise = null;
+      });
+  }
+  return cachedAliasKeysPromise;
+}
+
 export function markAudioKeyCached(key) {
   if (key && cachedAudioKeysSet) {
     cachedAudioKeysSet.add(key);
+  }
+}
+
+export function markAudioAliasCached(aliasKey) {
+  if (aliasKey && cachedAliasKeysSet) {
+    cachedAliasKeysSet.add(aliasKey);
   }
 }
 
@@ -197,7 +227,9 @@ function evictAudioKeyFromCache(key) {
   if (cachedAudioKeysSet) cachedAudioKeysSet.delete(key);
   try {
     audioStore.removeItem(key).catch(() => {});
-  } catch (_) {}
+  } catch {
+    // Ignorar error de limpieza local
+  }
 }
 
 function revokeTrackedObjectUrl(url) {
@@ -330,27 +362,50 @@ async function playAudioSource(
   }
 }
 
-async function persistBlobUnderAudioKeys(blob, keys = []) {
-  if (!(blob instanceof Blob)) return;
-  const keySet = cachedAudioKeysSet;
-  const missingKeys = Array.from(new Set(keys.filter(Boolean))).filter(
-    (k) => !keySet || !keySet.has(k)
-  );
-  if (missingKeys.length === 0) return;
+/**
+ * Persiste el Blob binario UNA sola vez en audioStore bajo canonicalKey
+ * y guarda únicamente punteros ligeros (strings) en audioAliasStore para el resto de alias.
+ */
+export async function persistAudioBlobWithAliases(blob, canonicalKey, aliasKeys = []) {
+  if (!(blob instanceof Blob)) return null;
+  const cleanAliases = Array.from(new Set(aliasKeys.filter(Boolean)));
+  const targetCanonicalKey =
+    canonicalKey ||
+    cleanAliases.find((k) => k.startsWith("audio_sha256_")) ||
+    cleanAliases[0];
+  if (!targetCanonicalKey) return null;
 
-  await Promise.all(
-    missingKeys.map((key) =>
-      audioStore
-        .setItem(key, blob)
-        .then(() => markAudioKeyCached(key))
-        .catch(() => {})
-    )
+  const keySet = await ensureAudioKeySet();
+  if (!keySet.has(targetCanonicalKey)) {
+    try {
+      await audioStore.setItem(targetCanonicalKey, blob);
+      markAudioKeyCached(targetCanonicalKey);
+    } catch {
+      // Ignorar fallo de cuota puntual en almacenamiento
+    }
+  }
+
+  const aliasSet = await ensureAliasKeySet();
+  const pendingAliases = cleanAliases.filter(
+    (k) => k !== targetCanonicalKey && !aliasSet.has(k)
   );
+  if (pendingAliases.length > 0) {
+    await Promise.all(
+      pendingAliases.map((aliasKey) =>
+        audioAliasStore
+          .setItem(aliasKey, targetCanonicalKey)
+          .then(() => markAudioAliasCached(aliasKey))
+          .catch(() => {})
+      )
+    );
+  }
+
+  return targetCanonicalKey;
 }
 
 /**
  * Resuelve el binario Blob original (o la URL remota en fallback) siguiendo estrictamente
- * los 3 niveles de caché (audioStore -> Firestore -> Cloud Function synthesizeGermanSpeech).
+ * los 3 niveles de caché (audioStore/audioAliasStore -> Firestore -> Cloud Function synthesizeGermanSpeech).
  */
 async function resolveAudioAsset(
   cleanText,
@@ -381,35 +436,78 @@ async function resolveAudioAsset(
     )
   );
 
-  // 1. Nivel 1: Revisar audioStore (IndexedDB local a 0 ms)
+  // 1. Nivel 1: Revisar audioStore (clave directa) o audioAliasStore (puntero deduplicado) a 0 ms
   try {
-    const keySet = await ensureAudioKeySet();
+    const [keySet, aliasSet] = await Promise.all([ensureAudioKeySet(), ensureAliasKeySet()]);
     if (isStale()) return null;
-    const matchedLocalKey = allLocalKeys.find((k) => keySet.has(k));
-    if (matchedLocalKey) {
-      const cached = await audioStore.getItem(matchedLocalKey);
-      if (isStale()) return null;
-      if (!cached) {
-        keySet.delete(matchedLocalKey);
-      } else if (cached instanceof Blob) {
-        await persistBlobUnderAudioKeys(cached, [sha256Id, cacheKey, safeAudioId]);
-        return { blob: cached, remoteUrl: null, cacheKey: primaryCacheId };
-      } else if (
-        typeof cached === "string" &&
-        (cached.startsWith("http") || cached.startsWith("data:"))
-      ) {
-        try {
-          const resp = await fetch(cached, signal ? { signal } : undefined);
+
+    let matchedLocalKey = allLocalKeys.find((k) => keySet.has(k));
+    let cached = matchedLocalKey ? await audioStore.getItem(matchedLocalKey) : null;
+    if (isStale()) return null;
+
+    if (matchedLocalKey && !cached) {
+      keySet.delete(matchedLocalKey);
+      matchedLocalKey = null;
+    }
+
+    if (!cached) {
+      const matchedAliasKey = allLocalKeys.find((k) => aliasSet.has(k));
+      if (matchedAliasKey) {
+        const pointedCanonicalKey = await audioAliasStore.getItem(matchedAliasKey);
+        if (isStale()) return null;
+        if (typeof pointedCanonicalKey === "string" && pointedCanonicalKey) {
+          const aliasedBlob = await audioStore.getItem(pointedCanonicalKey);
           if (isStale()) return null;
-          if (resp.ok) {
-            const fetchedBlob = await resp.blob();
-            await persistBlobUnderAudioKeys(fetchedBlob, [sha256Id, cacheKey, safeAudioId]);
-            return { blob: fetchedBlob, remoteUrl: null, cacheKey: primaryCacheId };
+          if (aliasedBlob instanceof Blob) {
+            matchedLocalKey = pointedCanonicalKey;
+            cached = aliasedBlob;
+          } else {
+            aliasSet.delete(matchedAliasKey);
+            await audioAliasStore.removeItem(matchedAliasKey).catch(() => {});
           }
-        } catch (_) {}
+        }
       }
     }
-  } catch (_) {}
+
+    if (cached instanceof Blob) {
+      const canonicalResolvedKey = primaryCacheId || matchedLocalKey;
+      await persistAudioBlobWithAliases(cached, canonicalResolvedKey, [
+        sha256Id,
+        cacheKey,
+        safeAudioId,
+        matchedLocalKey
+      ]);
+      return { blob: cached, remoteUrl: null, cacheKey: canonicalResolvedKey, fromLocalCache: true };
+    }
+
+    if (
+      typeof cached === "string" &&
+      (cached.startsWith("http") || cached.startsWith("data:"))
+    ) {
+      try {
+        const resp = await fetch(cached, signal ? { signal } : undefined);
+        if (isStale()) return null;
+        if (resp.ok) {
+          const fetchedBlob = await resp.blob();
+          const savedKey = await persistAudioBlobWithAliases(
+            fetchedBlob,
+            primaryCacheId,
+            [sha256Id, cacheKey, safeAudioId]
+          );
+          return {
+            blob: fetchedBlob,
+            remoteUrl: null,
+            cacheKey: savedKey || primaryCacheId,
+            fromLocalCache: false
+          };
+        }
+      } catch {
+        // Ignorar fallo de descarga puntual y continuar hacia nivel 2
+      }
+    }
+  } catch {
+    // Continuar hacia Firestore en caso de fallo de lectura local
+  }
 
   if (isStale()) return null;
 
@@ -459,20 +557,83 @@ async function resolveAudioAsset(
     throw new Error("No se recibió URL de audio desde Firestore ni Cloud Function.");
   }
 
-  // Descargar Blob y persistir en audioStore bajo sha256Id y cacheKey para futuras reproducciones a 0 ms
+  // Descargar Blob y persistir una única vez en audioStore + alias en audioAliasStore
   try {
     const resp = await fetch(remoteAudioUrl, signal ? { signal } : undefined);
     if (isStale()) return null;
     if (resp.ok) {
       const blob = await resp.blob();
-      await persistBlobUnderAudioKeys(blob, [sha256Id, cacheKey, safeAudioId]);
-      return { blob, remoteUrl: null, cacheKey: primaryCacheId };
+      const savedKey = await persistAudioBlobWithAliases(
+        blob,
+        primaryCacheId,
+        [sha256Id, cacheKey, safeAudioId, audioAlias, legacyKey]
+      );
+      return { blob, remoteUrl: null, cacheKey: savedKey || primaryCacheId, fromLocalCache: false };
     }
-  } catch (_) {
+  } catch {
     if (isStale()) return null;
   }
 
-  return { blob: null, remoteUrl: remoteAudioUrl, cacheKey: primaryCacheId };
+  return { blob: null, remoteUrl: remoteAudioUrl, cacheKey: primaryCacheId, fromLocalCache: false };
+}
+
+/**
+ * Descarga/cachea localmente un audio curricular estático en audioStore + audioAliasStore
+ * para reproducción 100% offline. Uso exclusivo para textos de catálogo (no chat efímero).
+ */
+export async function precacheAudioFromText(
+  text,
+  { voice = "Charon", type = "dialogue", lang = "de", directAudioUrl = null, signal = null } = {}
+) {
+  if (!text || typeof text !== "string") return { ok: false, cacheKey: "" };
+  const cleanText = normalizeCleanText(text);
+  if (!cleanText) return { ok: false, cacheKey: "" };
+
+  const sha256Id = await computeSha256AudioId(cleanText, voice);
+  const cacheKey = getSafeAudioKey(cleanText);
+  const safeAudioId = getSafeAudioId(cleanText);
+  const legacyKey = getLegacyAudioKey(cleanText);
+  const canonicalKey = sha256Id || cacheKey || safeAudioId;
+
+  if (directAudioUrl && typeof directAudioUrl === "string") {
+    try {
+      const keySet = await ensureAudioKeySet();
+      if (!keySet.has(canonicalKey)) {
+        const resp = await fetch(directAudioUrl, signal ? { signal } : undefined);
+        if (resp.ok) {
+          const blob = await resp.blob();
+          await persistAudioBlobWithAliases(blob, canonicalKey, [
+            sha256Id,
+            cacheKey,
+            safeAudioId,
+            legacyKey
+          ]);
+          return { ok: true, cacheKey: canonicalKey, blobAvailable: true, fromLocalCache: false };
+        }
+      } else {
+        const existingBlob = await audioStore.getItem(canonicalKey);
+        if (existingBlob instanceof Blob) {
+          await persistAudioBlobWithAliases(existingBlob, canonicalKey, [
+            sha256Id,
+            cacheKey,
+            safeAudioId,
+            legacyKey
+          ]);
+          return { ok: true, cacheKey: canonicalKey, blobAvailable: true, fromLocalCache: true };
+        }
+      }
+    } catch {
+      // Continuar hacia resolución estándar
+    }
+  }
+
+  const asset = await resolveAudioAsset(cleanText, { voice, type, lang, signal });
+  return {
+    ok: Boolean(asset && (asset.blob instanceof Blob || asset.remoteUrl)),
+    cacheKey: asset?.cacheKey || canonicalKey,
+    blobAvailable: Boolean(asset?.blob instanceof Blob),
+    fromLocalCache: Boolean(asset?.fromLocalCache)
+  };
 }
 
 /**

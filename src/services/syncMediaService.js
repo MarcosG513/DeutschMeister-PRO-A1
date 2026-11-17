@@ -3,11 +3,15 @@ import { getApps, initializeApp } from "firebase/app";
 import localforage from "localforage";
 import {
   audioStore,
+  audioAliasStore,
   computeSha256AudioId,
   getSafeAudioId,
   getSafeAudioKey,
   getLegacyAudioKey,
-  markAudioKeyCached
+  markAudioKeyCached,
+  markAudioAliasCached,
+  persistAudioBlobWithAliases,
+  precacheAudioFromText
 } from "./aiAudioService";
 import { getSafeId } from "../utils/helpers";
 
@@ -17,6 +21,17 @@ export const CHAPTER_STORIES_CACHE_KEY = "dm_chapter_stories_cache";
 export const mediaBlobStore = localforage.createInstance({
   name: "DeutschMeisterMediaCache",
   storeName: "offline_visual_blobs"
+});
+
+// Almacenes locales para packs offline de Micro-Pódcasts y Diálogos Estructurados
+export const podcastPackStore = localforage.createInstance({
+  name: "DeutschMeisterContentPacks",
+  storeName: "podcast_packs"
+});
+
+export const phrasePackStore = localforage.createInstance({
+  name: "DeutschMeisterContentPacks",
+  storeName: "phrase_packs"
 });
 
 /**
@@ -88,15 +103,24 @@ export async function syncCloudMediaToLocal(onProgress) {
       });
     }
 
-    const [flashcardsSnap, audiosSnap, chapterStoriesSnap, existingAudioKeys, existingVisualKeys] = await Promise.all([
+    const [
+      flashcardsSnap,
+      audiosSnap,
+      chapterStoriesSnap,
+      existingAudioKeys,
+      existingAliasKeys,
+      existingVisualKeys
+    ] = await Promise.all([
       getDocs(collection(db, "global_flashcards")),
       getDocs(collection(db, "global_audio_pronunciations")),
       getDocs(collection(db, "global_chapter_stories")).catch(() => ({ docs: [] })),
       audioStore.keys(),
+      audioAliasStore.keys().catch(() => []),
       mediaBlobStore.keys()
     ]);
 
     const existingAudioKeySet = new Set(existingAudioKeys);
+    const existingAliasKeySet = new Set(existingAliasKeys);
     const existingVisualKeySet = new Set(existingVisualKeys);
 
     const visualDocs = flashcardsSnap.docs;
@@ -193,51 +217,76 @@ export async function syncCloudMediaToLocal(onProgress) {
       const canonicalAudioId = data.canonicalId || (text ? getSafeAudioId(text) : docId);
       const legacyKey = text ? getLegacyAudioKey(text) : "";
 
+      const canonicalBlobKey = sha256Id || docId || primaryKey;
       const indexKeys = Array.from(
-        new Set([docId, primaryKey, sha256Id, canonicalAudioId].filter(Boolean))
+        new Set([docId, primaryKey, sha256Id, canonicalAudioId, legacyKey].filter(Boolean))
       );
 
-      if (audioUrl && indexKeys.length > 0) {
-        const existingLocalKey =
-          indexKeys.find((k) => existingAudioKeySet.has(k)) ||
-          (legacyKey && existingAudioKeySet.has(legacyKey) ? legacyKey : "");
-        const hasAllRequiredIndexes =
-          existingAudioKeySet.has(docId) &&
-          (!primaryKey || existingAudioKeySet.has(primaryKey)) &&
-          (!sha256Id || existingAudioKeySet.has(sha256Id));
+      if (audioUrl && canonicalBlobKey && indexKeys.length > 0) {
+        const existingDirectKey = indexKeys.find((k) => existingAudioKeySet.has(k)) || "";
+        const existingAliasKey = !existingDirectKey
+          ? indexKeys.find((k) => existingAliasKeySet.has(k)) || ""
+          : "";
 
-        if (existingLocalKey && hasAllRequiredIndexes) {
+        const hasCanonicalBlob = existingAudioKeySet.has(canonicalBlobKey);
+        const hasAllAliases = indexKeys.every(
+          (k) => k === canonicalBlobKey || existingAliasKeySet.has(k) || existingAudioKeySet.has(k)
+        );
+
+        if (hasCanonicalBlob && hasAllAliases) {
           skippedCached++;
           audiosSynced++;
         } else {
           let promotedFromLocal = false;
-          if (existingLocalKey) {
+          let resolvedLocalBlobKey = existingDirectKey;
+
+          if (!resolvedLocalBlobKey && existingAliasKey) {
             try {
-              const localBlob = await audioStore.getItem(existingLocalKey);
+              const targetKey = await audioAliasStore.getItem(existingAliasKey);
+              if (typeof targetKey === "string" && existingAudioKeySet.has(targetKey)) {
+                resolvedLocalBlobKey = targetKey;
+              }
+            } catch {
+              // Ignorar alias corrupto
+            }
+          }
+
+          if (resolvedLocalBlobKey) {
+            try {
+              const localBlob = await audioStore.getItem(resolvedLocalBlobKey);
               if (localBlob instanceof Blob) {
+                await persistAudioBlobWithAliases(localBlob, canonicalBlobKey, indexKeys);
+                existingAudioKeySet.add(canonicalBlobKey);
+                markAudioKeyCached(canonicalBlobKey);
                 for (const k of indexKeys) {
-                  if (!existingAudioKeySet.has(k)) {
-                    await audioStore.setItem(k, localBlob);
-                    existingAudioKeySet.add(k);
-                    markAudioKeyCached(k);
+                  if (k !== canonicalBlobKey) {
+                    existingAliasKeySet.add(k);
+                    markAudioAliasCached(k);
                   }
                 }
                 promotedFromLocal = true;
                 skippedCached++;
                 audiosSynced++;
               }
-            } catch (_) {}
+            } catch {
+              // Continuar hacia descarga remota si falla lectura local
+            }
           }
+
           if (!promotedFromLocal) {
             try {
               const response = await fetch(audioUrl, { mode: "cors" });
               if (response.ok) {
                 const audioBlob = await response.blob();
-                // Indexar bajo doc.id (audio_sha256_... / audio_...) y bajo tts_${canonicalSlug}
+                // Deduplicación estricta: 1 Blob en audioStore + alias ligeros en audioAliasStore
+                await persistAudioBlobWithAliases(audioBlob, canonicalBlobKey, indexKeys);
+                existingAudioKeySet.add(canonicalBlobKey);
+                markAudioKeyCached(canonicalBlobKey);
                 for (const k of indexKeys) {
-                  await audioStore.setItem(k, audioBlob);
-                  existingAudioKeySet.add(k);
-                  markAudioKeyCached(k);
+                  if (k !== canonicalBlobKey) {
+                    existingAliasKeySet.add(k);
+                    markAudioAliasCached(k);
+                  }
                 }
                 audiosSynced++;
               }
@@ -322,22 +371,207 @@ export async function syncCloudMediaToLocal(onProgress) {
 }
 
 /**
- * Retorna las estadísticas del almacenamiento local de medios, audios y cuentos por capítulo
+ * Descarga/cachea localmente un episodio de Micro-Pódcast en IndexedDB
+ * (audioStore deduplicado + audioAliasStore + podcastPackStore), sin contaminar
+ * global_audio_pronunciations con turnos efímeros.
+ */
+export async function syncPodcastEpisodeOffline(episode, onProgress) {
+  if (!episode || !episode.id) {
+    return { success: false, episodeId: "", syncedLines: 0, totalLines: 0 };
+  }
+
+  const segments = Array.isArray(episode.segments) ? episode.segments : [];
+  const fullEpisodeText =
+    episode.fullAudioText ||
+    segments
+      .map((seg) => seg?.de)
+      .filter(Boolean)
+      .join(" ");
+  const targetTexts = Array.from(
+    new Set(
+      [
+        fullEpisodeText,
+        ...segments.map((seg) => seg?.de).filter(Boolean)
+      ].filter(Boolean)
+    )
+  );
+
+  let syncedLines = 0;
+  let blobsCached = 0;
+  const cacheKeys = [];
+
+  for (let i = 0; i < targetTexts.length; i++) {
+    const textDe = targetTexts[i];
+    const directAudioUrl =
+      textDe === fullEpisodeText ? episode.audioUrl || null : null;
+    try {
+      const res = await precacheAudioFromText(textDe, {
+        voice: "Charon",
+        type: "story",
+        lang: "de",
+        directAudioUrl
+      });
+      if (res?.ok) {
+        syncedLines++;
+        if (res.blobAvailable) blobsCached++;
+        if (res.cacheKey) cacheKeys.push(res.cacheKey);
+      }
+    } catch {
+      // Continuar con el siguiente segmento si alguno falla en red débil
+    }
+    onProgress?.({
+      episodeId: episode.id,
+      current: i + 1,
+      total: targetTexts.length,
+      syncedLines,
+      blobsCached
+    });
+  }
+
+  const packMetadata = {
+    id: episode.id,
+    titleDe: episode.titleDe || episode.title || "",
+    axis: episode.axis || "survival",
+    totalLines: targetTexts.length,
+    syncedLines,
+    blobsCached,
+    cacheKeys,
+    cachedAt: new Date().toISOString()
+  };
+
+  if (syncedLines > 0) {
+    await podcastPackStore.setItem(episode.id, packMetadata).catch(() => {});
+  }
+
+  return {
+    success: syncedLines > 0,
+    ...packMetadata
+  };
+}
+
+export async function isPodcastEpisodeCachedOffline(episodeId) {
+  if (!episodeId) return false;
+  try {
+    const entry = await podcastPackStore.getItem(episodeId);
+    return Boolean(entry && entry.syncedLines > 0);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Descarga/cachea localmente un bloque de Frase / Diálogo Estructurado en IndexedDB
+ * (phrasePackStore + audioStore + audioAliasStore), filtrando solo líneas curadas del tutor/sistema.
+ */
+export async function syncDialoguePackOffline(dialogue, onProgress) {
+  if (!dialogue || !dialogue.id) {
+    return { success: false, dialogueId: "", syncedLines: 0, totalLines: 0 };
+  }
+
+  const curatedLines = [];
+  if (dialogue.targetDe) curatedLines.push(dialogue.targetDe);
+  if (dialogue.exampleDe) curatedLines.push(dialogue.exampleDe);
+
+  const turns = Array.isArray(dialogue.turns) ? dialogue.turns : [];
+  for (const turn of turns) {
+    const lineText = turn?.promptDe || turn?.audioDe;
+    if (turn?.speaker !== "user" && lineText) {
+      curatedLines.push(lineText);
+    }
+    if (turn?.sampleReplyDe) {
+      curatedLines.push(turn.sampleReplyDe);
+    }
+  }
+
+  const uniqueLines = Array.from(new Set(curatedLines.filter(Boolean)));
+  let syncedLines = 0;
+  let blobsCached = 0;
+
+  for (let i = 0; i < uniqueLines.length; i++) {
+    try {
+      const res = await precacheAudioFromText(uniqueLines[i], {
+        voice: "Charon",
+        type: "dialogue",
+        lang: "de"
+      });
+      if (res?.ok) {
+        syncedLines++;
+        if (res.blobAvailable) blobsCached++;
+      }
+    } catch {
+      // Ignorar fallo puntual en línea secundaria
+    }
+    onProgress?.({
+      dialogueId: dialogue.id,
+      current: i + 1,
+      total: uniqueLines.length,
+      syncedLines
+    });
+  }
+
+  const packMetadata = {
+    id: dialogue.id,
+    axis: dialogue.axis || "survival",
+    mode: dialogue.mode || "dialogue",
+    totalLines: uniqueLines.length,
+    syncedLines,
+    blobsCached,
+    cachedAt: new Date().toISOString()
+  };
+
+  if (syncedLines > 0) {
+    await phrasePackStore.setItem(dialogue.id, packMetadata).catch(() => {});
+  }
+
+  return {
+    success: syncedLines > 0,
+    ...packMetadata
+  };
+}
+
+export async function isDialoguePackCachedOffline(dialogueId) {
+  if (!dialogueId) return false;
+  try {
+    const entry = await phrasePackStore.getItem(dialogueId);
+    return Boolean(entry && entry.syncedLines > 0);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Retorna las estadísticas del almacenamiento local de medios, audios, cuentos y packs offline
  */
 export async function getOfflineSyncStats() {
   try {
-    const [lastSyncTime, stats, audioKeys, visualKeys, chapterStoriesCache] = await Promise.all([
+    const [
+      lastSyncTime,
+      stats,
+      audioKeys,
+      aliasKeys,
+      visualKeys,
+      chapterStoriesCache,
+      podcastKeys,
+      phraseKeys
+    ] = await Promise.all([
       localforage.getItem("dm_last_media_sync"),
       localforage.getItem("dm_offline_stats"),
       audioStore.keys(),
+      audioAliasStore.keys().catch(() => []),
       mediaBlobStore.keys(),
-      localforage.getItem(CHAPTER_STORIES_CACHE_KEY)
+      localforage.getItem(CHAPTER_STORIES_CACHE_KEY),
+      podcastPackStore.keys().catch(() => []),
+      phrasePackStore.keys().catch(() => [])
     ]);
 
-    // Contar claves únicas (priorizando audio_sha256_ y tts_ sin duplicar alias)
+    // Con audioAliasStore, cada Blob se almacena una única vez en audioStore;
+    // conservamos compatibilidad con caches heredadas anteriores a la deduplicación.
     const ttsKeysCount = audioKeys.filter((k) => k.startsWith("tts_")).length;
     const shaKeysCount = audioKeys.filter((k) => k.startsWith("audio_sha256_")).length;
-    const uniqueAudios = Math.max(ttsKeysCount, shaKeysCount) || Math.floor(audioKeys.length / 2);
+    const uniqueAudios =
+      aliasKeys.length > 0
+        ? Math.max(audioKeys.length, shaKeysCount)
+        : Math.max(ttsKeysCount, shaKeysCount) || Math.floor(audioKeys.length / 2);
 
     const storiesCached = chapterStoriesCache?.byId
       ? Object.keys(chapterStoriesCache.byId).length
@@ -347,7 +581,10 @@ export async function getOfflineSyncStats() {
       lastSyncTime,
       visualsCached: visualKeys.length,
       audiosCached: uniqueAudios,
+      aliasesCached: aliasKeys.length,
       storiesCached,
+      podcastsCached: podcastKeys.length,
+      phrasesCached: phraseKeys.length,
       ...(stats || {})
     };
   } catch (e) {
@@ -356,7 +593,10 @@ export async function getOfflineSyncStats() {
       lastSyncTime: null,
       visualsCached: 0,
       audiosCached: 0,
-      storiesCached: 0
+      aliasesCached: 0,
+      storiesCached: 0,
+      podcastsCached: 0,
+      phrasesCached: 0
     };
   }
 }

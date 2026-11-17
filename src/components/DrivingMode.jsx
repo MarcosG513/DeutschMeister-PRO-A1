@@ -28,7 +28,8 @@ import {
 import { useDrivingModePlayer } from "../hooks/useDrivingModePlayer";
 import { splitGermanTitle } from "../utils/helpers";
 import { drivingAcademyClasses } from "../data/drivingAcademyCurriculum";
-import { buildHighwaySessionQueue } from "../utils/highwayWorkoutBuilder";
+import { buildHighwaySessionQueue, buildSrsReviewWorkoutQueue } from "../utils/highwayWorkoutBuilder";
+import { getDueSrsQueue } from "../services/srsBridgeService";
 import {
   buildSessionStorageKey,
   saveDrivingCheckpoint,
@@ -60,9 +61,26 @@ export default function DrivingMode({
   const [workoutMode, setWorkoutMode] = useState("highway"); // "highway" (4 Olas) | "standard" (1 Ola)
 
   // Configuración Rutas Vocabulario
-  const [selectedRoute, setSelectedRoute] = useState("enpal"); // 'enpal' | 'stvo' | 'redemittel' | 'active' | 'mix'
+  const [selectedRoute, setSelectedRoute] = useState("enpal"); // 'enpal' | 'stvo' | 'redemittel' | 'srs' | 'active' | 'mix'
+  const [dueSrsCards, setDueSrsCards] = useState([]);
   const [includeSentences, setIncludeSentences] = useState(true);
   const [includeTips, setIncludeTips] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    getDueSrsQueue({ limit: 25 })
+      .then((cards) => {
+        if (!cancelled && Array.isArray(cards)) {
+          setDueSrsCards(cards);
+        }
+      })
+      .catch(() => {
+        // Ignorar si IndexedDB no está disponible
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedRoute]);
 
   // Visibilidad MUTUAMENTE EXCLUYENTE: 'hud' (Pantalla activa OLED) | 'routes' (Selector Rutas/Clases) | 'blocks' (Lista de Bloques/Olas)
   const [activePanel, setActivePanel] = useState("hud");
@@ -122,6 +140,8 @@ export default function DrivingMode({
         return "Señales StVO (Kap. 21)";
       case "redemittel":
         return "Redemittel & Alltag (Kap. 22)";
+      case "srs":
+        return `Repaso SRS Vencido (${dueSrsCards.length})`;
       case "mix":
         return "Mix 50 Supervivencia";
       default: {
@@ -129,7 +149,7 @@ export default function DrivingMode({
         return found?.title || "Capítulo Actual";
       }
     }
-  }, [modeCategory, selectedAcademyClasses, selectedRoute, chapters, activeChapterId]);
+  }, [modeCategory, selectedAcademyClasses, selectedRoute, chapters, activeChapterId, dueSrsCards.length]);
 
   // Cola activa según la categoría y modo elegidos
   const activeQueue = useMemo(() => {
@@ -142,6 +162,19 @@ export default function DrivingMode({
         level: step.level || "A1",
         de: step.targetDe || step.de,
         es: step.promptEs || step.es
+      }));
+    }
+
+    if (selectedRoute === "srs") {
+      const srsQueue = buildSrsReviewWorkoutQueue(dueSrsCards, 25);
+      if (srsQueue.length > 0) return srsQueue;
+      const fallbackCap22 = chapters.find((c) => Number(c.id) === 22);
+      const fallbackWords = fallbackCap22 ? (fallbackCap22.words || []).slice(0, 10) : [];
+      return fallbackWords.map((w, idx) => ({
+        ...w,
+        id: `srs_fallback_${idx}`,
+        chapter: "Sin tarjetas SRS vencidas • Redemittel",
+        tipEs: "Guarda palabras o errores en Pódcasts, Frases o Tutor IA para repasarlos aquí.",
       }));
     }
 
@@ -169,7 +202,7 @@ export default function DrivingMode({
     }
 
     return rawWords.filter((w) => w && (w.de || w.targetDe) && (w.es || w.promptEs));
-  }, [modeCategory, selectedAcademyClasses, workoutMode, selectedRoute, chapters, activeChapterId]);
+  }, [modeCategory, selectedAcademyClasses, workoutMode, selectedRoute, chapters, activeChapterId, dueSrsCards]);
 
   // Manejador de persistencia de índice
   const handleIndexChange = useCallback(
@@ -713,6 +746,7 @@ export default function DrivingMode({
                     { id: "enpal", label: "⚡ Enpal / Baustelle (Kap. 20)", icon: <Wrench className="w-5 h-5 text-amber-400" /> },
                     { id: "stvo", label: "🛑 Señales StVO (Kap. 21)", icon: <ShieldAlert className="w-5 h-5 text-red-400" /> },
                     { id: "redemittel", label: "💬 Redemittel & Alltag (Kap. 22)", icon: <MessageCircle className="w-5 h-5 text-indigo-400" /> },
+                    { id: "srs", label: `🧠 Repaso SRS Vencido (${dueSrsCards.length})`, icon: <Zap className="w-5 h-5 text-emerald-400" /> },
                     { id: "active", label: "🎯 Capítulo Actual", icon: <BookOpen className="w-5 h-5 text-blue-400" /> },
                     { id: "mix", label: "🔥 Mix 50 Supervivencia", icon: <Flame className="w-5 h-5 text-orange-400" /> }
                   ].map((route) => (
