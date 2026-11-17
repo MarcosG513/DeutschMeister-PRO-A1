@@ -382,7 +382,14 @@ async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}
       });
       console.log("FinOps: Invocando Claude Haiku 4.5 via Fal.ai...");
 
-      let finalPromptUser = promptUser;
+      let finalPromptUser = Array.isArray(promptUser)
+        ? promptUser
+            .map((part) => (typeof part === "string" ? part : part?.text || "[Contenido multimedia adjunto]"))
+            .join("\n")
+        : promptUser;
+      if (Array.isArray(promptUser)) {
+        throw new Error("El análisis multimodal con imagen no está disponible en el fallback textual.");
+      }
       if (isJson) {
         finalPromptUser += "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
       }
@@ -540,6 +547,7 @@ const ROLEPLAY_TURN_V2_SCHEMA = {
   properties: {
     replyDe: { type: SchemaType.STRING },
     translationEs: { type: SchemaType.STRING },
+    userTranscriptDe: { type: SchemaType.STRING },
     suggestedReplies: {
       type: SchemaType.ARRAY,
       items: {
@@ -580,6 +588,64 @@ const ROLEPLAY_TURN_V2_SCHEMA = {
     allMissionsCompleted: { type: SchemaType.BOOLEAN }
   },
   required: ["replyDe", "translationEs", "suggestedReplies", "grammarCorrections", "missionsStatus", "allMissionsCompleted"]
+};
+
+const PHOTO_ANALYSIS_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    overallScore: { type: SchemaType.NUMBER },
+    matchesScene: { type: SchemaType.BOOLEAN },
+    correctedDescriptionDe: { type: SchemaType.STRING },
+    idealA1ExampleDe: { type: SchemaType.STRING },
+    feedbackEs: { type: SchemaType.STRING },
+    errors: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          original: { type: SchemaType.STRING },
+          corrected: { type: SchemaType.STRING },
+          explanationEs: { type: SchemaType.STRING },
+          category: { type: SchemaType.STRING }
+        },
+        required: ["original", "corrected", "explanationEs", "category"]
+      }
+    },
+    sceneVocabulary: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          de: { type: SchemaType.STRING },
+          es: { type: SchemaType.STRING },
+          article: { type: SchemaType.STRING },
+          exampleDe: { type: SchemaType.STRING }
+        },
+        required: ["de", "es"]
+      }
+    },
+    suggestions: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          de: { type: SchemaType.STRING },
+          es: { type: SchemaType.STRING },
+          grammarTag: { type: SchemaType.STRING }
+        },
+        required: ["de", "es"]
+      }
+    }
+  },
+  required: [
+    "overallScore",
+    "matchesScene",
+    "correctedDescriptionDe",
+    "idealA1ExampleDe",
+    "errors",
+    "sceneVocabulary",
+    "suggestions"
+  ]
 };
 
 const SESSION_EVALUATION_SCHEMA = {
@@ -762,7 +828,15 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
           });
           promptBuilder += "\n";
         }
-        promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
+        const lastMessageSummary =
+          typeof lastMessage === "string"
+            ? lastMessage
+            : Array.isArray(lastMessage)
+              ? lastMessage
+                  .map((p) => (typeof p === "string" ? p : p?.text || "[Audio del estudiante]"))
+                  .join(" ")
+              : "[Audio del estudiante]";
+        promptBuilder += `Mensaje actual del usuario: "${lastMessageSummary}"\n\nResponde siguiendo las instrucciones del sistema.`;
         if (isStructuredJson) {
           promptBuilder += "\n\nResponde ÚNICAMENTE con un objeto JSON válido sin bloques de código Markdown.";
         }
@@ -873,7 +947,9 @@ export const runRoleplaySimulator = onRequest({
     responseFormat,
     action = "turn",
     missions = [],
-    previousMissionsStatus = []
+    previousMissionsStatus = [],
+    audioBase64 = "",
+    audioMimeType = ""
   } = data || {};
   if (!historialConversacion || !escenario) {
     res.status(400).send("Faltan parámetros requeridos: historialConversacion o escenario");
@@ -961,16 +1037,38 @@ REGLAS ESTRICTAS (Alemán A1–A2):
 Responde ÚNICAMENTE con JSON válido comenzando con "replyDe".`;
 
     const history = historialConversacion.slice(0, -1);
-    const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
+    const rawLastText = historialConversacion[historialConversacion.length - 1]?.parts?.[0]?.text || "";
     const prevMap = new Map((previousMissionsStatus || []).map((m) => [m.id, m]));
 
-    return await streamWithDeepSeekFallback(res, roleplayV2Prompt, history, lastMessage, {
+    let lastMessagePayload = rawLastText;
+    const cleanAudioB64 = typeof audioBase64 === "string"
+      ? audioBase64.replace(/^data:[^;]+;base64,/, "").trim()
+      : "";
+    const allowedAudioMime = /^audio\/(mp4|mpeg|mp3|wav|webm|ogg|aac)/i.test(audioMimeType)
+      ? audioMimeType.split(";")[0].toLowerCase()
+      : "audio/mp4";
+
+    if (cleanAudioB64 && cleanAudioB64.length <= 2_500_000) {
+      lastMessagePayload = [
+        {
+          text: "El estudiante habló en alemán mediante audio adjunto. Transcribe exactamente lo que dijo en alemán dentro de 'userTranscriptDe' y responde al turno siguiendo las reglas del rol."
+        },
+        {
+          inlineData: {
+            mimeType: allowedAudioMime,
+            data: cleanAudioB64
+          }
+        }
+      ];
+    }
+
+    return await streamWithDeepSeekFallback(res, roleplayV2Prompt, history, lastMessagePayload, {
       model: "gemini-3.8-flash",
       isJson: true,
       responseSchema: ROLEPLAY_TURN_V2_SCHEMA,
       structuredEventType: "roleplay_turn_v2",
       temperature: 0.5,
-      maxOutputTokens: 480,
+      maxOutputTokens: 520,
       req,
       postProcessStructured: (parsed) => {
         const llmMap = new Map((parsed?.missionsStatus || []).map((m) => [m.id, m]));
@@ -988,6 +1086,7 @@ Responde ÚNICAMENTE con JSON válido comenzando con "replyDe".`;
         return {
           replyDe: String(parsed?.replyDe || "").replace(/\*\*/g, "").trim(),
           translationEs: String(parsed?.translationEs || "").trim(),
+          userTranscriptDe: String(parsed?.userTranscriptDe || "").trim(),
           suggestedReplies: Array.isArray(parsed?.suggestedReplies) ? parsed.suggestedReplies.slice(0, 4) : [],
           grammarCorrections: (parsed?.grammarCorrections || []).map((err) => ({
             ...err,
@@ -2984,7 +3083,7 @@ export const synthesizeGermanSpeech = onCall(
   },
   async (request) => {
     await assertApprovedUser(request);
-    const { text, type = "vocab", lang = "de" } = request.data || {};
+    const { text, type = "vocab", lang = "de", ephemeral = false } = request.data || {};
     const voice = "Charon"; // Voz masculina oficial exclusiva de DeutschMeister
     if (!text || typeof text !== "string") {
       throw new HttpsError("invalid-argument", "El parámetro 'text' es obligatorio y debe ser una cadena.");
@@ -2996,6 +3095,10 @@ export const synthesizeGermanSpeech = onCall(
     }
 
     const safeType = (type || "general").replace(/[^a-zA-Z0-9_-]/g, "") || "general";
+    const isEphemeral =
+      Boolean(ephemeral) ||
+      safeType === "call_ephemeral" ||
+      safeType === "chat_ephemeral";
     const sha256Id = getSha256AudioId(cleanText, voice);
     const canonicalId = getSafeAudioId(cleanText);
     const legacyId = `${canonicalId}_`;
@@ -3069,7 +3172,24 @@ export const synthesizeGermanSpeech = onCall(
       }
     }
 
-    // ── PERSISTENCIA GLOBAL PERMANENTE (100% de audios: vocabulario, oraciones, lecturas y cuentos) ──
+    // ── MODO EFÍMERO (Modo Llamada / Chat): CERO escrituras en Cloud Storage ni global_audio_pronunciations ──
+    if (isEphemeral) {
+      console.log(`[TTS Ephemeral] Retornando audio Charon inline sin persistir [${cleanText.substring(0, 32)}...]`);
+      return {
+        success: true,
+        ephemeral: true,
+        persisted: false,
+        audioBase64: audioResult.buffer.toString("base64"),
+        mimeType: audioResult.mimeType || "audio/wav",
+        audioId: docId,
+        sha256Id,
+        canonicalId,
+        fromCloudCache: false,
+        provider: audioResult.provider
+      };
+    }
+
+    // ── PERSISTENCIA GLOBAL PERMANENTE (vocabulario, oraciones, lecturas, cuentos, pódcasts) ──
     const STORAGE_BUCKET_NAME = process.env.STORAGE_BUCKET || "deutschmeister-audio-vault";
     const bucket = admin.storage().bucket(STORAGE_BUCKET_NAME);
     const ext = audioResult.mimeType.includes("mp3") ? "mp3" : "wav";
@@ -4041,5 +4161,200 @@ export const manageUserAccess = onCall(
     }
 
     throw new HttpsError("invalid-argument", "Acción de gestión de acceso no soportada.");
+  }
+);
+
+// =========================================================================
+// MODO FOTO MULTIMODAL (analyzePhotoDescription): Zero-Trust + Magic Bytes + Sharp
+// =========================================================================
+function validateMagicBytesAndDecodeImage(rawBase64) {
+  if (!rawBase64 || typeof rawBase64 !== "string") {
+    throw new HttpsError("invalid-argument", "Falta la imagen codificada en base64.");
+  }
+
+  const stripped = rawBase64.replace(/^data:image\/[a-zA-Z0-9.+-]+;base64,/, "").trim();
+  // Máximo 512 KB en base64 (~384 KB binarios)
+  if (!stripped || stripped.length > 524_288) {
+    throw new HttpsError(
+      "invalid-argument",
+      "La imagen supera el límite máximo permitido de 512 KB (comprime a <= 768px antes de enviar)."
+    );
+  }
+
+  if (!/^[A-Za-z0-9+/]+={0,2}$/.test(stripped)) {
+    throw new HttpsError("invalid-argument", "Formato base64 de imagen inválido.");
+  }
+
+  const buffer = Buffer.from(stripped, "base64");
+  if (!buffer || buffer.length < 12) {
+    throw new HttpsError("invalid-argument", "Archivo de imagen corrupto o vacío.");
+  }
+
+  const isJpeg = buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+  const isPng =
+    buffer[0] === 0x89 &&
+    buffer[1] === 0x50 &&
+    buffer[2] === 0x4e &&
+    buffer[3] === 0x47 &&
+    buffer[4] === 0x0d &&
+    buffer[5] === 0x0a &&
+    buffer[6] === 0x1a &&
+    buffer[7] === 0x0a;
+  const isWebp =
+    buffer.toString("ascii", 0, 4) === "RIFF" &&
+    buffer.toString("ascii", 8, 12) === "WEBP";
+
+  if (!isJpeg && !isPng && !isWebp) {
+    throw new HttpsError(
+      "invalid-argument",
+      "Tipo de imagen no permitido. Solo JPEG, PNG o WebP válidos."
+    );
+  }
+
+  return buffer;
+}
+
+export const analyzePhotoDescription = onCall(
+  {
+    secrets: ALL_AI_SECRETS,
+    timeoutSeconds: 60,
+    memory: "512MiB",
+    cors: true
+  },
+  async (request) => {
+    const authUser = await assertApprovedUser(request);
+    const uid = authUser.uid;
+    const { imageBase64, userDescriptionDe = "", contextHint = "" } = request.data || {};
+
+    const cleanDescription = String(userDescriptionDe || "").trim().slice(0, 600);
+    if (!cleanDescription) {
+      throw new HttpsError(
+        "invalid-argument",
+        "Escribe o dicta primero una breve descripción en alemán sobre la foto."
+      );
+    }
+
+    const rawBuffer = validateMagicBytesAndDecodeImage(imageBase64);
+
+    // Saneamiento estricto en memoria (sin metadata EXIF y <=768px) — nunca se guarda en Cloud Storage
+    let sanitizedBuffer;
+    try {
+      sanitizedBuffer = await sharp(rawBuffer, { limitInputPixels: 25_000_000 })
+        .rotate()
+        .resize({ width: 768, height: 768, fit: "inside", withoutEnlargement: true })
+        .jpeg({ quality: 78, mozjpeg: true })
+        .toBuffer();
+    } catch (sharpErr) {
+      console.error("[analyzePhotoDescription] Error saneando imagen con sharp:", sharpErr);
+      throw new HttpsError("invalid-argument", "No se pudo procesar la imagen enviada.");
+    }
+
+    // Control de cuota FinOps en artifacts/deutschmeister-pro/users/{uid}/usage/today
+    const todayStr = new Date().toISOString().split("T")[0];
+    const usageDocRef = db
+      .collection("artifacts")
+      .doc("deutschmeister-pro")
+      .collection("users")
+      .doc(uid)
+      .collection("usage")
+      .doc("today");
+    const DAILY_PHOTO_LIMIT = 20;
+
+    const photoQuotaAllowed = await db.runTransaction(async (tx) => {
+      const snap = await tx.get(usageDocRef);
+      const data = snap.exists ? snap.data() || {} : {};
+      const isSameDay = data.date === todayStr;
+      const curPhotoCount = isSameDay ? Number(data.photoCount) || 0 : 0;
+      if (curPhotoCount >= DAILY_PHOTO_LIMIT) {
+        return false;
+      }
+      tx.set(
+        usageDocRef,
+        {
+          date: todayStr,
+          messageCount: isSameDay ? Number(data.messageCount) || 0 : 0,
+          photoCount: curPhotoCount + 1,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        },
+        { merge: true }
+      );
+      return true;
+    });
+
+    if (!photoQuotaAllowed) {
+      throw new HttpsError(
+        "resource-exhausted",
+        "Has alcanzado el límite diario preventivo de análisis de fotos (20/día). Inténtalo mañana."
+      );
+    }
+
+    const systemPrompt = `Eres un profesor experto de alemán A1-A2 para hispanohablantes (contexto vida en Alemania y entornos técnicos interiores).
+Analiza la fotografía adjunta junto con la descripción del estudiante y responde ÚNICAMENTE en JSON según el schema:
+1. overallScore (0..100): evalúa gramática A1-A2, vocabulario visual y correspondencia con la imagen.
+2. matchesScene (boolean): true si la descripción corresponde razonablemente a lo visible en la foto.
+3. correctedDescriptionDe: versión corregida y natural de la frase del usuario (o una descripción A1 limpia si intentó algo en español).
+4. idealA1ExampleDe: un ejemplo modelo A1-A2 describiendo la escena (1-2 frases claras).
+5. feedbackEs: explicación cálida y útil en español.
+6. errors[]: errores reales detectados con category en ["article","case","word_order","conjugation","vocab"].
+7. sceneVocabulary[]: entre 4 y 6 sustantivos o verbos visibles en la foto con artículo (der/die/das), traducción al español y breve exampleDe.
+8. suggestions[]: 3 frases breves en alemán ("de", "es", "grammarTag") que el usuario podría usar para seguir practicando sobre esta foto.`;
+
+    const sanitizedBase64 = sanitizedBuffer.toString("base64");
+    const userParts = [
+      {
+        text: `Descripción del estudiante en alemán: "${cleanDescription}"${
+          contextHint ? `\nContexto opcional: ${String(contextHint).slice(0, 140)}` : ""
+        }`
+      },
+      {
+        inlineData: {
+          mimeType: "image/jpeg",
+          data: sanitizedBase64
+        }
+      }
+    ];
+
+    try {
+      const parsed = await invokeWithDeepSeekFallback(systemPrompt, userParts, {
+        isJson: true,
+        responseSchema: PHOTO_ANALYSIS_SCHEMA,
+        temperature: 0.3,
+        maxOutputTokens: 900,
+        model: "gemini-3.8-flash"
+      });
+
+      const clampedScore = Math.max(0, Math.min(100, Math.round(Number(parsed?.overallScore) || 70)));
+      return {
+        success: true,
+        overallScore: clampedScore,
+        matchesScene: Boolean(parsed?.matchesScene),
+        correctedDescriptionDe: String(parsed?.correctedDescriptionDe || cleanDescription).trim(),
+        idealA1ExampleDe: String(parsed?.idealA1ExampleDe || "").trim(),
+        feedbackEs: String(parsed?.feedbackEs || "Buen esfuerzo describiendo la imagen.").trim(),
+        errors: (Array.isArray(parsed?.errors) ? parsed.errors : []).map((err, idx) => ({
+          id: `photo_err_${idx}_${Date.now()}`,
+          original: err.original || "",
+          corrected: err.corrected || "",
+          explanationEs: err.explanationEs || "",
+          category: normalizeErrorCategory(err.category)
+        })),
+        sceneVocabulary: (Array.isArray(parsed?.sceneVocabulary) ? parsed.sceneVocabulary : [])
+          .slice(0, 8)
+          .map((item) => ({
+            de: String(item.de || "").trim(),
+            es: String(item.es || "").trim(),
+            article: String(item.article || "").trim(),
+            exampleDe: String(item.exampleDe || "").trim()
+          }))
+          .filter((item) => item.de && item.es),
+        suggestions: (Array.isArray(parsed?.suggestions) ? parsed.suggestions : []).slice(0, 4)
+      };
+    } catch (visionErr) {
+      console.error("[analyzePhotoDescription Error]:", visionErr);
+      throw new HttpsError(
+        "unavailable",
+        "No se pudo analizar la foto en este momento. Reintenta en unos segundos."
+      );
+    }
   }
 );
