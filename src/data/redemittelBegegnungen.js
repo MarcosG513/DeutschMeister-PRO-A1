@@ -2581,6 +2581,117 @@ export const redemittelChapter = {
       "ruhig",
       "auf."
     ]
+  },
+  {
+    "de": "Wir sagen alle Du, ist das o.k. für dich? / Reden wir uns mit Du an?",
+    "audioDe": "Wir sagen alle Du, ist das okay für dich? Reden wir uns mit Du an?",
+    "pron": "via zá-guen á-le du, ist das o-kéi füa dij",
+    "es": "Todos nos tuteamos, ¿te parece bien? / ¿Nos tuteamos?",
+    "type": "Protocolo Social",
+    "category": "1. Person & Hobbys (Kap. 1)",
+    "level": "A1",
+    "regimen": "Invitación al tuteo laboral",
+    "exampleSentenceDe": "Sagen wir Du? Ich bin Marcos. — Sehr gerne!",
+    "exampleSentenceEs": "¿Nos tuteamos? Soy Marcos. — ¡Con mucho gusto!",
+    "exampleSentenceDeBlocks": [
+      "Sagen wir Du?",
+      "Ich bin Marcos.",
+      "— Sehr gerne!"
+    ]
+  },
+  {
+    "de": "Passt es am Montag um 9:15 Uhr? / Nein, das passt nicht. / Ja, das passt.",
+    "audioDe": "Passt es am Montag um 9:15 Uhr? Nein, das passt nicht. Ja, das passt.",
+    "pron": "past es am món-tak um noin ua fǘnf-tsen",
+    "es": "¿Le/te va bien el lunes a las 9:15? / No, no viene bien. / Sí, viene bien.",
+    "type": "Concertar Citas",
+    "category": "6. Telefon, Termine & E-Mail (Kap. 5)",
+    "level": "A1",
+    "regimen": "passen + Dativ (es passt mir)",
+    "exampleSentenceDe": "Hast du am Dienstag Zeit? — Ja, das geht und passt gut.",
+    "exampleSentenceEs": "¿Tienes tiempo el martes? — Sí, va bien y me conviene.",
+    "exampleSentenceDeBlocks": [
+      "Hast du",
+      "am Dienstag Zeit?",
+      "— Ja,",
+      "das geht",
+      "und passt gut."
+    ]
+  },
+  {
+    "de": "Um wie viel Uhr fährt die Bahn? — Die Bahn fährt um Viertel nach neun.",
+    "audioDe": "Um wie viel Uhr fährt die Bahn? Die Bahn fährt um Viertel nach neun.",
+    "pron": "um vi fil ua fert di ban",
+    "es": "¿A qué hora sale el tren? — Sale a las nueve y cuarto.",
+    "type": "En la Estación",
+    "category": "7. Wetter, Kleidung & Bahn (Kap. 6)",
+    "level": "A1",
+    "regimen": "fahren + um + Uhrzeit",
+    "exampleSentenceDe": "Entschuldigung, wann fährt die Linie 2 ab? — Um 9:18 Uhr.",
+    "exampleSentenceEs": "Disculpe, ¿cuándo sale la línea 2? — A las 9:18 h.",
+    "exampleSentenceDeBlocks": [
+      "Entschuldigung,",
+      "wann fährt",
+      "die Linie 2",
+      "ab?",
+      "— Um 9:18 Uhr."
+    ]
+  },
+  {
+    "de": "Donnerstags gehe ich oft weg, zu Freunden oder um 20:00 Uhr ins Kino.",
+    "audioDe": "Donnerstags gehe ich oft weg, zu Freunden oder um 20:00 Uhr ins Kino.",
+    "pron": "dónas-taks gué-e ij oft vek",
+    "es": "Los jueves salgo a menudo, a casa de amigos o a las 20:00 al cine.",
+    "type": "Rutina y Ocio",
+    "category": "5. Tagesablauf & IT (Kap. 5)",
+    "level": "A1",
+    "regimen": "Adverbio -s (hábito) + weg|gehen",
+    "exampleSentenceDe": "Ich stehe immer früh auf und gehe donnerstags weg.",
+    "exampleSentenceEs": "Me levanto siempre temprano y salgo los jueves.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "stehe",
+      "immer früh auf",
+      "und gehe",
+      "donnerstags weg."
+    ]
+  },
+  {
+    "de": "Haben Sie eine Krankmeldung?",
+    "audioDe": "Haben Sie eine Krankmeldung?",
+    "pron": "já-ben zi ái-ne kránk-mel-dung",
+    "es": "¿Tiene usted un parte de baja médica?",
+    "type": "Salud Laboral",
+    "category": "9. Wünsche, Arzt & Kurs (Kap. 8)",
+    "level": "A1–A2",
+    "regimen": "+ Akkusativ",
+    "exampleSentenceDe": "Ich habe seit gestern Fieber und brauche eine Krankmeldung.",
+    "exampleSentenceEs": "Tengo fiebre desde ayer y necesito una baja médica.",
+    "exampleSentenceDeBlocks": [
+      "Ich",
+      "habe",
+      "seit gestern Fieber",
+      "und brauche",
+      "eine Krankmeldung."
+    ]
+  },
+  {
+    "de": "Ich arbeite lieber zu Hause. / Ich habe Berufserfahrung.",
+    "audioDe": "Ich arbeite lieber zu Hause. Ich habe Berufserfahrung.",
+    "pron": "ij ár-bai-te lí-ba tsu jáu-ze",
+    "es": "Prefiero trabajar en casa. / Tengo experiencia laboral.",
+    "type": "Perfil Profesional",
+    "category": "2. Büro & Freizeit (Kap. 2)",
+    "level": "A1–A2",
+    "regimen": "Comparativo gern -> lieber",
+    "exampleSentenceDe": "In meinem Lebenslauf steht meine ganze Berufserfahrung.",
+    "exampleSentenceEs": "En mi currículum figura toda mi experiencia laboral.",
+    "exampleSentenceDeBlocks": [
+      "In meinem Lebenslauf",
+      "steht",
+      "meine ganze",
+      "Berufserfahrung."
+    ]
   }
 ]
 };

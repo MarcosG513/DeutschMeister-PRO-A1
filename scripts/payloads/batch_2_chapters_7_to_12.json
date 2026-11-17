@@ -1,0 +1,4226 @@
+{
+  "batch": 2,
+  "chapters": [
+    {
+      "id": 7,
+      "title": "Kapitel 7: Wohnen",
+      "words": [
+        {
+          "de": "der Abfall",
+          "pron": "dea áp-fal",
+          "es": "la basura / residuo",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Abfälle",
+          "exampleSentenceDe": "Bitte bringen Sie den Abfall nach unten in die Tonne.",
+          "exampleSentenceEs": "Por favor, baje la basura al contenedor de abajo.",
+          "category": "Haushalt",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bitte",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bringen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie den Abfall nach unten in die Tonne",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "open gray trash bin filled with tied garbage bags"
+        },
+        {
+          "de": "ab|waschen",
+          "pron": "áp-va-shen",
+          "es": "fregar / lavar (platos)",
+          "type": "Verbo separable",
+          "regimen": "+ Akk / wäscht ab, wusch ab, hat abgewaschen",
+          "plural": "",
+          "exampleSentenceDe": "Nach dem Abendessen müssen wir die Teller abwaschen.",
+          "exampleSentenceEs": "Después de cenar tenemos que fregar los platos.",
+          "category": "Haushalt",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Nach dem Abendessen",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "müssen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir die Teller",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "abwaschen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "person washing dinner plates in soapy kitchen sink water"
+        },
+        {
+          "de": "das Apartment",
+          "pron": "das a-párt-ment",
+          "es": "el apartamento / estudio",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Apartments",
+          "exampleSentenceDe": "Für drei Monate miete ich ein kleines Apartment.",
+          "exampleSentenceEs": "Durante tres meses alquilo un apartamento pequeño.",
+          "category": "Wohnen",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Für drei Monate",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "miete",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich ein kleines Apartment",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "cozy modern studio apartment interior with bed and sofa"
+        },
+        {
+          "de": "auf sein",
+          "pron": "auf zain",
+          "es": "estar abierto / levantado",
+          "type": "Frase verbal",
+          "regimen": "Separable irregular",
+          "plural": "",
+          "exampleSentenceDe": "Das Fenster im Schlafzimmer ist noch auf.",
+          "exampleSentenceEs": "La ventana del dormitorio sigue abierta.",
+          "category": "Haushalt",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das Fenster im Schlafzimmer",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "noch",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "auf",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "die Ecke",
+          "pron": "di é-ke",
+          "es": "la esquina / el rincón",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Ecken",
+          "exampleSentenceDe": "Der Schrank steht dort in der Ecke.",
+          "exampleSentenceEs": "El armario está allí en la esquina.",
+          "category": "Wohnung",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Schrank",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "steht",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "dort in der Ecke",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Eingang",
+          "pron": "dea áin-gang",
+          "es": "la entrada (puerta/acceso)",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Eingänge",
+          "exampleSentenceDe": "Der Eingang zum Haus befindet sich links.",
+          "exampleSentenceEs": "La entrada a la casa se encuentra a la izquierda.",
+          "category": "Gebäude",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Eingang zum Haus",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "befindet",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "sich links",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "front wooden entrance door and steps of a house"
+        },
+        {
+          "de": "die Gardine",
+          "pron": "di gar-dí-ne",
+          "es": "la cortina",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Gardinen",
+          "exampleSentenceDe": "Wir hängen heute neue weiße Gardinen auf.",
+          "exampleSentenceEs": "Hoy colgamos cortinas blancas nuevas.",
+          "category": "Möbel",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hängen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute neue weiße Gardinen",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "auf",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "white fabric window curtains hanging on a wooden rod"
+        },
+        {
+          "de": "der Makler",
+          "pron": "dea mák-la",
+          "es": "el agente inmobiliario",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Makler",
+          "exampleSentenceDe": "Der Makler zeigt uns morgen eine Wohnung.",
+          "exampleSentenceEs": "El agente inmobiliario nos muestra mañana un piso.",
+          "category": "Mieten",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Makler",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "zeigt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "uns morgen eine Wohnung",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "friendly real estate agent holding house keys and floor plan"
+        },
+        {
+          "de": "das OG (Obergeschoss)",
+          "pron": "das o-gué",
+          "es": "la planta superior / piso alto",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Obergeschosse",
+          "exampleSentenceDe": "Unsere Wohnung liegt im zweiten OG.",
+          "exampleSentenceEs": "Nuestro piso está en la segunda planta superior.",
+          "category": "Gebäude",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Unsere Wohnung",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "liegt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "im zweiten OG",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Putzmittel",
+          "pron": "das púts-mi-tel",
+          "es": "el producto de limpieza",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Putzmittel",
+          "exampleSentenceDe": "Im Supermarkt kaufe ich heute neues Putzmittel.",
+          "exampleSentenceEs": "Hoy compro en el supermercado producto de limpieza nuevo.",
+          "category": "Haushalt",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Supermarkt",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kaufe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich heute neues Putzmittel",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "spray bottle of household cleaning product with yellow sponge"
+        },
+        {
+          "de": "die Stiege (A)",
+          "pron": "di shtí-gue",
+          "es": "la escalera (variante austriaca)",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Stiegen",
+          "exampleSentenceDe": "Nehmen Sie die Stiege in den ersten Stock.",
+          "exampleSentenceEs": "Tome la escalera hasta el primer piso.",
+          "category": "Gebäude",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Nehmen",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "die Stiege in den ersten Stock",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "wooden indoor staircase with handrail"
+        },
+        {
+          "de": "das Stockwerk",
+          "pron": "das shtók-verk",
+          "es": "el piso / planta (del edificio)",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Stockwerke",
+          "exampleSentenceDe": "Das Büro befindet sich im dritten Stockwerk.",
+          "exampleSentenceEs": "La oficina se encuentra en la tercera planta.",
+          "category": "Gebäude",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das Büro",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "befindet",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "sich im dritten Stockwerk",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das UG (Untergeschoss)",
+          "pron": "das u-gué",
+          "es": "el sótano / planta baja inferior",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Untergeschosse",
+          "exampleSentenceDe": "Die Waschküche ist unten im UG.",
+          "exampleSentenceEs": "El cuarto de lavadoras está abajo en el subsuelo.",
+          "category": "Gebäude",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Waschküche",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "unten im UG",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Waschmittel",
+          "pron": "das vásh-mi-tel",
+          "es": "el detergente (para ropa)",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Waschmittel",
+          "exampleSentenceDe": "Wir haben kein Waschmittel mehr für die Wäsche.",
+          "exampleSentenceEs": "Ya no tenemos detergente para la colada.",
+          "category": "Haushalt",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "haben",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "kein Waschmittel mehr für die Wäsche",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "blue laundry detergent bottle and washing powder box"
+        },
+        {
+          "de": "das WC",
+          "pron": "das ve-tsé",
+          "es": "el servicio / baño (WC)",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die WCs",
+          "exampleSentenceDe": "Entschuldigung, wo ist hier bitte das WC?",
+          "exampleSentenceEs": "Disculpe, ¿dónde está aquí el baño, por favor?",
+          "category": "Gebäude",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Entschuldigung, wo",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "hier bitte das WC",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "clean white ceramic toilet in a modern restroom"
+        },
+        {
+          "de": "der Wecker",
+          "pron": "dea vé-ka",
+          "es": "el despertador",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Wecker",
+          "exampleSentenceDe": "Für die Reise brauche ich meinen kleinen Wecker.",
+          "exampleSentenceEs": "Para el viaje necesito mi despertador pequeño.",
+          "category": "Haushalt",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Für die Reise",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "brauche",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich meinen kleinen Wecker",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "classic round bedside alarm clock with twin bells"
+        },
+        {
+          "de": "die WG (Wohngemeinschaft)",
+          "pron": "di ve-gué",
+          "es": "el piso compartido",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die WGs",
+          "exampleSentenceDe": "Viele Studenten wohnen gern in einer WG.",
+          "exampleSentenceEs": "Muchos estudiantes viven con gusto en un piso compartido.",
+          "category": "Mieten",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Viele Studenten",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "wohnen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "gern in einer WG",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Kapitel 8: Essen & Trinken",
+      "words": [
+        {
+          "de": "der Alkohol",
+          "pron": "dea ál-ko-jol",
+          "es": "el alcohol",
+          "type": "Sustantivo (Masc)",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Wenn man Auto fährt, darf man keinen Alkohol trinken.",
+          "exampleSentenceEs": "Cuando se conduce no está permitido beber alcohol.",
+          "category": "Getränke",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wenn man Auto fährt,",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "darf",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "man keinen Alkohol",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "trinken",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "glass bottle of wine and frothy beer mug"
+        },
+        {
+          "de": "der Apfelsaft",
+          "pron": "dea áp-fel-zaft",
+          "es": "el zumo de manzana",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Apfelsäfte",
+          "exampleSentenceDe": "Was trinken Sie? Ich trinke einen Apfelsaft.",
+          "exampleSentenceEs": "¿Qué bebe usted? Bebo un zumo de manzana.",
+          "category": "Getränke",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Was",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "trinken",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie? Ich trinke einen Apfelsaft",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "clear glass of golden apple juice next to a red apple"
+        },
+        {
+          "de": "die Aprikose",
+          "pron": "di a-pri-kó-ze",
+          "es": "el albaricoque",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Aprikosen",
+          "exampleSentenceDe": "Im Sommer schmecken frische Aprikosen sehr süß.",
+          "exampleSentenceEs": "En verano los albaricoques frescos saben muy dulces.",
+          "category": "Lebensmittel",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Sommer",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "schmecken",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "frische Aprikosen sehr süß",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "fresh ripe orange apricot fruit with green leaf"
+        },
+        {
+          "de": "die/das Cola",
+          "pron": "di/das kó-la",
+          "es": "la cola (refresco)",
+          "type": "Sustantivo (Fem/Neutro)",
+          "regimen": "",
+          "plural": "die Colas",
+          "exampleSentenceDe": "Was nehmen Sie? Ich nehme eine Cola.",
+          "exampleSentenceEs": "¿Qué toma usted? Tomo una cola.",
+          "category": "Getränke",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Was",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "nehmen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie? Ich nehme eine Cola",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "tall glass of dark fizzy cola soda with ice and straw"
+        },
+        {
+          "de": "die Dose",
+          "pron": "di dó-ze",
+          "es": "la lata / bote",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Dosen",
+          "exampleSentenceDe": "Auf dem Tisch steht eine Dose Tomaten.",
+          "exampleSentenceEs": "En la mesa hay una lata de tomates.",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Auf dem Tisch",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "steht",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "eine Dose Tomaten",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "metal tin food can with red tomato label"
+        },
+        {
+          "de": "das Hackfleisch",
+          "pron": "das ják-flaish",
+          "es": "la carne picada",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "Singular (A: Faschierte)",
+          "plural": "",
+          "exampleSentenceDe": "Für die Soße brauche ich 500 Gramm Hackfleisch.",
+          "exampleSentenceEs": "Para la salsa necesito 500 gramos de carne picada.",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Für die Soße",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "brauche",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich 500 Gramm Hackfleisch",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "fresh tray of red ground minced beef meat"
+        },
+        {
+          "de": "das Hähnchen / Hühnchen",
+          "pron": "das jén-jen / jǘn-jen",
+          "es": "el pollo (carne/asado)",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Hähnchen",
+          "exampleSentenceDe": "Ich bestelle ein halbes Hähnchen mit Salat.",
+          "exampleSentenceEs": "Pido medio pollo con ensalada.",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bestelle",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ein halbes Hähnchen mit Salat",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "golden roasted whole chicken on a white serving plate"
+        },
+        {
+          "de": "die Halbpension",
+          "pron": "di jálp-pen-zión",
+          "es": "la media pensión",
+          "type": "Sustantivo (Fem)",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Wir buchen das Hotel mit Halbpension.",
+          "exampleSentenceEs": "Reservamos el hotel con media pensión.",
+          "category": "Gastronomie",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "buchen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "das Hotel mit Halbpension",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "haltbar",
+          "pron": "jált-bar",
+          "es": "duradero / no perecedero",
+          "type": "Adjetivo",
+          "regimen": "Predicativo/Atributivo",
+          "plural": "",
+          "exampleSentenceDe": "Wie lange ist diese Milch haltbar?",
+          "exampleSentenceEs": "¿Hasta cuándo se conserva esta leche?",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wie lange",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "diese Milch haltbar",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Hamburger",
+          "pron": "dea jám-bur-ga",
+          "es": "la hamburguesa",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Hamburger",
+          "exampleSentenceDe": "Die Person isst einen Hamburger.",
+          "exampleSentenceEs": "La persona come una hamburguesa.",
+          "category": "Lebensmittel",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Person",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "isst",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "einen Hamburger",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "classic cheeseburger with beef patty, lettuce, and sesame bun"
+        },
+        {
+          "de": "der Joghurt",
+          "pron": "dea yó-gurt",
+          "es": "el yogur",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Joghurts",
+          "exampleSentenceDe": "Zum Frühstück esse ich gern Joghurt mit Obst.",
+          "exampleSentenceEs": "Para desayunar como con gusto yogur con fruta.",
+          "category": "Lebensmittel",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Zum Frühstück",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "esse",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich gern Joghurt mit Obst",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "small white cup of creamy yogurt with a silver spoon"
+        },
+        {
+          "de": "mager",
+          "pron": "má-gua",
+          "es": "magro / bajo en grasa",
+          "type": "Adjetivo",
+          "regimen": "Comp: magerer",
+          "plural": "",
+          "exampleSentenceDe": "Ich kaufe heute mageres Fleisch zum Kochen.",
+          "exampleSentenceEs": "Hoy compro carne magra para cocinar.",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kaufe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute mageres Fleisch zum Kochen",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Mahlzeit",
+          "pron": "di mál-tsait",
+          "es": "la comida (ingesta del día)",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Mahlzeiten",
+          "exampleSentenceDe": "Das Mittagessen ist für mich die wichtigste Mahlzeit.",
+          "exampleSentenceEs": "El almuerzo es para mí la comida más importante.",
+          "category": "Essen",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das Mittagessen",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "für mich die wichtigste Mahlzeit",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Packung",
+          "pron": "di pá-kung",
+          "es": "el paquete / envase",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Packungen",
+          "exampleSentenceDe": "Ich brauche noch eine Packung Milch.",
+          "exampleSentenceEs": "Todavía necesito un cartón de leche.",
+          "category": "Lebensmittel",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "brauche",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "noch eine Packung Milch",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "sealed cardboard milk carton package"
+        },
+        {
+          "de": "das/der Sandwich",
+          "pron": "das/dea sénd-vich",
+          "es": "el sándwich",
+          "type": "Sustantivo (Neutro/Masc)",
+          "regimen": "Gen: -(e)s",
+          "plural": "die Sandwiche / Sandwiches",
+          "exampleSentenceDe": "In der Mittagspause esse ich ein Sandwich.",
+          "exampleSentenceEs": "En la pausa del mediodía como un sándwich.",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "In der Mittagspause",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "esse",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich ein Sandwich",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "fresh triangle toast sandwich with cheese, lettuce, and tomato"
+        },
+        {
+          "de": "der Schokoladenkuchen",
+          "pron": "dea sho-ko-lá-den-ku-jen",
+          "es": "el pastel de chocolate",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Schokoladenkuchen",
+          "exampleSentenceDe": "Am Sonntag backe ich einen Schokoladenkuchen.",
+          "exampleSentenceEs": "El domingo horneo un pastel de chocolate.",
+          "category": "Lebensmittel",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Am Sonntag",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "backe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich einen Schokoladenkuchen",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "rich frosted chocolate layer cake slice on a plate"
+        },
+        {
+          "de": "das Schwarzbrot",
+          "pron": "das shvárts-brot",
+          "es": "el pan negro / integral",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Schwarzbrote",
+          "exampleSentenceDe": "Zum Käse schmeckt deutsches Schwarzbrot sehr gut.",
+          "exampleSentenceEs": "Con el queso el pan negro alemán sabe muy bien.",
+          "category": "Lebensmittel",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Zum Käse",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "schmeckt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "deutsches Schwarzbrot sehr gut",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "sliced loaf of dark German rye whole-grain bread"
+        },
+        {
+          "de": "der Snack",
+          "pron": "dea snek",
+          "es": "el tentempié / bocadillo rápido",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Snacks",
+          "exampleSentenceDe": "Im Zug gibt es leider nur kleine Snacks.",
+          "exampleSentenceEs": "En el tren lamentablemente solo hay pequeños tentempiés.",
+          "category": "Gastronomie",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Zug",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gibt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "es leider nur kleine Snacks",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "small plate with crispy pretzels and bite-sized snacks"
+        },
+        {
+          "de": "das Steak",
+          "pron": "das shteik",
+          "es": "el filete (de carne)",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Steaks",
+          "exampleSentenceDe": "Möchten Sie Ihr Steak gut durchgebraten?",
+          "exampleSentenceEs": "¿Quiere su filete bien hecho?",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Möchten",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "Ihr Steak gut durchgebraten",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "grilled juicy beef steak with herb butter on a plate"
+        },
+        {
+          "de": "stinken",
+          "pron": "shtín-ken",
+          "es": "oler mal / apestar",
+          "type": "Verbo irregular",
+          "regimen": "nach + Dat / stinkt, stank, hat gestunken",
+          "plural": "",
+          "exampleSentenceDe": "Der alte Käse im Kühlschrank stinkt furchtbar.",
+          "exampleSentenceEs": "El queso viejo en el frigorífico huele fatal.",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der alte Käse im Kühlschrank",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "stinkt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "furchtbar",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Kapitel 9: Kleidung",
+      "words": [
+        {
+          "de": "der Anzug",
+          "pron": "dea án-tsuk",
+          "es": "el traje (chaqueta y pantalón)",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Anzüge",
+          "exampleSentenceDe": "Für das Vorstellungsgespräch trage ich einen Anzug.",
+          "exampleSentenceEs": "Para la entrevista de trabajo llevo un traje.",
+          "category": "Kleidung",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Für das Vorstellungsgespräch",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "trage",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich einen Anzug",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "tailored dark navy business suit jacket and trousers on hanger"
+        },
+        {
+          "de": "der Bikini",
+          "pron": "dea bi-kí-ni",
+          "es": "el bikini",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Bikinis",
+          "exampleSentenceDe": "Im Urlaub packe ich meinen Bikini ein.",
+          "exampleSentenceEs": "En vacaciones guardo mi bikini en la maleta.",
+          "category": "Kleidung",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Urlaub",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "packe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich meinen Bikini",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "ein",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "bright coral two-piece summer bikini swimsuit"
+        },
+        {
+          "de": "das Kleid",
+          "pron": "das klait",
+          "es": "el vestido",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Kleider",
+          "exampleSentenceDe": "Das blaue Kleid steht ihr ausgezeichnet.",
+          "exampleSentenceEs": "El vestido azul le sienta de maravilla.",
+          "category": "Kleidung",
+          "level": "A1–A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das blaue Kleid",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "steht",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ihr ausgezeichnet",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "classic blue summer dress on a wooden hanger"
+        },
+        {
+          "de": "der Pyjama",
+          "pron": "dea pü-yá-ma",
+          "es": "el pijama",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Pyjamas",
+          "exampleSentenceDe": "Für meine Reise brauche ich noch einen Pyjama.",
+          "exampleSentenceEs": "Para mi viaje necesito además un pijama.",
+          "category": "Kleidung",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Für meine Reise",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "brauche",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich noch einen Pyjama",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "folded striped cotton pajama top and trousers"
+        },
+        {
+          "de": "der Schirm",
+          "pron": "dea shirm",
+          "es": "el paraguas",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Schirme",
+          "exampleSentenceDe": "Es regnet heute, nimm bitte einen Schirm mit!",
+          "exampleSentenceEs": "Hoy llueve, ¡llévate un paraguas por favor!",
+          "category": "Accessoires",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Es",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "regnet",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute, nimm bitte einen Schirm",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "mit",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "open blue rain umbrella with curved wooden handle"
+        },
+        {
+          "de": "die Socken",
+          "pron": "di zó-ken",
+          "es": "los calcetines",
+          "type": "Sustantivo (Plural)",
+          "regimen": "Sg: die Socke",
+          "plural": "",
+          "exampleSentenceDe": "Ich packe fünf Paar Socken in die Tasche.",
+          "exampleSentenceEs": "Meto cinco pares de calcetines en el bolso.",
+          "category": "Kleidung",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "packe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "fünf Paar Socken in die Tasche",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "pair of cozy striped knitted cotton socks"
+        },
+        {
+          "de": "das T-Shirt",
+          "pron": "das tí-shört",
+          "es": "la camiseta",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die T-Shirts",
+          "exampleSentenceDe": "Im Sommer trage ich am liebsten ein T-Shirt.",
+          "exampleSentenceEs": "En verano llevo preferiblemente una camiseta.",
+          "category": "Kleidung",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Sommer",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "trage",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich am liebsten ein T-Shirt",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "clean casual blue cotton short-sleeve t-shirt"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Kapitel 10: Einkaufen",
+      "words": [
+        {
+          "de": "das Abo / Abonnement",
+          "pron": "das á-bo / a-bo-ne-mó",
+          "es": "la suscripción / abono",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Abos / Abonnements",
+          "exampleSentenceDe": "Ich habe ein monatliches Abo für die Bahn.",
+          "exampleSentenceEs": "Tengo un abono mensual para el tren.",
+          "category": "Konsum",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "habe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ein monatliches Abo für die Bahn",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "abonnieren",
+          "pron": "a-bo-ní-ren",
+          "es": "suscribirse",
+          "type": "Verbo (-ieren)",
+          "regimen": "+ Akkusativ / abonniert, hat abonniert",
+          "plural": "",
+          "exampleSentenceDe": "Möchten Sie unseren Newsletter abonnieren?",
+          "exampleSentenceEs": "¿Desea suscribirse a nuestro boletín?",
+          "category": "Konsum",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Möchten",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "unseren Newsletter",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "abonnieren",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "an|schaffen",
+          "pron": "án-sha-fen",
+          "es": "adquirir / comprar",
+          "type": "Verbo separable",
+          "regimen": "+ Akk / schafft an, hat angeschafft",
+          "plural": "",
+          "exampleSentenceDe": "Wir müssen eine neue Waschmaschine anschaffen.",
+          "exampleSentenceEs": "Tenemos que adquirir una lavadora nueva.",
+          "category": "Konsum",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "müssen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "eine neue Waschmaschine",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "anschaffen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "der Blumenladen",
+          "pron": "dea blú-men-la-den",
+          "es": "la floristería",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Blumenläden",
+          "exampleSentenceDe": "Im Erdgeschoss gibt es einen schönen Blumenladen.",
+          "exampleSentenceEs": "En la planta baja hay una bonita floristería.",
+          "category": "Geschäfte",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Erdgeschoss",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gibt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "es einen schönen Blumenladen",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "cozy corner flower shop storefront filled with colorful bouquets"
+        },
+        {
+          "de": "die Drogerie",
+          "pron": "di dro-gue-rí",
+          "es": "la droguería / perfumería",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Drogerien",
+          "exampleSentenceDe": "Zahnpasta und Seife kaufe ich in der Drogerie.",
+          "exampleSentenceEs": "Compro pasta de dientes y jabón en la droguería.",
+          "category": "Geschäfte",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Zahnpasta und Seife",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kaufe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich in der Drogerie",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "modern drugstore storefront with soap bottles and cosmetics shelves"
+        },
+        {
+          "de": "der Fotoservice",
+          "pron": "dea fó-to-sör-vis",
+          "es": "el servicio de fotografía",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Fotoservices",
+          "exampleSentenceDe": "Beim Fotoservice kann ich Passbilder machen lassen.",
+          "exampleSentenceEs": "En el servicio de fotos puedo hacerme fotos de pasaporte.",
+          "category": "Geschäfte",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Beim Fotoservice",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kann",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich Passbilder",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "machen lassen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "photo printing kiosk shop counter with camera and portrait prints"
+        },
+        {
+          "de": "der Geldschein",
+          "pron": "dea guélt-shain",
+          "es": "el billete (dinero)",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Geldscheine",
+          "exampleSentenceDe": "An diesem Automaten kann man mit Geldscheinen zahlen.",
+          "exampleSentenceEs": "En esta máquina se puede pagar con billetes.",
+          "category": "Geld",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "An diesem Automaten",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kann",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "man mit Geldscheinen",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "zahlen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "crisp colorful Euro paper banknote bill"
+        },
+        {
+          "de": "die Glückwunschkarte",
+          "pron": "di glǘk-vunsh-kar-te",
+          "es": "la tarjeta de felicitación",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Glückwunschkarten",
+          "exampleSentenceDe": "Ich kaufe eine Glückwunschkarte zur Hochzeit.",
+          "exampleSentenceEs": "Compro una tarjeta de felicitación para la boda.",
+          "category": "Geschäfte",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kaufe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "eine Glückwunschkarte zur Hochzeit",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "festive folded greeting card with ribbon and envelope"
+        },
+        {
+          "de": "der Handel",
+          "pron": "dea ján-del",
+          "es": "el comercio",
+          "type": "Sustantivo (Masc)",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Der Online-Handel wächst jedes Jahr stark.",
+          "exampleSentenceEs": "El comercio en línea crece con fuerza cada año.",
+          "category": "Konsum",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Online-Handel",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "wächst",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "jedes Jahr stark",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Händler / die Händlerin",
+          "pron": "dea jénd-la / di jénd-le-rin",
+          "es": "el comerciante / vendedor",
+          "type": "Sustantivo (Masc/Fem)",
+          "regimen": "",
+          "plural": "die Händler / die Händlerinnen",
+          "exampleSentenceDe": "Auf dem Markt kaufe ich Gemüse beim Händler.",
+          "exampleSentenceEs": "En el mercado compro verdura al comerciante.",
+          "category": "Geschäfte",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Auf dem Markt",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kaufe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich Gemüse beim Händler",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "friendly market vendor standing behind a fresh vegetable stall"
+        },
+        {
+          "de": "liefern",
+          "pron": "lí-fern",
+          "es": "entregar / repartir",
+          "type": "Verbo regular",
+          "regimen": "+ Akkusativ / liefert, lieferte, hat geliefert",
+          "plural": "",
+          "exampleSentenceDe": "Die Firma liefert die Möbel nächste Woche.",
+          "exampleSentenceEs": "La empresa entrega los muebles la próxima semana.",
+          "category": "Konsum",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Firma",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "liefert",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "die Möbel nächste Woche",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "delivery courier carrying a cardboard parcel box to a front door"
+        },
+        {
+          "de": "die Lieferung",
+          "pron": "di lí-fe-rung",
+          "es": "la entrega / envío",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Lieferungen",
+          "exampleSentenceDe": "Die Lieferung kommt heute zwischen zehn und zwölf Uhr.",
+          "exampleSentenceEs": "El envío llega hoy entre las diez y las doce.",
+          "category": "Konsum",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Lieferung",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kommt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute zwischen zehn und zwölf Uhr",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Münze",
+          "pron": "di mǘn-tse",
+          "es": "la moneda",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Münzen",
+          "exampleSentenceDe": "Haben Sie eine Zwei-Euro-Münze für den Wagen?",
+          "exampleSentenceEs": "¿Tiene una moneda de dos euros para el carro?",
+          "category": "Geld",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Haben",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "eine Zwei-Euro-Münze für den Wagen",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "shiny silver and gold two-euro metal coin"
+        },
+        {
+          "de": "der Schlüsseldienst",
+          "pron": "dea shlǘ-sel-dinst",
+          "es": "el servicio de cerrajería",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Schlüsseldienste",
+          "exampleSentenceDe": "Der Schlüsseldienst öffnet die Tür schnell.",
+          "exampleSentenceEs": "El cerrajero abre la puerta rápido.",
+          "category": "Geschäfte",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Schlüsseldienst",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "öffnet",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "die Tür schnell",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "locksmith shop counter with brass spare keys and padlock"
+        },
+        {
+          "de": "die Schuhwerkstatt",
+          "pron": "di shú-verk-shtat",
+          "es": "el zapatero (reparación)",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Schuhwerkstätten",
+          "exampleSentenceDe": "Ich bringe meine alten Schuhe zur Schuhwerkstatt.",
+          "exampleSentenceEs": "Llevo mis zapatos viejos al taller de reparación.",
+          "category": "Geschäfte",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bringe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "meine alten Schuhe zur Schuhwerkstatt",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "cobbler shoe repair workshop with leather shoes and hammer"
+        },
+        {
+          "de": "der Tabak",
+          "pron": "dea tá-bak",
+          "es": "el tabaco / estanco",
+          "type": "Sustantivo (Masc)",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Zeitungen und Tabak verkauft man am Kiosk.",
+          "exampleSentenceEs": "Los periódicos y el tabaco se venden en el quiosco.",
+          "category": "Geschäfte",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Zeitungen und Tabak",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "verkauft",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "man am Kiosk",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "dried brown tobacco leaves and small retail pouch"
+        },
+        {
+          "de": "der Trend",
+          "pron": "dea trent",
+          "es": "la tendencia / moda",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Trends",
+          "exampleSentenceDe": "Nachhaltige Mode ist heute ein großer Trend.",
+          "exampleSentenceEs": "La moda sostenible es hoy una gran tendencia.",
+          "category": "Konsum",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Nachhaltige Mode",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute ein großer Trend",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Kapitel 11: Freizeit",
+      "words": [
+        {
+          "de": "die Band",
+          "pron": "di bent",
+          "es": "la banda de música",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Bands",
+          "exampleSentenceDe": "Die Schülerband spielt heute Abend um neun Uhr.",
+          "exampleSentenceEs": "La banda escolar toca esta noche a las nueve.",
+          "category": "Kultur",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Schülerband",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "spielt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute Abend um neun Uhr",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "four-piece live music band playing guitar, bass, and drums"
+        },
+        {
+          "de": "die Bar",
+          "pron": "di bar",
+          "es": "el bar",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Bars",
+          "exampleSentenceDe": "Nach der Arbeit gehen wir oft in eine Bar.",
+          "exampleSentenceEs": "Después del trabajo vamos a menudo a un bar.",
+          "category": "Freizeit",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Nach der Arbeit",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gehen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir oft in eine Bar",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "cozy evening bar counter with high stools and colorful drinks"
+        },
+        {
+          "de": "der Basketball",
+          "pron": "dea bás-ket-bal",
+          "es": "el baloncesto",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Basketbälle",
+          "exampleSentenceDe": "Meine Hobbys sind Basketball und Musik.",
+          "exampleSentenceEs": "Mis aficiones son el baloncesto y la música.",
+          "category": "Sport",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Meine Hobbys",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "sind",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Basketball und Musik",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "classic orange leather textured basketball"
+        },
+        {
+          "de": "basteln",
+          "pron": "bás-teln",
+          "es": "hacer manualidades",
+          "type": "Verbo regular",
+          "regimen": "bastelt, bastelte, hat gebastelt",
+          "plural": "",
+          "exampleSentenceDe": "Basteln ist mein liebstes Hobby am Wochenende.",
+          "exampleSentenceEs": "Hacer manualidades es mi pasatiempo favorito el fin de semana.",
+          "category": "Hobbys",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Basteln",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "mein liebstes Hobby am Wochenende",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "person crafting paper stars with scissors and glue on a desk"
+        },
+        {
+          "de": "das Camp",
+          "pron": "das kemp",
+          "es": "el campamento",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Camps",
+          "exampleSentenceDe": "Im Sommer fahren die Kinder in ein Sportcamp.",
+          "exampleSentenceEs": "En verano los niños van a un campamento deportivo.",
+          "category": "Freizeit",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Sommer",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "fahren",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "die Kinder in ein Sportcamp",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "outdoor summer camp with pitched dome tents among pine trees"
+        },
+        {
+          "de": "campen",
+          "pron": "kém-pen",
+          "es": "acampar",
+          "type": "Verbo regular",
+          "regimen": "campt, campte, hat gecampt",
+          "plural": "",
+          "exampleSentenceDe": "Wir campen lieber in den Bergen als am Meer.",
+          "exampleSentenceEs": "Preferimos acampar en las montañas que en el mar.",
+          "category": "Freizeit",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "campen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "lieber in den Bergen als am Meer",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "person pitching a colorful camping tent beside a campfire"
+        },
+        {
+          "de": "die Castingshow",
+          "pron": "di kás-ting-shou",
+          "es": "el concurso de talentos (TV)",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Castingshows",
+          "exampleSentenceDe": "Viele junge Leute sehen am Abend Castingshows.",
+          "exampleSentenceEs": "Muchos jóvenes ven programas de talentos por la noche.",
+          "category": "Medien",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Viele junge Leute",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "sehen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "am Abend Castingshows",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Club",
+          "pron": "dea klup",
+          "es": "el club / discoteca",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Clubs",
+          "exampleSentenceDe": "Am Samstag treffen wir uns im neuen Club.",
+          "exampleSentenceEs": "El sábado nos encontramos en el club nuevo.",
+          "category": "Freizeit",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Am Samstag",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "treffen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir uns im neuen Club",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "modern music club entrance with neon lights and velvet rope"
+        },
+        {
+          "de": "der/das Comic",
+          "pron": "dea/das kó-mik",
+          "es": "el cómic / historieta",
+          "type": "Sustantivo (Masc/Neutro)",
+          "regimen": "",
+          "plural": "die Comics",
+          "exampleSentenceDe": "Mein Sohn liest vor dem Schlafen immer Comics.",
+          "exampleSentenceEs": "Mi hijo siempre lee cómics antes de dormir.",
+          "category": "Medien",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Mein Sohn",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "liest",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "vor dem Schlafen immer Comics",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "colorful open comic book magazine with illustrated panels"
+        },
+        {
+          "de": "der Fan",
+          "pron": "dea fen",
+          "es": "el fan / seguidor",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Fans",
+          "exampleSentenceDe": "Ich bin ein großer Fan von dieser Mannschaft.",
+          "exampleSentenceEs": "Soy un gran seguidor de este equipo.",
+          "category": "Freizeit",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bin",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ein großer Fan von dieser Mannschaft",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "cheering sports fan wearing a striped team scarf and waving a flag"
+        },
+        {
+          "de": "das Festival",
+          "pron": "das fés-ti-val",
+          "es": "el festival",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Festivals",
+          "exampleSentenceDe": "Im Juli besuchen wir ein großes Musikfestival.",
+          "exampleSentenceEs": "En julio visitamos un gran festival de música.",
+          "category": "Kultur",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Juli",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "besuchen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir ein großes Musikfestival",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "filmen",
+          "pron": "fíl-men",
+          "es": "filmar / grabar en vídeo",
+          "type": "Verbo regular",
+          "regimen": "+ Akkusativ / filmt, filmte, hat gefilmt",
+          "plural": "",
+          "exampleSentenceDe": "Eva kann auf der Party super filmen.",
+          "exampleSentenceEs": "Eva sabe grabar estupendamente en la fiesta.",
+          "category": "Medien",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Eva",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kann",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "auf der Party super",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "filmen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "person holding a camcorder filming a scene"
+        },
+        {
+          "de": "die Fitness",
+          "pron": "di fít-nes",
+          "es": "la forma física / fitness",
+          "type": "Sustantivo (Fem)",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Für meine Fitness gehe ich zweimal pro Woche joggen.",
+          "exampleSentenceEs": "Para mi forma física salgo a correr dos veces por semana.",
+          "category": "Sport",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Für meine Fitness",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gehe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich zweimal pro Woche",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "joggen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "das Foto",
+          "pron": "das fó-to",
+          "es": "la fotografía / foto",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Fotos",
+          "exampleSentenceDe": "Auf dem Foto bin ich mit meiner Schwester.",
+          "exampleSentenceEs": "En la foto estoy con mi hermana.",
+          "category": "Medien",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Auf dem Foto",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bin",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich mit meiner Schwester",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "printed glossy landscape photograph in a clean frame"
+        },
+        {
+          "de": "fotografieren",
+          "pron": "fo-to-gra-fí-ren",
+          "es": "fotografiar / hacer fotos",
+          "type": "Verbo (-ieren)",
+          "regimen": "fotografiert, hat fotografiert",
+          "plural": "",
+          "exampleSentenceDe": "Charlotte fotografiert gern in der Natur.",
+          "exampleSentenceEs": "A Charlotte le gusta fotografiar en la naturaleza.",
+          "category": "Hobbys",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Charlotte",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "fotografiert",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "gern in der Natur",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "person taking a picture with a black DSLR camera"
+        },
+        {
+          "de": "das Fußballspiel",
+          "pron": "das fús-bal-shpil",
+          "es": "el partido de fútbol",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Fußballspiele",
+          "exampleSentenceDe": "Am Samstag schauen wir das Fußballspiel im Stadion.",
+          "exampleSentenceEs": "El sábado vemos el partido de fútbol en el estadio.",
+          "category": "Sport",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Am Samstag",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "schauen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir das Fußballspiel im Stadion",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Gitarre",
+          "pron": "di gui-tá-re",
+          "es": "la guitarra",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Gitarren",
+          "exampleSentenceDe": "Ich spiele Gitarre und ein bisschen Klavier.",
+          "exampleSentenceEs": "Toco la guitarra y un poco el piano.",
+          "category": "Kultur",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "spiele",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Gitarre und ein bisschen Klavier",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "classic wooden acoustic six-string guitar"
+        },
+        {
+          "de": "das Hallenbad",
+          "pron": "das já-len-bat",
+          "es": "la piscina cubierta",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Hallenbäder",
+          "exampleSentenceDe": "Im Winter schwimmen wir oft im Hallenbad.",
+          "exampleSentenceEs": "En invierno nadamos a menudo en la piscina cubierta.",
+          "category": "Sport",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Winter",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "schwimmen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir oft im Hallenbad",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "modern indoor swimming pool building with blue water lanes"
+        },
+        {
+          "de": "das Haustier",
+          "pron": "das jáus-tir",
+          "es": "la mascota",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Haustiere",
+          "exampleSentenceDe": "Haben Sie ein Haustier zu Hause?",
+          "exampleSentenceEs": "¿Tiene usted una mascota en casa?",
+          "category": "Tiere",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Haben",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "ein Haustier zu Hause",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "friendly puppy and kitten sitting together as household pets"
+        },
+        {
+          "de": "der Hit",
+          "pron": "dea jit",
+          "es": "el éxito musical",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Hits",
+          "exampleSentenceDe": "Im Radio läuft gerade ein bekannter Hit.",
+          "exampleSentenceEs": "En la radio suena ahora un éxito conocido.",
+          "category": "Kultur",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Radio",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "läuft",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "gerade ein bekannter Hit",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Jazz",
+          "pron": "dea yes",
+          "es": "el jazz",
+          "type": "Sustantivo (Masc)",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Mein Vater hört abends sehr gern Jazz.",
+          "exampleSentenceEs": "A mi padre le gusta mucho escuchar jazz por la noche.",
+          "category": "Kultur",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Mein Vater",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hört",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "abends sehr gern Jazz",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "joggen",
+          "pron": "yó-guen",
+          "es": "trotar / correr",
+          "type": "Verbo regular",
+          "regimen": "joggt, joggte, ist/hat gejoggt",
+          "plural": "",
+          "exampleSentenceDe": "Jeden Morgen jogge ich dreißig Minuten im Park.",
+          "exampleSentenceEs": "Cada mañana salgo a trotar treinta minutos al parque.",
+          "category": "Sport",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Jeden Morgen",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "jogge",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich dreißig Minuten im Park",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "runner jogging energetically in athletic sneakers and sportswear"
+        },
+        {
+          "de": "das Konzert",
+          "pron": "das kon-tsért",
+          "es": "el concierto",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Konzerte",
+          "exampleSentenceDe": "Nächsten Freitag gehen wir auf ein Rockkonzert.",
+          "exampleSentenceEs": "El próximo viernes vamos a un concierto de rock.",
+          "category": "Kultur",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Nächsten Freitag",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gehen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir auf ein Rockkonzert",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Krimi",
+          "pron": "dea krí-mi",
+          "es": "la novela o película policiaca",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Krimis",
+          "exampleSentenceDe": "Am Sonntagabend lese ich einen spannenden Krimi.",
+          "exampleSentenceEs": "El domingo por la noche leo una novela policiaca emocionante.",
+          "category": "Medien",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Am Sonntagabend",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "lese",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich einen spannenden Krimi",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Lied",
+          "pron": "das lit",
+          "es": "la canción",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Lieder",
+          "exampleSentenceDe": "Welches deutsche Lied kennst du schon?",
+          "exampleSentenceEs": "¿Qué canción alemana conoces ya?",
+          "category": "Kultur",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Welches deutsche Lied",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kennst",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "du schon",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "malen",
+          "pron": "má-len",
+          "es": "pintar",
+          "type": "Verbo regular",
+          "regimen": "+ Akkusativ / malt, malte, hat gemalt",
+          "plural": "",
+          "exampleSentenceDe": "Mein Hobby ist es, Landschaften zu malen.",
+          "exampleSentenceEs": "Mi pasatiempo es pintar paisajes.",
+          "category": "Hobbys",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Mein Hobby",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "es, Landschaften",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "zu malen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "artist painting a colorful landscape on a wooden easel with brush"
+        },
+        {
+          "de": "die Mannschaft",
+          "pron": "di mán-shaft",
+          "es": "el equipo (deportivo)",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Mannschaften",
+          "exampleSentenceDe": "Unsere Mannschaft hat heute 2:1 gewonnen.",
+          "exampleSentenceEs": "Nuestro equipo ha ganado hoy 2 a 1.",
+          "category": "Sport",
+          "level": "A1–A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Unsere Mannschaft",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hat",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute 2:1",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "gewonnen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "sports team of athletes wearing matching jerseys standing together"
+        },
+        {
+          "de": "das Mountainbike",
+          "pron": "das máun-ten-baik",
+          "es": "la bicicleta de montaña",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Mountainbikes",
+          "exampleSentenceDe": "Am Wochenende fahre ich mit dem Mountainbike durch den Wald.",
+          "exampleSentenceEs": "El fin de semana voy con la bici de montaña por el bosque.",
+          "category": "Sport",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Am Wochenende",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "fahre",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich mit dem Mountainbike durch den Wald",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "rugged mountain bike bicycle with suspension and thick tires"
+        },
+        {
+          "de": "die Oper",
+          "pron": "di ó-pa",
+          "es": "la ópera",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Opern",
+          "exampleSentenceDe": "In Wien gibt es eine sehr berühmte Oper.",
+          "exampleSentenceEs": "En Viena hay una ópera muy famosa.",
+          "category": "Kultur",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "In Wien",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gibt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "es eine sehr berühmte Oper",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "grand classical opera house building with columns and red curtains"
+        },
+        {
+          "de": "die Party",
+          "pron": "di pár-ti",
+          "es": "la fiesta",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Partys",
+          "exampleSentenceDe": "Vielen Dank für die Einladung zu deiner Party!",
+          "exampleSentenceEs": "¡Muchas gracias por la invitación a tu fiesta!",
+          "category": "Freizeit",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Vielen Dank",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "für die Einladung zu deiner Party",
+              "role": "complement",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "de": "das Poster",
+          "pron": "das pós-ta",
+          "es": "el póster / cartel",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Poster",
+          "exampleSentenceDe": "An der Wand hängt ein großes Poster von Berlin.",
+          "exampleSentenceEs": "En la pared cuelga un gran póster de Berlín.",
+          "category": "Freizeit",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "An der Wand",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hängt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ein großes Poster von Berlin",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "colorful illustrated travel wall poster taped flat on a wall"
+        },
+        {
+          "de": "das Puzzle",
+          "pron": "das pú-tsel",
+          "es": "el rompecabezas / puzle",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Puzzles",
+          "exampleSentenceDe": "Die Kinder machen zusammen ein großes Puzzle.",
+          "exampleSentenceEs": "Los niños hacen juntos un puzle grande.",
+          "category": "Freizeit",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Kinder",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "machen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "zusammen ein großes Puzzle",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "colorful interlocking jigsaw puzzle pieces partially assembled"
+        },
+        {
+          "de": "das Saxophon",
+          "pron": "das sak-zo-fón",
+          "es": "el saxofón",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Saxophone",
+          "exampleSentenceDe": "Er lernt Saxophon in der Musikschule.",
+          "exampleSentenceEs": "Él aprende saxofón en la escuela de música.",
+          "category": "Kultur",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Er",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "lernt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Saxophon in der Musikschule",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "shiny golden brass alto saxophone musical instrument"
+        },
+        {
+          "de": "die Show",
+          "pron": "di shou",
+          "es": "el espectáculo / programa",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Shows",
+          "exampleSentenceDe": "Die neue Show im Fernsehen beginnt um zwanzig Uhr.",
+          "exampleSentenceEs": "El nuevo espectáculo en la tele empieza a las ocho.",
+          "category": "Medien",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die neue Show im Fernsehen",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "beginnt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "um zwanzig Uhr",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "Ski fahren",
+          "pron": "shi fá-ren",
+          "es": "esquiar",
+          "type": "Frase verbal",
+          "regimen": "fährt Ski, fuhr Ski, ist Ski gefahren",
+          "plural": "",
+          "exampleSentenceDe": "Im Winter fahren wir gern in den Alpen Ski.",
+          "exampleSentenceEs": "En invierno nos gusta esquiar en los Alpes.",
+          "category": "Sport",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Winter",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "fahren",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir gern in den Alpen",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "Ski",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "skier gliding down a snowy alpine slope with skis and poles"
+        },
+        {
+          "de": "der Song",
+          "pron": "dea song",
+          "es": "la canción (moderna)",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Songs",
+          "exampleSentenceDe": "Dieser Song ist in Deutschland sehr beliebt.",
+          "exampleSentenceEs": "Esta canción es muy popular en Alemania.",
+          "category": "Kultur",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Dieser Song",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "in Deutschland sehr beliebt",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "surfen",
+          "pron": "sö́r-fen",
+          "es": "surfear / navegar (en internet)",
+          "type": "Verbo regular",
+          "regimen": "surft, surfte, ist/hat gesurft",
+          "plural": "",
+          "exampleSentenceDe": "Eva kann surfen und tauchen.",
+          "exampleSentenceEs": "Eva sabe hacer surf y bucear.",
+          "category": "Sport",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Eva",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kann",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "surfen und tauchen",
+              "role": "verb_p2",
+              "order": 3
+            }
+          ],
+          "en": "surfer riding a curling blue ocean wave on a surfboard"
+        },
+        {
+          "de": "der Swimmingpool",
+          "pron": "dea sví-ming-pul",
+          "es": "la piscina (privada/hotel)",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Swimmingpools",
+          "exampleSentenceDe": "Das Hotel hat leider keinen Swimmingpool.",
+          "exampleSentenceEs": "Lamentablemente el hotel no tiene piscina.",
+          "category": "Freizeit",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das Hotel",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hat",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "leider keinen Swimmingpool",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "outdoor rectangular blue swimming pool with metal ladder"
+        },
+        {
+          "de": "die Szene",
+          "pron": "di tsé-ne",
+          "es": "la escena",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Szenen",
+          "exampleSentenceDe": "Diese Szene im Film war wirklich spannend.",
+          "exampleSentenceEs": "Esta escena en la película fue realmente emocionante.",
+          "category": "Kultur",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Diese Szene im Film",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "war",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wirklich spannend",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Tanz",
+          "pron": "dea tants",
+          "es": "el baile / danza",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Tänze",
+          "exampleSentenceDe": "Dieser traditionelle Tanz gefällt mir gut.",
+          "exampleSentenceEs": "Este baile tradicional me gusta mucho.",
+          "category": "Kultur",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Dieser traditionelle Tanz",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gefällt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "mir gut",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "tauchen",
+          "pron": "táu-jen",
+          "es": "bucear",
+          "type": "Verbo regular",
+          "regimen": "taucht, tauchte, ist/hat getaucht",
+          "plural": "",
+          "exampleSentenceDe": "Im Urlaub möchte ich im Meer tauchen.",
+          "exampleSentenceEs": "En vacaciones quiero bucear en el mar.",
+          "category": "Sport",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Urlaub",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "möchte",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich im Meer",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "tauchen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "scuba diver with diving mask and fins swimming underwater"
+        },
+        {
+          "de": "das Tier",
+          "pron": "das tir",
+          "es": "el animal",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Tiere",
+          "exampleSentenceDe": "Welche Tiere leben hier im Wald?",
+          "exampleSentenceEs": "¿Qué animales viven aquí en el bosque?",
+          "category": "Tiere",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Welche Tiere",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "leben",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "hier im Wald",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "cute friendly forest animals together including fox, deer, and rabbit"
+        },
+        {
+          "de": "das Training",
+          "pron": "das tréi-ning",
+          "es": "el entrenamiento",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Trainings",
+          "exampleSentenceDe": "Wann hat er Training? Am Mittwoch um sechzehn Uhr.",
+          "exampleSentenceEs": "¿Cuándo tiene entrenamiento? El miércoles a las cuatro.",
+          "category": "Sport",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wann",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hat",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "er Training? Am Mittwoch um sechzehn Uhr",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Video",
+          "pron": "das ví-deo",
+          "es": "el vídeo",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Videos",
+          "exampleSentenceDe": "Ich bearbeite die Videos am Computer.",
+          "exampleSentenceEs": "Edito los vídeos en el ordenador.",
+          "category": "Medien",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bearbeite",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "die Videos am Computer",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Videospiel",
+          "pron": "das ví-deo-shpil",
+          "es": "el videojuego",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Videospiele",
+          "exampleSentenceDe": "Viele Jugendliche spielen gern Videospiele.",
+          "exampleSentenceEs": "A muchos jóvenes les gusta jugar videojuegos.",
+          "category": "Medien",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Viele Jugendliche",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "spielen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "gern Videospiele",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Kapitel 12: Reisen & Verkehr",
+      "words": [
+        {
+          "de": "ab|fahren",
+          "pron": "áp-fa-ren",
+          "es": "salir / partir (transporte)",
+          "type": "Verbo separable irr.",
+          "regimen": "fährt ab, fuhr ab, ist abgefahren",
+          "plural": "",
+          "exampleSentenceDe": "Entschuldigung, wann fährt die Linie 2 ab?",
+          "exampleSentenceEs": "Disculpe, ¿cuándo sale la línea 2?",
+          "category": "Verkehr",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Entschuldigung, wann",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "fährt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "die Linie 2",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "ab",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "passenger train departing swiftly from a railway station platform"
+        },
+        {
+          "de": "die Abfahrtszeit",
+          "pron": "di áp-farts-tsait",
+          "es": "la hora de salida",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Abfahrtszeiten",
+          "exampleSentenceDe": "Die Abfahrtszeit steht oben auf dem Fahrplan.",
+          "exampleSentenceEs": "La hora de salida figura arriba en el horario.",
+          "category": "Verkehr",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Abfahrtszeit",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "steht",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "oben auf dem Fahrplan",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "an|kommen",
+          "pron": "án-ko-men",
+          "es": "llegar",
+          "type": "Verbo separable irr.",
+          "regimen": "kommt an, kam an, ist angekommen",
+          "plural": "",
+          "exampleSentenceDe": "Wann kommt ihr endlich in Berlin an?",
+          "exampleSentenceEs": "¿Cuándo llegáis por fin a Berlín?",
+          "category": "Reisen",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wann",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kommt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ihr endlich in Berlin",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "an",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "passenger train arriving smoothly at a train station platform"
+        },
+        {
+          "de": "die Ankunft",
+          "pron": "di án-kunft",
+          "es": "la llegada",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Ankünfte",
+          "exampleSentenceDe": "Die Ankunft des Zuges ist um 14:20 Uhr.",
+          "exampleSentenceEs": "La llegada del tren es a las 14:20 h.",
+          "category": "Verkehr",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Ankunft des Zuges",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "um 14:20 Uhr",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die City",
+          "pron": "di sí-ti",
+          "es": "el centro urbano / centro",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Citys",
+          "exampleSentenceDe": "Am Samstag gehen wir in der City einkaufen.",
+          "exampleSentenceEs": "El sábado vamos de compras al centro.",
+          "category": "Stadt",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Am Samstag",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gehen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir in der City",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "einkaufen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "bustling downtown city center plaza with shops and buildings"
+        },
+        {
+          "de": "das E-Bike",
+          "pron": "das í-baik",
+          "es": "la bicicleta eléctrica",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die E-Bikes",
+          "exampleSentenceDe": "Immer mehr Pendler fahren mit dem E-Bike zur Arbeit.",
+          "exampleSentenceEs": "Cada vez más trabajadores van en bici eléctrica al trabajo.",
+          "category": "Verkehr",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Immer mehr Pendler",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "fahren",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "mit dem E-Bike zur Arbeit",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "modern electric commuter bicycle with battery pack on frame"
+        },
+        {
+          "de": "das Fahrrad",
+          "pron": "das fár-rat",
+          "es": "la bicicleta",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Fahrräder",
+          "exampleSentenceDe": "Thomas hat ein Auto, aber er hat kein Fahrrad.",
+          "exampleSentenceEs": "Thomas tiene un coche, pero no tiene bicicleta.",
+          "category": "Verkehr",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Thomas",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hat",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ein Auto, aber er hat kein Fahrrad",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "classic blue city bicycle with front basket and bell"
+        },
+        {
+          "de": "die Gegend",
+          "pron": "di gué-guent",
+          "es": "la zona / región / alrededores",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Gegenden",
+          "exampleSentenceDe": "Das ist eine sehr ruhige und grüne Gegend.",
+          "exampleSentenceEs": "Esta es una zona muy tranquila y verde.",
+          "category": "Reisen",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "eine sehr ruhige und grüne Gegend",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Hafen",
+          "pron": "dea já-fen",
+          "es": "el puerto",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Häfen",
+          "exampleSentenceDe": "Im Hamburger Hafen liegen viele große Schiffe.",
+          "exampleSentenceEs": "En el puerto de Hamburgo hay muchos barcos grandes.",
+          "category": "Reisen",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Hamburger Hafen",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "liegen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "viele große Schiffe",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "maritime sea harbor port with cargo ships and dock cranes"
+        },
+        {
+          "de": "hageln",
+          "pron": "já-gueln",
+          "es": "granizar",
+          "type": "Verbo impersonal",
+          "regimen": "es hagelt, hagelte, hat gehagelt",
+          "plural": "",
+          "exampleSentenceDe": "Achtung, heute Nachmittag kann es stark hageln!",
+          "exampleSentenceEs": "¡Atención, esta tarde puede granizar fuerte!",
+          "category": "Wetter",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Achtung, heute Nachmittag",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kann",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "es stark",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "hageln",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "dark storm cloud dropping icy white hailstones"
+        },
+        {
+          "de": "das Hotel",
+          "pron": "das jo-tél",
+          "es": "el hotel",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Hotels",
+          "exampleSentenceDe": "Unser Hotel liegt fünf Minuten vom Bahnhof entfernt.",
+          "exampleSentenceEs": "Nuestro hotel está a cinco minutos de la estación.",
+          "category": "Reisen",
+          "level": "A1–A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Unser Hotel",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "liegt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "fünf Minuten vom Bahnhof entfernt",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "multi-story modern hotel building with glass entrance awning"
+        },
+        {
+          "de": "der ICE",
+          "pron": "dea i-tsé-e",
+          "es": "el tren de alta velocidad ICE",
+          "type": "Sustantivo (Masc)",
+          "regimen": "InterCityExpress",
+          "plural": "",
+          "exampleSentenceDe": "Mit dem ICE fährt man schnell nach München.",
+          "exampleSentenceEs": "Con el ICE se viaja rápido a Múnich.",
+          "category": "Verkehr",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Mit dem ICE",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "fährt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "man schnell nach München",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "sleek white and red German ICE high-speed passenger train"
+        },
+        {
+          "de": "die Insel",
+          "pron": "di ín-zel",
+          "es": "la isla",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Inseln",
+          "exampleSentenceDe": "Die Insel Rügen ist im Sommer sehr voll.",
+          "exampleSentenceEs": "La isla de Rügen está muy llena en verano.",
+          "category": "Natur",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Insel Rügen",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "im Sommer sehr voll",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "scenic green island with sandy shore surrounded by blue ocean"
+        },
+        {
+          "de": "der Koffer",
+          "pron": "dea kó-fa",
+          "es": "la maleta",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Koffer",
+          "exampleSentenceDe": "Hast du deinen Koffer für den Flug schon gepackt?",
+          "exampleSentenceEs": "¿Ya has hecho tu maleta para el vuelo?",
+          "category": "Reisen",
+          "level": "A1–A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Hast",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "du",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "deinen Koffer für den Flug schon",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "gepackt",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "hard-shell rolling travel suitcase with telescopic handle"
+        },
+        {
+          "de": "landen",
+          "pron": "lán-den",
+          "es": "aterrizar",
+          "type": "Verbo regular",
+          "regimen": "landet, landete, ist gelandet",
+          "plural": "",
+          "exampleSentenceDe": "Das Flugzeug landet pünktlich um zehn Uhr.",
+          "exampleSentenceEs": "El avión aterriza puntual a las diez.",
+          "category": "Reisen",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das Flugzeug",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "landet",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "pünktlich um zehn Uhr",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "commercial passenger airplane landing smoothly on an airport runway"
+        },
+        {
+          "de": "die Landkarte",
+          "pron": "di lánt-kar-te",
+          "es": "el mapa / plano",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Landkarten",
+          "exampleSentenceDe": "Auf dieser Landkarte sieht man alle großen Städte.",
+          "exampleSentenceEs": "En este mapa se ven todas las ciudades grandes.",
+          "category": "Orientierung",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Auf dieser Landkarte",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "sieht",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "man alle großen Städte",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "folded colorful paper geographic map with roads and pins"
+        },
+        {
+          "de": "die Landung",
+          "pron": "di lán-dung",
+          "es": "el aterrizaje",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Landungen",
+          "exampleSentenceDe": "Nach der Landung holen wir unsere Koffer ab.",
+          "exampleSentenceEs": "Tras el aterrizaje recogemos nuestras maletas.",
+          "category": "Reisen",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Nach der Landung",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "holen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir unsere Koffer",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "ab",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "die Landwirtschaft",
+          "pron": "di lánt-virt-shaft",
+          "es": "la agricultura",
+          "type": "Sustantivo (Fem)",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "In dieser Region spielt die Landwirtschaft eine Rolle.",
+          "exampleSentenceEs": "En esta región la agricultura juega un papel importante.",
+          "category": "Natur",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "In dieser Region",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "spielt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "die Landwirtschaft eine Rolle",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Linie",
+          "pron": "di lí-nie",
+          "es": "la línea (metro/autobús)",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Linien",
+          "exampleSentenceDe": "Sie müssen hier die Linie vier nehmen.",
+          "exampleSentenceEs": "Tiene que tomar aquí la línea cuatro.",
+          "category": "Verkehr",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "müssen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "hier die Linie vier",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "nehmen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "die Luft",
+          "pron": "di luft",
+          "es": "el aire",
+          "type": "Sustantivo (Fem)",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Nach der Arbeit brauche ich frische Luft.",
+          "exampleSentenceEs": "Después del trabajo necesito aire fresco.",
+          "category": "Natur",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Nach der Arbeit",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "brauche",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich frische Luft",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Reiseführer",
+          "pron": "dea rái-ze-fü-ra",
+          "es": "la guía turística (libro/persona)",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Reiseführer",
+          "exampleSentenceDe": "Vor dem Urlaub kaufe ich einen Reiseführer.",
+          "exampleSentenceEs": "Antes de las vacaciones compro una guía turística.",
+          "category": "Reisen",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Vor dem Urlaub",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kaufe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich einen Reiseführer",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "open travel guidebook with illustrated map and compass"
+        },
+        {
+          "de": "der Schulweg",
+          "pron": "dea shúl-vek",
+          "es": "el camino al colegio",
+          "type": "Sustantivo (Masc)",
+          "regimen": "",
+          "plural": "die Schulwege",
+          "exampleSentenceDe": "Der Schulweg dauert zu Fuß zehn Minuten.",
+          "exampleSentenceEs": "El camino a la escuela dura diez minutos a pie.",
+          "category": "Orientierung",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Schulweg",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "dauert",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "zu Fuß zehn Minuten",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Souvenir",
+          "pron": "das zu-ve-nír",
+          "es": "el recuerdo / suvenir",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Souvenirs",
+          "exampleSentenceDe": "Aus Berlin bringen wir kleine Souvenirs mit.",
+          "exampleSentenceEs": "De Berlín traemos pequeños recuerdos.",
+          "category": "Reisen",
+          "level": "A2",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Aus Berlin",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bringen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir kleine Souvenirs",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "mit",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ],
+          "en": "miniature landmark tower souvenir keychain and snowglobe"
+        },
+        {
+          "de": "die Straßenbahn",
+          "pron": "di shtrá-sen-ban",
+          "es": "el tranvía",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Straßenbahnen",
+          "exampleSentenceDe": "Ich fahre jeden Tag mit der Straßenbahn ins Büro.",
+          "exampleSentenceEs": "Voy todos los días en tranvía a la oficina.",
+          "category": "Verkehr",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "fahre",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "jeden Tag mit der Straßenbahn ins Büro",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "modern yellow city tram streetcar riding on rail tracks"
+        },
+        {
+          "de": "die Strecke",
+          "pron": "di shtré-ke",
+          "es": "el trayecto / recorrido",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Strecken",
+          "exampleSentenceDe": "Diese Strecke ist wegen Bauarbeiten gesperrt.",
+          "exampleSentenceEs": "Este trayecto está cortado por obras.",
+          "category": "Verkehr",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Diese Strecke",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wegen Bauarbeiten",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "gesperrt",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "das Tal",
+          "pron": "das tal",
+          "es": "el valle",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Täler",
+          "exampleSentenceDe": "Das kleine Dorf liegt tief unten im Tal.",
+          "exampleSentenceEs": "El pueblito está situado abajo en el valle.",
+          "category": "Natur",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das kleine Dorf",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "liegt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "tief unten im Tal",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "lush green alpine valley nestled between mountain slopes"
+        },
+        {
+          "de": "das Taxi",
+          "pron": "das ták-si",
+          "es": "el taxi",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Taxis",
+          "exampleSentenceDe": "Wir nehmen ein Taxi direkt zum Bahnhof.",
+          "exampleSentenceEs": "Tomamos un taxi directo a la estación.",
+          "category": "Verkehr",
+          "level": "A1–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "nehmen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ein Taxi direkt zum Bahnhof",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "cream-colored German taxi sedan car with glowing yellow roof sign"
+        },
+        {
+          "de": "die Tour",
+          "pron": "di tur",
+          "es": "la excursión / recorrido",
+          "type": "Sustantivo (Fem)",
+          "regimen": "",
+          "plural": "die Touren",
+          "exampleSentenceDe": "Am Sonntag machen wir eine Fahrradtour am Fluss.",
+          "exampleSentenceEs": "El domingo hacemos una ruta en bici junto al río.",
+          "category": "Reisen",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Am Sonntag",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "machen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir eine Fahrradtour am Fluss",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Umwelt",
+          "pron": "di úm-velt",
+          "es": "el medio ambiente",
+          "type": "Sustantivo (Fem)",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Bahnfahren ist besser für unsere Umwelt.",
+          "exampleSentenceEs": "Viajar en tren es mejor para nuestro medio ambiente.",
+          "category": "Natur",
+          "level": "A1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bahnfahren",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "besser für unsere Umwelt",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Unwetter",
+          "pron": "das ún-ve-ta",
+          "es": "el temporal / tormenta severa",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Unwetter",
+          "exampleSentenceDe": "Bei starkem Unwetter bleiben Sie besser zu Hause.",
+          "exampleSentenceEs": "Con temporal fuerte mejor quédese en casa.",
+          "category": "Wetter",
+          "level": "B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bei starkem Unwetter",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bleiben",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie besser zu Hause",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "dark thundercloud with heavy rain and bright lightning bolts"
+        },
+        {
+          "de": "das Verkehrsmittel",
+          "pron": "das fea-kérs-mi-tel",
+          "es": "el medio de transporte",
+          "type": "Sustantivo (Neutro)",
+          "regimen": "",
+          "plural": "die Verkehrsmittel",
+          "exampleSentenceDe": "Welche öffentlichen Verkehrsmittel nutzen Sie?",
+          "exampleSentenceEs": "¿Qué medios de transporte público utiliza usted?",
+          "category": "Verkehr",
+          "level": "A2–B1",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Welche öffentlichen Verkehrsmittel",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "nutzen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie",
+              "role": "complement",
+              "order": 3
+            }
+          ],
+          "en": "city bus, tram, and passenger train public transport vehicles"
+        }
+      ]
+    }
+  ]
+}
