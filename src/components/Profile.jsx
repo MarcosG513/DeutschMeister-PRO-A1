@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import localforage from 'localforage';
+import { chapters } from '../data/chapters';
 import { 
   User, Mail, Lock, RefreshCw, CheckCircle2, Flame, 
   Layers, Trophy, ShieldCheck, FileText, ChevronRight, 
@@ -18,6 +19,7 @@ import {
   getStreakSummarySync,
   getSkillProgressSummary,
   getSkillProgressSummarySync,
+  countUniqueVocabularyCards,
 } from '../utils/helpers';
 import { getSrsStats, getSrsStatsSync } from '../services/srsBridgeService';
 import { syncCloudMediaToLocal, getLastMediaSyncTime, getOfflineSyncStats } from '../services/syncMediaService';
@@ -32,8 +34,13 @@ import {
 
 const AVATARS = ['🦊', '🦉', '🐼', '🦁', '🐯', '🐸', '🦄', '🦖', '🚀', '👑', '⚡', '🎓'];
 
-const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdmin = false, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount = 1510, canInstallPWA: passedCanInstall = false, onInstallApp, showWebInstallCard: passedShowWebInstallCard }) => {
+const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdmin = false, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount, canInstallPWA: passedCanInstall = false, onInstallApp, showWebInstallCard: passedShowWebInstallCard }) => {
   const isAdminUser = passedIsAdmin === true || accessRole === 'admin';
+  const resolvedTotalCardsCount = useMemo(() => {
+    const provided = Number(totalCardsCount);
+    if (Number.isFinite(provided) && provided > 0) return provided;
+    return countUniqueVocabularyCards(chapters);
+  }, [totalCardsCount]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginMode, setIsLoginMode] = useState(false);
@@ -47,7 +54,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
   const [streak, setStreak] = useState(0);
   const [streakSummary, setStreakSummary] = useState(() => getStreakSummarySync());
   const [skillProgress, setSkillProgress] = useState(() =>
-    getSkillProgressSummarySync(studiedCardsCount || unlockedCardsCount || 0, totalCardsCount)
+    getSkillProgressSummarySync(studiedCardsCount || unlockedCardsCount || 0, resolvedTotalCardsCount)
   );
   const [srsStats, setSrsStats] = useState(() => getSrsStatsSync());
   const [studiedCount, setStudiedCount] = useState(studiedCardsCount || unlockedCardsCount || 0);
@@ -75,8 +82,8 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
   const isRegistered = user && user.isAnonymous === false;
 
   const effectiveStudiedCount = Math.max(studiedCount, studiedCardsCount || 0);
-  const progressPercent = totalCardsCount > 0 
-    ? Math.min(100, Math.round((effectiveStudiedCount / totalCardsCount) * 100)) 
+  const progressPercent = resolvedTotalCardsCount > 0 
+    ? Math.min(100, Math.round((effectiveStudiedCount / resolvedTotalCardsCount) * 100)) 
     : 0;
 
   const totalGoetheModules = 16;
@@ -102,7 +109,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
 
         const [curSummary, curSkills, curSrs] = await Promise.all([
           getStreakSummary(),
-          getSkillProgressSummary(Math.max(curStudied, studiedCardsCount || 0), totalCardsCount),
+          getSkillProgressSummary(Math.max(curStudied, studiedCardsCount || 0), resolvedTotalCardsCount),
           getSrsStats(),
         ]);
         if (curSummary) setStreakSummary(curSummary);
@@ -128,7 +135,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
       window.removeEventListener('skillActivityUpdated', loadGamificationData);
       window.removeEventListener('srsDeckUpdated', loadGamificationData);
     };
-  }, [studiedCardsCount, totalCardsCount]);
+  }, [studiedCardsCount, resolvedTotalCardsCount]);
 
   // Sincronización reactiva de velocidad global ('0.75x' / '1.0x') y limpieza de audio al desmontar
   useEffect(() => {
@@ -643,7 +650,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
               <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center text-center justify-between min-h-[145px]">
                 <span className="text-3xl mb-1">🗂️</span>
                 <div>
-                  <p className="text-lg font-bold text-slate-900">{effectiveStudiedCount}/{totalCardsCount}</p>
+                  <p className="text-lg font-bold text-slate-900">{effectiveStudiedCount}/{resolvedTotalCardsCount}</p>
                   <p className="text-xs font-medium text-slate-500">Vocabulario Estudiado</p>
                 </div>
                 <div className="w-full mt-2">

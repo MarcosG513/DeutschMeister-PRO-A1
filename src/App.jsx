@@ -14,7 +14,7 @@ import { app, auth, db, functions, appId } from './config/firebase';
 import { getCachedAccessDecision, setCachedAccessDecision, isOfflineOrTransientNetworkError, signOutUnified, processAuthRedirectResult } from './services/authService';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
-import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, recordSkillActivity, getStudiedCardsCount, getStreakSummary, getStreakSummarySync, getSkillProgressSummary, getSkillProgressSummarySync, syncPedagogyProgressFromCloud, splitGermanTitle, splitParentheticalText } from './utils/helpers';
+import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, countUniqueVocabularyCards, recordDailyStudyActivity, recordCardStudied, recordSkillActivity, getStudiedCardsCount, getStreakSummary, getStreakSummarySync, getSkillProgressSummary, getSkillProgressSummarySync, syncPedagogyProgressFromCloud, splitGermanTitle, splitParentheticalText } from './utils/helpers';
 import { syncSrsDeckFromCloud, getSrsStats, getSrsStatsSync } from './services/srsBridgeService';
 import { parseTextToTokens, calculateWordTimings } from './utils/textTokenizer';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl, getSavedPlaybackSpeed, setSavedPlaybackSpeed, getProcessedSpeechBlobUrl, isCleanStretchedUrl } from './services/aiAudioService';
@@ -73,14 +73,7 @@ const readSavedLastActivity = () => {
 
 export default function App() {
   const totalUniqueCardsCount = useMemo(
-    () =>
-      new Set(
-        chapters.flatMap((c) =>
-          (c.words || [])
-            .map((w) => (w?.de ? getSafeId(w.de).substring(0, 150) : null))
-            .filter(Boolean)
-        )
-      ).size,
+    () => countUniqueVocabularyCards(chapters),
     []
   );
   const [activeChapterId, setActiveChapterId] = useState(chapters[0].id);

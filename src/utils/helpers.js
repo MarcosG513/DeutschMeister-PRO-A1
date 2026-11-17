@@ -69,6 +69,21 @@ export const pcmToWav = (pcmBuffer, sampleRate) => {
 export const getSafeId = (str) => btoa(encodeURIComponent(str)).replace(/[/+=]/g, '_');
 
 /**
+ * Calcula dinámicamente el total de tarjetas únicas de vocabulario en el catálogo curricular.
+ *
+ * @param {Array} chaptersList
+ * @returns {number}
+ */
+export const countUniqueVocabularyCards = (chaptersList = []) =>
+  new Set(
+    (Array.isArray(chaptersList) ? chaptersList : []).flatMap((c) =>
+      (c?.words || [])
+        .map((w) => (w?.de ? getSafeId(w.de).substring(0, 150) : null))
+        .filter(Boolean)
+    )
+  ).size;
+
+/**
  * Divide un texto (alemán o español) en término principal y subtítulo/código/aclaración entre paréntesis.
  * Soporta saltos de línea explícitos '\n' o sufijos entre paréntesis como '(das Zeichen 201)', '(prioridad del tren)', '(PLZ)'.
  *
@@ -1097,7 +1112,7 @@ const buildSkillProgressObject = (skillPoints, studiedCardsCount, totalUniqueCar
   };
 };
 
-export const getSkillProgressSummary = async (studiedCardsCount = 0, totalUniqueCardsCount = 1500) => {
+export const getSkillProgressSummary = async (studiedCardsCount = 0, totalUniqueCardsCount = 0) => {
   await ensureMetricsHydrated();
   return buildSkillProgressObject(
     metricsCache.skillPoints,
@@ -1107,7 +1122,7 @@ export const getSkillProgressSummary = async (studiedCardsCount = 0, totalUnique
   );
 };
 
-export const getSkillProgressSummarySync = (studiedCardsCount = 0, totalUniqueCardsCount = 1500) => {
+export const getSkillProgressSummarySync = (studiedCardsCount = 0, totalUniqueCardsCount = 0) => {
   if (metricsCache.hydrated) {
     return buildSkillProgressObject(
       metricsCache.skillPoints,

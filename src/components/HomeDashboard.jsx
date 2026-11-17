@@ -29,6 +29,7 @@ import {
   WifiOff,
 } from 'lucide-react';
 import { drivingAcademyClasses } from '../data/drivingAcademyCurriculum';
+import { countUniqueVocabularyCards } from '../utils/helpers';
 
 const EXPLORER_TABS = [
   { id: 'chapters', labelPrefix: 'Capítulos', icon: BookOpen },
@@ -56,7 +57,7 @@ export default function HomeDashboard({
   studyPlanModules = [],
   goetheModules = [],
   studiedCardsCount = 0,
-  totalUniqueCardsCount = 0,
+  totalUniqueCardsCount,
   lastActivity = null,
   streakSummary = null,
   skillProgress = null,
@@ -170,9 +171,15 @@ export default function HomeDashboard({
   const activeChapterFallbackId =
     resumeContext && lastActivity?.type === 'chapter' ? Number(lastActivity.id) : chapters[0]?.id || 1;
 
+  const resolvedTotalUniqueCardsCount = useMemo(() => {
+    const provided = Number(totalUniqueCardsCount);
+    if (Number.isFinite(provided) && provided > 0) return provided;
+    return countUniqueVocabularyCards(chapters);
+  }, [totalUniqueCardsCount, chapters]);
+
   const progressPercentage =
-    totalUniqueCardsCount > 0
-      ? Math.min(100, Math.round((studiedCardsCount / totalUniqueCardsCount) * 100))
+    resolvedTotalUniqueCardsCount > 0
+      ? Math.min(100, Math.round((studiedCardsCount / resolvedTotalUniqueCardsCount) * 100))
       : 0;
 
   const handleTabKeyDown = (event, currentIndex) => {
@@ -224,7 +231,7 @@ export default function HomeDashboard({
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/10 text-slate-200 border border-white/10">
-                  <span>Progreso global: {studiedCardsCount} / {totalUniqueCardsCount} ({progressPercentage}%)</span>
+                  <span>Progreso global: {studiedCardsCount} / {resolvedTotalUniqueCardsCount} ({progressPercentage}%)</span>
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-400/15 text-amber-300 border border-amber-400/30 whitespace-nowrap">
                   <Flame size={13} aria-hidden="true" />

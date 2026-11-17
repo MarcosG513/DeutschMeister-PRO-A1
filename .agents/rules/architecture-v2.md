@@ -80,6 +80,10 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
   - Vista de bienvenida predeterminada tras superar `AuthAccessGate` (`isHomeOpen = true` en `src/App.jsx`).
   - Organiza el ecosistema en 4 bloques sin métricas ficticias (calculadas dinámicamente desde `chapters`, `studyPlanModules`, `goetheModules` y `drivingAcademyClasses`): Hero con saludo personalizado y tarjeta de continuidad (`localStorage` `dm_last_activity`), 4 Rutas de Aprendizaje Guiadas (Desde Cero, Vida Diaria/Trabajo, Goethe Zertifikat A1 y Modo Conducción), Mapa Cognitivo de Herramientas y Explorador Rápido por pestañas WAI-ARIA (`role="tablist"` / `role="tabpanel"`).
   - Cualquier navegación hacia capítulos, Plan de Estudios, Goethe, vistas especiales (`driving`, `reading`, `roleplay`, `quiz`, `profile`) o búsqueda global no vacía cierra `isHomeOpen(false)` y registra `dm_last_activity`; tanto el logo superior como la píldora `🏠 Inicio` (visible cuando `!isHomeOpen`), el acceso superior del Drawer y el botón Back de Android permiten volver a Inicio en 1 toque.
+- **Inventario Curricular Consolidado A1–B1 & Contadores Dinámicos:**
+  - `src/data/chapters.jsx` (`id: 1..21` tras mapeo canónico Base-1) integra **`1,955` entradas** (`1,761` en `K1–K19` + `194` en `K20–K21`), junto con **`155` bloques comunicativos** en `src/data/redemittelBegegnungen.js` (`id: 22`), alcanzando **`2,110` entradas curriculares totales** (`2,082` tarjetas únicas deduplicadas por `getSafeId` mediante `countUniqueVocabularyCards` en `src/utils/helpers.js`) y **`1,810` índices únicos** sincronizados en `vocabulario_completo.json`.
+  - Prohibido fijar denominadores estáticos (`1510`, `1538`, etc.) en componentes (`src/components/Profile.jsx`, `src/components/HomeDashboard.jsx`, `src/utils/helpers.js`): el total de tarjetas se resuelve dinámicamente mediante `countUniqueVocabularyCards(chapters)`.
+  - Todo verbo separable añadido conserva `|` en `de` para `checkIsVerb` / `PincerSwitch`, `plural` se almacena sin prefijo `"Pl: "`, `level` CEFR libre de superíndices y los datos técnicos de `Kapitel 18`/`20` respetan estrictamente el entorno indoor de Enpal.
 
 ---
 
@@ -131,3 +135,10 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
      - **Datos Privados (`/artifacts/{appId}/users/{userId}/**`):** Exige `isOwner(userId) && isApprovedUser()` con validación estricta de esquema por subcolección (`unlockedCards`, `chat`, `pedagogy`, `srsCards`, `usage` solo lectura en cliente) y denegación por defecto (`match /{document=**} { allow read, write: if false; }`).
 - **Bootstrap Seguro de Propietario / Super-Admin:**
   - `DEFAULT_SUPER_ADMIN_EMAILS` en `functions/index.js` y `scripts/bootstrap_access_control.mjs` garantizan la auto-aprobación con rol `admin` del propietario (`mgmogollon13@gmail.com`) y de las cuentas `google.com` existentes en el proyecto para evitar bloqueos al activar las reglas.
+
+---
+
+## 6. Agent Skills del Espacio de Trabajo (`.agents/skills/`)
+
+- **`auditing-codebase-architecture` (`.agents/skills/auditing-codebase-architecture/`):** Guía integral de auditoría de arquitectura, rendimiento, seguridad Zero-Trust, resiliencia serverless, Android Auto y pedagogía.
+- **`injecting-cefr-vocabulary` (`.agents/skills/injecting-cefr-vocabulary/`):** Pipeline determinista (`SKILL.md` + `scripts/dedupe_and_merge.js`) para parsear lotes Markdown/CSV/JSON (Goethe A1–B1, DTZ y manuales técnicos, cubriendo los bloques restantes `B, C, F, G, I, J, K, N–R, U–Z` hacia `2.500–3.000` entradas), deduplicar globalmente vía `getSafeId` y raíz léxica, validar reglas de esquema (`|`, `category`, `level`, `plural`, `en`, `exampleSentenceDeBlocks`, `audioDe`, guardrail Enpal indoor), e inyectar por AST en `src/data/chapters.jsx`, `src/data/redemittelBegegnungen.js` y `vocabulario_completo.json`.
