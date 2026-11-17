@@ -14,7 +14,8 @@ import { app, auth, db, functions, appId } from './config/firebase';
 import { getCachedAccessDecision, setCachedAccessDecision, isOfflineOrTransientNetworkError, signOutUnified, processAuthRedirectResult } from './services/authService';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
-import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, getStudiedCardsCount, syncPedagogyProgressFromCloud, splitGermanTitle, splitParentheticalText } from './utils/helpers';
+import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, recordDailyStudyActivity, recordCardStudied, recordSkillActivity, getStudiedCardsCount, getStreakSummary, getStreakSummarySync, getSkillProgressSummary, getSkillProgressSummarySync, syncPedagogyProgressFromCloud, splitGermanTitle, splitParentheticalText } from './utils/helpers';
+import { syncSrsDeckFromCloud, getSrsStats, getSrsStatsSync } from './services/srsBridgeService';
 import { parseTextToTokens, calculateWordTimings } from './utils/textTokenizer';
 import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl, getSavedPlaybackSpeed, setSavedPlaybackSpeed, getProcessedSpeechBlobUrl, isCleanStretchedUrl } from './services/aiAudioService';
 import { unregisterCleanStretchedUrl } from './utils/cleanTimeStretch';
@@ -94,6 +95,10 @@ export default function App() {
   const [pendingAutoCommand, setPendingAutoCommand] = useState(null);
   const [isHomeOpen, setIsHomeOpen] = useState(true);
   const [lastActivity, setLastActivity] = useState(() => readSavedLastActivity());
+  const [quizInitialScope, setQuizInitialScope] = useState('chapter');
+  const [tutorNotice, setTutorNotice] = useState(null);
+  const [phaseBannerNotice, setPhaseBannerNotice] = useState(null);
+  const returnToHomeRef = useRef(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isTablasOpen, setIsTablasOpen] = useState(false);
   const [isPlanOpen, setIsPlanOpen] = useState(false);
@@ -117,17 +122,31 @@ export default function App() {
   };
 
   const handleGoHome = () => {
+    returnToHomeRef.current = false;
     setActivePresentationId(null);
     setActiveStudyPlanId(null);
+    setQuizInitialScope('chapter');
     setSearchTerm("");
     setViewMode("flashcards");
     setIsHomeOpen(true);
     setIsMenuOpen(false);
   };
 
+  const handleExitToOrigin = () => {
+    setActivePresentationId(null);
+    setActiveStudyPlanId(null);
+    setQuizInitialScope('chapter');
+    setViewMode("flashcards");
+    if (returnToHomeRef.current) {
+      returnToHomeRef.current = false;
+      setIsHomeOpen(true);
+    }
+  };
+
   const handleOpenChapter = (chapterId, mode = 'flashcards') => {
     const target = chapters.find((c) => Number(c.id) === Number(chapterId)) || chapters[0];
     if (!target) return;
+    if (isHomeOpen) returnToHomeRef.current = true;
     setActivePresentationId(null);
     setActiveStudyPlanId(null);
     setSearchTerm("");
@@ -147,6 +166,7 @@ export default function App() {
   const handleOpenStudyPlan = (moduleId) => {
     const target = studyPlanModules.find((m) => m.id === moduleId);
     if (!target) return;
+    if (isHomeOpen) returnToHomeRef.current = true;
     setActivePresentationId(null);
     setSearchTerm("");
     setActiveStudyPlanId(target.id);
@@ -164,6 +184,7 @@ export default function App() {
   const handleOpenGoetheModule = (moduleId) => {
     const target = goetheModules.find((g) => g.id === moduleId);
     if (!target) return;
+    if (isHomeOpen) returnToHomeRef.current = true;
     setActiveStudyPlanId(null);
     setSearchTerm("");
     setActivePresentationId(target.id);
@@ -178,17 +199,47 @@ export default function App() {
     });
   };
 
-  const handleOpenSpecialView = (targetView) => {
+  const handleOpenSpecialView = (targetView, options = {}) => {
+    if (targetView === 'podcast') {
+      setPhaseBannerNotice('Micro-Pódcasts Offline Karaoke llega en la Fase 2. Mientras tanto, hemos abierto Leselabor PRO para practicar lectura + audio Charon sincronizado.');
+      targetView = 'reading';
+    } else if (targetView === 'call') {
+      setPhaseBannerNotice('Modo Llamada Hands-Free (VAD + Avatar OLED) llega en la Fase 3. Mientras tanto, practica en vivo usando el Simulador de Rol con micrófono y Charon.');
+      targetView = 'roleplay';
+    } else if (targetView === 'photo') {
+      setTutorNotice('Modo Foto Multimodal (cámara + Gemini Vision) llega en la Fase 3. Por ahora puedes describir tu entorno por texto o micrófono aquí para recibir correcciones A1 y guardarlas en SRS.');
+      setIsMenuOpen(false);
+      setIsTutorOpen(true);
+      return;
+    } else {
+      setPhaseBannerNotice(null);
+    }
+
+    if (isHomeOpen) returnToHomeRef.current = true;
     setActivePresentationId(null);
     setActiveStudyPlanId(null);
+    setQuizInitialScope(options.quizScope || 'chapter');
     setIsHomeOpen(false);
     setIsMenuOpen(false);
     setViewMode(targetView);
+
+    if (['driving', 'roleplay', 'phrase', 'reading', 'quiz'].includes(targetView)) {
+      recordLastActivity({
+        type: 'special',
+        id: targetView,
+        title: targetView,
+      });
+    }
   };
 
   const handleOpenTutorFromHome = () => {
+    setTutorNotice(null);
     setIsMenuOpen(false);
     setIsTutorOpen(true);
+  };
+
+  const handleStartSrsReview = () => {
+    handleOpenSpecialView('quiz', { quizScope: 'srs' });
   };
 
   useEffect(() => {
@@ -463,30 +514,56 @@ export default function App() {
     }
   }, [unlockedCards]);
   const [studiedCardsCount, setStudiedCardsCount] = useState(0);
+  const [streakSummary, setStreakSummary] = useState(() => getStreakSummarySync());
+  const [skillProgress, setSkillProgress] = useState(() =>
+    getSkillProgressSummarySync(0, totalUniqueCardsCount)
+  );
+  const [srsStats, setSrsStats] = useState(() => getSrsStatsSync());
 
   useEffect(() => {
     const handleSpeedSync = (e) => {
       const next = e?.detail !== undefined ? e.detail : getSavedPlaybackSpeed();
       setStorySpeed(next);
     };
-    window.addEventListener('dm-speed-changed', handleSpeedSync);
-    getStudiedCardsCount().then(c => setStudiedCardsCount(c));
-    const handleStudied = (e) => {
-      if (e.detail?.count) setStudiedCardsCount(e.detail.count);
-      else getStudiedCardsCount().then(c => setStudiedCardsCount(c));
+    const refreshTelemetry = async (explicitStudiedCount) => {
+      const curCount =
+        typeof explicitStudiedCount === 'number'
+          ? explicitStudiedCount
+          : await getStudiedCardsCount();
+      setStudiedCardsCount(curCount);
+      const [nextStreak, nextSkills, nextSrs] = await Promise.all([
+        getStreakSummary(),
+        getSkillProgressSummary(curCount, totalUniqueCardsCount),
+        getSrsStats(),
+      ]);
+      if (nextStreak) setStreakSummary(nextStreak);
+      if (nextSkills) setSkillProgress(nextSkills);
+      if (nextSrs) setSrsStats(nextSrs);
     };
+    const handleStudied = (e) => {
+      refreshTelemetry(e?.detail?.count);
+    };
+    const handleGeneralTelemetry = () => {
+      refreshTelemetry();
+    };
+
+    window.addEventListener('dm-speed-changed', handleSpeedSync);
     window.addEventListener('cardStudiedUpdated', handleStudied);
+    window.addEventListener('studyActivityUpdated', handleGeneralTelemetry);
+    window.addEventListener('moduleCompletedUpdated', handleGeneralTelemetry);
+    window.addEventListener('skillActivityUpdated', handleGeneralTelemetry);
+    window.addEventListener('srsDeckUpdated', handleGeneralTelemetry);
+    refreshTelemetry();
+
     return () => {
       window.removeEventListener('dm-speed-changed', handleSpeedSync);
       window.removeEventListener('cardStudiedUpdated', handleStudied);
+      window.removeEventListener('studyActivityUpdated', handleGeneralTelemetry);
+      window.removeEventListener('moduleCompletedUpdated', handleGeneralTelemetry);
+      window.removeEventListener('skillActivityUpdated', handleGeneralTelemetry);
+      window.removeEventListener('srsDeckUpdated', handleGeneralTelemetry);
     };
-  }, []);
-
-  useEffect(() => {
-    if (accessStatus === 'approved' && user && !user.isAnonymous) {
-      recordDailyStudyActivity();
-    }
-  }, [accessStatus, user, activeStudyPlanId, activePresentationId, activeChapterId, viewMode]);
+  }, [totalUniqueCardsCount]);
 
   // Listener global de comandos desde Android Auto (vehículo)
   useEffect(() => {
@@ -685,10 +762,11 @@ export default function App() {
     return () => window.removeEventListener('online', handleOnline);
   }, [user, accessStatus]);
 
-  // Sincronización pedagógica solo cuando el usuario está aprobado
+  // Sincronización pedagógica y SRS solo cuando el usuario está aprobado
   useEffect(() => {
     if (!user || user.isAnonymous || accessStatus !== 'approved' || user.uid === 'offline_user') return;
     syncPedagogyProgressFromCloud(user.uid);
+    syncSrsDeckFromCloud(user.uid);
   }, [user, accessStatus]);
 
   useEffect(() => {
@@ -747,13 +825,11 @@ export default function App() {
         return;
       }
       if (activePresentationId || activeStudyPlanId) {
-        setActivePresentationId(null);
-        setActiveStudyPlanId(null);
-        setViewMode("flashcards");
+        handleExitToOrigin();
         return;
       }
       if (viewMode !== "flashcards") {
-        setViewMode("flashcards");
+        handleExitToOrigin();
         return;
       }
       if (!isHomeOpen) {
@@ -811,6 +887,7 @@ export default function App() {
       recordCardStudied(safeId);
     }
     recordDailyStudyActivity();
+    recordSkillActivity('reading', 1).catch(() => {});
     setRevealedCards(prev => ({
       ...prev,
       [index]: !prev[index]
@@ -818,6 +895,7 @@ export default function App() {
   };
   const revealAll = () => {
     recordDailyStudyActivity();
+    recordSkillActivity('reading', 2).catch(() => {});
     const all = {};
     displayedWords.forEach((word, i) => {
       all[i] = true;
@@ -1247,6 +1325,7 @@ export default function App() {
   const sendChatMessage = async () => {
     if (!chatInput.trim()) return;
     recordDailyStudyActivity();
+    recordSkillActivity('writing', 4).catch(() => {});
     const newUserMessage = {
       role: "user",
       parts: [{
@@ -1267,6 +1346,8 @@ export default function App() {
         },
         body: JSON.stringify({
           historialConversacion: newMessages,
+          responseFormat: 'structured_v2',
+          action: 'turn',
           uid: user?.uid
         })
       });
@@ -1275,36 +1356,66 @@ export default function App() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
       let currentText = "";
+      let resolvedFinalMsg = null;
+
       setChatMessages([...newMessages, {
         role: "model",
         parts: [{
           text: ""
-        }]
+        }],
+        structuredMeta: null
       }]);
       setIsChatLoading(false);
       while (true) {
-        const {
-          value,
-          done
-        } = await reader.read();
+        const { value, done } = await reader.read();
         if (done) break;
-        const chunk = decoder.decode(value, {
-          stream: true
-        });
+        const chunk = decoder.decode(value, { stream: true });
         const lines = chunk.split("\n");
         for (const line of lines) {
           if (line.startsWith("data: ") && !line.includes("[DONE]")) {
             try {
               const data = JSON.parse(line.substring(6));
-              if (data.text) {
+              if (data.type === 'reply_de_ready' && data.replyDe) {
+                currentText = `> 🇩🇪 **${data.replyDe}**`;
+                setChatMessages(prev => {
+                  const updated = [...prev];
+                  updated[updated.length - 1] = {
+                    role: "model",
+                    parts: [{ text: currentText }],
+                    structuredMeta: { replyDe: data.replyDe }
+                  };
+                  return updated;
+                });
+              } else if (data.type === 'structured_v2' && data.payload) {
+                const p = data.payload;
+                const formattedText = [p.replyMarkdownEs, p.replyDe ? `\n\n> 🇩🇪 **${p.replyDe}**` : '']
+                  .filter(Boolean)
+                  .join('')
+                  .trim();
+                currentText = formattedText || p.replyDe || '';
+                resolvedFinalMsg = {
+                  role: "model",
+                  parts: [{ text: currentText }],
+                  structuredMeta: {
+                    replyDe: p.replyDe || '',
+                    translationEs: p.translationEs || '',
+                    grammarCorrections: Array.isArray(p.grammarCorrections) ? p.grammarCorrections : [],
+                    suggestedReplies: Array.isArray(p.suggestedReplies) ? p.suggestedReplies : [],
+                    newVocabulary: Array.isArray(p.newVocabulary) ? p.newVocabulary : []
+                  }
+                };
+                setChatMessages(prev => {
+                  const updated = [...prev];
+                  updated[updated.length - 1] = resolvedFinalMsg;
+                  return updated;
+                });
+              } else if (data.text) {
                 currentText += data.text;
                 setChatMessages(prev => {
                   const updated = [...prev];
                   updated[updated.length - 1] = {
                     role: "model",
-                    parts: [{
-                      text: currentText
-                    }]
+                    parts: [{ text: currentText }]
                   };
                   return updated;
                 });
@@ -1313,17 +1424,18 @@ export default function App() {
           }
         }
       }
-      const finalMessages = [...newMessages, {
-        role: "model",
-        parts: [{
-          text: currentText
-        }]
-      }];
+      const finalMessages = [
+        ...newMessages,
+        resolvedFinalMsg || {
+          role: "model",
+          parts: [{ text: currentText }]
+        }
+      ];
       setChatMessages(finalMessages);
       if (user && db) {
         const chatDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'chat', 'history');
         await setDoc(chatDocRef, {
-          messages: finalMessages
+          messages: finalMessages.slice(-40)
         }, {
           merge: true
         }).catch(e => console.warn("Chat guardado localmente debido a permisos:", e));
@@ -1434,6 +1546,7 @@ export default function App() {
     const rawText = typeof word === 'string' ? word : word.de;
     const textToSpeak = splitGermanTitle(rawText).main || rawText;
     recordDailyStudyActivity();
+    recordSkillActivity('listening', 1).catch(() => {});
     if (typeof word === 'object' && word?.de) {
       const safeId = getSafeId(word.de).substring(0, 150);
       recordCardStudied(safeId);
@@ -1466,10 +1579,7 @@ export default function App() {
       {viewMode === "presentation" && activePresentationId && activePresentation ? (
         <PresentationViewer
           presentation={activePresentation}
-          onClose={() => {
-            setViewMode('flashcards');
-            setActivePresentationId(null);
-          }}
+          onClose={handleExitToOrigin}
           cardImages={cardImages}
           generateCardImage={generateCardImage}
           isImageLoading={isImageLoading}
@@ -1486,10 +1596,7 @@ export default function App() {
         return (
           <PresentationViewer
             presentation={activeModule}
-            onClose={() => {
-              setViewMode('flashcards');
-              setActiveStudyPlanId(null);
-            }}
+            onClose={handleExitToOrigin}
             cardImages={cardImages}
             generateCardImage={generateCardImage}
             isImageLoading={isImageLoading}
@@ -1505,7 +1612,7 @@ export default function App() {
         <DrivingMode
           activeChapterId={activeChapterId}
           chapters={chapters}
-          onExit={() => setViewMode("flashcards")}
+          onExit={handleExitToOrigin}
           pendingAutoCommand={pendingAutoCommand}
           onClearAutoCommand={() => setPendingAutoCommand(null)}
           onWordStudied={(wordObj) => {
@@ -1513,11 +1620,13 @@ export default function App() {
               const safeId = getSafeId(wordObj.de).substring(0, 150);
               markCardAsStudied(safeId);
               recordDailyStudyActivity();
+              recordSkillActivity('listening', 2).catch(() => {});
+              recordSkillActivity('speaking', 2).catch(() => {});
             }
           }}
         />
       ) : viewMode === "profile" ? <Profile
-        onExit={() => setViewMode('flashcards')}
+        onExit={handleExitToOrigin}
         user={user}
         auth={auth}
         accessRole={accessRole}
@@ -1529,10 +1638,11 @@ export default function App() {
         onInstallApp={handleInstallApp}
         showWebInstallCard={showWebInstallCard}
       /> : viewMode === "quiz" ? <DynamicQuiz 
-        onExit={() => setViewMode('flashcards')} 
+        onExit={handleExitToOrigin} 
         chapters={chapters}
         activeChapterId={activeChapterId}
         activeChapterTitle={activeChapter?.title}
+        initialScope={quizInitialScope}
       /> : <>
           {/* HEADER NAVBAR */}
           <header className="bg-slate-900 text-white shadow-md sticky top-0 z-30 flex-shrink-0 pt-[max(0.75rem,env(safe-area-inset-top))]">
@@ -1635,7 +1745,7 @@ export default function App() {
               <div onClick={() => setIsMenuOpen(false)} className="fixed inset-0 bg-slate-950/60 z-40 transition-opacity animate-in fade-in duration-200" />
               <aside className="fixed inset-y-0 left-0 w-[88vw] sm:w-80 md:w-96 max-w-sm bg-slate-900 text-slate-100 z-50 shadow-2xl flex flex-col transform transition-transform duration-300 animate-in slide-in-from-left">
                 {/* Cabecera del Menú */}
-                <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950">
+                <div className="px-4 pb-4 pt-[max(1rem,env(safe-area-inset-top))] border-b border-slate-800 flex justify-between items-center bg-slate-950">
                   <div className="flex items-center gap-2">
                     <GraduationCap className="text-yellow-400" size={22} />
                     <span className="font-bold text-sm text-white tracking-wide">Navegación DM A1</span>
@@ -1827,8 +1937,22 @@ export default function App() {
             </div>
           }>
           
+          {phaseBannerNotice && !isHomeOpen && (
+            <div className="bg-indigo-50 border border-indigo-200 text-indigo-950 rounded-2xl px-4 py-3 text-xs sm:text-sm font-medium flex items-center justify-between gap-3">
+              <span>{phaseBannerNotice}</span>
+              <button
+                type="button"
+                onClick={() => setPhaseBannerNotice(null)}
+                className="text-indigo-700 hover:bg-indigo-100 p-1 rounded-lg shrink-0 cursor-pointer"
+                aria-label="Cerrar aviso"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
+
           {/* VISTA: INICIO Y CENTRO DE MANDO PEDAGÓGICO 🏠 */}
-          {isHomeOpen && searchTerm.trim() === "" && viewMode !== "roleplay" && viewMode !== "reading" && (
+          {isHomeOpen && searchTerm.trim() === "" && !["roleplay", "phrase", "reading"].includes(viewMode) && (
             <HomeDashboard
               user={user}
               accessRole={accessRole}
@@ -1838,6 +1962,10 @@ export default function App() {
               studiedCardsCount={studiedCardsCount}
               totalUniqueCardsCount={totalUniqueCardsCount}
               lastActivity={lastActivity}
+              streakSummary={streakSummary}
+              skillProgress={skillProgress}
+              srsStats={srsStats}
+              onStartSrsReview={handleStartSrsReview}
               onOpenChapter={handleOpenChapter}
               onOpenStudyPlan={handleOpenStudyPlan}
               onOpenGoetheModule={handleOpenGoetheModule}
@@ -1847,11 +1975,16 @@ export default function App() {
             />
           )}
 
-          {/* VISTA: SIMULADOR DE ROL (GEMINI API) ✨ */}
-          {viewMode === "roleplay" && typeof RoleplaySimulator !== 'undefined' && <RoleplaySimulator onExit={() => setViewMode("flashcards")} />}
+          {/* VISTA: SIMULADOR DE ROL Y MODO FRASE (GEMINI API) ✨ */}
+          {(viewMode === "roleplay" || viewMode === "phrase") && typeof RoleplaySimulator !== 'undefined' && (
+            <RoleplaySimulator
+              initialMode={viewMode === "phrase" ? "phrase" : "roleplay"}
+              onExit={handleExitToOrigin}
+            />
+          )}
 
           {/* VISTA: COMPRENSIÓN LECTORA IA 📖 */}
-          {viewMode === "reading" && <ReadingComprehension onExit={() => setViewMode("flashcards")} />}
+          {viewMode === "reading" && <ReadingComprehension onExit={handleExitToOrigin} />}
           
           {/* VISTAS: FLASHCARDS Y TABLA */}
           {(!isHomeOpen || searchTerm.trim() !== "") && (viewMode === "flashcards" || viewMode === "table") && <>
@@ -2296,7 +2429,10 @@ export default function App() {
     {/* --- PANEL LATERAL: TUTOR IA --- */}
     <TutorChat
       isOpen={isTutorOpen}
-      onClose={() => setIsTutorOpen(false)}
+      onClose={() => {
+        setIsTutorOpen(false);
+        setTutorNotice(null);
+      }}
       isFullscreen={isTutorFullscreen}
       setIsFullscreen={setIsTutorFullscreen}
       chatMessages={chatMessages}
@@ -2306,6 +2442,7 @@ export default function App() {
       isChatLoading={isChatLoading}
       chatEndRef={chatEndRef}
       user={user}
+      externalNotice={tutorNotice}
     />
 
     {fullscreenImage && (() => {
@@ -2360,18 +2497,5 @@ export default function App() {
       isOpen={showInstallInstructionsModal}
       onClose={() => setShowInstallInstructionsModal(false)}
     />
-
-  <style dangerouslySetInnerHTML={{
-      __html: `
-    .perspective-1000 { perspective: 1000px; }
-    .preserve-3d { transform-style: preserve-3d; }
-    .backface-hidden { backface-visibility: hidden; }
-    .rotate-y-180 { transform: rotateY(180deg); }
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px;}
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-  `
-    }} />
 </div></Suspense>;
 }

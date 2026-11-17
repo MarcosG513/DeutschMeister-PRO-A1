@@ -33,6 +33,8 @@ rules_version = '2';
 //   - global_audio_pronunciations/{audioId}
 //   - global_stories/{storyId}
 //   - global_chapter_stories/{storyId}
+//   - global_podcasts/{podcastId}
+//   - global_dialogs/{dialogId}
 //   Readable only by authenticated, non-anonymous, approved users. Client writes denied.
 //
 // Collection: artifacts/{appId}/users/{userId}
@@ -66,7 +68,32 @@ rules_version = '2';
 //   - favoriteStories: list (optional, max 500 items)
 //   - learnedStories: list (optional, max 500 items)
 //   - savedStoryWords: map (optional, max 2000 keys)
+//   - studyDates: list (optional, max 90 items)
+//   - todayActionsDate: string | null (optional, max 32 chars)
+//   - todayActionsCount: number (optional, 0..10000)
+//   - skillPoints: map (optional, max 10 keys; speaking/listening/writing/reading 0..1000000)
 //   - updatedAt: timestamp (optional)
+//
+// Subcollection: artifacts/{appId}/users/{userId}/srsCards/{cardId}
+// Fields:
+//   - id: string (required, equals {cardId}, 1..200 chars)
+//   - cardType: string (required, enum: 'vocabulary' | 'grammar_error')
+//   - termDe: string (required, 1..300 chars)
+//   - audioDe: string | null (optional, max 300 chars)
+//   - translationEs: string | null (optional, max 500 chars)
+//   - axis: string (optional, enum: 'general' | 'survival' | 'work')
+//   - source: string (optional, enum: 'flashcard' | 'quiz' | 'podcast' | 'dialogue' | 'roleplay' | 'tutor_chat' | 'voice_call' | 'photo_ocr' | 'story_word')
+//   - sourceRef: string | null (optional, max 160 chars)
+//   - grammarErrorMeta: map | null (optional, max 10 keys)
+//   - state: string (required, enum: 'new' | 'learning' | 'review' | 'relearning')
+//   - reps: number (required, 0..100000)
+//   - lapses: number (required, 0..100000)
+//   - easeFactor: number (required, 1.3..5.0)
+//   - intervalDays: number (required, 0..3650)
+//   - createdAt: number (optional, >= 0)
+//   - lastReviewedAt: number | null (optional, >= 0)
+//   - nextReviewAt: number (required, >= 0)
+//   - updatedAt: number (required, >= 0)
 //
 // Subcollection: artifacts/{appId}/users/{userId}/usage/{docId}
 //   - Server-managed FinOps usage counter (e.g., usage/today). Owner read-only; client writes denied.
@@ -269,6 +296,22 @@ service cloud.firestore {
         && (!('updatedAt' in data) || data.updatedAt is timestamp);
     }
 
+    function isValidSkillPointValue(skillMap, skillKey) {
+      return !(skillKey in skillMap)
+        || (skillMap[skillKey] is number
+            && skillMap[skillKey] >= 0
+            && skillMap[skillKey] <= 1000000);
+    }
+
+    function isValidSkillPointsMap(skillMap) {
+      return skillMap is map
+        && skillMap.keys().size() <= 10
+        && isValidSkillPointValue(skillMap, 'speaking')
+        && isValidSkillPointValue(skillMap, 'listening')
+        && isValidSkillPointValue(skillMap, 'writing')
+        && isValidSkillPointValue(skillMap, 'reading');
+    }
+
     function isValidPedagogyDoc() {
       let data = request.resource.data;
       return isValidPayloadSize()
@@ -277,6 +320,7 @@ service cloud.firestore {
           'studyStreak', 'lastStudyDate', 'studiedCards',
           'completedModules', 'goetheScores',
           'favoriteStories', 'learnedStories', 'savedStoryWords',
+          'studyDates', 'todayActionsDate', 'todayActionsCount', 'skillPoints',
           'updatedAt'
         ])
         && (!('studyStreak' in data)
@@ -298,7 +342,87 @@ service cloud.firestore {
             || (data.learnedStories is list && data.learnedStories.size() <= 500))
         && (!('savedStoryWords' in data)
             || (data.savedStoryWords is map && data.savedStoryWords.keys().size() <= 2000))
+        && (!('studyDates' in data)
+            || (data.studyDates is list && data.studyDates.size() <= 90))
+        && (!('todayActionsDate' in data)
+            || data.todayActionsDate == null
+            || (data.todayActionsDate is string && data.todayActionsDate.size() <= 32))
+        && (!('todayActionsCount' in data)
+            || (data.todayActionsCount is number
+                && data.todayActionsCount >= 0
+                && data.todayActionsCount <= 10000))
+        && (!('skillPoints' in data)
+            || isValidSkillPointsMap(data.skillPoints))
         && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidSrsCard(cardId) {
+      let data = request.resource.data;
+      return isValidPayloadSize()
+        && hasRequiredFields([
+          'id', 'cardType', 'termDe', 'state',
+          'reps', 'lapses', 'easeFactor', 'intervalDays',
+          'nextReviewAt', 'updatedAt'
+        ])
+        && hasOnlyAllowedFields([
+          'id', 'cardType', 'termDe', 'audioDe', 'translationEs',
+          'axis', 'source', 'sourceRef', 'grammarErrorMeta',
+          'state', 'reps', 'lapses', 'easeFactor', 'intervalDays',
+          'createdAt', 'lastReviewedAt', 'nextReviewAt', 'updatedAt'
+        ])
+        && data.id is string
+        && data.id == cardId
+        && data.id.size() >= 1
+        && data.id.size() <= 200
+        && data.cardType is string
+        && data.cardType in ['vocabulary', 'grammar_error']
+        && data.termDe is string
+        && data.termDe.size() >= 1
+        && data.termDe.size() <= 300
+        && (!('audioDe' in data)
+            || data.audioDe == null
+            || (data.audioDe is string && data.audioDe.size() <= 300))
+        && (!('translationEs' in data)
+            || data.translationEs == null
+            || (data.translationEs is string && data.translationEs.size() <= 500))
+        && (!('axis' in data)
+            || (data.axis is string && data.axis in ['general', 'survival', 'work']))
+        && (!('source' in data)
+            || (data.source is string
+                && data.source in [
+                  'flashcard', 'quiz', 'podcast', 'dialogue',
+                  'roleplay', 'tutor_chat', 'voice_call',
+                  'photo_ocr', 'story_word'
+                ]))
+        && (!('sourceRef' in data)
+            || data.sourceRef == null
+            || (data.sourceRef is string && data.sourceRef.size() <= 160))
+        && (!('grammarErrorMeta' in data)
+            || data.grammarErrorMeta == null
+            || (data.grammarErrorMeta is map && data.grammarErrorMeta.keys().size() <= 10))
+        && data.state is string
+        && data.state in ['new', 'learning', 'review', 'relearning']
+        && data.reps is number
+        && data.reps >= 0
+        && data.reps <= 100000
+        && data.lapses is number
+        && data.lapses >= 0
+        && data.lapses <= 100000
+        && data.easeFactor is number
+        && data.easeFactor >= 1.3
+        && data.easeFactor <= 5.0
+        && data.intervalDays is number
+        && data.intervalDays >= 0
+        && data.intervalDays <= 3650
+        && (!('createdAt' in data)
+            || (data.createdAt is number && data.createdAt >= 0))
+        && (!('lastReviewedAt' in data)
+            || data.lastReviewedAt == null
+            || (data.lastReviewedAt is number && data.lastReviewedAt >= 0))
+        && data.nextReviewAt is number
+        && data.nextReviewAt >= 0
+        && data.updatedAt is number
+        && data.updatedAt >= 0;
     }
 
     // ===============================================================
@@ -358,6 +482,16 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /global_podcasts/{podcastId} {
+      allow read: if isApprovedUser();
+      allow write: if false;
+    }
+
+    match /global_dialogs/{dialogId} {
+      allow read: if isApprovedUser();
+      allow write: if false;
+    }
+
     // ===============================================================
     // Private User Data (Zero-Trust: Approved Owner Only)
     // ===============================================================
@@ -389,6 +523,12 @@ service cloud.firestore {
       match /pedagogy/{docId} {
         allow read: if isOwner(userId) && isApprovedUser();
         allow create, update: if isOwner(userId) && isApprovedUser() && isValidPedagogyDoc();
+        allow delete: if isOwner(userId) && isApprovedUser();
+      }
+
+      match /srsCards/{cardId} {
+        allow read: if isOwner(userId) && isApprovedUser();
+        allow create, update: if isOwner(userId) && isApprovedUser() && isValidSrsCard(cardId);
         allow delete: if isOwner(userId) && isApprovedUser();
       }
 

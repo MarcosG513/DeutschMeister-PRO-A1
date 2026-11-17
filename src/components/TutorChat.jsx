@@ -1,20 +1,44 @@
 // src/components/TutorChat.jsx
-import React, { useState, useEffect } from 'react';
-import { Bot, Minimize, Maximize, X, Loader2, Send, Mic, Volume2, Square } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Bot, ClipboardCheck, Maximize, Minimize, Sparkles, X } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
-import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
+import ConversationThread from './chat/ConversationThread';
+import ComposerBar from './chat/ComposerBar';
+import SessionDiagnosticCard from './chat/SessionDiagnosticCard';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
+import { captureConversationBundle } from '../services/srsBridgeService';
+import { API_ENDPOINTS } from '../config/apiEndpoints';
+import { auth } from '../config/firebase';
+import { recordSkillActivity } from '../utils/helpers';
+
+const STARTER_TUTOR_SUGGESTIONS = [
+  {
+    de: 'Ich möchte meinen Alltag auf Deutsch beschreiben.',
+    es: 'Quiero describir mi rutina diaria en alemán.',
+    grammarTag: 'V2',
+  },
+  {
+    de: 'Wann benutze ich "den" statt "der"?',
+    es: '¿Cuándo uso "den" en lugar de "der"?',
+    grammarTag: 'Akk',
+  },
+  {
+    de: 'Gib mir bitte ein kurzes Beispiel mit "möchten".',
+    es: 'Dame por favor un ejemplo corto con "möchten".',
+    grammarTag: 'Modal',
+  },
+];
 
 const extractGermanSegmentsForTTS = (rawMarkdown) => {
   if (!rawMarkdown || typeof rawMarkdown !== 'string') return '';
 
-  const boldMatches = [...rawMarkdown.matchAll(/\*\*([^*\n]{2,120})\*\*/g)].map(m => m[1].trim());
-  const quoteMatches = [...rawMarkdown.matchAll(/[„"«]([^"”»\n]{3,120})[“"»]/g)].map(m => m[1].trim());
+  const boldMatches = [...rawMarkdown.matchAll(/\*\*([^*\n]{2,120})\*\*/g)].map((m) => m[1].trim());
+  const quoteMatches = [...rawMarkdown.matchAll(/[„"«]([^"”»\n]{3,120})[“"»]/g)].map((m) => m[1].trim());
 
   const spanishStopWords = /\b(hola|ejemplo|palabra|regla|porque|cuando|recuerda|español|significa|pregunta|respuesta|verbo|sustantivo|artículo|acusativo|dativo|nominativo|pista)\b/i;
 
   const candidates = [...boldMatches, ...quoteMatches].filter(
-    frag => !spanishStopWords.test(frag) && /[a-zA-ZäöüÄÖÜß]/.test(frag)
+    (frag) => !spanishStopWords.test(frag) && /[a-zA-ZäöüÄÖÜß]/.test(frag)
   );
 
   if (candidates.length > 0) {
@@ -28,25 +52,36 @@ const extractGermanSegmentsForTTS = (rawMarkdown) => {
     .substring(0, 180);
 };
 
-const TutorChat = ({
-  isOpen,
+const TutorChat = (props) => {
+  if (!props.isOpen) return null;
+  return <TutorChatPanel {...props} />;
+};
+
+const TutorChatPanel = ({
   onClose,
   setIsOpen,
   isFullscreen: controlledFullscreen,
   setIsFullscreen: setControlledFullscreen,
   chatMessages = [],
-  chatInput = "",
+  chatInput = '',
   setChatInput,
   sendChatMessage,
   isChatLoading = false,
-  chatEndRef
+  chatEndRef,
+  user,
+  externalNotice = null,
 }) => {
   const [internalFullscreen, setInternalFullscreen] = useState(false);
   const isFullscreen = controlledFullscreen !== undefined ? controlledFullscreen : internalFullscreen;
   const setIsFullscreen = setControlledFullscreen || setInternalFullscreen;
 
   const [playingMsgIndex, setPlayingMsgIndex] = useState(null);
-  const { isListening, startListening, stopListening } = useSpeechRecognition('de-DE');
+  const [playingSuggestionText, setPlayingSuggestionText] = useState(null);
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
+  const [isAnalyzingDiagnostic, setIsAnalyzingDiagnostic] = useState(false);
+  const [diagnosticData, setDiagnosticData] = useState(null);
+  const [sessionTurnCount, setSessionTurnCount] = useState(0);
 
   useEffect(() => {
     return () => {
@@ -54,11 +89,28 @@ const TutorChat = ({
     };
   }, []);
 
-  if (!isOpen) return null;
+  const latestModelMeta = [...chatMessages]
+    .reverse()
+    .find((m) => m.role === 'model' && m.structuredMeta)?.structuredMeta;
 
-  const handleClose = () => {
+  const activeSuggestions =
+    Array.isArray(latestModelMeta?.suggestedReplies) && latestModelMeta.suggestedReplies.length > 0
+      ? latestModelMeta.suggestedReplies
+      : STARTER_TUTOR_SUGGESTIONS;
+
+  const handleComposerSend = () => {
+    if (!chatInput?.trim() || isChatLoading) return;
+    setSessionTurnCount((n) => n + 1);
+    sendChatMessage?.();
+  };
+
+  const closeImmediately = () => {
     stopCurrentAudio();
     setPlayingMsgIndex(null);
+    setPlayingSuggestionText(null);
+    setIsDiagnosticOpen(false);
+    setDiagnosticData(null);
+    setSessionTurnCount(0);
     if (onClose) {
       onClose();
     } else if (setIsOpen) {
@@ -66,16 +118,98 @@ const TutorChat = ({
     }
   };
 
-  const handleMicClick = () => {
-    if (isListening) {
-      stopListening();
-    } else {
-      startListening((text) => {
-        if (text && setChatInput) {
-          setChatInput(prev => prev ? `${prev} ${text}` : text);
-        }
+  const buildLocalFallbackDiagnostic = () => {
+    const windowSize = Math.max(2, sessionTurnCount * 2 + 1);
+    const recentMsgs = chatMessages.slice(-windowSize);
+    const collectedErrors = [];
+    const collectedVocab = [];
+    recentMsgs.forEach((m, idx) => {
+      const meta = m.structuredMeta;
+      if (Array.isArray(meta?.grammarCorrections)) {
+        meta.grammarCorrections.forEach((err, eIdx) => {
+          collectedErrors.push({
+            id: `tut_loc_${idx}_${eIdx}`,
+            userAttempt: err.original || '',
+            correctedDe: err.corrected || '',
+            explanationEs: err.explanationEs || '',
+            category: err.category || 'vocab',
+          });
+        });
+      }
+      if (Array.isArray(meta?.newVocabulary)) {
+        meta.newVocabulary.forEach((v) => {
+          if (v?.de) collectedVocab.push(v);
+        });
+      }
+    });
+    return {
+      sessionId: `tutor_${Date.now()}`,
+      mode: 'tutor',
+      title: 'Tutor Socrático Alemán A1',
+      fluencyScore: Math.min(95, 70 + sessionTurnCount * 5),
+      summaryEs: 'Resumen generado con las correcciones y el vocabulario capturado en esta sesión.',
+      missions: [],
+      errors: collectedErrors,
+      vocabulary: collectedVocab,
+    };
+  };
+
+  const handleRequestDiagnostic = async () => {
+    stopCurrentAudio();
+    setPlayingMsgIndex(null);
+    setIsDiagnosticOpen(true);
+    setIsAnalyzingDiagnostic(true);
+
+    const sliceForEval = chatMessages.slice(-14);
+    try {
+      const activeUser = user || auth?.currentUser;
+      const idToken = activeUser ? await activeUser.getIdToken().catch(() => '') : '';
+      const response = await fetch(API_ENDPOINTS.TUTOR_CHAT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
+        },
+        body: JSON.stringify({
+          historialConversacion: sliceForEval,
+          responseFormat: 'structured_v2',
+          action: 'evaluate_session',
+        }),
       });
+
+      if (!response.ok) throw new Error('Eval failed');
+      const data = await response.json();
+      setDiagnosticData({
+        sessionId: `tutor_${Date.now()}`,
+        mode: 'tutor',
+        title: 'Tutor Socrático Alemán A1',
+        fluencyScore: data.fluencyScore ?? 80,
+        summaryEs: data.summaryEs,
+        nextStepTipEs: data.nextStepTipEs,
+        missions: [],
+        errors: (data.errorsSummary || []).map((err, i) => ({
+          id: err.id || `tut_err_${i}`,
+          userAttempt: err.userSaid || '',
+          correctedDe: err.correctedDe || '',
+          translationEs: err.translationEs || '',
+          explanationEs: err.explanationEs || '',
+          category: err.category || 'vocab',
+        })),
+        vocabulary: data.vocabularyExtracted || [],
+      });
+    } catch {
+      setDiagnosticData(buildLocalFallbackDiagnostic());
+    } finally {
+      setIsAnalyzingDiagnostic(false);
     }
+  };
+
+  const handleCloseClick = () => {
+    if (sessionTurnCount >= 2 && !isDiagnosticOpen) {
+      handleRequestDiagnostic();
+      return;
+    }
+    closeImmediately();
   };
 
   const handlePlayAudio = (rawText, idx) => {
@@ -84,119 +218,146 @@ const TutorChat = ({
       setPlayingMsgIndex(null);
       return;
     }
-    const germanToSpeak = extractGermanSegmentsForTTS(rawText);
+    const germanToSpeak = extractGermanSegmentsForTTS(rawText) || rawText;
     if (!germanToSpeak) return;
 
     setPlayingMsgIndex(idx);
+    setPlayingSuggestionText(null);
+    recordSkillActivity('listening', 1).catch(() => {});
     playGermanAudio(germanToSpeak, {
       type: 'sentence',
       voice: 'Charon',
       onEnd: () => setPlayingMsgIndex(null),
-      onError: () => setPlayingMsgIndex(null)
+      onError: () => setPlayingMsgIndex(null),
     });
   };
 
-  return (
-    <aside
-      className={`fixed ${isFullscreen ? 'inset-0 w-full z-[100]' : 'top-0 right-0 bottom-0 w-full md:w-[450px] z-[100] border-l'} bg-white shadow-2xl border-slate-200 flex flex-col h-[100dvh] overflow-hidden animate-in slide-in-from-right duration-300`}
-    >
-      <div className="bg-slate-900 text-white p-4 flex justify-between items-center flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <Bot className="text-yellow-400" />
-          <h3 className="font-bold text-lg">Tutor Alemán</h3>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setIsFullscreen(!isFullscreen)}
-            className="text-slate-400 hover:text-white transition bg-slate-800 hover:bg-slate-700 rounded-lg p-1.5 cursor-pointer"
-            title={isFullscreen ? "Minimizar" : "Pantalla Completa"}
-          >
-            {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-          </button>
-          <button
-            type="button"
-            onClick={handleClose}
-            className="text-slate-400 hover:text-white transition bg-slate-800 hover:bg-slate-700 rounded-lg p-1.5 cursor-pointer"
-            title="Cerrar Tutor"
-          >
-            <X size={18} />
-          </button>
-        </div>
-      </div>
+  const handlePlaySuggestionAudio = (textDe) => {
+    if (!textDe) return;
+    if (playingSuggestionText === textDe) {
+      stopCurrentAudio();
+      setPlayingSuggestionText(null);
+      return;
+    }
+    setPlayingMsgIndex(null);
+    setPlayingSuggestionText(textDe);
+    playGermanAudio(textDe, {
+      type: 'sentence',
+      voice: 'Charon',
+      onEnd: () => setPlayingSuggestionText(null),
+      onError: () => setPlayingSuggestionText(null),
+    });
+  };
 
-      <div className="flex-1 overflow-y-auto p-4 bg-slate-50 flex flex-col gap-4 custom-scrollbar">
-        {chatMessages.map((msg, i) => (
-          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[85%] rounded-2xl px-5 py-4 shadow-sm ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'}`}>
-              {msg.role === 'user' ? (
-                msg.parts[0].text
-              ) : (
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
-                    <span className="text-[11px] font-bold text-indigo-600 uppercase tracking-wider flex items-center gap-1.5">
-                      <Bot className="text-yellow-500" size={13} /> Tutor IA
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => handlePlayAudio(msg.parts[0].text, i)}
-                      className={`p-1.5 rounded-lg transition-all shrink-0 cursor-pointer ${
-                        playingMsgIndex === i
-                          ? 'text-indigo-700 bg-indigo-100 ring-2 ring-indigo-300 animate-pulse'
-                          : 'text-slate-400 hover:text-indigo-600 hover:bg-slate-100'
-                      }`}
-                      title={playingMsgIndex === i ? "Detener pronunciación" : "Escuchar ejemplos en alemán (Charon)"}
-                    >
-                      {playingMsgIndex === i ? <Square fill="currentColor" size={16} /> : <Volume2 size={16} />}
-                    </button>
-                  </div>
-                  <MarkdownMessage text={msg.parts[0].text} />
-                </div>
-              )}
+  const handleSelectSuggestion = (item) => {
+    if (!item?.de || !setChatInput) return;
+    setChatInput(item.de);
+  };
+
+  return (
+    <>
+      <aside
+        className={`fixed ${
+          isFullscreen ? 'inset-0 w-full z-[100]' : 'top-0 right-0 bottom-0 w-full md:w-[460px] z-[100] border-l'
+        } bg-white shadow-2xl border-slate-200 flex flex-col h-[100dvh] overflow-hidden animate-in slide-in-from-right duration-300`}
+      >
+        <div className="bg-slate-900 text-white px-4 pb-3.5 pt-[max(0.85rem,env(safe-area-inset-top))] flex justify-between items-center flex-shrink-0 gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <Bot className="text-yellow-400 shrink-0" />
+            <div className="min-w-0">
+              <h3 className="font-bold text-base sm:text-lg leading-tight truncate">Tutor Alemán</h3>
+              <p className="text-[11px] text-slate-400 truncate">Socrático A1 · Sugerencias &amp; SRS</p>
             </div>
           </div>
-        ))}
-        {isChatLoading && (
-          <div className="flex justify-start">
-            <div className="bg-white border border-slate-200 text-slate-500 px-4 py-3 rounded-2xl rounded-bl-none flex gap-2 items-center text-sm shadow-sm">
-              <Loader2 className="animate-spin text-blue-500" size={16} /> Escribiendo...
-            </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {sessionTurnCount >= 2 && (
+              <button
+                type="button"
+                onClick={handleRequestDiagnostic}
+                className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-2.5 py-2 rounded-lg transition flex items-center gap-1.5 cursor-pointer"
+                title="Evaluar sesión y guardar errores en tu mazo SRS"
+              >
+                <ClipboardCheck size={15} />
+                <span className="hidden sm:inline">Diagnóstico</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => setIsFullscreen(!isFullscreen)}
+              className="text-slate-400 hover:text-white transition bg-slate-800 hover:bg-slate-700 rounded-lg p-2 cursor-pointer"
+              title={isFullscreen ? 'Minimizar' : 'Pantalla Completa'}
+              aria-label={isFullscreen ? 'Minimizar' : 'Pantalla Completa'}
+            >
+              {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+            </button>
+            <button
+              type="button"
+              onClick={handleCloseClick}
+              className="text-slate-400 hover:text-white transition bg-slate-800 hover:bg-slate-700 rounded-lg p-2 cursor-pointer"
+              title="Cerrar Tutor"
+              aria-label="Cerrar Tutor"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        </div>
+
+        {externalNotice && (
+          <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-xs text-amber-950 font-medium flex items-center gap-2 shrink-0">
+            <Sparkles size={14} className="text-amber-600 shrink-0" />
+            <span>{externalNotice}</span>
           </div>
         )}
-        <div ref={chatEndRef} />
-      </div>
 
-      <div className="p-4 bg-white border-t border-slate-200 flex-shrink-0">
-        <div className="relative flex items-center">
-          <input
-            type="text"
-            className="w-full bg-slate-100 border border-slate-200 rounded-full py-3.5 pl-5 pr-24 text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition shadow-inner"
-            placeholder={isListening ? "Escuchando tu voz..." : "Pregúntame algo en alemán o español..."}
-            value={chatInput}
-            onChange={(e) => setChatInput && setChatInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && sendChatMessage && sendChatMessage()}
-          />
-          <div className="absolute right-2 top-2 flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={handleMicClick}
-              className={`p-2 rounded-full transition shadow cursor-pointer ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
-              title={isListening ? "Escuchando... Haz clic para detener" : "Dictar con micrófono"}
-            >
-              <Mic size={18} />
-            </button>
-            <button
-              type="button"
-              onClick={sendChatMessage}
-              disabled={!chatInput?.trim() || isChatLoading}
-              className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:bg-slate-400 transition shadow cursor-pointer"
-            >
-              <Send size={18} />
-            </button>
-          </div>
-        </div>
-      </div>
-    </aside>
+        <ConversationThread
+          messages={chatMessages}
+          theme="blue"
+          botLabel="Tutor IA"
+          isLoading={isChatLoading}
+          loadingLabel="Analizando tu mensaje..."
+          playingMsgIndex={playingMsgIndex}
+          onPlayAudio={handlePlayAudio}
+          renderModelContent={(msg) => <MarkdownMessage text={msg?.parts?.[0]?.text || ''} />}
+          chatEndRef={chatEndRef}
+        />
+
+        <ComposerBar
+          value={chatInput}
+          onChange={setChatInput}
+          onSend={handleComposerSend}
+          placeholder="Pregúntame o responde en alemán..."
+          disabled={isChatLoading}
+          accent="blue"
+          suggestions={activeSuggestions}
+          showSuggestions={showSuggestions}
+          onToggleSuggestions={() => setShowSuggestions((v) => !v)}
+          onSelectSuggestion={handleSelectSuggestion}
+          onPlaySuggestionAudio={handlePlaySuggestionAudio}
+          playingSuggestionText={playingSuggestionText}
+        />
+      </aside>
+
+      {isDiagnosticOpen && (
+        <SessionDiagnosticCard
+          key={diagnosticData?.sessionId || 'tutor_eval'}
+          isOpen={isDiagnosticOpen}
+          isAnalyzing={isAnalyzingDiagnostic}
+          diagnostic={diagnosticData}
+          onPlayCorrectionAudio={(textDe) => playGermanAudio(textDe, { type: 'sentence', voice: 'Charon' })}
+          onSaveToSrs={({ errors, vocabulary }) =>
+            captureConversationBundle({
+              vocabItems: vocabulary,
+              grammarErrors: errors,
+              axis: 'general',
+              source: 'tutor_chat',
+              sourceRef: 'tutor_chat',
+            })
+          }
+          onContinue={() => setIsDiagnosticOpen(false)}
+          onExit={closeImmediately}
+        />
+      )}
+    </>
   );
 };
 

@@ -6,10 +6,23 @@ import {
 } from 'lucide-react';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../config/firebase';
-import { recordDailyStudyActivity, scrollInputIntoView, splitGermanTitle } from '../utils/helpers';
+import { recordDailyStudyActivity, recordSkillActivity, scrollInputIntoView, splitGermanTitle } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { chapters as defaultChapters } from '../data/chapters';
-import { generateLocalQuizQuestions, shuffleArray } from '../utils/quizEngine';
+import {
+  generateLocalQuizQuestions,
+  generateSrsQuizQuestions,
+  selectSrsPrioritizedPool,
+  shuffleArray,
+} from '../utils/quizEngine';
+import {
+  captureGrammarErrorToSrs,
+  getDueSrsQueue,
+  getSrsStats,
+  getSrsStatsSync,
+  reviewSrsCard,
+} from '../services/srsBridgeService';
+import { encodeSrsSafeId } from '../utils/srsMath';
 
 const SUGGESTED_TOPICS = [
   "Declinación (Der/Die/Das)",
@@ -28,7 +41,8 @@ const DynamicQuiz = ({
   onExit, 
   chapters = defaultChapters, 
   activeChapterId = 1, 
-  activeChapterTitle = "Kapitel 1" 
+  activeChapterTitle = "Kapitel 1",
+  initialScope = 'chapter',
 }) => {
   const effectiveChapters = useMemo(() => {
     return (chapters && chapters.length > 0) ? chapters : defaultChapters;
@@ -44,9 +58,27 @@ const DynamicQuiz = ({
   }, [effectiveChapters, activeChapterId]);
 
   // --- ESTADOS DE CONFIGURACIÓN PRE-QUIZ ---
-  const [scope, setScope] = useState('chapter'); // 'chapter' | 'all' | 'ai'
+  const [scope, setScope] = useState(initialScope || 'chapter'); // 'chapter' | 'all' | 'srs' | 'ai'
   const [lengthOption, setLengthOption] = useState(10); // 10 | 25 | 50 | 'survival'
   const [tema, setTema] = useState("");
+  const [srsStats, setSrsStats] = useState(() => getSrsStatsSync());
+
+  useEffect(() => {
+    let mounted = true;
+    const loadStats = () => {
+      getSrsStats()
+        .then((stats) => {
+          if (mounted && stats) setSrsStats(stats);
+        })
+        .catch(() => {});
+    };
+    loadStats();
+    window.addEventListener('srsDeckUpdated', loadStats);
+    return () => {
+      mounted = false;
+      window.removeEventListener('srsDeckUpdated', loadStats);
+    };
+  }, []);
 
   // --- ESTADOS DEL FLUJO DEL JUEGO ---
   const [quizState, setQuizState] = useState('config'); // 'config' | 'loading' | 'playing' | 'results'
@@ -145,9 +177,29 @@ const DynamicQuiz = ({
     setIsSurvival(isSurvivalMode);
     setLives(isSurvivalMode ? 3 : 0);
 
-    // MODO LOCAL (Capítulo o Todo el Vocabulario) -> 0 ms de latencia
+    // MODO MAZO SRS (Errores de conversación + Tarjetas vencidas)
+    if (scope === 'srs') {
+      const questionCount = isSurvivalMode ? 30 : Number(lengthOption);
+      const dueCards = await getDueSrsQueue({ limit: questionCount });
+      if (!dueCards || dueCards.length === 0) {
+        setError("Aún no tienes tarjetas vencidas en tu mazo SRS. Captura errores o palabras desde el Tutor IA o Simulador de Rol.");
+        return;
+      }
+      const generatedSrs = generateSrsQuizQuestions(dueCards, allWords, questionCount);
+      if (!generatedSrs || generatedSrs.length === 0) {
+        setError("No se pudieron construir preguntas desde tu cola SRS.");
+        return;
+      }
+      setQuizQuestions(generatedSrs);
+      setQuizState('playing');
+      return;
+    }
+
+    // MODO LOCAL (Capítulo o Todo el Vocabulario) -> 0 ms de latencia prioritizando SRS vencidas
     if (scope === 'chapter' || scope === 'all') {
-      const pool = scope === 'chapter' ? currentChapterWords : allWords;
+      const basePool = scope === 'chapter' ? currentChapterWords : allWords;
+      const dueCards = await getDueSrsQueue({ limit: 25 }).catch(() => []);
+      const pool = selectSrsPrioritizedPool(basePool, dueCards);
       const questionCount = isSurvivalMode ? 50 : Number(lengthOption);
       const generated = generateLocalQuizQuestions(pool, questionCount, allWords);
 
@@ -222,8 +274,28 @@ const DynamicQuiz = ({
     setSelectedOption(opcion);
     setIsCorrect(correct);
 
-    // Registro diario de actividad en calendario (persistencia)
+    // Registro diario de actividad en calendario + habilidad Escribir (persistencia)
     recordDailyStudyActivity().catch(e => console.warn("Error en recordDailyStudyActivity:", e));
+    recordSkillActivity('writing', correct ? 2 : 1).catch(() => {});
+
+    // Sincronización SM-2 con Puente Conversación -> SRS
+    const cardDe = currentQuestion.targetWord?.de;
+    const targetSafeId = currentQuestion.srsCardId || (cardDe ? encodeSrsSafeId(cardDe) : null);
+    if (targetSafeId) {
+      reviewSrsCard(
+        targetSafeId,
+        correct ? 'good' : 'again',
+        cardDe
+          ? {
+              termDe: cardDe,
+              audioDe: currentQuestion.audioText || cardDe,
+              translationEs: currentQuestion.targetWord?.es || currentQuestion.explanation || '',
+              source: 'quiz',
+              sourceRef: `quiz_${scope}`,
+            }
+          : null
+      ).catch(() => {});
+    }
 
     if (correct) {
       setScore(prev => prev + 1);
@@ -231,6 +303,18 @@ const DynamicQuiz = ({
     } else {
       setCurrentStreak(0);
       setFailedQuestions(prev => [...prev, currentQuestion]);
+
+      if (currentQuestion.type === 'artikel' && cardDe) {
+        captureGrammarErrorToSrs({
+          userUtteranceDe: `${opcion} ${currentQuestion.questionText || ''}`.trim(),
+          correctedDe: cardDe,
+          errorCategory: 'article',
+          explanationEs: currentQuestion.explanation || '',
+          translationEs: currentQuestion.targetWord?.es || '',
+          source: 'quiz',
+          sourceRef: `quiz_${scope}`,
+        }).catch(() => {});
+      }
 
       if (isSurvival) {
         const nextLives = lives - 1;
@@ -372,7 +456,7 @@ const DynamicQuiz = ({
               <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2.5">
                 1. Ámbito de Vocabulario
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                 <button
                   type="button"
                   onClick={() => setScope('chapter')}
@@ -411,6 +495,25 @@ const DynamicQuiz = ({
                   </div>
                   <span className="font-bold text-sm">Banco Global A1</span>
                   <span className="text-[11px] text-slate-500 mt-0.5">Todos los capítulos</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setScope('srs')}
+                  className={`p-3.5 rounded-2xl border text-left flex flex-col justify-between transition cursor-pointer ${
+                    scope === 'srs'
+                      ? 'border-emerald-600 bg-emerald-50/80 text-emerald-950 shadow-sm ring-2 ring-emerald-500/20'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-slate-50/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-lg">🧠</span>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                      {srsStats.dueNow} pendientes
+                    </span>
+                  </div>
+                  <span className="font-bold text-sm">Mazo SRS</span>
+                  <span className="text-[11px] text-slate-500 mt-0.5">Errores y repaso espaciado</span>
                 </button>
 
                 <button
@@ -560,6 +663,7 @@ const DynamicQuiz = ({
                   {currentQuestion.type === 'cloze' && '📝 Oración en Contexto'}
                   {currentQuestion.type === 'bimodal_es_de' && '🔄 Producción (ES ➔ DE)'}
                   {currentQuestion.type === 'bimodal_de_es' && '🔄 Reconocimiento (DE ➔ ES)'}
+                  {currentQuestion.type === 'srs_error' && '🧠 Corrección Mazo SRS'}
                   {currentQuestion.type === 'ai_prompt' && '🤖 Examinador IA Goethe'}
                 </span>
               </div>

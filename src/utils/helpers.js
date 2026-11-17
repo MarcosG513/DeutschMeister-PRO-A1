@@ -204,13 +204,27 @@ export const getLocalDateString = (d = new Date()) => {
   return `${year}-${month}-${day}`;
 };
 
+const DEFAULT_SKILL_POINTS = {
+  speaking: 0,
+  listening: 0,
+  writing: 0,
+  reading: 0,
+};
+
+const VALID_SKILLS = ['speaking', 'listening', 'writing', 'reading'];
+const DAILY_TARGET_DEFAULT = 5;
+
 const metricsCache = {
   hydrated: false,
   streak: 0,
   lastStudyDate: null,
+  studyDates: new Set(),
+  todayActionsDate: null,
+  todayActionsCount: 0,
   studiedCards: new Set(),
   completedModules: new Set(),
   goetheScores: {},
+  skillPoints: { ...DEFAULT_SKILL_POINTS },
 };
 
 let hydrationPromise = null;
@@ -272,6 +286,13 @@ const flushLocalPersist = () => {
         if (metricsCache.lastStudyDate) {
           writes.push(localforage.setItem('dm_last_study_date', metricsCache.lastStudyDate));
         }
+        writes.push(localforage.setItem('dm_study_dates', Array.from(metricsCache.studyDates).slice(-90)));
+        writes.push(
+          localforage.setItem('dm_today_actions', {
+            date: metricsCache.todayActionsDate,
+            count: metricsCache.todayActionsCount,
+          })
+        );
       }
       if (keysToFlush.includes('dm_cards_studied')) {
         writes.push(localforage.setItem('dm_cards_studied', Array.from(metricsCache.studiedCards)));
@@ -281,6 +302,9 @@ const flushLocalPersist = () => {
       }
       if (keysToFlush.includes('dm_goethe_scores')) {
         writes.push(localforage.setItem('dm_goethe_scores', { ...metricsCache.goetheScores }));
+      }
+      if (keysToFlush.includes('dm_skill_points')) {
+        writes.push(localforage.setItem('dm_skill_points', { ...metricsCache.skillPoints }));
       }
       await Promise.all(writes);
     })
@@ -316,9 +340,13 @@ const pushPedagogyProgressToCloud = async (uid) => {
       {
         studyStreak: metricsCache.streak,
         lastStudyDate: metricsCache.lastStudyDate,
+        studyDates: Array.from(metricsCache.studyDates).slice(-90),
+        todayActionsDate: metricsCache.todayActionsDate,
+        todayActionsCount: metricsCache.todayActionsCount,
         studiedCards: Array.from(metricsCache.studiedCards),
         completedModules: Array.from(metricsCache.completedModules),
         goetheScores: { ...metricsCache.goetheScores },
+        skillPoints: { ...metricsCache.skillPoints },
         updatedAt: serverTimestamp(),
       },
       { merge: true }
@@ -346,12 +374,24 @@ const ensureMetricsHydrated = async () => {
 
   hydrationPromise = (async () => {
     try {
-      const [savedCards, savedModules, savedScores, savedStreak, savedLastDate] = await Promise.all([
+      const [
+        savedCards,
+        savedModules,
+        savedScores,
+        savedStreak,
+        savedLastDate,
+        savedStudyDates,
+        savedTodayActions,
+        savedSkillPoints,
+      ] = await Promise.all([
         localforage.getItem('dm_cards_studied'),
         localforage.getItem('dm_completed_modules'),
         localforage.getItem('dm_goethe_scores'),
         localforage.getItem('dm_user_streak'),
         localforage.getItem('dm_last_study_date'),
+        localforage.getItem('dm_study_dates'),
+        localforage.getItem('dm_today_actions'),
+        localforage.getItem('dm_skill_points'),
       ]);
 
       const initialCards = Array.isArray(savedCards) ? savedCards.filter(Boolean) : [];
@@ -425,6 +465,67 @@ const ensureMetricsHydrated = async () => {
       metricsCache.lastStudyDate = chosenLastDate;
       metricsCache.streak = chosenStreak;
 
+      // Hidratar historial de fechas (YYYY-MM-DD) para tira semanal L-D
+      const mergedDates = new Set(Array.isArray(savedStudyDates) ? savedStudyDates.filter((d) => typeof d === 'string') : []);
+      try {
+        const rawLsDates = safeGetLocalStorage('dm_study_dates');
+        if (rawLsDates) {
+          const parsedDates = JSON.parse(rawLsDates);
+          if (Array.isArray(parsedDates)) {
+            parsedDates.forEach((d) => typeof d === 'string' && mergedDates.add(d));
+          }
+        }
+      } catch {
+        // Ignorar caché corrupta de fechas
+      }
+      if (chosenLastDate) mergedDates.add(chosenLastDate);
+      metricsCache.studyDates = new Set(Array.from(mergedDates).sort().slice(-90));
+
+      // Hidratar acciones reales de hoy
+      const todayStr = getLocalDateString();
+      let mergedTodayCount = 0;
+      try {
+        const rawLsToday = safeGetLocalStorage('dm_today_actions');
+        if (rawLsToday) {
+          const parsedToday = JSON.parse(rawLsToday);
+          if (parsedToday?.date === todayStr) mergedTodayCount = Number(parsedToday.count) || 0;
+        }
+      } catch {
+        // Ignorar caché corrupta del contador diario
+      }
+      if (savedTodayActions?.date === todayStr) {
+        mergedTodayCount = Math.max(mergedTodayCount, Number(savedTodayActions.count) || 0);
+      }
+      metricsCache.todayActionsDate = todayStr;
+      metricsCache.todayActionsCount = mergedTodayCount;
+
+      // Hidratar puntos de 4 habilidades
+      const mergedSkills = { ...DEFAULT_SKILL_POINTS };
+      try {
+        const rawLsSkills = safeGetLocalStorage('dm_skill_points');
+        if (rawLsSkills) {
+          const parsedSkills = JSON.parse(rawLsSkills);
+          for (const sk of VALID_SKILLS) {
+            if (typeof parsedSkills?.[sk] === 'number') {
+              mergedSkills[sk] = Math.max(mergedSkills[sk], parsedSkills[sk]);
+            }
+          }
+        }
+      } catch {
+        // Ignorar caché corrupta de habilidades
+      }
+      if (savedSkillPoints && typeof savedSkillPoints === 'object') {
+        for (const sk of VALID_SKILLS) {
+          if (typeof savedSkillPoints[sk] === 'number') {
+            mergedSkills[sk] = Math.max(mergedSkills[sk], savedSkillPoints[sk]);
+          }
+        }
+      }
+      metricsCache.skillPoints = mergedSkills;
+      safeSetLocalStorage('dm_study_dates', JSON.stringify(Array.from(metricsCache.studyDates)));
+      safeSetLocalStorage('dm_today_actions', JSON.stringify({ date: todayStr, count: mergedTodayCount }));
+      safeSetLocalStorage('dm_skill_points', JSON.stringify(mergedSkills));
+
       if (chosenLastDate) {
         safeSetLocalStorage('dm_last_study_date', chosenLastDate);
         safeSetLocalStorage('dm_study_streak', String(chosenStreak));
@@ -467,16 +568,28 @@ const applyDailyStudyActivityMutation = () => {
     nextStreak = diffDays === 1 ? nextStreak + 1 : 1;
   }
 
+  const prevTodayCount = metricsCache.todayActionsDate === todayStr ? metricsCache.todayActionsCount || 0 : 0;
+  const nextTodayCount = prevTodayCount + 1;
+  metricsCache.todayActionsDate = todayStr;
+  metricsCache.todayActionsCount = nextTodayCount;
+  metricsCache.studyDates.add(todayStr);
+  if (metricsCache.studyDates.size > 90) {
+    metricsCache.studyDates = new Set(Array.from(metricsCache.studyDates).sort().slice(-90));
+  }
+
   const changed = nextStreak !== metricsCache.streak || lastDateStr !== todayStr;
   metricsCache.streak = nextStreak;
   metricsCache.lastStudyDate = todayStr;
 
+  safeSetLocalStorage('dm_study_dates', JSON.stringify(Array.from(metricsCache.studyDates)));
+  safeSetLocalStorage('dm_today_actions', JSON.stringify({ date: todayStr, count: nextTodayCount }));
+
   if (changed) {
     safeSetLocalStorage('dm_study_streak', String(nextStreak));
     safeSetLocalStorage('dm_last_study_date', todayStr);
-    dispatchMetricEvent('studyActivityUpdated', { streak: nextStreak });
   }
-  return { streak: nextStreak, changed };
+  dispatchMetricEvent('studyActivityUpdated', { streak: nextStreak, todayActions: nextTodayCount });
+  return { streak: nextStreak, todayActions: nextTodayCount, changed: true };
 };
 
 const applyModuleCompletedMutation = (moduleId) => {
@@ -502,7 +615,8 @@ export const syncPedagogyProgressFromCloud = async (uid) => {
         metricsCache.streak > 0 ||
         metricsCache.studiedCards.size > 0 ||
         metricsCache.completedModules.size > 0 ||
-        Object.keys(metricsCache.goetheScores).length > 0;
+        Object.keys(metricsCache.goetheScores).length > 0 ||
+        Object.values(metricsCache.skillPoints).some((v) => v > 0);
       if (hasLocalData) {
         cloudSyncQueue = cloudSyncQueue.then(() => pushPedagogyProgressToCloud(uid));
       }
@@ -604,6 +718,52 @@ export const syncPedagogyProgressFromCloud = async (uid) => {
       }
       dirtyLocalKeys.push('dm_user_streak');
       dispatchMetricEvent('studyActivityUpdated', { streak: metricsCache.streak });
+    }
+
+    // 5. Merge studyDates, todayActions & 4 skills
+    const cloudDates = Array.isArray(cloud.studyDates) ? cloud.studyDates.filter((d) => typeof d === 'string') : [];
+    let datesChanged = false;
+    for (const d of cloudDates) {
+      if (!metricsCache.studyDates.has(d)) {
+        metricsCache.studyDates.add(d);
+        datesChanged = true;
+      }
+    }
+    if (metricsCache.studyDates.size > cloudDates.length) cloudNeedsUpdate = true;
+    if (datesChanged) {
+      metricsCache.studyDates = new Set(Array.from(metricsCache.studyDates).sort().slice(-90));
+      safeSetLocalStorage('dm_study_dates', JSON.stringify(Array.from(metricsCache.studyDates)));
+      if (!dirtyLocalKeys.includes('dm_user_streak')) dirtyLocalKeys.push('dm_user_streak');
+    }
+
+    const todayStr = getLocalDateString();
+    if (cloud.todayActionsDate === todayStr && typeof cloud.todayActionsCount === 'number') {
+      if (cloud.todayActionsCount > (metricsCache.todayActionsCount || 0)) {
+        metricsCache.todayActionsDate = todayStr;
+        metricsCache.todayActionsCount = cloud.todayActionsCount;
+        safeSetLocalStorage('dm_today_actions', JSON.stringify({ date: todayStr, count: cloud.todayActionsCount }));
+        if (!dirtyLocalKeys.includes('dm_user_streak')) dirtyLocalKeys.push('dm_user_streak');
+      } else if ((metricsCache.todayActionsCount || 0) > cloud.todayActionsCount) {
+        cloudNeedsUpdate = true;
+      }
+    }
+
+    const cloudSkills = cloud.skillPoints && typeof cloud.skillPoints === 'object' ? cloud.skillPoints : {};
+    let skillsChangedLocally = false;
+    for (const sk of VALID_SKILLS) {
+      const cVal = typeof cloudSkills[sk] === 'number' ? cloudSkills[sk] : 0;
+      const lVal = typeof metricsCache.skillPoints[sk] === 'number' ? metricsCache.skillPoints[sk] : 0;
+      if (cVal > lVal) {
+        metricsCache.skillPoints[sk] = cVal;
+        skillsChangedLocally = true;
+      } else if (lVal > cVal) {
+        cloudNeedsUpdate = true;
+      }
+    }
+    if (skillsChangedLocally) {
+      safeSetLocalStorage('dm_skill_points', JSON.stringify(metricsCache.skillPoints));
+      dirtyLocalKeys.push('dm_skill_points');
+      dispatchMetricEvent('skillActivityUpdated', { skillPoints: { ...metricsCache.skillPoints } });
     }
 
     if (dirtyLocalKeys.length > 0) {
@@ -778,5 +938,198 @@ export const scrollInputIntoView = (event) => {
   setTimeout(() => {
     target.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 150);
+};
+
+// =========================================================================
+// 4. TELEMETRÍA REAL DE RACHA SEMANAL (L-D) Y 4 HABILIDADES A1
+// =========================================================================
+
+const WEEK_DAY_KEYS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+
+const buildWeekDaysSummary = (datesSet, todayStr) => {
+  const now = new Date();
+  const jsDay = now.getDay(); // 0=Dom..6=Sáb
+  const mondayOffset = jsDay === 0 ? -6 : 1 - jsDay;
+  const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + mondayOffset);
+
+  return WEEK_DAY_KEYS.map((label, idx) => {
+    const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + idx);
+    const iso = getLocalDateString(d);
+    return {
+      key: label,
+      date: iso,
+      active: datesSet.has(iso),
+      isToday: iso === todayStr,
+    };
+  });
+};
+
+export const recordSkillActivity = async (skill, points = 1) => {
+  if (!VALID_SKILLS.includes(skill)) return null;
+  try {
+    await ensureMetricsHydrated();
+    const inc = Math.max(0, Number(points) || 0);
+    metricsCache.skillPoints[skill] = (Number(metricsCache.skillPoints[skill]) || 0) + inc;
+    applyDailyStudyActivityMutation();
+    safeSetLocalStorage('dm_skill_points', JSON.stringify(metricsCache.skillPoints));
+    scheduleLocalPersist(['dm_user_streak', 'dm_skill_points']);
+    scheduleCloudSync();
+    dispatchMetricEvent('skillActivityUpdated', {
+      skill,
+      skillPoints: { ...metricsCache.skillPoints },
+    });
+    return { ...metricsCache.skillPoints };
+  } catch (err) {
+    console.warn('Error registrando actividad de habilidad:', err);
+    return null;
+  }
+};
+
+const computeStreakSummaryObject = (dailyTarget = DAILY_TARGET_DEFAULT) => {
+  const todayStr = getLocalDateString();
+  const expired =
+    metricsCache.lastStudyDate && diffCalendarDays(metricsCache.lastStudyDate, todayStr) > 1;
+  const currentStreak = expired ? 0 : metricsCache.streak || 0;
+  const todayActions =
+    metricsCache.todayActionsDate === todayStr ? metricsCache.todayActionsCount || 0 : 0;
+
+  return {
+    currentStreak,
+    todayActions,
+    dailyTarget,
+    isTodaySecured: todayActions >= 1,
+    weekDays: buildWeekDaysSummary(metricsCache.studyDates, todayStr),
+  };
+};
+
+export const getStreakSummary = async (dailyTarget = DAILY_TARGET_DEFAULT) => {
+  await ensureMetricsHydrated();
+  return computeStreakSummaryObject(dailyTarget);
+};
+
+export const getStreakSummarySync = (dailyTarget = DAILY_TARGET_DEFAULT) => {
+  if (metricsCache.hydrated) {
+    return computeStreakSummaryObject(dailyTarget);
+  }
+  const todayStr = getLocalDateString();
+  let lsDates = new Set();
+  try {
+    const rawDates = safeGetLocalStorage('dm_study_dates');
+    if (rawDates) {
+      const parsed = JSON.parse(rawDates);
+      if (Array.isArray(parsed)) lsDates = new Set(parsed);
+    }
+  } catch {
+    // fallback de fechas vacío
+  }
+  const lastDate = safeGetLocalStorage('dm_last_study_date');
+  if (lastDate) lsDates.add(lastDate);
+
+  let lsTodayCount = 0;
+  try {
+    const rawToday = safeGetLocalStorage('dm_today_actions');
+    if (rawToday) {
+      const parsedToday = JSON.parse(rawToday);
+      if (parsedToday?.date === todayStr) lsTodayCount = Number(parsedToday.count) || 0;
+    }
+  } catch {
+    // fallback de acciones vacío
+  }
+
+  const rawStreak = parseInt(safeGetLocalStorage('dm_study_streak') || '0', 10) || 0;
+  const expired = lastDate && diffCalendarDays(lastDate, todayStr) > 1;
+
+  return {
+    currentStreak: expired ? 0 : rawStreak,
+    todayActions: lsTodayCount,
+    dailyTarget,
+    isTodaySecured: lsTodayCount >= 1,
+    weekDays: buildWeekDaysSummary(lsDates, todayStr),
+  };
+};
+
+const buildSkillProgressObject = (skillPoints, studiedCardsCount, totalUniqueCardsCount, completedModulesCount) => {
+  const sp = Number(skillPoints?.speaking) || 0;
+  const li = Number(skillPoints?.listening) || 0;
+  const wr = Number(skillPoints?.writing) || 0;
+  const re = Number(skillPoints?.reading) || 0;
+
+  const vocabRatio =
+    totalUniqueCardsCount > 0 ? Math.min(1, (Number(studiedCardsCount) || 0) / totalUniqueCardsCount) : 0;
+
+  const speakingPct = Math.min(100, Math.round((sp / 100) * 100));
+  const listeningPct = Math.min(100, Math.round((li / 120) * 100));
+  const writingPct = Math.min(100, Math.round(((wr + (Number(completedModulesCount) || 0) * 8) / 100) * 100));
+  const readingPct = Math.min(100, Math.round(vocabRatio * 60 + Math.min(40, (re / 80) * 40)));
+
+  const overallA1Percent = Math.round((speakingPct + listeningPct + writingPct + readingPct) / 4);
+
+  return {
+    speaking: {
+      id: 'speaking',
+      label: 'Hablar',
+      percent: speakingPct,
+      points: sp,
+      quickTargetView: 'roleplay',
+    },
+    listening: {
+      id: 'listening',
+      label: 'Escuchar',
+      percent: listeningPct,
+      points: li,
+      quickTargetView: 'driving',
+    },
+    writing: {
+      id: 'writing',
+      label: 'Escribir',
+      percent: writingPct,
+      points: wr,
+      quickTargetView: 'quiz',
+    },
+    reading: {
+      id: 'reading',
+      label: 'Leer',
+      percent: readingPct,
+      points: re,
+      quickTargetView: 'reading',
+    },
+    overallA1Percent,
+  };
+};
+
+export const getSkillProgressSummary = async (studiedCardsCount = 0, totalUniqueCardsCount = 1500) => {
+  await ensureMetricsHydrated();
+  return buildSkillProgressObject(
+    metricsCache.skillPoints,
+    Math.max(studiedCardsCount, metricsCache.studiedCards.size),
+    totalUniqueCardsCount,
+    metricsCache.completedModules.size
+  );
+};
+
+export const getSkillProgressSummarySync = (studiedCardsCount = 0, totalUniqueCardsCount = 1500) => {
+  if (metricsCache.hydrated) {
+    return buildSkillProgressObject(
+      metricsCache.skillPoints,
+      Math.max(studiedCardsCount, metricsCache.studiedCards.size),
+      totalUniqueCardsCount,
+      metricsCache.completedModules.size
+    );
+  }
+  let lsSkills = { ...DEFAULT_SKILL_POINTS };
+  try {
+    const raw = safeGetLocalStorage('dm_skill_points');
+    if (raw) lsSkills = { ...lsSkills, ...JSON.parse(raw) };
+  } catch {
+    // fallback habilidades en cero
+  }
+  const lsCards = parseInt(safeGetLocalStorage('dm_cards_studied_count') || '0', 10) || 0;
+  const lsMods = parseInt(safeGetLocalStorage('dm_completed_modules_count') || '0', 10) || 0;
+  return buildSkillProgressObject(
+    lsSkills,
+    Math.max(studiedCardsCount, lsCards),
+    totalUniqueCardsCount,
+    lsMods
+  );
 };
 

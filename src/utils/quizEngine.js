@@ -1,3 +1,5 @@
+import { encodeSrsSafeId } from './srsMath';
+
 /**
  * quizEngine.js - Motor de Evaluación Pedagógica A1 para DeutschMeister PRO
  * Genera preguntas balanceadas (Reto de Artículos, Hören a Ciegas, Bimodal y Cloze)
@@ -234,6 +236,119 @@ export function generateLocalQuizQuestions(wordsPool = [], count = 10, globalFal
 
     questions.push(q);
   }
+
+  return questions;
+}
+
+/**
+ * Prioriza tarjetas vencidas del mazo SRS antes de completar un quiz local.
+ */
+export function selectSrsPrioritizedPool(wordsPool = [], dueSrsCards = []) {
+  if (!Array.isArray(dueSrsCards) || dueSrsCards.length === 0) {
+    return wordsPool;
+  }
+  const byId = new Map();
+  for (const w of wordsPool || []) {
+    if (w?.de) {
+      byId.set(encodeSrsSafeId(w.de), w);
+    }
+  }
+  const prioritized = [];
+  const seen = new Set();
+  for (const card of dueSrsCards) {
+    if (!card?.id) continue;
+    const matched = byId.get(card.id);
+    if (matched && !seen.has(card.id)) {
+      prioritized.push(matched);
+      seen.add(card.id);
+    }
+  }
+  for (const w of wordsPool || []) {
+    if (!w?.de) continue;
+    const id = encodeSrsSafeId(w.de);
+    if (!seen.has(id)) {
+      prioritized.push(w);
+      seen.add(id);
+    }
+  }
+  return prioritized;
+}
+
+/**
+ * Genera preguntas específicas a partir de tarjetas vencidas del mazo SRS (errores + vocabulario).
+ */
+export function generateSrsQuizQuestions(dueSrsCards = [], globalPool = [], count = 10) {
+  if (!Array.isArray(dueSrsCards) || dueSrsCards.length === 0) return [];
+
+  const byId = new Map();
+  for (const w of globalPool || []) {
+    if (w?.de) {
+      byId.set(encodeSrsSafeId(w.de), w);
+    }
+  }
+
+  const slice = dueSrsCards.slice(0, count);
+  const questions = [];
+
+  slice.forEach((card, idx) => {
+    if (card.cardType === 'grammar_error') {
+      const userAttempt = card.grammarErrorMeta?.userUtteranceDe || '';
+      const explanation =
+        card.grammarErrorMeta?.explanationEs ||
+        card.translationEs ||
+        'Refuerza esta estructura gramatical detectada en tu práctica.';
+      const distractorsPool = (globalPool || [])
+        .filter((w) => w?.exampleSentenceDe && w.exampleSentenceDe !== card.termDe)
+        .slice(0, 20);
+      const rawDist = shuffleArray(distractorsPool)
+        .slice(0, 3)
+        .map((w) => w.exampleSentenceDe);
+      const fallbacks = [
+        userAttempt && userAttempt !== card.termDe ? userAttempt : 'Ich habe das nicht gemacht heute.',
+        'Er gehen heute nach Hause.',
+        'Wir brauchen ein Kaffee bitte.',
+      ];
+      const uniqueDistractors = Array.from(
+        new Set([...rawDist, ...fallbacks].filter((opt) => opt && opt !== card.termDe))
+      ).slice(0, 3);
+
+      questions.push({
+        id: `q_srs_err_${idx}_${Date.now()}`,
+        type: 'srs_error',
+        srsCardId: card.id,
+        questionText: userAttempt
+          ? `Corrige: «${userAttempt}»`
+          : 'Elige la frase correcta en alemán:',
+        subText: card.grammarErrorMeta?.errorCategory
+          ? `Repaso SRS · Error frecuente (${card.grammarErrorMeta.errorCategory})`
+          : 'Repaso SRS de conversación',
+        targetWord: { de: card.termDe, es: card.translationEs || explanation },
+        correctAnswer: card.termDe,
+        options: shuffleArray([card.termDe, ...uniqueDistractors]),
+        explanation,
+        audioText: card.audioDe || card.termDe,
+        audioType: 'sentence',
+      });
+      return;
+    }
+
+    const matchedWord = byId.get(card.id) || {
+      de: card.termDe,
+      es: card.translationEs || 'Término capturado en sesión',
+      type: 'Vocabulario SRS',
+      exampleSentenceDe: card.audioDe || card.termDe,
+    };
+
+    const singleList = generateLocalQuizQuestions([matchedWord], 1, globalPool);
+    if (singleList.length > 0) {
+      questions.push({
+        ...singleList[0],
+        id: `q_srs_voc_${idx}_${Date.now()}`,
+        srsCardId: card.id,
+        subText: `Repaso SRS · ${singleList[0].subText || 'Vocabulario capturado'}`,
+      });
+    }
+  });
 
   return questions;
 }

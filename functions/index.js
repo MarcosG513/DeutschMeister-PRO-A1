@@ -361,6 +361,8 @@ async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}
       systemInstruction: promptSystem,
       isJson,
       responseSchema: options.responseSchema || null,
+      temperature,
+      maxOutputTokens: options.maxOutputTokens,
       mode
     });
 
@@ -420,6 +422,227 @@ async function closeAsyncStream(streamObj) {
 }
 
 /**
+ * Extrae el valor completo de un campo string JSON en streaming solo cuando su comilla de cierre ha llegado.
+ */
+function extractCompleteJsonStringProperty(rawBuffer, fieldName) {
+  if (!rawBuffer || typeof rawBuffer !== "string") return null;
+  const keyMatch = new RegExp(`"${fieldName}"\\s*:\\s*"`).exec(rawBuffer);
+  if (!keyMatch) return null;
+  const start = keyMatch.index + keyMatch[0].length;
+  let escaped = false;
+  for (let i = start; i < rawBuffer.length; i++) {
+    const ch = rawBuffer[i];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (ch === "\\") {
+      escaped = true;
+      continue;
+    }
+    if (ch === '"') {
+      const literal = rawBuffer.slice(start, i);
+      try {
+        return JSON.parse(`"${literal}"`);
+      } catch (_) {
+        return literal.replace(/\\n/g, "\n").replace(/\\"/g, '"');
+      }
+    }
+  }
+  return null;
+}
+
+function parseJsonResponseSafely(rawText) {
+  const clean = String(rawText || "")
+    .trim()
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/```$/, "")
+    .trim();
+  const match = clean.match(/\{[\s\S]*\}/);
+  return JSON.parse(match ? match[0] : clean);
+}
+
+/**
+ * Calcula puntuación de fluidez híbrida: 55% determinista en Node + 45% rúbrica A1 del LLM.
+ */
+function computeHybridFluencyScore(historialConversacion = [], missionsStatus = [], llmGrammarScore = 20, llmPragmaticScore = 15) {
+  const userTurns = (historialConversacion || []).filter(
+    (m) => m?.role === "user" && !String(m?.parts?.[0]?.text || "").startsWith("Hola, inicia la simulación")
+  );
+  const completedCount = (missionsStatus || []).filter((m) => m?.completed).length;
+  const missionCap = Math.max(1, (missionsStatus || []).length || 3);
+  const missionPts = (completedCount / missionCap) * 35;
+
+  const avgWords =
+    userTurns.length > 0
+      ? userTurns.reduce((sum, m) => {
+          const words = String(m?.parts?.[0]?.text || "").trim().split(/\s+/).filter(Boolean).length;
+          return sum + words;
+        }, 0) / userTurns.length
+      : 0;
+  const densityPts = avgWords >= 4 ? 20 : Math.min(20, (avgWords / 4) * 20);
+  const llmPts = Math.max(0, Math.min(25, Number(llmGrammarScore) || 0)) + Math.max(0, Math.min(20, Number(llmPragmaticScore) || 0));
+
+  return Math.max(0, Math.min(100, Math.round(missionPts + densityPts + llmPts)));
+}
+
+const TUTOR_V2_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    replyDe: { type: SchemaType.STRING },
+    translationEs: { type: SchemaType.STRING },
+    replyMarkdownEs: { type: SchemaType.STRING },
+    grammarCorrections: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          original: { type: SchemaType.STRING },
+          corrected: { type: SchemaType.STRING },
+          explanationEs: { type: SchemaType.STRING },
+          category: { type: SchemaType.STRING }
+        },
+        required: ["original", "corrected", "explanationEs", "category"]
+      }
+    },
+    suggestedReplies: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          de: { type: SchemaType.STRING },
+          es: { type: SchemaType.STRING },
+          grammarTag: { type: SchemaType.STRING }
+        },
+        required: ["de", "es"]
+      }
+    },
+    newVocabulary: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          de: { type: SchemaType.STRING },
+          es: { type: SchemaType.STRING },
+          pos: { type: SchemaType.STRING },
+          exampleDe: { type: SchemaType.STRING }
+        },
+        required: ["de", "es"]
+      }
+    }
+  },
+  required: ["replyDe", "translationEs", "replyMarkdownEs", "grammarCorrections", "suggestedReplies", "newVocabulary"]
+};
+
+const ROLEPLAY_TURN_V2_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    replyDe: { type: SchemaType.STRING },
+    translationEs: { type: SchemaType.STRING },
+    suggestedReplies: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          de: { type: SchemaType.STRING },
+          es: { type: SchemaType.STRING },
+          grammarTag: { type: SchemaType.STRING }
+        },
+        required: ["de", "es"]
+      }
+    },
+    grammarCorrections: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          original: { type: SchemaType.STRING },
+          corrected: { type: SchemaType.STRING },
+          explanationEs: { type: SchemaType.STRING },
+          category: { type: SchemaType.STRING }
+        },
+        required: ["original", "corrected", "explanationEs", "category"]
+      }
+    },
+    missionsStatus: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          id: { type: SchemaType.STRING },
+          completed: { type: SchemaType.BOOLEAN },
+          evidenceDe: { type: SchemaType.STRING }
+        },
+        required: ["id", "completed"]
+      }
+    },
+    allMissionsCompleted: { type: SchemaType.BOOLEAN }
+  },
+  required: ["replyDe", "translationEs", "suggestedReplies", "grammarCorrections", "missionsStatus", "allMissionsCompleted"]
+};
+
+const SESSION_EVALUATION_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    summaryEs: { type: SchemaType.STRING },
+    grammarScore: { type: SchemaType.NUMBER },
+    pragmaticScore: { type: SchemaType.NUMBER },
+    missionsStatus: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          id: { type: SchemaType.STRING },
+          completed: { type: SchemaType.BOOLEAN },
+          evidenceDe: { type: SchemaType.STRING },
+          feedbackEs: { type: SchemaType.STRING }
+        },
+        required: ["id", "completed"]
+      }
+    },
+    errorsSummary: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          userSaid: { type: SchemaType.STRING },
+          correctedDe: { type: SchemaType.STRING },
+          translationEs: { type: SchemaType.STRING },
+          explanationEs: { type: SchemaType.STRING },
+          category: { type: SchemaType.STRING }
+        },
+        required: ["userSaid", "correctedDe", "explanationEs", "category"]
+      }
+    },
+    vocabularyExtracted: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.OBJECT,
+        properties: {
+          de: { type: SchemaType.STRING },
+          es: { type: SchemaType.STRING },
+          pos: { type: SchemaType.STRING },
+          exampleDe: { type: SchemaType.STRING }
+        },
+        required: ["de", "es"]
+      }
+    },
+    nextStepTipEs: { type: SchemaType.STRING }
+  },
+  required: ["summaryEs", "grammarScore", "pragmaticScore", "errorsSummary", "vocabularyExtracted"]
+};
+
+const normalizeErrorCategory = (rawCat = "") => {
+  const c = String(rawCat).toLowerCase();
+  if (c.includes("article") || c.includes("gender") || c.includes("der/die")) return "article";
+  if (c.includes("case") || c.includes("akk") || c.includes("dat") || c.includes("acus") || c.includes("caso")) return "case";
+  if (c.includes("order") || c.includes("v2") || c.includes("pos") || c.includes("satz")) return "word_order";
+  if (c.includes("conj") || c.includes("verb")) return "conjugation";
+  return "vocab";
+};
+
+/**
  * Función centralizada para Streaming SSE con Pool Resiliente y Fallback a Claude Haiku 4.5,
  * con detección segura de desconexión del cliente para abortar consumo de tokens.
  */
@@ -461,6 +684,7 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
   const preferredModel = options.model || "gemini-3.8-flash";
   const mode = options.mode || "paid_first";
   const keys = getGeminiKeyConfig();
+  const isStructuredJson = Boolean(options.isJson);
 
   try {
     try {
@@ -469,8 +693,15 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
         keys,
         preferredModel,
         systemInstruction: promptSystem,
+        isJson: isStructuredJson,
+        responseSchema: options.responseSchema || null,
+        temperature: options.temperature,
+        maxOutputTokens: options.maxOutputTokens,
         mode
       });
+
+      let rawJsonBuffer = "";
+      let emittedReplyDe = false;
 
       for await (const chunk of streamResult.stream) {
         if (isAborted()) {
@@ -479,10 +710,27 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
           return;
         }
         const chunkText = chunk.text();
-        if (chunkText) {
+        if (!chunkText) continue;
+
+        if (isStructuredJson) {
+          rawJsonBuffer += chunkText;
+          if (!emittedReplyDe) {
+            const readyDe = extractCompleteJsonStringProperty(rawJsonBuffer, "replyDe");
+            if (readyDe !== null) {
+              emittedReplyDe = true;
+              res.write(`data: ${JSON.stringify({ type: "reply_de_ready", replyDe: readyDe })}\n\n`);
+            }
+          }
+        } else {
           const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '').replace(/\*/g, '') : chunkText;
           res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
         }
+      }
+
+      if (isStructuredJson && !isAborted()) {
+        const parsed = parseJsonResponseSafely(rawJsonBuffer);
+        const payload = options.postProcessStructured ? options.postProcessStructured(parsed) : parsed;
+        res.write(`data: ${JSON.stringify({ type: options.structuredEventType || "structured_v2", payload })}\n\n`);
       }
 
       if (!isAborted()) {
@@ -515,17 +763,21 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
           promptBuilder += "\n";
         }
         promptBuilder += `Mensaje actual del usuario: "${lastMessage}"\n\nResponde siguiendo las instrucciones del sistema.`;
+        if (isStructuredJson) {
+          promptBuilder += "\n\nResponde ÚNICAMENTE con un objeto JSON válido sin bloques de código Markdown.";
+        }
 
         const falStream = await fal.stream("openrouter/router/enterprise", {
           input: {
             model: "anthropic/claude-haiku-4.5",
             prompt: promptBuilder,
             system_prompt: promptSystem,
-            temperature: options.temperature || 0.7
+            temperature: options.temperature !== undefined ? options.temperature : 0.7
           }
         });
 
         let lastOutput = "";
+        let emittedReplyDe = false;
         for await (const event of falStream) {
           if (isAborted()) {
             console.log("FinOps Stream: Cliente SSE desconectado, abortando stream Fal.ai.");
@@ -536,11 +788,26 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
           if (currentOutput.length > lastOutput.length) {
             const chunkText = currentOutput.substring(lastOutput.length);
             lastOutput = currentOutput;
-            if (chunkText) {
+            if (!chunkText) continue;
+
+            if (isStructuredJson) {
+              if (!emittedReplyDe) {
+                const readyDe = extractCompleteJsonStringProperty(lastOutput, "replyDe");
+                if (readyDe !== null) {
+                  emittedReplyDe = true;
+                  res.write(`data: ${JSON.stringify({ type: "reply_de_ready", replyDe: readyDe })}\n\n`);
+                }
+              }
+            } else {
               const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '').replace(/\*/g, '') : chunkText;
               res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
             }
           }
+        }
+        if (isStructuredJson && !isAborted()) {
+          const parsed = parseJsonResponseSafely(lastOutput);
+          const payload = options.postProcessStructured ? options.postProcessStructured(parsed) : parsed;
+          res.write(`data: ${JSON.stringify({ type: options.structuredEventType || "structured_v2", payload })}\n\n`);
         }
         if (!isAborted()) {
           res.write('data: [DONE]\n\n');
@@ -575,7 +842,11 @@ export const runRoleplaySimulator = onRequest({
   secrets: ALL_AI_SECRETS,
   cors: true
 }, async (req, res) => {
-  if (req.method !== "POST" && req.method !== "OPTIONS") {
+  if (req.method === "OPTIONS") {
+    res.status(204).send("");
+    return;
+  }
+  if (req.method !== "POST") {
     res.status(405).send("Method Not Allowed");
     return;
   }
@@ -598,12 +869,137 @@ export const runRoleplaySimulator = onRequest({
   }
   const {
     historialConversacion,
-    escenario
+    escenario,
+    responseFormat,
+    action = "turn",
+    missions = [],
+    previousMissionsStatus = []
   } = data || {};
   if (!historialConversacion || !escenario) {
     res.status(400).send("Faltan parámetros requeridos: historialConversacion o escenario");
     return;
   }
+
+  if (responseFormat === "roleplay_v2" && action === "evaluate_final") {
+    const missionsText = Array.isArray(missions) && missions.length > 0
+      ? missions.map((m, i) => `- ${m.id || `m${i + 1}`}: ${m.descriptionEs || m.titleEs}`).join("\n")
+      : "Sin misiones específicas.";
+    const transcript = (historialConversacion || [])
+      .map((m) => `${m.role === "user" ? "ESTUDIANTE" : "INTERLOCUTOR"}: ${m?.parts?.[0]?.text || ""}`)
+      .join("\n");
+
+    const evalSystem = `Eres un examinador oficial Goethe-Institut A1–A2 para hispanohablantes. Evalúa el rol sobre el escenario "${escenario}".
+Categorías permitidas en errorsSummary[].category: "article", "case", "word_order", "conjugation", "vocab".
+grammarScore (0..25), pragmaticScore (0..20). Extrae entre 2 y 5 términos útiles alemanes (con artículo der/die/das si es sustantivo). Responde estrictamente en JSON.`;
+
+    const evalPrompt = `Misiones del escenario:\n${missionsText}\n\nTranscripción:\n${transcript}`;
+    try {
+      const rawEval = await invokeWithDeepSeekFallback(evalSystem, evalPrompt, {
+        isJson: true,
+        responseSchema: SESSION_EVALUATION_SCHEMA,
+        temperature: 0.2,
+        maxOutputTokens: 700,
+        model: "gemini-3.8-flash"
+      });
+
+      const prevMap = new Map((previousMissionsStatus || []).map((m) => [m.id, m]));
+      const llmMissionMap = new Map((rawEval?.missionsStatus || []).map((m) => [m.id, m]));
+      const mergedMissions = (Array.isArray(missions) ? missions : []).map((m, idx) => {
+        const id = m.id || `m${idx + 1}`;
+        const prev = prevMap.get(id);
+        const llm = llmMissionMap.get(id);
+        return {
+          id,
+          titleEs: m.titleEs || m.descriptionEs || `Misión ${idx + 1}`,
+          completed: Boolean(prev?.completed) || Boolean(llm?.completed),
+          evidenceDe: llm?.evidenceDe || prev?.evidenceDe || "",
+          feedbackEs: llm?.feedbackEs || ""
+        };
+      });
+
+      const fluencyScore = computeHybridFluencyScore(
+        historialConversacion,
+        mergedMissions,
+        rawEval?.grammarScore,
+        rawEval?.pragmaticScore
+      );
+
+      res.status(200).json({
+        fluencyScore,
+        summaryEs: rawEval?.summaryEs || "Sesión completada. Sigue practicando tus estructuras A1.",
+        missionsStatus: mergedMissions,
+        errorsSummary: (rawEval?.errorsSummary || []).map((err, idx) => ({
+          id: `rp_err_${idx}_${Date.now()}`,
+          userSaid: err.userSaid || "",
+          correctedDe: err.correctedDe || "",
+          translationEs: err.translationEs || "",
+          explanationEs: err.explanationEs || "",
+          category: normalizeErrorCategory(err.category)
+        })),
+        vocabularyExtracted: Array.isArray(rawEval?.vocabularyExtracted) ? rawEval.vocabularyExtracted : [],
+        nextStepTipEs: rawEval?.nextStepTipEs || ""
+      });
+    } catch (evalErr) {
+      console.error("Roleplay evaluate_final error:", evalErr);
+      res.status(500).json({ error: "No se pudo evaluar la sesión." });
+    }
+    return;
+  }
+
+  if (responseFormat === "roleplay_v2") {
+    const missionsList = Array.isArray(missions) && missions.length > 0
+      ? missions.map((m, i) => `- ${m.id || `m${i + 1}`}: ${m.descriptionEs || m.titleEs}`).join("\n")
+      : "1. Saludar y expresar intención.\n2. Responder a la pregunta clave.\n3. Cerrar educadamente.";
+
+    const roleplayV2Prompt = `Eres un interlocutor alemán en el escenario: "${escenario}".
+REGLAS ESTRICTAS (Alemán A1–A2):
+1. "replyDe": Solo alemán natural (máx. 2 frases cortas, <=12 palabras/frase, cero markdown). Termina con 1 pregunta o acción clara. Si todas las misiones se completan, despídete naturalmente.
+2. "translationEs": Traducción fiel al español de "replyDe".
+3. "suggestedReplies": 3 respuestas útiles A1-A2 para ayudar al alumno hispanohablante (cada una con "de", "es" y "grammarTag" opcional ej. "V2", "Akk", "Dativ").
+4. "grammarCorrections": Si el ÚLTIMO turno del usuario tuvo errores de artículo (der/die/das), caso o V2, anótalos con category en ["article","case","word_order","conjugation","vocab"]; si no hubo errores, array vacío [].
+5. "missionsStatus": Evalúa estas misiones con id exacto y booleano completed + breve evidenceDe:\n${missionsList}
+Responde ÚNICAMENTE con JSON válido comenzando con "replyDe".`;
+
+    const history = historialConversacion.slice(0, -1);
+    const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
+    const prevMap = new Map((previousMissionsStatus || []).map((m) => [m.id, m]));
+
+    return await streamWithDeepSeekFallback(res, roleplayV2Prompt, history, lastMessage, {
+      model: "gemini-3.8-flash",
+      isJson: true,
+      responseSchema: ROLEPLAY_TURN_V2_SCHEMA,
+      structuredEventType: "roleplay_turn_v2",
+      temperature: 0.5,
+      maxOutputTokens: 480,
+      req,
+      postProcessStructured: (parsed) => {
+        const llmMap = new Map((parsed?.missionsStatus || []).map((m) => [m.id, m]));
+        const baseMissions = Array.isArray(missions) && missions.length > 0 ? missions : (parsed?.missionsStatus || []);
+        const mergedStatus = baseMissions.map((m, idx) => {
+          const id = m.id || `m${idx + 1}`;
+          const prev = prevMap.get(id);
+          const cur = llmMap.get(id);
+          return {
+            id,
+            completed: Boolean(prev?.completed) || Boolean(cur?.completed),
+            evidenceDe: cur?.evidenceDe || prev?.evidenceDe || ""
+          };
+        });
+        return {
+          replyDe: String(parsed?.replyDe || "").replace(/\*\*/g, "").trim(),
+          translationEs: String(parsed?.translationEs || "").trim(),
+          suggestedReplies: Array.isArray(parsed?.suggestedReplies) ? parsed.suggestedReplies.slice(0, 4) : [],
+          grammarCorrections: (parsed?.grammarCorrections || []).map((err) => ({
+            ...err,
+            category: normalizeErrorCategory(err.category)
+          })),
+          missionsStatus: mergedStatus,
+          allMissionsCompleted: mergedStatus.length > 0 && mergedStatus.every((m) => m.completed)
+        };
+      }
+    });
+  }
+
   const defaultSystemInstruction = `Eres un hablante nativo de alemán en un escenario de juego de rol de nivel A1: "${escenario}".
       REGLAS ESTRICTAS E INVIOLABLES:
       1. Usa SOLO alemán de nivel A1. Cada frase u oración debe tener un MÁXIMO ESTRICTO de 8 palabras. Vocabulario básico y cotidiano. Solo tiempo presente.
@@ -921,12 +1317,12 @@ export const sendTutorChatMessage = onRequest({
   secrets: ALL_AI_SECRETS,
   cors: true
 }, async (req, res) => {
-  if (req.method !== "POST" && req.method !== "OPTIONS") {
-    res.status(405).send("Method Not Allowed");
-    return;
-  }
   if (req.method === "OPTIONS") {
     res.status(204).send("");
+    return;
+  }
+  if (req.method !== "POST") {
+    res.status(405).send("Method Not Allowed");
     return;
   }
 
@@ -939,7 +1335,7 @@ export const sendTutorChatMessage = onRequest({
     return;
   }
 
-  // Verificación estricta de Autenticación y Custom Claims de Firebase Auth
+  // Verificación estricta Zero-Trust (todo usuario aprobado tiene acceso completo sin paywall)
   let authUser;
   try {
     authUser = await assertApprovedUser(req);
@@ -949,55 +1345,130 @@ export const sendTutorChatMessage = onRequest({
     return;
   }
   const uid = authUser.uid;
-  const isPro = authUser.isPro;
 
-  // Protección de Cuota (10 msgs/día para usuarios Free)
-  if (!isPro && uid) {
+  const historialConversacion = data?.historialConversacion;
+  if (!historialConversacion || !Array.isArray(historialConversacion) || historialConversacion.length === 0) {
+    res.status(400).send("Faltan parámetros requeridos: historialConversacion");
+    return;
+  }
+
+  const responseFormat = data?.responseFormat || "legacy";
+  const action = data?.action || "turn";
+
+  // Cuota justa anti-abuso mediante transacción atómica (sin bloqueo paywall !isPro)
+  if (uid && action !== "evaluate_session") {
     const todayStr = new Date().toISOString().split("T")[0];
     const usageDocRef = db.collection("artifacts").doc("deutschmeister-pro").collection("users").doc(uid).collection("usage").doc("today");
-    
-    try {
-      const usageSnap = await usageDocRef.get();
-      let currentCount = 0;
-      if (usageSnap.exists) {
-        const usageData = usageSnap.data();
-        if (usageData.date === todayStr) {
-          currentCount = usageData.messageCount || 0;
-        }
-      }
+    const DAILY_FAIR_LIMIT = 80;
 
-      if (currentCount >= 10) {
+    try {
+      const allowed = await db.runTransaction(async (tx) => {
+        const snap = await tx.get(usageDocRef);
+        const curCount = snap.exists && snap.data()?.date === todayStr ? (Number(snap.data()?.messageCount) || 0) : 0;
+        if (curCount >= DAILY_FAIR_LIMIT) {
+          return false;
+        }
+        tx.set(usageDocRef, {
+          date: todayStr,
+          messageCount: curCount + 1,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        return true;
+      });
+
+      if (!allowed) {
         res.status(429).json({
-          error: "Límite diario alcanzado. Actualiza a PRO para mensajes ilimitados.",
-          limitReached: true,
-          isPro: false
+          error: "Has alcanzado el límite diario preventivo del Tutor IA. Vuelve mañana para continuar.",
+          limitReached: true
         });
         return;
       }
-
-      await usageDocRef.set({
-        date: todayStr,
-        messageCount: currentCount + 1,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
-      }, { merge: true });
     } catch (dbErr) {
-      console.error("FinOps Tutor: Error consultando Firestore:", dbErr);
+      console.error("FinOps Tutor: Error transaccional en cuota diaria:", dbErr);
     }
   }
 
-  const historialConversacion = data?.historialConversacion;
-  if (!historialConversacion || !Array.isArray(historialConversacion)) {
-    res.status(400).send("Faltan parámetros requeridos: historialConversacion");
+  if (responseFormat === "structured_v2" && action === "evaluate_session") {
+    const transcript = historialConversacion
+      .map((m) => `${m.role === "user" ? "ESTUDIANTE" : "TUTOR"}: ${m?.parts?.[0]?.text || ""}`)
+      .join("\n");
+    const evalSystem = `Eres un examinador A1-A2 que evalúa una sesión de Tutor IA.
+Detecta errores reales cometidos por el estudiante en alemán (categorías: "article", "case", "word_order", "conjugation", "vocab"), asigna grammarScore (0..25) y pragmaticScore (0..20), extrae vocabulario útil (2..5 entradas con artículo der/die/das si es sustantivo) y escribe summaryEs conciso. Responde solo JSON.`;
+    try {
+      const rawEval = await invokeWithDeepSeekFallback(evalSystem, `Transcripción:\n${transcript}`, {
+        isJson: true,
+        responseSchema: SESSION_EVALUATION_SCHEMA,
+        temperature: 0.2,
+        maxOutputTokens: 700,
+        model: "gemini-3.8-flash"
+      });
+      const fluencyScore = computeHybridFluencyScore(
+        historialConversacion,
+        [],
+        rawEval?.grammarScore,
+        rawEval?.pragmaticScore
+      );
+      res.status(200).json({
+        fluencyScore,
+        summaryEs: rawEval?.summaryEs || "Sesión analizada. Añade tus puntos clave al mazo SRS.",
+        missionsStatus: [],
+        errorsSummary: (rawEval?.errorsSummary || []).map((err, idx) => ({
+          id: `tut_err_${idx}_${Date.now()}`,
+          userSaid: err.userSaid || "",
+          correctedDe: err.correctedDe || "",
+          translationEs: err.translationEs || "",
+          explanationEs: err.explanationEs || "",
+          category: normalizeErrorCategory(err.category)
+        })),
+        vocabularyExtracted: Array.isArray(rawEval?.vocabularyExtracted) ? rawEval.vocabularyExtracted : [],
+        nextStepTipEs: rawEval?.nextStepTipEs || ""
+      });
+    } catch (err) {
+      console.error("Tutor evaluate_session error:", err);
+      res.status(500).json({ error: "No se pudo generar el diagnóstico de sesión." });
+    }
     return;
   }
 
   const history = historialConversacion.slice(0, -1);
   const lastMessage = historialConversacion[historialConversacion.length - 1].parts[0].text;
 
+  if (responseFormat === "structured_v2") {
+    const tutorV2Prompt = `Eres el Tutor Socrático experto de Alemán (Goethe A1) para hispanohablantes.
+Responde estrictamente en JSON comenzando con "replyDe":
+- "replyDe": Frase natural en alemán nivel A1 (1-2 oraciones cortas, ej. ejemplo práctico o pregunta reto para el alumno).
+- "translationEs": Traducción clara al español de "replyDe".
+- "replyMarkdownEs": Explicación empática y concisa en español (máximo 2 párrafos breves) con palabras alemanas en **negrita** (con artículo y plural en sustantivos, ej. **das Buch (¨-er)**) terminando con 1 reto práctico.
+- "grammarCorrections": Array de fallos reales de alemán del último mensaje del alumno (category: "article" | "case" | "word_order" | "conjugation" | "vocab"); [] si escribió sin errores o en español.
+- "suggestedReplies": 3 píldoras de respuesta en alemán nivel A1 ("de", "es" y "grammarTag" opcional ej. "V2", "Akk") para desbloquear al estudiante al responder tu reto.
+- "newVocabulary": 1 a 3 palabras clave introducidas ("de", "es", "pos", "exampleDe").`;
+
+    return await streamWithDeepSeekFallback(res, tutorV2Prompt, history, lastMessage, {
+      model: "gemini-3.8-flash",
+      isJson: true,
+      responseSchema: TUTOR_V2_SCHEMA,
+      structuredEventType: "structured_v2",
+      temperature: 0.4,
+      maxOutputTokens: 650,
+      req,
+      postProcessStructured: (parsed) => ({
+        replyDe: String(parsed?.replyDe || "").trim(),
+        translationEs: String(parsed?.translationEs || "").trim(),
+        replyMarkdownEs: String(parsed?.replyMarkdownEs || "").trim(),
+        grammarCorrections: (parsed?.grammarCorrections || []).map((err) => ({
+          ...err,
+          category: normalizeErrorCategory(err.category)
+        })),
+        suggestedReplies: Array.isArray(parsed?.suggestedReplies) ? parsed.suggestedReplies.slice(0, 4) : [],
+        newVocabulary: Array.isArray(parsed?.newVocabulary) ? parsed.newVocabulary.slice(0, 4) : []
+      })
+    });
+  }
+
   await streamWithDeepSeekFallback(res, TUTOR_STATIC_SYSTEM_PROMPT, history, lastMessage, {
     model: "gemini-3.8-flash",
     cleanBold: false,
-    thinking_level: "MINIMAL",
+    temperature: 0.5,
     req
   });
 });

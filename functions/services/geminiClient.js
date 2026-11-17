@@ -337,6 +337,9 @@ export async function executeBackendGemini(prompt, options = {}) {
     systemInstruction,
     isJson = false,
     responseSchema = null,
+    temperature,
+    maxOutputTokens,
+    thinkingConfig = null,
     isStreaming = false,
     mode = "paid_first",
     cooldownMs = LONG_COOLDOWN_MS
@@ -349,17 +352,22 @@ export async function executeBackendGemini(prompt, options = {}) {
     cooldownMs,
     logPrefix: "GeminiPool",
     invokeAttempt: async (genAI, selectedModelName) => {
+      const generationConfig = {
+        ...(temperature !== undefined ? { temperature } : {}),
+        ...(maxOutputTokens !== undefined ? { maxOutputTokens } : {}),
+        ...(thinkingConfig ? { thinkingConfig } : {}),
+        ...(isJson || responseSchema
+          ? {
+              responseMimeType: "application/json",
+              ...(responseSchema ? { responseSchema } : {})
+            }
+          : {})
+      };
+
       const modelConfig = {
         model: selectedModelName,
         ...(systemInstruction ? { systemInstruction } : {}),
-        ...(isJson || responseSchema
-          ? {
-              generationConfig: {
-                responseMimeType: "application/json",
-                ...(responseSchema ? { responseSchema } : {})
-              }
-            }
-          : {})
+        ...(Object.keys(generationConfig).length > 0 ? { generationConfig } : {})
       };
 
       const model = genAI.getGenerativeModel(modelConfig);
@@ -385,6 +393,11 @@ export async function executeBackendGeminiChatStream(history, lastMessage, optio
     keys = {},
     preferredModel = "gemini-3.8-flash",
     systemInstruction,
+    isJson = false,
+    responseSchema = null,
+    temperature,
+    maxOutputTokens,
+    thinkingConfig = null,
     mode = "paid_first",
     cooldownMs = LONG_COOLDOWN_MS
   } = options;
@@ -401,9 +414,22 @@ export async function executeBackendGeminiChatStream(history, lastMessage, optio
     cooldownMs,
     logPrefix: "GeminiPool ChatStream",
     invokeAttempt: async (genAI, selectedModelName) => {
+      const generationConfig = {
+        ...(temperature !== undefined ? { temperature } : {}),
+        ...(maxOutputTokens !== undefined ? { maxOutputTokens } : {}),
+        ...(thinkingConfig ? { thinkingConfig } : {}),
+        ...(isJson || responseSchema
+          ? {
+              responseMimeType: "application/json",
+              ...(responseSchema ? { responseSchema } : {})
+            }
+          : {})
+      };
+
       const model = genAI.getGenerativeModel({
         model: selectedModelName,
-        ...(systemInstruction ? { systemInstruction } : {})
+        ...(systemInstruction ? { systemInstruction } : {}),
+        ...(Object.keys(generationConfig).length > 0 ? { generationConfig } : {})
       });
       const chat = model.startChat({ history: validHistory });
       const resultStream = await chat.sendMessageStream(lastMessage);

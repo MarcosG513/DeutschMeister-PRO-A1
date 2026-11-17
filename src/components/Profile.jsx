@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import localforage from 'localforage';
 import { 
-  User, Mail, Lock, RefreshCw, Crown, CheckCircle2, Flame, 
+  User, Mail, Lock, RefreshCw, CheckCircle2, Flame, 
   Layers, Trophy, ShieldCheck, FileText, ChevronRight, 
   ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle,
-  CloudDownload, Loader2, Download, Volume2, Square
+  CloudDownload, Loader2, Download, Volume2, Square,
+  Mic, Headphones, PenTool, BookOpen, BookMarked
 } from 'lucide-react';
 import AdminAccessPanel from './AdminAccessPanel';
 import InstallInstructionsModal from './InstallInstructionsModal';
 import { usePWAInstall } from '../hooks/usePWAInstall';
-import { getDailyStudyStreak, getStudiedCardsCount, getCompletedModulesCount } from '../utils/helpers';
+import {
+  getDailyStudyStreak,
+  getStudiedCardsCount,
+  getCompletedModulesCount,
+  getStreakSummary,
+  getStreakSummarySync,
+  getSkillProgressSummary,
+  getSkillProgressSummarySync,
+} from '../utils/helpers';
+import { getSrsStats, getSrsStatsSync } from '../services/srsBridgeService';
 import { syncCloudMediaToLocal, getLastMediaSyncTime, getOfflineSyncStats } from '../services/syncMediaService';
 import { getSavedPlaybackSpeed, setSavedPlaybackSpeed, playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { signInWithGoogleUnified, signOutUnified } from '../services/authService';
@@ -35,6 +45,11 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [streak, setStreak] = useState(0);
+  const [streakSummary, setStreakSummary] = useState(() => getStreakSummarySync());
+  const [skillProgress, setSkillProgress] = useState(() =>
+    getSkillProgressSummarySync(studiedCardsCount || unlockedCardsCount || 0, totalCardsCount)
+  );
+  const [srsStats, setSrsStats] = useState(() => getSrsStatsSync());
   const [studiedCount, setStudiedCount] = useState(studiedCardsCount || unlockedCardsCount || 0);
   const [completedModulesCount, setCompletedModulesCount] = useState(0);
   const [isSyncingMedia, setIsSyncingMedia] = useState(false);
@@ -84,6 +99,15 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
 
         const curModules = await getCompletedModulesCount();
         setCompletedModulesCount(curModules);
+
+        const [curSummary, curSkills, curSrs] = await Promise.all([
+          getStreakSummary(),
+          getSkillProgressSummary(Math.max(curStudied, studiedCardsCount || 0), totalCardsCount),
+          getSrsStats(),
+        ]);
+        if (curSummary) setStreakSummary(curSummary);
+        if (curSkills) setSkillProgress(curSkills);
+        if (curSrs) setSrsStats(curSrs);
       } catch (error) {
         console.error("Error cargando datos de gamificación:", error);
       }
@@ -94,13 +118,17 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
     window.addEventListener('studyActivityUpdated', loadGamificationData);
     window.addEventListener('cardStudiedUpdated', loadGamificationData);
     window.addEventListener('moduleCompletedUpdated', loadGamificationData);
+    window.addEventListener('skillActivityUpdated', loadGamificationData);
+    window.addEventListener('srsDeckUpdated', loadGamificationData);
 
     return () => {
       window.removeEventListener('studyActivityUpdated', loadGamificationData);
       window.removeEventListener('cardStudiedUpdated', loadGamificationData);
       window.removeEventListener('moduleCompletedUpdated', loadGamificationData);
+      window.removeEventListener('skillActivityUpdated', loadGamificationData);
+      window.removeEventListener('srsDeckUpdated', loadGamificationData);
     };
-  }, [studiedCardsCount]);
+  }, [studiedCardsCount, totalCardsCount]);
 
   // Sincronización reactiva de velocidad global ('0.75x' / '1.0x') y limpieza de audio al desmontar
   useEffect(() => {
@@ -301,24 +329,25 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
   return (
     <div className="min-h-[100svh] w-full bg-[#f7f9fb] text-slate-900 pb-24 md:pb-12 animate-in fade-in duration-300">
       {/* Header Bar */}
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 py-3 sm:px-8 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-8 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <button 
             onClick={onExit} 
-            className="p-2 rounded-full hover:bg-slate-100 text-slate-700 transition active:scale-95 cursor-pointer"
+            className="min-h-[40px] min-w-[40px] p-2 rounded-full hover:bg-slate-100 text-slate-700 transition active:scale-95 cursor-pointer shrink-0 flex items-center justify-center"
             aria-label="Volver"
           >
             <ArrowLeft size={22} />
           </button>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <User className="text-blue-600" size={22} /> Perfil y Configuración
+          <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2 truncate">
+            <User className="text-blue-600 shrink-0" size={20} />
+            <span className="truncate">Perfil y Configuración</span>
           </h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <span className="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-200">
             Goethe A1
           </span>
-          <span className="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full border border-slate-200">
+          <span className="hidden sm:inline-flex text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full border border-slate-200">
             Versión 2.0
           </span>
         </div>
@@ -531,39 +560,39 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
               </button>
             </section>
 
-            {/* Premium RevenueCat PRO Card */}
-            <section className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 rounded-3xl p-6 sm:p-8 shadow-xl text-white relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6 border border-indigo-400/30">
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-xl pointer-events-none" />
+            {/* Zero-Trust Verified Full Access Card */}
+            <section className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-8 shadow-xl text-white relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6 border border-emerald-400/30">
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-400/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-400/15 rounded-full blur-xl pointer-events-none" />
               
               <div className="z-10 flex-1 text-center sm:text-left">
-                <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
-                  <Crown className="text-amber-300" size={28} />
-                  <h3 className="text-2xl font-bold text-white tracking-wide">DeutschMeister PRO</h3>
-                  <span className="bg-amber-400 text-slate-950 font-black text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wider">Activo</span>
+                <div className="flex items-center justify-center sm:justify-start gap-2 mb-3 flex-wrap">
+                  <ShieldCheck className="text-emerald-400" size={26} />
+                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-wide">DeutschMeister A1</h3>
+                  <span className="bg-emerald-400 text-slate-950 font-black text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wider">Verificado</span>
                 </div>
-                <ul className="space-y-2 font-medium text-sm text-indigo-100">
+                <ul className="space-y-2 font-medium text-sm text-slate-200">
                   <li className="flex items-center justify-center sm:justify-start gap-2">
-                    <CheckCircle2 size={16} className="text-amber-300 shrink-0" />
-                    <span>Tutor IA Ilimitado & Explicaciones Socráticas</span>
+                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                    <span>Acceso completo Zero-Trust sin candados ni monedas</span>
                   </li>
                   <li className="flex items-center justify-center sm:justify-start gap-2">
-                    <CheckCircle2 size={16} className="text-amber-300 shrink-0" />
-                    <span>Cero Anuncios & Experiencia 100% Fluida</span>
+                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                    <span>Tutor IA Socrático, Roleplay y Puente SRS activo</span>
                   </li>
                   <li className="flex items-center justify-center sm:justify-start gap-2">
-                    <CheckCircle2 size={16} className="text-amber-300 shrink-0" />
-                    <span>Audios Nativos & Tarjetas Infinitas</span>
+                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                    <span>Voz HD Charon WSOLA (0.75x / 0.85x / 1.0x) y Offline</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="z-10 flex flex-col items-center gap-3 w-full sm:w-auto">
-                <div className="w-full sm:w-auto bg-amber-400 text-slate-950 font-extrabold px-6 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 whitespace-nowrap text-sm">
-                  ✨ Cuenta PRO Activada
+              <div className="z-10 flex flex-col items-center gap-2.5 w-full sm:w-auto">
+                <div className="w-full sm:w-auto bg-emerald-400 text-slate-950 font-extrabold px-5 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 whitespace-nowrap text-sm">
+                  ✓ Acceso Total Aprobado
                 </div>
-                <span className="text-indigo-200 text-xs font-semibold">
-                  Acceso Total e Ilimitado
+                <span className="text-slate-300 text-xs font-semibold">
+                  Todos los módulos desbloqueados
                 </span>
               </div>
             </section>
@@ -586,16 +615,27 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
                   <p className="text-xs font-medium text-slate-500">Racha Diaria</p>
                 </div>
                 <div className="w-full mt-2">
-                  <div className="flex justify-between items-center text-[10px] text-slate-400 font-semibold mb-1">
-                    <span>Estado</span>
+                  <div className="flex justify-between items-center text-[10px] text-slate-500 font-semibold mb-1.5">
+                    <span>Hoy: {streakSummary?.todayActions || 0}/{streakSummary?.dailyTarget || 5}</span>
                     <span className={streak > 0 ? "text-amber-600 font-bold" : "text-slate-400"}>
                       {streak > 0 ? "¡Activa!" : "Comienza hoy"}
                     </span>
                   </div>
-                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full transition-all duration-500 ${streak > 0 ? 'bg-gradient-to-r from-orange-400 to-amber-500 w-full' : 'w-0'}`}
-                    />
+                  <div className="flex items-center justify-between gap-1">
+                    {(streakSummary?.weekDays || []).map((wd) => (
+                      <span
+                        key={wd.key}
+                        className={`w-5 h-5 rounded-full text-[9px] font-black flex items-center justify-center border ${
+                          wd.active
+                            ? 'bg-amber-400 border-amber-500 text-slate-950'
+                            : wd.isToday
+                              ? 'bg-amber-50 border-amber-300 text-amber-700'
+                              : 'bg-slate-100 border-slate-200 text-slate-400'
+                        }`}
+                      >
+                        {wd.key}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -643,6 +683,54 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
                     />
                   </div>
                 </div>
+              </div>
+            </section>
+
+            {/* Desglose de 4 Habilidades A1 & Mazo SRS */}
+            <section className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-4 sm:p-5 space-y-3.5">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                  📊 Desglose de 4 Habilidades A1
+                </h3>
+                <span className="text-xs font-extrabold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-full">
+                  Media {skillProgress?.overallA1Percent || 0}%
+                </span>
+              </div>
+
+              <div className="space-y-2.5">
+                {[
+                  { item: skillProgress?.speaking, icon: Mic, bar: 'bg-emerald-500', desc: 'Micrófono, Roleplay y Driving' },
+                  { item: skillProgress?.listening, icon: Headphones, bar: 'bg-sky-500', desc: 'Audio Charon, Cuentos y Driving' },
+                  { item: skillProgress?.writing, icon: PenTool, bar: 'bg-indigo-500', desc: 'Tutor, Roleplay, Blurting y Quiz' },
+                  { item: skillProgress?.reading, icon: BookOpen, bar: 'bg-amber-500', desc: 'Flashcards, Tablas y Leselabor' },
+                ].map(({ item, icon: SkillIcon, bar, desc }) => {
+                  const pct = item?.percent || 0;
+                  return (
+                    <div key={item?.id || desc} className="space-y-1">
+                      <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <SkillIcon size={14} className="text-slate-600 shrink-0" />
+                          <span className="font-bold text-slate-800">{item?.label}</span>
+                          <span className="text-[11px] text-slate-400 truncate hidden sm:inline">· {desc}</span>
+                        </div>
+                        <span className="font-extrabold text-slate-700 shrink-0">{pct}%</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className={`h-full rounded-full transition-all duration-500 ${bar}`} style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
+                <span className="font-bold text-slate-700 flex items-center gap-1.5">
+                  <BookMarked size={15} className="text-indigo-600" />
+                  <span>Mazo SRS Conversacional:</span>
+                </span>
+                <span className="text-slate-600 font-semibold">
+                  {srsStats?.total || 0} tarjetas · <strong className="text-emerald-700">{srsStats?.dueNow || 0} por repasar</strong>
+                </span>
               </div>
             </section>
  

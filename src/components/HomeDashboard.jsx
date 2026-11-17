@@ -2,12 +2,15 @@ import { useMemo, useRef, useState } from 'react';
 import {
   ArrowRight,
   Award,
+  BookMarked,
   BookOpen,
   Bot,
+  Camera,
   Car,
   CheckCircle2,
   Clock,
   Compass,
+  Flame,
   Gamepad2,
   GraduationCap,
   Headphones,
@@ -15,6 +18,8 @@ import {
   List,
   MessageCircle,
   Mic,
+  PenTool,
+  PhoneCall,
   PlayCircle,
   ShieldCheck,
   Sparkles,
@@ -53,6 +58,10 @@ export default function HomeDashboard({
   studiedCardsCount = 0,
   totalUniqueCardsCount = 0,
   lastActivity = null,
+  streakSummary = null,
+  skillProgress = null,
+  srsStats = null,
+  onStartSrsReview,
   onOpenChapter,
   onOpenStudyPlan,
   onOpenGoetheModule,
@@ -134,8 +143,26 @@ export default function HomeDashboard({
         onLaunch: () => onOpenGoetheModule?.(mod.id),
       };
     }
+    if (lastActivity.type === 'special') {
+      const specialMeta = {
+        driving: { label: 'Modo Conducción', emoji: '🚗', title: 'Fahrmodus Manos Libres', sub: 'Retoma tus clases guiadas en audio' },
+        roleplay: { label: 'Simulador de Rol IA', emoji: '🎭', title: 'Conversación con Misiones A1', sub: 'Practica situaciones reales con diagnóstico SRS' },
+        phrase: { label: 'Modo Frase/Diálogo', emoji: '💬', title: 'Diálogos Guiados A1', sub: 'Responde paso a paso con pistas y micrófono' },
+        reading: { label: 'Leselabor PRO', emoji: '📖', title: 'Comprensión Lectora Graduada', sub: 'Lectura interactiva con karaoke Charon' },
+        quiz: { label: 'Quiz Dinámico', emoji: '🎮', title: 'Evaluación Rápida A1 / SRS', sub: 'Pon a prueba vocabulario y errores' },
+      }[lastActivity.id];
+      if (!specialMeta) return null;
+      return {
+        categoryLabel: specialMeta.label,
+        emoji: specialMeta.emoji,
+        title: specialMeta.title,
+        subtitle: specialMeta.sub,
+        ctaLabel: 'Continuar práctica',
+        onLaunch: () => onOpenSpecialView?.(lastActivity.id),
+      };
+    }
     return null;
-  }, [lastActivity, chapterMap, studyPlanModules, goetheModules, onOpenChapter, onOpenStudyPlan, onOpenGoetheModule]);
+  }, [lastActivity, chapterMap, studyPlanModules, goetheModules, onOpenChapter, onOpenStudyPlan, onOpenGoetheModule, onOpenSpecialView]);
 
   const activeChapterFallbackId =
     resumeContext && lastActivity?.type === 'chapter' ? Number(lastActivity.id) : chapters[0]?.id || 1;
@@ -196,6 +223,22 @@ export default function HomeDashboard({
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/10 text-slate-200 border border-white/10">
                   <span>Progreso global: {studiedCardsCount} / {totalUniqueCardsCount} ({progressPercentage}%)</span>
                 </span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-400/15 text-amber-300 border border-amber-400/30 whitespace-nowrap">
+                  <Flame size={13} aria-hidden="true" />
+                  <span>
+                    {streakSummary?.currentStreak || 0}d · {streakSummary?.todayActions || 0}/{streakSummary?.dailyTarget || 5} hoy
+                  </span>
+                </span>
+                {(srsStats?.dueNow || 0) > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => onStartSrsReview?.()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-indigo-500 hover:bg-indigo-400 text-white border border-indigo-300/40 transition cursor-pointer whitespace-nowrap"
+                  >
+                    <BookMarked size={13} aria-hidden="true" />
+                    <span>Repasar {srsStats.dueNow} en SRS</span>
+                  </button>
+                )}
               </div>
 
               <h2
@@ -346,6 +389,192 @@ export default function HomeDashboard({
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          MEDIDOR REAL DE 4 HABILIDADES + RACHA L-D Y PRÁCTICA INMERSIVA IA
+      ====================================================================== */}
+      <section aria-label="Habilidades y Práctica Inmersiva" className="space-y-5">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3.5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 className="text-sm sm:text-base font-black text-slate-900">
+                Tu equilibrio A1 en 4 habilidades
+              </h3>
+              <p className="text-[11px] sm:text-xs text-slate-500">
+                Calculado en tiempo real según tu actividad; toca cualquier habilidad para entrenarla ahora.
+              </p>
+            </div>
+            <div className="flex items-center gap-1 shrink-0" aria-label="Actividad semanal Lunes a Domingo">
+              {(streakSummary?.weekDays || []).map((wd) => (
+                <span
+                  key={wd.key}
+                  className={`w-6 h-6 rounded-full text-[10px] font-black flex items-center justify-center border ${
+                    wd.active
+                      ? 'bg-amber-400 border-amber-500 text-slate-950'
+                      : wd.isToday
+                        ? 'bg-amber-50 border-amber-300 text-amber-800'
+                        : 'bg-slate-100 border-slate-200 text-slate-400'
+                  }`}
+                >
+                  {wd.key}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+            {[
+              {
+                data: skillProgress?.speaking,
+                fallbackLabel: 'Hablar',
+                fallbackTarget: 'roleplay',
+                icon: Mic,
+                barClass: 'bg-emerald-500',
+                badgeClass: 'text-emerald-700 bg-emerald-50',
+              },
+              {
+                data: skillProgress?.listening,
+                fallbackLabel: 'Escuchar',
+                fallbackTarget: 'driving',
+                icon: Headphones,
+                barClass: 'bg-sky-500',
+                badgeClass: 'text-sky-700 bg-sky-50',
+              },
+              {
+                data: skillProgress?.writing,
+                fallbackLabel: 'Escribir',
+                fallbackTarget: 'quiz',
+                icon: PenTool,
+                barClass: 'bg-indigo-500',
+                badgeClass: 'text-indigo-700 bg-indigo-50',
+              },
+              {
+                data: skillProgress?.reading,
+                fallbackLabel: 'Leer',
+                fallbackTarget: 'reading',
+                icon: BookOpen,
+                barClass: 'bg-amber-500',
+                badgeClass: 'text-amber-800 bg-amber-50',
+              },
+            ].map(({ data, fallbackLabel, fallbackTarget, icon: IconComp, barClass, badgeClass }) => {
+              const pct = data?.percent ?? 0;
+              const target = data?.quickTargetView || fallbackTarget;
+              return (
+                <button
+                  key={fallbackLabel}
+                  type="button"
+                  onClick={() => onOpenSpecialView?.(target)}
+                  className="min-h-[64px] p-3 rounded-xl border border-slate-200 hover:border-indigo-300 bg-slate-50/60 hover:bg-white transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+                >
+                  <div className="flex items-center justify-between gap-1.5 w-full">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-slate-800 truncate">
+                      <IconComp size={14} className="shrink-0 text-slate-600" aria-hidden="true" />
+                      <span>{data?.label || fallbackLabel}</span>
+                    </span>
+                    <span className={`text-[11px] font-black px-2 py-0.5 rounded-full shrink-0 ${badgeClass}`}>
+                      {pct}%
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-200/80 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full transition-all duration-500 ${barClass}`} style={{ width: `${pct}%` }} />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Tarjetas de acceso rápido a Práctica Inmersiva IA (2x2 móvil, 4 cols desktop) */}
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+              <Sparkles size={18} className="text-indigo-600 shrink-0" aria-hidden="true" />
+              <span>Práctica Inmersiva IA</span>
+            </h3>
+            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+              Incluido sin paywalls
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('phrase')}
+              className="min-h-[84px] p-3.5 rounded-2xl border-2 border-sky-200 bg-sky-50/70 hover:bg-sky-100/70 transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+            >
+              <div className="flex items-center justify-between gap-1 w-full">
+                <MessageCircle size={18} className="text-sky-700 shrink-0" aria-hidden="true" />
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-sky-600 text-white truncate">
+                  Activo · Mic
+                </span>
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">Modo Frase</div>
+                <div className="text-[11px] text-slate-600 leading-snug mt-0.5">
+                  Diálogos con pistas ES y misiones SRS
+                </div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('podcast')}
+              className="min-h-[84px] p-3.5 rounded-2xl border border-violet-200 bg-violet-50/60 hover:bg-violet-100/70 transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+            >
+              <div className="flex items-center justify-between gap-1 w-full">
+                <Headphones size={18} className="text-violet-700 shrink-0" aria-hidden="true" />
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-violet-200 text-violet-900 truncate">
+                  Fase 2 · Audio
+                </span>
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">Micro-Pódcasts</div>
+                <div className="text-[11px] text-slate-600 leading-snug mt-0.5">
+                  Episodios cortos offline + Karaoke
+                </div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('call')}
+              className="min-h-[84px] p-3.5 rounded-2xl border border-emerald-500/40 bg-slate-900 hover:bg-slate-800 text-white transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+            >
+              <div className="flex items-center justify-between gap-1 w-full">
+                <PhoneCall size={18} className="text-emerald-400 shrink-0" aria-hidden="true" />
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 truncate">
+                  Fase 3 · Voz
+                </span>
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-black text-white leading-tight">Modo Llamada</div>
+                <div className="text-[11px] text-slate-300 leading-snug mt-0.5">
+                  Llamada manos libres Charon WSOLA
+                </div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('photo')}
+              className="min-h-[84px] p-3.5 rounded-2xl border border-amber-200 bg-amber-50/70 hover:bg-amber-100/70 transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+            >
+              <div className="flex items-center justify-between gap-1 w-full">
+                <Camera size={18} className="text-amber-700 shrink-0" aria-hidden="true" />
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 truncate">
+                  Fase 3 · Visión
+                </span>
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">Modo Foto</div>
+                <div className="text-[11px] text-slate-600 leading-snug mt-0.5">
+                  Describe tu entorno y capta SRS
+                </div>
+              </div>
+            </button>
           </div>
         </div>
       </section>
