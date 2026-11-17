@@ -99,6 +99,7 @@ export default function App() {
   const [lastActivity, setLastActivity] = useState(() => readSavedLastActivity());
   const [quizInitialScope, setQuizInitialScope] = useState('chapter');
   const [tutorNotice, setTutorNotice] = useState(null);
+  const [tutorInitialMode, setTutorInitialMode] = useState('tutor');
   const [phaseBannerNotice, setPhaseBannerNotice] = useState(null);
   const returnToHomeRef = useRef(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -202,16 +203,18 @@ export default function App() {
   };
 
   const handleOpenSpecialView = (targetView, options = {}) => {
-    if (targetView === 'call') {
-      setPhaseBannerNotice('Modo Llamada Hands-Free (VAD + Avatar OLED) llega en la Fase 3. Mientras tanto, practica en vivo usando el Simulador de Rol con micrófono y Charon.');
-      targetView = 'roleplay';
-    } else if (targetView === 'photo') {
-      setTutorNotice('Modo Foto Multimodal (cámara + Gemini Vision) llega en la Fase 3. Por ahora puedes describir tu entorno por texto o micrófono aquí para recibir correcciones A1 y guardarlas en SRS.');
+    setPhaseBannerNotice(null);
+    if (targetView === 'photo') {
+      setTutorNotice(null);
+      setTutorInitialMode('photo');
       setIsMenuOpen(false);
       setIsTutorOpen(true);
+      recordLastActivity({
+        type: 'special',
+        id: 'photo',
+        title: 'photo',
+      });
       return;
-    } else {
-      setPhaseBannerNotice(null);
     }
 
     if (isHomeOpen) returnToHomeRef.current = true;
@@ -222,7 +225,7 @@ export default function App() {
     setIsMenuOpen(false);
     setViewMode(targetView);
 
-    if (['driving', 'roleplay', 'phrase', 'podcast', 'reading', 'quiz'].includes(targetView)) {
+    if (['driving', 'roleplay', 'call', 'phrase', 'podcast', 'reading', 'quiz'].includes(targetView)) {
       recordLastActivity({
         type: 'special',
         id: targetView,
@@ -233,6 +236,7 @@ export default function App() {
 
   const handleOpenTutorFromHome = () => {
     setTutorNotice(null);
+    setTutorInitialMode('tutor');
     setIsMenuOpen(false);
     setIsTutorOpen(true);
   };
@@ -1777,13 +1781,21 @@ export default function App() {
                       <span>🚗 Modo Conducción (Fahrmodus)</span>
                     </button>
                     <button onClick={() => {
+                setTutorNotice(null);
+                setTutorInitialMode('tutor');
                 setIsTutorOpen(true);
                 setIsMenuOpen(false);
-              }} className="bg-slate-800 text-yellow-400 border border-yellow-500/20 py-2.5 rounded-lg font-bold hover:bg-slate-700 transition flex flex-col items-center justify-center gap-1 text-xs">
+              }} className="bg-slate-800 text-yellow-400 border border-yellow-500/20 py-2.5 rounded-lg font-bold hover:bg-slate-700 transition flex flex-col items-center justify-center gap-1 text-xs cursor-pointer">
                       <Bot size={18} /> Tutor IA
                     </button>
                     <button onClick={() => handleOpenSpecialView('roleplay')} className="bg-purple-900/60 text-purple-200 border border-purple-500/20 py-2.5 rounded-lg font-bold hover:bg-purple-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
                       <Sparkles size={18} /> Rol ✨
+                    </button>
+                    <button onClick={() => handleOpenSpecialView('call')} className="bg-emerald-950 text-emerald-300 border border-emerald-500/30 py-2.5 rounded-lg font-bold hover:bg-emerald-900 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
+                      <Mic size={18} /> Llamada 📞
+                    </button>
+                    <button onClick={() => handleOpenSpecialView('photo')} className="bg-amber-950 text-amber-300 border border-amber-500/30 py-2.5 rounded-lg font-bold hover:bg-amber-900 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
+                      <ImagePlus size={18} /> Foto 📸
                     </button>
                     <button onClick={() => handleOpenSpecialView('phrase')} className="bg-sky-900/60 text-sky-200 border border-sky-500/20 py-2.5 rounded-lg font-bold hover:bg-sky-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
                       <MessageCircle size={18} /> Frase / Diálogo
@@ -1957,7 +1969,7 @@ export default function App() {
           )}
 
           {/* VISTA: INICIO Y CENTRO DE MANDO PEDAGÓGICO 🏠 */}
-          {isHomeOpen && searchTerm.trim() === "" && !["roleplay", "phrase", "podcast", "reading"].includes(viewMode) && (
+          {isHomeOpen && searchTerm.trim() === "" && !["roleplay", "call", "phrase", "podcast", "reading"].includes(viewMode) && (
             <HomeDashboard
               user={user}
               accessRole={accessRole}
@@ -1980,12 +1992,15 @@ export default function App() {
             />
           )}
 
-          {/* VISTA: SIMULADOR DE ROL IA (GEMINI API) ✨ */}
-          {viewMode === "roleplay" && (
-            <RoleplaySimulator
-              initialMode="roleplay"
-              onExit={handleExitToOrigin}
-            />
+          {/* VISTA: SIMULADOR DE ROL IA & MODO LLAMADA HANDS-FREE 📞✨ */}
+          {(viewMode === "roleplay" || viewMode === "call") && (
+            <div className="pt-[max(0.75rem,env(safe-area-inset-top))]">
+              <RoleplaySimulator
+                key={viewMode}
+                initialMode={viewMode === "call" ? "call" : "roleplay"}
+                onExit={handleExitToOrigin}
+              />
+            </div>
           )}
 
           {/* VISTA: MODO FRASE & DIÁLOGO GUIADO (SATZKLAMMER + TURNOS) 💬 */}
@@ -2441,24 +2456,28 @@ export default function App() {
   </>
   }
 
-    {/* --- PANEL LATERAL: TUTOR IA --- */}
-    <TutorChat
-      isOpen={isTutorOpen}
-      onClose={() => {
-        setIsTutorOpen(false);
-        setTutorNotice(null);
-      }}
-      isFullscreen={isTutorFullscreen}
-      setIsFullscreen={setIsTutorFullscreen}
-      chatMessages={chatMessages}
-      chatInput={chatInput}
-      setChatInput={setChatInput}
-      sendChatMessage={sendChatMessage}
-      isChatLoading={isChatLoading}
-      chatEndRef={chatEndRef}
-      user={user}
-      externalNotice={tutorNotice}
-    />
+    {/* --- PANEL LATERAL: TUTOR IA & MODO FOTO --- */}
+    <Suspense fallback={null}>
+      <TutorChat
+        isOpen={isTutorOpen}
+        onClose={() => {
+          setIsTutorOpen(false);
+          setTutorNotice(null);
+          setTutorInitialMode('tutor');
+        }}
+        initialMode={tutorInitialMode}
+        isFullscreen={isTutorFullscreen}
+        setIsFullscreen={setIsTutorFullscreen}
+        chatMessages={chatMessages}
+        chatInput={chatInput}
+        setChatInput={setChatInput}
+        sendChatMessage={sendChatMessage}
+        isChatLoading={isChatLoading}
+        chatEndRef={chatEndRef}
+        user={user}
+        externalNotice={tutorNotice}
+      />
+    </Suspense>
 
     {fullscreenImage && (() => {
         const resolvedFullscreenSrc =

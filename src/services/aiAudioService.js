@@ -816,3 +816,196 @@ export async function playGermanAudio(text, options = {}) {
     }
   }
 }
+
+const SILENT_WARMUP_WAV =
+  "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+
+function base64ToBlob(b64Data, mimeType = "audio/wav") {
+  const byteString = atob(b64Data);
+  const len = byteString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([bytes], { type: mimeType });
+}
+
+/**
+ * Crea y pre-calienta un único HTMLAudioElement dentro del gesto del usuario
+ * ("Iniciar Llamada") para evitar NotAllowedError en turnos asíncronos de iOS Safari PWA.
+ */
+export function createPrewarmedCallAudioElement() {
+  unlockWebKitAudioContext();
+  if (typeof Audio === "undefined") return null;
+  const audio = new Audio();
+  audio.playsInline = true;
+  audio.setAttribute("playsinline", "");
+  audio.setAttribute("webkit-playsinline", "");
+  audio.src = SILENT_WARMUP_WAV;
+  try {
+    const p = audio.play();
+    if (p && typeof p.then === "function") {
+      p.then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+      }).catch(() => {});
+    }
+  } catch {
+    // Desbloqueo en mejor esfuerzo
+  }
+  return audio;
+}
+
+export function stopPrewarmedCallAudio(audioElement) {
+  if (audioElement) {
+    try {
+      audioElement.onended = null;
+      audioElement.onerror = null;
+      audioElement.pause();
+      audioElement.currentTime = 0;
+      if (audioElement._dmObjectUrl) {
+        revokeTrackedObjectUrl(audioElement._dmObjectUrl);
+        audioElement._dmObjectUrl = null;
+      }
+      audioElement.removeAttribute("src");
+      audioElement.load();
+    } catch {
+      // Limpieza segura
+    }
+  }
+  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch {
+      // Ignorar en entornos sin WebSpeech
+    }
+  }
+}
+
+/**
+ * Reproducción efímera exclusiva para Modo Llamada sobre un único HTMLAudioElement
+ * pre-calentado + WSOLA (0.75x / 0.85x / 1.0x), garantizando CERO escrituras de
+ * turnos conversacionales en Firestore (`global_audio_pronunciations`) ni en IndexedDB.
+ */
+export async function playTextOnPrewarmedAudio(audioElement, text, options = {}) {
+  const { speed, lang = "de", signal = null, onStart, onEnd, onError } = options;
+  if (signal?.aborted || !text || typeof text !== "string") {
+    onEnd?.();
+    return;
+  }
+
+  const cleanText = normalizeCleanText(text);
+  if (!cleanText) {
+    onEnd?.();
+    return;
+  }
+
+  const targetSpeed =
+    speed !== undefined ? normalizePlaybackSpeed(speed) : getSavedPlaybackSpeed();
+
+  stopCurrentAudio();
+  stopPrewarmedCallAudio(audioElement);
+
+  const fns = appFunctions || getFunctions();
+  const synthesizeFn = httpsCallable(fns, "synthesizeGermanSpeech");
+
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = (err = null) => {
+      if (settled) return;
+      settled = true;
+      signal?.removeEventListener("abort", handleAbort);
+      if (err) {
+        onError?.(err);
+      } else {
+        onEnd?.();
+      }
+      resolve();
+    };
+
+    const handleAbort = () => {
+      stopPrewarmedCallAudio(audioElement);
+      finish();
+    };
+    signal?.addEventListener("abort", handleAbort, { once: true });
+
+    (async () => {
+      try {
+        onStart?.();
+        const sha256Id = await computeSha256AudioId(cleanText, "Charon");
+        const cacheKey = sha256Id ? `ephem_${sha256Id}` : `ephem_${Date.now()}`;
+
+        const response = await synthesizeFn({
+          text: cleanText,
+          voice: "Charon",
+          type: "call_ephemeral",
+          lang,
+          ephemeral: true
+        });
+        if (signal?.aborted) {
+          finish();
+          return;
+        }
+
+        const data = response?.data || {};
+        let blob = null;
+        if (data.audioBase64) {
+          blob = base64ToBlob(data.audioBase64, data.mimeType || "audio/wav");
+        } else if (data.audioUrl) {
+          const resp = await fetch(data.audioUrl, signal ? { signal } : undefined);
+          if (signal?.aborted) {
+            finish();
+            return;
+          }
+          if (resp.ok) {
+            blob = await resp.blob();
+          }
+        }
+
+        if (!(blob instanceof Blob) || !audioElement) {
+          throw new Error("No se recibió audio efímero reproducibles.");
+        }
+
+        const processed = await getCleanSpeedAudioResult(blob, targetSpeed, cacheKey);
+        if (signal?.aborted) {
+          if (processed?.url?.startsWith("blob:")) {
+            revokeTrackedObjectUrl(processed.url);
+          }
+          finish();
+          return;
+        }
+
+        if (processed?.url?.startsWith("blob:")) {
+          audioElement._dmObjectUrl = processed.url;
+        }
+        audioElement.src = processed.url;
+        audioElement.playbackRate = processed.playbackRate;
+        audioElement.preservesPitch = true;
+
+        audioElement.onended = () => {
+          stopPrewarmedCallAudio(audioElement);
+          finish();
+        };
+        audioElement.onerror = async (e) => {
+          stopPrewarmedCallAudio(audioElement);
+          if (!signal?.aborted && lang !== "es") {
+            await nativeSpeak(cleanText, { lang, rate: targetSpeed }).catch(() => {});
+          }
+          finish(e);
+        };
+
+        await audioElement.play();
+      } catch (err) {
+        if (signal?.aborted) {
+          finish();
+          return;
+        }
+        console.warn("[Call Ephemeral TTS Fallback]:", err?.message || err);
+        if (lang !== "es") {
+          await nativeSpeak(cleanText, { lang, rate: targetSpeed }).catch(() => {});
+        }
+        finish(err);
+      }
+    })();
+  });
+}

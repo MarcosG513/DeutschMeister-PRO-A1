@@ -147,6 +147,8 @@ export default function HomeDashboard({
       const specialMeta = {
         driving: { label: 'Modo Conducción', emoji: '🚗', title: 'Fahrmodus Manos Libres', sub: 'Retoma tus clases guiadas en audio' },
         roleplay: { label: 'Simulador de Rol IA', emoji: '🎭', title: 'Conversación con Misiones A1', sub: 'Practica situaciones reales con diagnóstico SRS' },
+        call: { label: 'Modo Llamada Hands-Free', emoji: '📞', title: 'Llamada OLED con Charon', sub: 'Habla por voz con WSOLA y evaluación SRS al colgar' },
+        photo: { label: 'Modo Foto Multimodal', emoji: '📸', title: 'Describe Escenas Reales', sub: 'Analiza fotos con Gemini Vision y capta vocabulario SRS' },
         phrase: { label: 'Modo Frase y Diálogo', emoji: '💬', title: 'Frases Satzklammer & Turnos', sub: 'Construye oraciones y dialoga paso a paso con Charon' },
         podcast: { label: 'Micro-Pódcasts Offline', emoji: '🎙️', title: 'Pódcasts Karaoke Charon', sub: 'Episodios A1–A2 offline a 0.75x / 0.85x / 1.0x' },
         reading: { label: 'Leselabor PRO', emoji: '📖', title: 'Comprensión Lectora Graduada', sub: 'Lectura interactiva con karaoke Charon' },
@@ -542,12 +544,12 @@ export default function HomeDashboard({
             <button
               type="button"
               onClick={() => onOpenSpecialView?.('call')}
-              className="min-h-[84px] p-3.5 rounded-2xl border border-emerald-500/40 bg-slate-900 hover:bg-slate-800 text-white transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+              className="min-h-[84px] p-3.5 rounded-2xl border-2 border-emerald-500/60 bg-slate-900 hover:bg-slate-800 text-white transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
             >
               <div className="flex items-center justify-between gap-1 w-full">
                 <PhoneCall size={18} className="text-emerald-400 shrink-0" aria-hidden="true" />
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 truncate">
-                  Fase 3 · Voz
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 truncate">
+                  Activo · Voz
                 </span>
               </div>
               <div>
@@ -561,12 +563,12 @@ export default function HomeDashboard({
             <button
               type="button"
               onClick={() => onOpenSpecialView?.('photo')}
-              className="min-h-[84px] p-3.5 rounded-2xl border border-amber-200 bg-amber-50/70 hover:bg-amber-100/70 transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+              className="min-h-[84px] p-3.5 rounded-2xl border-2 border-amber-300 bg-amber-50/80 hover:bg-amber-100/80 transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
             >
               <div className="flex items-center justify-between gap-1 w-full">
                 <Camera size={18} className="text-amber-700 shrink-0" aria-hidden="true" />
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 truncate">
-                  Fase 3 · Visión
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 truncate">
+                  Activo · Visión
                 </span>
               </div>
               <div>

@@ -55,7 +55,13 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
   - **GUARDRAIL:** Toda diapositiva o vista interactiva en `src/components/PresentationViewer.jsx` y `src/App.jsx` debe estar envuelta en un contenedor `<Suspense fallback={...}>` para evitar pantallas blancas durante la navegación.
 - **Nuevos Modos Prácticos y Laborales (Fase 2: Eje A Trámites & Eje B Enpal Indoor/Werkstatt):**
   - **Datasets aislados por lazy chunk (`src/data/`):** `microPodcasts.js` (`6` episodios con marcas temporales monótonas, glosario y `3` preguntas de comprensión), `structuredDialogues.js` (`10` ejercicios *Satzklammer* para Modo Frase + `6` diálogos guiados de `3` turnos con variantes aceptadas) y `roleplayScenarios.js` (conectado a `RoleplaySimulator.jsx`, estrictamente indoor para entornos Enpal: `Keller`, `Technikraum`, `Zählerschrank`, `Wechselrichter`, `Speicher`, `Smart Meter`, `Wallbox`, `Duspol`, `5 VDE-Regeln`).
-  - **Módulos Interactivos:** `src/components/MicroPodcastPlayer.jsx` (karaoke sincronizado, WSOLA `0.75x/0.85x/1.0x`, descarga offline, glosario SRS y test de 3 preguntas con `recordSkillActivity('listening', ...)`), y `src/components/PhraseDialogueTrainer.jsx` (pestañas accesibles Modo Frase + Modo Diálogo, evaluación determinista `src/utils/dialogueEval.js`, `useSpeechRecognition('de-DE')` tolerante a iOS PWA y guardado de reglas/vocabulario en SRS).
+  - **Módulos Interactivos (Fase 2 y Fase 3):** `src/components/MicroPodcastPlayer.jsx` (karaoke sincronizado, WSOLA `0.75x/0.85x/1.0x`, descarga offline, glosario SRS y test de 3 preguntas con `recordSkillActivity('listening', ...)`), y `src/components/PhraseDialogueTrainer.jsx` (pestañas accesibles Modo Frase + Modo Diálogo, evaluación determinista `src/utils/dialogueEval.js`, `useSpeechRecognition('de-DE')` tolerante a iOS PWA y guardado de reglas/vocabulario en SRS).
+- **Modo Llamada Hands-Free (`initialMode="call"` en `RoleplaySimulator.jsx` + `src/components/chat/CallModeStage.jsx` + `src/hooks/useCallSpeechCapture.js`):**
+  - Captura multiplataforma sin diálogo bloqueante en Android APK (`popup: false`, `partialResults: true`, debounce de silencio configurable `1200–2500 ms`), `WebSpeech` continuo en Desktop y fallback iOS Safari PWA standalone (`getUserMedia` + `AnalyserNode` RMS + `MediaRecorder` `audio/mp4`, liberando explícitamente cada pista con `track.stop()` antes de pasar turno a audio).
+  - Un único `HTMLAudioElement` pre-calentado dentro del gesto de usuario (*Iniciar Llamada*, `createPrewarmedCallAudioElement`, `playsInline=true`), bloqueo strict *half-duplex*, guardia anti-eco de `300 ms` e interrupción (*barge-in*) al tocar el avatar OLED.
+  - Los turnos efímeros se sintetizan vía `playTextOnPrewarmedAudio` -> `synthesizeGermanSpeech({ ephemeral: true })` (devolviendo `audioBase64` inline sin escribir nunca turnos de llamada en `global_audio_pronunciations` ni en `audioStore`) y el botón rojo **«Colgar y Evaluar»** abre `SessionDiagnosticCard` -> `srsBridgeService.js`.
+- **Modo Foto Multimodal (`initialMode="photo"` en `TutorChat.jsx` + `src/components/chat/PhotoPracticePanel.jsx` + `src/utils/imageCompressor.js`):**
+  - Compresión 100 % nativa en cliente (`createImageBitmap` + `<canvas>`, `<= 768px` JPEG calidad `<= 0.78`, `0 KB` de dependencias externas), descripción oral o escrita en alemán, evaluación multimodal y captura de 1 toque de `sceneVocabulary[]` y errores hacia `srsBridgeService.js`.
 - **Viewport Móvil y Teclados Virtuales (Capacitor & Web):**
   - Los contenedores principales (`EmailSimulator.jsx`, `RoleplaySimulator.jsx`, `DynamicQuiz.jsx`, `PresentationViewer.jsx`, `DrivingMode.jsx`) deben emplear `min-h-[100dvh]` y manejar `onFocus` con `scrollIntoView({ behavior: 'smooth', block: 'center' })` para que los teclados virtuales de Android no ocluyan los campos de texto ni causen saltos de layout.
 - **Integridad, Telemetría Real (4 Habilidades + Racha) y Puente SRS (`src/services/srsBridgeService.js`):**
@@ -79,18 +85,19 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
 
 ## 4. Backend Serverless & Resiliencia de IA (`functions/`)
 
-- **Funciones Cloud v2 Activas (11 endpoints):**
+- **Funciones Cloud v2 Activas (12 endpoints):**
   1. `sendTutorChatMessage` (Tutor socrático en streaming SSE — `onRequest`, protegida con `assertApprovedUser`)
-  2. `runRoleplaySimulator` (Simulador de roles A1 en streaming SSE — `onRequest`, protegida con `assertApprovedUser`)
+  2. `runRoleplaySimulator` (Simulador de roles A1/Llamada en streaming SSE con soporte multimodal opcional `audioBase64` iOS PWA — `onRequest`, protegida con `assertApprovedUser`)
   3. `evaluateEmail` (Evaluador de redacción oficial Goethe A1 — `onCall`, protegida con `assertApprovedUser`)
   4. `generateStory` (Generador de historias graduadas en streaming SSE — `onRequest`, protegida con `assertApprovedUser`)
   5. `generateDynamicQuiz` (Generador de evaluaciones dinámicas — `onCall`, protegida con `assertApprovedUser`)
   6. `generateReadingTest` (Comprensión lectora A1 — `onCall`, protegida con `assertApprovedUser`)
-  7. `synthesizeGermanSpeech` (Síntesis de voz neural de alta calidad — `onCall`, protegida con `assertApprovedUser`)
+  7. `synthesizeGermanSpeech` (Síntesis Charon HD — soporta `ephemeral: true` devolviendo `audioBase64` inline sin escribir turnos efímeros en Storage ni `global_audio_pronunciations` — `onCall`, protegida con `assertApprovedUser`)
   8. `regenerateCardMedia` (Mantenimiento y regeneración de audios/imágenes — `onCall`, protegida con `assertApprovedUser`)
   9. `generateCardImage` (Generación de ilustraciones didácticas — `onCall`, protegida con `assertApprovedUser`)
   10. `verifyOrRequestAccess` (Gate Zero-Trust de auto-registro, validación contra `SUPER_ADMIN_EMAILS`/`authorized_emails` y sincronización de Custom Claims — `onCall`)
   11. `manageUserAccess` (Panel de administración: `list`, `approve`, `revoke`, `preauthorize`, `remove_preauth` — `onCall`, exclusiva para `role === "admin"` vía `assertAdminUser`)
+  12. `analyzePhotoDescription` (Análisis visual multimodal A1–A2 — `onCall`, `await assertApprovedUser(request)` en la primera línea, validación de magic bytes JPEG/PNG/WebP `<= 512 KB`, saneamiento en memoria con `sharp` sin guardar fotos en Cloud Storage, cuota diaria transaccional FinOps `photoCount` en `usage/today` y respuesta estricta `PHOTO_ANALYSIS_SCHEMA`)
 - **Autenticación y Guard Zero-Trust Obligatorio (`assertApprovedUser`):**
   - Toda Cloud Function de IA o medios ejecuta obligatoriamente `await assertApprovedUser(...)` (rechaza peticiones sin auth, rechaza sesiones anónimas `sign_in_provider === "anonymous"` y exige Custom Claim `approved === true`/`admin === true` o estado `status === "approved"` en `access_control/{uid}`, sincronizando claims en segundo plano).
   - Las escrituras en `global_flashcards` (`regenerateCardMedia` y `generateCardImage`) mantienen validación adicional de origen/rol (`isServerAuthorizedMediaWriter`: emulador, Vite dev local o admin aprobado).

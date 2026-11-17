@@ -4,6 +4,7 @@ import { getAuth } from 'firebase/auth';
 import ConversationThread from './chat/ConversationThread';
 import ComposerBar from './chat/ComposerBar';
 import SessionDiagnosticCard from './chat/SessionDiagnosticCard';
+import CallModeStage from './chat/CallModeStage';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
 import { ROLEPLAY_AXES, roleplayScenariosCatalog } from '../data/roleplayScenarios';
@@ -111,9 +112,11 @@ const RoleplaySimulator = ({
     setIsDiagnosticOpen(false);
     setDiagnosticData(null);
 
-    if (initialMode === 'phrase') {
+    if (initialMode === 'call' || initialMode === 'phrase') {
       setIsBlurting(false);
-      startScenario(scen);
+      if (initialMode === 'phrase') {
+        startScenario(scen);
+      }
     } else {
       setIsBlurting(true);
       setBlurtInput('');
@@ -127,7 +130,13 @@ const RoleplaySimulator = ({
     startScenario(scenario);
   };
 
-  const streamRoleplayTurn = async (conversationHistory, scen, prevMissions) => {
+  const streamRoleplayTurn = async (conversationHistory, scen, prevMissions, turnOptions = {}) => {
+    const {
+      audioPayload = null,
+      signal = null,
+      onReplyDeReady = null,
+      onTranscriptResolved = null,
+    } = turnOptions;
     const currentUser = getAuth().currentUser;
     const idToken = currentUser ? await currentUser.getIdToken().catch(() => '') : '';
     const response = await fetch(API_ENDPOINTS.ROLEPLAY, {
@@ -136,6 +145,7 @@ const RoleplaySimulator = ({
         'Content-Type': 'application/json',
         ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
       },
+      ...(signal ? { signal } : {}),
       body: JSON.stringify({
         historialConversacion: conversationHistory,
         escenario: scen.prompt,
@@ -143,6 +153,12 @@ const RoleplaySimulator = ({
         action: 'turn',
         missions: scen.missions || DEFAULT_MISSIONS,
         previousMissionsStatus: prevMissions,
+        ...(audioPayload?.audioBase64
+          ? {
+              audioBase64: audioPayload.audioBase64,
+              audioMimeType: audioPayload.audioMimeType || 'audio/mp4',
+            }
+          : {}),
       }),
     });
     if (!response.ok) throw new Error('Failed to connect to Roleplay');
@@ -150,6 +166,7 @@ const RoleplaySimulator = ({
     const reader = response.body.getReader();
     const decoder = new TextDecoder('utf-8');
     let legacyText = '';
+    let emittedReplyDeOnce = false;
 
     setMessages((prev) => [
       ...prev,
@@ -167,6 +184,10 @@ const RoleplaySimulator = ({
         try {
           const data = JSON.parse(line.substring(6));
           if (data.type === 'reply_de_ready' && data.replyDe) {
+            if (!emittedReplyDeOnce) {
+              emittedReplyDeOnce = true;
+              onReplyDeReady?.(data.replyDe);
+            }
             setMessages((prev) => {
               const updated = [...prev];
               const lastIdx = updated.length - 1;
@@ -182,6 +203,13 @@ const RoleplaySimulator = ({
           } else if (data.type === 'roleplay_turn_v2' && data.payload) {
             const p = data.payload;
             const replyText = (p.replyDe || '').replace(/\*\*/g, '');
+            if (p.userTranscriptDe) {
+              onTranscriptResolved?.(p.userTranscriptDe);
+            }
+            if (replyText && !emittedReplyDeOnce) {
+              emittedReplyDeOnce = true;
+              onReplyDeReady?.(replyText);
+            }
             setMessages((prev) => {
               const updated = [...prev];
               const lastIdx = updated.length - 1;
@@ -312,7 +340,7 @@ const RoleplaySimulator = ({
     const completed = missionsStatus.filter((m) => m.completed).length;
     return {
       sessionId: `rp_${scenario?.id || 'scen'}_${Date.now()}`,
-      mode: initialMode === 'phrase' ? 'phrase' : 'roleplay',
+      mode: initialMode === 'call' ? 'call' : initialMode === 'phrase' ? 'phrase' : 'roleplay',
       title: scenario?.title || 'Roleplay A1',
       fluencyScore: Math.round(55 + (completed / Math.max(1, missionsStatus.length)) * 40),
       summaryEs: `Completaste ${completed} de ${missionsStatus.length} misiones en "${scenario?.title}".`,
@@ -355,7 +383,7 @@ const RoleplaySimulator = ({
       const data = await response.json();
       setDiagnosticData({
         sessionId: `rp_${scenario.id}_${Date.now()}`,
-        mode: initialMode === 'phrase' ? 'phrase' : 'roleplay',
+        mode: initialMode === 'call' ? 'call' : initialMode === 'phrase' ? 'phrase' : 'roleplay',
         title: scenario.title,
         fluencyScore: data.fluencyScore ?? 75,
         summaryEs: data.summaryEs,
@@ -402,9 +430,13 @@ const RoleplaySimulator = ({
           <div className="inline-flex bg-purple-100 text-purple-600 p-3 rounded-full mb-4 shadow-sm">
             <Sparkles size={32} aria-hidden="true" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-800">Simulador de Rol A1–A2</h2>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-800">
+            {initialMode === 'call' ? 'Modo Llamada Hands-Free A1–A2' : 'Simulador de Rol A1–A2'}
+          </h2>
           <p className="text-slate-500 text-sm sm:text-base mt-2">
-            Practica situaciones reales de trámites en Alemania y trabajo técnico con 3 misiones y diagnóstico SRS.
+            {initialMode === 'call'
+              ? 'Elige una situación para hablar por voz en pantalla negra OLED con Charon y evaluación SRS al colgar.'
+              : 'Practica situaciones reales de trámites en Alemania y trabajo técnico con 3 misiones y diagnóstico SRS.'}
           </p>
         </div>
 
@@ -512,6 +544,51 @@ const RoleplaySimulator = ({
         </button>
         <p className="text-xs text-slate-400 mt-4">Pulsa Enter o haz clic para continuar</p>
       </div>
+    );
+  }
+
+  if (scenario && initialMode === 'call') {
+    return (
+      <>
+        <CallModeStage
+          scenario={scenario}
+          messages={messages}
+          setMessages={setMessages}
+          missionsStatus={missionsStatus}
+          onRunTurn={streamRoleplayTurn}
+          onHangupAndEvaluate={handleEvaluateAndFinish}
+          onExitScenario={() => {
+            stopCurrentAudio();
+            setPlayingMsgIndex(null);
+            setScenario(null);
+          }}
+        />
+
+        {isDiagnosticOpen && (
+          <SessionDiagnosticCard
+            key={diagnosticData?.sessionId || 'call_eval'}
+            isOpen={isDiagnosticOpen}
+            isAnalyzing={isAnalyzingDiagnostic}
+            diagnostic={diagnosticData}
+            onPlayCorrectionAudio={(textDe) => playGermanAudio(textDe, { type: 'dialogue', voice: 'Charon' })}
+            onSaveToSrs={({ errors, vocabulary }) =>
+              captureConversationBundle({
+                vocabItems: vocabulary,
+                grammarErrors: errors,
+                axis: scenario?.axis || 'general',
+                source: 'call_mode',
+                sourceRef: scenario?.id || 'call_mode',
+              })
+            }
+            onContinue={() => setIsDiagnosticOpen(false)}
+            onExit={() => {
+              setIsDiagnosticOpen(false);
+              setScenario(null);
+              onExit?.();
+            }}
+          />
+        )}
+      </>
     );
   }
 

@@ -1,10 +1,11 @@
 // src/components/TutorChat.jsx
 import { useEffect, useState } from 'react';
-import { Bot, ClipboardCheck, Maximize, Minimize, Sparkles, X } from 'lucide-react';
+import { Bot, Camera, ClipboardCheck, Maximize, Minimize, Sparkles, X } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
 import ConversationThread from './chat/ConversationThread';
 import ComposerBar from './chat/ComposerBar';
 import SessionDiagnosticCard from './chat/SessionDiagnosticCard';
+import PhotoPracticePanel from './chat/PhotoPracticePanel';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { captureConversationBundle } from '../services/srsBridgeService';
 import { API_ENDPOINTS } from '../config/apiEndpoints';
@@ -54,7 +55,12 @@ const extractGermanSegmentsForTTS = (rawMarkdown) => {
 
 const TutorChat = (props) => {
   if (!props.isOpen) return null;
-  return <TutorChatPanel {...props} />;
+  return (
+    <TutorChatPanel
+      key={`${props.isOpen}-${props.initialMode || 'tutor'}`}
+      {...props}
+    />
+  );
 };
 
 const TutorChatPanel = ({
@@ -70,7 +76,11 @@ const TutorChatPanel = ({
   chatEndRef,
   user,
   externalNotice = null,
+  initialMode = 'tutor',
 }) => {
+  const [activeSubMode, setActiveSubMode] = useState(
+    initialMode === 'photo' ? 'photo' : 'tutor'
+  );
   const [internalFullscreen, setInternalFullscreen] = useState(false);
   const isFullscreen = controlledFullscreen !== undefined ? controlledFullscreen : internalFullscreen;
   const setIsFullscreen = setControlledFullscreen || setInternalFullscreen;
@@ -304,37 +314,85 @@ const TutorChatPanel = ({
 
         {externalNotice && (
           <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-xs text-amber-950 font-medium flex items-center gap-2 shrink-0">
-            <Sparkles size={14} className="text-amber-600 shrink-0" />
+            <Sparkles size={14} className="text-amber-600 shrink-0" aria-hidden="true" />
             <span>{externalNotice}</span>
           </div>
         )}
 
-        <ConversationThread
-          messages={chatMessages}
-          theme="blue"
-          botLabel="Tutor IA"
-          isLoading={isChatLoading}
-          loadingLabel="Analizando tu mensaje..."
-          playingMsgIndex={playingMsgIndex}
-          onPlayAudio={handlePlayAudio}
-          renderModelContent={(msg) => <MarkdownMessage text={msg?.parts?.[0]?.text || ''} />}
-          chatEndRef={chatEndRef}
-        />
+        {/* Selector accesible Chat Tutor vs Modo Foto Multimodal */}
+        <div
+          role="tablist"
+          aria-label="Modo del Tutor IA"
+          className="flex items-center border-b border-slate-200 bg-white px-3 shrink-0 overflow-x-auto no-scrollbar"
+        >
+          <button
+            type="button"
+            role="tab"
+            id="tutor-tab-chat"
+            aria-selected={activeSubMode === 'tutor'}
+            onClick={() => setActiveSubMode('tutor')}
+            className={`relative min-h-[44px] px-3.5 py-2 text-xs sm:text-sm whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer transition ${
+              activeSubMode === 'tutor'
+                ? 'text-blue-700 font-bold after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:border-b-[3px] after:border-blue-600'
+                : 'text-slate-600 hover:text-slate-900 font-medium'
+            }`}
+          >
+            <Bot size={15} aria-hidden="true" />
+            <span>Chat Tutor</span>
+          </button>
 
-        <ComposerBar
-          value={chatInput}
-          onChange={setChatInput}
-          onSend={handleComposerSend}
-          placeholder="Pregúntame o responde en alemán..."
-          disabled={isChatLoading}
-          accent="blue"
-          suggestions={activeSuggestions}
-          showSuggestions={showSuggestions}
-          onToggleSuggestions={() => setShowSuggestions((v) => !v)}
-          onSelectSuggestion={handleSelectSuggestion}
-          onPlaySuggestionAudio={handlePlaySuggestionAudio}
-          playingSuggestionText={playingSuggestionText}
-        />
+          <button
+            type="button"
+            role="tab"
+            id="tutor-tab-photo"
+            aria-selected={activeSubMode === 'photo'}
+            onClick={() => {
+              stopCurrentAudio();
+              setActiveSubMode('photo');
+            }}
+            className={`relative min-h-[44px] px-3.5 py-2 text-xs sm:text-sm whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer transition ${
+              activeSubMode === 'photo'
+                ? 'text-amber-700 font-bold after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:border-b-[3px] after:border-amber-500'
+                : 'text-slate-600 hover:text-slate-900 font-medium'
+            }`}
+          >
+            <Camera size={15} aria-hidden="true" />
+            <span>Modo Foto IA</span>
+          </button>
+        </div>
+
+        {activeSubMode === 'photo' ? (
+          <PhotoPracticePanel />
+        ) : (
+          <>
+            <ConversationThread
+              messages={chatMessages}
+              theme="blue"
+              botLabel="Tutor IA"
+              isLoading={isChatLoading}
+              loadingLabel="Analizando tu mensaje..."
+              playingMsgIndex={playingMsgIndex}
+              onPlayAudio={handlePlayAudio}
+              renderModelContent={(msg) => <MarkdownMessage text={msg?.parts?.[0]?.text || ''} />}
+              chatEndRef={chatEndRef}
+            />
+
+            <ComposerBar
+              value={chatInput}
+              onChange={setChatInput}
+              onSend={handleComposerSend}
+              placeholder="Pregúntame o responde en alemán..."
+              disabled={isChatLoading}
+              accent="blue"
+              suggestions={activeSuggestions}
+              showSuggestions={showSuggestions}
+              onToggleSuggestions={() => setShowSuggestions((v) => !v)}
+              onSelectSuggestion={handleSelectSuggestion}
+              onPlaySuggestionAudio={handlePlaySuggestionAudio}
+              playingSuggestionText={playingSuggestionText}
+            />
+          </>
+        )}
       </aside>
 
       {isDiagnosticOpen && (
