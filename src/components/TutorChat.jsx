@@ -155,7 +155,7 @@ const TutorChatPanel = ({
     return {
       sessionId: `tutor_${Date.now()}`,
       mode: 'tutor',
-      title: 'Tutor Socrático Alemán A1',
+      title: 'Tutor Socrático Alemán A1–B1',
       fluencyScore: Math.min(95, 70 + sessionTurnCount * 5),
       summaryEs: 'Resumen generado con las correcciones y el vocabulario capturado en esta sesión.',
       missions: [],

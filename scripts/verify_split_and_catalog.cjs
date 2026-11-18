@@ -17,7 +17,9 @@ function splitGermanTitle(text) {
   return { main: text.trim(), code: null };
 }
 
-const chaptersContent = fs.readFileSync('src/data/chapters.jsx', 'utf8');
+const chaptersContent = fs.existsSync('src/data/chaptersExtended.jsx')
+  ? fs.readFileSync('src/data/chaptersExtended.jsx', 'utf8')
+  : fs.readFileSync('src/data/chapters.jsx', 'utf8');
 
 // Extract all words from Chapter 21
 const chap21Block = chaptersContent.substring(chaptersContent.indexOf('id": 21'));

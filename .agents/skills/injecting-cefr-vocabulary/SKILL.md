@@ -84,7 +84,7 @@ Este flujo procesa de forma incremental los bloques alfabéticos restantes (**`B
    ```powershell
    node .agents/skills/injecting-cefr-vocabulary/scripts/dedupe_and_merge.js --input docs/lote_b1_dtz_b_c.md
    ```
-   - El script inserta mediante offsets AST inversos en `src/data/chapters.jsx` / `src/data/redemittelBegegnungen.js`, re-parsea ambos módulos en memoria con `@babel/parser` antes de guardar a disco y sincroniza `vocabulario_completo.json`.
+   - El script inserta mediante offsets AST inversos en `src/data/chaptersCore.jsx` (`K1–K10`), `src/data/chaptersExtended.jsx` (`K11–K21`) / `src/data/redemittelBegegnungen.js`, re-parsea cada módulo en memoria con `@babel/parser` antes de guardar a disco y sincroniza `vocabulario_completo.json` (con `src/data/chapters.jsx` actuando como barril unificador).
 4. **Verificación obligatoria post-inyección:**
    ```powershell
    npx.cmd eslint scripts/ src/data/redemittelBegegnungen.js

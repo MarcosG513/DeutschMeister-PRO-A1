@@ -41,14 +41,16 @@ const QUICK_SCENARIO_CHAPTER_IDS = [
   { id: 3, label: 'Kap. 3 · Personas' },
   { id: 8, label: 'Kap. 8 · Comida' },
   { id: 13, label: 'Kap. 13 · Auto' },
+  { id: 16, label: 'Kap. 16 · Trabajo/Examen' },
   { id: 17, label: 'Kap. 17 · IT y Digital' },
-  { id: 18, label: 'Kap. 18 · Solar/Técnico' },
+  { id: 18, label: 'Kap. 18 · Solar/Enpal' },
+  { id: 20, label: 'Kap. 20 · Herramientas' },
 ];
 
 /**
- * Página de inicio y Centro de Mando Pedagógico de DeutschMeister PRO A1.
- * Presenta métricas reales del ecosistema, continuidad inteligente (`dm_last_activity`),
- * cuatro rutas guiadas de aprendizaje, guía de herramientas cognitivas y explorador por pestañas.
+ * Página de inicio y Centro de Mando Pedagógico de DeutschMeister PRO A1–B1 (v3.0).
+ * Presenta niveles activos CEFR, continuidad inteligente (`dm_last_activity`),
+ * brújula de 4 rutas guiadas A1→B1, herramientas cognitivas y explorador por pestañas.
  */
 export default function HomeDashboard({
   user,
@@ -136,7 +138,7 @@ export default function HomeDashboard({
       const mod = goetheModules.find((g) => g.id === lastActivity.id);
       if (!mod) return null;
       return {
-        categoryLabel: 'Preparación Oficial Goethe A1',
+        categoryLabel: 'Preparación Oficial Goethe / DTZ',
         emoji: '🏛️',
         title: mod.title,
         subtitle: mod.desc || 'Entrenamiento oficial con simulador integrado',
@@ -147,13 +149,13 @@ export default function HomeDashboard({
     if (lastActivity.type === 'special') {
       const specialMeta = {
         driving: { label: 'Modo Conducción', emoji: '🚗', title: 'Fahrmodus Manos Libres', sub: 'Retoma tus clases guiadas en audio' },
-        roleplay: { label: 'Simulador de Rol IA', emoji: '🎭', title: 'Conversación con Misiones A1', sub: 'Practica situaciones reales con diagnóstico SRS' },
+        roleplay: { label: 'Simulador de Rol IA', emoji: '🎭', title: 'Conversación con Misiones A1–B1', sub: 'Practica situaciones reales y laborales con diagnóstico SRS' },
         call: { label: 'Modo Llamada Hands-Free', emoji: '📞', title: 'Llamada OLED con Charon', sub: 'Habla por voz con WSOLA y evaluación SRS al colgar' },
         photo: { label: 'Modo Foto Multimodal', emoji: '📸', title: 'Describe Escenas Reales', sub: 'Analiza fotos con Gemini Vision y capta vocabulario SRS' },
         phrase: { label: 'Modo Frase y Diálogo', emoji: '💬', title: 'Frases Satzklammer & Turnos', sub: 'Construye oraciones y dialoga paso a paso con Charon' },
-        podcast: { label: 'Micro-Pódcasts Offline', emoji: '🎙️', title: 'Pódcasts Karaoke Charon', sub: 'Episodios A1–A2 offline a 0.75x / 0.85x / 1.0x' },
-        reading: { label: 'Leselabor PRO', emoji: '📖', title: 'Comprensión Lectora Graduada', sub: 'Lectura interactiva con karaoke Charon' },
-        quiz: { label: 'Quiz Dinámico', emoji: '🎮', title: 'Evaluación Rápida A1 / SRS', sub: 'Pon a prueba vocabulario y errores' },
+        podcast: { label: 'Micro-Pódcasts Offline', emoji: '🎙️', title: 'Pódcasts Karaoke Charon', sub: 'Episodios A1–B1 offline a 0.75x / 0.85x / 1.0x' },
+        reading: { label: 'Leselabor PRO', emoji: '📖', title: 'Comprensión Lectora Graduada', sub: 'Lectura interactiva A1–B1 con karaoke Charon' },
+        quiz: { label: 'Quiz Dinámico', emoji: '🎮', title: 'Evaluación Rápida A1–B1 / SRS', sub: 'Pon a prueba vocabulario y errores' },
       }[lastActivity.id];
       if (!specialMeta) return null;
       return {
@@ -194,7 +196,9 @@ export default function HomeDashboard({
       event.preventDefault();
       const nextTabId = EXPLORER_TABS[nextIndex].id;
       setActiveExplorerTab(nextTabId);
-      tabRefs.current[nextTabId]?.focus();
+      const nextTabEl = tabRefs.current[nextTabId];
+      nextTabEl?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      nextTabEl?.focus();
     }
   };
 
@@ -224,6 +228,11 @@ export default function HomeDashboard({
                   <ShieldCheck size={14} aria-hidden="true" />
                   <span>Acceso Verificado</span>
                 </span>
+                <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-black bg-indigo-500/20 text-indigo-100 border border-indigo-400/30" aria-label="Niveles activos A1, A2 y B1">
+                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-200">A1</span>
+                  <span className="px-1.5 py-0.5 rounded bg-sky-500/25 text-sky-200">A2</span>
+                  <span className="px-1.5 py-0.5 rounded bg-amber-400/25 text-amber-200">B1</span>
+                </div>
                 {accessRole === 'admin' && (
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/35">
                     <Award size={13} aria-hidden="true" />
@@ -255,11 +264,11 @@ export default function HomeDashboard({
                 id="home-hero-heading"
                 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight [text-wrap:balance]"
               >
-                ¡Hallo, <span className="text-amber-400">{firstName}</span>! Tu centro de mando para dominar el Alemán A1
+                ¡Hallo, <span className="text-amber-400">{firstName}</span>! Tu centro de mando para dominar el Alemán A1–B1
               </h2>
 
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl [text-wrap:pretty]">
-                Aquí no memorizas listas sueltas sin contexto: combinas arquitectura gramatical visual, voz neural alemana sin artefactos metálicos, cuentos interactivos y práctica de conversación diseñada para aprobar el Goethe A1 y comunicarte en la vida real.
+                Aquí no memorizas listas sueltas sin contexto: combinas arquitectura gramatical progresiva (de V2 hasta <em>Nebensätze</em> y <em>Passiv</em> B1), vocabulario oficial Goethe / DTZ y técnico (Enpal / StVO), voz neural Charon, cuentos IA y simulación real de conversación.
               </p>
             </div>
 
@@ -411,7 +420,7 @@ export default function HomeDashboard({
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h3 className="text-sm sm:text-base font-black text-slate-900">
-                Tu equilibrio A1 en 4 habilidades
+                Tu equilibrio A1–B1 en 4 habilidades
               </h3>
               <p className="text-[11px] sm:text-xs text-slate-500">
                 Calculado en tiempo real según tu actividad; toca cualquier habilidad para entrenarla ahora.
@@ -609,16 +618,16 @@ export default function HomeDashboard({
         </div>
 
         <nav aria-label="Rutas de aprendizaje recomendadas" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* RUTA 1: DESDE CERO */}
+          {/* RUTA 1: DESDE CERO A B1 */}
           <article className="bg-white rounded-2xl border-2 border-emerald-200/80 shadow-xs hover:shadow-md transition p-5 flex flex-col justify-between gap-4 min-w-0">
             <div className="space-y-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1 min-w-0">
                   <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
-                    <span>🟢 Ruta 1 · Paso a paso</span>
+                    <span>🟢 Ruta 1 · Progresión A1 → B1</span>
                   </span>
                   <h3 className="text-lg font-black text-slate-900 pt-1 [text-wrap:balance]">
-                    Empieza Desde Cero (Principiante Absoluto)
+                    Desde Cero hasta B1 (Sintaxis y Fundamentos B2)
                   </h3>
                 </div>
               </div>
@@ -627,18 +636,18 @@ export default function HomeDashboard({
                 <div>
                   <dt className="font-bold text-slate-800 inline">Para quién es: </dt>
                   <dd className="inline">
-                    Quienes arrancan desde cero o sienten que las reglas del alemán están sueltas y sin orden.
+                    Tanto si empiezas desde cero en A1 como si ya dominas la base y quieres conquistar subordinadas B1 (<em>weil, dass, obwohl</em>), conectores lógicos y tiempos pasados.
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-bold text-slate-800 inline">Pasos (1 → 2 → 3): </dt>
+                  <dt className="font-bold text-slate-800 inline">Pasos (A1 → B1): </dt>
                   <dd className="inline">
-                    Clase Magistral 1 (V2) → Flashcards Kapitel 1 (Alfabeto y Números) → Escuchar tu primer Cuento IA con karaoke.
+                    Clase 1 (V2) → Clases 13–16 (Nebensätze, Pasado y Passiv B1) → Flashcards y Cuento IA con karaoke.
                   </dd>
                 </div>
                 <div className="bg-emerald-50/70 border border-emerald-100 rounded-xl p-2.5 text-emerald-950 text-xs leading-relaxed">
                   <span className="font-bold">Por qué funciona: </span>
-                  Primero fijas la estructura mental de la frase alemana, luego anclas sonido/imagen en memoria y finalmente integras el vocabulario en una historia real.
+                  Fijas la mecánica estructural del alemán paso a paso sin memorizar frases sueltas, conectando teoría visual con voz nativa y consolidación SRS.
                 </div>
               </dl>
             </div>
@@ -650,36 +659,44 @@ export default function HomeDashboard({
                 className="min-h-[44px] flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <GraduationCap size={16} aria-hidden="true" />
-                <span>1. Clase 1 (V2)</span>
+                <span>1. Base V2 (Clase 1)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onOpenStudyPlan?.('sp_13')}
+                className="min-h-[44px] flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <Sparkles size={16} aria-hidden="true" />
+                <span>Salto B1 (Clase 13)</span>
               </button>
               <button
                 type="button"
                 onClick={() => onOpenChapter?.(1, 'flashcards')}
-                className="min-h-[44px] flex-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
+                className="min-h-[44px] flex-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <LayoutGrid size={16} aria-hidden="true" />
-                <span>2. Flashcards Kap. 1</span>
+                <span>Flashcards Kap. 1</span>
               </button>
               <button
                 type="button"
                 onClick={() => onOpenChapterStory?.(1)}
-                className="min-h-[44px] w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
+                className="min-h-[44px] flex-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <Sparkles size={16} aria-hidden="true" />
-                <span>3. Escuchar Cuento IA Kap. 1 (Karaoke)</span>
+                <Headphones size={16} aria-hidden="true" />
+                <span>Cuento IA Kap. 1</span>
               </button>
             </div>
           </article>
 
-          {/* RUTA 2: VIDA DIARIA Y TRABAJO */}
+          {/* RUTA 2: VIDA DIARIA Y TRABAJO (ENPAL) */}
           <article className="bg-white rounded-2xl border-2 border-sky-200/80 shadow-xs hover:shadow-md transition p-5 flex flex-col justify-between gap-4 min-w-0">
             <div className="space-y-3">
               <div className="space-y-1">
                 <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-sky-700 bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-full">
-                  <span>🔵 Ruta 2 · Enfoque Práctico</span>
+                  <span>🔵 Ruta 2 · Vida Diaria, Trabajo y Enpal</span>
                 </span>
                 <h3 className="text-lg font-black text-slate-900 pt-1 [text-wrap:balance]">
-                  Alemán Práctico, Vida Diaria y Trabajo Técnico
+                  Alemán Práctico, Comunicación Real y Taller Técnico
                 </h3>
               </div>
 
@@ -687,18 +704,18 @@ export default function HomeDashboard({
                 <div>
                   <dt className="font-bold text-slate-800 inline">Para quién es: </dt>
                   <dd className="inline">
-                    Quienes necesitan frases útiles hoy para trámites, compras, restaurante, conducción o trabajo técnico/IT/solar.
+                    Quienes necesitan desenvolverse hoy en trámites oficiales, conducción y entorno laboral técnico/IT/solar (<em>Keller, Technikraum, Wechselrichter, Wallbox</em>).
                   </dd>
                 </div>
                 <div>
                   <dt className="font-bold text-slate-800 inline">Pasos (1 → 2 → 3): </dt>
                   <dd className="inline">
-                    Frases hechas (Kapitel 22) → Vocabulario de tu contexto diario → Práctica conversacional guiada.
+                    Redemittel clave (Kapitel 22) → Capítulos temáticos y técnicos (Kap. 13–20) → Simulación guiada con Rol IA y Tutor Socrático.
                   </dd>
                 </div>
                 <div className="bg-sky-50/70 border border-sky-100 rounded-xl p-2.5 text-sky-950 text-xs leading-relaxed">
                   <span className="font-bold">Por qué funciona: </span>
-                  Hablar fluido nace de dominar bloques comunicativos completos (<em>Redemittel</em>) y ponerlos a prueba en situaciones simuladas con retroalimentación inmediata.
+                  Hablar fluido nace de dominar bloques comunicativos completos (<em>Redemittel</em>) y practicar escenarios laborales reales con corrección inmediata hacia SRS.
                 </div>
               </dl>
             </div>
@@ -747,15 +764,15 @@ export default function HomeDashboard({
             </div>
           </article>
 
-          {/* RUTA 3: EXAMEN OFICIAL GOETHE A1 */}
+          {/* RUTA 3: EXAMEN OFICIAL GOETHE / DTZ */}
           <article className="bg-white rounded-2xl border-2 border-purple-200/80 shadow-xs hover:shadow-md transition p-5 flex flex-col justify-between gap-4 min-w-0">
             <div className="space-y-3">
               <div className="space-y-1">
                 <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-purple-700 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-full">
-                  <span>🟣 Ruta 3 · Certificación Oficial</span>
+                  <span>🟣 Ruta 3 · Certificación Oficial Goethe / DTZ</span>
                 </span>
                 <h3 className="text-lg font-black text-slate-900 pt-1 [text-wrap:balance]">
-                  Preparación Examen Oficial Goethe-Zertifikat A1
+                  Preparación Examen Oficial Goethe-Zertifikat &amp; DTZ
                 </h3>
               </div>
 
@@ -763,18 +780,18 @@ export default function HomeDashboard({
                 <div>
                   <dt className="font-bold text-slate-800 inline">Para quién es: </dt>
                   <dd className="inline">
-                    Candidatos que buscan aprobar Start Deutsch 1 con seguridad en las 4 pruebas oficiales sin sorpresas.
+                    Candidatos que buscan aprobar Start Deutsch 1, Goethe A2/B1 o DTZ con seguridad en las 4 pruebas oficiales.
                   </dd>
                 </div>
                 <div>
                   <dt className="font-bold text-slate-800 inline">Pasos (1 → 2 → 3): </dt>
                   <dd className="inline">
-                    Módulos oficiales (Hören, Lesen, Schreiben, Sprechen) → Lectura graduada en Leselabor → Validación con Quiz.
+                    Módulos oficiales (Hören, Lesen, Schreiben, Sprechen) → Debate y Argumentación B1 (Clase 16) → Leselabor y Quiz.
                   </dd>
                 </div>
                 <div className="bg-purple-50/70 border border-purple-100 rounded-xl p-2.5 text-purple-950 text-xs leading-relaxed">
                   <span className="font-bold">Por qué funciona: </span>
-                  Entrenas el formato exacto de formularios, correos formales, preguntas orales y trampas auditivas del examen real bajo el mismo techo.
+                  Entrenas el formato exacto de audios, lecturas, formularios, correos argumentados y preguntas orales del examen real bajo el mismo techo.
                 </div>
               </dl>
             </div>
@@ -793,22 +810,30 @@ export default function HomeDashboard({
                   </button>
                 ))}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => onOpenStudyPlan?.('sp_16')}
+                  className="min-h-[44px] bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold px-2.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <GraduationCap size={15} aria-hidden="true" />
+                  <span>Debate B1</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => onOpenSpecialView?.('reading')}
-                  className="min-h-[44px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="min-h-[44px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold px-2.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <BookOpen size={15} aria-hidden="true" />
-                  <span>Abrir Leselabor</span>
+                  <span>Leselabor</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => onOpenSpecialView?.('quiz')}
-                  className="min-h-[44px] bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="min-h-[44px] bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold px-2.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Gamepad2 size={15} aria-hidden="true" />
-                  <span>Quiz Dinámico</span>
+                  <span>Quiz SRS</span>
                 </button>
               </div>
             </div>
@@ -993,7 +1018,7 @@ export default function HomeDashboard({
                 Laboratorio editorial en 4 pestañas: Lectura + Audio Karaoke, Glosario interactivo, Gramática viva extraída del texto y Test de comprensión.
               </p>
               <p className="text-xs font-semibold text-teal-900 bg-teal-50/70 rounded-lg px-2.5 py-1.5">
-                Beneficio: entrena lectura rápida e inferencia A1 para la prueba Lesen sin diccionario.
+                Beneficio: entrena lectura rápida e inferencia A1–B1 para la prueba Lesen sin diccionario.
               </p>
             </div>
             <button
@@ -1119,9 +1144,11 @@ export default function HomeDashboard({
                 role="tab"
                 type="button"
                 aria-selected={isSelected}
-                aria-controls={`explorer-panel-${tab.id}`}
                 tabIndex={isSelected ? 0 : -1}
-                onClick={() => setActiveExplorerTab(tab.id)}
+                onClick={() => {
+                  setActiveExplorerTab(tab.id);
+                  tabRefs.current[tab.id]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+                }}
                 onKeyDown={(e) => handleTabKeyDown(e, idx)}
                 className={`min-h-[44px] shrink-0 whitespace-nowrap inline-flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-bold border-b-2 transition cursor-pointer ${
                   isSelected
@@ -1211,6 +1238,7 @@ export default function HomeDashboard({
           {studyPlanModules.map((mod, index) => {
             const firstSubtitle = mod.slides?.[0]?.subtitle;
             const slideCount = mod.slides?.length || 0;
+            const isB1Plus = ['sp_13', 'sp_14', 'sp_15', 'sp_16'].includes(mod.id);
             return (
               <button
                 key={mod.id}
@@ -1218,14 +1246,25 @@ export default function HomeDashboard({
                 onClick={() => onOpenStudyPlan?.(mod.id)}
                 className="min-h-[44px] w-full flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-indigo-300 hover:bg-indigo-50/50 transition text-left cursor-pointer min-w-0"
               >
-                <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-black text-xs shrink-0 mt-0.5">
+                <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg font-black text-xs shrink-0 mt-0.5 ${
+                  isB1Plus ? 'bg-amber-100 text-amber-900' : 'bg-indigo-100 text-indigo-700'
+                }`}>
                   {index + 1}
                 </span>
                 <div className="min-w-0 flex-1 space-y-0.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600">
-                      Clase Magistral · {slideCount} bloques
-                    </span>
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600">
+                        Clase Magistral · {slideCount} bloques
+                      </span>
+                      <span className={`text-[10px] font-black uppercase px-1.5 py-0.5 rounded-full ${
+                        isB1Plus
+                          ? 'bg-amber-100 text-amber-900 border border-amber-300/70'
+                          : 'bg-emerald-100 text-emerald-800'
+                      }`}>
+                        {isB1Plus ? 'B1–B2' : 'A1–A2'}
+                      </span>
+                    </div>
                     <CheckCircle2 size={14} className="text-indigo-400 shrink-0" aria-hidden="true" />
                   </div>
                   <div className="text-xs sm:text-sm font-bold text-slate-900 leading-snug [text-wrap:balance]">

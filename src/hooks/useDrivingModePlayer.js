@@ -550,7 +550,7 @@ export function useDrivingModePlayer({
           playerState === "revealing_sentence" ||
           playerState === "explaining";
 
-        let title = rawDe || rawEs || "DeutschMeister PRO A1";
+        let title = rawDe || rawEs || "DeutschMeister PRO A1–B1";
         let artist = rawEs ? `🇪🇸 ${rawEs} · ${progressTag}` : progressTag;
 
         if (playerState === "prompting_word" || playerState === "prompting_sentence") {
@@ -567,7 +567,7 @@ export function useDrivingModePlayer({
         navigator.mediaSession.metadata = new window.MediaMetadata({
           title,
           artist,
-          album: "DeutschMeister PRO A1",
+          album: "DeutschMeister PRO A1–B1",
           artwork: [
             { src: "/pwa-512x512.png", sizes: "512x512", type: "image/png" }
           ]

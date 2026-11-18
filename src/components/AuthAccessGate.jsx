@@ -207,7 +207,7 @@ const AuthAccessGate = ({
             </div>
             <div>
               <h1 className="text-lg font-black tracking-wide leading-tight">
-                DeutschMeister <span className="text-amber-400">PRO A1</span>
+                DeutschMeister <span className="text-amber-400">PRO A1–B1</span>
               </h1>
               <p className="text-[11px] text-slate-400 font-medium">
                 Acceso Privado · Protección Zero-Trust

@@ -1,5 +1,5 @@
 // src/components/VoiceExaminer.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Mic, MicOff, CheckCircle2, AlertCircle, Bot, Sparkles, Hand, ArrowRight, Volume2 } from 'lucide-react';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
@@ -7,7 +7,8 @@ import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 const VoiceExaminer = ({
   question = "Repite o responde con un comando oficial: 'Sprechen Sie bitte langsam!'",
   expectedKeywords = ["sprechen", "kommen", "nehmen", "langsam", "herein", "platz", "sei", "seid", "seien"],
-  note = "Tip Examen Goethe A1: El imperativo formal invierte el orden: 'Kommen Sie bitte!'",
+  note = "Tip Examen Goethe / DTZ: El imperativo formal invierte el orden: 'Kommen Sie bitte!'",
+  examBadge = "Examinador Goethe A1–B1",
   scenarios,
   onComplete
 }) => {
@@ -68,7 +69,7 @@ const VoiceExaminer = ({
             <Bot className="text-indigo-400 bg-indigo-950 p-2.5 rounded-full ring-2 ring-indigo-500/30 shrink-0" size={42} />
             <div>
               <p className="text-xs text-indigo-400 font-bold uppercase tracking-wider flex items-center gap-1">
-                <Sparkles size={12} /> Examinador Goethe A1
+                <Sparkles size={12} /> {examBadge}
               </p>
               <h4 className="text-lg font-bold text-white mt-1 leading-snug">{question}</h4>
             </div>

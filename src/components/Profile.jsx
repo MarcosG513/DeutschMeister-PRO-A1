@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import localforage from 'localforage';
-import { chapters } from '../data/chapters';
+import { chapters, goetheModules, studyPlanModules } from '../data/chapters';
 import { 
   User, Mail, Lock, RefreshCw, CheckCircle2, Flame, 
   Layers, Trophy, ShieldCheck, FileText, ChevronRight, 
@@ -86,7 +86,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
     ? Math.min(100, Math.round((effectiveStudiedCount / resolvedTotalCardsCount) * 100)) 
     : 0;
 
-  const totalGoetheModules = 16;
+  const totalGoetheModules = studyPlanModules.length + goetheModules.length;
   const goethePercent = Math.min(100, Math.round((completedModulesCount / totalGoetheModules) * 100));
 
   useEffect(() => {
@@ -575,7 +575,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
               <div className="z-10 flex-1 text-center sm:text-left">
                 <div className="flex items-center justify-center sm:justify-start gap-2 mb-3 flex-wrap">
                   <ShieldCheck className="text-emerald-400" size={26} />
-                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-wide">DeutschMeister A1</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-wide">DeutschMeister PRO A1–B1</h3>
                   <span className="bg-emerald-400 text-slate-950 font-black text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wider">Verificado</span>
                 </div>
                 <ul className="space-y-2 font-medium text-sm text-slate-200">
@@ -671,9 +671,9 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
                 <span className="text-3xl mb-1">🏆</span>
                 <div>
                   <div className="flex items-center justify-center gap-1.5">
-                    <p className="text-lg font-bold text-slate-900">A1</p>
+                    <p className="text-lg font-bold text-slate-900">A1–B1</p>
                     <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-md">
-                      {completedModulesCount}/16
+                      {completedModulesCount}/{totalGoetheModules}
                     </span>
                   </div>
                   <p className="text-xs font-medium text-slate-500">Preparación Goethe</p>
@@ -693,11 +693,11 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
               </div>
             </section>
 
-            {/* Desglose de 4 Habilidades A1 & Mazo SRS */}
+            {/* Desglose de 4 Habilidades A1–B1 & Mazo SRS */}
             <section className="bg-white rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-4 sm:p-5 space-y-3.5">
               <div className="flex items-center justify-between gap-2">
                 <h3 className="font-bold text-slate-900 text-sm sm:text-base">
-                  📊 Desglose de 4 Habilidades A1
+                  📊 Desglose de 4 Habilidades A1–B1
                 </h3>
                 <span className="text-xs font-extrabold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-full">
                   Media {skillProgress?.overallA1Percent || 0}%
@@ -948,7 +948,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
               {/* Legal & Help Links */}
               <a 
                 href="#"
-                onClick={(e) => { e.preventDefault(); alert("DeutschMeister PRO A1 respeta tu privacidad. Ningún dato personal es vendido a terceros."); }}
+                onClick={(e) => { e.preventDefault(); alert("DeutschMeister PRO A1–B1 respeta tu privacidad. Ningún dato personal es vendido a terceros."); }}
                 className="flex items-center justify-between p-4 border-b border-slate-100 hover:bg-slate-50 transition group"
               >
                 <div className="flex items-center gap-3">
@@ -960,7 +960,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
 
               <a 
                 href="#"
-                onClick={(e) => { e.preventDefault(); alert("Términos y Condiciones del Servicio DeutschMeister PRO A1."); }}
+                onClick={(e) => { e.preventDefault(); alert("Términos y Condiciones del Servicio DeutschMeister PRO A1–B1."); }}
                 className="flex items-center justify-between p-4 hover:bg-slate-50 transition group"
               >
                 <div className="flex items-center gap-3">
@@ -971,7 +971,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
               </a>
             </section>
             <div className="text-center pt-2 text-xs text-slate-400 font-medium">
-              DeutschMeister PRO A1 • Versión 2.0 (Build 2)
+              DeutschMeister PRO A1–B1 • Versión 3.0 (Build 3)
             </div>
           </div>
 

@@ -452,6 +452,7 @@ function inspectTargetAst(filePath, varName, plugins = []) {
     records.push({
       id: Number(id),
       title,
+      filePath,
       wordsArrayNode: wordsProp.value,
       existingCount: wordsProp.value.elements.length,
       existingSafeIds,
@@ -520,17 +521,26 @@ function parseCliArgs(argv) {
 function main() {
   const args = parseCliArgs(process.argv.slice(2));
   const repoRoot = resolveRepoRoot();
-  const chaptersPath = path.join(repoRoot, 'src', 'data', 'chapters.jsx');
+  const chaptersCorePath = path.join(repoRoot, 'src', 'data', 'chaptersCore.jsx');
+  const chaptersExtPath = path.join(repoRoot, 'src', 'data', 'chaptersExtended.jsx');
+  const chaptersLegacyPath = path.join(repoRoot, 'src', 'data', 'chapters.jsx');
   const redemittelPath = path.join(repoRoot, 'src', 'data', 'redemittelBegegnungen.js');
   const vocabJsonPath = path.join(repoRoot, 'vocabulario_completo.json');
 
-  const chaptersInfo = inspectTargetAst(chaptersPath, 'rawChapters', ['jsx']);
+  const chapterSources = (fs.existsSync(chaptersCorePath) && fs.existsSync(chaptersExtPath))
+    ? [
+        inspectTargetAst(chaptersCorePath, 'coreChapters', ['jsx']),
+        inspectTargetAst(chaptersExtPath, 'extendedChapters', ['jsx']),
+      ]
+    : [inspectTargetAst(chaptersLegacyPath, 'rawChapters', ['jsx'])];
+
+  const allChapterRecords = chapterSources.flatMap((info) => info.records).sort((a, b) => a.id - b.id);
   const redemittelInfo = inspectTargetAst(redemittelPath, 'redemittelChapter', []);
   const vocabJson = JSON.parse(fs.readFileSync(vocabJsonPath, 'utf8'));
 
   const globalSeenSafeIds = new Set();
   const globalRootOwners = new Map();
-  for (const rec of [...chaptersInfo.records, ...redemittelInfo.records]) {
+  for (const rec of [...allChapterRecords, ...redemittelInfo.records]) {
     for (const sid of rec.existingSafeIds) globalSeenSafeIds.add(sid);
     for (const root of rec.existingRoots) {
       if (!globalRootOwners.has(root)) globalRootOwners.set(root, rec.id);
@@ -538,15 +548,15 @@ function main() {
   }
   const existingVocabJsonIds = new Set(vocabJson.map((v) => v.id).filter(Boolean));
 
-  const totalChaptersCount = chaptersInfo.records.reduce((s, r) => s + r.existingCount, 0);
+  const totalChaptersCount = allChapterRecords.reduce((s, r) => s + r.existingCount, 0);
   const totalK22Count = redemittelInfo.records[0]?.existingCount || 0;
 
   if (args.inputs.length === 0) {
     console.log('\n=== INVENTARIO AST VIGENTE (injecting-cefr-vocabulary) ===');
-    for (const rec of [...chaptersInfo.records, ...redemittelInfo.records]) {
+    for (const rec of [...allChapterRecords, ...redemittelInfo.records]) {
       console.log(`  Kap ${String(rec.id).padStart(2, ' ')} | ${rec.title.padEnd(46, ' ')} | ${String(rec.existingCount).padStart(3, ' ')} entradas`);
     }
-    console.log(`\nTotal chapters.jsx: ${totalChaptersCount} | K22: ${totalK22Count} | Combinado: ${totalChaptersCount + totalK22Count}`);
+    console.log(`\nTotal chapters (K1–K21): ${totalChaptersCount} | K22: ${totalK22Count} | Combinado: ${totalChaptersCount + totalK22Count}`);
     console.log(`Total vocabulario_completo.json: ${vocabJson.length} índices únicos.`);
     if (!args.auditOnly) {
       console.log('Uso: node dedupe_and_merge.js --input <archivo.json|.md|.csv> [--dry-run] [--audit-only] [--allow-cross-homonyms]');
@@ -564,7 +574,7 @@ function main() {
     const meta = resolveCanonicalChapterMeta(batchChap.title || batchChap.id);
     const targetId = meta ? meta.id : Number(batchChap.id);
     const isK22 = targetId === 22 || Boolean(batchChap.isRedemittel);
-    const targetPool = isK22 ? redemittelInfo.records : chaptersInfo.records;
+    const targetPool = isK22 ? redemittelInfo.records : allChapterRecords;
     const targetRec =
       targetPool.find((r) => r.id === targetId) ||
       targetPool.find((r) => r.title.toLowerCase() === String(batchChap.title || '').toLowerCase());
@@ -576,6 +586,7 @@ function main() {
     if (!plansByTargetId.has(targetRec.id)) {
       plansByTargetId.set(targetRec.id, {
         isK22,
+        targetFilePath: targetRec.filePath,
         before: targetRec.existingCount,
         plan: {
           id: targetRec.id,
@@ -636,10 +647,15 @@ function main() {
   const chapterPlans = [];
   const k22Plans = [];
   const rowsReport = [];
+  const plansByFilePath = new Map();
   const sortedBuckets = Array.from(plansByTargetId.values()).sort((a, b) => a.plan.id - b.plan.id);
-  for (const { isK22, before, plan } of sortedBuckets) {
+  for (const { isK22, targetFilePath, before, plan } of sortedBuckets) {
     if (isK22) k22Plans.push(plan);
-    else chapterPlans.push(plan);
+    else {
+      chapterPlans.push(plan);
+      if (!plansByFilePath.has(targetFilePath)) plansByFilePath.set(targetFilePath, []);
+      plansByFilePath.get(targetFilePath).push(plan);
+    }
     rowsReport.push({
       id: plan.id,
       title: plan.title,
@@ -649,15 +665,24 @@ function main() {
     });
   }
 
-  const nextChaptersSource = spliceWordsIntoSource(chaptersInfo.source, chapterPlans);
+  const nextFilesToWrite = [];
+  for (const info of chapterSources) {
+    const filePlans = plansByFilePath.get(info.records[0]?.filePath) || [];
+    const nextSrc = spliceWordsIntoSource(info.source, filePlans);
+    parser.parse(nextSrc, { sourceType: 'module', plugins: ['jsx'] });
+    if (filePlans.length > 0) {
+      nextFilesToWrite.push([info.records[0].filePath, nextSrc]);
+    }
+  }
   const nextRedemittelSource = spliceWordsIntoSource(redemittelInfo.source, k22Plans);
-  parser.parse(nextChaptersSource, { sourceType: 'module', plugins: ['jsx'] });
   parser.parse(nextRedemittelSource, { sourceType: 'module' });
 
   const nextVocabJson = [...vocabJson, ...newVocabEntries];
   if (!args.dryRun && !args.auditOnly) {
-    fs.writeFileSync(chaptersPath, nextChaptersSource, 'utf8');
-    fs.writeFileSync(redemittelPath, nextRedemittelSource, 'utf8');
+    for (const [targetPath, content] of nextFilesToWrite) {
+      fs.writeFileSync(targetPath, content, 'utf8');
+    }
+    if (k22Plans.length > 0) fs.writeFileSync(redemittelPath, nextRedemittelSource, 'utf8');
     fs.writeFileSync(vocabJsonPath, `${JSON.stringify(nextVocabJson, null, 2)}\n`, 'utf8');
   }
 

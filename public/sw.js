@@ -1,5 +1,5 @@
-const CACHE_NAME = 'dm-pwa-v2.3';
-const ASSETS_CACHE = 'dm-assets-v2.3';
+const CACHE_NAME = 'dm-pwa-v3.0';
+const ASSETS_CACHE = 'dm-assets-v3.0';
 const ACTIVE_CACHES = [CACHE_NAME, ASSETS_CACHE];
 
 const PRECACHE_URLS = [

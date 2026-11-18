@@ -1,8 +1,8 @@
-# DeutschMeister PRO A1 (v2.0) — Reglas Canónicas de Arquitectura
+# DeutschMeister PRO A1–B1 (v3.0) — Reglas Canónicas de Arquitectura
 
-> **Estado del Sistema:** Producción Estable v2.0  
+> **Estado del Sistema:** Producción Estable v3.0 (A1–B1 & B2 Foundation)  
 > **Package / App ID:** `com.deutschmeister.app`  
-> **Plataformas:** Web (Vite + React 19 PWA), Android (Capacitor 7 + Android Auto), Backend (Firebase Cloud Functions v2)
+> **Plataformas:** Web (Vite + React 19 PWA), Android (Capacitor 8 + Android Auto), Backend (Firebase Cloud Functions v2)
 
 Este documento define la arquitectura canónica, las restricciones operativas y los guardrails obligatorios para cualquier agente de Antigravity o desarrollador trabajando en este repositorio. **Prohibido violar estas reglas para evitar regresiones críticas en producción.**
 
@@ -11,8 +11,8 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
 ## 1. Identidad Android, Compilación y Firma Release
 
 - **Identidad de la Aplicación:**
-  - El `applicationId` y `namespace` canónico es **`com.deutschmeister.app`** en `android/app/build.gradle` y `capacitor.config.json`.
-  - Versionado actual: `versionCode 2`, `versionName "2.0"`.
+  - El `applicationId` y `namespace` canónico es **`com.deutschmeister.app`** en `android/app/build.gradle` y `capacitor.config.json` (nombre comercial corto `"Deutsch B1"`).
+  - Versionado actual: `versionCode 3`, `versionName "3.0"`.
 - **Firma de Producción (Release Signing):**
   - Configurada en `android/app/build.gradle` leyendo `android/keystore.properties` y `android/app/deutschmeister-release.jks`.
   - **GUARDRAIL CRÍTICO DE SEGURIDAD:** Estos archivos están explícitamente ignorados en `.gitignore` (`*.jks`, `*.keystore`, `keystore.properties`). Está **ESTRICTAMENTE PROHIBIDO** eliminarlos, renombrarlos o subirlos al control de versiones (Git).
@@ -47,10 +47,10 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
 - **Configuración Centralizada de Firebase:**
   - Todo el SDK de Firebase (`app`, `auth`, `db`, `functions`, `appId`) se inicializa exclusivamente en `src/config/firebase.js`.
   - Queda prohibida la reinicialización duplicada en componentes; se debe importar directamente desde `src/config/firebase.js`.
-- **Code-Splitting, Bundling Vite & Caché Offline PWA v2.3:**
-  - Los 21 componentes de exámenes y módulos interactivos se importan mediante `React.lazy()` en `src/data/chapters.jsx`, y los modos especiales (`MicroPodcastPlayer`, `PhraseDialogueTrainer`, `RoleplaySimulator`, `ReadingComprehension`, `DynamicQuiz`, `EmailSimulator`, `PresentationViewer`, `InteractiveQA`, `TutorChat`) mediante `React.lazy()` + `<Suspense>` en `src/App.jsx`.
-  - **Chunking (`vite.config.js`):** Configura `build.rolldownOptions.output.codeSplitting.groups` para separar `vendor-firebase`, `vendor-react`, `vendor-markdown`, `vendor-lucide`, `vendor-native-storage` y los catálogos curriculares (`data-chapters-curriculum`, `data-stories-curriculum`, `data-redemittel-curriculum`, `data-driving-curriculum`), reduciendo el bundle principal (`index-*.js`) por debajo de `~260 KB` (`~65 KB` gzip), y emite `dist/precache-manifest.json` tras el build.
-  - **Service Worker (`public/sw.js` `dm-pwa-v2.3` / `dm-assets-v2.3`):** Precachea `/precache-manifest.json` en instalación y sirve los chunks `/assets/*.js|css` con estrategia Cache-First para garantizar que todos los módulos lazy abran sin conexión (Modo Avión).
+- **Code-Splitting, Bundling Vite & Caché Offline PWA v3.0:**
+  - Los componentes interactivos se importan mediante `React.lazy()` en `src/data/studyPlanModules.jsx` y `src/data/goetheModules.jsx`, y los modos especiales (`MicroPodcastPlayer`, `PhraseDialogueTrainer`, `RoleplaySimulator`, `ReadingComprehension`, `DynamicQuiz`, `EmailSimulator`, `PresentationViewer`, `InteractiveQA`, `TutorChat`) mediante `React.lazy()` + `<Suspense>` en `src/App.jsx`.
+  - **Chunking (`vite.config.js`):** Separa `vendor-firebase`, `vendor-react`, `vendor-markdown`, `vendor-lucide`, `vendor-native-storage`, y divide los catálogos en `data-chapters-core` (`chaptersCore.jsx` K1–K10), `data-chapters-extended` (`chaptersExtended.jsx` K11–K21), `data-studyplan-curriculum` (`studyPlanModules.jsx` `sp_1..sp_16`), `data-goethe-curriculum` (`goetheModules.jsx`), `data-stories-curriculum`, `data-redemittel-curriculum` y `data-driving-curriculum` (0 warnings de Vite `< 950 kB`), emitiendo `dist/precache-manifest.json` v3.0.
+  - **Service Worker (`public/sw.js` `dm-pwa-v3.0` / `dm-assets-v3.0`):** Precachea `/precache-manifest.json` en instalación y sirve los chunks `/assets/*.js|css` con estrategia Cache-First para garantizar que todos los módulos lazy abran sin conexión (Modo Avión).
   - **Deduplicación IndexedDB & Packs Offline (`src/services/aiAudioService.js` + `src/services/syncMediaService.js`):** Almacena cada binario `Blob` de audio una sola vez en `audioStore` (`sha256Id`) y guarda punteros ligeros en `audioAliasStore`; `syncPodcastEpisodeOffline` (`podcastPackStore`) y `syncDialoguePackOffline` (`phrasePackStore`) cachean líneas curadas de catálogo sin escribir turnos efímeros en `global_audio_pronunciations`.
   - **GUARDRAIL:** Toda diapositiva o vista interactiva en `src/components/PresentationViewer.jsx` y `src/App.jsx` debe estar envuelta en un contenedor `<Suspense fallback={...}>` para evitar pantallas blancas durante la navegación.
 - **Nuevos Modos Prácticos y Laborales (Fase 2: Eje A Trámites & Eje B Enpal Indoor/Werkstatt):**
@@ -78,7 +78,7 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
   - Cuando el recurso resuelto contiene `.mp4` o `data:video/`, el visor modal renderiza `<video autoPlay loop muted playsInline>` en lugar de `<img>`, y `App.jsx` difiere la revocación de `blob:` URLs activas en `fullscreenImageRef` hasta cerrar el modal.
 - **Centro de Mando Pedagógico de Inicio (`src/components/HomeDashboard.jsx`):**
   - Vista de bienvenida predeterminada tras superar `AuthAccessGate` (`isHomeOpen = true` en `src/App.jsx`).
-  - Organiza el ecosistema en 4 bloques sin métricas ficticias (calculadas dinámicamente desde `chapters`, `studyPlanModules`, `goetheModules` y `drivingAcademyClasses`): Hero con saludo personalizado y tarjeta de continuidad (`localStorage` `dm_last_activity`), 4 Rutas de Aprendizaje Guiadas (Desde Cero, Vida Diaria/Trabajo, Goethe Zertifikat A1 y Modo Conducción), Mapa Cognitivo de Herramientas y Explorador Rápido por pestañas WAI-ARIA (`role="tablist"` / `role="tabpanel"`).
+  - Organiza el ecosistema en 4 bloques sin métricas ficticias (calculadas dinámicamente desde `chapters`, `studyPlanModules`, `goetheModules` y `drivingAcademyClasses`): Hero con insignias activas `A1 / A2 / B1` y tarjeta de continuidad (`localStorage` `dm_last_activity`), Brújula de 4 Rutas de Aprendizaje (Desde Cero a B1 con acceso rápido a `sp_1` y `sp_13`, Vida Diaria/Trabajo/Enpal, Examen Oficial Goethe/DTZ y Modo Conducción), Mapa Cognitivo de Herramientas y Explorador Rápido por pestañas WAI-ARIA (`role="tablist"` / `role="tabpanel"`).
   - Cualquier navegación hacia capítulos, Plan de Estudios, Goethe, vistas especiales (`driving`, `reading`, `roleplay`, `quiz`, `profile`) o búsqueda global no vacía cierra `isHomeOpen(false)` y registra `dm_last_activity`; tanto el logo superior como la píldora `🏠 Inicio` (visible cuando `!isHomeOpen`), el acceso superior del Drawer y el botón Back de Android permiten volver a Inicio en 1 toque.
 - **Inventario Curricular Consolidado A1–B1 & Contadores Dinámicos:**
   - `src/data/chapters.jsx` (`id: 1..21` tras mapeo canónico Base-1) integra **`2,532` entradas** (`2,338` en `K1–K19` + `194` en `K20–K21`), junto con **`155` bloques comunicativos** en `src/data/redemittelBegegnungen.js` (`id: 22`), alcanzando **`2,687` entradas curriculares totales** (`2,659` tarjetas únicas deduplicadas por `getSafeId` mediante `countUniqueVocabularyCards` en `src/utils/helpers.js`) y **`2,387` índices únicos** sincronizados en `vocabulario_completo.json`.

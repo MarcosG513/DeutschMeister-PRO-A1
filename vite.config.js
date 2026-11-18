@@ -15,7 +15,7 @@ function emitPrecacheManifestPlugin() {
         .sort()
 
       const manifest = {
-        version: 'dm-pwa-v2.3',
+        version: 'dm-pwa-v3.0',
         generatedAt: new Date().toISOString(),
         urls: Array.from(
           new Set([
@@ -93,6 +93,26 @@ export default defineConfig({
               name: 'data-stories-curriculum',
               test: /[\\/]src[\\/]data[\\/]immersiveStoriesCatalog/,
               priority: 15,
+            },
+            {
+              name: 'data-chapters-core',
+              test: /[\\/]src[\\/]data[\\/]chaptersCore/,
+              priority: 12,
+            },
+            {
+              name: 'data-chapters-extended',
+              test: /[\\/]src[\\/]data[\\/]chaptersExtended/,
+              priority: 12,
+            },
+            {
+              name: 'data-studyplan-curriculum',
+              test: /[\\/]src[\\/]data[\\/]studyPlanModules/,
+              priority: 12,
+            },
+            {
+              name: 'data-goethe-curriculum',
+              test: /[\\/]src[\\/]data[\\/]goetheModules/,
+              priority: 12,
             },
             {
               name: 'data-chapters-curriculum',
