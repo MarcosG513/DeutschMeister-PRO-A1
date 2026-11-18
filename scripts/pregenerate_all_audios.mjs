@@ -141,11 +141,18 @@ async function extractAllAudios() {
     console.log(`  ✓ redemittelBegegnungen.js procesado (${redemittel.words.length} expresiones).`);
   }
 
-  // C. Escaneo estructurado por capítulos de chapters.jsx
-  const chaptersPath = path.join(ROOT, 'src/data/chapters.jsx');
-  if (fs.existsSync(chaptersPath)) {
-    const chaptersContent = fs.readFileSync(chaptersPath, 'utf8');
-    const chRegex = /id:\s*(\d+),\s*title:\s*"([^"]+)"/g;
+  // C. Escaneo estructurado por capítulos (chaptersCore.jsx + chaptersExtended.jsx o chapters.jsx legacy)
+  const splitFiles = [
+    path.join(ROOT, 'src/data/chaptersCore.jsx'),
+    path.join(ROOT, 'src/data/chaptersExtended.jsx'),
+  ].filter((p) => fs.existsSync(p));
+  const chapterFilesToScan = splitFiles.length > 0
+    ? splitFiles
+    : [path.join(ROOT, 'src/data/chapters.jsx')].filter((p) => fs.existsSync(p));
+
+  if (chapterFilesToScan.length > 0) {
+    const chaptersContent = chapterFilesToScan.map((p) => fs.readFileSync(p, 'utf8')).join('\n');
+    const chRegex = /"?id"?:\s*(\d+),\s*"?title"?:\s*"([^"]+)"/g;
     const chaptersMeta = [];
     let cm;
     while ((cm = chRegex.exec(chaptersContent)) !== null) {
@@ -166,7 +173,7 @@ async function extractAllAudios() {
       const isTechnical = TECHNICAL_CHAPTER_IDS.has(ch.id) ||
         /solar|elektro|fahrschul|beruf|digitale|it|werkzeug|handwerk|montage|verkehrszeichen|markierung|schilder/i.test(ch.title);
 
-      const wordRegex = /\{\s*de:\s*"([^"]+)"(?:[\s\S]*?plural:\s*"([^"]*)")?(?:[\s\S]*?exampleSentenceDe:\s*"([^"]*)")?/g;
+      const wordRegex = /\{\s*"?de"?:\s*"([^"]+)"(?:[\s\S]*?"?plural"?:\s*"([^"]*)")?(?:[\s\S]*?"?exampleSentenceDe"?:\s*"([^"]*)")?/g;
       let wm;
       while ((wm = wordRegex.exec(chapterSlice)) !== null) {
         countChapters++;
