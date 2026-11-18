@@ -1,6 +1,6 @@
 {
   "appId": "com.deutschmeister.app",
-  "appName": "Deutsch A1",
+  "appName": "Deutsch B1",
   "webDir": "dist",
   "plugins": {
     "StatusBar": {

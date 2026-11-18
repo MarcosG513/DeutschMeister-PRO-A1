@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('DeutschMeister PRO A1 — Interacción E2E con Tutor IA', () => {
+test.describe('DeutschMeister PRO A1–B1 — Interacción E2E con Tutor IA', () => {
 
   test('Debería poder abrir el chat, enviar una consulta y recibir respuesta del Tutor IA', async ({ page }) => {
     // Paso 1: Navegar al servidor de Vite

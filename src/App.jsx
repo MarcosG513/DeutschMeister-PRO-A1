@@ -1654,8 +1654,8 @@ export default function App() {
                     <GraduationCap size={26} />
                   </div>
                   <div className="min-w-0">
-                    <h1 className="text-lg sm:text-xl font-black tracking-wide leading-tight truncate">DeutschMeister <span className="text-yellow-400">PRO A1</span></h1>
-                    <p className="text-[11px] sm:text-xs text-slate-400 truncate">Alemán Técnico &amp; Preparación Goethe Zertifikat</p>
+                    <h1 className="text-lg sm:text-xl font-black tracking-wide leading-tight truncate">DeutschMeister <span className="text-yellow-400">PRO A1–B1</span></h1>
+                    <p className="text-[11px] sm:text-xs text-slate-400 truncate">Alemán Integral A1–B1 &amp; Preparación Oficial Goethe / DTZ</p>
                   </div>
                 </button>
                 {/* HAMBURGER + PROFILE ON MOBILE */}
