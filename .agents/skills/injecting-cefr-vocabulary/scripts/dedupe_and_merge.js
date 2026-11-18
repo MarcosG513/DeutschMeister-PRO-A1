@@ -555,11 +555,10 @@ function main() {
   }
 
   const batchChapters = loadBatchChapters(args.inputs);
-  const chapterPlans = [];
-  const k22Plans = [];
+  // Agrupar planes por `targetRec.id` para garantizar un único offset AST por capítulo incluso con múltiples `--input`
+  const plansByTargetId = new Map();
   const newVocabEntries = [];
   const skipped = { exactSafeId: [], sameChapterRoot: [], crossChapterRoot: [], forbiddenEnpal: [] };
-  const rowsReport = [];
 
   for (const batchChap of batchChapters) {
     const meta = resolveCanonicalChapterMeta(batchChap.title || batchChap.id);
@@ -574,7 +573,21 @@ function main() {
       throw new Error(`Capítulo destino no encontrado para id=${batchChap.id} title="${batchChap.title}"`);
     }
 
-    const accepted = [];
+    if (!plansByTargetId.has(targetRec.id)) {
+      plansByTargetId.set(targetRec.id, {
+        isK22,
+        before: targetRec.existingCount,
+        plan: {
+          id: targetRec.id,
+          title: targetRec.title,
+          closeBracketOffset: targetRec.wordsArrayNode.end - 1,
+          hadExistingElements: targetRec.wordsArrayNode.elements.length > 0,
+          items: [],
+        },
+      });
+    }
+    const bucket = plansByTargetId.get(targetRec.id);
+
     for (const rawWord of batchChap.words || []) {
       const normalized = normalizeWordEntry(rawWord, isK22);
       if (!normalized.de) continue;
@@ -605,7 +618,7 @@ function main() {
       globalSeenSafeIds.add(sid);
       targetRec.existingRoots.add(root);
       if (!globalRootOwners.has(root)) globalRootOwners.set(root, targetRec.id);
-      accepted.push(normalized);
+      bucket.plan.items.push(normalized);
 
       if (!isK22 && !existingVocabJsonIds.has(sid)) {
         existingVocabJsonIds.add(sid);
@@ -618,23 +631,21 @@ function main() {
         });
       }
     }
+  }
 
-    const plan = {
-      id: targetRec.id,
-      title: targetRec.title,
-      closeBracketOffset: targetRec.wordsArrayNode.end - 1,
-      hadExistingElements: targetRec.wordsArrayNode.elements.length > 0,
-      items: accepted,
-    };
+  const chapterPlans = [];
+  const k22Plans = [];
+  const rowsReport = [];
+  const sortedBuckets = Array.from(plansByTargetId.values()).sort((a, b) => a.plan.id - b.plan.id);
+  for (const { isK22, before, plan } of sortedBuckets) {
     if (isK22) k22Plans.push(plan);
     else chapterPlans.push(plan);
-
     rowsReport.push({
-      id: targetRec.id,
-      title: targetRec.title,
-      before: targetRec.existingCount,
-      added: accepted.length,
-      after: targetRec.existingCount + accepted.length,
+      id: plan.id,
+      title: plan.title,
+      before,
+      added: plan.items.length,
+      after: before + plan.items.length,
     });
   }
 
@@ -678,4 +689,7 @@ function main() {
   );
 }
 
-main();
+const isDirectCli = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename);
+if (isDirectCli) {
+  main();
+}
