@@ -1,0 +1,4232 @@
+{
+  "batch": "goethe_2",
+  "chapters": [
+    {
+      "id": 3,
+      "title": "Kapitel 3: Personen & Kontakte",
+      "words": [
+        {
+          "de": "der Halbtagsjob",
+          "pron": "dea jálp-taks-yop",
+          "es": "el trabajo de media jornada",
+          "type": "Sustantivo (Masc)",
+          "category": "Alltag",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Halbtagsjobs",
+          "exampleSentenceDe": "Nach der Geburt sucht sie einen Halbtagsjob.",
+          "exampleSentenceEs": "Tras el nacimiento busca un trabajo de media jornada.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Nach der Geburt",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "sucht",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "sie",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "einen Halbtagsjob",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "das Heimweh",
+          "pron": "das jáim-ve",
+          "es": "la nostalgia / añoranza",
+          "type": "Sustantivo (Neutro)",
+          "category": "Gefühle",
+          "level": "B1",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Am Anfang hatte ich oft Heimweh nach meiner Familie.",
+          "exampleSentenceEs": "Al principio sentía a menudo nostalgia de mi familia.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Am Anfang",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "hatte",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "oft Heimweh nach meiner Familie",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "der Held / die Heldin",
+          "pron": "dea jelt",
+          "es": "el héroe / la heroína",
+          "type": "Sustantivo (Masc/Fem)",
+          "category": "Personen",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Helden / -innen",
+          "en": "heroic figure wearing a bright red cape standing proudly",
+          "exampleSentenceDe": "Im Film rettet der Held viele Menschen.",
+          "exampleSentenceEs": "En la película el héroe salva a muchas personas.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Film",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "rettet",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "der Held",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "viele Menschen",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "her|stellen",
+          "pron": "jér-shte-len",
+          "es": "fabricar / establecer (contacto)",
+          "type": "Verbo separable",
+          "category": "Wirtschaft",
+          "level": "B1",
+          "regimen": "+ Akk / stellt her, stellte her, hat hergestellt",
+          "plural": "",
+          "exampleSentenceDe": "Die Firma stellt Teile für Computer her.",
+          "exampleSentenceEs": "La empresa fabrica piezas para ordenadores.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Firma",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "stellt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Teile für Computer",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "her",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "heimlich",
+          "pron": "jáim-lij",
+          "es": "a escondidas / en secreto",
+          "type": "Adjetivo / Adverbio",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Comp: heimlicher",
+          "plural": "",
+          "exampleSentenceDe": "Ich habe gesehen, dass er heimlich raucht.",
+          "exampleSentenceEs": "He visto que él fuma a escondidas.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "habe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "gesehen,",
+              "role": "verb_p2",
+              "order": 3
+            },
+            {
+              "text": "dass er heimlich",
+              "role": "complement",
+              "order": 4
+            },
+            {
+              "text": "raucht",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "das Herkunftsland",
+          "pron": "das jér-kunfts-lant",
+          "es": "el país de origen",
+          "type": "Sustantivo (Neutro)",
+          "category": "Formulare",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Herkunftsländer",
+          "exampleSentenceDe": "Tragen Sie auf dem Formular Ihr Herkunftsland ein.",
+          "exampleSentenceEs": "Anote en el formulario su país de origen.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Tragen",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "auf dem Formular Ihr Herkunftsland",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "ein",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "die Jugend",
+          "pron": "di yú-guent",
+          "es": "la juventud",
+          "type": "Sustantivo (Fem)",
+          "category": "Alter",
+          "level": "B1",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "In meiner Jugend war ich oft im Ausland.",
+          "exampleSentenceEs": "En mi juventud estuve a menudo en el extranjero.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "In meiner Jugend",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "war",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "oft im Ausland",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "die Kindheit",
+          "pron": "di kínt-jait",
+          "es": "la infancia / niñez",
+          "type": "Sustantivo (Fem)",
+          "category": "Alter",
+          "level": "B1",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Er hatte eine sehr glückliche Kindheit.",
+          "exampleSentenceEs": "Él tuvo una infancia muy feliz.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Er",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hatte",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "eine sehr glückliche Kindheit",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "klären",
+          "pron": "klé-ren",
+          "es": "aclarar / resolver",
+          "type": "Verbo regular",
+          "category": "Konflikte",
+          "level": "B1",
+          "regimen": "+ Akk / klärt, klärte, hat geklärt",
+          "plural": "",
+          "exampleSentenceDe": "Wir müssen dieses Problem schnell klären.",
+          "exampleSentenceEs": "Tenemos que aclarar este problema rápido.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "müssen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "dieses Problem schnell",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "klären",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "der Kontakt",
+          "pron": "dea kon-tákt",
+          "es": "el contacto / relación",
+          "type": "Sustantivo (Masc)",
+          "category": "Alltag",
+          "level": "A2–B1",
+          "regimen": "",
+          "plural": "die Kontakte",
+          "exampleSentenceDe": "Ich habe viel Kontakt zu meinen Kollegen.",
+          "exampleSentenceEs": "Tengo mucho contacto con mis compañeros.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "habe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "viel Kontakt zu meinen Kollegen",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "melden",
+          "pron": "mél-den",
+          "es": "informar / presentarse (sich)",
+          "type": "Verbo regular",
+          "category": "Kommunikation",
+          "level": "A2–B1",
+          "regimen": "+ Akk / meldet, meldete, hat gemeldet",
+          "plural": "",
+          "exampleSentenceDe": "Ich melde mich morgen bei dir.",
+          "exampleSentenceEs": "Mañana me pongo en contacto contigo.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "melde",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "mich morgen bei dir",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Mitteilung",
+          "pron": "di mít-tai-lung",
+          "es": "la comunicación / aviso",
+          "type": "Sustantivo (Fem)",
+          "category": "Kommunikation",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Mitteilungen",
+          "exampleSentenceDe": "Ich habe eine wichtige Mitteilung für Sie.",
+          "exampleSentenceEs": "Tengo un aviso importante para usted.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "habe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "eine wichtige Mitteilung für Sie",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "nach|denken",
+          "pron": "náj-den-ken",
+          "es": "reflexionar / pensar en",
+          "type": "Verbo separable irr.",
+          "category": "Gefühle",
+          "level": "B1",
+          "regimen": "über + Akk / denkt nach, dachte nach, hat nachgedacht",
+          "plural": "",
+          "exampleSentenceDe": "Lass mich kurz darüber nachdenken.",
+          "exampleSentenceEs": "Déjame reflexionar sobre eso un momento.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Lass",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "mich kurz darüber",
+              "role": "complement",
+              "order": 2
+            },
+            {
+              "text": "nachdenken",
+              "role": "verb_p2",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "ordentlich",
+          "pron": "ór-dent-lij",
+          "es": "ordenado / cuidadoso",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Comp: ordentlicher",
+          "plural": "",
+          "exampleSentenceDe": "Mein Bruder ist ein sehr ordentlicher Mensch.",
+          "exampleSentenceEs": "Mi hermano es una persona muy ordenada.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Mein Bruder",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ein sehr ordentlicher Mensch",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "persönlich",
+          "pron": "pea-zö́n-lij",
+          "es": "personal / personalmente",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "A2–B1",
+          "regimen": "Comp: persönlicher",
+          "plural": "",
+          "exampleSentenceDe": "Bitte geben Sie den Brief persönlich ab.",
+          "exampleSentenceEs": "Por favor, entregue la carta personalmente.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bitte",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "geben",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "den Brief persönlich",
+              "role": "complement",
+              "order": 4
+            },
+            {
+              "text": "ab",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "die Pflicht",
+          "pron": "di pflijt",
+          "es": "el deber / obligación",
+          "type": "Sustantivo (Fem)",
+          "category": "Gesellschaft",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Pflichten",
+          "exampleSentenceDe": "Als Bürger haben wir Rechte und Pflichten.",
+          "exampleSentenceEs": "Como ciudadanos tenemos derechos y deberes.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Als Bürger",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "haben",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "Rechte und Pflichten",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "das Recht",
+          "pron": "das rejt",
+          "es": "el derecho / la razón",
+          "type": "Sustantivo (Neutro)",
+          "category": "Gesellschaft",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Rechte",
+          "exampleSentenceDe": "Jeder Mensch hat das Recht auf Freiheit.",
+          "exampleSentenceEs": "Toda persona tiene derecho a la libertad.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Jeder Mensch",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hat",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "das Recht auf Freiheit",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Rücksicht",
+          "pron": "di rǘk-zijt",
+          "es": "la consideración / respeto",
+          "type": "Sustantivo (Fem)",
+          "category": "Gesellschaft",
+          "level": "B1",
+          "regimen": "auf + Akk (nehmen)",
+          "plural": "",
+          "exampleSentenceDe": "Nehmen Sie Rücksicht auf die Nachbarn.",
+          "exampleSentenceEs": "Tenga consideración con los vecinos.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Nehmen",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "Rücksicht auf die Nachbarn",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Kapitel 4: Basisverben & Adjektive",
+      "words": [
+        {
+          "de": "heben",
+          "pron": "jé-ben",
+          "es": "levantar / elevar",
+          "type": "Verbo irregular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "+ Akk / hebt, hob, hat gehoben",
+          "plural": "",
+          "en": "person lifting a brown cardboard box off the floor",
+          "exampleSentenceDe": "Er hob das Paket vom Boden auf.",
+          "exampleSentenceEs": "Él levantó el paquete del suelo.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Er",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hob",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "das Paket vom Boden",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "auf",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "herrschen",
+          "pron": "jér-shen",
+          "es": "reinar / dominar",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "über + Akk / herrscht, herrschte, hat geherrscht",
+          "plural": "",
+          "exampleSentenceDe": "Im Moment herrscht hier große Unruhe.",
+          "exampleSentenceEs": "En este momento reina aquí una gran inquietud.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Im Moment",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "herrscht",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "hier",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "große Unruhe",
+              "role": "subject",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "hupen",
+          "pron": "jú-pen",
+          "es": "tocar el claxon",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "hupt, hupte, hat gehupt",
+          "plural": "",
+          "en": "hand pressing the center horn on a black car steering wheel",
+          "exampleSentenceDe": "Bitte nicht hupen, hier ist ein Krankenhaus.",
+          "exampleSentenceEs": "Por favor, no toque el claxon, aquí hay un hospital.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bitte nicht",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "hupen,",
+              "role": "verb_p2",
+              "order": 2
+            },
+            {
+              "text": "hier",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 4
+            },
+            {
+              "text": "ein Krankenhaus",
+              "role": "subject",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "hübsch",
+          "pron": "jüpsh",
+          "es": "guapo / bonito",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "A1–B1",
+          "regimen": "Comp: hübscher",
+          "plural": "",
+          "exampleSentenceDe": "Sie trägt heute ein sehr hübsches Kleid.",
+          "exampleSentenceEs": "Ella lleva hoy un vestido muy bonito.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "trägt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute ein sehr hübsches Kleid",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "ideal",
+          "pron": "i-de-ál",
+          "es": "ideal / perfecto",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Comp: idealer",
+          "plural": "",
+          "exampleSentenceDe": "Dieses Haus ist ideal für eine große Familie.",
+          "exampleSentenceEs": "Esta casa es ideal para una familia grande.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Dieses Haus",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ideal für eine große Familie",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "indirekt",
+          "pron": "ín-di-rekt",
+          "es": "indirecto",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Antónimo: direkt",
+          "plural": "",
+          "exampleSentenceDe": "Wir haben indirekt von seinem Plan gehört.",
+          "exampleSentenceEs": "Hemos sabido de su plan de forma indirecta.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "haben",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "indirekt von seinem Plan",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "gehört",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "kämpfen",
+          "pron": "kém-pfen",
+          "es": "luchar",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "für / gegen + Akk / kämpft, kämpfte, hat gekämpft",
+          "plural": "",
+          "exampleSentenceDe": "Wir kämpfen für bessere Arbeitsbedingungen.",
+          "exampleSentenceEs": "Luchamos por mejores condiciones de trabajo.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kämpfen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "für bessere Arbeitsbedingungen",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "kleben",
+          "pron": "klé-ben",
+          "es": "pegar / adherir",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "klebt, klebte, hat geklebt",
+          "plural": "",
+          "en": "hand sticking a postage stamp onto a paper envelope",
+          "exampleSentenceDe": "Die Briefmarke klebt nicht richtig.",
+          "exampleSentenceEs": "El sello no pega bien.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Briefmarke",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "klebt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "nicht richtig",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "klingeln",
+          "pron": "klín-gueln",
+          "es": "sonar (timbre/teléfono)",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "A1–B1",
+          "regimen": "klingelt, klingelte, hat geklingelt",
+          "plural": "",
+          "en": "hand pressing a glowing apartment wall doorbell button",
+          "exampleSentenceDe": "Das Telefon klingelt schon wieder.",
+          "exampleSentenceEs": "El teléfono suena de nuevo.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das Telefon",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "klingelt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "schon wieder",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "klingen",
+          "pron": "klín-guen",
+          "es": "sonar (bien/mal)",
+          "type": "Verbo irregular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "klingt, klang, hat geklungen",
+          "plural": "",
+          "exampleSentenceDe": "Deine Idee klingt sehr interessant.",
+          "exampleSentenceEs": "Tu idea suena muy interesante.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Deine Idee",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "klingt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "sehr interessant",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "klopfen",
+          "pron": "kló-pfen",
+          "es": "llamar (a la puerta) / latir",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "klopft, klopfte, hat geklopft",
+          "plural": "",
+          "en": "hand knocking gently with knuckles on a wooden door",
+          "exampleSentenceDe": "Jemand hat gerade an die Tür geklopft.",
+          "exampleSentenceEs": "Alguien acaba de llamar a la puerta.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Jemand",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "hat",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "gerade an die Tür",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "geklopft",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "knapp",
+          "pron": "knap",
+          "es": "escaso / ajustado",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Comp: knapper",
+          "plural": "",
+          "exampleSentenceDe": "Die Zeit vor der Prüfung wird knapp.",
+          "exampleSentenceEs": "El tiempo antes del examen se hace escaso.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Zeit vor der Prüfung",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "wird",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "knapp",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "komisch",
+          "pron": "kó-mish",
+          "es": "raro / extraño / cómico",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "A2–B1",
+          "regimen": "Comp: komischer",
+          "plural": "",
+          "exampleSentenceDe": "Das Essen riecht heute etwas komisch.",
+          "exampleSentenceEs": "La comida huele hoy un poco raro.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das Essen",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "riecht",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute etwas komisch",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "korrekt",
+          "pron": "ko-rékt",
+          "es": "correcto",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Comp: korrekter",
+          "plural": "",
+          "exampleSentenceDe": "Die Rechnung ist absolut korrekt.",
+          "exampleSentenceEs": "La factura es absolutamente correcta.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Rechnung",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "absolut korrekt",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "lächerlich",
+          "pron": "lé-jer-lij",
+          "es": "ridículo",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Comp: lächerlicher",
+          "plural": "",
+          "exampleSentenceDe": "Ich mache mich doch nicht lächerlich!",
+          "exampleSentenceEs": "¡Yo no me voy a hacer el ridículo!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "mache",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "mich doch nicht lächerlich",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "leer",
+          "pron": "ler",
+          "es": "vacío",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "A2–B1",
+          "regimen": "Comp: leerer",
+          "plural": "",
+          "exampleSentenceDe": "Die Batterie von meinem Handy ist leer.",
+          "exampleSentenceEs": "La batería de mi móvil está vacía.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Batterie von meinem Handy",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "leer",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "lochen",
+          "pron": "ló-jen",
+          "es": "perforar / taladrar (papel)",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "locht, lochte, hat gelocht",
+          "plural": "",
+          "en": "metal two-hole paper puncher perforating white office sheets",
+          "exampleSentenceDe": "Bitte lochen Sie die Papiere vor dem Abheften.",
+          "exampleSentenceEs": "Por favor, perfore los papeles antes de archivarlos.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bitte",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "lochen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "die Papiere vor dem Abheften",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "locker",
+          "pron": "ló-ka",
+          "es": "suelto / relajado",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Comp: lockerer",
+          "plural": "",
+          "exampleSentenceDe": "Er nimmt die Prüfung ganz locker.",
+          "exampleSentenceEs": "Él se toma el examen muy relajado.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Er",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "nimmt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "die Prüfung ganz locker",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "lohnen (sich)",
+          "pron": "ló-nen",
+          "es": "valer la pena",
+          "type": "Verbo reflexivo",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "lohnt sich, lohnte sich, hat sich gelohnt",
+          "plural": "",
+          "exampleSentenceDe": "Es lohnt sich, jeden Tag Deutsch zu üben.",
+          "exampleSentenceEs": "Vale la pena practicar alemán todos los días.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Es",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "lohnt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "sich, jeden Tag Deutsch",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "zu üben",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "los|lassen",
+          "pron": "lós-la-sen",
+          "es": "soltar",
+          "type": "Verbo separable irr.",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "+ Akk / lässt los, ließ los, hat losgelassen",
+          "plural": "",
+          "en": "two open hands releasing and letting go of a rope",
+          "exampleSentenceDe": "Lass sofort meine Hand los!",
+          "exampleSentenceEs": "¡Suéltame la mano inmediatamente!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Lass",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "sofort meine Hand",
+              "role": "complement",
+              "order": 2
+            },
+            {
+              "text": "los",
+              "role": "verb_p2",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "mischen",
+          "pron": "mí-shen",
+          "es": "mezclar",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "+ Akk / mischt, mischte, hat gemischt",
+          "plural": "",
+          "en": "wooden spoon mixing white flour and sugar inside a ceramic bowl",
+          "exampleSentenceDe": "Ich mische das Mehl mit dem Zucker.",
+          "exampleSentenceEs": "Mezclo la harina con el azúcar.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "mische",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "das Mehl mit dem Zucker",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Misserfolg",
+          "pron": "dea mís-ea-folk",
+          "es": "el fracaso",
+          "type": "Sustantivo (Masc)",
+          "category": "Abstrakte",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Misserfolge",
+          "exampleSentenceDe": "Aus einem Misserfolg kann man viel lernen.",
+          "exampleSentenceEs": "De un fracaso se puede aprender mucho.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Aus einem Misserfolg",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "kann",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "man",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "viel",
+              "role": "complement",
+              "order": 4
+            },
+            {
+              "text": "lernen",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "nützen",
+          "pron": "nǘ-tsen",
+          "es": "servir de algo / ser útil",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "nützt, nützte, hat genützt",
+          "plural": "",
+          "exampleSentenceDe": "Es nützt nichts, sich jetzt noch zu ärgern.",
+          "exampleSentenceEs": "No sirve de nada enfadarse ahora.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Es",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "nützt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "nichts, sich jetzt noch",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "zu ärgern",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "peinlich",
+          "pron": "páin-lij",
+          "es": "vergonzoso / embarazoso",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "es ist mir peinlich",
+          "plural": "",
+          "exampleSentenceDe": "Das ist mir jetzt wirklich peinlich.",
+          "exampleSentenceEs": "Esto me resulta ahora realmente vergonzoso.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "mir jetzt wirklich peinlich",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "pfeifen",
+          "pron": "pféi-fen",
+          "es": "silbar / pitar",
+          "type": "Verbo irregular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "pfeift, pfiff, hat gepfiffen",
+          "plural": "",
+          "en": "soccer referee blowing a shiny silver whistle",
+          "exampleSentenceDe": "Der Schiedsrichter pfeift das Spiel ab.",
+          "exampleSentenceEs": "El árbitro pita el final del partido.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Schiedsrichter",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "pfeift",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "das Spiel",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "ab",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "quer",
+          "pron": "kver",
+          "es": "en diagonal / a través de",
+          "type": "Adjetivo / Adverbio",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Invariable",
+          "plural": "",
+          "exampleSentenceDe": "Ich fahre quer durch die Stadt.",
+          "exampleSentenceEs": "Conduzco a través de toda la ciudad.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "fahre",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "quer durch die Stadt",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "raten",
+          "pron": "rá-ten",
+          "es": "aconsejar / adivinar",
+          "type": "Verbo irregular",
+          "category": "Basisverben",
+          "level": "A2–B1",
+          "regimen": "+ Dat / rät, riet, hat geraten",
+          "plural": "",
+          "exampleSentenceDe": "Ich rate dir, den Arzt aufzusuchen.",
+          "exampleSentenceEs": "Te aconsejo acudir al médico.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "rate",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "dir, den Arzt",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "aufzusuchen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "rechtzeitig",
+          "pron": "réjt-tsai-tij",
+          "es": "a tiempo / puntual",
+          "type": "Adjetivo / Adverbio",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Comp: rechtzeitiger",
+          "plural": "",
+          "exampleSentenceDe": "Bitte reichen Sie die Dokumente rechtzeitig ein.",
+          "exampleSentenceEs": "Por favor, entregue los documentos a tiempo.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bitte",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "reichen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "die Dokumente rechtzeitig",
+              "role": "complement",
+              "order": 4
+            },
+            {
+              "text": "ein",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "retten",
+          "pron": "ré-ten",
+          "es": "salvar / rescatar",
+          "type": "Verbo regular",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "+ Akk / rettet, rettete, hat gerettet",
+          "plural": "",
+          "en": "firefighter in protective gear rescuing a person safely",
+          "exampleSentenceDe": "Die Feuerwehr konnte alle Personen retten.",
+          "exampleSentenceEs": "Los bomberos pudieron rescatar a todas las personas.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Feuerwehr",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "konnte",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "alle Personen",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "retten",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "riesig",
+          "pron": "rí-zij",
+          "es": "enorme / gigante",
+          "type": "Adjetivo",
+          "category": "Adjektive",
+          "level": "B1",
+          "regimen": "Comp: riesiger",
+          "plural": "",
+          "exampleSentenceDe": "Wir haben uns riesig über den Besuch gefreut.",
+          "exampleSentenceEs": "Nos alegramos enormemente por la visita.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "haben",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "uns riesig über den Besuch",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "gefreut",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "das Risiko",
+          "pron": "das rí-zi-ko",
+          "es": "el riesgo",
+          "type": "Sustantivo (Neutro)",
+          "category": "Abstrakte",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Risiken",
+          "exampleSentenceDe": "Das finanzielle Risiko ist mir zu hoch.",
+          "exampleSentenceEs": "El riesgo financiero es demasiado alto para mí.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das finanzielle Risiko",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "mir zu hoch",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Kapitel 5: Adverbien & Fragewörter",
+      "words": [
+        {
+          "de": "hin",
+          "pron": "jin",
+          "es": "hacia allá",
+          "type": "Adverbio de dirección",
+          "category": "Adverbien",
+          "level": "A1–B1",
+          "regimen": "(alejándose del hablante)",
+          "plural": "",
+          "exampleSentenceDe": "Wo gehst du hin?",
+          "exampleSentenceEs": "¿A dónde vas?",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wo",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "gehst",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "du",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "hin",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "hinten",
+          "pron": "jín-ten",
+          "es": "detrás / atrás",
+          "type": "Adverbio de lugar",
+          "category": "Adverbien",
+          "level": "A1",
+          "regimen": "Responde a Wo?",
+          "plural": "",
+          "exampleSentenceDe": "Der Eingang ist hinten.",
+          "exampleSentenceEs": "La entrada está atrás.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Eingang",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "hinten",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "hinterher",
+          "pron": "jín-ta-jea",
+          "es": "después / detrás de",
+          "type": "Adverbio temporal",
+          "category": "Adverbien",
+          "level": "B1",
+          "regimen": "Posición 1 o campo medio",
+          "plural": "",
+          "exampleSentenceDe": "Wir können uns hinterher noch treffen.",
+          "exampleSentenceEs": "Podemos vernos después todavía.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "können",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "uns hinterher noch",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "treffen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "hoch",
+          "pron": "joj",
+          "es": "arriba / alto",
+          "type": "Adverbio de dirección",
+          "category": "Adverbien",
+          "level": "A2",
+          "regimen": "(movimiento vertical)",
+          "plural": "",
+          "exampleSentenceDe": "Bring bitte die Kisten hoch.",
+          "exampleSentenceEs": "Sube las cajas, por favor.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bring",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "bitte die Kisten",
+              "role": "complement",
+              "order": 2
+            },
+            {
+              "text": "hoch",
+              "role": "verb_p2",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "hoffentlich",
+          "pron": "jó-fent-lij",
+          "es": "ojalá",
+          "type": "Adverbio / Partícula",
+          "category": "Adverbien",
+          "level": "A1",
+          "regimen": "Posición 1 (+ Inversión)",
+          "plural": "",
+          "exampleSentenceDe": "Hoffentlich hat der Zug keine Verspätung.",
+          "exampleSentenceEs": "Ojalá el tren no tenga retraso.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Hoffentlich",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "hat",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "der Zug",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "keine Verspätung",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "innen",
+          "pron": "í-nen",
+          "es": "dentro / en el interior",
+          "type": "Adverbio de lugar",
+          "category": "Adverbien",
+          "level": "B1",
+          "regimen": "Responde a Wo?",
+          "plural": "",
+          "exampleSentenceDe": "Der Lichtschalter ist innen links.",
+          "exampleSentenceEs": "El interruptor de la luz está dentro a la izquierda.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Lichtschalter",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "innen links",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "insgesamt",
+          "pron": "íns-gue-zamt",
+          "es": "en total",
+          "type": "Adverbio",
+          "category": "Adverbien",
+          "level": "A2–B1",
+          "regimen": "Posición 1 o campo medio",
+          "plural": "",
+          "exampleSentenceDe": "Insgesamt haben sich zwanzig Personen angemeldet.",
+          "exampleSentenceEs": "En total se han inscrito veinte personas.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Insgesamt",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "haben",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "sich",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "zwanzig Personen",
+              "role": "subject",
+              "order": 4
+            },
+            {
+              "text": "angemeldet",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "irren (sich)",
+          "pron": "í-ren",
+          "es": "equivocarse",
+          "type": "Verbo reflexivo",
+          "category": "Basisverben",
+          "level": "B1",
+          "regimen": "irrt sich, irrte sich, hat sich geirrt",
+          "plural": "",
+          "exampleSentenceDe": "Entschuldigung, ich habe mich in der Tür geirrt.",
+          "exampleSentenceEs": "Disculpe, me he equivocado de puerta.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Entschuldigung,",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "ich",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "habe",
+              "role": "verb_p1",
+              "order": 3
+            },
+            {
+              "text": "mich in der Tür",
+              "role": "complement",
+              "order": 4
+            },
+            {
+              "text": "geirrt",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "kaum",
+          "pron": "kaum",
+          "es": "apenas / casi no",
+          "type": "Adverbio",
+          "category": "Adverbien",
+          "level": "B1",
+          "regimen": "Posición 1 o campo medio",
+          "plural": "",
+          "exampleSentenceDe": "Ich kann Sie kaum verstehen, es ist zu laut.",
+          "exampleSentenceEs": "Apenas puedo entenderle, está demasiado alto.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kann",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie kaum",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "verstehen,",
+              "role": "verb_p2",
+              "order": 4
+            },
+            {
+              "text": "es",
+              "role": "subject",
+              "order": 5
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 6
+            },
+            {
+              "text": "zu laut",
+              "role": "complement",
+              "order": 7
+            }
+          ]
+        },
+        {
+          "de": "los",
+          "pron": "los",
+          "es": "¡vamos! / suelto",
+          "type": "Partícula",
+          "category": "Partikeln",
+          "level": "A1–B1",
+          "regimen": "Interjección",
+          "plural": "",
+          "exampleSentenceDe": "Achtung, fertig, los!",
+          "exampleSentenceEs": "¡Preparados, listos, ya!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Achtung, fertig,",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "los",
+              "role": "complement",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "de": "manche",
+          "pron": "mán-je",
+          "es": "algunos / algunas",
+          "type": "Pronombre indefinido",
+          "category": "Pronomen",
+          "level": "A1–B1",
+          "regimen": "Declina como adjetivo fuerte",
+          "plural": "",
+          "exampleSentenceDe": "Manche Leute trinken keinen Kaffee.",
+          "exampleSentenceEs": "Algunas personas no beben café.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Manche Leute",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "trinken",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "keinen Kaffee",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "meistens",
+          "pron": "máis-tens",
+          "es": "la mayoría de las veces / casi siempre",
+          "type": "Adverbio",
+          "category": "Adverbien",
+          "level": "A2–B1",
+          "regimen": "Frecuencia",
+          "plural": "",
+          "exampleSentenceDe": "Meistens trinke ich nur Tee zum Frühstück.",
+          "exampleSentenceEs": "Casi siempre tomo solo té para desayunar.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Meistens",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "trinke",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "nur Tee zum Frühstück",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "mitten",
+          "pron": "mí-ten",
+          "es": "en medio de",
+          "type": "Adverbio",
+          "category": "Adverbien",
+          "level": "B1",
+          "regimen": "mitten in / auf",
+          "plural": "",
+          "exampleSentenceDe": "Das Flugzeug landete mitten in der Nacht.",
+          "exampleSentenceEs": "El avión aterrizó en medio de la noche.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das Flugzeug",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "landete",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "mitten in der Nacht",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "möglichst",
+          "pron": "mö́-klijst",
+          "es": "lo más (rápido, pronto) posible",
+          "type": "Adverbio",
+          "category": "Adverbien",
+          "level": "B1",
+          "regimen": "möglichst + Adjetivo/Adverbio",
+          "plural": "",
+          "exampleSentenceDe": "Bitte antworten Sie möglichst schnell.",
+          "exampleSentenceEs": "Por favor, responda lo más rápido posible.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bitte",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "antworten",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "möglichst schnell",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "neulich",
+          "pron": "nói-lij",
+          "es": "hace poco / recientemente",
+          "type": "Adverbio",
+          "category": "Adverbien",
+          "level": "B1",
+          "regimen": "Temporal",
+          "plural": "",
+          "exampleSentenceDe": "Ich habe neulich unseren alten Lehrer gesehen.",
+          "exampleSentenceEs": "Hace poco vi a nuestro antiguo profesor.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "habe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "neulich unseren alten Lehrer",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "gesehen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "nirgends",
+          "pron": "nír-guents",
+          "es": "en ninguna parte",
+          "type": "Adverbio de lugar",
+          "category": "Adverbien",
+          "level": "B1",
+          "regimen": "Antónimo: überall",
+          "plural": "",
+          "exampleSentenceDe": "Ich kann meinen Schlüssel nirgends finden.",
+          "exampleSentenceEs": "No puedo encontrar mi llave en ninguna parte.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kann",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "meinen Schlüssel nirgends",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "finden",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "nirgendwo",
+          "pron": "nír-guent-vo",
+          "es": "en ninguna parte",
+          "type": "Adverbio de lugar",
+          "category": "Adverbien",
+          "level": "B1",
+          "regimen": "Sinónimo: nirgends",
+          "plural": "",
+          "exampleSentenceDe": "Er ist nirgendwo zu sehen.",
+          "exampleSentenceEs": "No se le ve por ninguna parte.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Er",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "nirgendwo",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "zu sehen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "ob",
+          "pron": "op",
+          "es": "si (condicional/duda indirecta)",
+          "type": "Conjunción subordinante",
+          "category": "Nebensätze",
+          "level": "A2–B1",
+          "regimen": "Verbo al final",
+          "plural": "",
+          "exampleSentenceDe": "Ich weiß noch nicht, ob ich kommen kann.",
+          "exampleSentenceEs": "Aún no sé si puedo venir.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "weiß",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "noch nicht, ob ich",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "kommen kann",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "offenbar",
+          "pron": "ó-fen-bar",
+          "es": "al parecer / por lo visto",
+          "type": "Adverbio",
+          "category": "Adverbien",
+          "level": "B1",
+          "regimen": "Posición 1 o campo medio",
+          "plural": "",
+          "exampleSentenceDe": "Offenbar hat er den Termin vergessen.",
+          "exampleSentenceEs": "Al parecer, ha olvidado la cita.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Offenbar",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "hat",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "er",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "den Termin",
+              "role": "complement",
+              "order": 4
+            },
+            {
+              "text": "vergessen",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "rand | rüber | rum",
+          "pron": "rant | rǘ-ba | rum",
+          "es": "(partículas de dirección acortadas coloquiales)",
+          "type": "Partículas/Adverbios",
+          "category": "Partikeln",
+          "level": "B1",
+          "regimen": "heran, herüber, herum",
+          "plural": "",
+          "exampleSentenceDe": "Komm mal kurz rüber zu mir!",
+          "exampleSentenceEs": "¡Ven un momento aquí conmigo!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Komm",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "mal kurz",
+              "role": "complement",
+              "order": 2
+            },
+            {
+              "text": "rüber",
+              "role": "verb_p2",
+              "order": 3
+            },
+            {
+              "text": "zu mir",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Kapitel 6: Grammatik: Konnektoren",
+      "words": [
+        {
+          "de": "indem",
+          "pron": "in-dém",
+          "es": "mientras / al (gerundio de modo)",
+          "type": "Conector Subordinante",
+          "category": "Nebensätze",
+          "level": "B1",
+          "regimen": "Verbo al final",
+          "plural": "",
+          "exampleSentenceDe": "Du lernst schneller, indem du jeden Tag übst.",
+          "exampleSentenceEs": "Aprendes más rápido practicando (al practicar) todos los días.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Du",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "lernst",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "schneller, indem du jeden Tag",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "übst",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "je ... umso",
+          "pron": "ye ... úm-zo",
+          "es": "cuanto más ... más",
+          "type": "Conector Doble",
+          "category": "Konnektoren",
+          "level": "B1",
+          "regimen": "+ Komparativ",
+          "plural": "",
+          "exampleSentenceDe": "Je mehr ich übe, umso besser spreche ich.",
+          "exampleSentenceEs": "Cuanto más practico, mejor hablo.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Je mehr ich",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "übe,",
+              "role": "verb_p2",
+              "order": 2
+            },
+            {
+              "text": "umso besser",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "spreche",
+              "role": "verb_p1",
+              "order": 4
+            },
+            {
+              "text": "ich",
+              "role": "subject",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "obgleich",
+          "pron": "op-gláij",
+          "es": "aunque",
+          "type": "Conector Subordinante",
+          "category": "Nebensätze",
+          "level": "B1",
+          "regimen": "Verbo al final",
+          "plural": "",
+          "exampleSentenceDe": "Obgleich es regnet, gehen wir spazieren.",
+          "exampleSentenceEs": "Aunque llueve, vamos a pasear.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Obgleich es",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "regnet,",
+              "role": "verb_p2",
+              "order": 2
+            },
+            {
+              "text": "gehen",
+              "role": "verb_p1",
+              "order": 3
+            },
+            {
+              "text": "wir",
+              "role": "subject",
+              "order": 4
+            },
+            {
+              "text": "spazieren",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "ohne dass",
+          "pron": "ó-ne das",
+          "es": "sin que",
+          "type": "Conector Subordinante",
+          "category": "Nebensätze",
+          "level": "B1",
+          "regimen": "Verbo al final",
+          "plural": "",
+          "exampleSentenceDe": "Er ging, ohne dass er ein Wort sagte.",
+          "exampleSentenceEs": "Él se fue sin que dijera una palabra.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Er",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ging,",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ohne dass er ein Wort",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "sagte",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Kapitel 7: Wohnen",
+      "words": [
+        {
+          "de": "herein | rein",
+          "pron": "je-ráin | rain",
+          "es": "adentro (hacia el hablante)",
+          "type": "Adverbio de dirección",
+          "category": "Adverbien",
+          "level": "A1",
+          "regimen": "herein (formal), rein (coloquial)",
+          "plural": "",
+          "exampleSentenceDe": "Kommen Sie bitte herein!",
+          "exampleSentenceEs": "¡Entre por favor!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Kommen",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "bitte",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "herein",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "der Hof",
+          "pron": "dea jof",
+          "es": "el patio (interior)",
+          "type": "Sustantivo (Masc)",
+          "category": "Gebäude",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Höfe",
+          "en": "sunny cobblestone apartment building inner courtyard with green plants",
+          "exampleSentenceDe": "Die Kinder spielen am Nachmittag immer im Hof.",
+          "exampleSentenceEs": "Los niños juegan por la tarde siempre en el patio.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Kinder",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "spielen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "am Nachmittag immer im Hof",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Müllabfuhr",
+          "pron": "di mǘl-ap-fur",
+          "es": "el servicio de recogida de basuras",
+          "type": "Sustantivo (Fem)",
+          "category": "Wohnen",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Müllabfuhren",
+          "en": "orange municipal garbage truck collecting household waste bins",
+          "exampleSentenceDe": "Die Müllabfuhr kommt jeden Dienstag früh.",
+          "exampleSentenceEs": "La recogida de basuras pasa todos los martes temprano.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Müllabfuhr",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kommt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "jeden Dienstag früh",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Mülltonne",
+          "pron": "di mǘl-to-ne",
+          "es": "el contenedor de basura",
+          "type": "Sustantivo (Fem)",
+          "category": "Haushalt",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Mülltonnen",
+          "en": "yellow wheeled plastic household trash bin with closed lid",
+          "exampleSentenceDe": "Die gelbe Mülltonne ist heute schon ganz voll.",
+          "exampleSentenceEs": "El contenedor amarillo de basura ya está muy lleno hoy.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die gelbe Mülltonne",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute schon ganz voll",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "nebenan",
+          "pron": "né-ben-an",
+          "es": "al lado / en la casa o habitación de al lado",
+          "type": "Adverbio de lugar",
+          "category": "Adverbien",
+          "level": "A2",
+          "regimen": "Responde a Wo?",
+          "plural": "",
+          "exampleSentenceDe": "Der neue Nachbar wohnt gleich hier nebenan.",
+          "exampleSentenceEs": "El nuevo vecino vive justo aquí al lado.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der neue Nachbar",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "wohnt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "gleich hier nebenan",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "offen",
+          "pron": "ó-fen",
+          "es": "abierto / sincero",
+          "type": "Adjetivo / Adverbio",
+          "category": "Adjektive",
+          "level": "A1–B1",
+          "regimen": "Antónimo: geschlossen",
+          "plural": "",
+          "exampleSentenceDe": "Komm herein, die Tür ist noch offen!",
+          "exampleSentenceEs": "¡Entra, la puerta todavía está abierta!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Komm",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "herein,",
+              "role": "verb_p2",
+              "order": 2
+            },
+            {
+              "text": "die Tür",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 4
+            },
+            {
+              "text": "noch offen",
+              "role": "complement",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "das Regal",
+          "pron": "das re-gál",
+          "es": "la estantería / estante",
+          "type": "Sustantivo (Neutro)",
+          "category": "Möbel",
+          "level": "A1–B1",
+          "regimen": "",
+          "plural": "die Regale",
+          "en": "tall wooden bookshelf filled with neatly arranged colorful books",
+          "exampleSentenceDe": "Meine Bücher stehen drüben im großen Regal.",
+          "exampleSentenceEs": "Mis libros están enfrente en la estantería grande.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Meine Bücher",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "stehen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "drüben im großen Regal",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Rollo",
+          "pron": "das ró-lo",
+          "es": "el estor / persiana enrollable",
+          "type": "Sustantivo (Neutro)",
+          "category": "Möbel",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Rollos",
+          "en": "cream fabric roller blind window shade partially pulled down",
+          "exampleSentenceDe": "Mach abends bitte das Rollo im Schlafzimmer zu.",
+          "exampleSentenceEs": "Por la noche cierra por favor el estor del dormitorio.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Mach",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "abends bitte das Rollo im Schlafzimmer",
+              "role": "complement",
+              "order": 2
+            },
+            {
+              "text": "zu",
+              "role": "verb_p2",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Kapitel 8: Essen & Trinken",
+      "words": [
+        {
+          "de": "der Honig",
+          "pron": "dea jó-nij",
+          "es": "la miel",
+          "type": "Sustantivo (Masc)",
+          "category": "Lebensmittel",
+          "level": "A2",
+          "regimen": "Singular",
+          "plural": "",
+          "en": "glass jar of golden honey with a wooden honey dipper",
+          "exampleSentenceDe": "Ich esse Brötchen mit Butter und Honig zum Frühstück.",
+          "exampleSentenceEs": "Como panecillos con mantequilla y miel para el desayuno.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "esse",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Brötchen mit Butter und Honig zum Frühstück",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Kasten",
+          "pron": "dea kás-ten",
+          "es": "la caja (bebidas) / arcón",
+          "type": "Sustantivo (Masc)",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Kästen",
+          "en": "blue plastic beverage crate holding glass mineral water bottles",
+          "exampleSentenceDe": "Bitte bringen Sie einen Kasten Mineralwasser mit.",
+          "exampleSentenceEs": "Por favor, traiga una caja de agua mineral.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bitte",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "bringen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "einen Kasten Mineralwasser",
+              "role": "complement",
+              "order": 4
+            },
+            {
+              "text": "mit",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "der Kaugummi",
+          "pron": "dea káu-gu-mi",
+          "es": "el chicle / goma de mascar",
+          "type": "Sustantivo (Masc)",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Kaugummis",
+          "en": "pink chewing gum strips beside a foil-wrapped gum pack",
+          "exampleSentenceDe": "Der Junge kauft sich einen Kaugummi am Kiosk.",
+          "exampleSentenceEs": "El niño se compra un chicle en el quiosco.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Junge",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kauft",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "sich einen Kaugummi am Kiosk",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Knödel",
+          "pron": "dea knö́-del",
+          "es": "la albóndiga de patata/pan (A, Bayern)",
+          "type": "Sustantivo (Masc)",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Knödel",
+          "en": "two round golden potato dumplings served on a white ceramic plate",
+          "exampleSentenceDe": "In Bayern isst man sonntags oft Fleisch mit Knödeln.",
+          "exampleSentenceEs": "En Baviera se come a menudo los domingos carne con Knödel.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "In Bayern",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "isst",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "man",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "sonntags oft Fleisch mit Knödeln",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "kochen",
+          "pron": "kó-jen",
+          "es": "cocinar / hervir",
+          "type": "Verbo regular",
+          "category": "Kochen",
+          "level": "A1–B1",
+          "regimen": "+ Akk / kocht, kochte, hat gekocht",
+          "plural": "",
+          "en": "stainless steel cooking pot with bubbling water and pasta on a stove",
+          "exampleSentenceDe": "Das Nudelwasser kocht schon im Topf.",
+          "exampleSentenceEs": "El agua de la pasta ya hierve en la olla.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Das Nudelwasser",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "kocht",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "schon im Topf",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Margarine",
+          "pron": "di mar-ga-rí-ne",
+          "es": "la margarina",
+          "type": "Sustantivo (Fem)",
+          "category": "Lebensmittel",
+          "level": "A2",
+          "regimen": "Singular",
+          "plural": "",
+          "en": "open plastic tub of yellow margarine spread with a butter knife",
+          "exampleSentenceDe": "Er isst Margarine statt Butter auf dem Brot.",
+          "exampleSentenceEs": "Él come margarina en lugar de mantequilla en el pan.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Er",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "isst",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Margarine statt Butter auf dem Brot",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Plastik",
+          "pron": "das plás-tik",
+          "es": "el plástico",
+          "type": "Sustantivo (Neutro)",
+          "category": "Material",
+          "level": "A2–B1",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Die neuen Flaschen sind leider aus Plastik.",
+          "exampleSentenceEs": "Las botellas nuevas lamentablemente son de plástico.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die neuen Flaschen",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "sind",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "leider aus Plastik",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Portion",
+          "pron": "di por-tsión",
+          "es": "la ración / porción",
+          "type": "Sustantivo (Fem)",
+          "category": "Lebensmittel",
+          "level": "A2–B1",
+          "regimen": "",
+          "plural": "die Portionen",
+          "exampleSentenceDe": "Ich nehme eine kleine Portion Eis mit Sahne.",
+          "exampleSentenceEs": "Tomo una porción pequeña de helado con nata.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "nehme",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "eine kleine Portion Eis mit Sahne",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Rind",
+          "pron": "das rint",
+          "es": "la ternera / ganado vacuno",
+          "type": "Sustantivo (Neutro)",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Rinder",
+          "en": "spotted brown cattle cow standing calmly on green grass",
+          "exampleSentenceDe": "Wir essen heute Abend Fleisch vom Rind.",
+          "exampleSentenceEs": "Cenamos hoy carne de ternera.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "essen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute Abend Fleisch vom Rind",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "roh",
+          "pron": "ro",
+          "es": "crudo / en bruto",
+          "type": "Adjetivo",
+          "category": "Lebensmittel",
+          "level": "B1",
+          "regimen": "Comp: roher",
+          "plural": "",
+          "exampleSentenceDe": "Dieses Gemüse kann man auch roh essen.",
+          "exampleSentenceEs": "Esta verdura también se puede comer cruda.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Dieses Gemüse",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "kann",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "man",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "auch roh",
+              "role": "complement",
+              "order": 4
+            },
+            {
+              "text": "essen",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Kapitel 9: Kleidung",
+      "words": [
+        {
+          "de": "die Kette",
+          "pron": "di ké-te",
+          "es": "la cadena / collar",
+          "type": "Sustantivo (Fem)",
+          "category": "Accessoires",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Ketten",
+          "en": "delicate shiny gold chain necklace with small clasp",
+          "exampleSentenceDe": "Sie trägt eine dünne Kette aus Gold um den Hals.",
+          "exampleSentenceEs": "Ella lleva una fina cadena de oro al cuello.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "trägt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "eine dünne Kette aus Gold um den Hals",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Mode",
+          "pron": "di mó-de",
+          "es": "la moda",
+          "type": "Sustantivo (Fem)",
+          "category": "Kleidung",
+          "level": "A2–B1",
+          "regimen": "",
+          "plural": "die Moden",
+          "exampleSentenceDe": "Diese Farbe ist diesen Sommer sehr in Mode.",
+          "exampleSentenceEs": "Este color está muy de moda este verano.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Diese Farbe",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "diesen Sommer sehr in Mode",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Portemonnaie / Portmonee",
+          "pron": "das port-mo-né",
+          "es": "el monedero",
+          "type": "Sustantivo (Neutro)",
+          "category": "Accessoires",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Portemonnaies",
+          "en": "compact brown leather folding wallet and coin purse",
+          "exampleSentenceDe": "Mein ganzes Kleingeld ist im Portemonnaie.",
+          "exampleSentenceEs": "Toda mi calderilla está en el monedero.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Mein ganzes Kleingeld",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "im Portemonnaie",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Ring",
+          "pron": "dea ring",
+          "es": "el anillo",
+          "type": "Sustantivo (Masc)",
+          "category": "Accessoires",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Ringe",
+          "en": "polished shiny gold band ring",
+          "exampleSentenceDe": "Zur Verlobung schenkte er ihr einen goldenen Ring.",
+          "exampleSentenceEs": "Por el compromiso él le regaló un anillo de oro.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Zur Verlobung",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "schenkte",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "er",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "ihr einen goldenen Ring",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Kapitel 10: Einkaufen",
+      "words": [
+        {
+          "de": "der Kiosk",
+          "pron": "dea kí-osk",
+          "es": "el quiosco",
+          "type": "Sustantivo (Masc)",
+          "category": "Geschäfte",
+          "level": "A2",
+          "regimen": "",
+          "plural": "die Kioske",
+          "en": "small colorful street corner kiosk booth with newspapers and drinks",
+          "exampleSentenceDe": "Die Zeitung kaufe ich morgens schnell am Kiosk.",
+          "exampleSentenceEs": "Compro el periódico rápido por la mañana en el quiosco.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Zeitung",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "kaufe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "morgens schnell am Kiosk",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "konsumieren",
+          "pron": "kon-zu-mí-ren",
+          "es": "consumir",
+          "type": "Verbo (-ieren)",
+          "category": "Konsum",
+          "level": "B1",
+          "regimen": "+ Akk / konsumiert, hat konsumiert",
+          "plural": "",
+          "exampleSentenceDe": "Wir konsumieren heute viel mehr Energie als früher.",
+          "exampleSentenceEs": "Consumimos hoy mucha más energía que antes.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wir",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "konsumieren",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute viel mehr Energie als früher",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Modell",
+          "pron": "das mo-dél",
+          "es": "el modelo / tipo (vehículo/ropa)",
+          "type": "Sustantivo (Neutro)",
+          "category": "Konsum",
+          "level": "A2–B1",
+          "regimen": "",
+          "plural": "die Modelle",
+          "exampleSentenceDe": "Dieses neue Modell gefällt mir besser als das alte.",
+          "exampleSentenceEs": "Este modelo nuevo me gusta más que el viejo.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Dieses neue Modell",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gefällt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "mir besser als das alte",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "produzieren",
+          "pron": "pro-du-tsí-ren",
+          "es": "producir",
+          "type": "Verbo (-ieren)",
+          "category": "Konsum",
+          "level": "B1",
+          "regimen": "+ Akk / produziert, hat produziert",
+          "plural": "",
+          "exampleSentenceDe": "Die Firma produziert nun auch in Deutschland.",
+          "exampleSentenceEs": "La empresa produce ahora también en Alemania.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Firma",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "produziert",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "nun auch in Deutschland",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Qualität",
+          "pron": "di kva-li-tét",
+          "es": "la calidad",
+          "type": "Sustantivo (Fem)",
+          "category": "Preis",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Qualitäten",
+          "exampleSentenceDe": "Für mich ist nicht nur der Preis wichtig, sondern auch die Qualität.",
+          "exampleSentenceEs": "Para mí no solo es importante el precio, sino también la calidad.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Für mich",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "nicht nur der Preis",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "wichtig, sondern auch die Qualität",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "die Reinigung",
+          "pron": "di rái-ni-gung",
+          "es": "la tintorería / limpieza",
+          "type": "Sustantivo (Fem)",
+          "category": "Geschäfte",
+          "level": "A2–B1",
+          "regimen": "",
+          "plural": "die Reinigungen",
+          "en": "tidy dry cleaning shop storefront with pressed coats on hangers",
+          "exampleSentenceDe": "Ich bringe meine Wintermäntel in die Reinigung.",
+          "exampleSentenceEs": "Llevo mis abrigos de invierno a la tintorería.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bringe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "meine Wintermäntel in die Reinigung",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Kapitel 11: Freizeit",
+      "words": [
+        {
+          "de": "ins Kino",
+          "pron": "ins kí-no",
+          "es": "al cine",
+          "type": "Frase locativa (Akk)",
+          "category": "Freizeit",
+          "level": "A1",
+          "regimen": "Responde a Wohin?",
+          "plural": "",
+          "exampleSentenceDe": "Wollen wir heute Abend zusammen ins Kino gehen?",
+          "exampleSentenceEs": "¿Vamos juntos al cine esta noche?",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Wollen",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "wir",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "heute Abend zusammen ins Kino",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "gehen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "der Klub (Club)",
+          "pron": "dea klup",
+          "es": "el club",
+          "type": "Sustantivo (Masc)",
+          "category": "Freizeit",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Klubs",
+          "en": "cozy modern social club building entrance with warm glowing lights",
+          "exampleSentenceDe": "Am Samstagabend treffen wir uns im neuen Klub.",
+          "exampleSentenceEs": "El sábado por la noche nos encontramos en el club nuevo.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Am Samstagabend",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "treffen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "wir",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "uns im neuen Klub",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "das Orchester",
+          "pron": "das or-kés-ta",
+          "es": "la orquesta",
+          "type": "Sustantivo (Neutro)",
+          "category": "Kultur",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Orchester",
+          "en": "symphony orchestra musicians playing violins, cello, and brass instruments",
+          "exampleSentenceDe": "Auf unserer Hochzeit hat ein kleines Orchester gespielt.",
+          "exampleSentenceEs": "En nuestra boda tocó una pequeña orquesta.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Auf unserer Hochzeit",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "hat",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ein kleines Orchester",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "gespielt",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "reiten",
+          "pron": "rái-ten",
+          "es": "montar a caballo",
+          "type": "Verbo irregular",
+          "category": "Sport",
+          "level": "B1",
+          "regimen": "reitet, ritt, ist geritten",
+          "plural": "",
+          "en": "rider on a brown horse trotting across a green meadow",
+          "exampleSentenceDe": "Meine Tochter möchte unbedingt reiten lernen.",
+          "exampleSentenceEs": "Mi hija quiere aprender a montar a caballo sin falta.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Meine Tochter",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "möchte",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "unbedingt",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "reiten lernen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Kapitel 12: Reisen & Verkehr",
+      "words": [
+        {
+          "de": "her|kommen",
+          "pron": "jér-ko-men",
+          "es": "venir (hacia aquí)",
+          "type": "Verbo separable irr.",
+          "category": "Verkehr",
+          "level": "A2",
+          "regimen": "kommt her, kam her, ist hergekommen",
+          "plural": "",
+          "exampleSentenceDe": "Bitte komm sofort her, wir müssen reden!",
+          "exampleSentenceEs": "¡Por favor, ven inmediatamente aquí, tenemos que hablar!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Bitte",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "komm",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "sofort",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "her,",
+              "role": "verb_p2",
+              "order": 4
+            },
+            {
+              "text": "wir",
+              "role": "subject",
+              "order": 5
+            },
+            {
+              "text": "müssen",
+              "role": "verb_p1",
+              "order": 6
+            },
+            {
+              "text": "reden",
+              "role": "verb_p2",
+              "order": 7
+            }
+          ]
+        },
+        {
+          "de": "die Hitze",
+          "pron": "di jí-tse",
+          "es": "el calor fuerte",
+          "type": "Sustantivo (Fem)",
+          "category": "Wetter",
+          "level": "B1",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Gestern Nachmittag war eine schreckliche Hitze!",
+          "exampleSentenceEs": "¡Ayer por la tarde hizo un calor terrible!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Gestern Nachmittag",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "war",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "eine schreckliche Hitze",
+              "role": "subject",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "das Klima",
+          "pron": "das klí-ma",
+          "es": "el clima",
+          "type": "Sustantivo (Neutro)",
+          "category": "Wetter",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Klimata / Klimate",
+          "exampleSentenceDe": "Alle sagen, dass sich das Klima leider ändert.",
+          "exampleSentenceEs": "Todos dicen que lamentablemente el clima está cambiando.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Alle",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "sagen,",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "dass sich das Klima leider",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "ändert",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "klettern",
+          "pron": "klé-tern",
+          "es": "escalar / trepar",
+          "type": "Verbo regular",
+          "category": "Natur",
+          "level": "B1",
+          "regimen": "klettert, kletterte, ist geklettert",
+          "plural": "",
+          "en": "child climbing up sturdy branches of a leafy green tree",
+          "exampleSentenceDe": "Die Kinder sind ohne Erlaubnis auf den Baum geklettert.",
+          "exampleSentenceEs": "Los niños han trepado al árbol sin permiso.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Kinder",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "sind",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ohne Erlaubnis auf den Baum",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "geklettert",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "die Kreuzung",
+          "pron": "di krói-tsung",
+          "es": "el cruce / intersección",
+          "type": "Sustantivo (Fem)",
+          "category": "Verkehr",
+          "level": "A2–B1",
+          "regimen": "",
+          "plural": "die Kreuzungen",
+          "en": "four-way asphalt street intersection with white pedestrian crosswalk stripes",
+          "exampleSentenceDe": "Fahren Sie an der nächsten Kreuzung nach rechts!",
+          "exampleSentenceEs": "¡Gire a la derecha en el próximo cruce!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Fahren",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "an der nächsten Kreuzung nach rechts",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Norden",
+          "pron": "dea nór-den",
+          "es": "el norte",
+          "type": "Sustantivo (Masc)",
+          "category": "Natur",
+          "level": "A1–B1",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Mein Dorf liegt ganz im Norden von Deutschland.",
+          "exampleSentenceEs": "Mi pueblo está situado muy al norte de Alemania.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Mein Dorf",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "liegt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ganz im Norden von Deutschland",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Osten",
+          "pron": "dea ós-ten",
+          "es": "el este",
+          "type": "Sustantivo (Masc)",
+          "category": "Natur",
+          "level": "A1–B1",
+          "regimen": "Singular",
+          "plural": "",
+          "exampleSentenceDe": "Die Fenster von unserem Zimmer gehen nach Osten.",
+          "exampleSentenceEs": "Las ventanas de nuestra habitación dan al este.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Fenster von unserem Zimmer",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "gehen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "nach Osten",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Kapitel 14: Post & Bank",
+      "words": [
+        {
+          "de": "hinterlassen",
+          "pron": "jín-ta-la-sen",
+          "es": "dejar (un recado)",
+          "type": "Verbo inseparable irr.",
+          "category": "Telefon",
+          "level": "B1",
+          "regimen": "+ Akk / hinterlässt, hinterließ, hat hinterlassen",
+          "plural": "",
+          "exampleSentenceDe": "Möchten Sie eine Nachricht auf dem Anrufbeantworter hinterlassen?",
+          "exampleSentenceEs": "¿Desea dejar un mensaje en el contestador automático?",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Möchten",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "eine Nachricht auf dem Anrufbeantworter",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "hinterlassen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Kapitel 15: Gesundheit",
+      "words": [
+        {
+          "de": "impfen",
+          "pron": "ím-pfen",
+          "es": "vacunar",
+          "type": "Verbo regular",
+          "category": "Krankheit",
+          "level": "B1",
+          "regimen": "+ Akk / impft, impfte, hat geimpft",
+          "plural": "",
+          "en": "doctor hand holding a small medical syringe administering a vaccine on an arm",
+          "exampleSentenceDe": "Sie sollten sich im Herbst gegen Grippe impfen lassen.",
+          "exampleSentenceEs": "Debería vacunarse contra la gripe en otoño.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "sollten",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "sich im Herbst gegen Grippe",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "impfen lassen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "die Klinik",
+          "pron": "di klí-nik",
+          "es": "la clínica",
+          "type": "Sustantivo (Fem)",
+          "category": "Beim Arzt",
+          "level": "A2",
+          "regimen": "",
+          "plural": "die Kliniken",
+          "en": "clean white modern medical clinic building with a red plus emblem",
+          "exampleSentenceDe": "Ich muss heute in die Klinik, um meinen Onkel zu besuchen.",
+          "exampleSentenceEs": "Hoy tengo que ir a la clínica para visitar a mi tío.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ich",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "muss",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "heute in die Klinik, um meinen Onkel",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "zu besuchen",
+              "role": "verb_p2",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "der Körper",
+          "pron": "dea kő́r-pa",
+          "es": "el cuerpo",
+          "type": "Sustantivo (Masc)",
+          "category": "Körperteile",
+          "level": "A2–B1",
+          "regimen": "",
+          "plural": "die Körper",
+          "en": "stylized friendly human mannequin figure showing full body form",
+          "exampleSentenceDe": "Der Arzt sagt, ich muss etwas für meinen Körper tun.",
+          "exampleSentenceEs": "El médico dice que debo hacer algo por mi cuerpo.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Der Arzt",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "sagt,",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "muss",
+              "role": "verb_p1",
+              "order": 4
+            },
+            {
+              "text": "etwas für meinen Körper",
+              "role": "complement",
+              "order": 5
+            },
+            {
+              "text": "tun",
+              "role": "verb_p2",
+              "order": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Kapitel 16: Schule & Beruf",
+      "words": [
+        {
+          "de": "der Inhalt",
+          "pron": "dea ín-jalt",
+          "es": "el contenido",
+          "type": "Sustantivo (Masc)",
+          "category": "Prüfung",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Inhalte",
+          "exampleSentenceDe": "Erklären Sie den Inhalt und die Struktur Ihrer Präsentation.",
+          "exampleSentenceEs": "Explique el contenido y la estructura de su presentación.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Erklären",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "den Inhalt und die Struktur Ihrer Präsentation",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Kursleiter / die Kursleiterin",
+          "pron": "dea kúrs-lai-ta",
+          "es": "el profesor / la profesora (de curso)",
+          "type": "Sustantivo (Masc/Fem)",
+          "category": "Schule",
+          "level": "A1",
+          "regimen": "",
+          "plural": "die Kursleiter / -innen",
+          "en": "friendly course instructor standing beside a classroom whiteboard holding a marker",
+          "exampleSentenceDe": "Die Kursleiterin erklärt uns heute die Grammatikregeln.",
+          "exampleSentenceEs": "La profesora del curso nos explica hoy las reglas gramaticales.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Die Kursleiterin",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "erklärt",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "uns heute die Grammatikregeln",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "der Lohn",
+          "pron": "dea lon",
+          "es": "el sueldo / salario (obrero)",
+          "type": "Sustantivo (Masc)",
+          "category": "Arbeitswelt",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Löhne",
+          "exampleSentenceDe": "Sie bekommen Ihren Lohn immer am Ende des Monats.",
+          "exampleSentenceEs": "Usted recibe su sueldo siempre a final de mes.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "bekommen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Ihren Lohn immer am Ende des Monats",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "markieren",
+          "pron": "mar-kí-ren",
+          "es": "marcar / subrayar",
+          "type": "Verbo (-ieren)",
+          "category": "Prüfung",
+          "level": "A1–B1",
+          "regimen": "+ Akk / markiert, markierte, hat markiert",
+          "plural": "",
+          "exampleSentenceDe": "Markieren Sie im Text alle wichtigen Informationen!",
+          "exampleSentenceEs": "¡Marque en el texto toda la información importante!",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Markieren",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "im Text alle wichtigen Informationen",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "de": "die Messe",
+          "pron": "di mé-se",
+          "es": "la feria (exposición)",
+          "type": "Sustantivo (Fem)",
+          "category": "Arbeitswelt",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Messen",
+          "exampleSentenceDe": "Kommst du nächste Woche mit zur großen Automobilmesse?",
+          "exampleSentenceEs": "¿Vienes la semana que viene a la gran feria del automóvil?",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Kommst",
+              "role": "verb_p1",
+              "order": 1
+            },
+            {
+              "text": "du",
+              "role": "subject",
+              "order": 2
+            },
+            {
+              "text": "nächste Woche",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "mit",
+              "role": "verb_p2",
+              "order": 4
+            },
+            {
+              "text": "zur großen Automobilmesse",
+              "role": "complement",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "ordnen",
+          "pron": "ór-dnen",
+          "es": "ordenar / organizar",
+          "type": "Verbo regular",
+          "category": "Prüfung",
+          "level": "B1",
+          "regimen": "+ Akk / ordnet, ordnete, hat geordnet",
+          "plural": "",
+          "exampleSentenceDe": "Letztes Wochenende habe ich meine Dokumente geordnet.",
+          "exampleSentenceEs": "El fin de semana pasado ordené mis documentos.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Letztes Wochenende",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "habe",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "ich",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "meine Dokumente",
+              "role": "complement",
+              "order": 4
+            },
+            {
+              "text": "geordnet",
+              "role": "verb_p2",
+              "order": 5
+            }
+          ]
+        },
+        {
+          "de": "der Profi",
+          "pron": "dea pró-fi",
+          "es": "el profesional",
+          "type": "Sustantivo (Masc)",
+          "category": "Berufe",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Profis",
+          "en": "skilled technician in clean uniform holding a toolbox and tablet",
+          "exampleSentenceDe": "Er repariert den Computer schnell, er ist doch ein Profi.",
+          "exampleSentenceEs": "Él repara el ordenador rápido, es todo un profesional.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Er",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "repariert",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "den Computer schnell,",
+              "role": "complement",
+              "order": 3
+            },
+            {
+              "text": "er",
+              "role": "subject",
+              "order": 4
+            },
+            {
+              "text": "ist",
+              "role": "verb_p1",
+              "order": 5
+            },
+            {
+              "text": "doch ein Profi",
+              "role": "complement",
+              "order": 6
+            }
+          ]
+        },
+        {
+          "de": "das Programm",
+          "pron": "das pro-grám",
+          "es": "el programa (TV/software)",
+          "type": "Sustantivo (Neutro)",
+          "category": "Prüfung",
+          "level": "A1–B1",
+          "regimen": "",
+          "plural": "die Programme",
+          "exampleSentenceDe": "Mit welchen Programmen arbeitest du am Computer am liebsten?",
+          "exampleSentenceEs": "¿Con qué programas trabajas preferiblemente en el ordenador?",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Mit welchen Programmen",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "arbeitest",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "du",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "am Computer am liebsten",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "de": "der Raum",
+          "pron": "dea raum",
+          "es": "la sala / habitación",
+          "type": "Sustantivo (Masc)",
+          "category": "Schule",
+          "level": "A1",
+          "regimen": "",
+          "plural": "die Räume",
+          "en": "bright modern classroom and office room with wooden door, table, and chairs",
+          "exampleSentenceDe": "Für die Anmeldung gehen Sie bitte in Raum neunzehn.",
+          "exampleSentenceEs": "Para la inscripción vaya por favor a la sala diecinueve.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Für die Anmeldung",
+              "role": "complement",
+              "order": 1
+            },
+            {
+              "text": "gehen",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "Sie",
+              "role": "subject",
+              "order": 3
+            },
+            {
+              "text": "bitte in Raum neunzehn",
+              "role": "complement",
+              "order": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "title": "Kapitel 17: Digitale Welt & IT",
+      "words": [
+        {
+          "de": "der Klick",
+          "pron": "dea klik",
+          "es": "el clic",
+          "type": "Sustantivo (Masc)",
+          "category": "Software",
+          "level": "B1",
+          "regimen": "",
+          "plural": "die Klicks",
+          "exampleSentenceDe": "Ein Doppelklick mit der linken Maustaste markiert das Wort.",
+          "exampleSentenceEs": "Un doble clic con el botón izquierdo del ratón selecciona la palabra.",
+          "exampleSentenceDeBlocks": [
+            {
+              "text": "Ein Doppelklick mit der linken Maustaste",
+              "role": "subject",
+              "order": 1
+            },
+            {
+              "text": "markiert",
+              "role": "verb_p1",
+              "order": 2
+            },
+            {
+              "text": "das Wort",
+              "role": "complement",
+              "order": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
