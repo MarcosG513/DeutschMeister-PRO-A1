@@ -6,7 +6,7 @@ function readAllSync() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : {};
-  } catch (_) {
+  } catch {
     return {};
   }
 }
@@ -15,7 +15,9 @@ function writeAllSync(data) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     localforage.setItem(STORAGE_KEY, data).catch(() => {});
-  } catch (_) {}
+  } catch {
+    // Ignorar errores de cuota o almacenamiento privado
+  }
 }
 
 /**

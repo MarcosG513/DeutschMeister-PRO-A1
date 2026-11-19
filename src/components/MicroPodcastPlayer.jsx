@@ -25,7 +25,7 @@ import {
   setSavedPlaybackSpeed,
   stopCurrentAudio,
 } from '../services/aiAudioService';
-import { unregisterCleanStretchedUrl } from '../utils/cleanTimeStretch';
+import { setPreservesPitch, unregisterCleanStretchedUrl } from '../utils/cleanTimeStretch';
 import {
   isPodcastEpisodeCachedOffline,
   syncPodcastEpisodeOffline,
@@ -280,10 +280,10 @@ export default function MicroPodcastPlayer({ onExit }) {
         audio.setAttribute('playsinline', '');
         audio.setAttribute('webkit-playsinline', '');
         audio.playbackRate = targetRate;
-        audio.preservesPitch = true;
+        setPreservesPitch(audio, true);
         audio.onloadedmetadata = () => {
           audio.playbackRate = targetRate;
-          audio.preservesPitch = true;
+          setPreservesPitch(audio, true);
         };
 
         audioRef.current = audio;

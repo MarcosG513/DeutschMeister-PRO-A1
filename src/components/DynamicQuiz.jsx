@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  Gamepad2, CheckCircle2, XCircle, Flame, Trophy, Sparkles, 
-  ArrowRight, Loader2, X, Volume2, Heart, RefreshCw, BookOpen, 
-  Layers, Headphones, Zap, RotateCcw, AlertTriangle, ShieldCheck
+  Gamepad2, XCircle, Flame, Trophy, Sparkles, 
+  ArrowRight, Loader2, X, Volume2, Heart, RefreshCw, 
+  Headphones, Zap, RotateCcw, AlertTriangle
 } from 'lucide-react';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../config/firebase';
@@ -105,10 +105,7 @@ const DynamicQuiz = ({
 
   useEffect(() => {
     localStorage.setItem('dm_quiz_streak', currentStreak.toString());
-    if (currentStreak > bestStreak) {
-      setBestStreak(currentStreak);
-      localStorage.setItem('dm_quiz_best_streak', currentStreak.toString());
-    }
+    localStorage.setItem('dm_quiz_best_streak', bestStreak.toString());
   }, [currentStreak, bestStreak]);
 
   // Detener audio al desmontar componente
@@ -120,7 +117,7 @@ const DynamicQuiz = ({
 
   // Rotador automático de frases del loader
   useEffect(() => {
-    if (quizState !== 'loading') return;
+    if (quizState !== 'loading') return undefined;
     const messages = [
       "🧠 Iniciando enlace neuronal con el Goethe-Institut...",
       "📚 Escaneando los archivos de gramática A1...",
@@ -133,7 +130,6 @@ const DynamicQuiz = ({
       "✨ Imprimiendo tu examen personalizado..."
     ];
     let idx = 0;
-    setLoadingMessage(messages[0]);
     const interval = setInterval(() => {
       idx = (idx + 1) % messages.length;
       setLoadingMessage(messages[idx]);
@@ -146,26 +142,25 @@ const DynamicQuiz = ({
 
   // Auto-reproducción para preguntas de tipo "hoeren" (Hören a ciegas)
   useEffect(() => {
-    if (quizState === 'playing' && currentQuestion) {
-      setSelectedOption(null);
-      setIsCorrect(null);
-      setEliminatedOptions([]);
-
-      if (currentQuestion.type === 'hoeren' && currentQuestion.audioText) {
-        setIsPlayingAudio(true);
-        playGermanAudio(currentQuestion.audioText, {
-          voice: 'Charon',
-          type: currentQuestion.audioType || 'vocab',
-          onEnd: () => setIsPlayingAudio(false),
-          onError: () => setIsPlayingAudio(false)
-        }).catch(() => setIsPlayingAudio(false));
-      }
+    if (quizState !== 'playing' || currentQuestion?.type !== 'hoeren' || !currentQuestion?.audioText) {
+      return undefined;
     }
-  }, [currentIdx, quizState]);
+    const timer = setTimeout(() => {
+      setIsPlayingAudio(true);
+      playGermanAudio(currentQuestion.audioText, {
+        voice: 'Charon',
+        type: currentQuestion.audioType || 'vocab',
+        onEnd: () => setIsPlayingAudio(false),
+        onError: () => setIsPlayingAudio(false)
+      }).catch(() => setIsPlayingAudio(false));
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [currentIdx, quizState, currentQuestion]);
 
   // --- INICIAR QUIZ ---
   const handleStartQuiz = async (customAiTopic = null) => {
     setError(null);
+    setLoadingMessage("🧠 Iniciando enlace neuronal con el Goethe-Institut...");
     setSelectedOption(null);
     setIsCorrect(null);
     setEliminatedOptions([]);
@@ -299,7 +294,11 @@ const DynamicQuiz = ({
 
     if (correct) {
       setScore(prev => prev + 1);
-      setCurrentStreak(prev => prev + 1);
+      setCurrentStreak(prev => {
+        const next = prev + 1;
+        setBestStreak(best => Math.max(best, next));
+        return next;
+      });
     } else {
       setCurrentStreak(0);
       setFailedQuestions(prev => [...prev, currentQuestion]);
@@ -353,6 +352,9 @@ const DynamicQuiz = ({
   const handleNext = () => {
     stopCurrentAudio();
     setIsPlayingAudio(false);
+    setSelectedOption(null);
+    setIsCorrect(null);
+    setEliminatedOptions([]);
 
     if (currentIdx >= quizQuestions.length - 1) {
       setQuizState('results');
@@ -377,7 +379,7 @@ const DynamicQuiz = ({
   };
 
   return (
-    <div className="flex flex-col min-h-[100dvh] w-full bg-slate-50 overflow-y-auto animate-in fade-in duration-300 p-3 sm:p-6 md:p-8">
+    <div className="flex flex-col min-h-[100dvh] w-full bg-slate-50 overflow-y-auto animate-in fade-in duration-300 px-3 sm:px-6 md:px-8 pt-[max(0.75rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))]">
       <div className="max-w-3xl mx-auto w-full">
 
         {/* CABECERA GENERAL */}

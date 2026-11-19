@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { Capacitor } from "@capacitor/core";
 import {
   Play,
@@ -40,8 +40,7 @@ import {
 import {
   syncAndroidAutoScreen,
   syncAndroidAutoQueue,
-  subscribeToAndroidAutoCommands,
-  cleanTextForCarScreen
+  stopAndroidAutoMetadataPager
 } from "../services/androidAutoBridge";
 
 export default function DrivingMode({
@@ -84,7 +83,7 @@ export default function DrivingMode({
 
   // Visibilidad MUTUAMENTE EXCLUYENTE: 'hud' (Pantalla activa OLED) | 'routes' (Selector Rutas/Clases) | 'blocks' (Lista de Bloques/Olas)
   const [activePanel, setActivePanel] = useState("hud");
-  const [checkpointVersion, setCheckpointVersion] = useState(0);
+  const [mixSeed] = useState(() => (Date.now() % 997) + 1);
 
   // Clases filtradas por el nivel seleccionado en la pestaña
   const levelClasses = useMemo(() => {
@@ -120,10 +119,10 @@ export default function DrivingMode({
     });
   }, [modeCategory, workoutMode, selectedClassIds, selectedRoute]);
 
-  // Checkpoint guardado de la sesión
-  const savedCheckpoint = useMemo(() => {
-    return getDrivingCheckpoint(sessionStorageKey);
-  }, [sessionStorageKey, checkpointVersion]);
+  // Índice inicial congelado por sesión para evitar reiniciar el ciclo al avanzar de bloque (C-1)
+  const sessionStartIndex = useMemo(() => {
+    return getDrivingCheckpoint(sessionStorageKey)?.currentIndex || 0;
+  }, [sessionStorageKey]);
 
   // Etiqueta legible de la ruta o clase activa
   const activeHeaderLabel = useMemo(() => {
@@ -178,7 +177,7 @@ export default function DrivingMode({
       }));
     }
 
-    let rawWords = [];
+    let rawWords;
     if (selectedRoute === "enpal") {
       const cap20 = chapters.find((c) => Number(c.id) === 20);
       rawWords = cap20 ? (cap20.words || []).map((w) => ({ ...w, chapter: cap20.title })) : [];
@@ -189,10 +188,21 @@ export default function DrivingMode({
       const cap22 = chapters.find((c) => Number(c.id) === 22);
       rawWords = cap22 ? (cap22.words || []).map((w) => ({ ...w, chapter: cap22.title })) : [];
     } else if (selectedRoute === "mix") {
+      const hashWord = (str, seedVal) => {
+        let h = seedVal >>> 0;
+        for (let i = 0; i < str.length; i++) {
+          h = Math.imul(h ^ str.charCodeAt(i), 2654435761) >>> 0;
+        }
+        return h;
+      };
       const all = chapters.flatMap((c) =>
-        (c.words || []).map((w) => ({ ...w, chapter: c.title }))
+        (c.words || []).map((w) => ({
+          ...w,
+          chapter: c.title,
+          _mixOrder: hashWord(`${c.id}:${w.de || ""}`, mixSeed)
+        }))
       );
-      rawWords = [...all].sort(() => Math.random() - 0.5).slice(0, 50);
+      rawWords = [...all].sort((a, b) => a._mixOrder - b._mixOrder).slice(0, 50);
     } else {
       const currentCap =
         chapters.find((c) => Number(c.id) === Number(activeChapterId)) || chapters[0];
@@ -202,7 +212,7 @@ export default function DrivingMode({
     }
 
     return rawWords.filter((w) => w && (w.de || w.targetDe) && (w.es || w.promptEs));
-  }, [modeCategory, selectedAcademyClasses, workoutMode, selectedRoute, chapters, activeChapterId, dueSrsCards]);
+  }, [modeCategory, selectedAcademyClasses, workoutMode, selectedRoute, chapters, activeChapterId, dueSrsCards, mixSeed]);
 
   // Manejador de persistencia de índice
   const handleIndexChange = useCallback(
@@ -215,7 +225,6 @@ export default function DrivingMode({
         totalItems: activeQueue.length,
         currentItem: item
       });
-      setCheckpointVersion((v) => v + 1);
     },
     [sessionStorageKey, selectedClassIds, workoutMode, activeQueue.length]
   );
@@ -234,7 +243,7 @@ export default function DrivingMode({
     jumpToIndex
   } = useDrivingModePlayer({
     initialQueue: activeQueue,
-    initialIndex: savedCheckpoint?.currentIndex || 0,
+    initialIndex: sessionStartIndex,
     sessionKey: sessionStorageKey,
     includeSentences,
     includeTips,
@@ -297,7 +306,7 @@ export default function DrivingMode({
 
         if (payload === "root_resume") {
           setActivePanel("hud");
-          const resumeIdx = savedCheckpoint?.currentIndex || 0;
+          const resumeIdx = getDrivingCheckpoint(sessionStorageKey)?.currentIndex || 0;
           jumpToIndex(resumeIdx, true);
           return;
         }
@@ -342,34 +351,37 @@ export default function DrivingMode({
     currentItem,
     activeQueue,
     currentIndex,
-    savedCheckpoint
+    sessionStorageKey
   ]);
 
   // Si se cambió de clase o ruta vía Android Auto, arrancar reproducción al estar lista la cola
   useEffect(() => {
-    if (autoPlayTargetRef.current && activeQueue.length > 0) {
+    if (!autoPlayTargetRef.current || activeQueue.length === 0) return undefined;
+    const timer = setTimeout(() => {
       autoPlayTargetRef.current = false;
       const chk = getDrivingCheckpoint(sessionStorageKey);
       const startIdx = chk?.currentIndex || 0;
       jumpToIndex(startIdx, true);
-    }
+    }, 0);
+    return () => clearTimeout(timer);
   }, [activeQueue, sessionStorageKey, jumpToIndex]);
 
-  // Ejecución de comandos pendientes recibidos al montar desde App.jsx
+  // Ejecución de comandos pendientes recibidos desde el listener único de App.jsx
   useEffect(() => {
-    if (pendingAutoCommand?.action) {
+    if (!pendingAutoCommand?.action) return undefined;
+    const timer = setTimeout(() => {
       executeAutoCommand(pendingAutoCommand.action, pendingAutoCommand.payload);
       onClearAutoCommand?.();
-    }
+    }, 0);
+    return () => clearTimeout(timer);
   }, [pendingAutoCommand, executeAutoCommand, onClearAutoCommand]);
 
-  // Suscripción directa en tiempo real mientras el componente está montado
+  // Detener paginador de metadatos al desmontar
   useEffect(() => {
-    const unsubscribe = subscribeToAndroidAutoCommands((action, payload) => {
-      executeAutoCommand(action, payload);
-    });
-    return () => unsubscribe();
-  }, [executeAutoCommand]);
+    return () => {
+      stopAndroidAutoMetadataPager();
+    };
+  }, []);
 
   // Publicar la cola de la lección actual en Android Auto para navegación a pantalla ancha
   useEffect(() => {
@@ -817,7 +829,6 @@ export default function DrivingMode({
                 <button
                   onClick={() => {
                     clearDrivingCheckpoint(sessionStorageKey, selectedClassIds, workoutMode);
-                    setCheckpointVersion((v) => v + 1);
                     jumpToIndex(0, false);
                   }}
                   className="px-2.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-xs flex items-center gap-1.5 active:scale-95 transition cursor-pointer"

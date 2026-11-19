@@ -65,42 +65,68 @@ export function useDrivingModePlayer({
   const keepAliveResumeTimerRef = useRef(null);
   const wakeLockRef = useRef(null);
   const isPlayingRef = useRef(isPlaying);
-  isPlayingRef.current = isPlaying;
   const queueRef = useRef(queue);
-  queueRef.current = queue;
+  const initialIndexRef = useRef(initialIndex);
 
   const sessionKeyRef = useRef(sessionKey);
   const onIndexChangeRef = useRef(onIndexChange);
-  onIndexChangeRef.current = onIndexChange;
-
   const includeSentencesRef = useRef(includeSentences);
-  includeSentencesRef.current = includeSentences;
   const includeTipsRef = useRef(includeTips);
-  includeTipsRef.current = includeTips;
   const onWordStudiedRef = useRef(onWordStudied);
-  onWordStudiedRef.current = onWordStudied;
 
   useEffect(() => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-      abortControllerRef.current = null;
-    }
-    stopAllDrivingSpeech();
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
 
-    setQueue(initialQueue);
-    queueRef.current = initialQueue;
+  useEffect(() => {
+    queueRef.current = queue;
+  }, [queue]);
 
-    const maxIdx = Math.max(0, initialQueue.length - 1);
-    const targetIdx = Math.min(Math.max(0, initialIndex), maxIdx);
-    setCurrentIndex(targetIdx);
-    setCountdownSec(0);
+  useEffect(() => {
+    initialIndexRef.current = initialIndex;
+  }, [initialIndex]);
 
-    if (sessionKeyRef.current !== sessionKey) {
-      sessionKeyRef.current = sessionKey;
-      setIsPlaying(false);
-      setPlayerState("idle");
-    }
-  }, [initialQueue, sessionKey, initialIndex]);
+  useEffect(() => {
+    onIndexChangeRef.current = onIndexChange;
+    includeSentencesRef.current = includeSentences;
+    includeTipsRef.current = includeTips;
+    onWordStudiedRef.current = onWordStudied;
+  }, [onIndexChange, includeSentences, includeTips, onWordStudied]);
+
+  useEffect(() => {
+    const isNewSession = sessionKeyRef.current !== sessionKey;
+    let cancelled = false;
+
+    const timer = setTimeout(() => {
+      if (cancelled) return;
+      if (isNewSession) {
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort();
+          abortControllerRef.current = null;
+        }
+        stopAllDrivingSpeech();
+        isPlayingRef.current = false;
+        sessionKeyRef.current = sessionKey;
+        const maxIdx = Math.max(0, initialQueue.length - 1);
+        const targetIdx = Math.min(Math.max(0, initialIndexRef.current), maxIdx);
+        setQueue(initialQueue);
+        queueRef.current = initialQueue;
+        setCurrentIndex(targetIdx);
+        setCountdownSec(0);
+        setIsPlaying(false);
+        setPlayerState("idle");
+      } else if (!isPlayingRef.current) {
+        setQueue(initialQueue);
+        queueRef.current = initialQueue;
+        setCurrentIndex((prev) => Math.min(prev, Math.max(0, initialQueue.length - 1)));
+      }
+    }, 0);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [initialQueue, sessionKey]);
 
   useEffect(() => {
     if (queueRef.current && queueRef.current.length > 0) {
@@ -123,12 +149,16 @@ export function useDrivingModePlayer({
         if (silentAudioRef.current && silentAudioRef.current.paused) {
           silentAudioRef.current.play().catch(() => {});
         }
-      } catch (_) {}
+      } catch {
+        // Ignorar si autoplay falla
+      }
       try {
         if (keepAliveCtxRef.current && keepAliveCtxRef.current.state === "suspended") {
           keepAliveCtxRef.current.resume().catch(() => {});
         }
-      } catch (_) {}
+      } catch {
+        // Ignorar si resume falla
+      }
     }, 600);
   }, []);
 
@@ -155,7 +185,9 @@ export function useDrivingModePlayer({
       if (silentAudioRef.current) {
         await silentAudioRef.current.play().catch(() => {});
       }
-    } catch (_) {}
+    } catch {
+      // Ignorar si fallo de reproducción silenciosa
+    }
 
     try {
       const AudioCtx =
@@ -178,13 +210,23 @@ export function useDrivingModePlayer({
           await keepAliveCtxRef.current.resume().catch(() => {});
         }
       }
-    } catch (_) {}
+    } catch {
+      // Ignorar si AudioContext no disponible
+    }
 
     try {
       if (typeof navigator !== "undefined" && "wakeLock" in navigator && !wakeLockRef.current) {
-        wakeLockRef.current = await navigator.wakeLock.request("screen");
+        const lock = await navigator.wakeLock.request("screen");
+        wakeLockRef.current = lock;
+        lock?.addEventListener?.("release", () => {
+          if (wakeLockRef.current === lock) {
+            wakeLockRef.current = null;
+          }
+        });
       }
-    } catch (_) {}
+    } catch {
+      // Ignorar si WakeLock denegado por batería/permiso
+    }
   }, [scheduleKeepAliveResume]);
 
   const releaseKeepAlive = useCallback(async () => {
@@ -200,20 +242,26 @@ export function useDrivingModePlayer({
         try {
           keepAliveOscRef.current.stop();
           keepAliveOscRef.current.disconnect();
-        } catch (_) {}
+        } catch {
+          // Oscilador ya detenido
+        }
         keepAliveOscRef.current = null;
       }
       if (keepAliveCtxRef.current) {
         try {
           await keepAliveCtxRef.current.close();
-        } catch (_) {}
+        } catch {
+          // Contexto ya cerrado
+        }
         keepAliveCtxRef.current = null;
       }
       if (wakeLockRef.current) {
         await wakeLockRef.current.release();
         wakeLockRef.current = null;
       }
-    } catch (_) {}
+    } catch {
+      // Ignorar al liberar keep-alive
+    }
   }, []);
 
   // Reanudación automática de Keep-Alive al cambiar visibilidad o regresar foco tras notificaciones/GPS
@@ -232,6 +280,11 @@ export function useDrivingModePlayer({
           .request("screen")
           .then((lock) => {
             wakeLockRef.current = lock;
+            lock?.addEventListener?.("release", () => {
+              if (wakeLockRef.current === lock) {
+                wakeLockRef.current = null;
+              }
+            });
           })
           .catch(() => {});
       }
@@ -393,7 +446,7 @@ export function useDrivingModePlayer({
         console.warn("[DrivingMode] Error recuperable en ciclo, reanudando en 1200ms:", err);
         try {
           await abortableDelay(1200, signal);
-        } catch (_) {
+        } catch {
           return;
         }
         if (signal.aborted || !isPlayingRef.current) return;
@@ -413,10 +466,14 @@ export function useDrivingModePlayer({
 
   // Disparar el ciclo cuando cambia currentIndex, stepAttemptId o isPlaying pasa a true
   useEffect(() => {
-    if (isPlaying && queue.length > 0) {
-      runStepCycle(currentIndex);
+    if (!isPlaying || queue.length === 0) {
+      return undefined;
     }
+    const timer = setTimeout(() => {
+      runStepCycle(currentIndex);
+    }, 0);
     return () => {
+      clearTimeout(timer);
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
@@ -425,21 +482,25 @@ export function useDrivingModePlayer({
 
   const startOrResume = useCallback(async () => {
     unlockWebKitAudioContext();
+    isPlayingRef.current = true;
     await acquireKeepAlive();
     setIsPlaying(true);
   }, [acquireKeepAlive]);
 
   const pauseSession = useCallback(async () => {
+    isPlayingRef.current = false;
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
     await stopAllDrivingSpeech();
+    await releaseKeepAlive();
     setIsPlaying(false);
     setCountdownSec(0);
     setPlayerState("paused");
-  }, []);
+  }, [releaseKeepAlive]);
 
   const stopSession = useCallback(async () => {
+    isPlayingRef.current = false;
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -451,6 +512,7 @@ export function useDrivingModePlayer({
   }, [releaseKeepAlive]);
 
   const skipToNext = useCallback(async () => {
+    unlockWebKitAudioContext();
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -460,6 +522,7 @@ export function useDrivingModePlayer({
     }
     setCurrentIndex((prev) => (prev + 1) % Math.max(1, queueRef.current.length));
     if (!isPlaying) {
+      isPlayingRef.current = true;
       await acquireKeepAlive();
       setIsPlaying(true);
     }
@@ -467,6 +530,7 @@ export function useDrivingModePlayer({
 
   // Repetir actual y reencolar +4 turnos SRS (más segundo refuerzo espaciado +9)
   const repeatAndRequeueCurrent = useCallback(async () => {
+    unlockWebKitAudioContext();
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -491,16 +555,18 @@ export function useDrivingModePlayer({
     }
 
     if (isPlaying) {
-      runStepCycle(currentIndex);
+      setStepAttemptId((prev) => prev + 1);
     } else {
+      isPlayingRef.current = true;
       await acquireKeepAlive();
       setIsPlaying(true);
     }
-  }, [acquireKeepAlive, currentIndex, currentItem, isPlaying, runStepCycle]);
+  }, [acquireKeepAlive, currentIndex, currentItem, isPlaying]);
 
   // Salto inmediato a un bloque específico (con detención de audios en vuelo)
   const jumpToIndex = useCallback(
     async (targetIndex, autoPlay = false) => {
+      unlockWebKitAudioContext();
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
         abortControllerRef.current = null;
@@ -515,17 +581,18 @@ export function useDrivingModePlayer({
       setCurrentIndex(safeIdx);
 
       if (autoPlay) {
+        isPlayingRef.current = true;
         await acquireKeepAlive();
         setIsPlaying(true);
         // Si ya estaba en isPlaying === true y elegimos el mismo índice, forzamos el reinicio del ciclo
         if (safeIdx === currentIndex && isPlaying) {
-          runStepCycle(safeIdx);
+          setStepAttemptId((prev) => prev + 1);
         }
       } else if (!isPlaying) {
         setPlayerState("idle");
       }
     },
-    [acquireKeepAlive, currentIndex, isPlaying, runStepCycle]
+    [acquireKeepAlive, currentIndex, isPlaying]
   );
 
   // Web Media Session API para PWA (pantalla bloqueada y controles Bluetooth/CarPlay/Android Auto)

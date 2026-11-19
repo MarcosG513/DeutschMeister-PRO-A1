@@ -17,6 +17,8 @@ import {
 } from 'firebase/auth';
 import { httpsCallable } from 'firebase/functions';
 import { auth as defaultAuth, functions as defaultFunctions } from '../config/firebase';
+import { resetLocalUserCaches } from '../utils/helpers';
+import { resetSrsLocalCache } from './srsBridgeService';
 
 export const ACCESS_CACHE_PREFIX = 'dm_access_approved_';
 export const ACCESS_ROLE_PREFIX = 'dm_access_role_';
@@ -436,6 +438,14 @@ export async function resetPasswordUnified(email, { authInstance = defaultAuth }
 
 export async function signOutUnified({ authInstance = defaultAuth } = {}) {
   const targetAuth = authInstance || defaultAuth;
+  try {
+    await Promise.all([
+      resetSrsLocalCache().catch(() => {}),
+      resetLocalUserCaches().catch(() => {}),
+    ]);
+  } catch {
+    // Continuar con el cierre de sesión aunque falle la limpieza local
+  }
   if (Capacitor.isNativePlatform()) {
     await FirebaseAuthentication.signOut().catch(() => {});
   }

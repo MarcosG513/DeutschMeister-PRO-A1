@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import InstallInstructionsModal from './InstallInstructionsModal';
 import { usePWAInstall } from '../hooks/usePWAInstall';
+import { scrollInputIntoView } from '../utils/helpers';
 import {
   signInWithGoogleUnified,
   signInWithEmailUnified,
@@ -193,7 +194,7 @@ const AuthAccessGate = ({
   const userInitial = displayName.charAt(0).toUpperCase();
 
   return (
-    <div className="min-h-[100dvh] w-full bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-100 flex flex-col items-center justify-center px-4 pb-4 sm:px-6 sm:pb-6 pt-[max(0.75rem,env(safe-area-inset-top))] relative overflow-hidden">
+    <div className="min-h-[100dvh] w-full bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-100 flex flex-col items-center justify-center px-4 pb-4 sm:px-6 sm:pb-6 pt-[max(0.75rem,env(safe-area-inset-top))] relative overflow-y-auto">
       {/* Decoración sutil de fondo */}
       <div className="absolute -top-24 -right-24 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
@@ -334,6 +335,7 @@ const AuthAccessGate = ({
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
+                        onFocus={scrollInputIntoView}
                         placeholder="Tu nombre completo"
                         autoComplete="name"
                         disabled={isBusy}
@@ -360,6 +362,7 @@ const AuthAccessGate = ({
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      onFocus={scrollInputIntoView}
                       placeholder="nombre@hotmail.com"
                       autoComplete="email"
                       required
@@ -386,6 +389,7 @@ const AuthAccessGate = ({
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      onFocus={scrollInputIntoView}
                       placeholder="••••••••"
                       minLength={6}
                       autoComplete={authMode === 'register' ? 'new-password' : 'current-password'}

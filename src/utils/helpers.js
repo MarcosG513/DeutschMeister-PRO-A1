@@ -155,7 +155,7 @@ export const getSavedPlaybackSpeed = () => {
     const raw = localStorage.getItem(PLAYBACK_SPEED_KEY);
     if (!raw) return 1.0;
     return normalizePlaybackSpeed(raw);
-  } catch (_) {
+  } catch {
     return 1.0;
   }
 };
@@ -169,17 +169,24 @@ export const setSavedPlaybackSpeed = (speed) => {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(PLAYBACK_SPEED_KEY, String(validSpeed));
     }
-  } catch (_) {}
+  } catch {
+    // Ignorar error de localStorage
+  }
   try {
     if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
       window.dispatchEvent(new CustomEvent('dm-speed-changed', { detail: validSpeed }));
     }
-  } catch (_) {}
+  } catch {
+    // Ignorar entorno sin EventTarget
+  }
   return validSpeed;
 };
 
 export const nativeSpeak = async (text, options = {}) => {
-  if (!text || typeof text !== 'string') return;
+  if (!text || typeof text !== 'string') {
+    options.onEnd?.();
+    return;
+  }
   const savedSpeed = normalizePlaybackSpeed(
     options.rate !== undefined ? options.rate : getSavedPlaybackSpeed()
   );
@@ -192,18 +199,40 @@ export const nativeSpeak = async (text, options = {}) => {
         rate: savedSpeed === 0.75 ? 0.75 : savedSpeed === 0.85 ? 0.85 : 0.95,
         pitch: 1.0,
       });
+      options.onEnd?.();
     } catch (e) {
       console.error("Error en TTS nativo", e);
+      options.onError?.(e);
+      options.onEnd?.();
     }
   } else {
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = langTag;
-      utterance.rate = savedSpeed === 0.75 ? 0.75 : savedSpeed === 0.85 ? 0.85 : 1.0;
-      window.speechSynthesis.speak(utterance);
+      try {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = langTag;
+        utterance.rate = savedSpeed === 0.75 ? 0.75 : savedSpeed === 0.85 ? 0.85 : 1.0;
+        let settled = false;
+        utterance.onend = () => {
+          if (settled) return;
+          settled = true;
+          options.onEnd?.();
+        };
+        utterance.onerror = (e) => {
+          if (settled) return;
+          settled = true;
+          options.onError?.(e);
+          options.onEnd?.();
+        };
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        options.onError?.(e);
+        options.onEnd?.();
+      }
     } else {
       console.error("Web Speech API no está soportada en este navegador.");
+      options.onError?.(new Error('SpeechSynthesis not supported'));
+      options.onEnd?.();
     }
   }
 };
@@ -252,7 +281,7 @@ let cloudSyncQueue = Promise.resolve();
 const safeGetLocalStorage = (key) => {
   try {
     return typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
-  } catch (_) {
+  } catch {
     return null;
   }
 };
@@ -262,7 +291,9 @@ const safeSetLocalStorage = (key, value) => {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(key, value);
     }
-  } catch (_) {}
+  } catch {
+    // Ignorar fallo de escritura en localStorage
+  }
 };
 
 const dispatchMetricEvent = (name, detail) => {
@@ -270,7 +301,9 @@ const dispatchMetricEvent = (name, detail) => {
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent(name, { detail }));
     }
-  } catch (_) {}
+  } catch {
+    // Ignorar entorno sin window
+  }
 };
 
 const diffCalendarDays = (fromDateStr, toDateStr) => {
@@ -425,7 +458,9 @@ const ensureMetricsHydrated = async () => {
               }
             }
           }
-        } catch (_) {}
+        } catch {
+          // Ignorar almacenamiento legacy corrupto
+        }
         safeSetLocalStorage('dm_cards_studied_migrated', 'true');
       }
 
@@ -444,7 +479,9 @@ const ensureMetricsHydrated = async () => {
             }
           }
         }
-      } catch (_) {}
+      } catch {
+        // Ignorar JSON inválido en puntuaciones locales
+      }
       if (savedScores && typeof savedScores === 'object') {
         for (const [k, v] of Object.entries(savedScores)) {
           if (typeof v === 'number') {
@@ -817,7 +854,7 @@ export const getDailyStudyStreak = async () => {
       return 0; // Expirada por inactividad de más de 24h
     }
     return metricsCache.streak;
-  } catch (_) {
+  } catch {
     return parseInt(safeGetLocalStorage('dm_study_streak') || '0', 10);
   }
 };
@@ -859,7 +896,7 @@ export const getStudiedCardsCount = async () => {
   try {
     await ensureMetricsHydrated();
     return metricsCache.studiedCards.size;
-  } catch (_) {
+  } catch {
     return parseInt(safeGetLocalStorage('dm_cards_studied_count') || '0', 10);
   }
 };
@@ -892,7 +929,7 @@ export const getCompletedModulesCount = async () => {
   try {
     await ensureMetricsHydrated();
     return metricsCache.completedModules.size;
-  } catch (_) {
+  } catch {
     return parseInt(safeGetLocalStorage('dm_completed_modules_count') || '0', 10);
   }
 };
@@ -937,11 +974,11 @@ export const getGoetheScores = async () => {
   try {
     await ensureMetricsHydrated();
     return { ...metricsCache.goetheScores };
-  } catch (_) {
+  } catch {
     try {
       const raw = safeGetLocalStorage('dm_goethe_scores');
       return raw ? JSON.parse(raw) : {};
-    } catch (_) {
+    } catch {
       return {};
     }
   }
@@ -1147,4 +1184,88 @@ export const getSkillProgressSummarySync = (studiedCardsCount = 0, totalUniqueCa
     lsMods
   );
 };
+
+/**
+ * Limpia cachés locales de métricas y progreso de usuario al cerrar sesión o cambiar de cuenta (A-2).
+ */
+export const resetLocalUserCaches = async () => {
+  if (localPersistTimer) {
+    clearTimeout(localPersistTimer);
+    localPersistTimer = null;
+  }
+  if (cloudSyncTimer) {
+    clearTimeout(cloudSyncTimer);
+    cloudSyncTimer = null;
+  }
+  pendingLocalKeys.clear();
+  hydrationPromise = null;
+
+  metricsCache.hydrated = false;
+  metricsCache.streak = 0;
+  metricsCache.lastStudyDate = null;
+  metricsCache.studyDates = new Set();
+  metricsCache.todayActionsDate = null;
+  metricsCache.todayActionsCount = 0;
+  metricsCache.studiedCards = new Set();
+  metricsCache.completedModules = new Set();
+  metricsCache.goetheScores = {};
+  metricsCache.skillPoints = { ...DEFAULT_SKILL_POINTS };
+
+  const lsKeys = [
+    'dm_study_streak',
+    'dm_last_study_date',
+    'dm_study_dates',
+    'dm_today_actions',
+    'dm_cards_studied_count',
+    'dm_cards_studied_migrated',
+    'dm_completed_modules_count',
+    'dm_goethe_scores',
+    'dm_skill_points',
+    'deutschmeister_unlocked',
+    'dm_last_activity',
+    'dm_user_learning_profile',
+    'dm_quiz_streak',
+    'dm_quiz_best_streak',
+    'dm_driving_progress_v1',
+  ];
+  try {
+    if (typeof localStorage !== 'undefined') {
+      for (const k of lsKeys) {
+        localStorage.removeItem(k);
+      }
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('dm_goethe_') && key.endsWith('_score')) {
+          localStorage.removeItem(key);
+        }
+      }
+    }
+  } catch {
+    // Ignorar error de localStorage
+  }
+
+  const lfKeys = [
+    'dm_cards_studied',
+    'dm_completed_modules',
+    'dm_goethe_scores',
+    'dm_user_streak',
+    'dm_last_study_date',
+    'dm_study_dates',
+    'dm_today_actions',
+    'dm_skill_points',
+    'dm_user_learning_profile',
+    'dm_driving_progress_v1',
+  ];
+  try {
+    await Promise.all(lfKeys.map((k) => localforage.removeItem(k).catch(() => {})));
+  } catch {
+    // Ignorar error de IndexedDB
+  }
+
+  dispatchMetricEvent('cardStudiedUpdated', { count: 0 });
+  dispatchMetricEvent('moduleCompletedUpdated', { count: 0 });
+  dispatchMetricEvent('skillActivityUpdated', { skillPoints: { ...DEFAULT_SKILL_POINTS } });
+  dispatchMetricEvent('studyActivityUpdated', { streak: 0 });
+};
+
 

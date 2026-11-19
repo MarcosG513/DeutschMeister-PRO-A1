@@ -10,6 +10,7 @@ import { API_ENDPOINTS } from '../config/apiEndpoints';
 import { ROLEPLAY_AXES, roleplayScenariosCatalog } from '../data/roleplayScenarios';
 import { recordDailyStudyActivity, recordSkillActivity, scrollInputIntoView } from '../utils/helpers';
 import { captureConversationBundle } from '../services/srsBridgeService';
+import { readSseJsonStream } from '../utils/sseStreamReader';
 
 const DEFAULT_MISSIONS = [
   { id: 'm1', titleEs: 'Saludar y abrir la conversación en alemán' },
@@ -43,9 +44,14 @@ const RoleplaySimulator = ({
   const [isAnalyzingDiagnostic, setIsAnalyzingDiagnostic] = useState(false);
   const [diagnosticData, setDiagnosticData] = useState(null);
   const chatEndRef = useRef(null);
+  const streamAbortRef = useRef(null);
 
   useEffect(() => {
     return () => {
+      if (streamAbortRef.current) {
+        streamAbortRef.current.abort();
+        streamAbortRef.current = null;
+      }
       stopCurrentAudio();
     };
   }, []);
@@ -137,6 +143,17 @@ const RoleplaySimulator = ({
       onReplyDeReady = null,
       onTranscriptResolved = null,
     } = turnOptions;
+    let activeController = null;
+    let activeSignal = signal;
+    if (!activeSignal) {
+      if (streamAbortRef.current) {
+        streamAbortRef.current.abort();
+      }
+      activeController = new AbortController();
+      streamAbortRef.current = activeController;
+      activeSignal = activeController.signal;
+    }
+
     const currentUser = getAuth().currentUser;
     const idToken = currentUser ? await currentUser.getIdToken().catch(() => '') : '';
     const response = await fetch(API_ENDPOINTS.ROLEPLAY, {
@@ -145,7 +162,7 @@ const RoleplaySimulator = ({
         'Content-Type': 'application/json',
         ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
       },
-      ...(signal ? { signal } : {}),
+      signal: activeSignal,
       body: JSON.stringify({
         historialConversacion: conversationHistory,
         escenario: scen.prompt,
@@ -163,8 +180,6 @@ const RoleplaySimulator = ({
     });
     if (!response.ok) throw new Error('Failed to connect to Roleplay');
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder('utf-8');
     let legacyText = '';
     let emittedReplyDeOnce = false;
 
@@ -174,15 +189,10 @@ const RoleplaySimulator = ({
     ]);
     setLoading(false);
 
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      const chunk = decoder.decode(value, { stream: true });
-      const lines = chunk.split('\n');
-      for (const line of lines) {
-        if (!line.startsWith('data: ') || line.includes('[DONE]')) continue;
-        try {
-          const data = JSON.parse(line.substring(6));
+    try {
+      await readSseJsonStream(response, {
+        signal: activeSignal,
+        onEvent: (data) => {
           if (data.type === 'reply_de_ready' && data.replyDe) {
             if (!emittedReplyDeOnce) {
               emittedReplyDeOnce = true;
@@ -259,9 +269,11 @@ const RoleplaySimulator = ({
               return updated;
             });
           }
-        } catch {
-          // Ignorar fragmento SSE parcial
-        }
+        },
+      });
+    } finally {
+      if (activeController && streamAbortRef.current === activeController) {
+        streamAbortRef.current = null;
       }
     }
   };
@@ -280,7 +292,8 @@ const RoleplaySimulator = ({
     ];
     try {
       await streamRoleplayTurn(initialMsgs, scen, []);
-    } catch {
+    } catch (err) {
+      if (err?.name === 'AbortError') return;
       setMessages([
         {
           role: 'model',
@@ -310,6 +323,7 @@ const RoleplaySimulator = ({
     try {
       await streamRoleplayTurn(newMsgs, scenario, missionsStatus);
     } catch (e) {
+      if (e?.name === 'AbortError') return;
       console.error(e);
       setMessages([
         ...newMsgs,
@@ -576,7 +590,7 @@ const RoleplaySimulator = ({
                 vocabItems: vocabulary,
                 grammarErrors: errors,
                 axis: scenario?.axis || 'general',
-                source: 'call_mode',
+                source: 'voice_call',
                 sourceRef: scenario?.id || 'call_mode',
               })
             }
@@ -594,7 +608,7 @@ const RoleplaySimulator = ({
 
   return (
     <>
-      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 flex flex-col min-h-[460px] h-[calc(100dvh-9.5rem)] sm:h-[720px] sm:max-h-[85vh] max-w-3xl mx-auto sm:mt-4 overflow-hidden animate-in slide-in-from-bottom-4">
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 flex flex-col min-h-0 sm:min-h-[460px] h-[calc(100dvh-9.5rem)] sm:h-[720px] sm:max-h-[85vh] max-w-3xl mx-auto sm:mt-4 overflow-hidden animate-in slide-in-from-bottom-4">
         {/* Cabecera + tracker de 3 misiones */}
         <div className="bg-purple-700 text-white px-4 py-3 shadow-md z-10 flex-shrink-0 space-y-2.5">
           <div className="flex justify-between items-center gap-2">

@@ -91,7 +91,8 @@ export function isQuotaOrBillingError(error) {
     msg.includes("429") ||
     msg.includes("503") ||
     msg.includes("quota") ||
-    msg.includes("limit") ||
+    msg.includes("rate limit") ||
+    msg.includes("rate_limit") ||
     msg.includes("resource_exhausted") ||
     msg.includes("overloaded") ||
     msg.includes("unavailable")
@@ -216,9 +217,9 @@ export function buildKeyPool(keysConfig = {}) {
 }
 
 /**
- * Limpia el Circuit Breaker vencido y ordena las llaves disponibles según modo.
+ * Limpia entradas expiradas del Circuit Breaker y filtra las llaves no agotadas de cualquier pool.
  */
-function getAvailableSortedKeys(keys, mode = "paid_first") {
+export function filterAvailablePoolKeys(pool = []) {
   const now = Date.now();
   for (const [keyId, resetTime] of exhaustedKeys.entries()) {
     if (now >= resetTime) {
@@ -226,7 +227,21 @@ function getAvailableSortedKeys(keys, mode = "paid_first") {
       exhaustedKeys.delete(keyId);
     }
   }
+  return (Array.isArray(pool) ? pool : []).filter((k) => k?.key && !exhaustedKeys.has(k.id));
+}
 
+export function recordPoolKeyFailure(keyId, error, longCooldownMs = LONG_COOLDOWN_MS) {
+  if (!keyId) return 0;
+  const cooldown = resolveCooldownMs(error, longCooldownMs);
+  exhaustedKeys.set(keyId, Date.now() + cooldown);
+  console.warn(`🔴 [Backend GeminiPool] Llave ${keyId} bloqueada ${Math.round(cooldown / 1000)}s.`);
+  return cooldown;
+}
+
+/**
+ * Limpia el Circuit Breaker vencido y ordena las llaves disponibles según modo.
+ */
+function getAvailableSortedKeys(keys, mode = "paid_first") {
   const pool = buildKeyPool(keys);
   const sortedPool = [...pool];
   if (mode === "free_first") {
@@ -235,7 +250,7 @@ function getAvailableSortedKeys(keys, mode = "paid_first") {
     sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? -1 : 1));
   }
 
-  const availableKeys = sortedPool.filter(k => k.key && !exhaustedKeys.has(k.id));
+  const availableKeys = filterAvailablePoolKeys(sortedPool);
   if (availableKeys.length === 0) {
     const error = new Error("⚠️ Todas las API Keys (Facturación y Gratuitas) han alcanzado su límite de cuota.");
     error.status = 429;

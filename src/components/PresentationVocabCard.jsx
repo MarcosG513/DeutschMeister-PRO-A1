@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { RefreshCw, ImagePlus, Loader2, Volume2, Bot, Mic, Sparkles, Check, Film } from 'lucide-react';
+import { Loader2, Volume2, Bot, Mic, Sparkles, Check, Film } from 'lucide-react';
 import { getSafeId, recordDailyStudyActivity, recordCardStudied, splitGermanTitle, splitParentheticalText } from '../utils/helpers';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
@@ -145,22 +145,12 @@ const SVGClock = ({ deWord }) => {
   );
 };
 
-const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generateCardImage, isImageLoading, openAiTutor: passedOpenAiTutor, setFullscreenImage, unlockedCards, isRevealed, speakText: passedSpeakText, lazyLoadImage }) => {
-  const speakText = passedSpeakText || ((word, e) => {
-    if (e) e.stopPropagation();
-    const textToSpeak = typeof word === 'string' ? word : (word?.de || word?.plural || '');
-    if (!textToSpeak) return;
-    setIsPlayingAudio(true);
-    playGermanAudio(textToSpeak, {
-      type: "vocab",
-      voice: "Charon",
-      onEnd: () => setIsPlayingAudio(false),
-      onError: () => setIsPlayingAudio(false)
-    });
-  });
+const PresentationVocabCard = ({ wordObj, cardImages, generateCardImage, isImageLoading, openAiTutor: passedOpenAiTutor, setFullscreenImage, isRevealed, lazyLoadImage }) => {
   const openAiTutor = passedOpenAiTutor || (() => {});
 
-  const [flipped, setFlipped] = useState(false);
+  const [flipped, setFlipped] = useState(Boolean(isRevealed));
+  const [prevRevealed, setPrevRevealed] = useState(isRevealed);
+  const [prevWordDe, setPrevWordDe] = useState(wordObj?.de);
   const { isListening, startListening, stopListening } = useSpeechRecognition();
   const [pronunciationStatus, setPronunciationStatus] = useState(null); // 'listening', 'success', 'error'
   const [recognizedText, setRecognizedText] = useState("");
@@ -171,20 +161,30 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   const [regenType, setRegenType] = useState(null); // 'image' | 'video'
   const feedbackTimeoutRef = useRef(null);
   const videoRef = useRef(null);
+  const cardRootRef = useRef(null);
+  const isPlayingThisCardRef = useRef(false);
 
-  useEffect(() => {
+  if (prevRevealed !== isRevealed) {
+    setPrevRevealed(isRevealed);
+    setFlipped(Boolean(isRevealed));
+  }
+  if (prevWordDe !== wordObj?.de) {
+    setPrevWordDe(wordObj?.de);
     setLocalMediaUrl(null);
     setLocalMediaType(null);
     setIsRegenerating(false);
     setRegenType(null);
-  }, [wordObj?.de]);
+  }
 
   useEffect(() => {
     return () => {
       if (feedbackTimeoutRef.current) {
         clearTimeout(feedbackTimeoutRef.current);
       }
-      stopCurrentAudio();
+      if (isPlayingThisCardRef.current) {
+        isPlayingThisCardRef.current = false;
+        stopCurrentAudio();
+      }
     };
   }, []);
 
@@ -196,12 +196,19 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
       recordCardStudied(sId);
     }
     const cleanWordDe = wordObj?.audioDe || splitGermanTitle(wordObj?.de).main || wordObj?.de;
+    isPlayingThisCardRef.current = true;
     setIsPlayingAudio(true);
     playGermanAudio(cleanWordDe, {
       type: "vocab",
       voice: "Charon",
-      onEnd: () => setIsPlayingAudio(false),
-      onError: () => setIsPlayingAudio(false)
+      onEnd: () => {
+        isPlayingThisCardRef.current = false;
+        setIsPlayingAudio(false);
+      },
+      onError: () => {
+        isPlayingThisCardRef.current = false;
+        setIsPlayingAudio(false);
+      }
     });
   };
 
@@ -229,13 +236,10 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   };
 
   const { main: deMainTitle, code: deTitleCode } = splitGermanTitle(wordObj.de);
-  const isLongText = (deMainTitle || wordObj.de).length > 20;
   const safeId = getSafeId(wordObj.de).substring(0, 150);
   const isUnlocked = true;
   const imgData = cardImages ? cardImages[safeId] : null;
-  const existsGlobally = cardImages && !!cardImages[safeId];
   const isGenLoading = isImageLoading === safeId;
-  const isRegenerated = true;
 
   const rawImage = localMediaUrl || (typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('data:') || imgData.startsWith('blob:') || imgData.startsWith('/')) ? imgData : (typeof imgData === 'string' && imgData ? `data:image/png;base64,${imgData}` : null)) || wordObj.imageUrl || wordObj.videoUrl || null;
   const cardImage = rawImage;
@@ -257,37 +261,13 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
     };
   }, [wordObj.videoUrl, activeMediaUrl]);
 
-  const checkIsVerb = (word) => {
-    if (!word) return false;
-    const type = (word.type || "").toLowerCase();
-    const category = (word.category || "").toLowerCase();
-    const regimen = (word.regimen || "").toLowerCase();
-    const de = (word.de || "").toLowerCase();
-
-    return (
-      type.includes("verb") ||
-      type.includes("acción") ||
-      type.includes("accion") ||
-      category.includes("verb") ||
-      category === "bewegung" ||
-      category === "aktivitäten" ||
-      category === "aktionen" ||
-      regimen.includes("separable") ||
-      regimen.includes("reflexiv") ||
-      de.startsWith("sich ") ||
-      de.includes("|")
-    );
-  };
-
-  const isVerb = checkIsVerb(wordObj);
-
   // Detección de Plataforma y Privilegios
   const isNative = Capacitor.isNativePlatform();
   // Exclusividad absoluta para localhost / entorno de desarrollo
   const isDev = Boolean(
     !isNative && (
-      import.meta.env.DEV || 
-      window.location.hostname === "localhost" || 
+      import.meta.env.DEV ||
+      window.location.hostname === "localhost" ||
       window.location.hostname === "127.0.0.1"
     )
   );
@@ -297,18 +277,6 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
 
   // Condición estricta: sólo si el entorno permite generar medios Y el verbo es kinestésico/de movimiento
   const canShowVideoButton = canGenerateMedia && isMotionVideoEligible(wordObj);
-
-  const hasExistingVideo = Boolean(
-    localMediaType === 'video' ||
-    wordObj.videoUrl || 
-    (activeMediaUrl && (activeMediaUrl.endsWith('.mp4') || activeMediaUrl.includes('.mp4') || activeMediaUrl.startsWith('data:video/')))
-  );
-  const hasExistingImage = Boolean(
-    localMediaType === 'image' ||
-    wordObj.imageUrl || 
-    (activeMediaUrl && !hasExistingVideo)
-  );
-  const hasAnyMedia = Boolean(hasExistingVideo || hasExistingImage || activeMediaUrl);
 
   const handleRegenerateMedia = async (targetWord, desiredMediaType, e) => {
     if (e) e.stopPropagation();
@@ -367,31 +335,35 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
   };
 
   useEffect(() => {
-    setFlipped(!!isRevealed);
-  }, [isRevealed]);
-
-  useEffect(() => {
-    if (isUnlocked && cardImages && cardImages[safeId] === undefined && lazyLoadImage) {
-      lazyLoadImage(wordObj);
+    if (!isUnlocked || !cardImages || cardImages[safeId] !== undefined || !lazyLoadImage) {
+      return undefined;
     }
+    const el = cardRootRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      lazyLoadImage(wordObj);
+      return undefined;
+    }
+    let loaded = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!loaded && entries.some((entry) => entry.isIntersecting)) {
+          loaded = true;
+          lazyLoadImage(wordObj);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '250px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [isUnlocked, cardImages, safeId, wordObj, lazyLoadImage]);
 
-  // Si la escucha del hook se detiene y seguimos en 'listening', cancelamos el estado
-  useEffect(() => {
-    if (!isListening && pronunciationStatus === 'listening') {
-      setPronunciationStatus(null);
-    }
-  }, [isListening, pronunciationStatus]);
-
-  useEffect(() => {
-    return () => {
-      if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
-    };
-  }, []);
+  const effectivePronunciationStatus =
+    !isListening && pronunciationStatus === 'listening' ? null : pronunciationStatus;
 
   const handlePronunciation = (e) => {
     e.stopPropagation();
-    if (pronunciationStatus === 'listening') {
+    if (effectivePronunciationStatus === 'listening') {
       stopListening();
       setPronunciationStatus(null);
       return;
@@ -403,12 +375,12 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
 
     startListening((transcript) => {
       // Normalización de cadenas (minúsculas y sin puntuación)
-      let cleanSpoken = transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+      let cleanSpoken = transcript.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").trim();
       const baseGermanTarget = (deMainTitle || wordObj.de || "").split("/")[0].replace(/[|]/g, "").trim();
-      const cleanSingular = baseGermanTarget.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim();
+      const cleanSingular = baseGermanTarget.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").trim();
       const cleanSingularWithoutArticle = cleanSingular.replace(/^(der|die|das|ein|eine)\s+/i, "").trim();
       const cleanPlural = (wordObj.plural && wordObj.plural !== "-") 
-        ? wordObj.plural.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim() 
+        ? wordObj.plural.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").trim() 
         : "";
 
       // Mapa para convertir números devueltos por Google a sus palabras en alemán
@@ -492,6 +464,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
 
   return (
     <div 
+      ref={cardRootRef}
       onClick={() => {
         const nextFlipped = !flipped;
         setFlipped(nextFlipped);
@@ -616,9 +589,9 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                           ? 'text-sm md:text-base'
                           : 'text-base md:text-lg'
                     } ${
-                      pronunciationStatus?.startsWith('success') 
+                      effectivePronunciationStatus?.startsWith('success') 
                         ? 'text-emerald-500' 
-                        : pronunciationStatus === 'error' 
+                        : effectivePronunciationStatus === 'error' 
                           ? 'text-rose-500' 
                           : 'text-slate-800'
                     }`}>
@@ -629,7 +602,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                         </span>
                       )}
                     </h3>
-                    {pronunciationStatus === 'success-singular' && <Check size={16} className="text-emerald-500 animate-bounce shrink-0" />}
+                    {effectivePronunciationStatus === 'success-singular' && <Check size={16} className="text-emerald-500 animate-bounce shrink-0" />}
                   </div>
  
                   <div className="flex justify-center items-center">
@@ -648,7 +621,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                 </div>
  
                 {/* Badge de Error de Pronunciación */}
-                {pronunciationStatus === 'error' && recognizedText && (
+                {effectivePronunciationStatus === 'error' && recognizedText && (
                   <div className="mt-0.5 mb-1.5 bg-rose-50 text-rose-700 text-[9px] md:text-xs px-2 py-0.5 rounded border border-rose-100 shadow-sm animate-fade-in max-w-[90%] break-words font-medium">
                     Entendí: "{recognizedText}"
                   </div>
@@ -663,12 +636,19 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                   <div 
                     onClick={(e) => {
                       e.stopPropagation();
+                      isPlayingThisCardRef.current = true;
                       setIsPlayingAudio(true);
                       playGermanAudio(wordObj.plural, {
                         type: "vocab",
                         voice: "Charon",
-                        onEnd: () => setIsPlayingAudio(false),
-                        onError: () => setIsPlayingAudio(false)
+                        onEnd: () => {
+                          isPlayingThisCardRef.current = false;
+                          setIsPlayingAudio(false);
+                        },
+                        onError: () => {
+                          isPlayingThisCardRef.current = false;
+                          setIsPlayingAudio(false);
+                        }
                       });
                     }}
                     className="mt-1 flex flex-col items-center bg-slate-50/80 hover:bg-slate-100/90 active:scale-95 cursor-pointer px-4 py-2 rounded-xl border border-slate-200 w-[95%] max-w-[240px] md:max-w-[280px] shadow-sm shrink-0 transition"
@@ -678,11 +658,11 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                   >
                     <div className="flex items-center justify-center gap-1 min-w-0 w-full">
                       <span className={`text-sm md:text-base font-semibold leading-tight text-center break-words transition-colors truncate ${
-                        pronunciationStatus === 'success-plural' ? 'text-emerald-600 font-bold' : 'text-slate-700'
+                        effectivePronunciationStatus === 'success-plural' ? 'text-emerald-600 font-bold' : 'text-slate-700'
                       }`}>
                         Pl: {wordObj.plural}
                       </span>
-                      {pronunciationStatus === 'success-plural' && <Check size={14} className="text-emerald-600 animate-bounce shrink-0" />}
+                      {effectivePronunciationStatus === 'success-plural' && <Check size={14} className="text-emerald-600 animate-bounce shrink-0" />}
                     </div>
                     {wordObj.pluralPron && (
                       <span className="text-xs md:text-sm text-slate-400 font-medium leading-tight mt-1 text-center break-words w-full">
@@ -703,7 +683,7 @@ const PresentationVocabCard = ({ wordObj, cardImages, regeneratedImages, generat
                 <button 
                   onClick={handlePronunciation} 
                   className={`p-1.5 rounded-full transition-colors ${
-                    pronunciationStatus === 'listening' 
+                    effectivePronunciationStatus === 'listening' 
                       ? 'bg-red-50 text-red-500 animate-pulse border border-red-200' 
                       : 'text-slate-400 hover:text-green-500 hover:bg-slate-100'
                   }`} 

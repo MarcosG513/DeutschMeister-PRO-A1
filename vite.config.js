@@ -15,7 +15,7 @@ function emitPrecacheManifestPlugin() {
         .sort()
 
       const manifest = {
-        version: 'dm-pwa-v3.0',
+        version: 'dm-pwa-v3.1',
         generatedAt: new Date().toISOString(),
         urls: Array.from(
           new Set([

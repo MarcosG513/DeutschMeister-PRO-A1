@@ -132,7 +132,7 @@ export function speakWithCharon(text, { type = "vocab", lang = "de", signal } = 
       ).catch(() => {
         finishSuccess();
       });
-    } catch (_) {
+    } catch {
       finishSuccess();
     }
   });

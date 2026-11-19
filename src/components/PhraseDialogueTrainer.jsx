@@ -223,7 +223,7 @@ export default function PhraseDialogueTrainer({ onExit, initialTab = 'phrase' })
         explanationEs: activeDrill.grammarRuleEs,
         translationEs: activeDrill.promptEs,
         axis: activeDrill.axis,
-        source: 'phrase_trainer',
+        source: 'dialogue',
         sourceRef: activeDrill.id,
       });
     } else {
@@ -232,7 +232,7 @@ export default function PhraseDialogueTrainer({ onExit, initialTab = 'phrase' })
         audioDe: activeDrill.targetDe,
         translationEs: activeDrill.promptEs,
         axis: activeDrill.axis,
-        source: 'phrase_trainer',
+        source: 'dialogue',
         sourceRef: activeDrill.id,
       });
     }
@@ -340,7 +340,7 @@ export default function PhraseDialogueTrainer({ onExit, initialTab = 'phrase' })
       explanationEs: activeTurn.hintEs,
       translationEs: activeTurn.sampleReplyEs,
       axis: activeDialogue.axis,
-      source: 'dialogue_trainer',
+      source: 'dialogue',
       sourceRef: `${activeDialogue.id}_${activeTurn.id}`,
     });
     setSavedDialogueSrsMap((prev) => ({ ...prev, [activeTurn.id]: true }));
@@ -352,7 +352,7 @@ export default function PhraseDialogueTrainer({ onExit, initialTab = 'phrase' })
       vocabItems: activeDialogue.targetVocabulary || [],
       grammarErrors: [],
       axis: activeDialogue.axis,
-      source: 'dialogue_trainer',
+      source: 'dialogue',
       sourceRef: activeDialogue.id,
     });
     setSavedDialogueSrsMap((prev) => ({ ...prev, [activeDialogue.id]: true }));

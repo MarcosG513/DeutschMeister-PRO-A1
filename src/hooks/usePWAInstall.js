@@ -31,10 +31,6 @@ export function usePWAInstall({
     showCardOverride !== undefined ? showCardOverride : !isNativeApp && !isStandalonePWA;
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.deferredPrompt) {
-      setCanInstallPWA(true);
-    }
-
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       window.deferredPrompt = e;

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   BookmarkPlus,
   Camera,
@@ -20,6 +20,7 @@ import {
   createPrewarmedCallAudioElement,
   playGermanAudio,
   playTextOnPrewarmedAudio,
+  stopPrewarmedCallAudio,
 } from '../../services/aiAudioService';
 import {
   captureConversationBundle,
@@ -57,6 +58,13 @@ export default function PhotoPracticePanel() {
     startListening,
     stopListening,
   } = useSpeechRecognition('de-DE');
+
+  useEffect(() => {
+    return () => {
+      stopPrewarmedCallAudio(previewAudioRef.current);
+      previewAudioRef.current = null;
+    };
+  }, []);
 
   const handleImagePicked = async (event) => {
     const file = event.target.files?.[0];
@@ -146,7 +154,7 @@ export default function PhotoPracticePanel() {
       audioDe: item.exampleDe || termFull,
       translationEs: item.es,
       axis: 'general',
-      source: 'photo_mode',
+      source: 'photo_ocr',
       sourceRef: 'photo_scene',
     });
     setSavedTermsMap((prev) => ({ ...prev, [item.de]: true }));
@@ -170,7 +178,7 @@ export default function PhotoPracticePanel() {
         category: e.category || 'vocab',
       })),
       axis: 'general',
-      source: 'photo_mode',
+      source: 'photo_ocr',
       sourceRef: 'photo_analysis',
     });
     const nextMap = {};

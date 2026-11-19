@@ -89,6 +89,8 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
     private boolean mHasAudioFocus = false;
     private volatile boolean mWasPlayingBeforeFocusLoss = false;
     private boolean mIsForeground = false;
+    private String mCachedTeleprompterKey = "";
+    private Bitmap mCachedTeleprompterBitmap = null;
 
     private final AudioManager.OnAudioFocusChangeListener mFocusChangeListener = focusChange -> {
         try {
@@ -404,7 +406,7 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
         }
     }
 
-    // ── TELEPROMPTER GRÁFICO (BITMAP 480x480 px EN RGB_565 = ~450 KB SEGURO PARA BINDER) ──
+    // ── TELEPROMPTER GRÁFICO (BITMAP 256x256 px EN RGB_565 = ~131 KB ÓPTIMO PARA BINDER) ──
 
     public static Bitmap createTeleprompterBitmap(
         String phase,
@@ -415,19 +417,18 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
         int countdownSec
     ) {
         try {
-            final int SIZE = 480;
-            final int MARGIN = 18;
-            final int USABLE_WIDTH = SIZE - (MARGIN * 2); // 444px útiles
+            final int SIZE = 256;
+            final int MARGIN = 10;
 
-            // RGB_565: 2 bytes por píxel (480 x 480 x 2 = ~450 KB, completamente seguro para Binder IPC)
+            // RGB_565: 2 bytes por píxel (256 x 256 x 2 = ~131 KB, mínimo tráfico Binder IPC)
             Bitmap bitmap = Bitmap.createBitmap(SIZE, SIZE, Bitmap.Config.RGB_565);
             Canvas canvas = new Canvas(bitmap);
 
             // 1. Fondo negro OLED puro (#000000)
             canvas.drawColor(Color.BLACK);
 
-            // 2. Franja Superior Compacta de Fase y Bloque (Alto: 56px)
-            final int HEADER_HEIGHT = 56;
+            // 2. Franja Superior Compacta de Fase y Bloque (Alto: 32px)
+            final int HEADER_HEIGHT = 32;
             int headerBgColor;
             int headerTextColor;
             String phaseBadge;
@@ -462,13 +463,13 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
             // Línea divisoria bajo la cabecera
             Paint headerLinePaint = new Paint();
             headerLinePaint.setColor(0xFF27272A);
-            headerLinePaint.setStrokeWidth(2f);
+            headerLinePaint.setStrokeWidth(1.5f);
             canvas.drawLine(0, HEADER_HEIGHT, SIZE, HEADER_HEIGHT, headerLinePaint);
 
-            // Texto centrado del encabezado (22px Bold)
+            // Texto centrado del encabezado (13px Bold)
             TextPaint headerTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             headerTextPaint.setColor(headerTextColor);
-            headerTextPaint.setTextSize(22f);
+            headerTextPaint.setTextSize(13f);
             headerTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
             headerTextPaint.setTextAlign(Paint.Align.CENTER);
 
@@ -476,98 +477,98 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
             if (blockProgress != null && !blockProgress.trim().isEmpty()) {
                 fullHeader += "  •  " + blockProgress.trim();
             }
-            canvas.drawText(fullHeader, SIZE / 2f, 36, headerTextPaint);
+            canvas.drawText(fullHeader, SIZE / 2f, 21f, headerTextPaint);
 
             // 3. Limpieza de textos
             String cleanEs = cleanTextForCar(spanishText);
             String cleanDe = cleanTextForCar(germanText);
 
-            // 4. Distribución del Cuerpo Central (Y = 62 a Y = 470)
+            // 4. Distribución del Cuerpo Central (Y = 36 a Y = 248)
             if (phase != null && (phase.contains("revealing") || phase.contains("solution"))) {
-                // ── FASE REVEALING: ESPAÑOL ARRIBA (Y = 66..200) Y ALEMÁN GIGANTE ABAJO (Y = 212..468) ──
+                // ── FASE REVEALING: ESPAÑOL ARRIBA (Y = 38..108) Y ALEMÁN GIGANTE ABAJO (Y = 116..246) ──
                 drawAutoFitText(
                     canvas,
                     cleanEs,
                     MARGIN,
-                    66,
+                    38,
                     SIZE - MARGIN,
-                    200,
+                    108,
                     0xFFE4E4E7, // Gris claro (#E4E4E7)
-                    34,
-                    22,
+                    20,
+                    12,
                     true
                 );
 
                 // Línea divisoria sutil
                 Paint linePaint = new Paint();
                 linePaint.setColor(0xFF27272A);
-                linePaint.setStrokeWidth(2f);
-                canvas.drawLine(MARGIN + 10, 205, SIZE - MARGIN - 10, 205, linePaint);
+                linePaint.setStrokeWidth(1.5f);
+                canvas.drawLine(MARGIN + 6, 111, SIZE - MARGIN - 6, 111, linePaint);
 
                 // Respuesta en Alemán en Verde Esmeralda Brillante (#34D399) Gigante
                 drawAutoFitText(
                     canvas,
                     cleanDe,
                     MARGIN,
-                    212,
+                    116,
                     SIZE - MARGIN,
-                    468,
+                    246,
                     0xFF34D399,
-                    54,
-                    28,
+                    30,
+                    14,
                     true
                 );
 
             } else if (phase != null && (phase.contains("waiting") || phase.contains("countdown"))) {
-                // ── FASE WAITING: RETO EN BLANCO GIGANTE (Y = 66..325) Y PÍLDORA ÁMBAR (Y = 335..465) ──
+                // ── FASE WAITING: RETO EN BLANCO GIGANTE (Y = 38..174) Y PÍLDORA ÁMBAR (Y = 182..244) ──
                 drawAutoFitText(
                     canvas,
                     cleanEs,
                     MARGIN,
-                    66,
+                    38,
                     SIZE - MARGIN,
-                    325,
+                    174,
                     0xFFFFFFFF, // Blanco puro
-                    50,
-                    26,
+                    28,
+                    14,
                     true
                 );
 
                 // Píldora ámbar con contador gigante
-                RectF pillRect = new RectF(MARGIN + 12, 340, SIZE - MARGIN - 12, 458);
+                RectF pillRect = new RectF(MARGIN + 6, 182, SIZE - MARGIN - 6, 244);
 
                 Paint pillBg = new Paint(Paint.ANTI_ALIAS_FLAG);
                 pillBg.setColor(0xFF451A03);
                 pillBg.setStyle(Paint.Style.FILL);
-                canvas.drawRoundRect(pillRect, 20f, 20f, pillBg);
+                canvas.drawRoundRect(pillRect, 12f, 12f, pillBg);
 
                 Paint pillStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
                 pillStroke.setColor(0xFFF59E0B);
                 pillStroke.setStyle(Paint.Style.STROKE);
-                pillStroke.setStrokeWidth(3f);
-                canvas.drawRoundRect(pillRect, 20f, 20f, pillStroke);
+                pillStroke.setStrokeWidth(2f);
+                canvas.drawRoundRect(pillRect, 12f, 12f, pillStroke);
 
                 TextPaint countPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
                 countPaint.setColor(0xFFFBBF24);
-                countPaint.setTextSize(54f);
+                countPaint.setTextSize(28f);
                 countPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 countPaint.setTextAlign(Paint.Align.CENTER);
 
                 String waitText = (countdownSec > 0) ? "🎙️ " + countdownSec + " s" : "🎙️ ¡Habla ahora!";
-                canvas.drawText(waitText, SIZE / 2f, 412, countPaint);
+                canvas.drawText(waitText, SIZE / 2f, 222f, countPaint);
 
             } else {
-                // ── FASE PROMPTING / EXPLAINING / IDLE: TODO EL LIENZO EN GIGANTE (Y = 66..468) ──
+                // ── FASE PROMPTING / EXPLAINING / IDLE: TODO EL LIENZO EN GIGANTE (Y = 38..246) ──
                 drawAutoFitText(
                     canvas,
                     cleanEs,
                     MARGIN,
-                    66,
+                    38,
                     SIZE - MARGIN,
-                    468,
+                    246,
                     0xFFF8FAFC, // Blanco brillante (#F8FAFC)
-                    52,
-                    24,
+                    28,
+                    13,
                     true
                 );
             }
@@ -640,15 +641,28 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
         if (mSession == null) return;
 
         try {
-            // Generar Teleprompter de 480x480 RGB_565 (~450 KB, seguro para Binder IPC)
-            Bitmap teleprompterBitmap = createTeleprompterBitmap(
-                phase,
-                spanishText,
-                germanText,
-                waveLabel,
-                blockProgress,
-                countdownSec
-            );
+            // Generar o reutilizar Teleprompter cacheado de 256x256 RGB_565 (~131 KB, seguro para Binder IPC)
+            String cacheKey = (phase != null ? phase : "")
+                + "|" + (title != null ? title : "")
+                + "|" + (subtitle != null ? subtitle : "")
+                + "|" + (isPlaying ? "1" : "0");
+            Bitmap teleprompterBitmap;
+            if (cacheKey.equals(mCachedTeleprompterKey) && mCachedTeleprompterBitmap != null && !mCachedTeleprompterBitmap.isRecycled()) {
+                teleprompterBitmap = mCachedTeleprompterBitmap;
+            } else {
+                teleprompterBitmap = createTeleprompterBitmap(
+                    phase,
+                    spanishText,
+                    germanText,
+                    waveLabel,
+                    blockProgress,
+                    countdownSec
+                );
+                if (teleprompterBitmap != null) {
+                    mCachedTeleprompterKey = cacheKey;
+                    mCachedTeleprompterBitmap = teleprompterBitmap;
+                }
+            }
 
             // Actualizar Metadatos (title y subtitle particionados para 2 líneas completas)
             MediaMetadataCompat.Builder metaBuilder = new MediaMetadataCompat.Builder()
@@ -658,7 +672,6 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
 
             if (teleprompterBitmap != null) {
                 metaBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, teleprompterBitmap);
-                metaBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, teleprompterBitmap);
             }
 
             mSession.setMetadata(metaBuilder.build());
@@ -792,16 +805,23 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
                 }
 
                 Notification notification = builder.build();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    startForeground(
-                        NOTIFICATION_ID,
-                        notification,
-                        ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-                    );
+                if (mIsForeground) {
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    if (notificationManager != null) {
+                        notificationManager.notify(NOTIFICATION_ID, notification);
+                    }
                 } else {
-                    startForeground(NOTIFICATION_ID, notification);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        startForeground(
+                            NOTIFICATION_ID,
+                            notification,
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                        );
+                    } else {
+                        startForeground(NOTIFICATION_ID, notification);
+                    }
+                    mIsForeground = true;
                 }
-                mIsForeground = true;
             } else if (mIsForeground) {
                 stopForegroundCompat(false);
             }
@@ -832,16 +852,19 @@ public class DeutschMeisterAutoService extends MediaBrowserServiceCompat {
                 Log.d(TAG, "Despachando comando de Android Auto: " + action + " (Payload: " + payload + ")");
 
                 // 1. Notificar en tiempo real al frontend vía Plugin de Capacitor
+                boolean hadActiveBridge = AndroidAutoPlugin.hasActiveBridge();
                 AndroidAutoPlugin.notifyCommandToJs(action, payload);
 
-                // 2. Si MainActivity no está en primer plano, despertarla para asegurar ejecución de audio
-                Intent intent = new Intent(DeutschMeisterAutoService.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                intent.putExtra("autoCommand", action);
-                if (payload != null) {
-                    intent.putExtra("autoPayload", payload);
+                // 2. Solo despertar MainActivity si el puente JS aún no está activo
+                if (!hadActiveBridge) {
+                    Intent intent = new Intent(DeutschMeisterAutoService.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.putExtra("autoCommand", action);
+                    if (payload != null) {
+                        intent.putExtra("autoPayload", payload);
+                    }
+                    startActivity(intent);
                 }
-                startActivity(intent);
             } catch (Throwable t) {
                 Log.w(TAG, "Error despachando comando a MainActivity: " + t.getMessage());
             }

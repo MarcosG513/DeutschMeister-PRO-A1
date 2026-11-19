@@ -1,5 +1,5 @@
-const CACHE_NAME = 'dm-pwa-v3.0';
-const ASSETS_CACHE = 'dm-assets-v3.0';
+const CACHE_NAME = 'dm-pwa-v3.1';
+const ASSETS_CACHE = 'dm-assets-v3.1';
 const ACTIVE_CACHES = [CACHE_NAME, ASSETS_CACHE];
 
 const PRECACHE_URLS = [
@@ -85,16 +85,19 @@ self.addEventListener('fetch', (event) => {
         .then(async (response) => {
           if (response && response.ok && response.type === 'basic') {
             const cache = await caches.open(CACHE_NAME);
-            await cache.put('/index.html', response.clone()).catch(() => {});
+            await Promise.all([
+              cache.put('/index.html', response.clone()).catch(() => {}),
+              cache.put('/', response.clone()).catch(() => {}),
+            ]);
           }
           return response;
         })
         .catch(async () => {
           const cache = await caches.open(CACHE_NAME);
           return (
-            (await cache.match(event.request)) ||
             (await cache.match('/index.html')) ||
             (await cache.match('/')) ||
+            (await cache.match(event.request)) ||
             Response.error()
           );
         })

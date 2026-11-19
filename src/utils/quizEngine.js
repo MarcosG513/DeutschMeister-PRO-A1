@@ -157,7 +157,7 @@ export function generateLocalQuizQuestions(wordsPool = [], count = 10, globalFal
       const rootWord = artInfo ? artInfo.root : deWord;
       
       const sent = word.exampleSentenceDe;
-      const cleanRoot = rootWord.replace(/[\(\)]/g, '').trim();
+      const cleanRoot = rootWord.replace(/[()]/g, '').trim();
       const regex = new RegExp(`\\b${cleanRoot}\\b`, 'i');
 
       if (cleanRoot.length >= 2 && regex.test(sent)) {

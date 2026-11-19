@@ -24,12 +24,21 @@ android {
     }
     signingConfigs {
         release {
-            def releaseStoreFile = file(keystoreProperties.getProperty("storeFile", "deutschmeister-release.jks"))
-            if (releaseStoreFile.exists()) {
-                storeFile releaseStoreFile
-                storePassword keystoreProperties.getProperty("storePassword", "DeutschMeister2026!")
-                keyAlias keystoreProperties.getProperty("keyAlias", "deutschmeister-key")
-                keyPassword keystoreProperties.getProperty("keyPassword", "DeutschMeister2026!")
+            def releaseStoreFilePath = keystoreProperties.getProperty("storeFile") ?: System.getenv("DM_KEYSTORE_PATH")
+            def releaseStorePassword = keystoreProperties.getProperty("storePassword") ?: System.getenv("DM_KEYSTORE_PASSWORD")
+            def releaseKeyAlias = keystoreProperties.getProperty("keyAlias") ?: System.getenv("DM_KEY_ALIAS")
+            def releaseKeyPassword = keystoreProperties.getProperty("keyPassword") ?: System.getenv("DM_KEY_PASSWORD")
+            if (releaseStoreFilePath) {
+                def releaseStoreFile = file(releaseStoreFilePath)
+                if (releaseStoreFile.exists()) {
+                    if (!releaseStorePassword || !releaseKeyAlias || !releaseKeyPassword) {
+                        throw new GradleException("Missing release signing credentials in keystore.properties or DM_KEYSTORE_* env vars")
+                    }
+                    storeFile releaseStoreFile
+                    storePassword releaseStorePassword
+                    keyAlias releaseKeyAlias
+                    keyPassword releaseKeyPassword
+                }
             }
         }
     }

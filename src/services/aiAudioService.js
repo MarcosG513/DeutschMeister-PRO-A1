@@ -10,6 +10,7 @@ import {
 import {
   getCleanSpeedAudioResult,
   isCleanStretchedUrl,
+  setPreservesPitch,
   unregisterCleanStretchedUrl,
   unlockWebKitAudioContext
 } from "../utils/cleanTimeStretch";
@@ -130,7 +131,9 @@ export async function computeSha256AudioId(text, voice = "Charon") {
         .join("");
       return `audio_sha256_${hashHex.substring(0, 24)}`;
     }
-  } catch (_) {}
+  } catch {
+    // Fallback JS puro si crypto.subtle falla
+  }
   const utf8Binary = unescape(encodeURIComponent(rawInput));
   const hex = sha256HexPureJs(utf8Binary);
   return `audio_sha256_${hex.substring(0, 24)}`;
@@ -236,7 +239,9 @@ function revokeTrackedObjectUrl(url) {
   if (!url || typeof url !== "string" || !url.startsWith("blob:")) return;
   try {
     URL.revokeObjectURL(url);
-  } catch (_) {}
+  } catch {
+    // Fallback JS puro si crypto.subtle falla
+  }
   unregisterCleanStretchedUrl(url);
 }
 
@@ -257,14 +262,18 @@ export function stopCurrentAudio() {
       currentAudioInstance.currentTime = 0;
       currentAudioInstance.removeAttribute("src");
       currentAudioInstance.load();
-    } catch (_) {}
+    } catch {
+    // Fallback JS puro si crypto.subtle falla
+  }
     currentAudioInstance = null;
   }
   revokeCurrentObjectUrl();
   if (typeof window !== "undefined" && "speechSynthesis" in window) {
     try {
       window.speechSynthesis.cancel();
-    } catch (_) {}
+    } catch {
+    // Fallback JS puro si crypto.subtle falla
+  }
   }
 }
 
@@ -293,10 +302,10 @@ async function playAudioSource(
   audio.setAttribute("playsinline", "");
   audio.setAttribute("webkit-playsinline", "");
   audio.playbackRate = rate;
-  audio.preservesPitch = true;
+  setPreservesPitch(audio, true);
   audio.onloadedmetadata = () => {
     audio.playbackRate = rate;
-    audio.preservesPitch = true;
+    setPreservesPitch(audio, true);
   };
 
   currentAudioInstance = audio;
@@ -351,7 +360,9 @@ async function playAudioSource(
       console.warn("[TTS Autoplay Blocked (NotAllowedError)] Fallback a motor nativo:", err?.message || err);
       try {
         await nativeSpeak(cleanText, { lang, rate });
-      } catch (_) {}
+      } catch {
+    // Fallback JS puro si crypto.subtle falla
+  }
       if (!isStale()) {
         onError?.(err);
         onEnd?.();
@@ -809,7 +820,9 @@ export async function playGermanAudio(text, options = {}) {
       if (error?.name === "NotAllowedError" || lang !== "es") {
         await nativeSpeak(cleanText, { lang, rate: targetSpeed });
       }
-    } catch (_) {}
+    } catch {
+    // Fallback JS puro si crypto.subtle falla
+  }
     if (!isStale()) {
       onError?.(error);
       onEnd?.();
@@ -980,7 +993,7 @@ export async function playTextOnPrewarmedAudio(audioElement, text, options = {})
         }
         audioElement.src = processed.url;
         audioElement.playbackRate = processed.playbackRate;
-        audioElement.preservesPitch = true;
+        setPreservesPitch(audioElement, true);
 
         audioElement.onended = () => {
           stopPrewarmedCallAudio(audioElement);

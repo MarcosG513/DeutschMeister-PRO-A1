@@ -19,12 +19,26 @@ const stretchedObjectUrls = new Set();
 let sharedOfflineCtxSampleRate = 0;
 let sharedUnlockAudioCtx = null;
 
+export function setPreservesPitch(audioEl, enabled = true) {
+  if (!audioEl) return;
+  try {
+    if ("preservesPitch" in audioEl) audioEl.preservesPitch = enabled;
+    if ("mozPreservesPitch" in audioEl) audioEl.mozPreservesPitch = enabled;
+    if ("webkitPreservesPitch" in audioEl) audioEl.webkitPreservesPitch = enabled;
+  } catch {
+    // Ignorar en entornos sin propiedades preservesPitch
+  }
+}
+
 /**
  * Desbloquea el motor Web Audio de WebKit/Safari iOS tras la primera interacción táctil o clic.
  */
 export function unlockWebKitAudioContext() {
   if (typeof window === "undefined") return;
   try {
+    if (sharedUnlockAudioCtx && sharedUnlockAudioCtx.state === "running") {
+      return;
+    }
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     if (!AudioCtx) return;
     if (!sharedUnlockAudioCtx || sharedUnlockAudioCtx.state === "closed") {
@@ -359,7 +373,27 @@ function createAudioContextForRate(AudioCtx, targetSampleRate) {
   }
 }
 
+function decodeAudioWithTimeout(ctx, buffer, timeoutMs = 5000) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error("Audio decode timeout"));
+    }, timeoutMs);
+    Promise.resolve(ctx.decodeAudioData(buffer))
+      .then((decoded) => {
+        clearTimeout(timer);
+        resolve(decoded);
+      })
+      .catch((err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+  });
+}
+
 async function decodeBlobWithAudioContext(arrayBuffer) {
+  const pcmDirect = tryDecodePcmWavDirect(arrayBuffer);
+  if (pcmDirect) return pcmDirect;
+
   const targetSampleRate = detectWavSampleRate(arrayBuffer);
 
   // Preferir OfflineAudioContext (sin tocar hardware de audio / Bluetooth ni agotar contextos WebView)
@@ -372,10 +406,10 @@ async function decodeBlobWithAudioContext(arrayBuffer) {
     try {
       const offlineCtx = new OfflineCtx(1, 1, targetSampleRate);
       sharedOfflineCtxSampleRate = offlineCtx.sampleRate;
-      const decoded = await offlineCtx.decodeAudioData(arrayBuffer.slice(0));
+      const decoded = await decodeAudioWithTimeout(offlineCtx, arrayBuffer.slice(0), 5000);
       return extractDecodedChannels(decoded, sharedOfflineCtxSampleRate);
     } catch {
-      // Continuar al fallback de AudioContext estándar o decodificador PCM directo
+      // Continuar al fallback de AudioContext estándar
     }
   }
 
@@ -385,10 +419,7 @@ async function decodeBlobWithAudioContext(arrayBuffer) {
   if (AudioCtx) {
     const ctx = createAudioContextForRate(AudioCtx, targetSampleRate);
     try {
-      if (ctx.state === "suspended" && typeof ctx.resume === "function") {
-        await ctx.resume().catch(() => {});
-      }
-      const decoded = await ctx.decodeAudioData(arrayBuffer.slice(0));
+      const decoded = await decodeAudioWithTimeout(ctx, arrayBuffer.slice(0), 5000);
       return extractDecodedChannels(decoded, targetSampleRate);
     } finally {
       if (ctx && typeof ctx.close === "function") {
@@ -396,9 +427,6 @@ async function decodeBlobWithAudioContext(arrayBuffer) {
       }
     }
   }
-
-  const pcmFallback = tryDecodePcmWavDirect(arrayBuffer);
-  if (pcmFallback) return pcmFallback;
 
   throw new Error("Web Audio API no disponible para decodificar el audio.");
 }

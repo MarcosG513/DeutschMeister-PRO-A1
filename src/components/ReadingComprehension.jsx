@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import localforage from 'localforage';
 import {
   BookOpen,
@@ -47,6 +47,7 @@ import {
 import {
   getCleanSpeedAudioUrl,
   isCleanStretchedUrl,
+  setPreservesPitch,
   unregisterCleanStretchedUrl
 } from '../utils/cleanTimeStretch';
 import {
@@ -264,6 +265,7 @@ const ReadingComprehension = ({ onExit }) => {
   const rafIdRef = useRef(null);
   const prefetchInFlightRef = useRef(new Map());
   const playbackRunIdRef = useRef(0);
+  const playSentenceStepRef = useRef(null);
   const isLoopingRef = useRef(isLooping);
   const playbackSpeedRef = useRef(playbackSpeed);
   const sentenceRefs = useRef({});
@@ -368,13 +370,17 @@ const ReadingComprehension = ({ onExit }) => {
       try {
         audioRef.current.pause();
         audioRef.current.src = '';
-      } catch (_) {}
+      } catch {
+        // Audio ya detenido
+      }
       audioRef.current = null;
     }
     if (objectUrlRef.current) {
       try {
         URL.revokeObjectURL(objectUrlRef.current);
-      } catch (_) {}
+      } catch {
+        // ObjectURL ya revocada
+      }
       unregisterCleanStretchedUrl(objectUrlRef.current);
       objectUrlRef.current = null;
     }
@@ -618,7 +624,7 @@ const ReadingComprehension = ({ onExit }) => {
           getCleanSpeedAudioUrl(cached, playbackSpeedRef.current, cacheKey)
             .then((warmUrl) => {
               if (warmUrl && warmUrl.startsWith('blob:')) {
-                try { URL.revokeObjectURL(warmUrl); } catch (_) {}
+                try { URL.revokeObjectURL(warmUrl); } catch { /* noop */ }
                 unregisterCleanStretchedUrl(warmUrl);
               }
             })
@@ -626,7 +632,9 @@ const ReadingComprehension = ({ onExit }) => {
         }
         return cached;
       }
-    } catch (_) {}
+    } catch {
+      // Cache lookup fallido
+    }
 
     if (prefetchInFlightRef.current.has(cacheKey)) {
       return prefetchInFlightRef.current.get(cacheKey);
@@ -649,12 +657,12 @@ const ReadingComprehension = ({ onExit }) => {
         if (playbackSpeedRef.current < 0.98) {
           const warmUrl = await getCleanSpeedAudioUrl(blob, playbackSpeedRef.current, cacheKey).catch(() => null);
           if (warmUrl && warmUrl.startsWith('blob:')) {
-            try { URL.revokeObjectURL(warmUrl); } catch (_) {}
+            try { URL.revokeObjectURL(warmUrl); } catch { /* noop */ }
             unregisterCleanStretchedUrl(warmUrl);
           }
         }
         return blob;
-      } catch (_) {
+      } catch {
         return null;
       } finally {
         prefetchInFlightRef.current.delete(cacheKey);
@@ -695,7 +703,7 @@ const ReadingComprehension = ({ onExit }) => {
 
       if (seqMode === 'sentence') {
         if (isLoopingRef.current) {
-          playSentenceStep(sIdx, 'sentence', runId);
+          playSentenceStepRef.current?.(sIdx, 'sentence', runId);
           return;
         }
         setIsPlaying(false);
@@ -708,10 +716,10 @@ const ReadingComprehension = ({ onExit }) => {
 
       const nextIdx = sIdx + 1;
       if (nextIdx < sentences.length) {
-        playSentenceStep(nextIdx, 'story', runId);
+        playSentenceStepRef.current?.(nextIdx, 'story', runId);
       } else if (isLoopingRef.current) {
         lastScrolledSentenceRef.current = -1;
-        playSentenceStep(0, 'story', runId);
+        playSentenceStepRef.current?.(0, 'story', runId);
       } else {
         setIsPlaying(false);
         setPlaybackMode(null);
@@ -788,7 +796,7 @@ const ReadingComprehension = ({ onExit }) => {
 
       if (runId !== playbackRunIdRef.current || !resolvedSource) {
         if (isObjectUrl && resolvedSource) {
-          try { URL.revokeObjectURL(resolvedSource); } catch (_) {}
+          try { URL.revokeObjectURL(resolvedSource); } catch { /* noop */ }
           unregisterCleanStretchedUrl(resolvedSource);
         }
         if (!resolvedSource) runNativeFallbackStep();
@@ -801,10 +809,10 @@ const ReadingComprehension = ({ onExit }) => {
       audio.setAttribute('playsinline', '');
       audio.setAttribute('webkit-playsinline', '');
       audio.playbackRate = targetRate;
-      audio.preservesPitch = true;
+      setPreservesPitch(audio, true);
       audio.onloadedmetadata = () => {
         audio.playbackRate = targetRate;
-        audio.preservesPitch = true;
+        setPreservesPitch(audio, true);
       };
       audioRef.current = audio;
       if (isObjectUrl) objectUrlRef.current = resolvedSource;
@@ -866,15 +874,23 @@ const ReadingComprehension = ({ onExit }) => {
       };
 
       audio.onended = advanceOrFinish;
-      audio.onerror = runNativeFallbackStep;
+      audio.onerror = () => {
+        releaseCurrentAudioOnly();
+        runNativeFallbackStep();
+      };
 
       await audio.play();
     } catch (err) {
+      releaseCurrentAudioOnly();
       if (runId !== playbackRunIdRef.current) return;
       console.warn('[Readle Audio] Fallback a síntesis nativa por frase:', err?.message || err);
       runNativeFallbackStep();
     }
   }, [prefetchSentenceAudio, releaseCurrentAudioOnly, tokenizedStory.sentences]);
+
+  useEffect(() => {
+    playSentenceStepRef.current = playSentenceStep;
+  }, [playSentenceStep]);
 
   // Cambia velocidad global exclusivamente entre 0.75x (Phase Vocoder) y 1x
   const handleSelectPlaybackSpeed = (nextSpeed) => {
@@ -901,7 +917,7 @@ const ReadingComprehension = ({ onExit }) => {
         ? 1.0
         : playbackSpeedRef.current;
       audioRef.current.playbackRate = resumeRate;
-      audioRef.current.preservesPitch = true;
+      setPreservesPitch(audioRef.current, true);
       await audioRef.current.play().catch(() => {});
       setIsPlaying(true);
       return;
@@ -1032,6 +1048,8 @@ const ReadingComprehension = ({ onExit }) => {
 
   const fontPreset = FONT_SIZE_PRESETS[fontScaleIdx] || FONT_SIZE_PRESETS[1];
   const savedCount = Object.keys(savedWordsMap).length;
+  const activeTrainerCard = showFlashcardTrainer ? trainerCards[trainerIdx] || null : null;
+  const activeTrainerLex = activeTrainerCard ? getLexiconTheme(activeTrainerCard, isDarkMode) : null;
 
   // =========================================================================
   // RENDER 1: BIBLIOTECA & GENERADOR IA (CUANDO NO HAY HISTORIA ACTIVA)
@@ -2260,90 +2278,86 @@ const ReadingComprehension = ({ onExit }) => {
                   </button>
                 </div>
 
-                {trainerCards[trainerIdx] && (() => {
-                  const card = trainerCards[trainerIdx];
-                  const cardLex = getLexiconTheme(card, isDarkMode);
-                  return (
-                    <div
-                      onClick={() => setTrainerFlipped((f) => !f)}
-                      className={`rounded-3xl border-2 p-7 sm:p-10 min-h-[250px] flex flex-col items-center justify-center text-center gap-4 cursor-pointer shadow-md select-none ${
-                        isDarkMode
-                          ? 'bg-slate-900 border-teal-500/40'
-                          : 'bg-white border-amber-300'
-                      }`}
-                    >
-                      {!trainerFlipped ? (
-                        <>
-                          <div className="flex items-center gap-2">
-                            <span
-                              className={`px-2.5 py-0.5 rounded text-xs font-extrabold ${
-                                isDarkMode ? 'bg-teal-500/15 text-teal-300' : 'bg-stone-100 text-slate-700'
-                              }`}
-                            >
-                              {card.level}
-                            </span>
-                            <span className={`px-2.5 py-0.5 rounded border text-xs font-bold ${cardLex.badgeClass}`}>
-                              {cardLex.genderLabel}
-                            </span>
-                          </div>
-                          <h3 translate="no" className={`notranslate text-2xl sm:text-3xl font-black ${cardLex.wordClass}`}>
-                            {card.de}
-                          </h3>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              speakQuickGerman(card.de);
-                            }}
-                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-bold cursor-pointer ${
-                              isDarkMode
-                                ? 'bg-teal-500/20 text-teal-300 border-teal-400/40'
-                                : 'bg-amber-50 text-amber-800 border-amber-200'
+                {activeTrainerCard && activeTrainerLex && (
+                  <div
+                    onClick={() => setTrainerFlipped((f) => !f)}
+                    className={`rounded-3xl border-2 p-7 sm:p-10 min-h-[250px] flex flex-col items-center justify-center text-center gap-4 cursor-pointer shadow-md select-none ${
+                      isDarkMode
+                        ? 'bg-slate-900 border-teal-500/40'
+                        : 'bg-white border-amber-300'
+                    }`}
+                  >
+                    {!trainerFlipped ? (
+                      <>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`px-2.5 py-0.5 rounded text-xs font-extrabold ${
+                              isDarkMode ? 'bg-teal-500/15 text-teal-300' : 'bg-stone-100 text-slate-700'
                             }`}
                           >
-                            <Volume2 size={16} /> Escuchar alemán
-                          </button>
-                          <p className={`text-xs mt-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                            Toca la tarjeta para ver traducción y ejemplo
+                            {activeTrainerCard.level}
+                          </span>
+                          <span className={`px-2.5 py-0.5 rounded border text-xs font-bold ${activeTrainerLex.badgeClass}`}>
+                            {activeTrainerLex.genderLabel}
+                          </span>
+                        </div>
+                        <h3 translate="no" className={`notranslate text-2xl sm:text-3xl font-black ${activeTrainerLex.wordClass}`}>
+                          {activeTrainerCard.de}
+                        </h3>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speakQuickGerman(activeTrainerCard.de);
+                          }}
+                          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-bold cursor-pointer ${
+                            isDarkMode
+                              ? 'bg-teal-500/20 text-teal-300 border-teal-400/40'
+                              : 'bg-amber-50 text-amber-800 border-amber-200'
+                          }`}
+                        >
+                          <Volume2 size={16} /> Escuchar alemán
+                        </button>
+                        <p className={`text-xs mt-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                          Toca la tarjeta para ver traducción y ejemplo
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <h3 className={`text-2xl font-black ${isDarkMode ? 'text-teal-300' : 'text-amber-700'}`}>
+                          {activeTrainerCard.es}
+                        </h3>
+                        <div
+                          className={`border rounded-2xl p-4 max-w-md w-full space-y-1.5 ${
+                            isDarkMode ? 'bg-slate-950 border-slate-800' : 'bg-stone-50 border-slate-200'
+                          }`}
+                        >
+                          <p
+                            translate="no"
+                            className={`notranslate text-sm font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
+                          >
+                            {activeTrainerCard.exampleDe}
                           </p>
-                        </>
-                      ) : (
-                        <>
-                          <h3 className={`text-2xl font-black ${isDarkMode ? 'text-teal-300' : 'text-amber-700'}`}>
-                            {card.es}
-                          </h3>
-                          <div
-                            className={`border rounded-2xl p-4 max-w-md w-full space-y-1.5 ${
-                              isDarkMode ? 'bg-slate-950 border-slate-800' : 'bg-stone-50 border-slate-200'
-                            }`}
-                          >
-                            <p
-                              translate="no"
-                              className={`notranslate text-sm font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
-                            >
-                              {card.exampleDe}
-                            </p>
-                            <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                              {card.exampleEs}
-                            </p>
-                          </div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              speakQuickGerman(card.exampleDe || card.de);
-                            }}
-                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-bold cursor-pointer ${
-                              isDarkMode
-                                ? 'bg-slate-800 text-teal-300 border-slate-700'
-                                : 'bg-stone-100 text-slate-700 border-slate-200'
-                            }`}
-                          >
-                            <Volume2 size={16} /> Escuchar frase
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  );
-                })()}
+                          <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                            {activeTrainerCard.exampleEs}
+                          </p>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speakQuickGerman(activeTrainerCard.exampleDe || activeTrainerCard.de);
+                          }}
+                          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-bold cursor-pointer ${
+                            isDarkMode
+                              ? 'bg-slate-800 text-teal-300 border-slate-700'
+                              : 'bg-stone-100 text-slate-700 border-slate-200'
+                          }`}
+                        >
+                          <Volume2 size={16} /> Escuchar frase
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between gap-3">
                   <button

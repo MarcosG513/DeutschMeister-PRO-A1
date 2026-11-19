@@ -26,10 +26,12 @@ const VALID_SOURCES = new Set([
   'voice_call',
   'photo_ocr',
   'story_word',
+  'grammar_lab',
 ]);
 
 let deckCache = {
   hydrated: false,
+  isDirty: false,
   schemaVersion: 1,
   updatedAt: 0,
   cards: {},
@@ -134,6 +136,10 @@ async function flushLocalSrsPersist() {
     clearTimeout(localPersistTimer);
     localPersistTimer = null;
   }
+  if (!deckCache.hydrated || !deckCache.isDirty) {
+    return localPersistQueue;
+  }
+  deckCache.isDirty = false;
   const snapshot = {
     schemaVersion: 1,
     updatedAt: deckCache.updatedAt || Date.now(),
@@ -142,6 +148,7 @@ async function flushLocalSrsPersist() {
   localPersistQueue = localPersistQueue
     .then(() => localforage.setItem(SRS_STORAGE_KEY, snapshot))
     .catch((err) => {
+      deckCache.isDirty = true;
       console.warn('[SRS Bridge] Error guardando mazo local:', err?.message || err);
     });
   return localPersistQueue;
@@ -220,8 +227,10 @@ function attachLifecycleFlushListeners() {
  * Hidrata en memoria el mazo SRS desde IndexedDB garantizando una sola lectura concurrente.
  */
 export async function hydrateSrsDeck() {
-  attachLifecycleFlushListeners();
-  if (deckCache.hydrated) return deckCache;
+  if (deckCache.hydrated) {
+    attachLifecycleFlushListeners();
+    return deckCache;
+  }
   if (hydrationPromise) return hydrationPromise;
 
   hydrationPromise = (async () => {
@@ -232,10 +241,12 @@ export async function hydrateSrsDeck() {
         deckCache.updatedAt = Number(saved.updatedAt) || Date.now();
       }
       deckCache.hydrated = true;
+      attachLifecycleFlushListeners();
       dispatchSrsUpdated();
     } catch (err) {
       console.warn('[SRS Bridge] Error hidratando mazo SRS:', err?.message || err);
       deckCache.hydrated = true;
+      attachLifecycleFlushListeners();
     } finally {
       hydrationPromise = null;
     }
@@ -243,6 +254,42 @@ export async function hydrateSrsDeck() {
   })();
 
   return hydrationPromise;
+}
+
+/**
+ * Limpia el caché SRS en memoria e IndexedDB al cerrar sesión o cambiar de cuenta.
+ */
+export async function resetSrsLocalCache() {
+  if (localPersistTimer) {
+    clearTimeout(localPersistTimer);
+    localPersistTimer = null;
+  }
+  if (cloudSyncTimer) {
+    clearTimeout(cloudSyncTimer);
+    cloudSyncTimer = null;
+  }
+  dirtyCloudCardIds.clear();
+  hydrationPromise = null;
+  deckCache = {
+    hydrated: false,
+    isDirty: false,
+    schemaVersion: 1,
+    updatedAt: 0,
+    cards: {},
+  };
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(SRS_SUMMARY_LS_KEY);
+    }
+  } catch {
+    // Ignorar error de localStorage
+  }
+  try {
+    await localforage.removeItem(SRS_STORAGE_KEY);
+  } catch {
+    // Ignorar error de IndexedDB
+  }
+  dispatchSrsUpdated();
 }
 
 /**
@@ -286,6 +333,7 @@ export async function syncSrsDeckFromCloud(uid) {
 
     if (localChanged) {
       deckCache.updatedAt = Date.now();
+      deckCache.isDirty = true;
       scheduleLocalSrsPersist();
       dispatchSrsUpdated();
     }
@@ -437,6 +485,7 @@ export async function captureVocabToSrs(item) {
   const card = upsertVocabCardInCache(item || {});
   if (!card) return null;
   deckCache.updatedAt = Date.now();
+  deckCache.isDirty = true;
   scheduleLocalSrsPersist();
   scheduleSrsCloudSync([card.id]);
   dispatchSrsUpdated();
@@ -451,6 +500,7 @@ export async function captureGrammarErrorToSrs(errItem) {
   const card = upsertGrammarErrorInCache(errItem || {});
   if (!card) return null;
   deckCache.updatedAt = Date.now();
+  deckCache.isDirty = true;
   scheduleLocalSrsPersist();
   scheduleSrsCloudSync([card.id]);
   dispatchSrsUpdated();
@@ -501,6 +551,7 @@ export async function captureConversationBundle({
 
   if (savedCards.length > 0) {
     deckCache.updatedAt = Date.now();
+    deckCache.isDirty = true;
     await flushLocalSrsPersist();
     scheduleSrsCloudSync(savedCards.map((c) => c.id));
     dispatchSrsUpdated();
@@ -527,6 +578,7 @@ export async function reviewSrsCard(cardId, ratingOrQuality, fallbackCreatePaylo
   const reviewed = applySm2Review(existing, ratingOrQuality, Date.now());
   deckCache.cards[existing.id] = reviewed;
   deckCache.updatedAt = Date.now();
+  deckCache.isDirty = true;
 
   scheduleLocalSrsPersist();
   scheduleSrsCloudSync([existing.id]);

@@ -115,19 +115,25 @@ public class AndroidAutoPlugin extends Plugin {
         call.resolve(ret);
     }
 
+    public static boolean hasActiveBridge() {
+        return sInstance != null;
+    }
+
     /**
      * Notifica un comando originado en la pantalla del auto o volante hacia React
      */
     public static void notifyCommandToJs(String action, String payload) {
-        sPendingAction = action;
-        sPendingPayload = payload;
-
         AndroidAutoPlugin plugin = sInstance;
         if (plugin != null) {
+            sPendingAction = null;
+            sPendingPayload = null;
             JSObject ret = new JSObject();
             ret.put("action", action);
             ret.put("payload", payload);
-            plugin.notifyListeners("androidAutoCommand", ret, true);
+            plugin.notifyListeners("androidAutoCommand", ret, false);
+        } else {
+            sPendingAction = action;
+            sPendingPayload = payload;
         }
     }
 }

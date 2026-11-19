@@ -73,7 +73,6 @@ export function formatTwoLineCarDisplay({
   spanishText = "",
   germanText = "",
   countdownSec = 0,
-  waveLabel = "OLA 1/4",
   blockProgress = ""
 }) {
   const cleanEs = cleanTextForCarScreen(spanishText);
@@ -161,14 +160,27 @@ export function formatTwoLineCarDisplay({
 let currentPagerTimer = null;
 let currentPagerKey = "";
 
+export function stopAndroidAutoMetadataPager() {
+  if (currentPagerTimer) {
+    clearInterval(currentPagerTimer);
+    currentPagerTimer = null;
+  }
+  currentPagerKey = "";
+}
+
 /**
  * Sincroniza en tiempo real los metadatos y el Teleprompter gráfico en la pantalla
- * del vehículo (Android Auto) y en la Media Session estándar del navegador.
+ * del vehículo (Android Auto) evitando colisionar con Web Media Session.
  * Si el texto supera 2 líneas, inicia un rotador automático de páginas cada 2.3 segundos.
  *
  * @param {Object} stateObj
  */
 export async function syncAndroidAutoScreen(stateObj = {}) {
+  if (!Capacitor.isNativePlatform()) {
+    stopAndroidAutoMetadataPager();
+    return;
+  }
+
   const pages = formatTwoLineCarDisplay(stateObj);
   const cleanEs = cleanTextForCarScreen(stateObj.spanishText);
   const cleanDe = cleanTextForCarScreen(stateObj.germanText);
@@ -176,7 +188,7 @@ export async function syncAndroidAutoScreen(stateObj = {}) {
   // Clave única del bloque actual (sin incluir countdownSec para no interrumpir el paginador)
   const pagerKey = `${stateObj.phase}__${cleanEs}__${cleanDe}__${stateObj.blockProgress}`;
 
-  const sendPageToNativeAndMediaSession = async (page) => {
+  const sendPageToNative = async (page) => {
     const payload = {
       title: page.title || "DeutschMeister Fahrmodus",
       subtitle: page.subtitle || "",
@@ -190,27 +202,19 @@ export async function syncAndroidAutoScreen(stateObj = {}) {
       isPlaying: Boolean(stateObj.isPlaying)
     };
 
-    // 1. Android Auto Nativo
-    if (Capacitor.isNativePlatform()) {
-      try {
-        await AndroidAuto.updateCarScreen(payload);
-      } catch (err) {
-        console.warn("[AndroidAutoBridge] Error updateCarScreen:", err);
-      }
-    }
-
-    // 2. Media Session estándar del navegador
-    if (typeof navigator !== "undefined" && "mediaSession" in navigator) {
-      try {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: payload.title,
-          artist: payload.subtitle,
-          album: payload.album
-        });
-        navigator.mediaSession.playbackState = payload.isPlaying ? "playing" : "paused";
-      } catch (_) {}
+    try {
+      await AndroidAuto.updateCarScreen(payload);
+    } catch (err) {
+      console.warn("[AndroidAutoBridge] Error updateCarScreen:", err);
     }
   };
+
+  if (stateObj.phase === "paused" || stateObj.phase === "idle") {
+    stopAndroidAutoMetadataPager();
+    currentPagerKey = pagerKey;
+    await sendPageToNative(pages[0]);
+    return;
+  }
 
   // Si cambió el contenido o la fase, reiniciamos el paginador
   if (pagerKey !== currentPagerKey) {
@@ -221,17 +225,17 @@ export async function syncAndroidAutoScreen(stateObj = {}) {
     currentPagerKey = pagerKey;
 
     let pageIdx = 0;
-    await sendPageToNativeAndMediaSession(pages[0]);
+    await sendPageToNative(pages[0]);
 
-    if (pages.length > 1 && stateObj.phase !== "paused" && stateObj.phase !== "idle") {
+    if (pages.length > 1) {
       currentPagerTimer = setInterval(() => {
         pageIdx = (pageIdx + 1) % pages.length;
-        sendPageToNativeAndMediaSession(pages[pageIdx]);
+        sendPageToNative(pages[pageIdx]);
       }, 2300);
     }
   } else {
     // Si la clave es la misma (ej. cuenta regresiva disminuyendo), actualizamos la página 0
-    await sendPageToNativeAndMediaSession(pages[0]);
+    await sendPageToNative(pages[0]);
   }
 }
 
@@ -265,16 +269,23 @@ export async function syncAndroidAutoQueue(queue = []) {
 export function subscribeToAndroidAutoCommands(callback) {
   if (typeof callback !== "function") return () => {};
 
+  let disposed = false;
   let listenerHandle = null;
 
   if (Capacitor.isNativePlatform()) {
     // 1. Suscribirse a eventos en tiempo real
     AndroidAuto.addListener("androidAutoCommand", (data) => {
-      if (data && data.action) {
+      if (!disposed && data && data.action) {
         callback(data.action, data.payload || null);
       }
     })
       .then((handle) => {
+        if (disposed) {
+          if (handle && typeof handle.remove === "function") {
+            handle.remove();
+          }
+          return;
+        }
         listenerHandle = handle;
       })
       .catch((err) => {
@@ -284,7 +295,7 @@ export function subscribeToAndroidAutoCommands(callback) {
     // 2. Consultar si hay algún comando pendiente que despertó la app al arrancar
     AndroidAuto.getPendingAutoCommand()
       .then((res) => {
-        if (res && res.action) {
+        if (!disposed && res && res.action) {
           callback(res.action, res.payload || null);
         }
       })
@@ -292,8 +303,10 @@ export function subscribeToAndroidAutoCommands(callback) {
   }
 
   return () => {
+    disposed = true;
     if (listenerHandle && typeof listenerHandle.remove === "function") {
       listenerHandle.remove();
+      listenerHandle = null;
     }
   };
 }

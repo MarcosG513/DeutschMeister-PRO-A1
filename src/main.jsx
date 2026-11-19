@@ -6,6 +6,21 @@ import './index.css'
 import App from './App.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 
+if (typeof window !== 'undefined') {
+  window.addEventListener('vite:preloadError', (event) => {
+    event.preventDefault();
+    const reloadKey = 'dm_preload_reload_v31';
+    try {
+      if (!sessionStorage.getItem(reloadKey)) {
+        sessionStorage.setItem(reloadKey, '1');
+        window.location.reload();
+      }
+    } catch {
+      // Ignorar si sessionStorage no está disponible
+    }
+  });
+}
+
 if (Capacitor.isNativePlatform()) {
   (async () => {
     try {
@@ -28,6 +43,17 @@ createRoot(document.getElementById('root')).render(
 
 // Registro de Service Worker PWA para soporte de instalación nativa
 if ('serviceWorker' in navigator && !window.location.hostname.includes('localhost')) {
+  let hadSwController = Boolean(navigator.serviceWorker.controller);
+  let swReloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadSwController || swReloading) {
+      hadSwController = Boolean(navigator.serviceWorker.controller);
+      return;
+    }
+    swReloading = true;
+    window.location.reload();
+  });
+
   const registerServiceWorker = () => {
     navigator.serviceWorker
       .register('/sw.js')

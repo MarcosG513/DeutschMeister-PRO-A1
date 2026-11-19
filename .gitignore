@@ -42,5 +42,10 @@ scratch/
 *.keystore
 keystore.properties
 
+# Playwright & QA reports
+test-results/
+playwright-report/
+blob-report/
+
 # Firebase Android client config (mantener solo en local)
 android/app/google-services.json

@@ -2,17 +2,16 @@ import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { onRequest } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import admin from "firebase-admin";
-import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
+import { SchemaType } from "@google/generative-ai";
 import { fal } from "@fal-ai/client";
 import crypto from "crypto";
 import sharp from "sharp";
 import {
   executeBackendGemini,
   executeBackendGeminiChatStream,
-  resolveModelForTier,
+  filterAvailablePoolKeys,
   isQuotaOrBillingError,
-  buildKeyPool,
-  getPoolStatus
+  recordPoolKeyFailure
 } from "./services/geminiClient.js";
 
 // Inicializa Firebase Admin
@@ -39,7 +38,9 @@ function getGeminiKeyConfig() {
         const val = sec.value();
         if (val) return val;
       }
-    } catch (_) {}
+    } catch {
+      // Secreto no disponible en entorno local
+    }
     return process.env[envVar] || "";
   };
 
@@ -157,7 +158,7 @@ function serializeTimestampIso(ts) {
   if (typeof ts.toDate === "function") {
     try {
       return ts.toDate().toISOString();
-    } catch (_) {
+    } catch {
       return null;
     }
   }
@@ -321,10 +322,7 @@ function isServerAuthorizedMediaWriter(request, authUser) {
   if (request.data?.clientPlatform === "native" || request.data?.isNativePlatform === true) {
     return false;
   }
-  if (process.env.FUNCTIONS_EMULATOR === "true") return true;
-
-  const origin = request.rawRequest?.headers?.origin || "";
-  return origin === "http://localhost:5173" || origin === "http://localhost:5174";
+  return process.env.FUNCTIONS_EMULATOR === "true";
 }
 
 /**
@@ -388,7 +386,7 @@ async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}
             .join("\n")
         : promptUser;
       if (Array.isArray(promptUser)) {
-        throw new Error("El análisis multimodal con imagen no está disponible en el fallback textual.");
+        throw new Error("El análisis multimodal con imagen no está disponible en el fallback textual.", { cause: poolError });
       }
       if (isJson) {
         finalPromptUser += "\n\nResponde estrictamente en formato JSON válido, sin bloques de código ```json ni texto adicional fuera del JSON.";
@@ -412,7 +410,7 @@ async function invokeWithDeepSeekFallback(promptSystem, promptUser, options = {}
       return outputText;
     } catch (fallbackErr) {
       console.error("FinOps: Error crítico en fallback definitivo de Claude Haiku 4.5:", fallbackErr);
-      throw new Error("Servicio no disponible temporalmente. Inténtalo más tarde.");
+      throw new Error("Servicio no disponible temporalmente. Inténtalo más tarde.", { cause: fallbackErr });
     }
   }
 }
@@ -425,7 +423,9 @@ async function closeAsyncStream(streamObj) {
     if (streamObj && typeof streamObj.return === "function") {
       await streamObj.return();
     }
-  } catch (_) {}
+  } catch {
+    // Ignorar error al cerrar stream Abortado
+  }
 }
 
 /**
@@ -451,7 +451,7 @@ function extractCompleteJsonStringProperty(rawBuffer, fieldName) {
       const literal = rawBuffer.slice(start, i);
       try {
         return JSON.parse(`"${literal}"`);
-      } catch (_) {
+      } catch {
         return literal.replace(/\\n/g, "\n").replace(/\\"/g, '"');
       }
     }
@@ -751,6 +751,7 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
   const mode = options.mode || "paid_first";
   const keys = getGeminiKeyConfig();
   const isStructuredJson = Boolean(options.isJson);
+  let emittedReplyDe = false;
 
   try {
     try {
@@ -767,7 +768,6 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
       });
 
       let rawJsonBuffer = "";
-      let emittedReplyDe = false;
 
       for await (const chunk of streamResult.stream) {
         if (isAborted()) {
@@ -851,7 +851,6 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
         });
 
         let lastOutput = "";
-        let emittedReplyDe = false;
         for await (const event of falStream) {
           if (isAborted()) {
             console.log("FinOps Stream: Cliente SSE desconectado, abortando stream Fal.ai.");
@@ -924,9 +923,8 @@ export const runRoleplaySimulator = onRequest({
     res.status(405).send("Method Not Allowed");
     return;
   }
-  let authUser;
   try {
-    authUser = await assertApprovedUser(req);
+    await assertApprovedUser(req);
   } catch (authErr) {
     const statusCode = authErr?.code === "permission-denied" ? 403 : 401;
     res.status(statusCode).json({ error: authErr.message || "Acceso no autorizado.", code: authErr?.code || "unauthenticated" });
@@ -937,7 +935,7 @@ export const runRoleplaySimulator = onRequest({
   try {
     data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     if (data && data.data) data = data.data;
-  } catch (e) {
+  } catch {
     res.status(400).send("Invalid JSON body");
     return;
   }
@@ -1128,9 +1126,18 @@ export const evaluateEmail = onCall(
   { secrets: ALL_AI_SECRETS, maxInstances: 6 },
   async (request) => {
     await assertApprovedUser(request);
-    const { textoCorreo, consignaExamen } = request.data || {};
+    const { textoCorreo, consignaExamen, cefrLevel = "A1" } = request.data || {};
+    const normalizedLevel = ["A1", "A2", "B1", "DTZ"].includes(String(cefrLevel || "").toUpperCase())
+      ? String(cefrLevel).toUpperCase()
+      : "A1";
+    const examLabel = normalizedLevel === "A1"
+      ? "Start Deutsch 1 (Schreiben Teil 2 - E-Mail)"
+      : `Goethe-Zertifikat / DTZ (${normalizedLevel} Schreiben)`;
+    const wordRangeHint = normalizedLevel === "A1"
+      ? "25 a 45 palabras, recomendación estándar: ca. 30 Wörter"
+      : "45 a 80 palabras con conectores (weil, dass, obwohl, deshalb)";
 
-    const systemPrompt = `Por favor, actúa como un examinador oficial del Goethe-Institut para el examen Start Deutsch 1 (Schreiben Teil 2 - E-Mail).
+    const systemPrompt = `Por favor, actúa como un examinador oficial del Goethe-Institut para el examen ${examLabel} (extensión óptima: ${wordRangeHint}).
 Evalúa minuciosamente el correo redactado por el estudiante aplicando la rúbrica oficial estricta de 3 criterios y extensión:
 
 ESTRUCTURA EXACTA DE TU RESPUESTA EN MARKDOWN:
@@ -1192,17 +1199,26 @@ export const generateStory = onRequest({
     res.status(204).send("");
     return;
   }
+  if (req.method !== "POST") {
+    res.status(405).send("Method Not Allowed");
+    return;
+  }
   res.set("Access-Control-Allow-Origin", "*");
-  let authUser;
   try {
-    authUser = await assertApprovedUser(req);
+    await assertApprovedUser(req);
   } catch (authErr) {
     const statusCode = authErr?.code === "permission-denied" ? 403 : 401;
     res.status(statusCode).json({ error: authErr.message || "Acceso no autorizado.", code: authErr?.code || "unauthenticated" });
     return;
   }
 
+  let clientClosed = false;
+  const onClientClose = () => { clientClosed = true; };
+  if (req && typeof req.on === "function") req.on("close", onClientClose);
+  if (typeof res.on === "function") res.on("close", onClientClose);
+
   const sendSsePayload = (payloadObj) => {
+    if (clientClosed || res.writableEnded) return;
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
@@ -1380,13 +1396,18 @@ export const generateStory = onRequest({
     sendSsePayload(jsonOutput);
   } catch (globalError) {
     console.error("FinOps Story Error:", globalError);
-    if (!res.headersSent) {
-      res.status(500).json({
-        error: "Error al generar el cuento."
-      });
-    } else {
-      res.end();
+    if (!clientClosed && !res.writableEnded) {
+      if (!res.headersSent) {
+        res.status(500).json({
+          error: "Error al generar el cuento."
+        });
+      } else {
+        res.end();
+      }
     }
+  } finally {
+    if (req && typeof req.off === "function") req.off("close", onClientClose);
+    if (typeof res.off === "function") res.off("close", onClientClose);
   }
 });
 
@@ -1429,7 +1450,7 @@ export const sendTutorChatMessage = onRequest({
   try {
     data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     if (data && data.data) data = data.data;
-  } catch (e) {
+  } catch {
     res.status(400).send("Invalid JSON body");
     return;
   }
@@ -2219,7 +2240,7 @@ function construirPromptDinamico(conceptoIngles, tipoGramatical, palabraAleman =
 
     // Filtro ampliado para determinar si lleva o no la esfera gramatical
     const isSinGenero = esColor || esAdjetivo || esVerbo || esPersona || esAbstractoInanimado || diccionarioAccionesDinamicas[palabraLimpia] || tipoLimpio.includes('expresión') || tipoLimpio.includes('expresion') || tipoLimpio.includes('frase') || tipoLimpio.includes('regla') || palabraLimpia.includes('+');
-    let subjectType = conceptoIngles;
+    let subjectType;
     const colorAsignado = hexAsignado; // Garantizar compatibilidad con hexAsignado
 
     // Asignación de sujeto y escudo anti-caritas según el tipo
@@ -2291,7 +2312,7 @@ export const generateCardImage = onCall({
   const esPersonaje = !esColor && (tipoLimpio.includes("adjetivo") || tipoLimpio.includes("verbo") || tipoLimpio.includes("acción") || tipoLimpio.includes("pronombre") || tipoLimpio.includes("sentimiento"));
 
   // ── CACHE CHECK BARRIER (global_flashcards) ───────────────────────────────
-  const safeWordId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
+  const safeWordId = wordObj.de.replace(/[\s/?!\\,.]+/g, '_').toLowerCase();
   try {
     const cacheRef = db.collection("global_flashcards").doc(safeWordId);
     const docSnap = await cacheRef.get();
@@ -2644,7 +2665,7 @@ export const generateReadingTest = onCall({
       ]
     };
 
-    let parsedStory = null;
+    let parsedStory;
     try {
       console.log("ReadingReadle FinOps: Invocando pool de llaves con gemini-3.8-flash...");
       const poolRes = await executeBackendGemini(promptUser, {
@@ -2966,7 +2987,7 @@ const TTS_MODELS = ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts"];
  * Ejecuta una petición unitaria de síntesis TTS contra un modelo concreto de Google AI Studio.
  */
 async function requestGoogleDirectTts(text, voice, apiKey, modelName) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
   const payload = {
     contents: [{ parts: [{ text }] }],
     generationConfig: {
@@ -2983,7 +3004,11 @@ async function requestGoogleDirectTts(text, voice, apiKey, modelName) {
 
   const response = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": apiKey
+    },
+    signal: AbortSignal.timeout(20_000),
     body: JSON.stringify(payload)
   });
 
@@ -3054,7 +3079,7 @@ async function synthesizeWithFalFallback(text, voice, falKeyValue, styleInstruct
     throw new Error("Fal.ai no devolvió URL de audio.");
   }
 
-  const audioRes = await fetch(result.data.audio.url);
+  const audioRes = await fetch(result.data.audio.url, { signal: AbortSignal.timeout(20_000) });
   if (!audioRes.ok) throw new Error(`Fallo descargando audio de Fal.ai: HTTP ${audioRes.status}`);
 
   return {
@@ -3141,9 +3166,9 @@ export const synthesizeGermanSpeech = onCall(
       };
     }
 
-    // ── INFERENCIA: POOL GOOGLE DIRECTO CON DUAL-MODEL Y ROTACIÓN (0% FAL.AI A MENOS DE AGOTAR POOL) ──
+    // ── INFERENCIA: POOL GOOGLE DIRECTO CON DUAL-MODEL Y CIRCUIT BREAKER (exhaustedKeys) ──
     let audioResult = null;
-    const googleKeys = getGoogleKeyPool();
+    const googleKeys = filterAvailablePoolKeys(getGoogleKeyPool());
     let lastGoogleError = null;
 
     for (const keyItem of googleKeys) {
@@ -3153,6 +3178,9 @@ export const synthesizeGermanSpeech = onCall(
         break;
       } catch (err) {
         lastGoogleError = err;
+        if (isQuotaOrBillingError(err)) {
+          recordPoolKeyFailure(keyItem.id, err);
+        }
         console.warn(`[TTS Warning] Falló Google Direct con ${keyItem.id}: ${err.message}`);
       }
     }
@@ -3196,7 +3224,7 @@ export const synthesizeGermanSpeech = onCall(
     const filePath = `pronunciations/${safeType}/${docId}.${ext}`;
     const file = bucket.file(filePath);
 
-    let permanentAudioUrl = "";
+    let permanentAudioUrl;
     try {
       await file.save(audioResult.buffer, {
         metadata: {
@@ -3214,7 +3242,7 @@ export const synthesizeGermanSpeech = onCall(
         }
       });
 
-      try { await file.makePublic(); } catch (_) {}
+      try { await file.makePublic(); } catch { /* Archivo ya público */ }
 
       permanentAudioUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
 
@@ -3324,7 +3352,7 @@ function resolveKineticAction(wordObj) {
   // Quitar anotaciones gramaticales, regímenes y conectores
   raw = raw.replace(/[≠+].*$/g, "").trim();
   // Tomar solo el primer término si hay barras o comas (ej. "to go / walk" -> "to go")
-  raw = raw.split(/[\/,]/)[0].trim();
+  raw = raw.split(/[/,]/)[0].trim();
   // Eliminar el "to " inicial
   raw = raw.replace(/^to\s+/, "").trim();
 
@@ -3384,7 +3412,7 @@ async function optimizeImageBuffer(buffer) {
  * 1. Generación de Imagen con Nano Banana 2 Lite (gemini-3.1-flash-lite-image)
  */
 async function generateGoogleFlashImage(prompt, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-image:generateContent?key=${apiKey}`;
+  const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-image:generateContent";
 
   const payload = {
     contents: [
@@ -3402,7 +3430,11 @@ async function generateGoogleFlashImage(prompt, apiKey) {
 
   const response = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": apiKey
+    },
+    signal: AbortSignal.timeout(20_000),
     body: JSON.stringify(payload)
   });
 
@@ -3467,7 +3499,7 @@ function findVideoInObject(obj, visited = new Set()) {
  * 2. Generación de Video con Gemini Omni Flash (gemini-omni-1.1-flash)
  */
 async function generateGoogleOmniVideo(prompt, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/interactions?key=${apiKey}`;
+  const url = "https://generativelanguage.googleapis.com/v1beta/interactions";
 
   const payload = {
     model: "gemini-omni-1.1-flash",
@@ -3482,7 +3514,11 @@ async function generateGoogleOmniVideo(prompt, apiKey) {
 
   let response = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": apiKey
+    },
+    signal: AbortSignal.timeout(45_000),
     body: JSON.stringify(payload)
   });
 
@@ -3494,7 +3530,11 @@ async function generateGoogleOmniVideo(prompt, apiKey) {
       delete payload.response_format.aspect_ratio;
       response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey
+        },
+        signal: AbortSignal.timeout(45_000),
         body: JSON.stringify(payload)
       });
     } else {
@@ -3523,18 +3563,17 @@ async function generateGoogleOmniVideo(prompt, apiKey) {
 
   if (extracted?.uri) {
     console.log(`[Omni Video] Descargando desde URI de Google: ${extracted.uri}`);
-    let downloadUrl = extracted.uri;
-    if (!downloadUrl.includes("key=")) {
-      const sep = downloadUrl.includes("?") ? "&" : "?";
-      downloadUrl = `${downloadUrl}${sep}key=${apiKey}`;
-    }
+    const downloadUrl = extracted.uri;
 
     let downloadRes = await fetch(downloadUrl, {
-      headers: { "x-goog-api-key": apiKey }
+      headers: { "x-goog-api-key": apiKey },
+      signal: AbortSignal.timeout(45_000)
     });
     if (!downloadRes.ok) {
-      downloadRes = await fetch(`${downloadUrl}&alt=media`, {
-        headers: { "x-goog-api-key": apiKey }
+      const mediaSep = downloadUrl.includes("?") ? "&" : "?";
+      downloadRes = await fetch(`${downloadUrl}${mediaSep}alt=media`, {
+        headers: { "x-goog-api-key": apiKey },
+        signal: AbortSignal.timeout(45_000)
       });
     }
 
@@ -3639,7 +3678,7 @@ export const regenerateCardMedia = onCall(
       const cardDocRef = db.collection("global_flashcards").doc(safeId);
       let docSnap = await cardDocRef.get();
       if (!docSnap.exists) {
-        const slugId = wordObj.de.toLowerCase().replace(/[\s\/?!\\,.]+/g, "_");
+        const slugId = wordObj.de.toLowerCase().replace(/[\s/?!\\,.]+/g, "_");
         if (slugId && slugId !== safeId) {
           docSnap = await db.collection("global_flashcards").doc(slugId).get();
         }
@@ -3719,7 +3758,7 @@ export const regenerateCardMedia = onCall(
             actualMediaType = "image";
             provider = "gemini-3.1-flash-lite-image";
           } catch (imgErr) {
-            throw new Error(`Falló la generación de video (${lastMediaError?.message}) e imagen (${imgErr.message}) tras recorrer el pool PAID.`);
+            throw new Error(`Falló la generación de video (${lastMediaError?.message}) e imagen (${imgErr.message}) tras recorrer el pool PAID.`, { cause: imgErr });
           }
         }
       } else {
@@ -3731,7 +3770,7 @@ export const regenerateCardMedia = onCall(
           actualMediaType = "image";
           provider = "gemini-3.1-flash-lite-image";
         } catch (imgErr) {
-          throw new Error(`Falló la generación de imagen tras recorrer el pool PAID: ${imgErr.message}`);
+          throw new Error(`Falló la generación de imagen tras recorrer el pool PAID: ${imgErr.message}`, { cause: imgErr });
         }
       }
 
@@ -3755,7 +3794,7 @@ export const regenerateCardMedia = onCall(
         }
       });
 
-      try { await file.makePublic(); } catch (_) {}
+      try { await file.makePublic(); } catch { /* Archivo ya público */ }
 
       const permanentMediaUrl = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
 
@@ -3771,7 +3810,7 @@ export const regenerateCardMedia = onCall(
         updatePayload.imageUrl = permanentMediaUrl;
       }
 
-      const slugId = wordObj.de.toLowerCase().replace(/[\s\/?!\\,.]+/g, "_");
+      const slugId = wordObj.de.toLowerCase().replace(/[\s/?!\\,.]+/g, "_");
       await db.collection("global_flashcards").doc(safeId).set(updatePayload, { merge: true });
       if (slugId && slugId !== safeId) {
         await db.collection("global_flashcards").doc(slugId).set(updatePayload, { merge: true });
