@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ClockSVG = ({ time }) => {
   if (!time) return null;
   
@@ -34,7 +32,7 @@ const ClockSVG = ({ time }) => {
 
   return (
     <div className="flex flex-col items-center justify-center p-2">
-      <svg viewBox="0 0 100 100" className="w-24 h-24 drop-shadow-sm select-none">
+      <svg viewBox="0 0 100 100" role="img" aria-label={`Reloj analógico mostrando las ${time}`} className="w-24 h-24 drop-shadow-sm select-none">
         {/* Esfera del Reloj */}
         <circle cx="50" cy="50" r="45" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="2.5" />
         

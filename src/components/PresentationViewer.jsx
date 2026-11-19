@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Suspense } from 'react';
-import { Presentation, Link2, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
+import { Presentation, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { goetheModules, studyPlanModules } from '../data/chapters';
 import { recordDailyStudyActivity, recordModuleCompleted, recordCardStudied, getSafeId } from '../utils/helpers';
 import { stopCurrentAudio } from '../services/aiAudioService';
@@ -18,6 +18,13 @@ const PresentationViewer = ({
   onNextModule
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [prevPresId, setPrevPresId] = useState(presentation?.id);
+  const mainRef = useRef(null);
+
+  if (presentation?.id !== prevPresId) {
+    setPrevPresId(presentation?.id);
+    setCurrentSlide(0);
+  }
 
   useEffect(() => {
     return () => {
@@ -27,10 +34,15 @@ const PresentationViewer = ({
 
   useEffect(() => {
     if (presentation) {
-      setCurrentSlide(0);
       recordDailyStudyActivity();
     }
-  }, [presentation?.id]);
+  }, [presentation]);
+
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTop = 0;
+    }
+  }, [currentSlide, presentation?.id]);
 
   useEffect(() => {
     const curSlide = presentation?.slides?.[currentSlide];
@@ -45,7 +57,7 @@ const PresentationViewer = ({
         recordCardStudied(getSafeId(curSlide.de).substring(0, 150));
       }
     }
-  }, [currentSlide, presentation?.id]);
+  }, [currentSlide, presentation]);
 
   const nextSlide = () => {
     recordDailyStudyActivity();
@@ -73,7 +85,6 @@ const PresentationViewer = ({
     ? currentCollection[currentModuleIndex + 1] 
     : null;
   
-  const hasNextModule = Boolean(nextModule && nextModule.title);
   const slide = presentation?.slides?.[currentSlide] || presentation?.slides?.[0] || { title: '', subtitle: '', content: null };
   const isLastSlide = currentSlide === (presentation?.slides?.length || 0) - 1;
 
@@ -89,19 +100,15 @@ const PresentationViewer = ({
     setFullscreenImage,
     unlockedCards,
     speakText,
-    lazyLoadImage,
-    onComplete: nextSlide
+    lazyLoadImage
   };
 
   // Helper de Formato Inline para Negritas (**texto**), Cursivas (*texto*) y Código (`texto`)
   const formatInlineMarkdown = (text) => {
     if (!text) return '';
     
-    let clean = text.trim()
-      .replace(/([a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\)\]\:\;\,\.\/\-])\*(?!\*)/g, '$1')
-      .replace(/(?<!\*)\*(?!\*)/g, '');
-
-    const parts = clean.split(/(\*\*.*?\*\*|\*.*?\*|`.*?`)/g);
+    const clean = text.trim();
+    const parts = clean.split(/(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`)/g);
 
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
@@ -156,11 +163,7 @@ const PresentationViewer = ({
 
     // 3. Procesar contenido en formato Texto / Markdown / Tablas
     if (typeof slide.content === 'string') {
-      // Sanitización inicial
-      const cleanContent = slide.content
-        .replace(/([a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\)\]\:\;\,\.\/\-])\*(?!\*)/g, '$1')
-        .replace(/(?<!\*)\*(?!\*)/g, '')
-        .replace(/\n\n+/g, '\n\n');
+      const cleanContent = slide.content.replace(/\n\n+/g, '\n\n');
 
       const blocks = cleanContent.split('\n\n');
 
@@ -263,7 +266,7 @@ const PresentationViewer = ({
               return (
                 <ul key={bIdx} className="space-y-2 my-2 pl-1 text-slate-800 not-prose">
                   {lines.map((line, lIdx) => {
-                    const itemText = line.trim().replace(/^[\*\-]\s+/, '');
+                    const itemText = line.trim().replace(/^[*-]\s+/, '');
                     return (
                       <li key={lIdx} className="flex items-start gap-2.5 text-slate-800">
                         <span className="inline-block w-2 h-2 rounded-full bg-blue-600 mt-2 shrink-0" />
@@ -384,8 +387,8 @@ const PresentationViewer = ({
       </header>
 
       {/* 2. MAIN (ÁREA DE CONTENIDO SCROLLEABLE) */}
-      <main className={`flex-1 w-full overflow-y-auto overscroll-contain px-4 sm:px-6 md:px-10 py-6 pb-6 ${bodyBackground}`}>
-        <div className="max-w-4xl mx-auto w-full animate-in slide-in-from-bottom-3 fade-in duration-200" key={currentSlide}>
+      <main ref={mainRef} className={`flex-1 w-full overflow-y-auto overscroll-contain px-4 sm:px-6 md:px-10 py-6 pb-6 ${bodyBackground}`}>
+        <div className="max-w-4xl mx-auto w-full animate-in slide-in-from-bottom-3 fade-in duration-200" key={`${presentation.id}-${currentSlide}`}>
           <div className="mb-6 md:mb-8 text-center">
             <h1 className={`text-2xl sm:text-3xl md:text-4xl mb-2 tracking-tight ${isBlueprint ? 'text-slate-900 font-extrabold' : isMedical ? 'text-emerald-950 font-black' : 'text-amber-950 font-black'}`}>
               {slide.title}
@@ -414,16 +417,24 @@ const PresentationViewer = ({
           <ChevronLeft size={18} /> Anterior
         </button>
         
-        <div className="flex gap-1 sm:gap-1.5 items-center justify-center overflow-x-auto max-w-[40%] sm:max-w-none px-1">
+        <div className="flex gap-0.5 sm:gap-1 items-center justify-center overflow-x-auto max-w-[44%] sm:max-w-none px-1">
           {presentation.slides.map((_, idx) => (
-            <div 
-              key={idx} 
-              className={`h-2 rounded-full transition-all duration-300 shrink-0 ${
-                idx === currentSlide 
-                  ? isBlueprint ? 'bg-blue-600 w-5 sm:w-6' : isMedical ? 'bg-emerald-500 w-5 sm:w-6' : 'bg-amber-600 w-5 sm:w-6' 
-                  : isBlueprint ? 'bg-slate-300 w-2' : isMedical ? 'bg-emerald-200 w-2' : 'bg-amber-200 w-2'
-              }`} 
-            />
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setCurrentSlide(idx)}
+              aria-label={`Ir a diapositiva ${idx + 1} de ${presentation.slides.length}`}
+              aria-current={idx === currentSlide ? 'step' : undefined}
+              className="min-w-[24px] min-h-[24px] flex items-center justify-center shrink-0 cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-indigo-600"
+            >
+              <span
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  idx === currentSlide 
+                    ? isBlueprint ? 'bg-blue-600 w-5 sm:w-6' : isMedical ? 'bg-emerald-500 w-5 sm:w-6' : 'bg-amber-600 w-5 sm:w-6' 
+                    : isBlueprint ? 'bg-slate-300 w-2' : isMedical ? 'bg-emerald-200 w-2' : 'bg-amber-200 w-2'
+                }`}
+              />
+            </button>
           ))}
         </div>
 

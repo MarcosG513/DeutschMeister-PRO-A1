@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { 
-  BookOpen, CheckCircle2, XCircle, AlertTriangle, 
-  RotateCcw, Award, ArrowRight, ExternalLink, Globe, Mail 
+import { useState } from 'react';
+import {
+  BookOpen, CheckCircle2, XCircle,
+  RotateCcw, Award, ArrowRight, Globe, Mail
 } from 'lucide-react';
 import { recordGoetheScore } from '../utils/helpers';
 
@@ -125,33 +125,105 @@ const LESEN_TEILS = [
   }
 ];
 
+const LESEN_DTZ_TEILS = [
+  {
+    teilId: 'dtz_1',
+    title: "Puente A2/DTZ: Hausordnung, Wohnungsanzeige & Bürgeramt",
+    subtitle: "3 lecturas funcionales estilo DTZ/B1 con detalles y requisitos específicos",
+    questions: [
+      {
+        id: "ldtz_1",
+        title: "1. Hausordnung (Normas de la comunidad)",
+        signType: "public",
+        signHeader: "HAUSORDNUNG · LINDENSTRASSE 22",
+        signBody: "Ruhezeiten: Montag bis Samstag von 13:00–15:00 Uhr und ab 22:00 Uhr sowie sonntags ganztägig.\n\nFahrräder bitte nur im Fahrradkeller oder auf den markierten Außenflächen abstellen – niemals im Treppenhaus.",
+        statement: "Am Sonntag darf man im Treppenhaus ein Fahrrad abstellen.",
+        question: "¿Es verdadera o falsa la afirmación según la Hausordnung?",
+        options: ["Richtig", "Falsch"],
+        correct: "Falsch",
+        explanation: "Las bicicletas NO se pueden dejar nunca en la escalera («niemals im Treppenhaus»), independientemente del día."
+      },
+      {
+        id: "ldtz_2",
+        title: "2. Anuncio de vivienda (Wohnungsmarkt)",
+        situation: "Tu familia busca un piso de 3 habitaciones máximo 1.100 € Warmmiete cerca del metro, con permiso para un perro pequeño.",
+        optionsData: [
+          {
+            key: "Anzeige A",
+            title: "3-Zimmer-Altbauwohnung Zentrum",
+            tag: "950 € Kaltmiete + 280 € NK • Keine Haustiere",
+            details: "Direkt an der U-Bahn U2, Balkon, 72 m². Haustiere sind vom Vermieter leider nicht gestattet."
+          },
+          {
+            key: "Anzeige B",
+            title: "Helle 3-Zimmer-Wohnung Nordpark",
+            tag: "1.060 € Warmmiete • Haustiere nach Absprache",
+            details: "3 Minuten zur S-Bahn, 68 m², Einbauküche. Ein kleiner ruhiger Hund ist erlaubt."
+          }
+        ],
+        question: "¿Qué anuncio cumple con TODAS las condiciones?",
+        options: ["Anzeige A", "Anzeige B"],
+        correct: "Anzeige B",
+        explanation: "Anzeige A supera 1.100 € Warmmiete (950 + 280 = 1.230 €) y prohíbe mascotas. Anzeige B cuesta 1.060 € Warmmiete y permite un perro pequeño."
+      },
+      {
+        id: "ldtz_3",
+        title: "3. Notificación del Bürgeramt",
+        sender: "bürgeramt@stadt-koeln.de",
+        subject: "Ihr Termin zur Ummeldung",
+        body: "Sehr geehrter Herr Morales,\n\nfür die Ummeldung am Donnerstag um 10:15 Uhr benötigen wir Ihren gültigen Reisepass UND die Wohnungsgeberbestätigung im Original. Eine Kopie der Bestätigung auf dem Handy reicht leider nicht aus. Bei Verspätung von über 10 Minuten verfällt der Termin.\n\nMit freundlichen Grüßen\nIhr Kundenservice",
+        statement: "Es genügt, die Wohnungsgeberbestätigung als Foto auf dem Handy vorzuzeigen.",
+        question: "¿Es verdadera o falsa la afirmación?",
+        options: ["Richtig", "Falsch"],
+        correct: "Falsch",
+        explanation: "«Original» obligatorio: una foto o copia en el móvil NO es suficiente («reicht leider nicht aus»)."
+      }
+    ]
+  }
+];
+
+const LESEN_BY_TRACK = {
+  A1: LESEN_TEILS,
+  DTZ: LESEN_DTZ_TEILS,
+};
+
 const GoetheLesenExam = ({ onComplete }) => {
+  const [examTrack, setExamTrack] = useState('A1');
   const [activeTeilIdx, setActiveTeilIdx] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showSummary, setShowSummary] = useState(false);
 
-  const activeTeil = LESEN_TEILS[activeTeilIdx];
+  const currentTeils = LESEN_BY_TRACK[examTrack] || LESEN_TEILS;
+  const activeTeil = currentTeils[activeTeilIdx] || currentTeils[0];
+
+  const handleTrackSwitch = (nextTrack) => {
+    if (nextTrack === examTrack) return;
+    setExamTrack(nextTrack);
+    setActiveTeilIdx(0);
+    setShowSummary(false);
+  };
 
   const handleSelectOption = (qId, opt) => {
     setAnswers(prev => ({ ...prev, [qId]: opt }));
   };
 
-  const allQuestions = LESEN_TEILS.flatMap(t => t.questions);
-  const totalQuestions = allQuestions.length; // 6 preguntas oficiales
-  const answeredCount = Object.keys(answers).length;
+  const allQuestions = currentTeils.flatMap(t => t.questions);
+  const totalQuestions = allQuestions.length;
+  const answeredCount = allQuestions.filter((q) => Boolean(answers[q.id])).length;
 
   const calculateOfficialScore = () => {
     let correct = 0;
     allQuestions.forEach(q => {
       if (answers[q.id] === q.correct) correct++;
     });
-    // Escalado oficial Goethe A1: 15 puntos máximos
     return Math.round((correct / totalQuestions) * 15);
   };
 
   const handleFinishExam = () => {
     const finalScore = calculateOfficialScore();
-    recordGoetheScore('g_lesen', finalScore);
+    if (examTrack === 'A1') {
+      recordGoetheScore('g_lesen', finalScore);
+    }
     setShowSummary(true);
     if (onComplete) onComplete(finalScore);
   };
@@ -167,29 +239,53 @@ const GoetheLesenExam = ({ onComplete }) => {
           </div>
           <div>
             <h3 className="font-black text-base sm:text-lg leading-tight">
-              Goethe-Zertifikat A1: Lesen (Simulacro Oficial)
+              {examTrack === 'A1' ? 'Goethe-Zertifikat A1: Lesen (Simulacro Oficial)' : 'Puente A2 / DTZ: Lesen Funcional'}
             </h3>
             <p className="text-amber-200 text-xs">
-              E-Mails, Anzeigen & Schilder • Ponderación oficial: 15 Puntos
+              E-Mails, Anzeigen &amp; Hausordnung • Ponderación oficial: 15 Puntos
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 bg-amber-900/60 p-1 rounded-xl border border-amber-700/50">
-          {LESEN_TEILS.map((teil, idx) => (
-            <button
-              key={teil.teilId}
-              type="button"
-              onClick={() => setActiveTeilIdx(idx)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-                activeTeilIdx === idx
-                  ? 'bg-amber-500 text-slate-900 shadow-sm font-black'
-                  : 'text-amber-200 hover:text-white'
-              }`}
-            >
-              Teil {teil.teilId}
-            </button>
-          ))}
+        <div className="flex flex-wrap items-center gap-2">
+          <div role="tablist" aria-label="Nivel de examen Lesen" className="flex items-center gap-1 bg-amber-900/90 p-1 rounded-xl border border-amber-700/60">
+            {[
+              { id: 'A1', label: 'A1 Oficial' },
+              { id: 'DTZ', label: 'Puente A2/DTZ' },
+            ].map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                aria-selected={examTrack === t.id}
+                onClick={() => handleTrackSwitch(t.id)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold border-b-2 transition cursor-pointer ${
+                  examTrack === t.id
+                    ? 'bg-amber-400 text-slate-950 border-white'
+                    : 'text-amber-200 border-transparent hover:text-white'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-1.5 bg-amber-900/60 p-1 rounded-xl border border-amber-700/50">
+            {currentTeils.map((teil, idx) => (
+              <button
+                key={teil.teilId}
+                type="button"
+                onClick={() => setActiveTeilIdx(idx)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  activeTeilIdx === idx
+                    ? 'bg-amber-500 text-slate-900 shadow-sm font-black'
+                    : 'text-amber-200 hover:text-white'
+                }`}
+              >
+                {examTrack === 'DTZ' ? 'Práctica DTZ' : `Teil ${teil.teilId}`}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -359,7 +455,7 @@ const GoetheLesenExam = ({ onComplete }) => {
             </div>
 
             <div className="flex items-center gap-2">
-              {activeTeilIdx < LESEN_TEILS.length - 1 ? (
+              {activeTeilIdx < currentTeils.length - 1 ? (
                 <button
                   type="button"
                   onClick={() => setActiveTeilIdx(prev => prev + 1)}
@@ -389,7 +485,7 @@ const GoetheLesenExam = ({ onComplete }) => {
           </div>
 
           <h3 className="text-2xl font-black text-slate-900 mb-1">
-            Resultado del Módulo Lesen A1
+            {examTrack === 'A1' ? 'Resultado del Módulo Lesen A1' : 'Resultado Puente A2 / DTZ Lesen'}
           </h3>
           <p className="text-xs sm:text-sm text-slate-500 mb-6">
             Evaluación oficial sobre textos y normas Start Deutsch 1

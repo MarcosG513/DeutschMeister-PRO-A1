@@ -1,88 +1,164 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Volume2, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
-import { playGermanAudio } from '../services/aiAudioService';
+import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
+import { deterministicShuffle } from '../utils/pedagogicalToolEvaluators';
 
-const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePool, mode }) => {
-  const [currentSentence, setCurrentSentence] = useState(null);
-  const [pool, setPool] = useState([]);
-  const [slots, setSlots] = useState([null, null, null]);
+const getSentenceParts = (rawSentence = {}, fallback = {}) => {
+  const expectedOrder = rawSentence.correctOrder
+    ? rawSentence.correctOrder
+    : rawSentence.words
+      ? rawSentence.words
+      : [rawSentence.subject || fallback.subject, rawSentence.verb || fallback.verb, rawSentence.complement || fallback.complement].filter(Boolean);
+  const targetWords = rawSentence.words || expectedOrder;
+  return { expectedOrder, targetWords };
+};
+
+const createShuffledPool = (targetWords = [], expectedOrder = [], seedKey = '') => {
+  let shuffled = deterministicShuffle(targetWords, `${seedKey}_0`);
+  if (
+    shuffled.length > 1 &&
+    expectedOrder.length === shuffled.length &&
+    shuffled.every((w, i) => w === expectedOrder[i])
+  ) {
+    shuffled = deterministicShuffle(targetWords, `${seedKey}_alt`);
+    if (shuffled.every((w, i) => w === expectedOrder[i])) {
+      shuffled = [...shuffled.slice(1), shuffled[0]];
+    }
+  }
+  return shuffled;
+};
+
+const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePool, mode = 'v2' }) => {
+  const initialSentence =
+    sentencePool && sentencePool.length > 0
+      ? sentencePool[0]
+      : { subject, verb, complement };
+
+  const datasetKey =
+    sentencePool && sentencePool.length > 0
+      ? `pool::${sentencePool.map((s) => s?.id || (s?.words || []).join('_')).join('|')}`
+      : `single::${subject}::${verb}::${complement}`;
+
+  const [prevDatasetKey, setPrevDatasetKey] = useState(datasetKey);
+  const [poolCursor, setPoolCursor] = useState(0);
+  const [currentSentence, setCurrentSentence] = useState(initialSentence);
+
+  const { expectedOrder, targetWords } = getSentenceParts(currentSentence || {}, { subject, verb, complement });
+  const numBlocks = expectedOrder.length || 3;
+
+  const [pool, setPool] = useState(() =>
+    createShuffledPool(targetWords, expectedOrder, `${datasetKey}_0`)
+  );
+  const [slots, setSlots] = useState(() => new Array(numBlocks).fill(null));
   const [isValid, setIsValid] = useState(null); // true, false, o null
   const [shake, setShake] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
+  const resetTimerRef = useRef(null);
 
-  // Sincronizar y elegir oración inicial del pool o de props directos
-  useEffect(() => {
-    if (sentencePool && sentencePool.length > 0) {
-      const randomItem = sentencePool[Math.floor(Math.random() * sentencePool.length)];
-      setCurrentSentence(randomItem);
-    } else {
-      setCurrentSentence({ subject, verb, complement });
-    }
-  }, [sentencePool, subject, verb, complement]);
-
-  const rawSentence = currentSentence || {};
-  const expectedOrder = rawSentence.correctOrder 
-    ? rawSentence.correctOrder 
-    : (rawSentence.words 
-        ? rawSentence.words 
-        : [rawSentence.subject || subject, rawSentence.verb || verb, rawSentence.complement || complement].filter(Boolean));
-  
-  const targetWords = rawSentence.words || expectedOrder;
-  const numBlocks = expectedOrder.length || 3;
-
-  // Inicializar y desordenar palabras en el pool
-  useEffect(() => {
-    if (!targetWords || targetWords.length === 0) return;
-    
-    let shuffled = [...targetWords];
-    let attempts = 0;
-    while (attempts < 10 && shuffled.length > 1 && shuffled.every((w, i) => w === expectedOrder[i])) {
-      shuffled = [...shuffled].sort(() => Math.random() - 0.5);
-      attempts++;
-    }
-
-    setPool(shuffled);
-    setSlots(new Array(numBlocks).fill(null));
+  if (prevDatasetKey !== datasetKey) {
+    setPrevDatasetKey(datasetKey);
+    const nextSent =
+      sentencePool && sentencePool.length > 0
+        ? sentencePool[0]
+        : { subject, verb, complement };
+    const nextParts = getSentenceParts(nextSent, { subject, verb, complement });
+    setPoolCursor(0);
+    setCurrentSentence(nextSent);
+    setPool(createShuffledPool(nextParts.targetWords, nextParts.expectedOrder, `${datasetKey}_reset`));
+    setSlots(new Array(nextParts.expectedOrder.length || 3).fill(null));
     setIsValid(null);
     setHintUsed(false);
-  }, [currentSentence]);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+      stopCurrentAudio();
+    };
+  }, []);
+
+  const validateCompletedSlots = (candidateSlots) => {
+    if (!candidateSlots || candidateSlots.includes(null)) return;
+
+    const isMatch =
+      expectedOrder && expectedOrder.length === candidateSlots.length
+        ? candidateSlots.every((w, idx) => w === expectedOrder[idx])
+        : candidateSlots[1] === ((currentSentence && currentSentence.verb) || verb);
+
+    if (isMatch) {
+      setIsValid(true);
+      playGermanAudio(candidateSlots.join(" "), { type: "sentence", voice: "Charon" });
+    } else {
+      setIsValid(false);
+      setShake(true);
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = setTimeout(() => {
+        setShake(false);
+        setSlots(new Array(numBlocks).fill(null));
+        setPool(createShuffledPool(targetWords, expectedOrder, `${datasetKey}_retry_${poolCursor}`));
+        setIsValid(null);
+      }, 1200);
+    }
+  };
 
   const buyHint = () => {
     if (hintUsed || isValid !== null || !expectedOrder || expectedOrder.length === 0) return;
-    setHintUsed(true);
     const firstWord = expectedOrder[0];
-    if (firstWord && (pool.includes(firstWord) || slots.includes(firstWord))) {
-      const newSlots = [...slots];
-      newSlots[0] = firstWord;
-      setSlots(newSlots);
-      setPool(prev => {
-        const idx = prev.indexOf(firstWord);
-        if (idx !== -1) {
-          const next = [...prev];
-          next.splice(idx, 1);
-          return next;
-        }
-        return prev;
-      });
+    if (!firstWord) return;
+
+    setHintUsed(true);
+    const nextSlots = [...slots];
+    const nextPool = [...pool];
+
+    if (nextSlots[0] === firstWord) {
+      return;
+    }
+
+    const displaced = nextSlots[0];
+    const poolIdx = nextPool.indexOf(firstWord);
+    if (poolIdx !== -1) {
+      nextPool.splice(poolIdx, 1);
+    } else {
+      const existingSlotIdx = nextSlots.findIndex((w, i) => i > 0 && w === firstWord);
+      if (existingSlotIdx !== -1) {
+        nextSlots[existingSlotIdx] = null;
+      } else {
+        return;
+      }
+    }
+
+    if (displaced) {
+      nextPool.push(displaced);
+    }
+
+    nextSlots[0] = firstWord;
+    setSlots(nextSlots);
+    setPool(nextPool);
+    if (!nextSlots.includes(null)) {
+      validateCompletedSlots(nextSlots);
     }
   };
 
   const selectWord = (word) => {
     if (isValid !== null) return;
     const emptyIndex = slots.indexOf(null);
-    if (emptyIndex !== -1) {
-      const newSlots = [...slots];
-      newSlots[emptyIndex] = word;
-      setSlots(newSlots);
-      setPool(prev => {
-        const idx = prev.indexOf(word);
-        if (idx !== -1) {
-          const next = [...prev];
-          next.splice(idx, 1);
-          return next;
-        }
-        return prev;
-      });
+    if (emptyIndex === -1) return;
+
+    const newSlots = [...slots];
+    newSlots[emptyIndex] = word;
+    setSlots(newSlots);
+    setPool((prev) => {
+      const idx = prev.indexOf(word);
+      if (idx !== -1) {
+        const next = [...prev];
+        next.splice(idx, 1);
+        return next;
+      }
+      return prev;
+    });
+
+    if (!newSlots.includes(null)) {
+      validateCompletedSlots(newSlots);
     }
   };
 
@@ -93,53 +169,34 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
       const newSlots = [...slots];
       newSlots[index] = null;
       setSlots(newSlots);
-      setPool(prev => [...prev, word]);
+      setPool((prev) => [...prev, word]);
       setIsValid(null);
     }
   };
 
-  const checkSentence = () => {
-    if (slots.includes(null)) return;
-
-    let isMatch = false;
-    if (expectedOrder && expectedOrder.length === slots.length) {
-      isMatch = slots.every((w, idx) => w === expectedOrder[idx]);
-    } else {
-      isMatch = slots[1] === (rawSentence.verb || verb);
-    }
-
-    if (isMatch) {
-      setIsValid(true);
-      playGermanAudio(slots.join(" "), { type: "sentence", voice: "Charon" });
-    } else {
-      setIsValid(false);
-      setShake(true);
-      setTimeout(() => {
-        setShake(false);
-        setSlots(new Array(numBlocks).fill(null));
-        setPool([...targetWords].sort(() => Math.random() - 0.5));
-        setIsValid(null);
-      }, 1200);
-    }
-  };
-
-  useEffect(() => {
-    if (slots.length > 0 && !slots.includes(null)) {
-      checkSentence();
-    }
-  }, [slots]);
-
   const nextRandomSentence = () => {
     if (!sentencePool || sentencePool.length === 0) return;
-    let nextSentence = currentSentence;
-    if (sentencePool.length > 1) {
-      do {
-        nextSentence = sentencePool[Math.floor(Math.random() * sentencePool.length)];
-      } while (nextSentence?.id === currentSentence?.id && sentencePool.length > 1);
-    } else {
-      nextSentence = sentencePool[0];
-    }
+    stopCurrentAudio();
+    if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+    const nextIdx = (poolCursor + 1) % sentencePool.length;
+    const nextSentence = sentencePool[nextIdx];
+    const nextParts = getSentenceParts(nextSentence, { subject, verb, complement });
+    setPoolCursor(nextIdx);
     setCurrentSentence(nextSentence);
+    setPool(createShuffledPool(nextParts.targetWords, nextParts.expectedOrder, `${datasetKey}_${nextIdx}`));
+    setSlots(new Array(nextParts.expectedOrder.length || 3).fill(null));
+    setIsValid(null);
+    setHintUsed(false);
+  };
+
+  const getSlotCaption = (idx) => {
+    if (mode === 'b1_subordinate' || mode === 'subordinate') {
+      return idx === numBlocks - 1 ? '🎯 Verbo al Final' : `Bloque ${idx + 1}`;
+    }
+    if (idx === 1 && numBlocks <= 4) {
+      return '👑 Posición 2';
+    }
+    return `Bloque ${idx + 1}`;
   };
 
   const getGridColsClass = () => {
@@ -206,7 +263,7 @@ const DraggableSentenceBuilder = ({ verb, subject, complement, pool: sentencePoo
               {word || ''}
             </div>
             <span className="text-[10px] font-bold text-slate-400 mt-1 uppercase text-center">
-              {idx === 1 && numBlocks <= 4 ? '👑 Posición 2' : `Bloque ${idx + 1}`}
+              {getSlotCaption(idx)}
             </span>
           </div>
         ))}

@@ -1,6 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Shield, ArrowRight, CheckCircle2, AlertTriangle, RotateCcw } from 'lucide-react';
-import { playGermanAudio } from '../services/aiAudioService';
+import { useState, useEffect } from 'react';
+import { Shield, ArrowRight, CheckCircle2, AlertTriangle, RotateCcw, Volume2 } from 'lucide-react';
+import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
+
+const ARTICLE_PREFIX_RE = /^(der|die|das|den|dem|ein|eine|einen|einem|kein|keine|keinen|keinem|mein|meine|meinen|meinem)\s+/i;
+const PRONOUN_RE = /^(er|sie|es|ihn|ihm|ihr|ihnen)$/i;
+
+const buildShieldPhrase = (choice, word, raw = {}) => {
+  if (raw.displayTemplate) {
+    return raw.displayTemplate.replace('___', choice);
+  }
+  const cleanWord = String(word || '').trim();
+  const cleanChoice = String(choice || '').trim();
+  if (!cleanWord) return cleanChoice;
+  if (PRONOUN_RE.test(cleanChoice)) {
+    return cleanChoice;
+  }
+  if (ARTICLE_PREFIX_RE.test(cleanWord)) {
+    return cleanWord.replace(ARTICLE_PREFIX_RE, `${cleanChoice} `);
+  }
+  return `${cleanChoice} ${cleanWord}`;
+};
+
+const stripLeadingArticle = (word = '') => String(word || '').replace(ARTICLE_PREFIX_RE, '').trim();
 
 const AccusativeShield = ({ words = [], mode = "accusative" }) => {
   const list = words.length > 0 ? words : [
@@ -17,104 +38,89 @@ const AccusativeShield = ({ words = [], mode = "accusative" }) => {
   const [feedbackMsg, setFeedbackMsg] = useState("");
   const [finished, setFinished] = useState(false);
   const [shieldApplied, setShieldApplied] = useState(false);
-  const timerRef = useRef(null);
 
   useEffect(() => {
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
+      stopCurrentAudio();
     };
   }, []);
 
   const currentRaw = list[currentIndex] || {};
   const effectiveGender = currentRaw.gender || (currentRaw.type === "Masc" ? "der" : currentRaw.type === "Fem" ? "die" : currentRaw.type === "Neutro" ? "das" : "die");
   const wordText = currentRaw.word || currentRaw.de || "";
-  const currentWord = { ...currentRaw, gender: effectiveGender, word: wordText };
+  const bareNoun = stripLeadingArticle(wordText);
+  const currentWord = { ...currentRaw, gender: effectiveGender, word: wordText, bareNoun };
   const hasBinaryChoice = Boolean(currentRaw.correct && currentRaw.alt);
 
-  // Opciones binarias estables por índice
   const choices = hasBinaryChoice
     ? (currentIndex % 2 === 0 ? [currentRaw.correct, currentRaw.alt] : [currentRaw.alt, currentRaw.correct])
     : [];
 
+  const advanceToNext = () => {
+    stopCurrentAudio();
+    setShowFeedback(null);
+    setFeedbackMsg("");
+    setShieldApplied(false);
+    if (currentIndex + 1 < list.length) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      setFinished(true);
+    }
+  };
+
   const handleBinaryChoice = (chosen) => {
     if (showFeedback) return;
     const isCorrect = chosen === currentRaw.correct;
-    let explanation = "";
+    const targetPhrase = currentRaw.audioText && isCorrect
+      ? currentRaw.audioText
+      : buildShieldPhrase(currentRaw.correct, wordText, currentRaw);
+    const chosenPhrase = buildShieldPhrase(chosen, wordText, currentRaw);
 
     if (isCorrect) {
-      explanation = `¡Correcto! '${chosen} ${currentWord.word}' (${currentWord.translation || ''}).`;
-      playGermanAudio(`${chosen} ${currentWord.word}`, { type: "vocab", voice: "Charon" });
+      playGermanAudio(targetPhrase, { type: "vocab", voice: "Charon" });
       setScore(prev => prev + 1);
       setShowFeedback('correct');
+      setFeedbackMsg(`¡Correcto! «${chosenPhrase}» (${currentWord.translation || ''}).`);
     } else {
-      explanation = `¡Error! La opción correcta es '${currentRaw.correct} ${currentWord.word}' (${currentWord.translation || ''}).`;
       setShowFeedback('incorrect');
+      setFeedbackMsg(`¡Error! Elegiste «${chosenPhrase}». La opción correcta es «${targetPhrase}» (${currentWord.translation || ''}).`);
     }
-    setFeedbackMsg(explanation);
-
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      setShowFeedback(null);
-      setFeedbackMsg("");
-      if (currentIndex + 1 < list.length) {
-        setCurrentIndex(prev => prev + 1);
-      } else {
-        setFinished(true);
-      }
-    }, 2800);
   };
 
   const handleAction = (applyShield) => {
     if (showFeedback) return;
 
     const isMasculine = currentWord.gender === "der" || currentRaw.type === "Masc";
-    let correct = false;
-    let explanation = "";
 
     if (applyShield) {
       if (isMasculine) {
-        correct = true;
         setShieldApplied(true);
-        explanation = `¡Correcto! El masculino '${currentWord.gender} ${currentWord.word}' cambia en Acusativo a 'den ${currentWord.word}' (o 'einen ${currentWord.word}').`;
-        playGermanAudio(`den ${currentWord.word}`, { type: "vocab", voice: "Charon" });
+        const targetPhrase = currentRaw.audioText || `den ${bareNoun}`;
+        playGermanAudio(targetPhrase, { type: "vocab", voice: "Charon" });
+        setScore(prev => prev + 1);
+        setShowFeedback('correct');
+        setFeedbackMsg(`¡Correcto! El masculino «der ${bareNoun}» cambia en Acusativo a «den ${bareNoun}» (o «einen ${bareNoun}»). (${currentWord.translation || ''})`);
       } else {
-        correct = false;
-        explanation = `¡Error! El sustantivo es ${currentWord.gender === "die" ? "femenino" : "neutro"} (${currentWord.gender} ${currentWord.word}). Solo los masculinos cambian en acusativo.`;
+        setShowFeedback('incorrect');
+        setFeedbackMsg(`¡Error! El sustantivo es ${currentWord.gender === "die" ? "femenino" : "neutro"} (${currentWord.gender} ${bareNoun}). Solo los masculinos cambian en acusativo.`);
       }
-    } else {
-      if (!isMasculine) {
-        correct = true;
-        explanation = `¡Correcto! '${currentWord.gender} ${currentWord.word}' es ${currentWord.gender === "die" ? "femenino" : "neutro"}, por lo que no cambia en acusativo.`;
-        playGermanAudio(`${currentWord.gender} ${currentWord.word}`, { type: "vocab", voice: "Charon" });
-      } else {
-        correct = false;
-        explanation = `¡Error! '${currentWord.gender} ${currentWord.word}' es masculino. El acusativo exige cambiar '${currentWord.gender}' a 'den' (o 'einen').`;
-      }
+      return;
     }
 
-    if (correct) {
+    if (!isMasculine) {
+      const targetPhrase = currentRaw.audioText || `${currentWord.gender} ${bareNoun}`;
+      playGermanAudio(targetPhrase, { type: "vocab", voice: "Charon" });
       setScore(prev => prev + 1);
       setShowFeedback('correct');
+      setFeedbackMsg(`¡Correcto! «${targetPhrase}» es ${currentWord.gender === "die" ? "femenino" : "neutro"}, por lo que no cambia en acusativo. (${currentWord.translation || ''})`);
     } else {
       setShowFeedback('incorrect');
+      setFeedbackMsg(`¡Error! «der ${bareNoun}» es masculino. El acusativo exige cambiar el artículo a «den» (o «einen»).`);
     }
-    setFeedbackMsg(explanation);
-
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      setShowFeedback(null);
-      setFeedbackMsg("");
-      setShieldApplied(false);
-      if (currentIndex + 1 < list.length) {
-        setCurrentIndex(prev => prev + 1);
-      } else {
-        setFinished(true);
-      }
-    }, 3500);
   };
 
   const resetGame = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
+    stopCurrentAudio();
     setCurrentIndex(0);
     setScore(0);
     setShowFeedback(null);
@@ -179,19 +185,40 @@ const AccusativeShield = ({ words = [], mode = "accusative" }) => {
             ? (currentWord.type ? `${currentWord.type} (${currentWord.gender || ''})` : currentWord.gender)
             : (shieldApplied ? "den" : currentWord.gender)}
         </span>
-        <h3 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight max-w-full break-words whitespace-normal text-center overflow-hidden px-2">{currentWord.word}</h3>
-        <p className="text-sm text-slate-400 mt-1 italic">({currentWord.translation})</p>
+        <h3 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight max-w-full break-words whitespace-normal text-center overflow-hidden px-2" lang="de">{currentWord.word}</h3>
+        {showFeedback && currentWord.translation && (
+          <p className="text-sm text-slate-500 mt-1 italic">({currentWord.translation})</p>
+        )}
       </div>
 
       {/* Feedback Alert */}
       {showFeedback && (
-        <div className={`flex items-start gap-2 p-3 rounded-xl border mb-6 text-xs sm:text-sm font-medium animate-in fade-in zoom-in-95 ${
+        <div aria-live="polite" className={`flex flex-col gap-3 p-3.5 rounded-xl border mb-5 text-xs sm:text-sm font-medium animate-in fade-in zoom-in-95 ${
           showFeedback === 'correct' 
             ? 'bg-emerald-100 border-emerald-200 text-emerald-800' 
             : 'bg-rose-100 border-rose-200 text-rose-800'
         }`}>
-          {showFeedback === 'correct' ? <CheckCircle2 size={18} className="shrink-0 text-emerald-600 mt-0.5" /> : <AlertTriangle size={18} className="shrink-0 text-rose-600 mt-0.5" />}
-          <span>{feedbackMsg}</span>
+          <div className="flex items-start gap-2">
+            {showFeedback === 'correct' ? <CheckCircle2 size={18} className="shrink-0 text-emerald-600 mt-0.5" /> : <AlertTriangle size={18} className="shrink-0 text-rose-600 mt-0.5" />}
+            <span>{feedbackMsg}</span>
+          </div>
+          <div className="flex items-center justify-between gap-2 pt-1">
+            <button
+              type="button"
+              onClick={() => playGermanAudio(currentRaw.audioText || `${currentWord.gender} ${bareNoun}`, { type: "vocab", voice: "Charon" })}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/80 hover:bg-white text-slate-800 text-xs font-bold border border-slate-300 cursor-pointer"
+            >
+              <Volume2 size={14} /> Escuchar
+            </button>
+            <button
+              type="button"
+              onClick={advanceToNext}
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold cursor-pointer ml-auto"
+            >
+              <span>{currentIndex + 1 >= list.length ? 'Ver resultado' : 'Siguiente'}</span>
+              <ArrowRight size={14} />
+            </button>
+          </div>
         </div>
       )}
 
@@ -201,6 +228,7 @@ const AccusativeShield = ({ words = [], mode = "accusative" }) => {
           {choices.map((choice, i) => (
             <button
               key={i}
+              type="button"
               onClick={() => handleBinaryChoice(choice)}
               disabled={showFeedback !== null}
               className="flex flex-col items-center justify-center p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-extrabold text-base sm:text-lg shadow transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
@@ -213,6 +241,7 @@ const AccusativeShield = ({ words = [], mode = "accusative" }) => {
       ) : (
         <div className="grid grid-cols-2 gap-3">
           <button
+            type="button"
             onClick={() => handleAction(true)}
             disabled={showFeedback !== null}
             className="flex flex-col items-center justify-center p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none max-w-full break-words whitespace-normal text-center overflow-hidden"
@@ -223,6 +252,7 @@ const AccusativeShield = ({ words = [], mode = "accusative" }) => {
           </button>
 
           <button
+            type="button"
             onClick={() => handleAction(false)}
             disabled={showFeedback !== null}
             className="flex flex-col items-center justify-center p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold border border-slate-200 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:pointer-events-none max-w-full break-words whitespace-normal text-center overflow-hidden"

@@ -4,6 +4,8 @@ import { Mic, MicOff, CheckCircle2, AlertCircle, Bot, Sparkles, Hand, ArrowRight
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 
+const STOPWORDS = new Set(['ich', 'du', 'er', 'sie', 'es', 'wir', 'ihr', 'der', 'die', 'das', 'den', 'dem', 'ein', 'eine', 'einen', 'und', 'ist', 'sind', 'bin', 'bitte']);
+
 const VoiceExaminer = ({
   question = "Repite o responde con un comando oficial: 'Sprechen Sie bitte langsam!'",
   expectedKeywords = ["sprechen", "kommen", "nehmen", "langsam", "herein", "platz", "sei", "seid", "seien"],
@@ -39,7 +41,9 @@ const VoiceExaminer = ({
     ? scenarios.map(s => ({
         raw: (s.german || s.text || "").trim(),
         translation: s.translation || "",
-        context: s.context || ""
+        context: s.context || "",
+        instruction: s.instruction || "",
+        tip: s.tip || ""
       }))
     : defaultOptions;
 
@@ -48,9 +52,21 @@ const VoiceExaminer = ({
     setResult(null);
     setSelectedOption('');
     startListening((speechResult) => {
-      const speechToText = (speechResult || "").toLowerCase();
-      const match = expectedKeywords.some(keyword => speechToText.includes(keyword.toLowerCase()));
+      const normalizedWords = (speechResult || "")
+        .toLowerCase()
+        .replace(/[.,!?]/g, ' ')
+        .split(/\s+/)
+        .filter((w) => w.length >= 3 && !STOPWORDS.has(w));
+      const meaningfulTargets = (expectedKeywords || [])
+        .map((k) => k.toLowerCase().trim())
+        .filter((k) => k.length >= 3 && !STOPWORDS.has(k));
+      const poolToCheck = meaningfulTargets.length > 0 ? meaningfulTargets : expectedKeywords.map((k) => k.toLowerCase());
+      const speechLower = (speechResult || "").toLowerCase();
+      const match =
+        normalizedWords.some((w) => poolToCheck.includes(w)) ||
+        poolToCheck.some((kw) => speechLower.includes(kw));
       setResult(match ? 'success' : 'fail');
+      if (match) onComplete?.();
     });
   };
 
@@ -58,7 +74,6 @@ const VoiceExaminer = ({
     const pureGermanText = option.raw || option.text;
     setSelectedOption(pureGermanText);
     playGermanAudio(pureGermanText, { type: "dialogue", voice: "Charon" });
-    setResult('success');
   };
 
   return (
@@ -119,8 +134,14 @@ const VoiceExaminer = ({
                   >
                     <div className="flex flex-col">
                       <span>{opt.context ? `${opt.context}: ` : '🗣️ '}<strong>{opt.raw}</strong></span>
+                      {opt.instruction && (
+                        <span className="text-[11px] text-indigo-100/90 font-medium mt-0.5">{opt.instruction}</span>
+                      )}
                       {opt.translation && (
                         <span className="text-[11px] opacity-80 italic font-normal mt-0.5">{opt.translation}</span>
+                      )}
+                      {opt.tip && (
+                        <span className="text-[10px] text-amber-300/95 font-medium mt-0.5">💡 {opt.tip}</span>
                       )}
                     </div>
                     <Volume2 className="shrink-0 opacity-80" size={15} />
@@ -138,8 +159,16 @@ const VoiceExaminer = ({
 
           {(transcript || selectedOption) && (
             <div className="w-full text-center bg-indigo-900/90 p-2.5 rounded-lg border border-indigo-700/40">
-              <p className="text-[11px] text-indigo-400 uppercase font-bold">Respuesta capturada:</p>
+              <p className="text-[11px] text-indigo-400 uppercase font-bold">
+                {selectedOption ? 'Modelo reproducido:' : 'Respuesta capturada por micrófono:'}
+              </p>
               <p className="text-sm font-semibold text-amber-300 italic">"{selectedOption || transcript}"</p>
+            </div>
+          )}
+
+          {result === 'fail' && (
+            <div aria-live="polite" className="w-full bg-rose-500/20 border border-rose-400/40 text-rose-200 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-center">
+              ⚠️ No detectamos la palabra clave principal en alemán. Escucha el modelo arriba y vuelve a intentarlo con el micrófono.
             </div>
           )}
 

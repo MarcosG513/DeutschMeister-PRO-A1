@@ -13,6 +13,8 @@ const LiveEvaluator = lazy(() => import('../components/LiveEvaluator'));
 const LocativeMapSimulator = lazy(() => import('../components/LocativeMapSimulator'));
 const VoiceExaminer = lazy(() => import('../components/VoiceExaminer'));
 const ClockSVG = lazy(() => import('../components/ClockSVG'));
+const VerbPrepositionTrainer = lazy(() => import('../components/VerbPrepositionTrainer'));
+const SyntaxTransformLab = lazy(() => import('../components/SyntaxTransformLab'));
 
 export const studyPlanModules = [
   // =========================================================================
@@ -20,6 +22,13 @@ export const studyPlanModules = [
   // =========================================================================
   {
     id: 'sp_1',
+    cefrLevel: 'A1',
+    stageOrder: 1,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 12,
+    prerequisites: [],
+    recommendedChapters: [1, 2],
+    skillsFocused: ['grammar', 'speaking'],
     title: 'Capítulo 1: La Célula Sintáctica, V2 y Cambio Vocálico',
     presentationUrl: 'https://drive.google.com/file/d/1D1x2fDb33331RzgNbJupn8jg-MpjiAzA/view?usp=drive_web',
     theme: 'blueprint',
@@ -63,6 +72,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_2',
+    cefrLevel: 'A1',
+    stageOrder: 2,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 14,
+    prerequisites: ['sp_1'],
+    recommendedChapters: [3, 4],
+    skillsFocused: ['grammar', 'vocabulary'],
     title: 'Capítulo 2: El Universo del Sustantivo (Géneros, Plurales y Posesivos)',
     presentationUrl: 'https://drive.google.com/file/d/1ydPXeoc5VGUyyP2C-_eBo7e0RB-CTTGS/view?usp=drive_web',
     theme: 'blueprint',
@@ -107,6 +123,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_3',
+    cefrLevel: 'A1',
+    stageOrder: 3,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 14,
+    prerequisites: ['sp_2'],
+    recommendedChapters: [8, 10],
+    skillsFocused: ['grammar', 'vocabulary'],
     title: 'Capítulo 3: La Crisis del Masculino en Acusativo y Verbos Gatillo',
     presentationUrl: 'https://drive.google.com/file/d/1QusIBIw3hhDxZvtnB3eocWlPWW43dlIp/view?usp=drive_web',
     theme: 'blueprint',
@@ -143,10 +166,10 @@ export const studyPlanModules = [
           <AccusativeShield 
             mode="pronouns"
             words={[
-              { id: 1, word: "den Mann", type: "Masc", gender: "der", correct: "ihn", alt: "er", translation: "hombre (den Mann / ihn)" },
-              { id: 2, word: "einen Kaffee", type: "Masc", gender: "der", correct: "einen", alt: "ein", translation: "café (einen Kaffee)" },
-              { id: 3, word: "die Frau", type: "Fem", gender: "die", correct: "sie", alt: "ihr", translation: "mujer (die Frau / sie)" },
-              { id: 4, word: "das Brot", type: "Neutro", gender: "das", correct: "ein", alt: "einen", translation: "pan (das Brot / es)" }
+              { id: 1, word: "der Mann", type: "Masc", gender: "der", correct: "ihn", alt: "er", displayTemplate: "Ich sehe ___ (der Mann)", audioText: "Ich sehe ihn.", translation: "hombre (der Mann → ihn)" },
+              { id: 2, word: "der Kaffee", type: "Masc", gender: "der", correct: "einen", alt: "ein", displayTemplate: "Ich trinke ___ Kaffee", audioText: "Ich trinke einen Kaffee.", translation: "café (masc. acusativo: einen Kaffee)" },
+              { id: 3, word: "die Frau", type: "Fem", gender: "die", correct: "sie", alt: "ihr", displayTemplate: "Ich frage ___ (die Frau)", audioText: "Ich frage sie.", translation: "mujer (die Frau → sie)" },
+              { id: 4, word: "das Brot", type: "Neutro", gender: "das", correct: "ein", alt: "einen", displayTemplate: "Wir kaufen ___ Brot", audioText: "Wir kaufen ein Brot.", translation: "pan (neutro: ein Brot)" }
             ]}
             {...props} 
           />
@@ -160,6 +183,13 @@ export const studyPlanModules = [
   // =========================================================================
   {
     id: 'sp_4',
+    cefrLevel: 'A1',
+    stageOrder: 4,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 14,
+    prerequisites: ['sp_3'],
+    recommendedChapters: [6, 15],
+    skillsFocused: ['grammar', 'speaking'],
     title: 'Capítulo 4: Verbos Separables e Inseparables (Satzklammer)',
     presentationUrl: 'https://drive.google.com/file/d/1s4MSGKeK7xVZF2qGN4JSXu5dl43VkhOC/view?usp=drive_web',
     theme: 'notebook',
@@ -205,6 +235,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_5',
+    cefrLevel: 'A1',
+    stageOrder: 5,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 12,
+    prerequisites: ['sp_4'],
+    recommendedChapters: [6, 16],
+    skillsFocused: ['grammar', 'speaking'],
     title: 'Capítulo 5: Verbos Modales y el Doble Sándwich Sintáctico',
     presentationUrl: 'https://drive.google.com/file/d/12ef-35y8c5SaFbw4v1xIZX74-5E8mX6c/view?usp=drive_web',
     theme: 'notebook',
@@ -270,6 +307,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_6',
+    cefrLevel: 'A1',
+    stageOrder: 6,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 12,
+    prerequisites: ['sp_5'],
+    recommendedChapters: [5, 7],
+    skillsFocused: ['listening', 'vocabulary'],
     title: 'Capítulo 6: El Reloj Dual (Formal vs. Informal) y Preposiciones Temporales',
     presentationUrl: 'https://drive.google.com/file/d/19pXqHghxkD35YlPmPZqhgPh7yC8Uo33n/view?usp=sharing',
     theme: 'notebook',
@@ -327,6 +371,13 @@ export const studyPlanModules = [
   // =========================================================================
   {
     id: 'sp_7',
+    cefrLevel: 'A1',
+    stageOrder: 7,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 15,
+    prerequisites: ['sp_6'],
+    recommendedChapters: [9, 11],
+    skillsFocused: ['grammar', 'reading'],
     title: 'Capítulo 7: El Objeto Indirecto: Dativo, Código M-R-M-N y Verbos Intrínsecos',
     presentationUrl: 'https://drive.google.com/file/d/1n_dLlwAlx9mJMoytcMC4wV3TjNCb59-r/view?usp=drive_web',
     theme: 'medical',
@@ -410,6 +461,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_8',
+    cefrLevel: 'A1',
+    stageOrder: 8,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 14,
+    prerequisites: ['sp_7'],
+    recommendedChapters: [11, 13],
+    skillsFocused: ['grammar', 'vocabulary'],
     title: 'Capítulo 8: El Mapa Espacial: Wechselpräpositionen (Wo vs. Wohin)',
     presentationUrl: 'https://drive.google.com/file/d/1wS542v_rcsuYj1cpEsTzahsmKDBQQxjV/view?usp=drive_web',
     theme: 'medical',
@@ -451,6 +509,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_9',
+    cefrLevel: 'A1',
+    stageOrder: 9,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 15,
+    prerequisites: ['sp_8'],
+    recommendedChapters: [12, 14],
+    skillsFocused: ['grammar', 'speaking'],
     title: 'Capítulo 9: Das Perfekt (haben vs. sein) y Präteritum de Supervivencia',
     presentationUrl: 'https://drive.google.com/file/d/1rWmyyVBBceZm2lzbaNY8Luuvv5X6vgfU/view?usp=drive_web',
     theme: 'medical',
@@ -504,6 +569,13 @@ export const studyPlanModules = [
   // =========================================================================
   {
     id: 'sp_10',
+    cefrLevel: 'A1',
+    stageOrder: 10,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 12,
+    prerequisites: ['sp_9'],
+    recommendedChapters: [10, 12],
+    skillsFocused: ['grammar', 'writing'],
     title: 'Capítulo 10: Negación Sistémica (nicht vs. kein) y Conectores (Posición 0 y 1)',
     presentationUrl: 'https://drive.google.com/file/d/1ja2uZyZv5RMsli1g6RVJAleFgRD4YVnG/view?usp=drive_web',
     theme: 'blueprint',
@@ -594,9 +666,9 @@ export const studyPlanModules = [
           <DraggableSentenceBuilder 
             mode="advanced_connectors"
             pool={[
-              { id: 1, words: ["Ich lerne Deutsch", "und", "ich", "verstehe", "alles"], correctOrder: ["Ich lerne Deutsch", "und", "ich", "verstehe", "alles"] },
-              { id: 2, words: ["Er ist müde", "deshalb", "geht", "er", "ins Bett"], correctOrder: ["Er ist müde", "deshalb", "geht", "er", "ins Bett"] },
-              { id: 3, words: ["Ich komme gerne", "aber", "ich", "habe", "keine Zeit"], correctOrder: ["Ich komme gerne", "aber", "ich", "habe", "keine Zeit"] }
+              { id: 1, words: ["Ich lerne Deutsch", "und", "ich", "verstehe", "alles."], correctOrder: ["Ich lerne Deutsch", "und", "ich", "verstehe", "alles."] },
+              { id: 2, words: ["Er ist müde,", "deshalb", "geht", "er", "ins Bett."], correctOrder: ["Er ist müde,", "deshalb", "geht", "er", "ins Bett."] },
+              { id: 3, words: ["Ich komme gerne,", "aber", "ich", "habe", "keine Zeit."], correctOrder: ["Ich komme gerne,", "aber", "ich", "habe", "keine Zeit."] }
             ]}
             {...props} 
           />
@@ -606,6 +678,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_11',
+    cefrLevel: 'A1',
+    stageOrder: 11,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 14,
+    prerequisites: ['sp_10'],
+    recommendedChapters: [10, 18],
+    skillsFocused: ['grammar', 'writing'],
     title: 'Capítulo 11: Declinación de Adjetivos en A1 (Débil y Mixta)',
     presentationUrl: 'https://drive.google.com/file/d/1uXg-DLwnQLSTdsSFbT8yPmHpTBWM2miu/view?usp=drive_web1',
     theme: 'blueprint',
@@ -767,6 +846,7 @@ export const studyPlanModules = [
         content: props => (
           <LiveEvaluator 
             mode="adjective_declension"
+            successMessage="¡Excelente! Has dominado las declinaciones débiles y mixtas del adjetivo."
             {...props} 
           />
         )
@@ -775,6 +855,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_12',
+    cefrLevel: 'A1',
+    stageOrder: 12,
+    stageLabel: 'Cimientos A1',
+    estimatedMinutes: 15,
+    prerequisites: ['sp_11'],
+    recommendedChapters: [16, 22],
+    skillsFocused: ['speaking', 'writing'],
     title: 'Capítulo 12: Fórmulas de Cortesía (Konjunktiv II), Redemittel y Burocracia Oficial',
     presentationUrl: 'https://drive.google.com/file/d/1hvauciZnzhQPR7Jcvlhktq7VRdc_Xvrq/view?usp=drive_web',
     theme: 'blueprint',
@@ -875,10 +962,145 @@ export const studyPlanModules = [
   },
 
   // =========================================================================
+  // BLOQUE IV-B: PUENTE A2 SÓLIDO Y DTZ (sp_a2_1 a sp_a2_4)
+  // =========================================================================
+  {
+    id: 'sp_a2_1',
+    cefrLevel: 'A2',
+    stageOrder: 13,
+    stageLabel: 'Puente A2 · Clases A2',
+    estimatedMinutes: 14,
+    prerequisites: ['sp_12'],
+    recommendedChapters: [15, 16, 18],
+    skillsFocused: ['grammar', 'writing', 'vocabulary'],
+    title: 'Clase A2.1: Verbos con Preposición (Rektion) y Adverbios da-/wo-',
+    theme: 'blueprint',
+    slides: [
+      {
+        title: '¿Por qué un verbo exige siempre su preposición fija?',
+        subtitle: 'De «warten auf + Akkusativ» a «sprechen mit + Dativ» sin traducir literal del español',
+        content: `En alemán A2, muchos verbos cambian su significado o necesitan obligatoriamente una preposición fija combinada con **Akkusativ** o **Dativ**.\n\n| Verbo + Preposición | Caso Obligatorio | Ejemplo Real |\n| :--- | :--- | :--- |\n| **warten auf** (esperar) | Akkusativ | *Ich warte **auf den** Bus.* |\n| **achten auf** (prestar atención) | Akkusativ | *Wir achten **auf die** Erdung im Keller.* |\n| **sich interessieren für** | Akkusativ | *Er interessiert sich **für den** Speicher.* |\n| **bitten um** (solicitar) | Akkusativ | *Ich bitte **um einen** Termin.* |\n| **sprechen mit** (hablar con) | Dativ | *Sie spricht **mit der** Lehrerin.* |\n| **abhängen von** (depender de) | Dativ | *Das hängt **vom** Hausanschluss ab.* |\n\n⚠️ **Regla de Oro para cosas vs personas:**\nPara **personas** mantienes la preposición + *wen / wem* (*Auf wen wartest du?*). Para **cosas u hechos** jamás digas *auf was*: fusiona **wo(r)- / da(r)- + Preposición** (*Worauf wartest du? — Ich warte **darauf**!*).`
+      },
+      {
+        title: 'Laboratorio SRS: Verbos con Preposición y da-/wo-',
+        subtitle: 'Practica rección verbal en vida diaria, trámites DTZ y taller técnico indoor y guarda fallos en SRS',
+        content: props => (
+          <VerbPrepositionTrainer {...props} />
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_a2_2',
+    cefrLevel: 'A2',
+    stageOrder: 14,
+    stageLabel: 'Puente A2 · Clases A2',
+    estimatedMinutes: 12,
+    prerequisites: ['sp_a2_1'],
+    recommendedChapters: [14, 16],
+    skillsFocused: ['grammar', 'speaking', 'reading'],
+    title: 'Clase A2.2: Preguntas Indirectas (ob / W-Fragen) y Modales en Präteritum',
+    theme: 'notebook',
+    slides: [
+      {
+        title: 'Cortesía A2: Preguntas Indirectas con ob y W-Wörter',
+        subtitle: 'Cómo suavizar preguntas en el Bürgeramt, consultas médicas y llamadas de trabajo',
+        content: `En A1 preguntabas directo: *«Wann beginnt der Kurs?»*. En A2/DTZ el examinador espera subordinadas indirectas con el **verbo conjugado al final absoluto**:\n\n1. **Pregunta abierta (mantiene wo, wann, wie, warum, wie viel):**\n   * *Directa:* Wo ist das Bürgeramt?\n   * *Indirecta A2:* **Können Sie mir sagen, wo das Bürgeramt ist?**\n\n2. **Pregunta cerrada Sí/No (usa siempre la partícula «ob»):**\n   * *Directa:* Kommt der Zug pünktlich?\n   * *Indirecta A2:* **Ich möchte wissen, ob der Zug pünktlich kommt.**\n\n💡 Recuerda poner **siempre coma** antes de *ob* o de la palabra interrogativa.`
+      },
+      {
+        title: 'Pasado Narrativo Ligero: sein, haben y Modales en Präteritum',
+        subtitle: '¡Adiós a la diéresis (Umlaut) en musste, konnte, wollte, durfte!',
+        content: `Aunque el Perfekt domina la lengua hablada, para *sein*, *haben* y todos los **verbos modales** los nativos usan **Präteritum** incluso hablando:\n\n* **können ➔ ich / er konnte** (sin ö) — *Gestern **konnte** ich das Kabel im Technikraum prüfen.*\n* **müssen ➔ ich / er musste** (sin ü) — *Wir **mussten** früh im Büro sein.*\n* **wollen ➔ ich / er wollte** — *Er **wollte** einen Termin vereinbaren.*\n* **dürfen ➔ ich / er durfte** (sin ü) — *Man **durfte** dort nicht parken.*\n\n⚠️ El infinitivo que acompaña al modal sigue cerrando la frase en el **Final Absoluto**.`
+      }
+    ]
+  },
+  {
+    id: 'sp_a2_3',
+    cefrLevel: 'A2',
+    stageOrder: 15,
+    stageLabel: 'Puente A2 · Clases A2',
+    estimatedMinutes: 15,
+    prerequisites: ['sp_a2_2'],
+    recommendedChapters: [12, 17, 19],
+    skillsFocused: ['grammar', 'writing'],
+    title: 'Clase A2.3: Subordinadas Clave (weil, dass, wenn) y Doble Objeto (Dativ + Akkusativ)',
+    theme: 'blueprint',
+    slides: [
+      {
+        title: 'La Regla de Oro del Doble Objeto (Persona vs Cosa)',
+        subtitle: 'Cuándo va primero el Dativo y cuándo lo adelanta el pronombre en Acusativo',
+        content: `Cuando un verbo como *geben*, *zeigen*, *schicken* o *erklären* lleva dos complementos:\n\n1. **Ambos son sustantivos ➔ Primero DATIVO (persona), luego ACUSATIVO (cosa):**\n   * *Der Mitarbeiter gibt **dem Kunden** (Dat) **das Formular** (Akk).*\n\n2. **El objeto es un pronombre personal (es / ihn / sie) ➔ El pronombre SIEMPRE adelanta:**\n   * *Der Techniker zeigt **es** (Akk pron.) **dem Kunden** (Dat sust.).*\n   * *Ich gebe **es** (Akk) **ihm** (Dat).* (Si los dos son pronombres: Acusativo antes que Dativo).`
+      },
+      {
+        title: 'Laboratorio de Sintaxis y Transformación (A2–B1)',
+        subtitle: 'Reordena por bloques o redacta libremente: ob/W-Frage, modales, doble objeto, weil/obwohl/deshalb y Vorgangspassiv',
+        content: props => (
+          <SyntaxTransformLab {...props} />
+        )
+      }
+    ]
+  },
+  {
+    id: 'sp_a2_4',
+    cefrLevel: 'A2',
+    stageOrder: 16,
+    stageLabel: 'Puente A2 · Clases A2',
+    estimatedMinutes: 14,
+    prerequisites: ['sp_a2_3'],
+    recommendedChapters: [16, 18, 20, 22],
+    skillsFocused: ['reading', 'writing', 'speaking'],
+    title: 'Clase A2.4: Trámites DTZ, Burocracia y Comunicación Técnica Indoor',
+    theme: 'medical',
+    slides: [
+      {
+        title: 'KIT DTZ / Vida Real: Empadronamiento, Salud y Vivienda',
+        subtitle: 'Redemittel imprescindibles para gestionar citas, plazos y reclamaciones por escrito',
+        content: `En el salto de A1 a A2/DTZ pasas de frases aisladas a resolver gestiones reales en Alemania:\n\n* **Bürgeramt / Wohnung:** *die Wohnungsgeberbestätigung*, *sich ummelden*, *die Kaution*, *der Mietvertrag*, *die Nebenkosten*.\n* **Gesundheit / Arbeit:** *die Arbeitsunfähigkeitsbescheinigung (AU)*, *sich krankmelden*, *der Hausarzt*.\n* **Técnico indoor (Enpal / taller):** *Im Keller prüfen wir zuerst den Zählerschrank, bevor wir den Speicher und den Wechselrichter testen.*\n\n💡 **Conectores semiformales A2:**\n* *Hiermit möchte ich meinen Termin verschieben, weil...*\n* *Könnten Sie mir bitte bestätigen, ob...*`
+      },
+      {
+        title: 'Práctica Guiada de Voz y Frases Semiformales A2',
+        subtitle: 'Escucha el modelo Charon o practica pronunciando la petición oficial',
+        content: props => (
+          <VoiceExaminer
+            examBadge="Puente A2 / DTZ"
+            question="Práctica oral A2: Pide cambiar una cita en el Bürgeramt o reporta una incidencia en el Technikraum"
+            expectedKeywords={["termin", "verschieben", "zählerschrank", "prüfen", "könnten", "bitte", "möchte"]}
+            note="En A2/DTZ usa «weil...» o «Könnten Sie mir bitte sagen, ob...» para mostrar dominio sintáctico."
+            scenarios={[
+              {
+                context: "Trámite A2",
+                instruction: "Reprogramar cita formalmente",
+                german: "Könnten wir den Termin bitte verschieben, weil ich arbeite?",
+                translation: "(¿Podríamos posponer la cita por favor porque trabajo?)",
+                tip: "Verbo modal «Könnten» + subordinada causal con «arbeite» al final."
+              },
+              {
+                context: "Técnico indoor",
+                instruction: "Explicar revisión eléctrica en sótano",
+                german: "Ich prüfe zuerst den Zählerschrank im Keller, damit alles sicher ist.",
+                translation: "(Reviso primero el cuadro eléctrico en el sótano para que todo sea seguro.)",
+                tip: "Estructura final «damit... sicher ist»."
+              }
+            ]}
+            {...props}
+          />
+        )
+      }
+    ]
+  },
+
+  // =========================================================================
   // BLOQUE V: SINTAXIS SUBORDINADA, COHESIÓN B1 Y FUNDAMENTOS B2 (sp_13 a sp_16)
   // =========================================================================
   {
     id: 'sp_13',
+    cefrLevel: 'B1',
+    stageOrder: 17,
+    stageLabel: 'Nivel B1',
+    estimatedMinutes: 16,
+    prerequisites: ['sp_a2_4'],
+    recommendedChapters: [16, 17, 22],
+    skillsFocused: ['grammar', 'writing'],
     title: 'Capítulo 13 (B1): Oraciones Subordinadas (Nebensätze: weil, dass, obwohl, wenn/als)',
     theme: 'blueprint',
     slides: [
@@ -965,6 +1187,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_14',
+    cefrLevel: 'B1',
+    stageOrder: 18,
+    stageLabel: 'Nivel B1',
+    estimatedMinutes: 16,
+    prerequisites: ['sp_13'],
+    recommendedChapters: [17, 18, 22],
+    skillsFocused: ['grammar', 'writing'],
     title: 'Capítulo 14 (B1): Cohesión Lógica (deshalb, trotzdem, zwar ... aber, um ... zu / damit)',
     theme: 'blueprint',
     slides: [
@@ -1020,6 +1249,8 @@ export const studyPlanModules = [
         subtitle: "Completa el conector exacto (deshalb, trotzdem, obwohl, um, damit) y escucha",
         content: props => (
           <LiveEvaluator
+            mode="connectors_b1"
+            successMessage="¡Fantástico! Has dominado los conectores lógicos y de finalidad B1."
             exercises={[
               { text: "Es ist dunkel, ___ schalten wir die Lampe ein.", answer: "deshalb", translation: "Está oscuro, por eso encendemos la lámpara (Posición 1 + inversión)." },
               { text: "Ich bin sehr müde, ___ gehe ich ins Training.", answer: "trotzdem", translation: "Estoy muy cansado, sin embargo voy a entrenar (Posición 1)." },
@@ -1048,6 +1279,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_15',
+    cefrLevel: 'B1',
+    stageOrder: 19,
+    stageLabel: 'Nivel B1',
+    estimatedMinutes: 15,
+    prerequisites: ['sp_14'],
+    recommendedChapters: [12, 18, 20],
+    skillsFocused: ['grammar', 'reading'],
     title: 'Capítulo 15 (B1): Dominio Temporal (Perfekt Avanzado, Präteritum y Plusquamperfekt)',
     theme: 'medical',
     slides: [
@@ -1098,7 +1336,7 @@ export const studyPlanModules = [
               past={{ auxiliary: "hat", participle: "installiert" }}
               {...props}
             />
-            <PincerSwitch {...props} />
+            <PincerSwitch mode="perfekt_partizip" {...props} />
           </div>
         )
       }
@@ -1106,6 +1344,13 @@ export const studyPlanModules = [
   },
   {
     id: 'sp_16',
+    cefrLevel: 'B1',
+    stageOrder: 20,
+    stageLabel: 'Nivel B1',
+    estimatedMinutes: 18,
+    prerequisites: ['sp_15'],
+    recommendedChapters: [18, 20, 22],
+    skillsFocused: ['grammar', 'speaking', 'writing'],
     title: 'Capítulo 16 (B1–B2): Relativsätze, Passiv Vorgang, Konjunktiv II y Redemittel de Debate',
     theme: 'blueprint',
     slides: [

@@ -8,11 +8,15 @@ const GoetheHorenExam = lazy(() => import('../components/GoetheHorenExam'));
 const GoetheLesenExam = lazy(() => import('../components/GoetheLesenExam'));
 const GoetheWritingForm = lazy(() => import('../components/GoetheWritingForm'));
 const GoetheSprechenExam = lazy(() => import('../components/GoetheSprechenExam'));
+const TextHighlighter = lazy(() => import('../components/TextHighlighter'));
 
 export const goetheModules = [{
   id: 'g_horen',
+  cefrLevel: 'A1',
+  bridgeLevels: ['A2', 'DTZ'],
+  linkedStudyPlanIds: ['sp_6', 'sp_a2_1', 'sp_a2_4'],
   title: 'Hören (Comprensión Auditiva)',
-  desc: 'Supervivencia en estaciones y llamadas',
+  desc: 'Supervivencia en estaciones, llamadas y puente A2/DTZ',
   theme: 'blueprint',
   presentationUrl: 'https://drive.google.com/file/d/1HaRoaGMXPAHwQbmeVkqMoaotGvM5TjBH/view?usp=sharing',
   slides: [{
@@ -122,16 +126,37 @@ export const goetheModules = [{
       </div>
     )
   }, {
-    title: "Simulacro Oficial Hören (Start Deutsch 1)",
-    subtitle: "Teil 1 (Diálogos cotidianos), Teil 2 (Megafonía) y Teil 3 (Mensajes) con voz Charon",
+    title: "Puente A2 / DTZ: Distractores de Tiempo, Correcciones («sondern») y Anuncios Técnicos",
+    subtitle: "Prepárate para audios más largos del DTZ detectando rectificaciones y negaciones en la frase",
+    content: (
+      <div className="space-y-4 max-w-3xl mx-auto text-left">
+        <div className="p-4 bg-sky-50 border-l-4 border-sky-500 rounded-r-xl text-sky-950 text-sm space-y-2">
+          <p className="font-bold">🎯 Del A1 al DTZ: El truco de la autocorrección oral</p>
+          <p>En A1 escuchas un dato directo. En <strong>A2 y DTZ</strong>, el hablante dice un horario o andén inicial y luego lo corrige con <em>«aber leider...»</em>, <em>«nicht auf Gleis 12, sondern 14»</em> o <em>«bereits geprüft, aber bringen Sie bitte...»</em>.</p>
+        </div>
+        <GrammarAccordion title="Checklist rápida antes de pulsar Play en Puente A2/DTZ">
+          <ul className="list-disc pl-5 space-y-1.5 text-sm">
+            <li><strong>Números parecidos:</strong> distingue bien entre <em>14 (vierzehn)</em> y <em>40 (vierzig)</em>, y horas como <em>halb acht (7:30)</em>.</li>
+            <li><strong>Marcadores de cambio:</strong> escucha palabras alerta como <em>eigentlich</em>, <em>jedoch</em>, <em>ausnahmsweise</em> y <em>sondern</em>.</li>
+            <li>Dentro del simulacro en la siguiente diapositiva encontrarás la pestaña <strong>Puente A2/DTZ</strong> arriba a la derecha.</li>
+          </ul>
+        </GrammarAccordion>
+      </div>
+    )
+  }, {
+    title: "Simulacro Oficial Hören (Start Deutsch 1 & Puente A2/DTZ)",
+    subtitle: "Teil 1–3 A1 + pestaña Puente A2/DTZ con voz Charon",
     content: props => (
       <GoetheHorenExam {...props} />
     )
   }]
 }, {
   id: 'g_lesen',
+  cefrLevel: 'A1',
+  bridgeLevels: ['A2', 'DTZ'],
+  linkedStudyPlanIds: ['sp_4', 'sp_a2_3', 'sp_a2_4'],
   title: 'Lesen (Comprensión Lectora)',
-  desc: 'Textos del día a día y letreros',
+  desc: 'Textos del día a día, letreros y puente DTZ',
   theme: 'notebook',
   presentationUrl: 'https://drive.google.com/file/d/1v0X84LxezwiLTIOll5OqIs5VfY6khT5Z/view?usp=drive_link',
   slides: [{
@@ -272,16 +297,38 @@ export const goetheModules = [{
             </div>
           </div>
   }, {
-    title: "Simulacro Oficial Lesen (Start Deutsch 1)",
-    subtitle: "Teil 1 (E-Mails), Teil 2 (Webseiten/Anuncios) y Teil 3 (Schilder) con retroalimentación inmediata",
+    title: "Puente A2 / DTZ: Lupa de Restricciones en Hausordnung y Trámites",
+    subtitle: "Identifica condiciones ocultas («ausreichend», «im Original», «nicht gestattet») antes de decidir Richtig/Falsch",
+    content: (
+      <div className="space-y-4 max-w-3xl mx-auto">
+        <TextHighlighter
+          badgeLabel="Lupa Puente A2 / DTZ (Lesen)"
+          promptLabel="¿Qué significa exactamente la palabra destacada en un contrato o reglamento?"
+          sentence="Eine Kopie der Wohnungsgeberbestätigung auf dem Handy ist leider nicht gestattet."
+          trapWord="nicht gestattet"
+          options={["verboten (no permitido)", "kostenlos (gratis)", "sofort (de inmediato)"]}
+          correctAntonym="verboten (no permitido)"
+          translation="Lamentablemente no está permitida una copia en el móvil (debes llevar el original)."
+        />
+        <div className="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl text-sm text-amber-950 text-left">
+          <strong>Tip DTZ Lesen:</strong> palabras como <em>niemals</em>, <em>ausschließlich</em>, <em>im Original</em> o <em>gegen Gebühr</em> suelen convertir en <strong>Falsch</strong> afirmaciones que parecen correctas a primera vista. Usa la pestaña <strong>Puente A2/DTZ</strong> en el examen interactivo.
+        </div>
+      </div>
+    )
+  }, {
+    title: "Simulacro Oficial Lesen (Start Deutsch 1 & Puente A2/DTZ)",
+    subtitle: "Teil 1–3 A1 + pestaña Puente A2/DTZ con retroalimentación inmediata",
     content: props => (
       <GoetheLesenExam {...props} />
     )
   }]
 }, {
   id: 'g_schreiben',
+  cefrLevel: 'A1',
+  bridgeLevels: ['A2', 'DTZ'],
+  linkedStudyPlanIds: ['sp_12', 'sp_a2_2', 'sp_a2_4'],
   title: 'Schreiben (Expresión Escrita)',
-  desc: 'Formularios y Correos exactos',
+  desc: 'Formularios, correos exactos y trámites DTZ',
   theme: 'medical',
   presentationUrl: 'https://drive.google.com/file/d/19bbbF3M4RfIRbQ4PkxZlCsPcbibYQLPx/view?usp=drive_link',
   slides: [{
@@ -494,18 +541,34 @@ export const goetheModules = [{
             </GrammarAccordion>
           </div>
   }, {
-    title: "Teil 1: Formulario de Inscripción Oficial (Anmeldeformular)",
+    title: "Puente A2 / DTZ: Correo Semiformal con Registro «Sie» y Conectores Lógicos",
+    subtitle: "Sube de 30 a ~45 palabras usando «weil», «deshalb» y despedida formal sin coma final",
+    content: (
+      <div className="space-y-4 max-w-3xl mx-auto text-left">
+        <div className="p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-xl text-emerald-950 text-sm space-y-1.5">
+          <p className="font-bold">📐 Plantilla infalible para Schreiben A2 / DTZ</p>
+          <p><strong>Saludo (con coma):</strong> <em>Sehr geehrte Frau Weber,</em> (y la primera palabra del párrafo empieza en <strong>minúscula</strong>).</p>
+          <p><strong>Cuerpo con 1 subordinada:</strong> <em>ich schreibe Ihnen, <strong>weil</strong> ich am Dienstag leider nicht kommen kann.</em></p>
+          <p><strong>Despedida (SIN coma):</strong> <em>Mit freundlichen Grüßen</em></p>
+        </div>
+        <GrammarAccordion title="Formularios DTZ añadidos en el siguiente simulador">
+          <p className="text-sm">En el simulador de Teil 1 hemos incluido los escenarios <strong>5. Bürgeramt (DTZ)</strong> y <strong>6. Hausarzt / Krankmeldung (A2)</strong>, y en Teil 2 puedes conmutar el evaluador a <strong>Puente A2/DTZ</strong>.</p>
+        </GrammarAccordion>
+      </div>
+    )
+  }, {
+    title: "Teil 1: Formulario Oficial (A1 & Escenarios 5–6 Puente DTZ)",
     subtitle: "Completa los 5 campos requeridos a partir del texto de la situación",
     content: props => (
       <GoetheWritingForm {...props} />
     )
   }, {
-    title: "Teil 2: Redacción de Correo Electrónico (E-Mail)",
-    subtitle: "Simulador oficial con evaluación pedagógica y modelo auditivo (voz Charon)",
+    title: "Teil 2: Redacción de Correo Electrónico (A1 & Puente A2/DTZ)",
+    subtitle: "Simulador oficial con selector A1 / Puente A2/DTZ y modelo auditivo Charon",
     content: <div className="mt-6 max-w-3xl mx-auto">
             <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 mb-4 rounded-r-lg">
-              <p className="font-bold text-emerald-800">💡 Estrategia Oficial Goethe A1: 3 oraciones exactas (25-45 palabras)</p>
-              <p className="text-sm text-emerald-700 mt-1">El examen evalúa el cumplimiento de los 3 puntos (Leitpunkte). Escribe una oración por punto con verbo conjugado en Posición 2, saludo y despedida apropiados.</p>
+              <p className="font-bold text-emerald-800">💡 Estrategia Oficial: 25–38 palabras (A1) · ~45 palabras (Puente A2/DTZ)</p>
+              <p className="text-sm text-emerald-700 mt-1">El examen evalúa el cumplimiento de todos los Leitpunkte, registro (du/Sie) y orden verbal V2 / Nebensatz.</p>
             </div>
 
             <EmailSimulator initialText="" />
@@ -513,8 +576,11 @@ export const goetheModules = [{
   }]
 }, {
   id: 'g_sprechen',
+  cefrLevel: 'A1',
+  bridgeLevels: ['A2', 'DTZ'],
+  linkedStudyPlanIds: ['sp_12', 'sp_a2_2', 'sp_a2_4'],
   title: 'Sprechen (Expresión Oral)',
-  desc: 'Presentaciones y Peticiones Educadas',
+  desc: 'Presentaciones, peticiones y planificación conjunta A2/DTZ',
   theme: 'blueprint',
   presentationUrl: 'https://drive.google.com/file/d/1_yvgsDvmHvQvSYoXJvKImN9WLxkEdgGA/view?usp=drive_link',
   slides: [{
@@ -579,8 +645,27 @@ export const goetheModules = [{
             </GrammarAccordion>
           </div>
   }, {
-    title: "Simulacro Interactivo Sprechen (Start Deutsch 1)",
-    subtitle: "Teil 1 (Sich vorstellen), Teil 2 (Themenkarten W-Fragen) y Teil 3 (Bitten & Reagieren) con respuestas modelo en voz Charon",
+    title: "Puente A2 / DTZ: Opinar, Narrar Experiencia y Planificar en Pareja (Teil 2 & 3 DTZ)",
+    subtitle: "Pasa de preguntas sueltas A1 a proponer soluciones y justificar con «weil» o «deshalb»",
+    content: (
+      <div className="space-y-4 max-w-3xl mx-auto text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 space-y-1.5">
+            <p className="text-xs font-black uppercase text-blue-800">DTZ Teil 2: Experiencias</p>
+            <p className="text-sm font-semibold text-slate-800">Estructura en 2 pasos: respuesta directa + motivo o rutina en trabajo/hogar.</p>
+            <p className="text-xs text-slate-600 italic">«Zuerst prüfe ich den Zählerschrank im Keller, weil Sicherheit wichtig ist.»</p>
+          </div>
+          <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-200 space-y-1.5">
+            <p className="text-xs font-black uppercase text-indigo-800">DTZ Teil 3: Planificar</p>
+            <p className="text-sm font-semibold text-slate-800">Usa propuestas activas en vez de quedarte callado:</p>
+            <p className="text-xs text-slate-600 italic">«Wollen wir...? / Wie wäre es mit Freitag? / Ich kann Getränke mitbringen.»</p>
+          </div>
+        </div>
+      </div>
+    )
+  }, {
+    title: "Simulacro Interactivo Sprechen (Start Deutsch 1 & Puente A2/DTZ)",
+    subtitle: "Teil 1–3 A1 + pestaña Puente A2/DTZ con voz Charon y práctica oral",
     content: props => (
       <GoetheSprechenExam {...props} />
     )

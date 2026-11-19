@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Volume2, CheckCircle2, XCircle } from 'lucide-react';
 import { playGermanAudio } from '../services/aiAudioService';
 

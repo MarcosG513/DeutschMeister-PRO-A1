@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Volume2, CheckCircle2, XCircle, Headphones, AlertCircle, 
-  RotateCcw, Sparkles, Award, ArrowRight, ShieldCheck, Play 
+import { useState, useEffect } from 'react';
+import {
+  Volume2, CheckCircle2, XCircle, Headphones,
+  RotateCcw, Award, ArrowRight
 } from 'lucide-react';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { recordGoetheScore } from '../utils/helpers';
 
-const HOREN_TEILS = [
+const HOREN_A1_TEILS = [
   {
     teilId: 1,
     title: "Teil 1: Alltagssituationen",
@@ -98,12 +98,58 @@ const HOREN_TEILS = [
   }
 ];
 
+const HOREN_DTZ_TEILS = [
+  {
+    teilId: 'dtz_1',
+    title: "Puente A2/DTZ: Jobcenter, Klinik & Bahndurchsage",
+    subtitle: "3 audios más largos estilo DTZ/B1 con distractor temporal o condición • 2 escuchas",
+    maxListens: 2,
+    questions: [
+      {
+        id: "hdtz_1",
+        title: "1. Mensaje del Jobcenter / Bürgeramt",
+        audioText: "Guten Tag, hier spricht Frau Lindner vom Bürgeramt. Sie haben morgen um neun Uhr einen Termin zur Anmeldung. Bitte vergessen Sie nicht die Wohnungsgeberbestätigung. Den Reisepass haben wir bereits geprüft, aber ohne die Bestätigung des Vermieters können wir Sie leider nicht anmelden.",
+        question: "¿Qué documento es imprescindible llevar mañana?",
+        options: ["Nur den Reisepass", "Die Wohnungsgeberbestätigung", "Einen Arbeitsvertrag"],
+        correct: "Die Wohnungsgeberbestätigung",
+        explanation: "El pasaporte ya fue revisado («bereits geprüft»); lo obligatorio que no debe olvidar es la Wohnungsgeberbestätigung."
+      },
+      {
+        id: "hdtz_2",
+        title: "2. Aviso técnico en el taller indoor",
+        audioText: "Achtung an das Installationsteam: Heute Morgen liefern wir die Wallbox und den Batteriespeicher direkt in den Hausanschlussraum im Keller. Der Elektriker beginnt um acht Uhr dreißig mit dem Zählerschrank. Bitte legen Sie zuerst alle Werkzeuge im Technikraum bereit.",
+        question: "¿Dónde empieza el electricista a trabajar a las 8:30?",
+        options: ["Am Zählerschrank im Keller", "Auf dem Parkplatz draußen", "Erst morgen Nachmittag"],
+        correct: "Am Zählerschrank im Keller",
+        explanation: "A las 8:30 («um acht Uhr dreißig») empieza con el cuadro eléctrico en el sótano («am Zählerschrank»)."
+      },
+      {
+        id: "hdtz_3",
+        title: "3. Cambio de andén en la estación",
+        audioText: "Liebe Fahrgäste, die S-Bahn S3 Richtung Hauptbahnhof fährt heute ausnahmsweise nicht von Gleis zwölf, sondern von Gleis vierzehn ab. Die Abfahrt bleibt um siebzehn Uhr zehn. Reisende nach Ostkreuz nehmen bitte den Regionalzug um siebzehn Uhr zwanzig.",
+        question: "¿Por qué andén sale hoy la S-Bahn S3 hacia Hauptbahnhof?",
+        options: ["Gleis 12", "Gleis 14", "Gleis 20"],
+        correct: "Gleis 14",
+        explanation: "«Nicht von Gleis zwölf, sondern von Gleis vierzehn»: trampa clásica de corrección inmediata («sondern»)."
+      }
+    ]
+  }
+];
+
+const HOREN_BY_TRACK = {
+  A1: HOREN_A1_TEILS,
+  DTZ: HOREN_DTZ_TEILS,
+};
+
 const GoetheHorenExam = ({ onComplete }) => {
+  const [examTrack, setExamTrack] = useState('A1');
   const [activeTeilIdx, setActiveTeilIdx] = useState(0);
   const [answers, setAnswers] = useState({});
   const [playingId, setPlayingId] = useState(null);
   const [listenCounts, setListenCounts] = useState({});
   const [showSummary, setShowSummary] = useState(false);
+
+  const currentTeils = HOREN_BY_TRACK[examTrack] || HOREN_A1_TEILS;
 
   useEffect(() => {
     return () => {
@@ -111,9 +157,22 @@ const GoetheHorenExam = ({ onComplete }) => {
     };
   }, []);
 
-  const activeTeil = HOREN_TEILS[activeTeilIdx];
+  const activeTeil = currentTeils[activeTeilIdx] || currentTeils[0];
+
+  const handleTrackSwitch = (nextTrack) => {
+    if (nextTrack === examTrack) return;
+    stopCurrentAudio();
+    setPlayingId(null);
+    setExamTrack(nextTrack);
+    setActiveTeilIdx(0);
+    setShowSummary(false);
+  };
 
   const handlePlayAudio = (qId, audioText, maxListens) => {
+    if (playingId !== null) {
+      if (playingId === qId) return;
+      stopCurrentAudio();
+    }
     const currentListens = listenCounts[qId] || 0;
     if (currentListens >= maxListens) return;
 
@@ -133,22 +192,23 @@ const GoetheHorenExam = ({ onComplete }) => {
     setAnswers(prev => ({ ...prev, [qId]: opt }));
   };
 
-  const allQuestions = HOREN_TEILS.flatMap(t => t.questions);
-  const totalQuestions = allQuestions.length; // 7 preguntas oficiales
-  const answeredCount = Object.keys(answers).length;
+  const allQuestions = currentTeils.flatMap(t => t.questions);
+  const totalQuestions = allQuestions.length;
+  const answeredCount = allQuestions.filter((q) => Boolean(answers[q.id])).length;
 
   const calculateOfficialScore = () => {
     let correct = 0;
     allQuestions.forEach(q => {
       if (answers[q.id] === q.correct) correct++;
     });
-    // Escalado oficial Goethe A1: 15 puntos máximos
     return Math.round((correct / totalQuestions) * 15);
   };
 
   const handleFinishExam = () => {
     const finalScore = calculateOfficialScore();
-    recordGoetheScore('g_horen', finalScore);
+    if (examTrack === 'A1') {
+      recordGoetheScore('g_horen', finalScore);
+    }
     setShowSummary(true);
     if (onComplete) onComplete(finalScore);
   };
@@ -164,7 +224,7 @@ const GoetheHorenExam = ({ onComplete }) => {
           </div>
           <div>
             <h3 className="font-black text-base sm:text-lg leading-tight">
-              Goethe-Zertifikat A1: Hören (Simulacro Oficial)
+              {examTrack === 'A1' ? 'Goethe-Zertifikat A1: Hören (Simulacro Oficial)' : 'Puente A2 / DTZ: Hören con Distractores'}
             </h3>
             <p className="text-blue-200 text-xs">
               Voz oficial Charon • Ponderación oficial: 15 Puntos
@@ -172,25 +232,49 @@ const GoetheHorenExam = ({ onComplete }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 bg-blue-950/70 p-1 rounded-xl border border-blue-700/50">
-          {HOREN_TEILS.map((teil, idx) => (
-            <button
-              key={teil.teilId}
-              type="button"
-              onClick={() => {
-                stopCurrentAudio();
-                setPlayingId(null);
-                setActiveTeilIdx(idx);
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-                activeTeilIdx === idx
-                  ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-blue-200 hover:text-white'
-              }`}
-            >
-              Teil {teil.teilId}
-            </button>
-          ))}
+        <div className="flex flex-wrap items-center gap-2">
+          <div role="tablist" aria-label="Nivel de examen Hören" className="flex items-center gap-1 bg-blue-950/90 p-1 rounded-xl border border-blue-700/60">
+            {[
+              { id: 'A1', label: 'A1 Oficial' },
+              { id: 'DTZ', label: 'Puente A2/DTZ' },
+            ].map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                aria-selected={examTrack === t.id}
+                onClick={() => handleTrackSwitch(t.id)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold border-b-2 transition cursor-pointer ${
+                  examTrack === t.id
+                    ? 'bg-amber-400 text-slate-950 border-white'
+                    : 'text-blue-200 border-transparent hover:text-white'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-1.5 bg-blue-950/70 p-1 rounded-xl border border-blue-700/50">
+            {currentTeils.map((teil, idx) => (
+              <button
+                key={teil.teilId}
+                type="button"
+                onClick={() => {
+                  stopCurrentAudio();
+                  setPlayingId(null);
+                  setActiveTeilIdx(idx);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  activeTeilIdx === idx
+                    ? 'bg-blue-500 text-white shadow-sm'
+                    : 'text-blue-200 hover:text-white'
+                }`}
+              >
+                {examTrack === 'DTZ' ? 'Práctica DTZ' : `Teil ${teil.teilId}`}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -327,7 +411,7 @@ const GoetheHorenExam = ({ onComplete }) => {
             </div>
 
             <div className="flex items-center gap-2">
-              {activeTeilIdx < HOREN_TEILS.length - 1 ? (
+              {activeTeilIdx < currentTeils.length - 1 ? (
                 <button
                   type="button"
                   onClick={() => {

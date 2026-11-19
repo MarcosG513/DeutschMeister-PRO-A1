@@ -1,5 +1,3 @@
-import React from 'react';
-
 const LocativeEquationCards = () => {
   return (
     <div className="flex flex-col gap-3 w-full max-w-md mx-auto my-4 font-sans">

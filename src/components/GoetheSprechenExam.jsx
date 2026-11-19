@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Mic, Volume2, CheckCircle2, MessageSquare, Sparkles, 
-  ArrowRight, Award, RotateCcw, HelpCircle, UserCheck 
+import { useState, useEffect } from 'react';
+import {
+  Mic, Volume2, CheckCircle2, Sparkles,
+  ArrowRight, Award
 } from 'lucide-react';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { recordGoetheScore } from '../utils/helpers';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 const SPRECHEN_TEILS = [
   {
@@ -128,10 +129,72 @@ const SPRECHEN_TEILS = [
   }
 ];
 
+const DTZ_SPRECHEN_TEILS = [
+  {
+    teilId: 'dtz_2',
+    title: "Puente DTZ Teil 2: Über Erfahrungen sprechen",
+    subtitle: "Responder preguntas sobre trabajo indoor, vivienda o rutina diaria en Alemania",
+    cards: [
+      {
+        theme: "Wohnung / Alltag",
+        keyword: "Nachbarschaft",
+        questionPrompt: "Wie verstehen Sie sich mit Ihren Nachbarn und welche Hausregeln gelten?",
+        answerPrompt: "Wir grüßen uns freundlich im Treppenhaus. Am Sonntag beachten wir natürlich die Ruhezeit.",
+        tip: "En DTZ/B1 añade siempre una frase subordinada («weil...», «obwohl...») o un detalle concreto."
+      },
+      {
+        theme: "Beruf / Technik",
+        keyword: "Arbeitstag",
+        questionPrompt: "Was machen Sie am Vormittag bei der Arbeit im Technikraum?",
+        answerPrompt: "Zuerst prüfe ich den Zählerschrank und bereite die Kabel für die Wallbox im Keller vor.",
+        tip: "Usa conectores temporales: «Zuerst... danach... zum Schluss...»."
+      }
+    ]
+  },
+  {
+    teilId: 'dtz_3',
+    title: "Puente DTZ Teil 3: Gemeinsam etwas planen",
+    subtitle: "Proponer, aceptar o negociar una actividad con el compañero de examen",
+    cards: [
+      {
+        situation: "Planificar una reunión del equipo",
+        object: "Termin & Essen",
+        requestPrompt: "Wollen wir uns am Freitag um achtzehn Uhr treffen? Ich kann Getränke mitbringen.",
+        responsePrompt: "Gute Idee! Freitag passt mir gut. Soll ich dann einen Salat machen?",
+        formula: "Wollen wir...? / Wie wäre es mit...? / Passt es dir am...?"
+      },
+      {
+        situation: "Organizar ayuda para una mudanza",
+        object: "Umzug am Samstag",
+        requestPrompt: "Kannst du mir am Samstag beim Kisten tragen helfen?",
+        responsePrompt: "Klar, gern! Ab wie viel Uhr soll ich da sein?",
+        formula: "Kannst du...? / Ab wann soll ich...?"
+      }
+    ]
+  }
+];
+
+const SPRECHEN_BY_TRACK = {
+  A1: SPRECHEN_TEILS,
+  DTZ: DTZ_SPRECHEN_TEILS,
+};
+
 const GoetheSprechenExam = ({ onComplete }) => {
+  const [examTrack, setExamTrack] = useState('A1');
   const [activeTeilIdx, setActiveTeilIdx] = useState(0);
   const [practicedCards, setPracticedCards] = useState({});
   const [playingKey, setPlayingKey] = useState(null);
+  const [speakingCardKey, setSpeakingCardKey] = useState(null);
+  const [speechNotice, setSpeechNotice] = useState(null);
+
+  const {
+    isListening,
+    startListening,
+    stopListening,
+    error: speechError,
+  } = useSpeechRecognition('de-DE');
+
+  const currentTeils = SPRECHEN_BY_TRACK[examTrack] || SPRECHEN_TEILS;
 
   useEffect(() => {
     return () => {
@@ -139,7 +202,17 @@ const GoetheSprechenExam = ({ onComplete }) => {
     };
   }, []);
 
-  const activeTeil = SPRECHEN_TEILS[activeTeilIdx];
+  const activeTeil = currentTeils[activeTeilIdx] || currentTeils[0];
+
+  const handleTrackSwitch = (nextTrack) => {
+    if (nextTrack === examTrack) return;
+    stopCurrentAudio();
+    if (isListening) stopListening();
+    setPlayingKey(null);
+    setSpeakingCardKey(null);
+    setExamTrack(nextTrack);
+    setActiveTeilIdx(0);
+  };
 
   const handlePlayAudio = (key, text) => {
     stopCurrentAudio();
@@ -154,9 +227,43 @@ const GoetheSprechenExam = ({ onComplete }) => {
     }).catch(() => setPlayingKey(null));
   };
 
+  const handlePracticeMic = (cardKey, targetSentence) => {
+    if (isListening) {
+      stopListening();
+      setSpeakingCardKey(null);
+      return;
+    }
+    stopCurrentAudio();
+    setSpeakingCardKey(cardKey);
+    setSpeechNotice(null);
+    startListening((spoken) => {
+      setSpeakingCardKey(null);
+      const cleanSpoken = String(spoken || '').trim();
+      if (cleanSpoken) {
+        setPracticedCards((prev) => ({ ...prev, [cardKey]: true }));
+        setSpeechNotice(`Captado: «${cleanSpoken}» (Objetivo: «${targetSentence}»)`);
+      }
+    });
+  };
+
+  const totalCardsCount = currentTeils.reduce((acc, t) => acc + t.cards.length, 0);
+  const trackPrefix = examTrack === 'A1' ? 't' : 'dtz';
+  const practicedUniqueCards = new Set(
+    Object.keys(practicedCards)
+      .filter((k) => (examTrack === 'A1' ? !k.startsWith('dtz') : k.startsWith('dtz')))
+      .map((k) => k.split('_').slice(0, 2).join('_'))
+  ).size;
+  const proportionalScore = Math.max(
+    1,
+    Math.min(15, Math.round((practicedUniqueCards / Math.max(1, totalCardsCount)) * 15))
+  );
+
   const handleCompleteModule = () => {
-    recordGoetheScore('g_sprechen', 15);
-    if (onComplete) onComplete(15);
+    const scoreToSave = practicedUniqueCards > 0 ? proportionalScore : 15;
+    if (examTrack === 'A1') {
+      recordGoetheScore('g_sprechen', scoreToSave);
+    }
+    if (onComplete) onComplete(scoreToSave);
   };
 
   return (
@@ -170,33 +277,57 @@ const GoetheSprechenExam = ({ onComplete }) => {
           </div>
           <div>
             <h3 className="font-black text-base sm:text-lg leading-tight">
-              Goethe-Zertifikat A1: Sprechen (Simulador Oral)
+              {examTrack === 'A1' ? 'Goethe-Zertifikat A1: Sprechen (Simulador Oral)' : 'Puente A2 / DTZ: Interacción Oral y Planificación'}
             </h3>
             <p className="text-blue-200 text-xs">
-              Voz modelo Charon • Presentación, Themenkarten y Bitten (15 Pts)
+              Voz modelo Charon + Práctica de micrófono ({practicedUniqueCards}/{totalCardsCount} bloques practicados · {trackPrefix === 't' ? `${proportionalScore}/15 Pts est.` : 'A2/DTZ'})
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 bg-blue-900/60 p-1 rounded-xl border border-blue-800">
-          {SPRECHEN_TEILS.map((teil, idx) => (
-            <button
-              key={teil.teilId}
-              type="button"
-              onClick={() => {
-                stopCurrentAudio();
-                setPlayingKey(null);
-                setActiveTeilIdx(idx);
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-                activeTeilIdx === idx
-                  ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-blue-200 hover:text-white'
-              }`}
-            >
-              Teil {teil.teilId}
-            </button>
-          ))}
+        <div className="flex flex-wrap items-center gap-2">
+          <div role="tablist" aria-label="Nivel de examen Sprechen" className="flex items-center gap-1 bg-blue-900/90 p-1 rounded-xl border border-blue-700/60">
+            {[
+              { id: 'A1', label: 'A1 Oficial' },
+              { id: 'DTZ', label: 'Puente A2/DTZ' },
+            ].map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                aria-selected={examTrack === t.id}
+                onClick={() => handleTrackSwitch(t.id)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold border-b-2 transition cursor-pointer ${
+                  examTrack === t.id
+                    ? 'bg-amber-400 text-slate-950 border-white'
+                    : 'text-blue-200 border-transparent hover:text-white'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-1.5 bg-blue-900/60 p-1 rounded-xl border border-blue-800">
+            {currentTeils.map((teil, idx) => (
+              <button
+                key={teil.teilId}
+                type="button"
+                onClick={() => {
+                  stopCurrentAudio();
+                  setPlayingKey(null);
+                  setActiveTeilIdx(idx);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  activeTeilIdx === idx
+                    ? 'bg-blue-500 text-white shadow-sm'
+                    : 'text-blue-200 hover:text-white'
+                }`}
+              >
+                {String(teil.teilId).startsWith('dtz_') ? `DTZ ${teil.teilId.replace('dtz_', 'Teil ')}` : `Teil ${teil.teilId}`}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -211,9 +342,14 @@ const GoetheSprechenExam = ({ onComplete }) => {
               {activeTeil.subtitle}
             </p>
           </div>
-          <span className="text-[11px] font-bold bg-blue-50 text-blue-800 border border-blue-200 px-2.5 py-1 rounded-lg self-start sm:self-auto">
-            Expresión oral Start Deutsch 1
-          </span>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <span className="text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-lg">
+              Practicadas: {Object.keys(practicedCards).length} tarjetas
+            </span>
+            <span className="text-[11px] font-bold bg-blue-50 text-blue-800 border border-blue-200 px-2.5 py-1 rounded-lg">
+              Expresión oral
+            </span>
+          </div>
         </div>
 
         {/* TEIL 1: SICH VORSTELLEN (PRESENTACIÓN PERSONAL) */}
@@ -265,20 +401,39 @@ const GoetheSprechenExam = ({ onComplete }) => {
           </div>
         )}
 
-        {/* TEIL 2: THEMENKARTEN (W-FRAGEN) */}
-        {activeTeil.teilId === 2 && (
+        {/* TEIL 2 / DTZ 2: THEMENKARTEN (W-FRAGEN / ERFAHRUNGEN) */}
+        {(activeTeil.teilId === 2 || activeTeil.teilId === 'dtz_2') && (
           <div className="space-y-4">
             {activeTeil.cards.map((c, idx) => {
-              const qKey = `t2_${idx}_q`;
-              const aKey = `t2_${idx}_a`;
+              const prefix = activeTeil.teilId === 'dtz_2' ? 'dtz2' : 't2';
+              const qKey = `${prefix}_${idx}_q`;
+              const aKey = `${prefix}_${idx}_a`;
+              const isCardDone = Boolean(practicedCards[qKey] || practicedCards[aKey] || practicedCards[`${prefix}_${idx}`]);
 
               return (
                 <div key={idx} className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2">
                     <span className="text-xs font-black bg-indigo-100 text-indigo-800 px-2.5 py-1 rounded-lg uppercase">
                       Thema: {c.theme} • Wort: {c.keyword}
                     </span>
-                    <span className="text-xs text-slate-400 font-mono">W-Frage & Antwort</span>
+                    <div className="flex items-center gap-2">
+                      {isCardDone && (
+                        <span className="text-[11px] font-bold text-emerald-700 inline-flex items-center gap-1">
+                          <CheckCircle2 size={13} /> Practicada
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handlePracticeMic(`${prefix}_${idx}`, c.answerPrompt)}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold border transition cursor-pointer ${
+                          speakingCardKey === `${prefix}_${idx}` && isListening
+                            ? 'bg-rose-600 text-white border-rose-600 animate-pulse'
+                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-blue-50'
+                        }`}
+                      >
+                        <Mic size={12} /> {speakingCardKey === `${prefix}_${idx}` && isListening ? 'Detener' : 'Practicar voz'}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -320,22 +475,31 @@ const GoetheSprechenExam = ({ onComplete }) => {
           </div>
         )}
 
-        {/* TEIL 3: BITTEN UND REAGIEREN */}
-        {activeTeil.teilId === 3 && (
+        {/* TEIL 3 / DTZ 3: BITTEN & PLANEN */}
+        {(activeTeil.teilId === 3 || activeTeil.teilId === 'dtz_3') && (
           <div className="space-y-4">
             {activeTeil.cards.map((c, idx) => {
-              const reqKey = `t3_${idx}_req`;
-              const resKey = `t3_${idx}_res`;
+              const prefix = activeTeil.teilId === 'dtz_3' ? 'dtz3' : 't3';
+              const reqKey = `${prefix}_${idx}_req`;
+              const resKey = `${prefix}_${idx}_res`;
 
               return (
                 <div key={idx} className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2">
                     <span className="font-bold text-slate-800 text-sm">
                       {c.situation} ({c.object})
                     </span>
-                    <span className="text-xs bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded-lg">
-                      Höfliche Bitte
-                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handlePracticeMic(`${prefix}_${idx}`, c.requestPrompt)}
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold border transition cursor-pointer ${
+                        speakingCardKey === `${prefix}_${idx}` && isListening
+                          ? 'bg-rose-600 text-white border-rose-600 animate-pulse'
+                          : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'
+                      }`}
+                    >
+                      <Mic size={12} /> Practicar diálogo
+                    </button>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -377,14 +541,21 @@ const GoetheSprechenExam = ({ onComplete }) => {
           </div>
         )}
 
+        {(speechNotice || speechError) && (
+          <div aria-live="polite" className="p-3 rounded-xl border border-blue-200 bg-blue-50 text-xs text-blue-900 flex items-center gap-2">
+            <Sparkles size={15} className="shrink-0 text-blue-600" />
+            <span>{speechNotice || speechError}</span>
+          </div>
+        )}
+
         {/* BARRA INFERIOR DE ACCIÓN */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-200">
           <div className="text-xs font-bold text-slate-500">
-            Escucha todos los modelos con voz oficial Charon para automatizar tu fluidez.
+            Progreso oral: {practicedUniqueCards} / {totalCardsCount} bloques escuchados o hablados con voz Charon.
           </div>
 
           <div className="flex items-center gap-2">
-            {activeTeilIdx < SPRECHEN_TEILS.length - 1 ? (
+            {activeTeilIdx < currentTeils.length - 1 ? (
               <button
                 type="button"
                 onClick={() => {

@@ -1,5 +1,4 @@
-import React from 'react';
-import { ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowRight, Zap } from 'lucide-react';
 
 const AccusativeCards = () => {
   const cards = [
@@ -88,7 +87,7 @@ const AccusativeCards = () => {
                   {item.label}
                 </span>
                 <div className="flex items-center gap-2 font-mono text-xs sm:text-sm">
-                  <span className={`line-through opacity-70 ${card.isMutated ? 'text-slate-400' : 'text-slate-400'}`}>
+                  <span className={card.isMutated ? 'line-through opacity-70 text-slate-400' : 'text-slate-700 font-semibold'}>
                     {item.from}
                   </span>
                   <ArrowRight size={14} className={card.isMutated ? 'text-amber-400' : 'text-slate-400'} />

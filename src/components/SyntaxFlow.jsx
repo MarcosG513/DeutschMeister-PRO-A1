@@ -1,5 +1,3 @@
-import React from 'react';
-
 const SyntaxFlow = ({ steps = [] }) => {
   return (
     <div className="flex flex-col gap-2.5 w-full max-w-md mx-auto my-4 font-sans">
@@ -15,10 +13,10 @@ const SyntaxFlow = ({ steps = [] }) => {
           
           {/* Contenido del Bloque Gramatical */}
           <div className="flex flex-col flex-1 min-w-0">
-            <span className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
+            <span className="text-sm font-bold text-slate-900 dark:text-slate-100 whitespace-normal break-words">
               {step.name}
             </span>
-            <span className="text-xs text-slate-500 dark:text-slate-400 leading-snug">
+            <span className="text-xs text-slate-500 dark:text-slate-400 leading-snug whitespace-normal break-words">
               {step.description}
             </span>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useId } from 'react';
 import { httpsCallable } from 'firebase/functions';
 import { Loader2, CheckCircle, Edit as Edit3, Volume2, Square } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
@@ -6,17 +6,24 @@ import { functions } from '../config/firebase';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { scrollInputIntoView } from '../utils/helpers';
 
-const consignasGoethe = [
-  { de: "Ihre Freundin Anna hat Geburtstag. Schreiben Sie eine E-Mail: Gratulation? Wann besuchen? Geschenk? (Schreiben Sie ca. 30 Wörter)", es: "Tu amiga Anna cumple años. Escribe un correo: ¿Felicitación? ¿Cuándo la visitas? ¿Regalo? (Escribe aprox. 30 palabras)" },
-  { de: "Sie machen am Wochenende einen Ausflug. Schreiben Sie eine E-Mail an Ihren Freund: Wohin? Wann treffen? Was mitbringen? (Schreiben Sie ca. 30 Wörter)", es: "Harás una excursión el fin de semana. Escribe un correo a tu amigo: ¿A dónde? ¿Cuándo encontrarse? ¿Qué llevar? (Escribe aprox. 30 palabras)" },
-  { de: "Sie möchten am Samstag eine Party machen. Schreiben Sie eine E-Mail an Ihre Freunde: Einladung? Wann und wo? Essen und Getränke? (Schreiben Sie ca. 30 Wörter)", es: "Quieres hacer una fiesta el sábado. Escribe a tus amigos: ¿Invitación? ¿Cuándo y dónde? ¿Comida y bebida? (Escribe aprox. 30 palabras)" }
-];
+const CONSIGNAS_BY_LEVEL = {
+  A1: [
+    { de: "Ihre Freundin Anna hat Geburtstag. Schreiben Sie eine E-Mail: Gratulation? Wann besuchen? Geschenk? (Schreiben Sie ca. 30 Wörter)", es: "Tu amiga Anna cumple años. Escribe un correo: ¿Felicitación? ¿Cuándo la visitas? ¿Regalo? (Escribe aprox. 30 palabras)" },
+    { de: "Sie machen am Wochenende einen Ausflug. Schreiben Sie eine E-Mail an Ihren Freund: Wohin? Wann treffen? Was mitbringen? (Schreiben Sie ca. 30 Wörter)", es: "Harás una excursión el fin de semana. Escribe un correo a tu amigo: ¿A dónde? ¿Cuándo encontrarse? ¿Qué llevar? (Escribe aprox. 30 palabras)" },
+    { de: "Sie möchten am Samstag eine Party machen. Schreiben Sie eine E-Mail an Ihre Freunde: Einladung? Wann und wo? Essen und Getränke? (Schreiben Sie ca. 30 Wörter)", es: "Quieres hacer una fiesta el sábado. Escribe a tus amigos: ¿Invitación? ¿Cuándo y dónde? ¿Comida y bebida? (Escribe aprox. 30 palabras)" }
+  ],
+  A2: [
+    { de: "Puente A2/DTZ (Formal): Sie können am Dienstag nicht zum Termin im Bürgeramt kommen. Schreiben Sie eine formelle E-Mail an Frau Weber: Warum schreiben Sie? Entschuldigung? Neuer Termin am Donnerstag? (ca. 45 Wörter)", es: "No puedes asistir el martes a tu cita en el registro ciudadano. Escribe un correo formal a Frau Weber: Motivo, disculpa y nueva propuesta el jueves (~45 palabras)." },
+    { de: "Puente A2/DTZ (Vivienda): Die Heizung in Ihrer Wohnung funktioniert nicht. Schreiben Sie an die Hausverwaltung: Seit wann ist das Problem? Wann sind Sie zu Hause? Bitte um schnelle Reparatur (ca. 45 Wörter)", es: "La calefacción de tu piso no funciona. Escribe a la administración: ¿Desde cuándo falla? ¿Cuándo estás en casa? Solicita reparación (~45 palabras)." },
+    { de: "Puente A2/DTZ (Semiformal): Sie arbeiten im Lager/Technik-Team und haben am Freitag eine Einladung zum Team-Essen bekommen. Schreiben Sie an Ihre Kollegin Laura: Zusage? Was bringen Sie mit? Wann kommen Sie? (ca. 45 Wörter)", es: "Recibiste una invitación para una comida de equipo el viernes. Escribe a tu compañera Laura confirmando asistencia, hora y qué llevas (~45 palabras)." }
+  ]
+};
 
 const EVALUATION_STEPS = [
   { icon: "📋", text: "Auditando el cumplimiento de los 3 Leitpunkte..." },
   { icon: "🎩", text: "Verificando registro y formalidad (du vs. Sie, Anrede y Gruß)..." },
-  { icon: "📐", text: "Revisando gramática A1 (V2, sustantivos con mayúscula, casos)..." },
-  { icon: "📊", text: "Comprobando extensión oficial Goethe (25-45 palabras)..." }
+  { icon: "📐", text: "Revisando gramática (V2, Nebensätze, mayúsculas, casos)..." },
+  { icon: "📊", text: "Comprobando extensión oficial del nivel seleccionado..." }
 ];
 
 const extractModelEmail = (evalText) => {
@@ -35,17 +42,19 @@ const extractModelEmail = (evalText) => {
 };
 
 const EmailSimulator = ({ initialText }) => {
+  const textareaId = useId();
+  const [cefrLevel, setCefrLevel] = useState('A1');
   const [text, setText] = useState(initialText || "");
   const [evaluation, setEvaluation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isPlayingModelAudio, setIsPlayingModelAudio] = useState(false);
-  const [consigna, setConsigna] = useState(() => {
-    const randomIndex = Math.floor(Math.random() * consignasGoethe.length);
-    return consignasGoethe[randomIndex];
-  });
+  const [consignaIdx, setConsignaIdx] = useState(0);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [progress, setProgress] = useState(0);
+
+  const currentList = CONSIGNAS_BY_LEVEL[cefrLevel] || CONSIGNAS_BY_LEVEL.A1;
+  const consigna = currentList[consignaIdx % currentList.length];
 
   useEffect(() => {
     return () => {
@@ -58,9 +67,6 @@ const EmailSimulator = ({ initialText }) => {
     let progressInterval;
 
     if (loading) {
-      setCurrentStep(0);
-      setProgress(0);
-
       stepInterval = setInterval(() => {
         setCurrentStep((prev) => (prev < EVALUATION_STEPS.length - 1 ? prev + 1 : prev));
       }, 2500);
@@ -79,28 +85,33 @@ const EmailSimulator = ({ initialText }) => {
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   const getWordCountStatus = (count) => {
+    const isA2 = cefrLevel === 'A2';
+    const minOpt = isA2 ? 35 : 20;
+    const maxOpt = isA2 ? 65 : 38;
+    const targetWordLabel = isA2 ? '~45' : '~30';
+
     if (count === 0) {
       return {
         dotClass: "bg-slate-400",
         badgeClass: "bg-slate-100 text-slate-600 border-slate-300",
-        label: "0 / ~30 palabras",
-        hint: "Meta oficial Goethe A1: ~30 palabras (rango óptimo 20-38)"
+        label: `0 / ${targetWordLabel} palabras`,
+        hint: `Meta oficial ${isA2 ? 'Puente A2/DTZ' : 'Goethe A1'}: ${targetWordLabel} palabras (${minOpt}-${maxOpt})`
       };
     }
-    if (count < 20) {
+    if (count < minOpt) {
       return {
         dotClass: "bg-rose-500",
         badgeClass: "bg-amber-50 text-rose-700 border-rose-300",
         label: `${count} palabras`,
-        hint: "Faltan palabras — Mínimo recomendado: 25-30 palabras"
+        hint: `Faltan palabras — Mínimo recomendado (${cefrLevel}): ${minOpt}-${maxOpt} palabras`
       };
     }
-    if (count <= 38) {
+    if (count <= maxOpt) {
       return {
         dotClass: "bg-emerald-500",
         badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-300",
         label: `${count} palabras`,
-        hint: "Longitud óptima Goethe A1 (~30 palabras)"
+        hint: `Longitud óptima ${isA2 ? 'A2/DTZ' : 'Goethe A1'} (${targetWordLabel} palabras)`
       };
     }
     return {
@@ -111,15 +122,19 @@ const EmailSimulator = ({ initialText }) => {
     };
   };
 
+  const handleSwitchLevel = (nextLevel) => {
+    if (nextLevel === cefrLevel) return;
+    stopCurrentAudio();
+    setIsPlayingModelAudio(false);
+    setCefrLevel(nextLevel);
+    setConsignaIdx(0);
+    setEvaluation(null);
+  };
+
   const cambiarTema = () => {
     stopCurrentAudio();
     setIsPlayingModelAudio(false);
-    let nextIndex;
-    do {
-      nextIndex = Math.floor(Math.random() * consignasGoethe.length);
-    } while (consignasGoethe.length > 1 && consignasGoethe[nextIndex].de === consigna.de);
-    
-    setConsigna(consignasGoethe[nextIndex]);
+    setConsignaIdx((prev) => (prev + 1) % currentList.length);
     setEvaluation(null);
   };
 
@@ -142,6 +157,8 @@ const EmailSimulator = ({ initialText }) => {
     if (!text.trim()) return;
     stopCurrentAudio();
     setIsPlayingModelAudio(false);
+    setCurrentStep(0);
+    setProgress(0);
     setLoading(true);
     setEvaluation(null);
     try {
@@ -149,7 +166,8 @@ const EmailSimulator = ({ initialText }) => {
       const evaluateEmailFn = httpsCallable(functions, 'evaluateEmail');
       const result = await evaluateEmailFn({
         textoCorreo: text,
-        consignaExamen: consigna.de
+        consignaExamen: consigna.de,
+        cefrLevel
       }).catch(err => {
         console.warn("Petición abortada/fallida al cambiar de vista:", err);
         throw err;
@@ -210,19 +228,44 @@ const EmailSimulator = ({ initialText }) => {
   return (
     <div className="bg-white border-2 border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col mb-4 text-left">
       <div className="bg-slate-100 px-4 py-3 border-b border-slate-200 flex flex-col gap-2">
-        <div className="flex items-center justify-between font-bold text-slate-700 text-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2 font-bold text-slate-700 text-sm">
           <div className="flex items-center gap-2">
-            <Edit3 size={16} className="text-blue-600" /> Simulador de Examen (Goethe A1 Schreiben Teil 2)
+            <Edit3 size={16} className="text-blue-600" />
+            <span>Simulador de Examen ({cefrLevel === 'A2' ? 'Puente A2 / DTZ' : 'Goethe A1'} Schreiben)</span>
           </div>
-          <button 
-            onClick={cambiarTema}
-            className="text-xs bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-800 px-2.5 py-1 rounded font-bold shadow-sm transition-all"
-          >
-            Cambiar tema
-          </button>
+          <div className="flex items-center gap-2">
+            <div role="tablist" aria-label="Nivel de redacción" className="inline-flex bg-white p-0.5 rounded-lg border border-slate-200">
+              {[
+                { id: 'A1', label: 'A1' },
+                { id: 'A2', label: 'Puente A2/DTZ' },
+              ].map((lvl) => (
+                <button
+                  key={lvl.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={cefrLevel === lvl.id}
+                  onClick={() => handleSwitchLevel(lvl.id)}
+                  className={`px-2.5 py-1 rounded-md text-xs font-bold transition-colors border-b-2 cursor-pointer ${
+                    cefrLevel === lvl.id
+                      ? 'bg-blue-50 text-blue-700 border-blue-600'
+                      : 'text-slate-600 border-transparent hover:text-slate-900'
+                  }`}
+                >
+                  {lvl.label}
+                </button>
+              ))}
+            </div>
+            <button 
+              type="button"
+              onClick={cambiarTema}
+              className="text-xs bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-800 px-2.5 py-1 rounded font-bold shadow-sm transition-all cursor-pointer"
+            >
+              Cambiar tema
+            </button>
+          </div>
         </div>
         <div className="text-sm bg-white p-3 rounded border border-slate-200 flex flex-col gap-1.5 text-left">
-          <p className="font-bold text-slate-800 leading-relaxed">
+          <p className="font-bold text-slate-800 leading-relaxed" lang="de">
             {consigna.de}
           </p>
           <p className="text-xs text-slate-500 italic font-medium leading-relaxed border-t border-slate-100 pt-1.5">
@@ -230,7 +273,11 @@ const EmailSimulator = ({ initialText }) => {
           </p>
         </div>
       </div>
+      <label htmlFor={textareaId} className="sr-only">
+        Escribe tu correo en alemán
+      </label>
       <textarea 
+        id={textareaId}
         className="w-full p-4 h-40 focus:outline-none focus:bg-yellow-50/30 text-slate-700 font-medium resize-none transition-colors" 
         placeholder="Escribe tu correo aquí en alemán..." 
         value={text} 

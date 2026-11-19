@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Compass, CheckCircle2, AlertTriangle, RotateCcw, ArrowRight } from 'lucide-react';
-import { playGermanAudio } from '../services/aiAudioService';
+import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 
 const LocativeMapSimulator = ({ exercises = [] }) => {
   const list = exercises.length > 0 ? exercises : [
@@ -44,6 +44,14 @@ const LocativeMapSimulator = ({ exercises = [] }) => {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [shake, setShake] = useState(false);
+  const shakeTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
+      stopCurrentAudio();
+    };
+  }, []);
 
   const current = list[currentIndex];
 
@@ -61,7 +69,8 @@ const LocativeMapSimulator = ({ exercises = [] }) => {
     } else {
       setShowFeedback('incorrect');
       setShake(true);
-      setTimeout(() => setShake(false), 500);
+      if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
+      shakeTimerRef.current = setTimeout(() => setShake(false), 500);
     }
   };
 
@@ -123,29 +132,46 @@ const LocativeMapSimulator = ({ exercises = [] }) => {
       </div>
 
       <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 my-4 flex items-center gap-4">
-        <div className={`p-4 rounded-xl flex items-center justify-center ${
-          current.questionType === "Wo" 
-            ? "bg-amber-100 text-amber-800 border border-amber-200" 
-            : "bg-blue-100 text-blue-800 border border-blue-200"
+        <div className={`p-3 sm:p-4 rounded-xl flex items-center justify-center ${
+          showFeedback
+            ? current.questionType === "Wo" 
+              ? "bg-amber-100 text-amber-800 border border-amber-200" 
+              : "bg-blue-100 text-blue-800 border border-blue-200"
+            : "bg-slate-200/80 text-slate-700 border border-slate-300"
         }`}>
-          {current.questionType === "Wo" ? (
-            <div className="flex flex-col items-center gap-0.5">
-              <span className="font-extrabold text-xs">¿Wo?</span>
-              <span className="text-[9px] font-bold uppercase tracking-wider">Estático</span>
-            </div>
+          {showFeedback ? (
+            current.questionType === "Wo" ? (
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="font-extrabold text-xs">¿Wo?</span>
+                <span className="text-[9px] font-bold uppercase tracking-wider">Estático</span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="font-extrabold text-xs">¿Wohin?</span>
+                <span className="text-[9px] font-bold uppercase tracking-wider">Dinámico</span>
+              </div>
+            )
           ) : (
             <div className="flex flex-col items-center gap-0.5">
-              <span className="font-extrabold text-xs">¿Wohin?</span>
-              <span className="text-[9px] font-bold uppercase tracking-wider">Dinámico</span>
+              <span className="font-extrabold text-xs">¿Wo / Wohin?</span>
+              <span className="text-[9px] font-bold uppercase tracking-wider">Elige</span>
             </div>
           )}
         </div>
         <div className="flex-1">
           <h5 className="font-bold text-slate-800 text-sm">
-            {current.questionType === "Wo" ? "Reposición / Ubicación" : "Desplazamiento / Dirección"}
+            {showFeedback
+              ? current.questionType === "Wo"
+                ? "Reposo / Ubicación (¿Wo?)"
+                : "Desplazamiento / Dirección (¿Wohin?)"
+              : "¿Reposo fijo o movimiento hacia un destino?"}
           </h5>
           <p className="text-xs text-slate-500">
-            {current.questionType === "Wo" ? "Exige caso DATIVO en el sustantivo." : "Exige caso ACUSATIVO en el sustantivo."}
+            {showFeedback
+              ? current.questionType === "Wo"
+                ? "Exige caso DATIVO en el sustantivo."
+                : "Exige caso ACUSATIVO en el sustantivo."
+              : "Observa el verbo y el contexto antes de revelar el caso gramatical."}
           </p>
         </div>
       </div>
@@ -181,13 +207,17 @@ const LocativeMapSimulator = ({ exercises = [] }) => {
       </div>
 
       {showFeedback && (
-        <div className={`p-4 rounded-xl border-2 mb-6 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-bottom-2 ${
+        <div aria-live="polite" className={`p-4 rounded-xl border-2 mb-6 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-bottom-2 ${
           showFeedback === 'correct' 
             ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
             : 'bg-rose-50 border-rose-200 text-rose-800'
         }`}>
           <div className="flex gap-2 items-start">
-            <CheckCircle2 size={18} className="shrink-0 text-emerald-600 mt-0.5" />
+            {showFeedback === 'correct' ? (
+              <CheckCircle2 size={18} className="shrink-0 text-emerald-600 mt-0.5" />
+            ) : (
+              <AlertTriangle size={18} className="shrink-0 text-rose-600 mt-0.5" />
+            )}
             <div className="space-y-1">
               <span className="font-bold block">
                 {showFeedback === 'correct' ? "¡Correcto!" : "¡Incorrecto!"}
@@ -196,8 +226,9 @@ const LocativeMapSimulator = ({ exercises = [] }) => {
             </div>
           </div>
           <button 
+            type="button"
             onClick={nextQuestion}
-            className="w-full mt-3 bg-white border border-current hover:bg-slate-50 text-slate-800 font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm"
+            className="w-full mt-3 bg-white border border-current hover:bg-slate-50 text-slate-800 font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
           >
             Siguiente <ArrowRight size={14} />
           </button>
