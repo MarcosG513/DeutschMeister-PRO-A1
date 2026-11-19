@@ -1,61 +1,80 @@
-import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
-import { User, Search, BookOpen, Car, Home, Coffee, ShoppingCart, Activity, Briefcase, Heart, Clock, Mail, CheckCircle, XCircle, List, LayoutGrid, Gamepad2, GraduationCap, Link2, MessageCircle, Bot, ImagePlus, Volume2, X, Send, Loader2, Star as Sparkles, Monitor as Presentation, ChevronRight, ChevronLeft, PlayCircle, Mic, Edit as Edit3, Headphones, RefreshCw, Flame, Trophy, Menu, ChevronDown, Maximize, Minimize, Play, Pause, Filter, Download } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
+import { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import { ArrowLeft, User, Search, BookOpen, Car, Home, List, LayoutGrid, Gamepad2, GraduationCap, MessageCircle, Bot, ImagePlus, Volume2, X, Loader2, Star as Sparkles, ChevronRight, PlayCircle, Mic, Headphones, Menu, Filter, Download } from 'lucide-react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, doc, setDoc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
+import { collection, doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { App as CapacitorApp } from '@capacitor/app';
-import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import localforage from 'localforage';
 import PresentationVocabCard from './components/PresentationVocabCard';
-import MarkdownMessage from './components/MarkdownMessage';
 import AuthAccessGate from './components/AuthAccessGate';
-import { app, auth, db, functions, appId } from './config/firebase';
+import { auth, db, functions, appId } from './config/firebase';
 import { getCachedAccessDecision, setCachedAccessDecision, isOfflineOrTransientNetworkError, signOutUnified, processAuthRedirectResult } from './services/authService';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { chapters, goetheModules, studyPlanModules } from './data/chapters';
-import { fetchWithRetry, compressImageBase64 as compressImage, getSafeId, countUniqueVocabularyCards, recordDailyStudyActivity, recordCardStudied, recordSkillActivity, getStudiedCardsCount, getStreakSummary, getStreakSummarySync, getSkillProgressSummary, getSkillProgressSummarySync, syncPedagogyProgressFromCloud, splitGermanTitle, splitParentheticalText } from './utils/helpers';
-import { syncSrsDeckFromCloud, getSrsStats, getSrsStatsSync } from './services/srsBridgeService';
-import { parseTextToTokens, calculateWordTimings } from './utils/textTokenizer';
-import { playGermanAudio, stopCurrentAudio, getGermanSpeechUrl, getSavedPlaybackSpeed, setSavedPlaybackSpeed, getProcessedSpeechBlobUrl, isCleanStretchedUrl } from './services/aiAudioService';
-import { unregisterCleanStretchedUrl } from './utils/cleanTimeStretch';
+import {
+  compressImageBase64 as compressImage,
+  getSafeId,
+  countUniqueVocabularyCards,
+  recordDailyStudyActivity,
+  recordCardStudied,
+  recordSkillActivity,
+  getStudiedCardsCount,
+  getStudiedCardIds,
+  getStudiedCardIdsSync,
+  getCompletedModuleIds,
+  getCompletedModuleIdsSync,
+  getLearningProfile,
+  getLearningProfileSync,
+  saveLearningProfile,
+  getStreakSummary,
+  getStreakSummarySync,
+  getSkillProgressSummary,
+  getSkillProgressSummarySync,
+  syncPedagogyProgressFromCloud,
+  resetLocalUserCaches,
+  splitGermanTitle,
+  splitParentheticalText,
+} from './utils/helpers';
+import { syncSrsDeckFromCloud, getSrsStats, getSrsStatsSync, resetSrsLocalCache } from './services/srsBridgeService';
+import { playGermanAudio, stopCurrentAudio } from './services/aiAudioService';
+import { readSseJsonStream } from './utils/sseStreamReader';
 import { API_ENDPOINTS } from './config/apiEndpoints';
 import { mediaBlobStore, CHAPTER_STORIES_CACHE_KEY } from './services/syncMediaService';
 
-import Profile from './components/Profile';
 import HomeDashboard from './components/HomeDashboard';
 import InstallInstructionsModal from './components/InstallInstructionsModal';
-import DrivingMode from './components/DrivingMode';
 import { subscribeToAndroidAutoCommands } from './services/androidAutoBridge';
 
-const EmailSimulator = lazy(() => import('./components/EmailSimulator'));
+const Profile = lazy(() => import('./components/Profile'));
+const DrivingMode = lazy(() => import('./components/DrivingMode'));
+const StoryModal = lazy(() => import('./components/StoryModal'));
+const OnboardingModal = lazy(() => import('./components/OnboardingModal'));
+const VerbPrepositionTrainer = lazy(() => import('./components/VerbPrepositionTrainer'));
+const SyntaxTransformLab = lazy(() => import('./components/SyntaxTransformLab'));
 const ReadingComprehension = lazy(() => import('./components/ReadingComprehension'));
 const PresentationViewer = lazy(() => import('./components/PresentationViewer'));
 const DynamicQuiz = lazy(() => import('./components/DynamicQuiz'));
 const RoleplaySimulator = lazy(() => import('./components/RoleplaySimulator'));
-const InteractiveQA = lazy(() => import('./components/InteractiveQA'));
 const TutorChat = lazy(() => import('./components/TutorChat'));
 const MicroPodcastPlayer = lazy(() => import('./components/MicroPodcastPlayer'));
 const PhraseDialogueTrainer = lazy(() => import('./components/PhraseDialogueTrainer'));
 
 // --- CONFIGURACIÓN API & FIREBASE ---
 // Se removió el apiKey local, ahora se usan Firebase Functions.
-export { app, auth, db, functions, appId } from './config/firebase';
-
-// --- COMPONENTES AUXILIARES ---
-
-// --- Las bases de datos se importan desde './data/chapters' ---
-
-const loadingPhrases = [
-  "Buscando inspiración en la Selva Negra... 🌲",
-  "Poniendo el verbo en la Posición 2... 👑",
-  "Comprando un billete de tren hacia Berlín... 🚆",
-  "Mezclando palabras con un poco de chucrut... 🥨",
-  "Despertando al fantasma de Goethe... 👻",
-  "Declinando adjetivos a la velocidad de la luz... ⚡"
-];
 
 const LAST_ACTIVITY_STORAGE_KEY = 'dm_last_activity';
+
+const sanitizeUnlockedCardsForStorage = (cardsMap) => {
+  if (!cardsMap || typeof cardsMap !== 'object') return {};
+  const sanitized = {};
+  for (const [key, entry] of Object.entries(cardsMap)) {
+    if (!entry || typeof entry !== 'object') continue;
+    const rawUrl = typeof entry.imageUrl === 'string' ? entry.imageUrl : null;
+    const safeUrl = rawUrl && !rawUrl.startsWith('data:') && rawUrl.length <= 2048 ? rawUrl : null;
+    sanitized[key] = { ...entry, imageUrl: safeUrl };
+  }
+  return sanitized;
+};
 
 const readSavedLastActivity = () => {
   try {
@@ -79,10 +98,6 @@ export default function App() {
   const [activeChapterId, setActiveChapterId] = useState(chapters[0].id);
   const [activePresentationId, setActivePresentationId] = useState(null);
   const [activeStudyPlanId, setActiveStudyPlanId] = useState(null);
-  const [currentStudyPlanSlide, setCurrentStudyPlanSlide] = useState(0);
-  useEffect(() => {
-    setCurrentStudyPlanSlide(0);
-  }, [activeStudyPlanId]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [revealedCards, setRevealedCards] = useState({});
@@ -95,6 +110,12 @@ export default function App() {
   const [tutorInitialMode, setTutorInitialMode] = useState('tutor');
   const [phaseBannerNotice, setPhaseBannerNotice] = useState(null);
   const returnToHomeRef = useRef(false);
+  const isChatLoadingRef = useRef(false);
+  const chatAbortRef = useRef(null);
+  const storyAbortRef = useRef(null);
+  const prevUidRef = useRef(null);
+  const onboardingDismissedThisSessionRef = useRef(false);
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isTablasOpen, setIsTablasOpen] = useState(false);
   const [isPlanOpen, setIsPlanOpen] = useState(false);
@@ -128,7 +149,7 @@ export default function App() {
     setIsMenuOpen(false);
   };
 
-  const handleExitToOrigin = () => {
+  const handleExitToOrigin = useCallback(() => {
     setActivePresentationId(null);
     setActiveStudyPlanId(null);
     setQuizInitialScope('chapter');
@@ -137,7 +158,7 @@ export default function App() {
       returnToHomeRef.current = false;
       setIsHomeOpen(true);
     }
-  };
+  }, []);
 
   const handleOpenChapter = (chapterId, mode = 'flashcards') => {
     const target = chapters.find((c) => Number(c.id) === Number(chapterId)) || chapters[0];
@@ -218,7 +239,7 @@ export default function App() {
     setIsMenuOpen(false);
     setViewMode(targetView);
 
-    if (['driving', 'roleplay', 'call', 'phrase', 'podcast', 'reading', 'quiz'].includes(targetView)) {
+    if (['driving', 'roleplay', 'call', 'phrase', 'podcast', 'reading', 'quiz', 'verb_prep_lab', 'syntax_lab'].includes(targetView)) {
       recordLastActivity({
         type: 'special',
         id: targetView,
@@ -238,12 +259,28 @@ export default function App() {
     handleOpenSpecialView('quiz', { quizScope: 'srs' });
   };
 
-  useEffect(() => {
-    setSelectedCategory("Todas");
-  }, [activeChapterId]);
+  const [studiedCardsCount, setStudiedCardsCount] = useState(0);
+  const [studiedCardIds, setStudiedCardIds] = useState(() => getStudiedCardIdsSync());
+  const [completedModuleIds, setCompletedModuleIds] = useState(() => getCompletedModuleIdsSync());
+  const [learningProfile, setLearningProfile] = useState(() => getLearningProfileSync());
+  const [streakSummary, setStreakSummary] = useState(() => getStreakSummarySync());
+  const [skillProgress, setSkillProgress] = useState(() =>
+    getSkillProgressSummarySync(0, totalUniqueCardsCount)
+  );
+  const [srsStats, setSrsStats] = useState(() => getSrsStatsSync());
 
+  const handleSaveLearningProfile = useCallback(async (nextProfile) => {
+    onboardingDismissedThisSessionRef.current = true;
+    const saved = await saveLearningProfile(nextProfile);
+    setLearningProfile(saved);
+    setIsOnboardingOpen(false);
+  }, [setLearningProfile]);
 
-  // Se ha removido el useEffect de migración, ya que se hará síncronamente arriba.
+  const handleDismissOnboarding = useCallback(() => {
+    onboardingDismissedThisSessionRef.current = true;
+    setIsOnboardingOpen(false);
+  }, []);
+
   const [storyState, setStoryState] = useState({
     isOpen: false,
     loading: false,
@@ -254,60 +291,21 @@ export default function App() {
     stories: [],
     chapterId: null
   });
-  const [loadingPhraseIdx, setLoadingPhraseIdx] = useState(0);
 
-  useEffect(() => {
-    if (!storyState?.loading) {
-      setLoadingPhraseIdx(0);
-      return;
-    }
-    const interval = setInterval(() => {
-      setLoadingPhraseIdx(prev => (prev + 1) % loadingPhrases.length);
-    }, 2200);
-    return () => clearInterval(interval);
-  }, [storyState?.loading]);
-  const [isStoryAudioLoading, setIsStoryAudioLoading] = useState(false);
-  const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
-  const [currentWordIndex, setCurrentWordIndex] = useState(-1);
-  const [storySpeed, setStorySpeed] = useState(() => getSavedPlaybackSpeed());
-  const storyAudioInstanceRef = useRef(null); // Instancia HTML5 Audio en memoria
-  const storyAudioUrlRef = useRef(null);      // ObjectURL o URL remota de la sesión activa
-
-  const resetStoryAudioPlayback = () => {
-    if (storyAudioInstanceRef.current) {
-      storyAudioInstanceRef.current.onended = null;
-      storyAudioInstanceRef.current.onerror = null;
-      storyAudioInstanceRef.current.ontimeupdate = null;
-      storyAudioInstanceRef.current.onplay = null;
-      try {
-        storyAudioInstanceRef.current.pause();
-        storyAudioInstanceRef.current.src = "";
-      } catch (_) {}
-      storyAudioInstanceRef.current = null;
-    }
-    if (storyAudioUrlRef.current && storyAudioUrlRef.current.startsWith("blob:")) {
-      try {
-        URL.revokeObjectURL(storyAudioUrlRef.current);
-      } catch (_) {}
-      unregisterCleanStretchedUrl(storyAudioUrlRef.current);
-    }
-    storyAudioUrlRef.current = null;
-    setIsPlayingStoryAudio(false);
-    setIsStoryAudioLoading(false);
-    setCurrentWordIndex(-1);
-  };
-
-  const closeStoryModal = () => {
-    resetStoryAudioPlayback();
+  const closeStoryModal = useCallback(() => {
+    storyAbortRef.current?.abort();
+    stopCurrentAudio();
     setStoryState(prev => ({
       ...prev,
-      isOpen: false
+      isOpen: false,
+      loading: false
     }));
-  };
+  }, [setStoryState]);
 
   useEffect(() => {
     return () => {
-      resetStoryAudioPlayback();
+      storyAbortRef.current?.abort();
+      chatAbortRef.current?.abort();
     };
   }, []);
   const [fullscreenImage, setFullscreenImage] = useState(null);
@@ -364,7 +362,7 @@ export default function App() {
   const lazyLoadImage = async wordObj => {
     if (!wordObj || !wordObj.de) return;
     const safeId = getSafeId(wordObj.de).substring(0, 150);
-    const slugId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
+    const slugId = wordObj.de.replace(/[\s/?!\\,.]+/g, '_').toLowerCase();
     if (cardImages[safeId] !== undefined || loadingImages[safeId]) return;
     setLoadingImages(prev => ({
       ...prev,
@@ -486,78 +484,93 @@ export default function App() {
   const [unlockedCards, setUnlockedCards] = useState(() => {
     try {
       const saved = localStorage.getItem('deutschmeister_unlocked');
-      let parsed = saved ? JSON.parse(saved) : {};
+      const parsed = saved ? JSON.parse(saved) : {};
 
       // MIGRACIÓN AUTOMÁTICA (SÍNCRONA)
       const hasReset = localStorage.getItem('global_regen_reset_v3');
       if (!hasReset) {
         if (parsed && typeof parsed === 'object') {
           for (const key in parsed) {
-            parsed[key].regenerated = false;
+            if (parsed[key] && typeof parsed[key] === 'object') {
+              parsed[key].regenerated = false;
+            }
           }
-          localStorage.setItem('deutschmeister_unlocked', JSON.stringify(parsed));
         }
         localStorage.setItem('global_regen_reset_v3', 'true');
       }
-      return parsed && typeof parsed === 'object' ? parsed : {};
-    } catch (e) {
+      const sanitized = sanitizeUnlockedCardsForStorage(parsed);
+      if (!hasReset && Object.keys(sanitized).length > 0) {
+        localStorage.setItem('deutschmeister_unlocked', JSON.stringify(sanitized));
+      }
+      return sanitized;
+    } catch {
       return {};
     }
   });
   useEffect(() => {
     if (unlockedCards && typeof unlockedCards === 'object' && Object.keys(unlockedCards).length > 0) {
-      localStorage.setItem('deutschmeister_unlocked', JSON.stringify(unlockedCards));
+      try {
+        localStorage.setItem(
+          'deutschmeister_unlocked',
+          JSON.stringify(sanitizeUnlockedCardsForStorage(unlockedCards))
+        );
+      } catch {
+        // Ignorar errores de cuota al persistir tarjetas desbloqueadas
+      }
     }
   }, [unlockedCards]);
-  const [studiedCardsCount, setStudiedCardsCount] = useState(0);
-  const [streakSummary, setStreakSummary] = useState(() => getStreakSummarySync());
-  const [skillProgress, setSkillProgress] = useState(() =>
-    getSkillProgressSummarySync(0, totalUniqueCardsCount)
-  );
-  const [srsStats, setSrsStats] = useState(() => getSrsStatsSync());
 
   useEffect(() => {
-    const handleSpeedSync = (e) => {
-      const next = e?.detail !== undefined ? e.detail : getSavedPlaybackSpeed();
-      setStorySpeed(next);
-    };
     const refreshTelemetry = async (explicitStudiedCount) => {
       const curCount =
         typeof explicitStudiedCount === 'number'
           ? explicitStudiedCount
           : await getStudiedCardsCount();
       setStudiedCardsCount(curCount);
-      const [nextStreak, nextSkills, nextSrs] = await Promise.all([
+      const [nextStreak, nextSkills, nextSrs, nextStudiedIds, nextCompletedIds, nextProfile] = await Promise.all([
         getStreakSummary(),
         getSkillProgressSummary(curCount, totalUniqueCardsCount),
         getSrsStats(),
+        getStudiedCardIds(),
+        getCompletedModuleIds(),
+        getLearningProfile(),
       ]);
       if (nextStreak) setStreakSummary(nextStreak);
       if (nextSkills) setSkillProgress(nextSkills);
       if (nextSrs) setSrsStats(nextSrs);
+      if (Array.isArray(nextStudiedIds)) setStudiedCardIds(nextStudiedIds);
+      if (Array.isArray(nextCompletedIds)) setCompletedModuleIds(nextCompletedIds);
+      if (nextProfile) setLearningProfile(nextProfile);
     };
     const handleStudied = (e) => {
       refreshTelemetry(e?.detail?.count);
+    };
+    const handleLearningProfileUpdated = (e) => {
+      if (e?.detail?.learningProfile) {
+        setLearningProfile(e.detail.learningProfile);
+      } else {
+        refreshTelemetry();
+      }
     };
     const handleGeneralTelemetry = () => {
       refreshTelemetry();
     };
 
-    window.addEventListener('dm-speed-changed', handleSpeedSync);
     window.addEventListener('cardStudiedUpdated', handleStudied);
     window.addEventListener('studyActivityUpdated', handleGeneralTelemetry);
     window.addEventListener('moduleCompletedUpdated', handleGeneralTelemetry);
     window.addEventListener('skillActivityUpdated', handleGeneralTelemetry);
     window.addEventListener('srsDeckUpdated', handleGeneralTelemetry);
+    window.addEventListener('learningProfileUpdated', handleLearningProfileUpdated);
     refreshTelemetry();
 
     return () => {
-      window.removeEventListener('dm-speed-changed', handleSpeedSync);
       window.removeEventListener('cardStudiedUpdated', handleStudied);
       window.removeEventListener('studyActivityUpdated', handleGeneralTelemetry);
       window.removeEventListener('moduleCompletedUpdated', handleGeneralTelemetry);
       window.removeEventListener('skillActivityUpdated', handleGeneralTelemetry);
       window.removeEventListener('srsDeckUpdated', handleGeneralTelemetry);
+      window.removeEventListener('learningProfileUpdated', handleLearningProfileUpdated);
     };
   }, [totalUniqueCardsCount]);
 
@@ -666,24 +679,46 @@ export default function App() {
         setAccessError(redirectErr.message);
       }
     });
+    const clearSessionScopedState = async (nextUid = null) => {
+      prevUidRef.current = nextUid;
+      onboardingDismissedThisSessionRef.current = false;
+      setIsOnboardingOpen(false);
+      setUnlockedCards({});
+      setCardImages({});
+      setCompletedModuleIds([]);
+      setStudiedCardIds([]);
+      setStudiedCardsCount(0);
+      await Promise.all([resetLocalUserCaches(), resetSrsLocalCache()]);
+      setLearningProfile(getLearningProfileSync());
+      setChatMessages([{
+        role: "model",
+        parts: [{
+          text: "¡Hallo! Soy tu tutor experto de alemán. He guardado nuestro historial. ¿En qué te puedo ayudar hoy? 🇩🇪"
+        }]
+      }]);
+    };
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (!currentUser) {
+      if (!currentUser || currentUser.isAnonymous) {
+        const wasAnon = Boolean(currentUser?.isAnonymous);
         authCheckSeqRef.current += 1;
+        if (prevUidRef.current !== null) {
+          await clearSessionScopedState(null);
+        }
         setUser(null);
         setAccessRole('user');
         setAccessError(null);
         setAccessStatus('unauthenticated');
+        if (wasAnon) {
+          await signOutUnified({ authInstance: auth }).catch(() => {});
+        }
         return;
       }
 
-      if (currentUser.isAnonymous) {
-        authCheckSeqRef.current += 1;
-        setUser(null);
-        setAccessRole('user');
-        setAccessError(null);
-        setAccessStatus('unauthenticated');
-        await signOutUnified({ authInstance: auth }).catch(() => {});
-        return;
+      if (prevUidRef.current && prevUidRef.current !== currentUser.uid) {
+        await clearSessionScopedState(currentUser.uid);
+      } else {
+        prevUidRef.current = currentUser.uid;
       }
 
       setUser(currentUser);
@@ -760,9 +795,30 @@ export default function App() {
 
   // Sincronización pedagógica y SRS solo cuando el usuario está aprobado
   useEffect(() => {
-    if (!user || user.isAnonymous || accessStatus !== 'approved' || user.uid === 'offline_user') return;
-    syncPedagogyProgressFromCloud(user.uid);
-    syncSrsDeckFromCloud(user.uid);
+    if (!user || user.isAnonymous || accessStatus !== 'approved' || user.uid === 'offline_user') return undefined;
+    let cancelled = false;
+    (async () => {
+      await Promise.all([
+        syncPedagogyProgressFromCloud(user.uid),
+        syncSrsDeckFromCloud(user.uid),
+      ]);
+      if (cancelled) return;
+      const [profile, studiedIds, completedIds] = await Promise.all([
+        getLearningProfile(),
+        getStudiedCardIds(),
+        getCompletedModuleIds(),
+      ]);
+      if (cancelled) return;
+      if (Array.isArray(studiedIds)) setStudiedCardIds(studiedIds);
+      if (Array.isArray(completedIds)) setCompletedModuleIds(completedIds);
+      setLearningProfile(profile || getLearningProfileSync());
+      if (!profile?.onboardingCompleted && !profile?.skipped && !onboardingDismissedThisSessionRef.current) {
+        setIsOnboardingOpen(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [user, accessStatus]);
 
   useEffect(() => {
@@ -782,6 +838,7 @@ export default function App() {
     if (!user || user.isAnonymous || accessStatus !== 'approved' || !db || user.uid === 'offline_user') return;
     const chatDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'chat', 'history');
     const unsubscribe = onSnapshot(chatDocRef, docSnap => {
+      if (isChatLoadingRef.current) return;
       if (docSnap.exists()) {
         setChatMessages(docSnap.data().messages || []);
       } else {
@@ -812,6 +869,10 @@ export default function App() {
         setFullscreenImage(null);
         return;
       }
+      if (isOnboardingOpen) {
+        handleDismissOnboarding();
+        return;
+      }
       if (isTutorOpen) {
         setIsTutorOpen(false);
         return;
@@ -839,8 +900,9 @@ export default function App() {
       backButtonListener.then(listener => listener.remove());
     };
   }, [
-    fullscreenImage, isTutorOpen, storyState, 
-    activePresentationId, activeStudyPlanId, viewMode, isHomeOpen
+    fullscreenImage, isOnboardingOpen, isTutorOpen, storyState,
+    activePresentationId, activeStudyPlanId, viewMode, isHomeOpen,
+    handleDismissOnboarding, closeStoryModal, handleExitToOrigin
   ]);
   const activeChapter = useMemo(() => chapters.find(c => c.id === Number(activeChapterId)) || chapters[0], [activeChapterId]);
   const activePresentation = useMemo(() => goetheModules.find(p => p.id === activePresentationId), [activePresentationId]);
@@ -875,20 +937,7 @@ export default function App() {
       words = words.filter(w => w.category === selectedCategory);
     }
     return words;
-  }, [activeChapterId, searchTerm, activeChapter, selectedCategory]);
-  const toggleCard = index => {
-    const word = displayedWords[index];
-    if (word && word.de) {
-      const safeId = getSafeId(word.de).substring(0, 150);
-      recordCardStudied(safeId);
-    }
-    recordDailyStudyActivity();
-    recordSkillActivity('reading', 1).catch(() => {});
-    setRevealedCards(prev => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
-  };
+  }, [searchTerm, activeChapter, selectedCategory]);
   const revealAll = () => {
     recordDailyStudyActivity();
     recordSkillActivity('reading', 2).catch(() => {});
@@ -955,7 +1004,9 @@ export default function App() {
           }
         }
       }
-    } catch (_) {}
+    } catch {
+      // Ignorar caché corrupta de cuentos locales
+    }
 
     if (db) {
       try {
@@ -991,7 +1042,7 @@ export default function App() {
   const handleSelectChapterStorySlot = (slotNumber) => {
     const target = (storyState.stories || []).find((s) => Number(s.storyIndex) === Number(slotNumber));
     if (!target) return;
-    resetStoryAudioPlayback();
+    stopCurrentAudio();
     setStoryState((prev) => ({
       ...prev,
       activeSlot: Number(slotNumber),
@@ -1004,7 +1055,8 @@ export default function App() {
   const handleCreateNewChapterStory = async (existingStoriesOverride = null, chapterOverride = null) => {
     const targetChapter = chapterOverride || activeChapter;
     if (!targetChapter) return;
-    resetStoryAudioPlayback();
+    storyAbortRef.current?.abort();
+    stopCurrentAudio();
 
     const currentStories = Array.isArray(existingStoriesOverride)
       ? existingStoriesOverride
@@ -1063,9 +1115,13 @@ export default function App() {
     }));
 
     const attemptFetch = async () => {
+      storyAbortRef.current?.abort();
+      const controller = new AbortController();
+      storyAbortRef.current = controller;
       const idToken = user ? await user.getIdToken().catch(() => "") : "";
       const response = await fetch(API_ENDPOINTS.STORY_GEN, {
         method: "POST",
+        signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
           ...(idToken ? { Authorization: `Bearer ${idToken}` } : {})
@@ -1077,28 +1133,33 @@ export default function App() {
         })
       });
       if (!response.ok) throw new Error("Failed to generate story");
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      let currentBuffer = "";
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-        for (const line of lines) {
-          if (line.startsWith("data: ") && !line.includes("[DONE]")) {
-            const textChunk = line.substring(6);
-            currentBuffer += textChunk;
-            const getStreamingField = (buffer, fieldName) => {
-              const regex = new RegExp(`"${fieldName}"\\s*:\\s*"([^"]*)`);
-              const match = buffer.match(regex);
-              if (match) {
-                return match[1].replace(/\\n/g, "\n").replace(/\\"/g, '"').replace(/\\t/g, "\t");
-              }
-              return "";
-            };
-            const partialDe = getStreamingField(currentBuffer, "cuento_aleman") || getStreamingField(currentBuffer, "de");
-            const partialEs = getStreamingField(currentBuffer, "traduccion_espanol") || getStreamingField(currentBuffer, "es");
+      let resolvedPayload = null;
+      let rawBuffer = "";
+      await readSseJsonStream(response, {
+        signal: controller.signal,
+        onEvent: (data) => {
+          resolvedPayload = data;
+          const deText = data?.cuento_aleman || data?.de || "";
+          const esText = data?.traduccion_espanol || data?.es || "";
+          if (deText || esText) {
+            setStoryState((prev) => ({
+              ...prev,
+              loading: false,
+              de: deText || prev.de,
+              es: esText || prev.es
+            }));
+          }
+        },
+        onParseError: (raw) => {
+          rawBuffer += raw || "";
+          const extractPartial = (buffer, fieldName) => {
+            const regex = new RegExp(`"${fieldName}"\\s*:\\s*"([^"]*)`);
+            const match = buffer.match(regex);
+            return match ? match[1].replace(/\\n/g, "\n").replace(/\\"/g, '"').replace(/\\t/g, "\t") : "";
+          };
+          const partialDe = extractPartial(rawBuffer, "cuento_aleman") || extractPartial(rawBuffer, "de");
+          const partialEs = extractPartial(rawBuffer, "traduccion_espanol") || extractPartial(rawBuffer, "es");
+          if (partialDe || partialEs) {
             setStoryState((prev) => ({
               ...prev,
               loading: false,
@@ -1107,8 +1168,11 @@ export default function App() {
             }));
           }
         }
+      });
+      if (resolvedPayload && typeof resolvedPayload === "object") {
+        return resolvedPayload;
       }
-      const jsonMatch = currentBuffer.match(/\{[\s\S]*\}/);
+      const jsonMatch = rawBuffer.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
         throw new Error("Formato JSON no encontrado.");
       }
@@ -1150,12 +1214,14 @@ export default function App() {
       const data = await attemptFetch();
       await applyStoryResult(data);
     } catch (e) {
+      if (e?.name === "AbortError") return;
       console.warn("Intento 1 falló, reintentando...", e);
       try {
         await new Promise((resolve) => setTimeout(resolve, 600));
         const data = await attemptFetch();
         await applyStoryResult(data);
       } catch (retryError) {
+        if (retryError?.name === "AbortError") return;
         console.error("Intento 2 falló:", retryError);
         setStoryState((prev) => ({
           ...prev,
@@ -1171,7 +1237,8 @@ export default function App() {
   const generateStory = async (chapterOverride = null) => {
     const targetChapter = chapterOverride && chapterOverride.id ? chapterOverride : activeChapter;
     if (!targetChapter) return;
-    resetStoryAudioPlayback();
+    storyAbortRef.current?.abort();
+    stopCurrentAudio();
 
     setStoryState((prev) => ({
       ...prev,
@@ -1208,105 +1275,6 @@ export default function App() {
     generateStory(target);
   };
 
-  const handleChangeStorySpeed = (nextSpeed) => {
-    const valid = setSavedPlaybackSpeed(nextSpeed);
-    setStorySpeed(valid);
-    if (storyAudioInstanceRef.current || storyAudioUrlRef.current || isPlayingStoryAudio || isStoryAudioLoading) {
-      resetStoryAudioPlayback();
-    }
-  };
-
-  const handleToggleStoryAudio = async () => {
-    if (!storyState.de || isStoryAudioLoading) return;
-
-    // 1. Si ya se está reproduciendo, pausar
-    if (isPlayingStoryAudio && storyAudioInstanceRef.current) {
-      storyAudioInstanceRef.current.pause();
-      setIsPlayingStoryAudio(false);
-      return;
-    }
-
-    // 2. Si ya fue pausado y el audio ya existe en memoria, reanudar de inmediato (0 API calls)
-    if (storyAudioInstanceRef.current && storyAudioUrlRef.current) {
-      // Si terminó, reiniciar desde el inicio
-      if (storyAudioInstanceRef.current.ended) {
-        storyAudioInstanceRef.current.currentTime = 0;
-        setCurrentWordIndex(0);
-      }
-      const resumeRate = isCleanStretchedUrl(storyAudioUrlRef.current) ? 1.0 : storySpeed;
-      storyAudioInstanceRef.current.playbackRate = resumeRate;
-      storyAudioInstanceRef.current.preservesPitch = true;
-      storyAudioInstanceRef.current.play();
-      setIsPlayingStoryAudio(true);
-      return;
-    }
-
-    // 3. Primera reproducción: Obtener URL limpia (Phase Vocoder a 0.75x o original a 1.0x) y guardar en memoria
-    try {
-      setIsStoryAudioLoading(true);
-      stopCurrentAudio(); // Detiene cualquier otro sonido en la app
-
-      const activeSpeed = getSavedPlaybackSpeed();
-      const audioSource = await getProcessedSpeechBlobUrl(storyState.de, {
-        voice: "Charon",
-        type: "story",
-        speed: activeSpeed
-      });
-
-      storyAudioUrlRef.current = audioSource;
-
-      const targetRate = isCleanStretchedUrl(audioSource) ? 1.0 : activeSpeed;
-      const audio = new Audio(audioSource);
-      audio.playsInline = true;
-      audio.setAttribute('playsinline', '');
-      audio.setAttribute('webkit-playsinline', '');
-      audio.playbackRate = targetRate;
-      audio.preservesPitch = true;
-      audio.onloadedmetadata = () => {
-        audio.playbackRate = targetRate;
-        audio.preservesPitch = true;
-      };
-      storyAudioInstanceRef.current = audio;
-
-      const tokens = parseTextToTokens(storyState.de);
-      const wordTimings = calculateWordTimings(tokens);
-
-      audio.onplay = () => {
-        setIsStoryAudioLoading(false);
-        setIsPlayingStoryAudio(true);
-      };
-
-      audio.ontimeupdate = () => {
-        if (!audio.duration || audio.duration === 0) return;
-        const currentProgress = audio.currentTime / audio.duration;
-        const active = wordTimings.find(
-          w => currentProgress >= w.startRatio && currentProgress < w.endRatio
-        );
-        if (active) setCurrentWordIndex(prev => (prev === active.wordIndex ? prev : active.wordIndex));
-      };
-
-      audio.onended = () => {
-        setIsPlayingStoryAudio(false);
-        setCurrentWordIndex(-1);
-      };
-
-      audio.onerror = (e) => {
-        console.warn("[Story Audio Error] Fallo al reproducir:", e);
-        setIsPlayingStoryAudio(false);
-        setIsStoryAudioLoading(false);
-        setCurrentWordIndex(-1);
-      };
-
-      await audio.play();
-    } catch (err) {
-      console.error("Error al obtener audio del cuento:", err);
-      setIsStoryAudioLoading(false);
-      setIsPlayingStoryAudio(false);
-    }
-  };
-
-  const handlePlayStory = handleToggleStoryAudio;
-  const speakStory = handleToggleStoryAudio;
   const groupWordsByCategory = words => {
     return words.reduce((acc, word) => {
       const cat = word.category || "General";
@@ -1315,11 +1283,9 @@ export default function App() {
       return acc;
     }, {});
   };
-  const toggleFullScreen = () => {
-    setIsTutorFullscreen(prev => !prev);
-  };
   const sendChatMessage = async () => {
-    if (!chatInput.trim()) return;
+    if (!chatInput.trim() || isChatLoadingRef.current) return;
+    isChatLoadingRef.current = true;
     recordDailyStudyActivity();
     recordSkillActivity('writing', 4).catch(() => {});
     const newUserMessage = {
@@ -1332,10 +1298,23 @@ export default function App() {
     setChatMessages(newMessages);
     setChatInput("");
     setIsChatLoading(true);
+    chatAbortRef.current?.abort();
+    const controller = new AbortController();
+    chatAbortRef.current = controller;
+
+    const updateLastAssistantMessage = (nextMsg) => {
+      setChatMessages(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1] = nextMsg;
+        return updated;
+      });
+    };
+
     try {
       const idToken = user ? await user.getIdToken().catch(() => '') : '';
       const response = await fetch(API_ENDPOINTS.TUTOR_CHAT, {
         method: 'POST',
+        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
           ...(idToken ? { 'Authorization': `Bearer ${idToken}` } : {})
@@ -1349,8 +1328,6 @@ export default function App() {
       });
 
       if (!response.ok) throw new Error("Failed to connect to tutor");
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
       let currentText = "";
       let resolvedFinalMsg = null;
 
@@ -1362,64 +1339,49 @@ export default function App() {
         structuredMeta: null
       }]);
       setIsChatLoading(false);
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-        for (const line of lines) {
-          if (line.startsWith("data: ") && !line.includes("[DONE]")) {
-            try {
-              const data = JSON.parse(line.substring(6));
-              if (data.type === 'reply_de_ready' && data.replyDe) {
-                currentText = `> 🇩🇪 **${data.replyDe}**`;
-                setChatMessages(prev => {
-                  const updated = [...prev];
-                  updated[updated.length - 1] = {
-                    role: "model",
-                    parts: [{ text: currentText }],
-                    structuredMeta: { replyDe: data.replyDe }
-                  };
-                  return updated;
-                });
-              } else if (data.type === 'structured_v2' && data.payload) {
-                const p = data.payload;
-                const formattedText = [p.replyMarkdownEs, p.replyDe ? `\n\n> 🇩🇪 **${p.replyDe}**` : '']
-                  .filter(Boolean)
-                  .join('')
-                  .trim();
-                currentText = formattedText || p.replyDe || '';
-                resolvedFinalMsg = {
-                  role: "model",
-                  parts: [{ text: currentText }],
-                  structuredMeta: {
-                    replyDe: p.replyDe || '',
-                    translationEs: p.translationEs || '',
-                    grammarCorrections: Array.isArray(p.grammarCorrections) ? p.grammarCorrections : [],
-                    suggestedReplies: Array.isArray(p.suggestedReplies) ? p.suggestedReplies : [],
-                    newVocabulary: Array.isArray(p.newVocabulary) ? p.newVocabulary : []
-                  }
-                };
-                setChatMessages(prev => {
-                  const updated = [...prev];
-                  updated[updated.length - 1] = resolvedFinalMsg;
-                  return updated;
-                });
-              } else if (data.text) {
-                currentText += data.text;
-                setChatMessages(prev => {
-                  const updated = [...prev];
-                  updated[updated.length - 1] = {
-                    role: "model",
-                    parts: [{ text: currentText }]
-                  };
-                  return updated;
-                });
+
+      await readSseJsonStream(response, {
+        signal: controller.signal,
+        onEvent: (data) => {
+          if (data?.type === 'reply_de_ready' && data.replyDe) {
+            currentText = `> 🇩🇪 **${data.replyDe}**`;
+            updateLastAssistantMessage({
+              role: "model",
+              parts: [{ text: currentText }],
+              structuredMeta: { replyDe: data.replyDe }
+            });
+          } else if (data?.type === 'structured_v2' && data.payload) {
+            const p = data.payload;
+            const formattedText = [p.replyMarkdownEs, p.replyDe ? `\n\n> 🇩🇪 **${p.replyDe}**` : '']
+              .filter(Boolean)
+              .join('')
+              .trim();
+            currentText = formattedText || p.replyDe || '';
+            resolvedFinalMsg = {
+              role: "model",
+              parts: [{ text: currentText }],
+              structuredMeta: {
+                replyDe: p.replyDe || '',
+                translationEs: p.translationEs || '',
+                grammarCorrections: Array.isArray(p.grammarCorrections) ? p.grammarCorrections : [],
+                suggestedReplies: Array.isArray(p.suggestedReplies) ? p.suggestedReplies : [],
+                newVocabulary: Array.isArray(p.newVocabulary) ? p.newVocabulary : []
               }
-            } catch (err) {}
+            };
+            updateLastAssistantMessage(resolvedFinalMsg);
+          } else if (data?.text) {
+            currentText += data.text;
+            updateLastAssistantMessage({
+              role: "model",
+              parts: [{ text: currentText }]
+            });
           }
+        },
+        onParseError: () => {
+          // Ignorar fragmentos JSON parciales durante streaming SSE
         }
-      }
+      });
+
       const finalMessages = [
         ...newMessages,
         resolvedFinalMsg || {
@@ -1437,6 +1399,7 @@ export default function App() {
         }).catch(e => console.warn("Chat guardado localmente debido a permisos:", e));
       }
     } catch (error) {
+      if (error?.name === 'AbortError') return;
       console.error("Error en chat:", error);
       setChatMessages([...newMessages, {
         role: "model",
@@ -1445,6 +1408,7 @@ export default function App() {
         }]
       }]);
     } finally {
+      isChatLoadingRef.current = false;
       setIsChatLoading(false);
     }
   };
@@ -1460,7 +1424,7 @@ export default function App() {
     if (e) e.stopPropagation();
     if (!wordObj || !wordObj.de) return;
     const safeId = getSafeId(wordObj.de).substring(0, 150);
-    const slugId = wordObj.de.replace(/[\s\/?!\\,.]+/g, '_').toLowerCase();
+    const slugId = wordObj.de.replace(/[\s/?!\\,.]+/g, '_').toLowerCase();
     const userDocRef = user && db ? doc(db, 'artifacts', appId, 'users', user.uid, 'unlockedCards', safeId) : null;
 
     setIsImageLoading(safeId);
@@ -1633,6 +1597,7 @@ export default function App() {
         canInstallPWA={canInstallPWA}
         onInstallApp={handleInstallApp}
         showWebInstallCard={showWebInstallCard}
+        onOpenOnboarding={() => setIsOnboardingOpen(true)}
       /> : viewMode === "quiz" ? <DynamicQuiz 
         onExit={handleExitToOrigin} 
         chapters={chapters}
@@ -1744,7 +1709,7 @@ export default function App() {
                 <div className="px-4 pb-4 pt-[max(1rem,env(safe-area-inset-top))] border-b border-slate-800 flex justify-between items-center bg-slate-950">
                   <div className="flex items-center gap-2">
                     <GraduationCap className="text-yellow-400" size={22} />
-                    <span className="font-bold text-sm text-white tracking-wide">Navegación DM A1</span>
+                    <span className="font-bold text-sm text-white tracking-wide">Navegación DM A1–B1</span>
                   </div>
                   <button onClick={() => setIsMenuOpen(false)} className="text-slate-400 hover:text-white p-1 rounded-lg transition" aria-label="Cerrar menú">
                     <X size={20} />
@@ -1796,8 +1761,14 @@ export default function App() {
                     <button onClick={() => handleOpenSpecialView('podcast')} className="bg-violet-900/60 text-violet-200 border border-violet-500/20 py-2.5 rounded-lg font-bold hover:bg-violet-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
                       <Headphones size={18} /> Pódcasts 🎙️
                     </button>
-                    <button onClick={() => handleOpenSpecialView('reading')} className="bg-emerald-900/60 text-emerald-200 border border-emerald-500/20 py-2.5 rounded-lg font-bold hover:bg-emerald-800 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
+                    <button onClick={() => handleOpenSpecialView('reading')} className="bg-emerald-900/60 text-emerald-200 border border-emerald-500/20 col-span-2 py-2.5 rounded-lg font-bold hover:bg-emerald-800 transition flex items-center justify-center gap-2 text-xs shadow-sm cursor-pointer">
                       <BookOpen size={18} /> Lectura 📖
+                    </button>
+                    <button onClick={() => handleOpenSpecialView('verb_prep_lab')} className="bg-sky-950/70 text-sky-200 border border-sky-500/30 py-2.5 rounded-lg font-bold hover:bg-sky-900/70 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
+                      <span>🔗</span> Verbos + Prep
+                    </button>
+                    <button onClick={() => handleOpenSpecialView('syntax_lab')} className="bg-indigo-950/70 text-indigo-200 border border-indigo-500/30 py-2.5 rounded-lg font-bold hover:bg-indigo-900/70 transition flex flex-col items-center justify-center gap-1 text-xs shadow-sm cursor-pointer">
+                      <span>🔀</span> Sintaxis A2–B1
                     </button>
                     <button onClick={() => handleOpenSpecialView('quiz')} className="bg-yellow-600 text-slate-900 col-span-2 py-2.5 rounded-lg font-bold hover:bg-yellow-500 transition flex items-center justify-center gap-2 text-xs shadow-sm cursor-pointer">
                       <Gamepad2 size={18} /> Quiz Dinámico / SRS
@@ -1868,6 +1839,13 @@ export default function App() {
                     {isPlanOpen && <div className="flex flex-col border-t border-slate-800/50 bg-slate-950/20 p-1.5 space-y-1">
                         {studyPlanModules.map(mod => {
                           const isActive = !isHomeOpen && activeStudyPlanId === mod.id && viewMode === 'studyPlan';
+                          const cefr = mod.cefrLevel || 'A1';
+                          const cefrPillClass = cefr === 'B1'
+                            ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                            : cefr === 'A2'
+                              ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
+                              : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+                          const stageText = mod.stageLabel || (mod.id ? String(mod.id).replace(/(sp_|g_|kap_)/i, 'Módulo ') : 'Sección');
                           return (
                             <button
                               key={mod.id}
@@ -1881,10 +1859,15 @@ export default function App() {
                               <span className="mt-0.5 text-amber-400 shrink-0">
                                 <Sparkles size={16} />
                               </span>
-                              <div className="flex flex-col min-w-0 flex-1 space-y-0.5">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">
-                                  {mod.id ? String(mod.id).replace(/(sp_|g_|kap_)/i, 'Módulo ') : 'Sección'}
-                                </span>
+                              <div className="flex flex-col min-w-0 flex-1 space-y-1">
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                  <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded border shrink-0 ${cefrPillClass}`}>
+                                    {cefr}
+                                  </span>
+                                  <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 truncate">
+                                    {stageText}
+                                  </span>
+                                </div>
                                 <span className="text-xs font-medium text-slate-100 leading-snug whitespace-normal break-words">
                                   {mod.title.replace(/^(Capítulo|Kapitel)\s+\d+:\s*/i, '')}
                                 </span>
@@ -1962,7 +1945,7 @@ export default function App() {
           )}
 
           {/* VISTA: INICIO Y CENTRO DE MANDO PEDAGÓGICO 🏠 */}
-          {isHomeOpen && searchTerm.trim() === "" && !["roleplay", "call", "phrase", "podcast", "reading"].includes(viewMode) && (
+          {isHomeOpen && searchTerm.trim() === "" && !["roleplay", "call", "phrase", "podcast", "reading", "verb_prep_lab", "syntax_lab"].includes(viewMode) && (
             <HomeDashboard
               user={user}
               accessRole={accessRole}
@@ -1975,6 +1958,10 @@ export default function App() {
               streakSummary={streakSummary}
               skillProgress={skillProgress}
               srsStats={srsStats}
+              learningProfile={learningProfile}
+              completedModuleIds={completedModuleIds}
+              studiedCardIds={studiedCardIds}
+              onOpenOnboarding={() => setIsOnboardingOpen(true)}
               onStartSrsReview={handleStartSrsReview}
               onOpenChapter={handleOpenChapter}
               onOpenStudyPlan={handleOpenStudyPlan}
@@ -2008,6 +1995,46 @@ export default function App() {
 
           {/* VISTA: COMPRENSIÓN LECTORA IA 📖 */}
           {viewMode === "reading" && <ReadingComprehension onExit={handleExitToOrigin} />}
+
+          {/* VISTA: LABORATORIO DE VERBOS + PREPOSICIÓN & DA-/WO- 🔗 */}
+          {viewMode === "verb_prep_lab" && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-3 bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-xs">
+                <button
+                  type="button"
+                  onClick={handleExitToOrigin}
+                  className="inline-flex items-center gap-2 min-h-[44px] px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer"
+                >
+                  <ArrowLeft size={16} />
+                  <span>Volver</span>
+                </button>
+                <span className="text-xs font-extrabold uppercase tracking-wider text-sky-700 bg-sky-50 border border-sky-200 px-3 py-1.5 rounded-full">
+                  Laboratorio A2–B1 · Verbos + Preposición
+                </span>
+              </div>
+              <VerbPrepositionTrainer isModal />
+            </div>
+          )}
+
+          {/* VISTA: LABORATORIO DE TRANSFORMACIÓN SINTÁCTICA 🔀 */}
+          {viewMode === "syntax_lab" && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-3 bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-xs">
+                <button
+                  type="button"
+                  onClick={handleExitToOrigin}
+                  className="inline-flex items-center gap-2 min-h-[44px] px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer"
+                >
+                  <ArrowLeft size={16} />
+                  <span>Volver</span>
+                </button>
+                <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-full">
+                  Laboratorio A2–B1 · Sintaxis &amp; Nebensätze
+                </span>
+              </div>
+              <SyntaxTransformLab isModal />
+            </div>
+          )}
           
           {/* VISTAS: FLASHCARDS Y TABLA */}
           {(!isHomeOpen || searchTerm.trim() !== "") && (viewMode === "flashcards" || viewMode === "table") && <>
@@ -2026,7 +2053,7 @@ export default function App() {
                   
                   <div className="flex items-center gap-3 self-start sm:self-auto flex-wrap">
                     {/* BOTÓN CUENTO IA (GEMINI API) ✨ */}
-                    <button onClick={typeof generateStory === 'function' ? generateStory : () => {}} disabled={storyState?.loading} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:opacity-90 transition flex items-center gap-2 shadow-sm whitespace-nowrap">
+                    <button onClick={() => generateStory()} disabled={storyState?.loading} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:opacity-90 transition flex items-center gap-2 shadow-sm whitespace-nowrap">
                       {storyState?.loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
                       Cuento IA ✨
                     </button>
@@ -2085,13 +2112,7 @@ export default function App() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
                 {displayedWords.map((word, index) => {
                   const isRevealed = revealedCards[index];
-                  const isLongText = word.de.length > 25;
                   const safeId = getSafeId(word.de).substring(0, 150);
-                  const isUnlocked = true;
-                  const imgBase64 = cardImages[safeId];
-                  const existsGlobally = !!cardImages[safeId];
-                  const isGenLoading = isImageLoading === safeId;
-                  const isRegenerated = true;
                   return <PresentationVocabCard key={`${safeId}_${word.category || index}`} wordObj={{
                     ...word,
                     chapter: searchTerm ? word.chapter : undefined
@@ -2233,214 +2254,16 @@ export default function App() {
 
           {/* MODAL DEL CUENTO IA (MÁXIMO 3 CUENTOS PERSISTENTES POR TABLA MAESTRA) */}
           {storyState.isOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
-              <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-5 sm:p-6 animate-in zoom-in-95 max-h-[88dvh] flex flex-col overflow-hidden">
-                <div className="flex justify-between items-start gap-3 mb-3 flex-shrink-0">
-                  <div className="min-w-0">
-                    <h3 className="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
-                      <Sparkles className="text-indigo-500 shrink-0" size={20} />
-                      <span className="truncate">{storyState.titulo || "Cuentos IA del Capítulo"}</span>
-                    </h3>
-                    <p className="text-xs text-slate-500 mt-0.5 truncate">
-                      {(chapters.find((c) => Number(c.id) === Number(storyState.chapterId)) || activeChapter)?.title} • {(storyState.stories || []).length} / 3 cuentos guardados
-                    </p>
-                  </div>
-                  <button
-                    onClick={closeStoryModal}
-                    aria-label="Cerrar modal de cuentos"
-                    className="text-slate-400 hover:bg-slate-100 p-2 rounded-full shrink-0 cursor-pointer"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-
-                {/* SELECTOR DE SLOTS (CUENTO 1 | CUENTO 2 | CUENTO 3) Y GESTIÓN DE CUPO FINOPS */}
-                <div className="mb-3.5 space-y-2 flex-shrink-0">
-                  <div className="grid grid-cols-3 gap-2">
-                    {[1, 2, 3].map((slotNum) => {
-                      const slotStory = (storyState.stories || []).find(
-                        (s) => Number(s.storyIndex) === slotNum
-                      );
-                      const isActive = Number(storyState.activeSlot) === slotNum && Boolean(slotStory);
-                      return (
-                        <button
-                          key={slotNum}
-                          type="button"
-                          disabled={storyState.loading || !slotStory}
-                          onClick={() => slotStory && handleSelectChapterStorySlot(slotNum)}
-                          className={`py-2 px-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-                            isActive
-                              ? "bg-indigo-600 border-indigo-600 text-white shadow-sm cursor-pointer"
-                              : slotStory
-                                ? "bg-slate-50 hover:bg-indigo-50 border-slate-200 text-slate-700 cursor-pointer"
-                                : "bg-slate-50/60 border-dashed border-slate-200 text-slate-400 cursor-not-allowed"
-                          }`}
-                        >
-                          <span>Cuento {slotNum}</span>
-                          {slotStory && (
-                            <CheckCircle
-                              size={13}
-                              className={isActive ? "text-indigo-200" : "text-emerald-500"}
-                            />
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {(storyState.stories || []).length >= 3 ? (
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2 text-[11px] font-bold text-emerald-800 flex items-center justify-center gap-1.5 text-center">
-                      <CheckCircle size={14} className="text-emerald-600 shrink-0" />
-                      <span>✓ 3/3 Cuentos en Base de Datos — Reproducción Instantánea</span>
-                    </div>
-                  ) : (
-                    !storyState.loading &&
-                    (storyState.stories || []).length > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => handleCreateNewChapterStory(storyState.stories)}
-                        className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-extrabold shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <Sparkles size={14} />
-                        <span>
-                          ✨ Generar Cuento Nuevo ({(storyState.stories || []).length + 1}/3)
-                        </span>
-                      </button>
-                    )
-                  )}
-                </div>
-
-                {storyState.loading ? (
-                  <div className="py-12 flex flex-col items-center justify-center gap-3 text-indigo-500 flex-grow">
-                    <Loader2 size={40} className="animate-spin" />
-                    <div className="animate-pulse text-indigo-600 font-medium transition-opacity duration-300 text-center px-4">
-                      {loadingPhrases[loadingPhraseIdx]}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-3.5 flex-grow overflow-hidden flex flex-col">
-                    <div className="bg-slate-50 rounded-xl border border-slate-200 relative group transition-all select-none flex-grow overflow-hidden flex flex-col max-h-[290px]">
-                      <div className="flex items-center justify-between gap-2 px-3.5 py-2 border-b border-slate-200/80 bg-white/80 shrink-0">
-                        <div
-                          className="inline-flex items-center rounded-full bg-slate-100 border border-slate-200 p-0.5"
-                          role="group"
-                          aria-label="Velocidad de reproducción del cuento"
-                        >
-                          {[0.75, 0.85, 1.0].map((spd) => (
-                            <button
-                              key={spd}
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleChangeStorySpeed(spd);
-                              }}
-                              className={`px-2.5 py-1 rounded-full text-[11px] font-extrabold transition cursor-pointer ${
-                                storySpeed === spd
-                                  ? "bg-indigo-600 text-white shadow-xs"
-                                  : "text-slate-600 hover:text-slate-900"
-                              }`}
-                            >
-                              {spd === 1 ? "1x" : `${spd}x`}
-                            </button>
-                          ))}
-                        </div>
-                        <button
-                          onClick={handleToggleStoryAudio}
-                          disabled={isStoryAudioLoading}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-xs transition-all text-xs font-semibold cursor-pointer ${
-                            isStoryAudioLoading
-                              ? "bg-indigo-100 text-indigo-500 cursor-not-allowed opacity-100"
-                              : isPlayingStoryAudio
-                                ? "bg-indigo-600 text-white hover:bg-indigo-700 opacity-100"
-                                : "bg-white text-indigo-600 hover:bg-indigo-50 border border-indigo-200"
-                          }`}
-                          title={
-                            isStoryAudioLoading
-                              ? "Preparando voz de estudio..."
-                              : isPlayingStoryAudio
-                                ? "Pausar cuento"
-                                : "Escuchar cuento"
-                          }
-                          aria-label={
-                            isStoryAudioLoading
-                              ? "Preparando voz de estudio..."
-                              : isPlayingStoryAudio
-                                ? "Pausar cuento"
-                                : "Escuchar cuento"
-                          }
-                        >
-                          {isStoryAudioLoading ? (
-                            <>
-                              <Loader2 size={14} className="animate-spin text-indigo-500" />
-                              <span className="hidden sm:inline">Preparando voz de estudio...</span>
-                            </>
-                          ) : isPlayingStoryAudio ? (
-                            <>
-                              <div className="flex items-center gap-0.5">
-                                <span className="w-1 h-3 bg-white rounded-sm animate-pulse"></span>
-                                <span className="w-1 h-2 bg-white rounded-sm animate-pulse delay-75"></span>
-                                <span className="w-1 h-3.5 bg-white rounded-sm animate-pulse delay-150"></span>
-                              </div>
-                              <Pause size={14} className="ml-0.5" />
-                              <span className="hidden sm:inline">Pausar</span>
-                            </>
-                          ) : (
-                            <>
-                              <Play size={14} className="fill-current" />
-                              <span>{storyAudioUrlRef.current ? "Reanudar" : "Escuchar cuento"}</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                      <div
-                        className="p-5 overflow-y-auto pb-4 cursor-pointer hover:bg-indigo-50/10 flex-grow"
-                        onClick={handleToggleStoryAudio}
-                      >
-                        <div translate="no" className="notranslate font-normal text-lg leading-relaxed text-slate-800">
-                          {parseTextToTokens(storyState.de).map((token, idx) => {
-                            if (token.isWord) {
-                              const isHighlighted = token.wordIndex === currentWordIndex;
-                              const isKeyword = token.isBold || token.isKeyword;
-                              const fontWeightClass = isKeyword ? "font-bold" : "font-medium";
-                              return (
-                                <span
-                                  key={idx}
-                                  style={isHighlighted ? { textShadow: "0 0 0.6px currentColor" } : undefined}
-                                  className={`inline-block transition-colors duration-150 rounded px-1 mx-[1px] border ${
-                                    isHighlighted
-                                      ? "bg-yellow-200 border-yellow-300 text-slate-900 shadow-xs"
-                                      : isKeyword
-                                        ? "bg-indigo-50 border-transparent text-indigo-700"
-                                        : "bg-transparent border-transparent text-slate-800"
-                                  } ${fontWeightClass}`}
-                                >
-                                  {token.text}
-                                </span>
-                              );
-                            } else {
-                              const isPunct = /^[.,!?:;]+$/.test(token.text);
-                              return (
-                                <span
-                                  key={idx}
-                                  className={`text-slate-800 inline-block ${
-                                    isPunct ? "ml-[-3px] pl-0 pr-[1px]" : "px-[1px]"
-                                  }`}
-                                >
-                                  {token.text}
-                                </span>
-                              );
-                            }
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex-shrink-0 max-h-[160px] overflow-y-auto">
-                      <p className="text-slate-700 italic text-sm leading-relaxed">{storyState.es}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            <Suspense fallback={null}>
+              <StoryModal
+                storyState={storyState}
+                activeChapter={activeChapter}
+                chapters={chapters}
+                onClose={closeStoryModal}
+                onSelectSlot={handleSelectChapterStorySlot}
+                onCreateNewStory={() => handleCreateNewChapterStory(storyState.stories)}
+              />
+            </Suspense>
           )}
         </>}
     </Suspense>
@@ -2450,27 +2273,29 @@ export default function App() {
   }
 
     {/* --- PANEL LATERAL: TUTOR IA & MODO FOTO --- */}
-    <Suspense fallback={null}>
-      <TutorChat
-        isOpen={isTutorOpen}
-        onClose={() => {
-          setIsTutorOpen(false);
-          setTutorNotice(null);
-          setTutorInitialMode('tutor');
-        }}
-        initialMode={tutorInitialMode}
-        isFullscreen={isTutorFullscreen}
-        setIsFullscreen={setIsTutorFullscreen}
-        chatMessages={chatMessages}
-        chatInput={chatInput}
-        setChatInput={setChatInput}
-        sendChatMessage={sendChatMessage}
-        isChatLoading={isChatLoading}
-        chatEndRef={chatEndRef}
-        user={user}
-        externalNotice={tutorNotice}
-      />
-    </Suspense>
+    {isTutorOpen && (
+      <Suspense fallback={null}>
+        <TutorChat
+          isOpen={isTutorOpen}
+          onClose={() => {
+            setIsTutorOpen(false);
+            setTutorNotice(null);
+            setTutorInitialMode('tutor');
+          }}
+          initialMode={tutorInitialMode}
+          isFullscreen={isTutorFullscreen}
+          setIsFullscreen={setIsTutorFullscreen}
+          chatMessages={chatMessages}
+          chatInput={chatInput}
+          setChatInput={setChatInput}
+          sendChatMessage={sendChatMessage}
+          isChatLoading={isChatLoading}
+          chatEndRef={chatEndRef}
+          user={user}
+          externalNotice={tutorNotice}
+        />
+      </Suspense>
+    )}
 
     {fullscreenImage && (() => {
         const resolvedFullscreenSrc =
@@ -2520,9 +2345,23 @@ export default function App() {
       })()}
 
     {/* Modal con instrucciones para iOS Safari / Instalación manual */}
-    <InstallInstructionsModal
-      isOpen={showInstallInstructionsModal}
-      onClose={() => setShowInstallInstructionsModal(false)}
-    />
+    {showInstallInstructionsModal && (
+      <InstallInstructionsModal
+        isOpen={showInstallInstructionsModal}
+        onClose={() => setShowInstallInstructionsModal(false)}
+      />
+    )}
+
+    {/* Modal de Onboarding Guiado & Mini-Diagnóstico CEFR A1-B1 */}
+    {isOnboardingOpen && (
+      <Suspense fallback={null}>
+        <OnboardingModal
+          isOpen={isOnboardingOpen}
+          initialProfile={learningProfile}
+          onSaveProfile={handleSaveLearningProfile}
+          onDismiss={handleDismissOnboarding}
+        />
+      </Suspense>
+    )}
 </div></Suspense>;
 }

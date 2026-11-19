@@ -72,6 +72,7 @@ rules_version = '2';
 //   - todayActionsDate: string | null (optional, max 32 chars)
 //   - todayActionsCount: number (optional, 0..10000)
 //   - skillPoints: map (optional, max 10 keys; speaking/listening/writing/reading 0..1000000)
+//   - learningProfile: map | null (optional, 7 keys: startingLevel, goal, onboardingCompleted, skipped, diagnosticScore, recommendedLevel, updatedAt)
 //   - updatedAt: timestamp (optional)
 //
 // Subcollection: artifacts/{appId}/users/{userId}/srsCards/{cardId}
@@ -82,7 +83,7 @@ rules_version = '2';
 //   - audioDe: string | null (optional, max 300 chars)
 //   - translationEs: string | null (optional, max 500 chars)
 //   - axis: string (optional, enum: 'general' | 'survival' | 'work')
-//   - source: string (optional, enum: 'flashcard' | 'quiz' | 'podcast' | 'dialogue' | 'roleplay' | 'tutor_chat' | 'voice_call' | 'photo_ocr' | 'story_word')
+//   - source: string (optional, enum: 'flashcard' | 'quiz' | 'podcast' | 'dialogue' | 'roleplay' | 'tutor_chat' | 'voice_call' | 'photo_ocr' | 'story_word' | 'grammar_lab')
 //   - sourceRef: string | null (optional, max 160 chars)
 //   - grammarErrorMeta: map | null (optional, max 10 keys)
 //   - state: string (required, enum: 'new' | 'learning' | 'review' | 'relearning')
@@ -312,6 +313,35 @@ service cloud.firestore {
         && isValidSkillPointValue(skillMap, 'reading');
     }
 
+    function isValidLearningProfileMap(lp) {
+      return lp is map
+        && lp.keys().hasOnly([
+          'startingLevel', 'goal', 'onboardingCompleted',
+          'skipped', 'diagnosticScore', 'recommendedLevel', 'updatedAt'
+        ])
+        && lp.keys().hasAll([
+          'startingLevel', 'goal', 'onboardingCompleted',
+          'skipped', 'updatedAt'
+        ])
+        && lp.startingLevel is string
+        && lp.startingLevel in ['A1', 'A2', 'B1']
+        && lp.goal is string
+        && lp.goal in ['complete', 'work_daily', 'exam', 'handsfree']
+        && lp.onboardingCompleted is bool
+        && lp.skipped is bool
+        && (!('diagnosticScore' in lp)
+            || lp.diagnosticScore == null
+            || ((lp.diagnosticScore is int || lp.diagnosticScore is float)
+                && lp.diagnosticScore >= 0
+                && lp.diagnosticScore <= 5))
+        && (!('recommendedLevel' in lp)
+            || lp.recommendedLevel == null
+            || (lp.recommendedLevel is string
+                && lp.recommendedLevel in ['A1', 'A2', 'B1']))
+        && lp.updatedAt is number
+        && lp.updatedAt >= 0;
+    }
+
     function isValidPedagogyDoc() {
       let data = request.resource.data;
       return isValidPayloadSize()
@@ -321,7 +351,7 @@ service cloud.firestore {
           'completedModules', 'goetheScores',
           'favoriteStories', 'learnedStories', 'savedStoryWords',
           'studyDates', 'todayActionsDate', 'todayActionsCount', 'skillPoints',
-          'updatedAt'
+          'learningProfile', 'updatedAt'
         ])
         && (!('studyStreak' in data)
             || (data.studyStreak is number
@@ -353,6 +383,9 @@ service cloud.firestore {
                 && data.todayActionsCount <= 10000))
         && (!('skillPoints' in data)
             || isValidSkillPointsMap(data.skillPoints))
+        && (!('learningProfile' in data)
+            || data.learningProfile == null
+            || isValidLearningProfileMap(data.learningProfile))
         && (!('updatedAt' in data) || data.updatedAt is timestamp);
     }
 
@@ -392,7 +425,7 @@ service cloud.firestore {
                 && data.source in [
                   'flashcard', 'quiz', 'podcast', 'dialogue',
                   'roleplay', 'tutor_chat', 'voice_call',
-                  'photo_ocr', 'story_word'
+                  'photo_ocr', 'story_word', 'grammar_lab'
                 ]))
         && (!('sourceRef' in data)
             || data.sourceRef == null

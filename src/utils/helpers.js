@@ -3,6 +3,12 @@ import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import localforage from 'localforage';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db, appId } from '../config/firebase';
+import {
+  DEFAULT_LEARNING_PROFILE,
+  normalizeLearningProfile,
+  parseLearningProfile,
+  serializeLearningProfile,
+} from './learningPathEngine';
 
 export const fetchWithRetry = async (url, options, retries = 5, backoff = 1000) => {
   for (let i = 0; i < retries; i++) {
@@ -269,6 +275,7 @@ const metricsCache = {
   completedModules: new Set(),
   goetheScores: {},
   skillPoints: { ...DEFAULT_SKILL_POINTS },
+  learningProfile: null,
 };
 
 let hydrationPromise = null;
@@ -354,6 +361,14 @@ const flushLocalPersist = () => {
       if (keysToFlush.includes('dm_skill_points')) {
         writes.push(localforage.setItem('dm_skill_points', { ...metricsCache.skillPoints }));
       }
+      if (keysToFlush.includes('dm_user_learning_profile') && metricsCache.learningProfile) {
+        writes.push(
+          localforage.setItem(
+            'dm_user_learning_profile',
+            normalizeLearningProfile(metricsCache.learningProfile)
+          )
+        );
+      }
       await Promise.all(writes);
     })
     .catch((err) => {
@@ -383,22 +398,22 @@ const pushPedagogyProgressToCloud = async (uid) => {
   try {
     await ensureMetricsHydrated();
     const progressRef = doc(db, 'artifacts', appId, 'users', uid, 'pedagogy', 'progress');
-    await setDoc(
-      progressRef,
-      {
-        studyStreak: metricsCache.streak,
-        lastStudyDate: metricsCache.lastStudyDate,
-        studyDates: Array.from(metricsCache.studyDates).slice(-90),
-        todayActionsDate: metricsCache.todayActionsDate,
-        todayActionsCount: metricsCache.todayActionsCount,
-        studiedCards: Array.from(metricsCache.studiedCards),
-        completedModules: Array.from(metricsCache.completedModules),
-        goetheScores: { ...metricsCache.goetheScores },
-        skillPoints: { ...metricsCache.skillPoints },
-        updatedAt: serverTimestamp(),
-      },
-      { merge: true }
-    );
+    const payload = {
+      studyStreak: metricsCache.streak,
+      lastStudyDate: metricsCache.lastStudyDate,
+      studyDates: Array.from(metricsCache.studyDates).slice(-90),
+      todayActionsDate: metricsCache.todayActionsDate,
+      todayActionsCount: metricsCache.todayActionsCount,
+      studiedCards: Array.from(metricsCache.studiedCards),
+      completedModules: Array.from(metricsCache.completedModules),
+      goetheScores: { ...metricsCache.goetheScores },
+      skillPoints: { ...metricsCache.skillPoints },
+      updatedAt: serverTimestamp(),
+    };
+    if (metricsCache.learningProfile) {
+      payload.learningProfile = normalizeLearningProfile(metricsCache.learningProfile);
+    }
+    await setDoc(progressRef, payload, { merge: true });
   } catch (err) {
     console.warn('[Metrics Sync] Cloud write deferred/skipped:', err?.message || err);
   }
@@ -431,6 +446,7 @@ const ensureMetricsHydrated = async () => {
         savedStudyDates,
         savedTodayActions,
         savedSkillPoints,
+        savedLearningProfile,
       ] = await Promise.all([
         localforage.getItem('dm_cards_studied'),
         localforage.getItem('dm_completed_modules'),
@@ -440,6 +456,7 @@ const ensureMetricsHydrated = async () => {
         localforage.getItem('dm_study_dates'),
         localforage.getItem('dm_today_actions'),
         localforage.getItem('dm_skill_points'),
+        localforage.getItem('dm_user_learning_profile'),
       ]);
 
       const initialCards = Array.isArray(savedCards) ? savedCards.filter(Boolean) : [];
@@ -574,6 +591,23 @@ const ensureMetricsHydrated = async () => {
         }
       }
       metricsCache.skillPoints = mergedSkills;
+
+      // Hidratar learningProfile (LWW entre localStorage y localforage)
+      const lsProfile = parseLearningProfile(safeGetLocalStorage('dm_user_learning_profile'));
+      const lfProfile =
+        savedLearningProfile && typeof savedLearningProfile === 'object'
+          ? normalizeLearningProfile(savedLearningProfile)
+          : null;
+      let resolvedProfile = null;
+      if (lsProfile && lfProfile) {
+        resolvedProfile = lsProfile.updatedAt >= lfProfile.updatedAt ? lsProfile : lfProfile;
+      } else {
+        resolvedProfile = lsProfile || lfProfile || null;
+      }
+      metricsCache.learningProfile = resolvedProfile;
+      if (resolvedProfile) {
+        safeSetLocalStorage('dm_user_learning_profile', serializeLearningProfile(resolvedProfile));
+      }
       safeSetLocalStorage('dm_study_dates', JSON.stringify(Array.from(metricsCache.studyDates)));
       safeSetLocalStorage('dm_today_actions', JSON.stringify({ date: todayStr, count: mergedTodayCount }));
       safeSetLocalStorage('dm_skill_points', JSON.stringify(mergedSkills));
@@ -668,7 +702,8 @@ export const syncPedagogyProgressFromCloud = async (uid) => {
         metricsCache.studiedCards.size > 0 ||
         metricsCache.completedModules.size > 0 ||
         Object.keys(metricsCache.goetheScores).length > 0 ||
-        Object.values(metricsCache.skillPoints).some((v) => v > 0);
+        Object.values(metricsCache.skillPoints).some((v) => v > 0) ||
+        Boolean(metricsCache.learningProfile);
       if (hasLocalData) {
         cloudSyncQueue = cloudSyncQueue.then(() => pushPedagogyProgressToCloud(uid));
       }
@@ -818,6 +853,24 @@ export const syncPedagogyProgressFromCloud = async (uid) => {
       dispatchMetricEvent('skillActivityUpdated', { skillPoints: { ...metricsCache.skillPoints } });
     }
 
+    // 6. Merge learningProfile via Last-Write-Wins (updatedAt)
+    const cloudProfileRaw =
+      cloud.learningProfile && typeof cloud.learningProfile === 'object'
+        ? normalizeLearningProfile(cloud.learningProfile)
+        : null;
+    const localProfile = metricsCache.learningProfile
+      ? normalizeLearningProfile(metricsCache.learningProfile)
+      : null;
+
+    if (cloudProfileRaw && (!localProfile || cloudProfileRaw.updatedAt > localProfile.updatedAt)) {
+      metricsCache.learningProfile = cloudProfileRaw;
+      safeSetLocalStorage('dm_user_learning_profile', serializeLearningProfile(cloudProfileRaw));
+      dirtyLocalKeys.push('dm_user_learning_profile');
+      dispatchMetricEvent('learningProfileUpdated', { learningProfile: { ...cloudProfileRaw } });
+    } else if (localProfile && (!cloudProfileRaw || localProfile.updatedAt > cloudProfileRaw.updatedAt)) {
+      cloudNeedsUpdate = true;
+    }
+
     if (dirtyLocalKeys.length > 0) {
       scheduleLocalPersist(dirtyLocalKeys);
     }
@@ -925,12 +978,76 @@ export const recordModuleCompleted = async (moduleId) => {
   }
 };
 
+export const getStudiedCardIds = async () => {
+  try {
+    await ensureMetricsHydrated();
+    return Array.from(metricsCache.studiedCards);
+  } catch {
+    return Array.from(metricsCache.studiedCards);
+  }
+};
+
+export const getStudiedCardIdsSync = () => Array.from(metricsCache.studiedCards);
+
 export const getCompletedModulesCount = async () => {
   try {
     await ensureMetricsHydrated();
     return metricsCache.completedModules.size;
   } catch {
     return parseInt(safeGetLocalStorage('dm_completed_modules_count') || '0', 10);
+  }
+};
+
+export const getCompletedModuleIds = async () => {
+  try {
+    await ensureMetricsHydrated();
+    return Array.from(metricsCache.completedModules);
+  } catch {
+    return Array.from(metricsCache.completedModules);
+  }
+};
+
+export const getCompletedModuleIdsSync = () => Array.from(metricsCache.completedModules);
+
+export const getLearningProfileSync = () => {
+  if (metricsCache.learningProfile) {
+    return normalizeLearningProfile(metricsCache.learningProfile);
+  }
+  const lsParsed = parseLearningProfile(safeGetLocalStorage('dm_user_learning_profile'));
+  return lsParsed || { ...DEFAULT_LEARNING_PROFILE };
+};
+
+export const getLearningProfile = async () => {
+  try {
+    await ensureMetricsHydrated();
+    if (metricsCache.learningProfile) {
+      return normalizeLearningProfile(metricsCache.learningProfile);
+    }
+    const lsParsed = parseLearningProfile(safeGetLocalStorage('dm_user_learning_profile'));
+    return lsParsed || null;
+  } catch {
+    return parseLearningProfile(safeGetLocalStorage('dm_user_learning_profile'));
+  }
+};
+
+export const saveLearningProfile = async (partialOrFull = {}) => {
+  try {
+    await ensureMetricsHydrated();
+    const base = metricsCache.learningProfile || parseLearningProfile(safeGetLocalStorage('dm_user_learning_profile')) || DEFAULT_LEARNING_PROFILE;
+    const merged = normalizeLearningProfile({
+      ...base,
+      ...partialOrFull,
+      updatedAt: Date.now(),
+    });
+    metricsCache.learningProfile = merged;
+    safeSetLocalStorage('dm_user_learning_profile', serializeLearningProfile(merged));
+    scheduleLocalPersist(['dm_user_learning_profile']);
+    scheduleCloudSync();
+    dispatchMetricEvent('learningProfileUpdated', { learningProfile: { ...merged } });
+    return merged;
+  } catch (err) {
+    console.warn('Error guardando perfil de aprendizaje:', err);
+    return normalizeLearningProfile({ ...DEFAULT_LEARNING_PROFILE, ...partialOrFull, updatedAt: Date.now() });
   }
 };
 
@@ -1210,6 +1327,7 @@ export const resetLocalUserCaches = async () => {
   metricsCache.completedModules = new Set();
   metricsCache.goetheScores = {};
   metricsCache.skillPoints = { ...DEFAULT_SKILL_POINTS };
+  metricsCache.learningProfile = null;
 
   const lsKeys = [
     'dm_study_streak',
@@ -1266,6 +1384,7 @@ export const resetLocalUserCaches = async () => {
   dispatchMetricEvent('moduleCompletedUpdated', { count: 0 });
   dispatchMetricEvent('skillActivityUpdated', { skillPoints: { ...DEFAULT_SKILL_POINTS } });
   dispatchMetricEvent('studyActivityUpdated', { streak: 0 });
+  dispatchMetricEvent('learningProfileUpdated', { learningProfile: null });
 };
 
 

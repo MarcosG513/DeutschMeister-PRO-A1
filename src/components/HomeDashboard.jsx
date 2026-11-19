@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { memo, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight,
   Award,
@@ -12,9 +12,11 @@ import {
   Compass,
   Flame,
   Gamepad2,
+  GitBranch,
   GraduationCap,
   Headphones,
   LayoutGrid,
+  Link2,
   List,
   MessageCircle,
   Mic,
@@ -28,8 +30,12 @@ import {
   Volume2,
   WifiOff,
 } from 'lucide-react';
-import { drivingAcademyClasses } from '../data/drivingAcademyCurriculum';
+import { DRIVING_ACADEMY_CLASS_COUNT } from '../data/drivingAcademyMeta';
 import { countUniqueVocabularyCards } from '../utils/helpers';
+import {
+  computeStageProgress,
+  getRecommendedNextStep,
+} from '../utils/learningPathEngine';
 
 const EXPLORER_TABS = [
   { id: 'chapters', labelPrefix: 'Capítulos', icon: BookOpen },
@@ -43,16 +49,46 @@ const QUICK_SCENARIO_CHAPTER_IDS = [
   { id: 13, label: 'Kap. 13 · Auto' },
   { id: 16, label: 'Kap. 16 · Trabajo/Examen' },
   { id: 17, label: 'Kap. 17 · IT y Digital' },
-  { id: 18, label: 'Kap. 18 · Solar/Enpal' },
+  { id: 18, label: 'Kap. 18 · Solar/Indoor' },
   { id: 20, label: 'Kap. 20 · Herramientas' },
 ];
 
+const STAGE_UI_META = [
+  {
+    level: 'A1',
+    title: 'Etapa 1 · Cimientos A1',
+    desc: 'Posición V2, género, acusativo, dativo, tiempos base y cortesía.',
+    fallbackId: 'sp_1',
+    badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    barClass: 'bg-emerald-500',
+    cardBorder: 'border-emerald-200 hover:border-emerald-400',
+  },
+  {
+    level: 'A2',
+    title: 'Etapa 2 · Puente A2 & DTZ',
+    desc: 'Verbos + preposición, da-/wo-, ob/W-Frage, modales en Präteritum y trámites.',
+    fallbackId: 'sp_a2_1',
+    badgeClass: 'bg-sky-100 text-sky-800 border-sky-200',
+    barClass: 'bg-sky-500',
+    cardBorder: 'border-sky-200 hover:border-sky-400',
+  },
+  {
+    level: 'B1',
+    title: 'Etapa 3 · Dominio B1 & Técnica',
+    desc: 'Nebensätze (weil, obwohl, damit), cohesión lógica, Plusquamperfekt y Passiv.',
+    fallbackId: 'sp_13',
+    badgeClass: 'bg-amber-100 text-amber-900 border-amber-300',
+    barClass: 'bg-amber-500',
+    cardBorder: 'border-amber-200 hover:border-amber-400',
+  },
+];
+
 /**
- * Página de inicio y Centro de Mando Pedagógico de DeutschMeister PRO A1–B1 (v3.0).
- * Presenta niveles activos CEFR, continuidad inteligente (`dm_last_activity`),
- * brújula de 4 rutas guiadas A1→B1, herramientas cognitivas y explorador por pestañas.
+ * Centro de Mando Pedagógico Progresivo A1–B1 (v3.1).
+ * Integra perfil diagnóstico CEFR, mapa de 3 etapas sin bloqueos, 4 habilidades + laboratorios SRS
+ * y explorador por pestañas accesibles.
  */
-export default function HomeDashboard({
+function HomeDashboard({
   user,
   accessRole = 'user',
   chapters = [],
@@ -64,6 +100,10 @@ export default function HomeDashboard({
   streakSummary = null,
   skillProgress = null,
   srsStats = null,
+  learningProfile = null,
+  completedModuleIds = [],
+  studiedCardIds = [],
+  onOpenOnboarding,
   onStartSrsReview,
   onOpenChapter,
   onOpenStudyPlan,
@@ -92,11 +132,6 @@ export default function HomeDashboard({
     return map;
   }, [chapters]);
 
-  const firstMasterClass = studyPlanModules[0] || {
-    id: 'sp_1',
-    title: 'Capítulo 1: La Célula Sintáctica, V2 y Cambio Vocálico',
-  };
-
   const quickScenarioChapters = useMemo(
     () =>
       QUICK_SCENARIO_CHAPTER_IDS.filter((item) => chapterMap.has(item.id)).map((item) => ({
@@ -105,6 +140,46 @@ export default function HomeDashboard({
       })),
     [chapterMap]
   );
+
+  const stageProgress = useMemo(
+    () =>
+      computeStageProgress({
+        completedModuleIds,
+        studyPlanModules,
+        goetheModules,
+        studiedCardIds,
+        chapters,
+      }),
+    [completedModuleIds, studyPlanModules, goetheModules, studiedCardIds, chapters]
+  );
+
+  const recommendedStep = useMemo(
+    () =>
+      getRecommendedNextStep({
+        learningProfile: learningProfile || undefined,
+        completedModuleIds,
+        studyPlanModules,
+        goetheModules,
+        srsStats,
+        lastActivity,
+      }),
+    [learningProfile, completedModuleIds, studyPlanModules, goetheModules, srsStats, lastActivity]
+  );
+
+  const launchRecommendedStep = (step) => {
+    if (!step) return;
+    if (step.actionType === 'srs') {
+      onStartSrsReview?.();
+    } else if (step.actionType === 'studyPlan') {
+      onOpenStudyPlan?.(step.targetId);
+    } else if (step.actionType === 'goethe') {
+      onOpenGoetheModule?.(step.targetId);
+    } else if (step.actionType === 'special') {
+      onOpenSpecialView?.(step.targetId);
+    } else if (step.actionType === 'chapter') {
+      onOpenChapter?.(step.targetId, 'flashcards');
+    }
+  };
 
   const resumeContext = useMemo(() => {
     if (!lastActivity?.type || lastActivity?.id === undefined || lastActivity?.id === null) {
@@ -126,7 +201,7 @@ export default function HomeDashboard({
       const mod = studyPlanModules.find((m) => m.id === lastActivity.id);
       if (!mod) return null;
       return {
-        categoryLabel: 'Clase Magistral · Plan de Estudios',
+        categoryLabel: `Clase Magistral · ${mod.cefrLevel || 'A1'}`,
         emoji: '🎓',
         title: mod.title,
         subtitle: `${mod.slides?.length || 0} diapositivas interactivas y simuladores`,
@@ -156,6 +231,8 @@ export default function HomeDashboard({
         podcast: { label: 'Micro-Pódcasts Offline', emoji: '🎙️', title: 'Pódcasts Karaoke Charon', sub: 'Episodios A1–B1 offline a 0.75x / 0.85x / 1.0x' },
         reading: { label: 'Leselabor PRO', emoji: '📖', title: 'Comprensión Lectora Graduada', sub: 'Lectura interactiva A1–B1 con karaoke Charon' },
         quiz: { label: 'Quiz Dinámico', emoji: '🎮', title: 'Evaluación Rápida A1–B1 / SRS', sub: 'Pon a prueba vocabulario y errores' },
+        verb_prep_lab: { label: 'Laboratorio Gramatical', emoji: '🔗', title: 'Verbos + Preposición & da-/wo-', sub: 'Rección A2–B1 conectada al repaso SRS' },
+        syntax_lab: { label: 'Laboratorio Gramatical', emoji: '🔀', title: 'Transformación Sintáctica A2–B1', sub: 'Subordinadas, modales y Passiv al SRS' },
       }[lastActivity.id];
       if (!specialMeta) return null;
       return {
@@ -184,6 +261,11 @@ export default function HomeDashboard({
       ? Math.min(100, Math.round((studiedCardsCount / resolvedTotalUniqueCardsCount) * 100))
       : 0;
 
+  const completedModulesSet = useMemo(
+    () => new Set(completedModuleIds || []),
+    [completedModuleIds]
+  );
+
   const handleTabKeyDown = (event, currentIndex) => {
     const count = EXPLORER_TABS.length;
     let nextIndex = null;
@@ -202,10 +284,12 @@ export default function HomeDashboard({
     }
   };
 
+  const activeLevel = learningProfile?.startingLevel || 'A1';
+
   return (
     <div className="space-y-8 pb-6 animate-in fade-in duration-300">
       {/* =====================================================================
-          BLOQUE 1: HERO DE BIENVENIDA + CONTINUIDAD INTELIGENTE
+          BLOQUE 1: HERO PERSONALIZADO + SIGUIENTE ACCIÓN INTELIGENTE
       ====================================================================== */}
       <section
         aria-labelledby="home-hero-heading"
@@ -228,11 +312,33 @@ export default function HomeDashboard({
                   <ShieldCheck size={14} aria-hidden="true" />
                   <span>Acceso Verificado</span>
                 </span>
-                <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-black bg-indigo-500/20 text-indigo-100 border border-indigo-400/30" aria-label="Niveles activos A1, A2 y B1">
-                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-200">A1</span>
-                  <span className="px-1.5 py-0.5 rounded bg-sky-500/25 text-sky-200">A2</span>
-                  <span className="px-1.5 py-0.5 rounded bg-amber-400/25 text-amber-200">B1</span>
+                <div
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-black bg-indigo-500/20 text-indigo-100 border border-indigo-400/30"
+                  aria-label={`Niveles activos A1, A2 y B1. Prioridad actual ${activeLevel}`}
+                >
+                  {['A1', 'A2', 'B1'].map((lvl) => (
+                    <span
+                      key={lvl}
+                      className={`px-1.5 py-0.5 rounded ${
+                        activeLevel === lvl
+                          ? 'bg-amber-400 text-slate-950 shadow-xs'
+                          : 'bg-white/10 text-slate-200'
+                      }`}
+                    >
+                      {lvl}
+                    </span>
+                  ))}
                 </div>
+                {typeof onOpenOnboarding === 'function' && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenOnboarding()}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-white/10 hover:bg-white/20 text-amber-300 border border-amber-300/30 transition cursor-pointer"
+                  >
+                    <Compass size={13} aria-hidden="true" />
+                    <span>Ruta {activeLevel} · Diagnóstico</span>
+                  </button>
+                )}
                 {accessRole === 'admin' && (
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/35">
                     <Award size={13} aria-hidden="true" />
@@ -240,7 +346,7 @@ export default function HomeDashboard({
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/10 text-slate-200 border border-white/10">
-                  <span>Progreso global: {studiedCardsCount} / {resolvedTotalUniqueCardsCount} ({progressPercentage}%)</span>
+                  <span>Progreso: {studiedCardsCount} / {resolvedTotalUniqueCardsCount} ({progressPercentage}%)</span>
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-400/15 text-amber-300 border border-amber-400/30 whitespace-nowrap">
                   <Flame size={13} aria-hidden="true" />
@@ -268,11 +374,10 @@ export default function HomeDashboard({
               </h2>
 
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl [text-wrap:pretty]">
-                Aquí no memorizas listas sueltas sin contexto: combinas arquitectura gramatical progresiva (de V2 hasta <em>Nebensätze</em> y <em>Passiv</em> B1), vocabulario oficial Goethe / DTZ y técnico (Enpal / StVO), voz neural Charon, cuentos IA y simulación real de conversación.
+                Avanza sin candados por una ruta escalonada desde Posición V2 hasta el Puente A2/DTZ (verbos con preposición, <em>da-/wo-</em>, <em>ob</em>) y B1 (<em>Nebensätze</em> y <em>Vorgangspassiv</em>), con voz HD Charon y memoria SRS.
               </p>
             </div>
 
-            {/* Píldoras de métricas reales */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
               <div className="flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 min-w-0">
                 <BookOpen size={18} className="text-amber-400 shrink-0" aria-hidden="true" />
@@ -281,7 +386,7 @@ export default function HomeDashboard({
                     {chapters.length} Capítulos • {totalTermsCount.toLocaleString('es-ES')} términos
                   </div>
                   <div className="text-[11px] text-slate-400 truncate">
-                    Vocabulario general, técnico y Redemittel
+                    Vocabulario general, DTZ y técnico indoor
                   </div>
                 </div>
               </div>
@@ -305,7 +410,7 @@ export default function HomeDashboard({
                     {studyPlanModules.length} Clases Magistrales + {goetheModules.length} Goethe
                   </div>
                   <div className="text-[11px] text-slate-400 truncate">
-                    Simuladores mecánicos y exámenes oficiales
+                    Simuladores A1, Puente A2/DTZ y B1
                   </div>
                 </div>
               </div>
@@ -314,7 +419,7 @@ export default function HomeDashboard({
                 <Car size={18} className="text-emerald-400 shrink-0" aria-hidden="true" />
                 <div className="min-w-0">
                   <div className="text-xs font-bold text-white truncate">
-                    {drivingAcademyClasses.length} Clases Conducción • 100% Offline
+                    {DRIVING_ACADEMY_CLASS_COUNT} Clases Conducción • 100% Offline
                   </div>
                   <div className="text-[11px] text-slate-400 truncate">
                     Mandos al volante y sincronización IndexedDB
@@ -324,7 +429,7 @@ export default function HomeDashboard({
             </div>
           </div>
 
-          {/* Tarjeta inteligente de continuidad / primer paso */}
+          {/* Tarjeta inteligente de continuidad / siguiente paso recomendado */}
           <div className="lg:col-span-5 flex flex-col justify-between bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-5 min-w-0">
             {resumeContext ? (
               <div className="flex flex-col justify-between h-full gap-4">
@@ -353,22 +458,34 @@ export default function HomeDashboard({
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
+                <div className="space-y-2 pt-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <button
+                      type="button"
+                      onClick={resumeContext.onLaunch}
+                      className="min-h-[44px] flex-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-4 py-2.5 rounded-xl transition shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 text-sm cursor-pointer"
+                    >
+                      <span>{resumeContext.ctaLabel}</span>
+                      <ArrowRight size={16} aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onOpenSpecialView?.('driving')}
+                      className="min-h-[44px] bg-slate-800/90 hover:bg-slate-800 text-emerald-300 border border-emerald-400/30 font-bold px-3.5 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 text-xs sm:text-sm cursor-pointer shrink-0"
+                    >
+                      <Car size={16} aria-hidden="true" />
+                      <span>Fahrmodus</span>
+                    </button>
+                  </div>
                   <button
                     type="button"
-                    onClick={resumeContext.onLaunch}
-                    className="min-h-[44px] flex-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-4 py-2.5 rounded-xl transition shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 text-sm cursor-pointer"
+                    onClick={() => launchRecommendedStep(recommendedStep)}
+                    className="w-full text-left px-3 py-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-[11px] text-indigo-200 transition flex items-center justify-between gap-2 cursor-pointer"
                   >
-                    <span>{resumeContext.ctaLabel}</span>
-                    <ArrowRight size={16} aria-hidden="true" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onOpenSpecialView?.('driving')}
-                    className="min-h-[44px] bg-slate-800/90 hover:bg-slate-800 text-emerald-300 border border-emerald-400/30 font-bold px-3.5 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 text-xs sm:text-sm cursor-pointer shrink-0"
-                  >
-                    <Car size={16} aria-hidden="true" />
-                    <span>Fahrmodus</span>
+                    <span className="truncate">
+                      Sugerido ({recommendedStep.cefrLevel}): <strong>{recommendedStep.title}</strong>
+                    </span>
+                    <ArrowRight size={13} className="shrink-0" aria-hidden="true" />
                   </button>
                 </div>
               </div>
@@ -377,24 +494,23 @@ export default function HomeDashboard({
                 <div className="space-y-2.5 min-w-0">
                   <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-300">
                     <Sparkles size={14} aria-hidden="true" />
-                    <span>Primer paso recomendado</span>
+                    <span>{recommendedStep.badge}</span>
                   </span>
                   <h3 className="text-lg font-extrabold text-white leading-snug [text-wrap:balance]">
-                    Comienza por la Ruta 1: la lógica V2 del alemán en 10 minutos
+                    {recommendedStep.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed [text-wrap:pretty]">
-                    Antes de memorizar vocabulario, abre{' '}
-                    <span className="font-semibold text-white">{firstMasterClass.title}</span> para descubrir por qué el verbo siempre manda en la Posición 2.
+                    {recommendedStep.subtitle}
                   </p>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
                   <button
                     type="button"
-                    onClick={() => onOpenStudyPlan?.(firstMasterClass.id)}
+                    onClick={() => launchRecommendedStep(recommendedStep)}
                     className="min-h-[44px] flex-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-4 py-2.5 rounded-xl transition shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 text-sm cursor-pointer"
                   >
-                    <span>Iniciar Clase 1</span>
+                    <span>{recommendedStep.ctaLabel}</span>
                     <ArrowRight size={16} aria-hidden="true" />
                   </button>
                   <button
@@ -413,15 +529,183 @@ export default function HomeDashboard({
       </section>
 
       {/* =====================================================================
-          MEDIDOR REAL DE 4 HABILIDADES + RACHA L-D Y PRÁCTICA INMERSIVA IA
+          BLOQUE 2: MAPA PROGRESIVO DE 3 ETAPAS (A1 → A2 → B1) + RUTAS
       ====================================================================== */}
-      <section aria-label="Habilidades y Práctica Inmersiva" className="space-y-5">
+      <section aria-labelledby="stages-heading" className="space-y-4">
+        <div className="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h2
+              id="stages-heading"
+              className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2 [text-wrap:balance]"
+            >
+              <Compass className="text-indigo-600 shrink-0" size={24} aria-hidden="true" />
+              <span>Mapa Progresivo A1 → A2 → B1</span>
+            </h2>
+            <p className="text-sm text-slate-600 mt-1 [text-wrap:pretty]">
+              Progresa etapa por etapa o entra directo a la clase que necesites (0 bloqueos).
+            </p>
+          </div>
+          <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-200">
+            Currículo completado: {stageProgress.totalCurriculumCompleted} / {stageProgress.totalCurriculumModules} ({stageProgress.curriculumPercent}%)
+          </span>
+        </div>
+
+        {/* 3 Etapas Progresivas */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+          {STAGE_UI_META.map((meta) => {
+            const st = stageProgress.stages?.[meta.level] || {
+              completedCount: 0,
+              totalCount: 0,
+              percent: 0,
+              modules: [],
+              completedIds: [],
+            };
+            const doneSet = new Set(st.completedIds || []);
+            const nextInStage =
+              (st.modules || []).find((m) => !doneSet.has(m.id)) ||
+              st.modules?.[0] ||
+              { id: meta.fallbackId };
+
+            return (
+              <article
+                key={meta.level}
+                className={`bg-white rounded-2xl border-2 p-4 sm:p-5 shadow-xs transition flex flex-col justify-between gap-3 ${meta.cardBorder}`}
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-black border ${meta.badgeClass}`}>
+                      {meta.level}
+                    </span>
+                    <span className="text-xs font-extrabold text-slate-600">
+                      {st.completedCount}/{st.totalCount} clases ({st.percent}%)
+                    </span>
+                  </div>
+                  <h3 className="text-base font-black text-slate-900">{meta.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">{meta.desc}</p>
+                </div>
+
+                <div className="space-y-2.5">
+                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${meta.barClass}`}
+                      style={{ width: `${st.percent}%` }}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onOpenStudyPlan?.(nextInStage.id)}
+                    className="min-h-[40px] w-full bg-slate-900 hover:bg-indigo-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <span>
+                      {st.completedCount > 0 && st.completedCount < st.totalCount
+                        ? `Continuar ${meta.level}`
+                        : `Abrir etapa ${meta.level}`}
+                    </span>
+                    <ArrowRight size={14} aria-hidden="true" />
+                  </button>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        {/* Accesos directos de contextos: Vida Diaria/Enpal indoor + Goethe/DTZ + Fahrmodus */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
+          <article className="bg-white rounded-2xl border border-sky-200 p-4 shadow-xs flex flex-col justify-between gap-3">
+            <div className="space-y-2">
+              <h3 className="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
+                <MessageCircle size={17} className="text-sky-600 shrink-0" aria-hidden="true" />
+                <span>Vida Diaria, DTZ y Taller Indoor</span>
+              </h3>
+              <p className="text-xs text-slate-600">
+                Accede directo a los capítulos más consultados (<em>Redemittel</em> Kap. 22, StVO Auto, Solar Indoor).
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {quickScenarioChapters.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => onOpenChapter?.(item.id, 'flashcards')}
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-sky-100 text-slate-700 hover:text-sky-900 border border-slate-200 text-xs font-semibold transition cursor-pointer"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onOpenChapter?.(22, 'flashcards')}
+              className="min-h-[40px] w-full bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition cursor-pointer"
+            >
+              Abrir Kapitel 22: Redemittel
+            </button>
+          </article>
+
+          <article className="bg-white rounded-2xl border border-purple-200 p-4 shadow-xs flex flex-col justify-between gap-3">
+            <div className="space-y-2">
+              <h3 className="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
+                <Trophy size={17} className="text-purple-600 shrink-0" aria-hidden="true" />
+                <span>Examen Oficial Goethe &amp; DTZ</span>
+              </h3>
+              <p className="text-xs text-slate-600">
+                Las 4 pruebas oficiales con simulacro A1 y pestañas Puente A2/DTZ integradas.
+              </p>
+              <div className="grid grid-cols-2 gap-1.5">
+                {goetheModules.map((mod) => (
+                  <button
+                    key={mod.id}
+                    type="button"
+                    onClick={() => onOpenGoetheModule?.(mod.id)}
+                    className="min-h-[38px] bg-purple-600 hover:bg-purple-700 text-white font-bold px-2.5 py-1.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <PlayCircle size={14} className="shrink-0" aria-hidden="true" />
+                    <span className="truncate">{mod.title.split(' ')[0]}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('quiz')}
+              className="min-h-[40px] w-full bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200 text-xs font-bold px-3 py-2 rounded-xl transition cursor-pointer"
+            >
+              Quiz Rápido A1–B1 / SRS
+            </button>
+          </article>
+
+          <article className="bg-slate-900 text-white rounded-2xl border border-emerald-500/40 p-4 shadow-xs flex flex-col justify-between gap-3">
+            <div className="space-y-1.5">
+              <h3 className="text-sm sm:text-base font-black text-emerald-300 flex items-center gap-2">
+                <Car size={18} className="shrink-0" aria-hidden="true" />
+                <span>Fahrmodus Manos Libres</span>
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {DRIVING_ACADEMY_CLASS_COUNT} clases audio-coach en 4 olas + cola de repaso SRS vencido al volante, 100% offline.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('driving')}
+              className="min-h-[42px] w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <Car size={16} aria-hidden="true" />
+              <span>Lanzar Fahrmodus</span>
+            </button>
+          </article>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          BLOQUE 3: 4 HABILIDADES + LABORATORIOS SRS Y PRÁCTICA INMERSIVA IA
+      ====================================================================== */}
+      <section aria-labelledby="skills-heading" className="space-y-5">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h3 className="text-sm sm:text-base font-black text-slate-900">
+              <h2 id="skills-heading" className="text-base sm:text-lg font-black text-slate-900">
                 Tu equilibrio A1–B1 en 4 habilidades
-              </h3>
+              </h2>
               <p className="text-[11px] sm:text-xs text-slate-500">
                 Calculado en tiempo real según tu actividad; toca cualquier habilidad para entrenarla ahora.
               </p>
@@ -506,19 +790,57 @@ export default function HomeDashboard({
           </div>
         </div>
 
-        {/* Tarjetas de acceso rápido a Práctica Inmersiva IA (2x2 móvil, 4 cols desktop) */}
+        {/* Práctica Inmersiva IA + Laboratorios Gramaticales v3.1 */}
         <div className="space-y-2.5">
           <div className="flex items-center justify-between gap-2">
             <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
               <Sparkles size={18} className="text-indigo-600 shrink-0" aria-hidden="true" />
-              <span>Práctica Inmersiva IA</span>
+              <span>Laboratorios A2–B1 &amp; Práctica Inmersiva IA</span>
             </h3>
             <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-              Incluido sin paywalls
+              Conectado a SRS
             </span>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('verb_prep_lab')}
+              className="min-h-[84px] p-3.5 rounded-2xl border-2 border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100/80 transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+            >
+              <div className="flex items-center justify-between gap-1 w-full">
+                <Link2 size={18} className="text-indigo-700 shrink-0" aria-hidden="true" />
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-indigo-600 text-white truncate">
+                  A2–B1 · SRS
+                </span>
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">Verbos + Preposición</div>
+                <div className="text-[11px] text-slate-600 leading-snug mt-0.5">
+                  Rektion, Akk/Dat y da-/wo- (18 ejercicios)
+                </div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('syntax_lab')}
+              className="min-h-[84px] p-3.5 rounded-2xl border-2 border-fuchsia-200 bg-fuchsia-50/70 hover:bg-fuchsia-100/70 transition text-left flex flex-col justify-between gap-2 cursor-pointer min-w-0"
+            >
+              <div className="flex items-center justify-between gap-1 w-full">
+                <GitBranch size={18} className="text-fuchsia-700 shrink-0" aria-hidden="true" />
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-fuchsia-600 text-white truncate">
+                  A2–B1 · SRS
+                </span>
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">Laboratorio Sintaxis</div>
+                <div className="text-[11px] text-slate-600 leading-snug mt-0.5">
+                  ob, obwohl, deshalb y Vorgangspassiv
+                </div>
+              </div>
+            </button>
+
             <button
               type="button"
               onClick={() => onOpenSpecialView?.('phrase')}
@@ -595,508 +917,66 @@ export default function HomeDashboard({
               </div>
             </button>
           </div>
-        </div>
-      </section>
 
-      {/* =====================================================================
-          BLOQUE 2: 4 RUTAS DE APRENDIZAJE GUIADAS
-      ====================================================================== */}
-      <section aria-labelledby="routes-heading" className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
-          <div>
-            <h2
-              id="routes-heading"
-              className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2 [text-wrap:balance]"
-            >
-              <Compass className="text-indigo-600 shrink-0" size={24} aria-hidden="true" />
-              <span>¿Qué camino quieres iniciar hoy?</span>
-            </h2>
-            <p className="text-sm text-slate-600 mt-1 [text-wrap:pretty]">
-              Elige la secuencia que mejor encaja con tu nivel, tu objetivo y el tiempo que tienes ahora mismo.
-            </p>
-          </div>
-        </div>
-
-        <nav aria-label="Rutas de aprendizaje recomendadas" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* RUTA 1: DESDE CERO A B1 */}
-          <article className="bg-white rounded-2xl border-2 border-emerald-200/80 shadow-xs hover:shadow-md transition p-5 flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-3">
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-1 min-w-0">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
-                    <span>🟢 Ruta 1 · Progresión A1 → B1</span>
-                  </span>
-                  <h3 className="text-lg font-black text-slate-900 pt-1 [text-wrap:balance]">
-                    Desde Cero hasta B1 (Sintaxis y Fundamentos B2)
-                  </h3>
-                </div>
-              </div>
-
-              <dl className="space-y-2 text-xs sm:text-sm text-slate-600">
-                <div>
-                  <dt className="font-bold text-slate-800 inline">Para quién es: </dt>
-                  <dd className="inline">
-                    Tanto si empiezas desde cero en A1 como si ya dominas la base y quieres conquistar subordinadas B1 (<em>weil, dass, obwohl</em>), conectores lógicos y tiempos pasados.
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-bold text-slate-800 inline">Pasos (A1 → B1): </dt>
-                  <dd className="inline">
-                    Clase 1 (V2) → Clases 13–16 (Nebensätze, Pasado y Passiv B1) → Flashcards y Cuento IA con karaoke.
-                  </dd>
-                </div>
-                <div className="bg-emerald-50/70 border border-emerald-100 rounded-xl p-2.5 text-emerald-950 text-xs leading-relaxed">
-                  <span className="font-bold">Por qué funciona: </span>
-                  Fijas la mecánica estructural del alemán paso a paso sin memorizar frases sueltas, conectando teoría visual con voz nativa y consolidación SRS.
-                </div>
-              </dl>
-            </div>
-
-            <div className="flex flex-wrap gap-2 pt-1">
-              <button
-                type="button"
-                onClick={() => onOpenStudyPlan?.('sp_1')}
-                className="min-h-[44px] flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <GraduationCap size={16} aria-hidden="true" />
-                <span>1. Base V2 (Clase 1)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onOpenStudyPlan?.('sp_13')}
-                className="min-h-[44px] flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <Sparkles size={16} aria-hidden="true" />
-                <span>Salto B1 (Clase 13)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onOpenChapter?.(1, 'flashcards')}
-                className="min-h-[44px] flex-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <LayoutGrid size={16} aria-hidden="true" />
-                <span>Flashcards Kap. 1</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onOpenChapterStory?.(1)}
-                className="min-h-[44px] flex-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <Headphones size={16} aria-hidden="true" />
-                <span>Cuento IA Kap. 1</span>
-              </button>
-            </div>
-          </article>
-
-          {/* RUTA 2: VIDA DIARIA Y TRABAJO (ENPAL) */}
-          <article className="bg-white rounded-2xl border-2 border-sky-200/80 shadow-xs hover:shadow-md transition p-5 flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-sky-700 bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-full">
-                  <span>🔵 Ruta 2 · Vida Diaria, Trabajo y Enpal</span>
-                </span>
-                <h3 className="text-lg font-black text-slate-900 pt-1 [text-wrap:balance]">
-                  Alemán Práctico, Comunicación Real y Taller Técnico
-                </h3>
-              </div>
-
-              <dl className="space-y-2 text-xs sm:text-sm text-slate-600">
-                <div>
-                  <dt className="font-bold text-slate-800 inline">Para quién es: </dt>
-                  <dd className="inline">
-                    Quienes necesitan desenvolverse hoy en trámites oficiales, conducción y entorno laboral técnico/IT/solar (<em>Keller, Technikraum, Wechselrichter, Wallbox</em>).
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-bold text-slate-800 inline">Pasos (1 → 2 → 3): </dt>
-                  <dd className="inline">
-                    Redemittel clave (Kapitel 22) → Capítulos temáticos y técnicos (Kap. 13–20) → Simulación guiada con Rol IA y Tutor Socrático.
-                  </dd>
-                </div>
-                <div className="bg-sky-50/70 border border-sky-100 rounded-xl p-2.5 text-sky-950 text-xs leading-relaxed">
-                  <span className="font-bold">Por qué funciona: </span>
-                  Hablar fluido nace de dominar bloques comunicativos completos (<em>Redemittel</em>) y practicar escenarios laborales reales con corrección inmediata hacia SRS.
-                </div>
-              </dl>
-            </div>
-
-            <div className="space-y-2.5 pt-1">
-              <button
-                type="button"
-                onClick={() => onOpenChapter?.(22, 'flashcards')}
-                className="min-h-[44px] w-full bg-sky-600 hover:bg-sky-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <MessageCircle size={16} aria-hidden="true" />
-                <span>1. Abrir Kapitel 22: Redemittel & Comunicación</span>
-              </button>
-
-              <div className="flex flex-wrap gap-1.5">
-                {quickScenarioChapters.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => onOpenChapter?.(item.id, 'flashcards')}
-                    className="min-h-[44px] px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-sky-100 text-slate-700 hover:text-sky-900 border border-slate-200 text-xs font-semibold transition cursor-pointer"
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => onOpenSpecialView?.('roleplay')}
-                  className="min-h-[44px] bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <Sparkles size={15} aria-hidden="true" />
-                  <span>Simulador de Rol IA</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={onOpenTutor}
-                  className="min-h-[44px] bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <Bot size={15} aria-hidden="true" />
-                  <span>Tutor IA 24/7</span>
-                </button>
-              </div>
-            </div>
-          </article>
-
-          {/* RUTA 3: EXAMEN OFICIAL GOETHE / DTZ */}
-          <article className="bg-white rounded-2xl border-2 border-purple-200/80 shadow-xs hover:shadow-md transition p-5 flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-purple-700 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-full">
-                  <span>🟣 Ruta 3 · Certificación Oficial Goethe / DTZ</span>
-                </span>
-                <h3 className="text-lg font-black text-slate-900 pt-1 [text-wrap:balance]">
-                  Preparación Examen Oficial Goethe-Zertifikat &amp; DTZ
-                </h3>
-              </div>
-
-              <dl className="space-y-2 text-xs sm:text-sm text-slate-600">
-                <div>
-                  <dt className="font-bold text-slate-800 inline">Para quién es: </dt>
-                  <dd className="inline">
-                    Candidatos que buscan aprobar Start Deutsch 1, Goethe A2/B1 o DTZ con seguridad en las 4 pruebas oficiales.
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-bold text-slate-800 inline">Pasos (1 → 2 → 3): </dt>
-                  <dd className="inline">
-                    Módulos oficiales (Hören, Lesen, Schreiben, Sprechen) → Debate y Argumentación B1 (Clase 16) → Leselabor y Quiz.
-                  </dd>
-                </div>
-                <div className="bg-purple-50/70 border border-purple-100 rounded-xl p-2.5 text-purple-950 text-xs leading-relaxed">
-                  <span className="font-bold">Por qué funciona: </span>
-                  Entrenas el formato exacto de audios, lecturas, formularios, correos argumentados y preguntas orales del examen real bajo el mismo techo.
-                </div>
-              </dl>
-            </div>
-
-            <div className="space-y-2.5 pt-1">
-              <div className="grid grid-cols-2 gap-2">
-                {goetheModules.map((mod) => (
-                  <button
-                    key={mod.id}
-                    type="button"
-                    onClick={() => onOpenGoetheModule?.(mod.id)}
-                    className="min-h-[44px] bg-purple-600 hover:bg-purple-700 text-white font-bold px-3 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <PlayCircle size={15} className="shrink-0" aria-hidden="true" />
-                    <span className="truncate">{mod.title.split(' ')[0]}</span>
-                  </button>
-                ))}
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  onClick={() => onOpenStudyPlan?.('sp_16')}
-                  className="min-h-[44px] bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold px-2.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <GraduationCap size={15} aria-hidden="true" />
-                  <span>Debate B1</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onOpenSpecialView?.('reading')}
-                  className="min-h-[44px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold px-2.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <BookOpen size={15} aria-hidden="true" />
-                  <span>Leselabor</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onOpenSpecialView?.('quiz')}
-                  className="min-h-[44px] bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold px-2.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <Gamepad2 size={15} aria-hidden="true" />
-                  <span>Quiz SRS</span>
-                </button>
-              </div>
-            </div>
-          </article>
-
-          {/* RUTA 4: MODO CONDUCCIÓN (FAHRMODUS) */}
-          <article className="bg-white rounded-2xl border-2 border-amber-200/80 shadow-xs hover:shadow-md transition p-5 flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
-                  <span>🟠 Ruta 4 · Manos Libres / Audio</span>
-                </span>
-                <h3 className="text-lg font-black text-slate-900 pt-1 [text-wrap:balance]">
-                  Aprende Conduciendo o Sin Mirar la Pantalla (Fahrmodus)
-                </h3>
-              </div>
-
-              <dl className="space-y-2 text-xs sm:text-sm text-slate-600">
-                <div>
-                  <dt className="font-bold text-slate-800 inline">Para quién es: </dt>
-                  <dd className="inline">
-                    Ideal para tus trayectos en coche, caminatas, gimnasio o momentos sin poder leer la pantalla.
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-bold text-slate-800 inline">Pasos (1 → 2 → 3): </dt>
-                  <dd className="inline">
-                    Inicia Fahrmodus → Elige entre {drivingAcademyClasses.length} clases audio-coach o cualquier capítulo → Responde en voz alta antes de oír la solución.
-                  </dd>
-                </div>
-                <div className="bg-amber-50/70 border border-amber-100 rounded-xl p-2.5 text-amber-950 text-xs leading-relaxed">
-                  <span className="font-bold">Por qué funciona: </span>
-                  La recuperación activa oral durante las pausas guiadas automatiza artículos (<em>der/den</em>), verbos y reflejos auditivos con mandos del coche compatibles (Android Auto y MediaSession).
-                </div>
-              </dl>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => onOpenSpecialView?.('driving')}
-              className="min-h-[44px] w-full bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-emerald-500/40 font-extrabold px-4 py-3 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <Car size={18} aria-hidden="true" />
-              <span>Lanzar Modo Conducción (Fahrmodus)</span>
-            </button>
-          </article>
-        </nav>
-      </section>
-
-      {/* =====================================================================
-          BLOQUE 3: MAPA COMPLETO DE HERRAMIENTAS Y BENEFICIO COGNITIVO
-      ====================================================================== */}
-      <section aria-labelledby="tools-heading" className="space-y-4">
-        <div>
-          <h2
-            id="tools-heading"
-            className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2 [text-wrap:balance]"
-          >
-            <Sparkles className="text-amber-500 shrink-0" size={24} aria-hidden="true" />
-            <span>Todas tus herramientas y cómo aceleran tu aprendizaje</span>
-          </h2>
-          <p className="text-sm text-slate-600 mt-1 [text-wrap:pretty]">
-            Cada módulo ataca una habilidad distinta de tu cerebro: memoria visual, oído, síntesis gramatical y producción oral.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Herramienta 1 */}
-          <article className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2.5 text-indigo-700 font-black text-base">
-                <div className="p-2 rounded-xl bg-indigo-50 border border-indigo-100 shrink-0">
-                  <Mic size={18} aria-hidden="true" />
-                </div>
-                <h3 className="[text-wrap:balance]">Flashcards 3D + Micrófono</h3>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed [text-wrap:pretty]">
-                Tarjetas con imagen didáctica, frase real de ejemplo, audio nativo Charon, guía fonética y evaluación en vivo de tu pronunciación al hablar.
-              </p>
-              <p className="text-xs font-semibold text-indigo-900 bg-indigo-50/70 rounded-lg px-2.5 py-1.5">
-                Beneficio: codifica imagen, significado, oído y articulación vocal al mismo tiempo.
-              </p>
-            </div>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
             <button
               type="button"
               onClick={() => onOpenChapter?.(activeChapterFallbackId, 'flashcards')}
-              className="min-h-[44px] w-full bg-slate-100 hover:bg-indigo-600 text-slate-800 hover:text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer"
+              className="min-h-[42px] bg-white hover:bg-indigo-50 text-slate-800 border border-slate-200 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <LayoutGrid size={16} aria-hidden="true" />
-              <span>Abrir Flashcards</span>
+              <LayoutGrid size={14} aria-hidden="true" />
+              <span>Flashcards</span>
             </button>
-          </article>
-
-          {/* Herramienta 2 */}
-          <article className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2.5 text-slate-800 font-black text-base">
-                <div className="p-2 rounded-xl bg-slate-100 border border-slate-200 shrink-0">
-                  <List size={18} aria-hidden="true" />
-                </div>
-                <h3 className="[text-wrap:balance]">Tablas Maestras Filtrables</h3>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed [text-wrap:pretty]">
-                Listado completo por capítulos y categorías gramaticales con búsqueda instantánea en los {chapters.length} capítulos y reproducción directa por fila.
-              </p>
-              <p className="text-xs font-semibold text-slate-800 bg-slate-100 rounded-lg px-2.5 py-1.5">
-                Beneficio: visión panorámica ideal para comparar artículos, conjugaciones y familias de palabras.
-              </p>
-            </div>
             <button
               type="button"
-              onClick={() => onOpenChapter?.(activeChapterFallbackId, 'table')}
-              className="min-h-[44px] w-full bg-slate-100 hover:bg-slate-800 text-slate-800 hover:text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer"
+              onClick={() => onOpenChapterStory?.(activeChapterFallbackId)}
+              className="min-h-[42px] bg-white hover:bg-violet-50 text-slate-800 border border-slate-200 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <List size={16} aria-hidden="true" />
-              <span>Explorar en Tabla</span>
+              <Sparkles size={14} aria-hidden="true" />
+              <span>Cuento IA</span>
             </button>
-          </article>
-
-          {/* Herramienta 3 */}
-          <article className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2.5 text-blue-700 font-black text-base">
-                <div className="p-2 rounded-xl bg-blue-50 border border-blue-100 shrink-0">
-                  <GraduationCap size={18} aria-hidden="true" />
-                </div>
-                <h3 className="[text-wrap:balance]">Simuladores Mecánicos ({studyPlanModules.length} Clases)</h3>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed [text-wrap:pretty]">
-                Laboratorios interactivos donde ensamblas frases V2, activas Acusativo/Dativo, ajustas relojes alemanes y practicas formularios paso a paso.
-              </p>
-              <p className="text-xs font-semibold text-blue-900 bg-blue-50/70 rounded-lg px-2.5 py-1.5">
-                Beneficio: transforma teoría gramatical abstracta en intuición mecánica inmediata.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => onOpenStudyPlan?.(firstMasterClass.id)}
-              className="min-h-[44px] w-full bg-slate-100 hover:bg-blue-600 text-slate-800 hover:text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <GraduationCap size={16} aria-hidden="true" />
-              <span>Abrir Plan de Estudios</span>
-            </button>
-          </article>
-
-          {/* Herramienta 4 */}
-          <article className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2.5 text-violet-700 font-black text-base">
-                <div className="p-2 rounded-xl bg-violet-50 border border-violet-100 shrink-0">
-                  <Headphones size={18} aria-hidden="true" />
-                </div>
-                <h3 className="[text-wrap:balance]">Cuentos IA Contextuales (Karaoke)</h3>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed [text-wrap:pretty]">
-                Hasta 3 historias persistentes por capítulo escritas con el vocabulario de esa lección, resaltado karaoke sincronizado y velocidad 0.75x / 0.85x / 1.0x.
-              </p>
-              <p className="text-xs font-semibold text-violet-900 bg-violet-50/70 rounded-lg px-2.5 py-1.5">
-                Beneficio: consolida palabras aisladas viéndolas vivir dentro de una historia real.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => onOpenChapterStory?.(1)}
-              className="min-h-[44px] w-full bg-slate-100 hover:bg-violet-600 text-slate-800 hover:text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <Sparkles size={16} aria-hidden="true" />
-              <span>Escuchar Cuento IA (Kap. 1)</span>
-            </button>
-          </article>
-
-          {/* Herramienta 5 */}
-          <article className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2.5 text-teal-700 font-black text-base">
-                <div className="p-2 rounded-xl bg-teal-50 border border-teal-100 shrink-0">
-                  <BookOpen size={18} aria-hidden="true" />
-                </div>
-                <h3 className="[text-wrap:balance]">Leselabor & Tagesgeschichten</h3>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed [text-wrap:pretty]">
-                Laboratorio editorial en 4 pestañas: Lectura + Audio Karaoke, Glosario interactivo, Gramática viva extraída del texto y Test de comprensión.
-              </p>
-              <p className="text-xs font-semibold text-teal-900 bg-teal-50/70 rounded-lg px-2.5 py-1.5">
-                Beneficio: entrena lectura rápida e inferencia A1–B1 para la prueba Lesen sin diccionario.
-              </p>
-            </div>
             <button
               type="button"
               onClick={() => onOpenSpecialView?.('reading')}
-              className="min-h-[44px] w-full bg-slate-100 hover:bg-teal-600 text-slate-800 hover:text-white font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer"
+              className="min-h-[42px] bg-white hover:bg-teal-50 text-slate-800 border border-slate-200 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <BookOpen size={16} aria-hidden="true" />
-              <span>Abrir Leselabor</span>
+              <BookOpen size={14} aria-hidden="true" />
+              <span>Leselabor</span>
             </button>
-          </article>
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('roleplay')}
+              className="min-h-[42px] bg-white hover:bg-purple-50 text-slate-800 border border-slate-200 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <Gamepad2 size={14} aria-hidden="true" />
+              <span>Rol IA</span>
+            </button>
+            <button
+              type="button"
+              onClick={onOpenTutor}
+              className="min-h-[42px] col-span-2 sm:col-span-1 bg-white hover:bg-amber-50 text-slate-800 border border-slate-200 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <Bot size={14} aria-hidden="true" />
+              <span>Tutor 24/7</span>
+            </button>
+          </div>
 
-          {/* Herramienta 6 */}
-          <article className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between gap-4 min-w-0">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2.5 text-amber-700 font-black text-base">
-                <div className="p-2 rounded-xl bg-amber-50 border border-amber-100 shrink-0">
-                  <Bot size={18} aria-hidden="true" />
-                </div>
-                <h3 className="[text-wrap:balance]">Tutor IA, Roleplay y Quiz</h3>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed [text-wrap:pretty]">
-                Profesor socrático disponible 24/7 con historial guardado, simulador de escenas reales y exámenes dinámicos adaptados a tu capítulo activo.
-              </p>
-              <p className="text-xs font-semibold text-amber-900 bg-amber-50/70 rounded-lg px-2.5 py-1.5">
-                Beneficio: resuelve dudas al segundo y te entrena a producir respuestas activas en alemán.
-              </p>
+          <div className="bg-slate-900 text-white rounded-2xl border border-slate-800 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-start gap-2.5 text-xs text-slate-300">
+              <WifiOff size={17} className="text-emerald-400 shrink-0 mt-0.5" aria-hidden="true" />
+              <span>
+                Descarga audios Charon, cuentos e imágenes a IndexedDB y ajusta tu velocidad WSOLA (0.75x / 0.85x / 1.0x).
+              </span>
             </div>
-            <div className="grid grid-cols-3 gap-1.5">
-              <button
-                type="button"
-                onClick={onOpenTutor}
-                className="min-h-[44px] bg-slate-100 hover:bg-amber-500 text-slate-800 hover:text-slate-950 font-bold px-2 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <Bot size={14} aria-hidden="true" />
-                <span>Tutor</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onOpenSpecialView?.('roleplay')}
-                className="min-h-[44px] bg-slate-100 hover:bg-purple-600 text-slate-800 hover:text-white font-bold px-2 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <Sparkles size={14} aria-hidden="true" />
-                <span>Rol</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onOpenSpecialView?.('quiz')}
-                className="min-h-[44px] bg-slate-100 hover:bg-yellow-500 text-slate-800 hover:text-slate-950 font-bold px-2 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <Gamepad2 size={14} aria-hidden="true" />
-                <span>Quiz</span>
-              </button>
-            </div>
-          </article>
-
-          {/* Herramienta 7 (destacada a ancho completo en desktop o tarjeta en grilla) */}
-          <article className="bg-slate-900 text-white rounded-2xl border border-slate-800 p-5 shadow-xs flex flex-col justify-between gap-4 md:col-span-2 lg:col-span-3 min-w-0">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="space-y-1.5 min-w-0">
-                <div className="flex items-center gap-2 text-emerald-400 font-black text-base">
-                  <WifiOff size={18} className="shrink-0" aria-hidden="true" />
-                  <h3>Sincronización 100% Offline & Control de Velocidad WSOLA</h3>
-                </div>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl [text-wrap:pretty]">
-                  Descarga imágenes, audios HD Charon (tarjetas, lecturas y cuentos de capítulo) a la memoria offline del dispositivo (IndexedDB) y configura tu velocidad global (0.75x / 0.85x / 1.0x) sin eco metálico.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => onOpenSpecialView?.('profile')}
-                className="min-h-[44px] shrink-0 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <User size={16} aria-hidden="true" />
-                <span>Abrir Mi Perfil y Medios Offline</span>
-              </button>
-            </div>
-          </article>
+            <button
+              type="button"
+              onClick={() => onOpenSpecialView?.('profile')}
+              className="min-h-[38px] shrink-0 bg-blue-600 hover:bg-blue-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <User size={14} aria-hidden="true" />
+              <span>Mi Perfil Offline</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -1113,7 +993,7 @@ export default function HomeDashboard({
               Explorador rápido del currículo
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Salta directamente a cualquier capítulo, clase magistral o prueba Goethe desde aquí.
+              Salta directamente a cualquier capítulo, clase magistral ({studyPlanModules.length}) o prueba Goethe / DTZ.
             </p>
           </div>
         </div>
@@ -1223,7 +1103,7 @@ export default function HomeDashboard({
           })}
         </div>
 
-        {/* Panel 2: Plan de Estudios */}
+        {/* Panel 2: Plan de Estudios (dinámico por mod.cefrLevel) */}
         <div
           id="explorer-panel-studyPlan"
           role="tabpanel"
@@ -1238,7 +1118,21 @@ export default function HomeDashboard({
           {studyPlanModules.map((mod, index) => {
             const firstSubtitle = mod.slides?.[0]?.subtitle;
             const slideCount = mod.slides?.length || 0;
-            const isB1Plus = ['sp_13', 'sp_14', 'sp_15', 'sp_16'].includes(mod.id);
+            const level = mod.cefrLevel || 'A1';
+            const isCompleted = completedModulesSet.has(mod.id);
+            const badgeStyle =
+              level === 'B1'
+                ? 'bg-amber-100 text-amber-900 border border-amber-300/70'
+                : level === 'A2'
+                  ? 'bg-sky-100 text-sky-900 border border-sky-300/70'
+                  : 'bg-emerald-100 text-emerald-800';
+            const numBgStyle =
+              level === 'B1'
+                ? 'bg-amber-100 text-amber-900'
+                : level === 'A2'
+                  ? 'bg-sky-100 text-sky-800'
+                  : 'bg-indigo-100 text-indigo-700';
+
             return (
               <button
                 key={mod.id}
@@ -1246,26 +1140,24 @@ export default function HomeDashboard({
                 onClick={() => onOpenStudyPlan?.(mod.id)}
                 className="min-h-[44px] w-full flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:border-indigo-300 hover:bg-indigo-50/50 transition text-left cursor-pointer min-w-0"
               >
-                <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg font-black text-xs shrink-0 mt-0.5 ${
-                  isB1Plus ? 'bg-amber-100 text-amber-900' : 'bg-indigo-100 text-indigo-700'
-                }`}>
-                  {index + 1}
+                <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg font-black text-xs shrink-0 mt-0.5 ${numBgStyle}`}>
+                  {mod.stageOrder || index + 1}
                 </span>
                 <div className="min-w-0 flex-1 space-y-0.5">
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600">
-                        Clase Magistral · {slideCount} bloques
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 truncate">
+                        {mod.stageLabel || 'Clase Magistral'} · {slideCount} bloques
                       </span>
-                      <span className={`text-[10px] font-black uppercase px-1.5 py-0.5 rounded-full ${
-                        isB1Plus
-                          ? 'bg-amber-100 text-amber-900 border border-amber-300/70'
-                          : 'bg-emerald-100 text-emerald-800'
-                      }`}>
-                        {isB1Plus ? 'B1–B2' : 'A1–A2'}
+                      <span className={`text-[10px] font-black uppercase px-1.5 py-0.5 rounded-full shrink-0 ${badgeStyle}`}>
+                        {level}
                       </span>
                     </div>
-                    <CheckCircle2 size={14} className="text-indigo-400 shrink-0" aria-hidden="true" />
+                    <CheckCircle2
+                      size={14}
+                      className={`shrink-0 ${isCompleted ? 'text-emerald-600' : 'text-slate-300'}`}
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="text-xs sm:text-sm font-bold text-slate-900 leading-snug [text-wrap:balance]">
                     {mod.title}
@@ -1322,3 +1214,5 @@ export default function HomeDashboard({
     </div>
   );
 }
+
+export default memo(HomeDashboard);

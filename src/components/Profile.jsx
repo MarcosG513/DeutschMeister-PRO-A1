@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import localforage from 'localforage';
+import { useState, useEffect, useMemo } from 'react';
 import { chapters, goetheModules, studyPlanModules } from '../data/chapters';
 import { 
-  User, Mail, Lock, RefreshCw, CheckCircle2, Flame, 
-  Layers, Trophy, ShieldCheck, FileText, ChevronRight, 
+  User, Mail, Lock, RefreshCw, CheckCircle2, 
+  ShieldCheck, FileText, 
   ArrowLeft, Edit3, Trash2, ExternalLink, LogOut, Check, AlertCircle,
   CloudDownload, Loader2, Download, Volume2, Square,
-  Mic, Headphones, PenTool, BookOpen, BookMarked
+  Mic, Headphones, PenTool, BookOpen, BookMarked, Compass, Sparkles
 } from 'lucide-react';
 import AdminAccessPanel from './AdminAccessPanel';
 import InstallInstructionsModal from './InstallInstructionsModal';
@@ -14,7 +13,10 @@ import { usePWAInstall } from '../hooks/usePWAInstall';
 import {
   getDailyStudyStreak,
   getStudiedCardsCount,
-  getCompletedModulesCount,
+  getCompletedModuleIds,
+  getLearningProfile,
+  getLearningProfileSync,
+  saveLearningProfile,
   getStreakSummary,
   getStreakSummarySync,
   getSkillProgressSummary,
@@ -22,7 +24,7 @@ import {
   countUniqueVocabularyCards,
 } from '../utils/helpers';
 import { getSrsStats, getSrsStatsSync } from '../services/srsBridgeService';
-import { syncCloudMediaToLocal, getLastMediaSyncTime, getOfflineSyncStats } from '../services/syncMediaService';
+import { syncCloudMediaToLocal, getOfflineSyncStats } from '../services/syncMediaService';
 import { getSavedPlaybackSpeed, setSavedPlaybackSpeed, playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { signInWithGoogleUnified, signOutUnified } from '../services/authService';
 import {
@@ -34,7 +36,7 @@ import {
 
 const AVATARS = ['🦊', '🦉', '🐼', '🦁', '🐯', '🐸', '🦄', '🦖', '🚀', '👑', '⚡', '🎓'];
 
-const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdmin = false, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount, canInstallPWA: passedCanInstall = false, onInstallApp, showWebInstallCard: passedShowWebInstallCard }) => {
+const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdmin = false, studiedCardsCount, unlockedCardsCount = 0, totalCardsCount, canInstallPWA: passedCanInstall = false, onInstallApp, showWebInstallCard: passedShowWebInstallCard, onOpenOnboarding }) => {
   const isAdminUser = passedIsAdmin === true || accessRole === 'admin';
   const resolvedTotalCardsCount = useMemo(() => {
     const provided = Number(totalCardsCount);
@@ -59,6 +61,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
   const [srsStats, setSrsStats] = useState(() => getSrsStatsSync());
   const [studiedCount, setStudiedCount] = useState(studiedCardsCount || unlockedCardsCount || 0);
   const [completedModulesCount, setCompletedModulesCount] = useState(0);
+  const [learningProfile, setLearningProfile] = useState(() => getLearningProfileSync());
   const [isSyncingMedia, setIsSyncingMedia] = useState(false);
   const [mediaSyncProgress, setMediaSyncProgress] = useState(null);
   const [lastMediaSync, setLastMediaSync] = useState(null);
@@ -66,6 +69,11 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
   const [offlineStats, setOfflineStats] = useState({ visualsCached: 0, audiosCached: 0, storiesCached: 0 });
   const [voiceSpeed, setVoiceSpeed] = useState(() => getSavedPlaybackSpeed());
   const [isTestingVoice, setIsTestingVoice] = useState(false);
+
+  const validCurriculumIds = useMemo(
+    () => new Set([...studyPlanModules.map((m) => m.id), ...goetheModules.map((g) => g.id)]),
+    []
+  );
 
   // Detección PWA reactiva compartida mediante hook dedicado
   const {
@@ -90,12 +98,6 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
   const goethePercent = Math.min(100, Math.round((completedModulesCount / totalGoetheModules) * 100));
 
   useEffect(() => {
-    if (studiedCardsCount !== undefined) {
-      setStudiedCount(studiedCardsCount);
-    }
-  }, [studiedCardsCount]);
-
-  useEffect(() => {
     const loadGamificationData = async () => {
       try {
         const curStreak = await getDailyStudyStreak();
@@ -104,19 +106,24 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
         const curStudied = await getStudiedCardsCount();
         setStudiedCount(Math.max(curStudied, studiedCardsCount || 0));
 
-        const curModules = await getCompletedModulesCount();
-        setCompletedModulesCount(curModules);
+        const rawCompletedIds = await getCompletedModuleIds();
+        const filteredCompletedCount = (rawCompletedIds || []).filter((id) =>
+          validCurriculumIds.has(id)
+        ).length;
+        setCompletedModulesCount(filteredCompletedCount);
 
-        const [curSummary, curSkills, curSrs] = await Promise.all([
+        const [curSummary, curSkills, curSrs, curLp] = await Promise.all([
           getStreakSummary(),
           getSkillProgressSummary(Math.max(curStudied, studiedCardsCount || 0), resolvedTotalCardsCount),
           getSrsStats(),
+          getLearningProfile(),
         ]);
         if (curSummary) setStreakSummary(curSummary);
         if (curSkills) setSkillProgress(curSkills);
         if (curSrs) setSrsStats(curSrs);
-      } catch (error) {
-        console.error("Error cargando datos de gamificación:", error);
+        if (curLp) setLearningProfile(curLp);
+      } catch (loadErr) {
+        console.error("Error cargando datos de gamificación:", loadErr);
       }
     };
 
@@ -127,6 +134,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
     window.addEventListener('moduleCompletedUpdated', loadGamificationData);
     window.addEventListener('skillActivityUpdated', loadGamificationData);
     window.addEventListener('srsDeckUpdated', loadGamificationData);
+    window.addEventListener('learningProfileUpdated', loadGamificationData);
 
     return () => {
       window.removeEventListener('studyActivityUpdated', loadGamificationData);
@@ -134,8 +142,9 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
       window.removeEventListener('moduleCompletedUpdated', loadGamificationData);
       window.removeEventListener('skillActivityUpdated', loadGamificationData);
       window.removeEventListener('srsDeckUpdated', loadGamificationData);
+      window.removeEventListener('learningProfileUpdated', loadGamificationData);
     };
-  }, [studiedCardsCount, resolvedTotalCardsCount]);
+  }, [studiedCardsCount, resolvedTotalCardsCount, validCurriculumIds]);
 
   // Sincronización reactiva de velocidad global ('0.75x' / '1.0x') y limpieza de audio al desmontar
   useEffect(() => {
@@ -171,7 +180,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
     });
   };
 
-  const loadOfflineStats = async () => {
+  const refreshOfflineStats = async () => {
     try {
       const stats = await getOfflineSyncStats();
       if (stats.lastSyncTime) setLastMediaSync(stats.lastSyncTime);
@@ -180,11 +189,30 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
         audiosCached: stats.audiosCached || 0,
         storiesCached: stats.storiesCached || 0
       });
-    } catch (_) {}
+    } catch {
+      // Caché offline aún no inicializada
+    }
   };
 
   useEffect(() => {
-    loadOfflineStats();
+    let active = true;
+    (async () => {
+      try {
+        const stats = await getOfflineSyncStats();
+        if (!active) return;
+        if (stats.lastSyncTime) setLastMediaSync(stats.lastSyncTime);
+        setOfflineStats({
+          visualsCached: stats.visualsCached || 0,
+          audiosCached: stats.audiosCached || 0,
+          storiesCached: stats.storiesCached || 0
+        });
+      } catch {
+        // Ignorar en arranque sin IndexedDB
+      }
+    })();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleSyncMedia = async () => {
@@ -199,7 +227,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
       });
       if (res.success) {
         setLastMediaSync(res.lastSyncTime);
-        await loadOfflineStats();
+        await refreshOfflineStats();
         const msg = `¡Sincronización Offline completada! Tienes ${res.visualsSynced || 0} medios visuales, ${res.audiosSynced || 0} audios Charon (incluyendo cuentos y lecturas) y ${res.storiesSynced || 0} cuentos por capítulo guardados en la memoria de tu teléfono para estudiar a 0 ms sin internet.`;
         setSyncSuccessMessage(msg);
         window.dispatchEvent(new CustomEvent('mediaSyncCompleted', { 
@@ -263,7 +291,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
           try {
             await signInWithEmailAndPassword(targetAuth, email, password);
             setMessage("¡Esta cuenta ya existía y tu sesión fue restaurada con éxito!");
-          } catch (signInErr) {
+          } catch {
             setError("Esta cuenta ya existe. La contraseña ingresada no coincide.");
           }
         } else {
@@ -302,7 +330,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
     try {
       await signOutUnified({ authInstance: targetAuth });
       setMessage("Sesión cerrada.");
-    } catch (err) {
+    } catch {
       setError("Error al cerrar sesión.");
     } finally {
       setIsLoading(false);
@@ -352,10 +380,10 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <span className="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-200">
-            Goethe A1
+            Goethe A1–B1
           </span>
           <span className="hidden sm:inline-flex text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full border border-slate-200">
-            Versión 2.0
+            Versión 3.1
           </span>
         </div>
       </header>
@@ -602,6 +630,98 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
                   Todos los módulos desbloqueados
                 </span>
               </div>
+            </section>
+
+            {/* Mi Ruta y Diagnóstico CEFR (v3.1) */}
+            <section className="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-200 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-100">
+                    <Compass size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black text-slate-900">Mi Ruta y Diagnóstico CEFR</h3>
+                    <p className="text-xs text-slate-500">
+                      Adapta el orden sugerido de tu inicio (todas las clases siguen 100 % abiertas).
+                    </p>
+                  </div>
+                </div>
+                {learningProfile?.recommendedLevel && (
+                  <span className="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Diagnóstico: {learningProfile.diagnosticScore ?? 0}/5 → {learningProfile.recommendedLevel}
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 block">
+                    Nivel prioritario
+                  </span>
+                  <div className="flex gap-1.5">
+                    {['A1', 'A2', 'B1'].map((lvl) => {
+                      const active = learningProfile?.startingLevel === lvl;
+                      return (
+                        <button
+                          key={lvl}
+                          type="button"
+                          aria-pressed={active}
+                          onClick={async () => {
+                            const updated = await saveLearningProfile({
+                              startingLevel: lvl,
+                              onboardingCompleted: true,
+                              skipped: false,
+                            });
+                            setLearningProfile(updated);
+                          }}
+                          className={`flex-1 py-2 rounded-xl text-xs font-black border transition cursor-pointer ${
+                            active
+                              ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                              : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                          }`}
+                        >
+                          {lvl}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="profile-learning-goal" className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 block">
+                    Objetivo principal
+                  </label>
+                  <select
+                    id="profile-learning-goal"
+                    value={learningProfile?.goal || 'complete'}
+                    onChange={async (e) => {
+                      const updated = await saveLearningProfile({
+                        goal: e.target.value,
+                        onboardingCompleted: true,
+                        skipped: false,
+                      });
+                      setLearningProfile(updated);
+                    }}
+                    className="w-full py-2 px-3 rounded-xl text-xs font-bold bg-slate-50 border border-slate-200 text-slate-800"
+                  >
+                    <option value="complete">Dominio completo A1→B1</option>
+                    <option value="work_daily">Trabajo y trámites DTZ</option>
+                    <option value="exam">Aprobar Goethe / DTZ</option>
+                    <option value="handsfree">Estudio al volante (Fahrmodus)</option>
+                  </select>
+                </div>
+              </div>
+
+              {typeof onOpenOnboarding === 'function' && (
+                <button
+                  type="button"
+                  onClick={() => onOpenOnboarding()}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-950 text-xs font-black rounded-xl border border-amber-300 transition cursor-pointer"
+                >
+                  <Sparkles size={15} />
+                  <span>Repetir diagnóstico rápido (5 preguntas)</span>
+                </button>
+              )}
             </section>
 
             {/* Panel de Administración Zero-Trust (Exclusivo role === 'admin') */}
@@ -971,7 +1091,7 @@ const Profile = ({ onExit, user, auth, accessRole = 'user', isAdmin: passedIsAdm
               </a>
             </section>
             <div className="text-center pt-2 text-xs text-slate-400 font-medium">
-              DeutschMeister PRO A1–B1 • Versión 3.0 (Build 3)
+              DeutschMeister PRO A1–B1 • Versión 3.1
             </div>
           </div>
 
