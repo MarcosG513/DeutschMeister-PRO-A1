@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import admin from 'firebase-admin';
 import { drivingAcademyClasses } from '../src/data/drivingAcademyCurriculum.js';
+import { VERB_PREPOSITION_ITEMS, SYNTAX_TRANSFORM_ITEMS } from '../src/data/pedagogicalToolsData.js';
 
 dotenv.config();
 
@@ -237,13 +238,18 @@ async function extractAllAudios() {
 
   // G. Ejercicios interactivos del Plan de Estudio (12 capítulos)
   const interactiveItems = [
-    // DraggableSentenceBuilder
+    // DraggableSentenceBuilder (A1 + B1 subordinate/cohesion)
     { text: "Heute wohne ich in Madrid", type: "sentence" },
     { text: "Am Morgen trinken wir einen Kaffee", type: "sentence" },
     { text: "Jetzt spreche ich Deutsch", type: "sentence" },
     { text: "Ich lerne Deutsch und ich verstehe alles", type: "sentence" },
     { text: "Er ist müde deshalb geht er ins Bett", type: "sentence" },
     { text: "Ich komme gerne aber ich habe keine Zeit", type: "sentence" },
+    { text: "Ich prüfe das Kabel, weil die Spannung wichtig ist", type: "sentence" },
+    { text: "Er kommt pünktlich, obwohl der Zug Verspätung hat", type: "sentence" },
+    { text: "Wenn ich Zeit habe, lese ich ein Buch", type: "sentence" },
+    { text: "Der Akku ist leer, deshalb laden wir ihn", type: "sentence" },
+    { text: "Es regnet stark, trotzdem fahren wir los", type: "sentence" },
 
     // AccusativeShield (default + study plan possessives/pronouns)
     { text: "der Apfel", type: "vocab" },
@@ -268,13 +274,23 @@ async function extractAllAudios() {
     { text: "dem Kind", type: "vocab" },
     { text: "den Kindern", type: "vocab" },
 
-    // PincerSwitch
+    // PincerSwitch (separable, modal, separable_vs_inseparable, perfekt_partizip)
     { text: "Ich stehe um 7 Uhr auf", type: "sentence" },
     { text: "Er kauft im Supermarkt ein", type: "sentence" },
     { text: "Wir sehen am Abend fern", type: "sentence" },
     { text: "Ich muss heute arbeiten", type: "sentence" },
     { text: "Wir können gut Deutsch sprechen", type: "sentence" },
     { text: "Du sollst im Bett bleiben", type: "sentence" },
+    { text: "Ich bezahle die Rechnung heute", type: "sentence" },
+    { text: "Er macht das Fenster auf", type: "sentence" },
+    { text: "Wir verstehen die Aufgabe gut", type: "sentence" },
+    { text: "Sie ruft den Kunden im Büro an", type: "sentence" },
+    { text: "Der Techniker erklärt den Zählerschrank", type: "sentence" },
+    { text: "Du kaufst am Samstag ein", type: "sentence" },
+    { text: "Ich habe das Paket abgeholt", type: "sentence" },
+    { text: "Er hat die Frage verstanden", type: "sentence" },
+    { text: "Wir haben den Speicher im Keller eingebaut", type: "sentence" },
+    { text: "Sie hat das Kabel bestellt", type: "sentence" },
 
     // LocativeMapSimulator
     { text: "Das Handy liegt auf dem Tisch.", type: "sentence" },
@@ -282,16 +298,36 @@ async function extractAllAudios() {
     { text: "Wir gehen ins Kino.", type: "sentence" },
     { text: "Wir sind im Kino.", type: "sentence" },
 
-    // MechanicalTimeline
+    // MechanicalTimeline (perfekt + dual perfekt_and_praeteritum + sp_15)
     { text: "Ich kaufe eine Pizza", type: "sentence" },
     { text: "Ich habe eine Pizza gekauft", type: "sentence" },
+    { text: "Ich kaufte eine Pizza", type: "sentence" },
+    { text: "Wir müssen früh zum Amt", type: "sentence" },
+    { text: "Wir sind früh zum Amt gegangen", type: "sentence" },
+    { text: "Wir mussten früh zum Amt gehen", type: "sentence" },
+    { text: "Er prüft den Speicher", type: "sentence" },
+    { text: "Er hat den Speicher geprüft", type: "sentence" },
+    { text: "Er war den Speicher fertig", type: "sentence" },
+    { text: "Der Zug fährt nach Berlin", type: "sentence" },
+    { text: "Der Zug ist nach Berlin gefahren", type: "sentence" },
+    { text: "Der Zug hatte nach Berlin Verspätung", type: "sentence" },
+    { text: "Der Monteur installiert die Wallbox im Keller", type: "sentence" },
+    { text: "Der Monteur hat die Wallbox im Keller installiert", type: "sentence" },
 
-    // LiveEvaluator
+    // LiveEvaluator (strong, adjective_declension, connectors_b1)
     { text: "Ich mag alten Käse.", type: "sentence" },
     { text: "Gutes Brot ist teuer.", type: "sentence" },
     { text: "Sie hilft mir mit großer Freude.", type: "sentence" },
+    { text: "Ich trage heute den neuen Mantel.", type: "sentence" },
+    { text: "Ein alter Freund ruft mich an.", type: "sentence" },
+    { text: "Sie wohnt in einer ruhigen Straße.", type: "sentence" },
+    { text: "Das kleine Kabel passt in den Schrank.", type: "sentence" },
+    { text: "Es ist dunkel, deshalb schalten wir die Lampe ein.", type: "sentence" },
+    { text: "Ich bin sehr müde, trotzdem gehe ich ins Training.", type: "sentence" },
+    { text: "Wir prüfen die Sicherung, damit alles sicher funktioniert.", type: "sentence" },
+    { text: "Er lernt jeden Abend, um die B1-Prüfung zu bestehen.", type: "sentence" },
 
-    // VoiceExaminer
+    // VoiceExaminer & InteractiveQA
     { text: "Sprechen Sie bitte langsam!", type: "dialogue" },
     { text: "Kommen Sie bitte herein!", type: "dialogue" },
     { text: "Nehmen Sie bitte Platz!", type: "dialogue" },
@@ -299,6 +335,17 @@ async function extractAllAudios() {
     { text: "Können wir den Termin verschieben?", type: "dialogue" },
     { text: "Würden Sie mir bitte helfen?", type: "dialogue" },
     { text: "Ich hätte gern einen Kaffee, bitte.", type: "dialogue" },
+    { text: "Ich hätte gern ein Einzelzimmer.", type: "dialogue" },
+    { text: "Können Sie mir bitte helfen?", type: "dialogue" },
+    { text: "Könnten wir den Termin bitte verschieben, weil ich arbeite?", type: "dialogue" },
+    { text: "Ich prüfe zuerst den Zählerschrank im Keller, damit alles sicher ist.", type: "dialogue" },
+    { text: "Meiner Meinung nach ist Weiterbildung wichtig, weil sich die Technik schnell ändert.", type: "dialogue" },
+    { text: "Der Zählerschrank wurde gestern im Technikraum geprüft.", type: "dialogue" },
+    { text: "Wir könnten den Termin auf Freitag verschieben, wenn das für Sie passt.", type: "dialogue" },
+    { text: "Wie spät ist es jetzt?", type: "dialogue" },
+    { text: "Es ist halb drei nachmittags. Der Termin beginnt um vierzehn Uhr dreißig.", type: "dialogue" },
+    { text: "Warum lernst du jeden Tag Technisches Deutsch?", type: "dialogue" },
+    { text: "Weil ich im Technikraum sicher mit Kunden und Kollegen sprechen möchte.", type: "dialogue" },
 
     // TimeClockSimulator
     { text: "14:30 Uhr", type: "vocab" },
@@ -317,6 +364,59 @@ async function extractAllAudios() {
     enqueueAudio(item.text, item.type, 'interactive_components');
   });
   console.log(`  ✓ Componentes interactivos procesados (${interactiveItems.length} expresiones).`);
+
+  // G.2. Laboratorios Pedagógicos A2–B1 v3.1 (pedagogicalToolsData.js) + studyPlanModules.jsx & goetheModules.jsx
+  let pedLabCount = 0;
+  if (Array.isArray(VERB_PREPOSITION_ITEMS)) {
+    VERB_PREPOSITION_ITEMS.forEach((item) => {
+      if (item.fullSentenceDe) {
+        enqueueAudio(item.fullSentenceDe, 'sentence', `grammar_lab_${item.id}`, {
+          isTechnical: item.axis === 'work',
+        });
+        pedLabCount++;
+      }
+    });
+  }
+  if (Array.isArray(SYNTAX_TRANSFORM_ITEMS)) {
+    SYNTAX_TRANSFORM_ITEMS.forEach((item) => {
+      if (item.targetDe) {
+        enqueueAudio(item.targetDe, 'sentence', `grammar_lab_${item.id}`, {
+          isTechnical: item.axis === 'work',
+        });
+        pedLabCount++;
+      }
+      if (Array.isArray(item.altAcceptedDe)) {
+        item.altAcceptedDe.forEach((alt, idx) => {
+          enqueueAudio(alt, 'sentence', `grammar_lab_${item.id}_alt_${idx}`, {
+            isTechnical: item.axis === 'work',
+          });
+          pedLabCount++;
+        });
+      }
+    });
+  }
+
+  const curriculumModuleFiles = [
+    path.join(ROOT, 'src/data/studyPlanModules.jsx'),
+    path.join(ROOT, 'src/data/goetheModules.jsx'),
+  ].filter((p) => fs.existsSync(p));
+
+  for (const modPath of curriculumModuleFiles) {
+    const modContent = fs.readFileSync(modPath, 'utf8');
+    const voiceGermanRegex = /german:\s*"([^"]+)"/g;
+    let vm;
+    while ((vm = voiceGermanRegex.exec(modContent)) !== null) {
+      enqueueAudio(vm[1], 'dialogue', 'study_plan_voice_examiner');
+      pedLabCount++;
+    }
+    const presentationCardRegex = /wordObj=\{\{\s*de:\s*"([^"]+)"/g;
+    let pm;
+    while ((pm = presentationCardRegex.exec(modContent)) !== null) {
+      enqueueAudio(splitGermanTitle(pm[1]).main, 'vocab', 'goethe_presentation_card');
+      pedLabCount++;
+    }
+  }
+  console.log(`  ✓ pedagogicalToolsData.js + Módulos v3.1 procesados (${pedLabCount} expresiones).`);
 
   // H. Clases de Fahrmodus: Academia de Audio A1–B1
   if (Array.isArray(drivingAcademyClasses)) {
