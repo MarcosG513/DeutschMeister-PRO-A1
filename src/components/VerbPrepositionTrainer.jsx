@@ -15,6 +15,7 @@ import { VERB_PREPOSITION_ITEMS } from '../data/pedagogicalToolsData';
 import {
   evaluateVerbPrepositionAttempt,
   deterministicShuffle,
+  getDiagnosticLabelEs,
 } from '../utils/pedagogicalToolEvaluators';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { captureVocabToSrs, captureGrammarErrorToSrs } from '../services/srsBridgeService';
@@ -448,7 +449,7 @@ export default function VerbPrepositionTrainer({
                 <p className="font-bold">
                   {evalResult.isCorrect
                     ? `¡Correcto! ${currentItem.fullSentenceDe}`
-                    : `Casi — revisa la regla (${evalResult.errorCode})`}
+                    : `Casi — ${getDiagnosticLabelEs(evalResult.errorCode)}`}
                 </p>
                 <p className="leading-relaxed opacity-90">{evalResult.feedbackEs}</p>
               </div>

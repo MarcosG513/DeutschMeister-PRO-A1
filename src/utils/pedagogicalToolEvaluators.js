@@ -3,6 +3,31 @@
  * para detectar errores sintácticos específicos (A2–B1) y generar códigos SRS precisos.
  */
 
+export const DIAGNOSTIC_LABELS_ES = {
+  empty_attempt: 'Respuesta vacía',
+  wrong_person_vs_thing: 'Persona vs. cosa (wo(r)-)',
+  wrong_case_ending: 'Caso gramatical (Akkusativ / Dativ)',
+  wrong_preposition: 'Preposición fija del verbo',
+  missing_epenthetic_r: 'Falta la -r- de enlace',
+  wrong_pronominal_adverb: 'Adverbio pronominal (da-/wo-)',
+  verb_not_final: 'Posición del verbo al final',
+  missing_comma: 'Falta coma antes del conector',
+  missing_v2_inversion: 'Inversión verbo en posición 2',
+  modal_umlaut_error: 'Präteritum modal sin Umlaut',
+  missing_passive_aux: 'Auxiliar werden en pasiva',
+  double_object_order: 'Orden Dativ y Akkusativ',
+  word_order_mismatch: 'Orden sintáctico de la frase',
+};
+
+/**
+ * Traduce un código técnico de diagnóstico gramatical a una etiqueta legible en español.
+ * @param {string | null | undefined} errorCode
+ * @returns {string}
+ */
+export function getDiagnosticLabelEs(errorCode) {
+  return DIAGNOSTIC_LABELS_ES[errorCode] || 'Revisa la regla';
+}
+
 export function normalizeGermanComparison(raw = '') {
   return String(raw || '')
     .trim()
