@@ -2,7 +2,7 @@
 
 > **Estado del Sistema:** Producción Activa v3.1 (`HEAD` `7a13840` en `main` — Evolución A1 → Puente A2/DTZ → B1 & Laboratorios SRS)  
 > **Hosting / Despliegue Activo:** `https://deutschmeister-pro.web.app` (`firestore:rules`, 12 Cloud Functions v2, Hosting)  
-> **Package / App ID:** `com.deutschmeister.app` (APK Release firmado: `DeutschMeister-PRO-A1-B1-v3.1-release.apk`)  
+> **Package / App ID:** `com.deutschmeister.app` (APK Release firmado: `DeutschMeister-PRO-A1-B1-v3.1-release.apk`, `11.92 MB`)  
 > **Plataformas:** Web (Vite + React 19 PWA), Android (Capacitor 8 + Android Auto), Backend (Firebase Cloud Functions v2)
 
 Este documento define la arquitectura canónica, las restricciones operativas y los guardrails obligatorios para cualquier agente de Antigravity o desarrollador trabajando en este repositorio. **Prohibido violar estas reglas para evitar regresiones críticas en producción.**
@@ -13,7 +13,7 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
 
 - **Identidad de la Aplicación:**
   - El `applicationId` y `namespace` canónico es **`com.deutschmeister.app`** en `android/app/build.gradle` y `capacitor.config.json` (nombre comercial corto `"Deutsch B1"`).
-  - Versionado actual: `versionCode 3`, `versionName "3.0"` (artefacto Release v3.1 generado: `DeutschMeister-PRO-A1-B1-v3.1-release.apk`).
+  - Versionado actual: `versionCode 3`, `versionName "3.0"` (artefacto Release v3.1 generado: `DeutschMeister-PRO-A1-B1-v3.1-release.apk`, `11.92 MB`).
 - **Firma de Producción (Release Signing):**
   - Configurada en `android/app/build.gradle` leyendo `android/keystore.properties` y `android/app/deutschmeister-release.jks`.
   - **GUARDRAIL CRÍTICO DE SEGURIDAD:** Estos archivos están explícitamente ignorados en `.gitignore` (`*.jks`, `*.keystore`, `keystore.properties`). Está **ESTRICTAMENTE PROHIBIDO** eliminarlos, renombrarlos o subirlos al control de versiones (Git).
@@ -91,8 +91,10 @@ Este documento define la arquitectura canónica, las restricciones operativas y 
   - Corpus Markdown unificado en `docs/`: `vocabulario_diferencial_a1_b1.md`, `goethe_b1_dtz_lote_1_A_G.md`, `goethe_b1_dtz_lote_2_H_R.md` y `goethe_b1_dtz_lote_3_S_Z.md`.
   - Prohibido fijar denominadores estáticos (`1510`, `1538`, etc.) en componentes (`src/components/Profile.jsx`, `src/components/HomeDashboard.jsx`, `src/utils/helpers.js`): el total de tarjetas se resuelve dinámicamente mediante `countUniqueVocabularyCards(chapters)`.
   - Todo verbo separable añadido conserva `|` en `de` para `checkIsVerb` / `PincerSwitch`, `plural` se almacena sin prefijo `"Pl: "`, `level` CEFR libre de superíndices y los datos técnicos de `Kapitel 18`/`20` respetan estrictamente el entorno indoor de Enpal.
-  - **Bóveda Multimedia en Producción (`global_flashcards` & `global_audio_pronunciations`):** `2,190` imágenes cacheadas en `global_flashcards` (incluyendo `166 / 166` de Goethe B1/DTZ en *Soft Matte Clay*) y `5,401 / 6,792` audios `Charon` cacheados en `global_audio_pronunciations`.
-  - **Extractor de Audios & Tarea Programada (`7a13840`):** `scripts/pregenerate_all_audios.mjs` extrae `VERB_PREPOSITION_ITEMS`, `SYNTAX_TRANSFORM_ITEMS` (`src/data/pedagogicalToolsData.js`) y todas las frases interactivas v3.1. En el repositorio principal (`C:\Users\Marcos\Desktop\DeutschMeister Pro Final\.agents\schedules.json`) está configurada la tarea `Charon_Audio_Vault_Pregeneration_0905_CET` (`5 9 * * *`) para completar los `1,391` audios restantes tras el reinicio diario `00:00 PT` (`09:00 AM CET`).
+  - **Bóveda Multimedia en Producción (`Firestore CDN` + `Cloud Storage`):**
+    - **Imágenes (`global_flashcards`):** `2,190` tarjetas con imagen en caché (`166 / 166` Goethe B1/DTZ en *Soft Matte Clay* completadas al `100 %`).
+    - **Audios `Charon` (`global_audio_pronunciations` / `gs://deutschmeister-audio-vault`):** **`6,236 / 6,792` (`91.8 %` de cobertura)** tras sumar `+835` audios en la ejecución automática del 20 de noviembre de 2026 a las `09:05 AM CET` (`0` fallos); Prioridades 1, 2 y 3 completadas al `100 %`.
+  - **Extractor de Audios & Cola Final Programada (`7a13840`):** `scripts/pregenerate_all_audios.mjs` extrae `VERB_PREPOSITION_ITEMS`, `SYNTAX_TRANSFORM_ITEMS` (`src/data/pedagogicalToolsData.js`) y todas las frases interactivas v3.1. Restan únicamente **`556` audios** (`vocab` y `sentence` de Capítulos 13 y 16–21), agendados en `C:\Users\Marcos\Desktop\DeutschMeister Pro Final\.agents\schedules.json` (`Charon_Audio_Vault_Pregeneration_0905_CET`, `5 9 * * *`) para liquidarse al `100 %` mañana a las `09:05 AM CET` y desactivar la tarea automáticamente al llegar a `0` pendientes.
   - **Invariantes Estrictos del Sistema:** Prohibido alterar los valores `w.de` existentes (rompe `global_flashcards`, `global_audio_pronunciations` y `dm_cards_studied`), prohibido introducir vocabulario outdoor/tejados en el dominio laboral Enpal, y mantener `GEMINI_PAID_KEY_2..4` fuera de `ALL_AI_SECRETS`.
 
 ---
