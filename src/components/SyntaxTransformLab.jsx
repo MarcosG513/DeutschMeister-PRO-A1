@@ -15,6 +15,7 @@ import { SYNTAX_TRANSFORM_ITEMS } from '../data/pedagogicalToolsData';
 import {
   evaluateSyntaxTransformAttempt,
   deterministicShuffle,
+  getDiagnosticLabelEs,
 } from '../utils/pedagogicalToolEvaluators';
 import { playGermanAudio, stopCurrentAudio } from '../services/aiAudioService';
 import { captureVocabToSrs, captureGrammarErrorToSrs } from '../services/srsBridgeService';
@@ -476,7 +477,7 @@ export default function SyntaxTransformLab({
                 <p className="font-bold">
                   {evalResult.isCorrect
                     ? `¡Sintaxis perfecta! ${currentItem.targetDe}`
-                    : `Diagnóstico sintáctico (${evalResult.errorCode})`}
+                    : `Diagnóstico: ${getDiagnosticLabelEs(evalResult.errorCode)}`}
                 </p>
                 <p className="leading-relaxed opacity-90">{evalResult.feedbackEs}</p>
               </div>
