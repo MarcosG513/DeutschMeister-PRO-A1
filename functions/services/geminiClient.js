@@ -30,6 +30,14 @@ export function resolveModelForTier(requestedModel, isPaidKey) {
 }
 
 /**
+ * gemini-3.5-flash-lite rechaza `thinkingConfig.thinkingBudget: 0` con HTTP 400 (verificado en vivo),
+ * por lo que solo se envía a los modelos que lo admiten (gemini-3.8-flash). Nunca se envía `thinkingLevel`.
+ */
+export function supportsThinkingConfig(modelName = "") {
+  return !String(modelName).toLowerCase().includes("flash-lite");
+}
+
+/**
  * Detecta errores definitivos de clave inválida, permisos o falta de facturación (401/402/403).
  */
 function isInvalidOrBillingError(error) {
@@ -307,7 +315,7 @@ export async function executeBackendGemini(prompt, options = {}) {
       const generationConfig = {
         ...(temperature !== undefined ? { temperature } : {}),
         ...(maxOutputTokens !== undefined ? { maxOutputTokens } : {}),
-        ...(thinkingConfig ? { thinkingConfig } : {}),
+        ...(thinkingConfig && supportsThinkingConfig(selectedModelName) ? { thinkingConfig } : {}),
         ...(isJson || responseSchema
           ? {
               responseMimeType: "application/json",
@@ -394,7 +402,7 @@ export async function executeBackendGeminiChatStream(history, lastMessage, optio
       const generationConfig = {
         ...(temperature !== undefined ? { temperature } : {}),
         ...(maxOutputTokens !== undefined ? { maxOutputTokens } : {}),
-        ...(thinkingConfig ? { thinkingConfig } : {}),
+        ...(thinkingConfig && supportsThinkingConfig(selectedModelName) ? { thinkingConfig } : {}),
         ...(isJson || responseSchema
           ? {
               responseMimeType: "application/json",

@@ -771,6 +771,7 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
         responseSchema: options.responseSchema || null,
         temperature: options.temperature,
         maxOutputTokens: options.maxOutputTokens,
+        ...(options.thinkingConfig ? { thinkingConfig: options.thinkingConfig } : {}),
         mode
       });
 
@@ -1090,6 +1091,7 @@ Responde ÚNICAMENTE con JSON válido comenzando con "replyDe".`;
       structuredEventType: "roleplay_turn_v2",
       temperature: 0.5,
       maxOutputTokens: 1536,
+      thinkingConfig: { thinkingBudget: 0 },
       req,
       postProcessStructured: (parsed) => {
         const llmMap = new Map((parsed?.missionsStatus || []).map((m) => [m.id, m]));
@@ -1138,6 +1140,7 @@ Responde ÚNICAMENTE con JSON válido comenzando con "replyDe".`;
     model: "gemini-3.8-flash",
     cleanBold: true,
     temperature: 0.7,
+    thinkingConfig: { thinkingBudget: 0 },
     req
   });
 });
@@ -1594,6 +1597,7 @@ Responde estrictamente en JSON comenzando con "replyDe":
       structuredEventType: "structured_v2",
       temperature: 0.4,
       maxOutputTokens: 2048,
+      thinkingConfig: { thinkingBudget: 0 },
       req,
       postProcessStructured: (parsed) => ({
         replyDe: String(parsed?.replyDe || "").trim(),
@@ -1613,6 +1617,7 @@ Responde estrictamente en JSON comenzando con "replyDe":
     model: "gemini-3.8-flash",
     cleanBold: false,
     temperature: 0.5,
+    thinkingConfig: { thinkingBudget: 0 },
     req
   });
 });
