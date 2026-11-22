@@ -8,7 +8,8 @@
       "backgroundColor": "#0F172A"
     },
     "Keyboard": {
-      "resize": "body"
+      "resize": "none",
+      "resizeOnFullScreen": false
     },
     "FirebaseAuthentication": {
       "skipNativeAuth": false,

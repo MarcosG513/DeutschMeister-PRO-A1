@@ -417,10 +417,35 @@ export async function executeBackendGeminiChatStream(history, lastMessage, optio
     cooldownMs = LONG_COOLDOWN_MS
   } = options;
 
-  const validHistory = (history || []).slice(0);
-  if (validHistory.length > 0 && validHistory[0].role !== "user") {
-    validHistory.shift();
+  const sanitizedHistory = [];
+  for (const item of Array.isArray(history) ? history : []) {
+    const role = item?.role === "model" ? "model" : item?.role === "user" ? "user" : null;
+    if (!role) continue;
+    const parts = Array.isArray(item?.parts)
+      ? item.parts
+          .map((p) => {
+            if (p && typeof p.text === "string" && p.text.trim()) {
+              return { text: p.text };
+            }
+            if (p && p.inlineData?.data && p.inlineData?.mimeType) {
+              return { inlineData: { mimeType: p.inlineData.mimeType, data: p.inlineData.data } };
+            }
+            return null;
+          })
+          .filter(Boolean)
+      : [];
+    if (parts.length === 0) continue;
+
+    // Gemini requiere que el historial empiece en 'user' y alterne roles
+    if (sanitizedHistory.length === 0 && role !== "user") continue;
+    const prev = sanitizedHistory[sanitizedHistory.length - 1];
+    if (prev && prev.role === role) {
+      prev.parts.push(...parts);
+    } else {
+      sanitizedHistory.push({ role, parts });
+    }
   }
+  const validHistory = sanitizedHistory;
 
   return executeAcrossKeyPool({
     keys,

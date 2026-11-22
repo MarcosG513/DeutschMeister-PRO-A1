@@ -52,7 +52,7 @@ export default function ConversationThread({
   };
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 bg-slate-50 flex flex-col gap-3.5 custom-scrollbar">
+    <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 bg-slate-50 flex flex-col gap-3.5 custom-scrollbar">
       {visibleMessages.map((msg, i) => {
         const isUser = msg.role === 'user';
         const rawText = msg?.parts?.[0]?.text || '';

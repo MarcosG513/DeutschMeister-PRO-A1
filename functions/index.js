@@ -28,6 +28,33 @@ const geminiFreeKey = defineSecret("GEMINI_FREE_KEY"); // Compatibilidad con des
 // Array unificado de secretos para Cloud Functions v2
 const ALL_AI_SECRETS = [geminiPaidKey, geminiFreeKey1, geminiFreeKey2, geminiFreeKey, falKey];
 
+// Política CORS explícita para APK Capacitor (Android/iOS) y PWA Firebase Hosting
+const ALLOWED_CORS_ORIGINS = [
+  "https://localhost",
+  "http://localhost",
+  "capacitor://localhost",
+  "https://deutschmeister-pro.web.app",
+  "https://deutschmeister-pro.firebaseapp.com",
+  /^http:\/\/localhost:\d+$/,
+  /^http:\/\/127\.0\.0\.1:\d+$/
+];
+
+function applyCorsHeaders(req, res) {
+  const origin = req.headers?.origin;
+  const isAllowed =
+    origin &&
+    ALLOWED_CORS_ORIGINS.some((rule) =>
+      typeof rule === "string" ? rule === origin : rule.test(origin)
+    );
+  if (isAllowed) {
+    res.set("Access-Control-Allow-Origin", origin);
+    res.set("Vary", "Origin");
+  }
+  res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.set("Access-Control-Max-Age", "3600");
+}
+
 /**
  * Resuelve la configuración de las API Keys activas desde secretos de Firebase o variables de entorno
  */
@@ -857,7 +884,7 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
             await closeAsyncStream(falStream);
             return;
           }
-          const currentOutput = event.output || "";
+          const currentOutput = event?.output || event?.data?.output || event?.text || "";
           if (currentOutput.length > lastOutput.length) {
             const chunkText = currentOutput.substring(lastOutput.length);
             lastOutput = currentOutput;
@@ -875,6 +902,21 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
               const cleanedChunk = options.cleanBold ? chunkText.replace(/\*\*/g, '').replace(/\*/g, '') : chunkText;
               res.write(`data: ${JSON.stringify({ text: cleanedChunk })}\n\n`);
             }
+          }
+        }
+        if (!lastOutput.trim() && !isAborted()) {
+          const subRes = await fal.subscribe("openrouter/router/enterprise", {
+            input: {
+              model: "anthropic/claude-haiku-4.5",
+              prompt: promptBuilder,
+              system_prompt: promptSystem,
+              temperature: options.temperature !== undefined ? options.temperature : 0.7
+            }
+          });
+          lastOutput = subRes?.data?.output || subRes?.data?.text || "";
+          if (!isStructuredJson && lastOutput.trim()) {
+            const cleaned = options.cleanBold ? lastOutput.replace(/\*\*/g, '').replace(/\*/g, '') : lastOutput;
+            res.write(`data: ${JSON.stringify({ text: cleaned })}\n\n`);
           }
         }
         if (isStructuredJson && !isAborted()) {
@@ -913,8 +955,9 @@ async function streamWithDeepSeekFallback(res, promptSystem, history, lastMessag
 // =========================================================================
 export const runRoleplaySimulator = onRequest({
   secrets: ALL_AI_SECRETS,
-  cors: true
+  cors: ALLOWED_CORS_ORIGINS
 }, async (req, res) => {
+  applyCorsHeaders(req, res);
   if (req.method === "OPTIONS") {
     res.status(204).send("");
     return;
@@ -972,7 +1015,7 @@ grammarScore (0..25), pragmaticScore (0..20). Extrae entre 2 y 5 términos útil
         isJson: true,
         responseSchema: SESSION_EVALUATION_SCHEMA,
         temperature: 0.2,
-        maxOutputTokens: 700,
+        maxOutputTokens: 1536,
         model: "gemini-3.8-flash"
       });
 
@@ -1066,7 +1109,7 @@ Responde ÚNICAMENTE con JSON válido comenzando con "replyDe".`;
       responseSchema: ROLEPLAY_TURN_V2_SCHEMA,
       structuredEventType: "roleplay_turn_v2",
       temperature: 0.5,
-      maxOutputTokens: 520,
+      maxOutputTokens: 1536,
       req,
       postProcessStructured: (parsed) => {
         const llmMap = new Map((parsed?.missionsStatus || []).map((m) => [m.id, m]));
@@ -1435,8 +1478,9 @@ Tu esencia es conversacional, cálida y paciente. Tu objetivo no es ser un dicci
 
 export const sendTutorChatMessage = onRequest({
   secrets: ALL_AI_SECRETS,
-  cors: true
+  cors: ALLOWED_CORS_ORIGINS
 }, async (req, res) => {
+  applyCorsHeaders(req, res);
   if (req.method === "OPTIONS") {
     res.status(204).send("");
     return;
@@ -1519,7 +1563,7 @@ Detecta errores reales cometidos por el estudiante en alemán (categorías: "art
         isJson: true,
         responseSchema: SESSION_EVALUATION_SCHEMA,
         temperature: 0.2,
-        maxOutputTokens: 700,
+        maxOutputTokens: 1536,
         model: "gemini-3.8-flash"
       });
       const fluencyScore = computeHybridFluencyScore(
@@ -1569,7 +1613,7 @@ Responde estrictamente en JSON comenzando con "replyDe":
       responseSchema: TUTOR_V2_SCHEMA,
       structuredEventType: "structured_v2",
       temperature: 0.4,
-      maxOutputTokens: 650,
+      maxOutputTokens: 2048,
       req,
       postProcessStructured: (parsed) => ({
         replyDe: String(parsed?.replyDe || "").trim(),

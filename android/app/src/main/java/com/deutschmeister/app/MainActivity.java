@@ -17,17 +17,18 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(AndroidAutoPlugin.class);
         super.onCreate(savedInstanceState);
 
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         View rootView = findViewById(android.R.id.content);
         if (rootView != null) {
             rootView.setBackgroundColor(Color.parseColor("#0F172A"));
             ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, windowInsets) -> {
-                Insets bars = windowInsets.getInsets(
+                Insets sysBars = windowInsets.getInsets(
                     WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
                 );
                 Insets ime = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
-                v.setPadding(bars.left, bars.top, bars.right, Math.max(bars.bottom, ime.bottom));
-                return windowInsets;
+                int bottomInset = Math.max(sysBars.bottom, ime.bottom);
+                v.setPadding(sysBars.left, sysBars.top, sysBars.right, bottomInset);
+                return WindowInsetsCompat.CONSUMED;
             });
             ViewCompat.requestApplyInsets(rootView);
         }

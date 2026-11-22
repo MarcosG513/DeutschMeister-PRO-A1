@@ -1,5 +1,6 @@
 // src/components/TutorChat.jsx
 import { useEffect, useState } from 'react';
+import { Capacitor } from '@capacitor/core';
 import { Bot, Camera, ClipboardCheck, Maximize, Minimize, Sparkles, X } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
 import ConversationThread from './chat/ConversationThread';
@@ -87,17 +88,40 @@ const TutorChatPanel = ({
 
   const [playingMsgIndex, setPlayingMsgIndex] = useState(null);
   const [playingSuggestionText, setPlayingSuggestionText] = useState(null);
-  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [showSuggestions, setShowSuggestions] = useState(
+    () => typeof window === 'undefined' || window.innerHeight >= 520
+  );
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
   const [isAnalyzingDiagnostic, setIsAnalyzingDiagnostic] = useState(false);
   const [diagnosticData, setDiagnosticData] = useState(null);
   const [sessionTurnCount, setSessionTurnCount] = useState(0);
+  const isNativePlatform = Capacitor.isNativePlatform();
 
   useEffect(() => {
     return () => {
       stopCurrentAudio();
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const handleResize = () => {
+      if (window.innerHeight < 520) {
+        setShowSuggestions(false);
+        chatEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [chatEndRef]);
+
+  const handleInputFocus = () => {
+    setShowSuggestions(false);
+    chatEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      chatEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 180);
+  };
 
   const latestModelMeta = [...chatMessages]
     .reverse()
@@ -187,7 +211,11 @@ const TutorChatPanel = ({
         }),
       });
 
-      if (!response.ok) throw new Error('Eval failed');
+      if (!response.ok) {
+        const errBody = await response.text().catch(() => '');
+        console.error('[TutorChat] Error HTTP en diagnóstico:', response.status, errBody);
+        throw new Error(`Eval failed (${response.status})`);
+      }
       const data = await response.json();
       setDiagnosticData({
         sessionId: `tutor_${Date.now()}`,
@@ -267,11 +295,15 @@ const TutorChatPanel = ({
   return (
     <>
       <aside
-        className={`fixed ${
-          isFullscreen ? 'inset-0 w-full z-[100]' : 'top-0 right-0 bottom-0 w-full md:w-[460px] z-[100] border-l'
-        } bg-white shadow-2xl border-slate-200 flex flex-col h-[100dvh] overflow-hidden animate-in slide-in-from-right duration-300`}
+        className={`fixed inset-0 z-50 flex flex-col h-full w-full overflow-hidden bg-white shadow-2xl border-slate-200 animate-in slide-in-from-right duration-300 ${
+          isFullscreen ? '' : 'md:left-auto md:w-[460px] md:border-l'
+        }`}
       >
-        <div className="bg-slate-900 text-white px-4 pb-3.5 pt-[max(0.85rem,env(safe-area-inset-top))] flex justify-between items-center flex-shrink-0 gap-2">
+        <div
+          className={`bg-slate-900 text-white px-4 pb-3 flex justify-between items-center shrink-0 gap-2 ${
+            isNativePlatform ? 'pt-3' : 'pt-[max(0.85rem,env(safe-area-inset-top))]'
+          }`}
+        >
           <div className="flex items-center gap-2 min-w-0">
             <Bot className="text-yellow-400 shrink-0" />
             <div className="min-w-0">
@@ -381,6 +413,7 @@ const TutorChatPanel = ({
               value={chatInput}
               onChange={setChatInput}
               onSend={handleComposerSend}
+              onInputFocus={handleInputFocus}
               placeholder="Pregúntame o responde en alemán..."
               disabled={isChatLoading}
               accent="blue"

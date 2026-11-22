@@ -1311,25 +1311,96 @@ export default function App() {
     };
 
     try {
-      const idToken = user ? await user.getIdToken().catch(() => '') : '';
+      const activeUser = auth?.currentUser || user;
+      const idToken = activeUser ? await activeUser.getIdToken().catch(() => '') : '';
+      const sanitizedHistory = newMessages.map((m) => ({
+        role: m?.role === 'model' ? 'model' : 'user',
+        parts: [{ text: String(m?.parts?.[0]?.text || '') }]
+      }));
+
       const response = await fetch(API_ENDPOINTS.TUTOR_CHAT, {
         method: 'POST',
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          ...(idToken ? { 'Authorization': `Bearer ${idToken}` } : {})
+          ...(idToken ? { Authorization: `Bearer ${idToken}` } : {})
         },
         body: JSON.stringify({
-          historialConversacion: newMessages,
+          historialConversacion: sanitizedHistory,
           responseFormat: 'structured_v2',
           action: 'turn',
-          uid: user?.uid
+          uid: activeUser?.uid
         })
       });
 
-      if (!response.ok) throw new Error("Failed to connect to tutor");
+      if (!response.ok) {
+        const errDetail = await response.text().catch(() => '');
+        const httpErr = new Error(`HTTP ${response.status}: ${errDetail || response.statusText || 'Failed to connect to tutor'}`);
+        httpErr.status = response.status;
+        httpErr.detail = errDetail;
+        throw httpErr;
+      }
+
       let currentText = "";
       let resolvedFinalMsg = null;
+
+      const applyTutorEvent = (data) => {
+        if (!data || typeof data !== 'object') return;
+        if (typeof data.error === 'string' && data.error.trim()) {
+          throw new Error(data.error);
+        }
+        if (data?.type === 'reply_de_ready' && data.replyDe) {
+          currentText = `> 🇩🇪 **${data.replyDe}**`;
+          updateLastAssistantMessage({
+            role: "model",
+            parts: [{ text: currentText }],
+            structuredMeta: { replyDe: data.replyDe }
+          });
+        } else if (data?.type === 'structured_v2' && data.payload) {
+          const p = data.payload;
+          const formattedText = [p.replyMarkdownEs, p.replyDe ? `\n\n> 🇩🇪 **${p.replyDe}**` : '']
+            .filter(Boolean)
+            .join('')
+            .trim();
+          currentText = formattedText || p.replyDe || '';
+          resolvedFinalMsg = {
+            role: "model",
+            parts: [{ text: currentText }],
+            structuredMeta: {
+              replyDe: p.replyDe || '',
+              translationEs: p.translationEs || '',
+              grammarCorrections: Array.isArray(p.grammarCorrections) ? p.grammarCorrections : [],
+              suggestedReplies: Array.isArray(p.suggestedReplies) ? p.suggestedReplies : [],
+              newVocabulary: Array.isArray(p.newVocabulary) ? p.newVocabulary : []
+            }
+          };
+          updateLastAssistantMessage(resolvedFinalMsg);
+        } else if (data?.replyMarkdownEs || data?.replyDe) {
+          const formattedText = [data.replyMarkdownEs, data.replyDe ? `\n\n> 🇩🇪 **${data.replyDe}**` : '']
+            .filter(Boolean)
+            .join('')
+            .trim();
+          currentText = formattedText || data.replyDe || '';
+          resolvedFinalMsg = {
+            role: "model",
+            parts: [{ text: currentText }],
+            structuredMeta: {
+              replyDe: data.replyDe || '',
+              translationEs: data.translationEs || '',
+              grammarCorrections: Array.isArray(data.grammarCorrections) ? data.grammarCorrections : [],
+              suggestedReplies: Array.isArray(data.suggestedReplies) ? data.suggestedReplies : [],
+              newVocabulary: Array.isArray(data.newVocabulary) ? data.newVocabulary : []
+            }
+          };
+          updateLastAssistantMessage(resolvedFinalMsg);
+        } else if (data?.text) {
+          currentText += data.text;
+          updateLastAssistantMessage({
+            role: "model",
+            parts: [{ text: currentText }]
+          });
+        }
+      };
 
       setChatMessages([...newMessages, {
         role: "model",
@@ -1340,47 +1411,44 @@ export default function App() {
       }]);
       setIsChatLoading(false);
 
-      await readSseJsonStream(response, {
-        signal: controller.signal,
-        onEvent: (data) => {
-          if (data?.type === 'reply_de_ready' && data.replyDe) {
-            currentText = `> 🇩🇪 **${data.replyDe}**`;
-            updateLastAssistantMessage({
-              role: "model",
-              parts: [{ text: currentText }],
-              structuredMeta: { replyDe: data.replyDe }
-            });
-          } else if (data?.type === 'structured_v2' && data.payload) {
-            const p = data.payload;
-            const formattedText = [p.replyMarkdownEs, p.replyDe ? `\n\n> 🇩🇪 **${p.replyDe}**` : '']
-              .filter(Boolean)
-              .join('')
-              .trim();
-            currentText = formattedText || p.replyDe || '';
-            resolvedFinalMsg = {
-              role: "model",
-              parts: [{ text: currentText }],
-              structuredMeta: {
-                replyDe: p.replyDe || '',
-                translationEs: p.translationEs || '',
-                grammarCorrections: Array.isArray(p.grammarCorrections) ? p.grammarCorrections : [],
-                suggestedReplies: Array.isArray(p.suggestedReplies) ? p.suggestedReplies : [],
-                newVocabulary: Array.isArray(p.newVocabulary) ? p.newVocabulary : []
-              }
-            };
-            updateLastAssistantMessage(resolvedFinalMsg);
-          } else if (data?.text) {
-            currentText += data.text;
-            updateLastAssistantMessage({
-              role: "model",
-              parts: [{ text: currentText }]
-            });
+      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+      if (contentType.includes('application/json')) {
+        const jsonData = await response.json();
+        applyTutorEvent(jsonData);
+      } else if (response.body && typeof response.body.getReader === 'function') {
+        await readSseJsonStream(response, {
+          signal: controller.signal,
+          onEvent: applyTutorEvent,
+          onParseError: () => {
+            // Ignorar fragmentos JSON parciales durante streaming SSE
           }
-        },
-        onParseError: () => {
-          // Ignorar fragmentos JSON parciales durante streaming SSE
+        });
+      } else {
+        const rawBody = await response.text();
+        if (rawBody.includes('data: ')) {
+          for (const line of rawBody.split('\n')) {
+            const trimmed = line.replace(/\r$/, '');
+            if (!trimmed.startsWith('data: ')) continue;
+            const payload = trimmed.slice(6).trim();
+            if (!payload || payload === '[DONE]') continue;
+            try {
+              applyTutorEvent(JSON.parse(payload));
+            } catch {
+              // Ignorar línea SSE parcial
+            }
+          }
+        } else if (rawBody.trim()) {
+          try {
+            applyTutorEvent(JSON.parse(rawBody));
+          } catch {
+            applyTutorEvent({ text: rawBody.trim() });
+          }
         }
-      });
+      }
+
+      if (!currentText.trim()) {
+        throw new Error('Respuesta vacía recibida del servidor del Tutor.');
+      }
 
       const finalMessages = [
         ...newMessages,
@@ -1390,8 +1458,8 @@ export default function App() {
         }
       ];
       setChatMessages(finalMessages);
-      if (user && db) {
-        const chatDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'chat', 'history');
+      if (activeUser && db) {
+        const chatDocRef = doc(db, 'artifacts', appId, 'users', activeUser.uid, 'chat', 'history');
         await setDoc(chatDocRef, {
           messages: finalMessages.slice(-40)
         }, {
@@ -1400,7 +1468,11 @@ export default function App() {
       }
     } catch (error) {
       if (error?.name === 'AbortError') return;
-      console.error("Error en chat:", error);
+      console.error("[TutorChat] Error de conexión:", {
+        status: error?.status || null,
+        message: error?.message || String(error),
+        detail: error?.detail || null
+      });
       setChatMessages([...newMessages, {
         role: "model",
         parts: [{

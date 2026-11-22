@@ -10,6 +10,7 @@ export default function ComposerBar({
   value = '',
   onChange,
   onSend,
+  onInputFocus,
   placeholder = 'Escribe tu respuesta en alemán...',
   disabled = false,
   accent = 'blue',
@@ -51,7 +52,7 @@ export default function ComposerBar({
         : 'bg-blue-600 hover:bg-blue-700';
 
   return (
-    <div className="p-3 sm:p-4 pb-[max(0.85rem,calc(env(safe-area-inset-bottom,0px)+0.6rem))] bg-white border-t border-slate-200 flex-shrink-0">
+    <div className="p-3 sm:p-4 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] bg-white border-t border-slate-200 shrink-0">
       <SuggestionBar
         suggestions={suggestions}
         isVisible={showSuggestions}
@@ -72,10 +73,22 @@ export default function ComposerBar({
           placeholder={isListening ? 'Escuchando tu voz en alemán...' : placeholder}
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
-          onFocus={scrollInputIntoView}
+          onFocus={(e) => {
+            if (onInputFocus) {
+              onInputFocus(e);
+            } else {
+              scrollInputIntoView(e);
+            }
+          }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !disabled && value?.trim()) {
-              onSend?.();
+            if (e.key === 'Enter') {
+              if (e.nativeEvent?.isComposing || e.isComposing || e.keyCode === 229) {
+                return;
+              }
+              e.preventDefault();
+              if (!disabled && value?.trim()) {
+                onSend?.();
+              }
             }
           }}
           disabled={disabled}
