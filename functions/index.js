@@ -18,15 +18,13 @@ import {
 admin.initializeApp();
 const db = admin.firestore();
 
-// Define los secretos que se tomarán de Secret Manager (FASE 1)
-const falKey = defineSecret("FAL_KEY");
+// Define los secretos que se tomarán de Secret Manager (Pool de 2 llaves PAID + Fal fallback)
 const geminiPaidKey = defineSecret("GEMINI_PAID_KEY");
-const geminiFreeKey1 = defineSecret("GEMINI_FREE_KEY_1");
-const geminiFreeKey2 = defineSecret("GEMINI_FREE_KEY_2");
-const geminiFreeKey = defineSecret("GEMINI_FREE_KEY"); // Compatibilidad con despliegues previos
+const geminiPaidKey2 = defineSecret("GEMINI_PAID_KEY_2");
+const falKey = defineSecret("FAL_KEY");
 
 // Array unificado de secretos para Cloud Functions v2
-const ALL_AI_SECRETS = [geminiPaidKey, geminiFreeKey1, geminiFreeKey2, geminiFreeKey, falKey];
+const ALL_AI_SECRETS = [geminiPaidKey, geminiPaidKey2, falKey];
 
 // Política CORS explícita para APK Capacitor (Android/iOS) y PWA Firebase Hosting
 const ALLOWED_CORS_ORIGINS = [
@@ -56,7 +54,7 @@ function applyCorsHeaders(req, res) {
 }
 
 /**
- * Resuelve la configuración de las API Keys activas desde secretos de Firebase o variables de entorno
+ * Resuelve la configuración de las 2 API Keys de facturación activas desde Secret Manager o variables de entorno
  */
 function getGeminiKeyConfig() {
   const resolve = (sec, envVar) => {
@@ -73,35 +71,19 @@ function getGeminiKeyConfig() {
 
   return {
     paidKey: resolve(geminiPaidKey, "GEMINI_PAID_KEY"),
-    paidKey1: resolve(geminiPaidKey, "GEMINI_PAID_KEY"),
-    paidKey2: process.env.GEMINI_PAID_KEY_2 || "",
-    paidKey3: process.env.GEMINI_PAID_KEY_3 || "",
-    paidKey4: process.env.GEMINI_PAID_KEY_4 || "",
-    freeKey1: resolve(geminiFreeKey1, "GEMINI_FREE_KEY_1") || resolve(geminiFreeKey, "GEMINI_FREE_KEY"),
-    freeKey2: resolve(geminiFreeKey2, "GEMINI_FREE_KEY_2"),
-    freeKey3: process.env.GEMINI_FREE_KEY_3 || "",
-    freeKey4: process.env.GEMINI_FREE_KEY_4 || "",
-    freeKey5: process.env.GEMINI_FREE_KEY_5 || ""
+    paidKey2: resolve(geminiPaidKey2, "GEMINI_PAID_KEY_2")
   };
 }
 
 /**
- * Resuelve el pool dinámico de 6 llaves para síntesis de audio Charon TTS,
- * deduplicando por valor exacto de string y priorizando PAID primero.
+ * Resuelve el pool estandarizado de 2 llaves de facturación Nivel 1 (PAID_1, PAID_2),
+ * deduplicando por valor exacto de string.
  */
 function getGoogleKeyPool() {
   const config = getGeminiKeyConfig();
   const rawKeys = [
-    { id: "PAID_1", key: config.paidKey1 || config.paidKey, isPaid: true },
-    { id: "PAID_2", key: config.paidKey2, isPaid: true },
-    { id: "PAID_3", key: config.paidKey3, isPaid: true },
-    { id: "PAID_4", key: config.paidKey4, isPaid: true },
-    { id: "FREE_1", key: config.freeKey1, isPaid: false },
-    { id: "FREE_2", key: config.freeKey2, isPaid: false },
-    { id: "FREE_3", key: config.freeKey3, isPaid: false },
-    { id: "FREE_4", key: config.freeKey4, isPaid: false },
-    { id: "FREE_5", key: config.freeKey5, isPaid: false },
-    { id: "GENERIC", key: process.env.GEMINI_API_KEY || "", isPaid: false }
+    { id: "PAID_1", key: config.paidKey, isPaid: true },
+    { id: "PAID_2", key: config.paidKey2, isPaid: true }
   ];
 
   const pool = [];
@@ -111,13 +93,11 @@ function getGoogleKeyPool() {
       const trimmed = item.key.trim();
       if (trimmed.length > 10 && !seenKeys.has(trimmed)) {
         seenKeys.add(trimmed);
-        pool.push({ id: item.id, key: trimmed, isPaid: item.isPaid });
+        pool.push({ id: item.id, key: trimmed, isPaid: true });
       }
     }
   }
 
-  // Ordenar: PAID primero, luego FREE
-  pool.sort((a, b) => (b.isPaid ? 1 : 0) - (a.isPaid ? 1 : 0));
   return pool;
 }
 
@@ -353,10 +333,10 @@ function isServerAuthorizedMediaWriter(request, authUser) {
 }
 
 /**
- * Obtiene y rota (round-robin) las llaves PAID disponibles (PAID_1..PAID_4).
+ * Obtiene y rota (round-robin) las 2 llaves PAID disponibles (PAID_1, PAID_2).
  */
 function getRotatedPaidKeys() {
-  const paidKeys = getGoogleKeyPool().filter(k => k.id.startsWith("PAID") || k.isPaid);
+  const paidKeys = getGoogleKeyPool();
   if (paidKeys.length <= 1) return paidKeys;
   const startIdx = paidMediaKeyCursor % paidKeys.length;
   paidMediaKeyCursor = (paidMediaKeyCursor + 1) % paidKeys.length;
@@ -1659,7 +1639,7 @@ async function getVisualDescriptionForConcept(conceptoEspanol, category = "") {
     const res = await executeBackendGemini(promptDirectorArte, {
       keys: getGeminiKeyConfig(),
       preferredModel: "gemini-3.5-flash-lite",
-      mode: "free_first" // Modo ahorro para micro-prompts de traducción
+      mode: "paid_first"
     });
     return res.text.trim().replace(/['"]/g, '');
   } catch (error) {
@@ -1675,7 +1655,7 @@ async function getCleanEnglishTranslation(wordEspanol) {
     const res = await executeBackendGemini(prompt, {
       keys: getGeminiKeyConfig(),
       preferredModel: "gemini-3.5-flash-lite",
-      mode: "free_first"
+      mode: "paid_first"
     });
     return res.text.trim().toLowerCase().replace(/[^a-z\s-]/g, '');
   } catch (error) {
@@ -3210,9 +3190,9 @@ export const synthesizeGermanSpeech = onCall(
       };
     }
 
-    // ── INFERENCIA: POOL GOOGLE DIRECTO CON DUAL-MODEL Y CIRCUIT BREAKER (exhaustedKeys) ──
+    // ── INFERENCIA: POOL GOOGLE DIRECTO (PAID_1 <-> PAID_2) CON DUAL-MODEL Y CIRCUIT BREAKER ──
     let audioResult = null;
-    const googleKeys = filterAvailablePoolKeys(getGoogleKeyPool());
+    const googleKeys = filterAvailablePoolKeys(getRotatedPaidKeys());
     let lastGoogleError = null;
 
     for (const keyItem of googleKeys) {

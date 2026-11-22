@@ -125,12 +125,6 @@ function buildKeyPool() {
   const candidates = [
     { id: 'PAID_1', key: process.env.GEMINI_PAID_KEY, isPaid: true },
     { id: 'PAID_2', key: process.env.GEMINI_PAID_KEY_2, isPaid: true },
-    { id: 'PAID_3', key: process.env.GEMINI_PAID_KEY_3, isPaid: true },
-    { id: 'PAID_4', key: process.env.GEMINI_PAID_KEY_4, isPaid: true },
-    { id: 'FREE_1', key: process.env.GEMINI_FREE_KEY_1 || process.env.GEMINI_FREE_KEY, isPaid: false },
-    { id: 'FREE_2', key: process.env.GEMINI_FREE_KEY_2, isPaid: false },
-    { id: 'FREE_3', key: process.env.GEMINI_FREE_KEY_3, isPaid: false },
-    { id: 'GENERIC', key: process.env.GEMINI_API_KEY, isPaid: false },
   ];
 
   const pool = [];

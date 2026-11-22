@@ -1,11 +1,10 @@
 /**
  * geminiClient.js - Gestor de Resiliencia Multi-Key para Firebase Cloud Functions
- * DeutschMeister PRO A1 (Node 20 ESM)
+ * DeutschMeister PRO A1 (Node 22 ESM)
  *
- * Pool de 3 llaves con conmutación bidireccional por error (Failover / Circuit Breaker):
- * 1. Clave de Facturación (Google Developer Program / créditos): gemini-3.8-flash
- * 2. Clave Gratuita 1 (Free Tier): gemini-3.5-flash-lite
- * 3. Clave Gratuita 2 (Free Tier): gemini-3.5-flash-lite
+ * Pool estandarizado de 2 llaves de facturación Nivel 1 con Circuit Breaker y fallback intra-llave:
+ * 1. PAID_1 (GEMINI_PAID_KEY): gemini-3.8-flash -> gemini-3.5-flash-lite
+ * 2. PAID_2 (GEMINI_PAID_KEY_2): gemini-3.8-flash -> gemini-3.5-flash-lite
  */
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -122,79 +121,24 @@ function resolveKeyValue(secretOrString) {
 }
 
 /**
- * Construye el pool dinámico de 3 llaves
+ * Construye el pool estandarizado de 2 llaves de facturación Nivel 1 (PAID_1, PAID_2)
  */
 export function buildKeyPool(keysConfig = {}) {
   const paidKey1 = resolveKeyValue(keysConfig.paidKey || keysConfig.paidKey1 || process.env.GEMINI_PAID_KEY);
   const paidKey2 = resolveKeyValue(keysConfig.paidKey2 || process.env.GEMINI_PAID_KEY_2);
-  const paidKey3 = resolveKeyValue(keysConfig.paidKey3 || process.env.GEMINI_PAID_KEY_3);
-  const paidKey4 = resolveKeyValue(keysConfig.paidKey4 || process.env.GEMINI_PAID_KEY_4);
-
-  const freeKey1 = resolveKeyValue(
-    keysConfig.freeKey1 || 
-    process.env.GEMINI_FREE_KEY_1 || 
-    keysConfig.freeKey || 
-    process.env.GEMINI_FREE_KEY
-  );
-  const freeKey2 = resolveKeyValue(keysConfig.freeKey2 || process.env.GEMINI_FREE_KEY_2);
-  const freeKey3 = resolveKeyValue(keysConfig.freeKey3 || process.env.GEMINI_FREE_KEY_3);
-  const freeKey4 = resolveKeyValue(keysConfig.freeKey4 || process.env.GEMINI_FREE_KEY_4);
-  const freeKey5 = resolveKeyValue(keysConfig.freeKey5 || process.env.GEMINI_FREE_KEY_5);
 
   const candidates = [
     {
       id: "PAID_1",
       key: paidKey1,
       isPaid: true,
-      description: "Cuenta con Facturación 1 / Google Developer Program (gemini-3.8-flash)"
+      description: "Cuenta con Facturación 1 / Nivel 1 (gemini-3.8-flash)"
     },
     {
       id: "PAID_2",
       key: paidKey2,
       isPaid: true,
-      description: "Cuenta con Facturación 2 / Google Developer Program (gemini-3.8-flash)"
-    },
-    {
-      id: "PAID_3",
-      key: paidKey3,
-      isPaid: true,
-      description: "Cuenta con Facturación 3 / Google Developer Program (gemini-3.8-flash)"
-    },
-    {
-      id: "PAID_4",
-      key: paidKey4,
-      isPaid: true,
-      description: "Cuenta con Facturación 4 / Google Developer Program (gemini-3.8-flash)"
-    },
-    {
-      id: "FREE_1",
-      key: freeKey1,
-      isPaid: false,
-      description: "Cuenta Gratuita 1 (gemini-3.5-flash-lite)"
-    },
-    {
-      id: "FREE_2",
-      key: freeKey2,
-      isPaid: false,
-      description: "Cuenta Gratuita 2 (gemini-3.5-flash-lite)"
-    },
-    {
-      id: "FREE_3",
-      key: freeKey3,
-      isPaid: false,
-      description: "Cuenta Gratuita 3 (gemini-3.5-flash-lite)"
-    },
-    {
-      id: "FREE_4",
-      key: freeKey4,
-      isPaid: false,
-      description: "Cuenta Gratuita 4 (gemini-3.5-flash-lite)"
-    },
-    {
-      id: "FREE_5",
-      key: freeKey5,
-      isPaid: false,
-      description: "Cuenta Gratuita 5 (gemini-3.5-flash-lite)"
+      description: "Cuenta con Facturación 2 / Nivel 1 (gemini-3.8-flash)"
     }
   ];
 
@@ -239,20 +183,13 @@ export function recordPoolKeyFailure(keyId, error, longCooldownMs = LONG_COOLDOW
 }
 
 /**
- * Limpia el Circuit Breaker vencido y ordena las llaves disponibles según modo.
+ * Limpia el Circuit Breaker vencido y devuelve las llaves PAID disponibles.
  */
-function getAvailableSortedKeys(keys, mode = "paid_first") {
+function getAvailableSortedKeys(keys) {
   const pool = buildKeyPool(keys);
-  const sortedPool = [...pool];
-  if (mode === "free_first") {
-    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? 1 : -1));
-  } else {
-    sortedPool.sort((a, b) => (a.isPaid === b.isPaid ? 0 : a.isPaid ? -1 : 1));
-  }
-
-  const availableKeys = filterAvailablePoolKeys(sortedPool);
+  const availableKeys = filterAvailablePoolKeys(pool);
   if (availableKeys.length === 0) {
-    const error = new Error("⚠️ Todas las API Keys (Facturación y Gratuitas) han alcanzado su límite de cuota.");
+    const error = new Error("⚠️ Todas las API Keys de facturación (PAID_1, PAID_2) han alcanzado su límite de cuota.");
     error.status = 429;
     throw error;
   }

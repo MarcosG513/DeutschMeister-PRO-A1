@@ -36,17 +36,11 @@ export const getSafeAudioId = (text) => {
   return "audio_" + (normalized || "audio");
 };
 
-// ── 2. POOL DE 6 API KEYS (GOOGLE AI STUDIO DIRECT) ──
+// ── 2. POOL DE 2 API KEYS PAID NIVEL 1 (GOOGLE AI STUDIO DIRECT) ──
 function buildGoogleKeyPool() {
   const candidateKeys = [
-    // 4 Llaves Facturables Nivel 1 (Prioritarias)
     { id: "PAID_1", key: process.env.GEMINI_PAID_KEY, isPaid: true },
-    { id: "PAID_2", key: process.env.GEMINI_PAID_KEY_2, isPaid: true },
-    { id: "PAID_3", key: process.env.GEMINI_PAID_KEY_3, isPaid: true },
-    { id: "PAID_4", key: process.env.GEMINI_PAID_KEY_4, isPaid: true },
-    // 2 Llaves Gratuitas Nivel 2 (Respaldo)
-    { id: "FREE_1", key: process.env.GEMINI_FREE_KEY_1 || process.env.GEMINI_FREE_KEY, isPaid: false },
-    { id: "FREE_2", key: process.env.GEMINI_FREE_KEY_2, isPaid: false }
+    { id: "PAID_2", key: process.env.GEMINI_PAID_KEY_2, isPaid: true }
   ];
 
   const pool = [];

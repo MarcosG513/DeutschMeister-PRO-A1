@@ -511,23 +511,11 @@ async function synthesizeWithGoogleDirect(text, voice, apiKey, model = "gemini-3
   };
 }
 
-// ── 4. POOL DE LLAVES GOOGLE DIRECT CON DESCARTE INTELIGENTE Y DUAL-MODEL ──
+// ── 4. POOL DE LLAVES GOOGLE DIRECT (2 LLAVES PAID NIVEL 1) CON DUAL-MODEL ──
 function buildGoogleKeyPool() {
   const candidateKeys = [
-    // Llaves Paid (Nivel 1)
     { id: "PAID_1", key: process.env.GEMINI_PAID_KEY, isPaid: true },
-    { id: "PAID_2", key: process.env.GEMINI_PAID_KEY_2, isPaid: true },
-    { id: "PAID_3", key: process.env.GEMINI_PAID_KEY_3, isPaid: true },
-    { id: "PAID_4", key: process.env.GEMINI_PAID_KEY_4, isPaid: true },
-    { id: "PAID_5", key: process.env.GEMINI_PAID_KEY_5, isPaid: true },
-    // Llaves Free
-    { id: "FREE_1", key: process.env.GEMINI_FREE_KEY_1 || process.env.GEMINI_FREE_KEY, isPaid: false },
-    { id: "FREE_2", key: process.env.GEMINI_FREE_KEY_2, isPaid: false },
-    { id: "FREE_3", key: process.env.GEMINI_FREE_KEY_3, isPaid: false },
-    { id: "FREE_4", key: process.env.GEMINI_FREE_KEY_4, isPaid: false },
-    { id: "FREE_5", key: process.env.GEMINI_FREE_KEY_5, isPaid: false },
-    // Respaldo genérico
-    { id: "GENERIC", key: process.env.GEMINI_API_KEY, isPaid: false }
+    { id: "PAID_2", key: process.env.GEMINI_PAID_KEY_2, isPaid: true }
   ];
 
   const pool = [];
@@ -541,7 +529,7 @@ function buildGoogleKeyPool() {
         pool.push({
           id: item.id,
           key: trimmed,
-          isPaid: item.isPaid,
+          isPaid: true,
           models: ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts"],
           modelIndex: 0,
           lastUsedAt: 0,
@@ -552,8 +540,6 @@ function buildGoogleKeyPool() {
     }
   }
 
-  // Ordenar llaves: PAID primero, luego FREE_1..5
-  pool.sort((a, b) => (b.isPaid ? 1 : 0) - (a.isPaid ? 1 : 0));
   return pool;
 }
 
